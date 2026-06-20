@@ -1,6 +1,8 @@
 # Données (téléchargées, non versionnées — peuvent contenir des données personnelles)
 data/
 *.csv
+# Exception : fixtures synthétiques/anonymes committées (démo d'ingestion générique).
+!pipeline/ingest/fixtures/*.csv
 
 # Python
 __pycache__/

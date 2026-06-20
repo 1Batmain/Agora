@@ -1,0 +1,16 @@
+{
+  "name": "xstance",
+  "format": "jsonl",
+  "path": "data/raw/xstance-data-v1.0.zip",
+  "url": "https://github.com/ZurichNLP/xstance/raw/master/data/xstance-data-v1.0.zip",
+  "encoding": "utf-8",
+  "archive": "zip",
+  "members": ["train.jsonl", "valid.jsonl", "test.jsonl"],
+  "columns": {
+    "id": "id",
+    "text": "comment",
+    "author": "author",
+    "lang": "language"
+  },
+  "_note": "x-stance (ZurichNLP) : commentaires politiques labellises FAVOR/AGAINST, MULTILINGUE de/fr/it. Pas de 'lang_keep' => on garde TOUTES les langues par defaut (#11). Pour ne garder que le FR (demo), ajouter \"lang_keep\": [\"fr\"]. Pas d'horodatage dans la source."
+}
