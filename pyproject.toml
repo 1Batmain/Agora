@@ -18,6 +18,12 @@ contender = [
     "hdbscan>=0.8.33",
     "umap-learn>=0.5.5",
 ]
+# Embedders multilingues contenders du registre. `nomic-embed-text-v2-moe`
+# charge du code custom (trust_remote_code) qui dépend de `einops`.
+# bge-m3 / e5-small ne requièrent rien de plus que sentence-transformers.
+embed-contender = [
+    "einops>=0.7",
+]
 faiss = [
     "faiss-cpu>=1.8",
 ]
