@@ -41,6 +41,40 @@ TikTok (33 609 réponses, FR).
   (NMI cluster↔langue, qu'on veut BAS = clusters trans-langues) + stabilité.
   x-stance (DE/FR/IT) sert le test cross-lingue ; TikTok (FR) la cohérence.
 
+## Console live + backend recluster (itération « console », 2026-06-20 ter)
+**Pivot UX** : on retire le 3D (fork dummy). Le front devient une **console
+d'exploration du pipeline** : tous les knobs réglables en live → re-clustering serveur
+→ **viz 2D circle packing zoomable** (macro → clic zoom → sous-thèmes → clic → avis).
+
+### Contrat backend `:8010` (lane stream) — FROZEN
+- Embeddings **nomic-v2 en CACHE** (`.npy` précalculé une fois sur les avis TikTok/FR).
+  Le serveur ne ré-embedde JAMAIS → re-clustering rapide (~1–3 s pour ~1600 avis).
+- Endpoints :
+  - `GET /health` → ok
+  - `GET /params` → défauts + bornes de chaque knob (pour construire les sliders)
+  - `POST /recluster` body =
+    `{ dedup, min_chars, k, threshold, resolution_macro, resolution_sub, min_sub_size }`
+    → **GraphPayload hiérarchique** (même shape que `graph.json` : `meta, nodes, links,
+    themes[2 niveaux]`) + `meta.stats { n_macros, n_subs, n_nodes, modularity, took_ms }`.
+- Réutilise `pipeline.cluster.{knn,hierarchy,scoring,naming}` sur les vecteurs cachés ;
+  `dedup`/`min_chars` filtrent le set caché (pas de ré-embed).
+
+### Knobs (défauts ← WINNER_NOTE nomic-v2, + bornes)
+| knob | défaut | borne | effet |
+|---|---|---|---|
+| `dedup` (cosine) | 0.95 | 0.90–0.99 | fusion near-dups |
+| `min_chars` | 12 | 0–40 | filtre avis courts |
+| `k` (voisins) | 12 | 5–30 | densité k-NN |
+| `threshold` (cosine) | 0.60 | 0.40–0.85 | coupe les arêtes |
+| `resolution_macro` | 1.0 | 0.3–3.0 | granularité macros |
+| `resolution_sub` | 1.5 | 0.5–4.0 | granularité sous-thèmes |
+| `min_sub_size` | 18 | 5–40 | fusion des miettes |
+
+### Front (lane console) — remplace le 3D
+- D3 **circle packing** (`d3.pack`) sur la hiérarchie macro→sous→avis ; zoom au clic.
+- **Panneau knobs** (sliders/inputs) → debounce → `POST /recluster` → re-render + stats.
+- Port `:5180`. Garde un repli `graph.json` statique si backend down.
+
 ## Modèle de données (canonique — aligné sur les shapes viz de dummy)
 ```
 Idea  → GraphNode { id, type, label, props{ text, text_clean, ts, lang,
