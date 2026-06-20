@@ -4,22 +4,26 @@ Pipeline : sources brutes -> nettoyage (T-D2) -> anonymisation + langue (T-D4)
 -> objet Idea canonique (cf. queue/cross-lane.md). Régénère tout from scratch et
 imprime des compteurs (total, par source, par langue, % vides retirés).
 
-Si aucune source réelle n'est présente dans `data/raw/`, on tente un téléchargement
-(T-D1) puis, en dernier recours, on génère un échantillon synthétique FR pour que
-la lane nlp puisse démarrer.
+Les sources sont **déclaratives** : chaque consultation est décrite par un
+descripteur JSON (`descriptors/*.json`) lu par un seul `read_generic`
+(`sources.py`). Ajouter une consultation = ajouter un descripteur, **pas de
+code** (audit #1). Voir `pipeline/ingest/README.md`.
+
+Si aucune source réelle n'est présente dans `data/raw/`, on tente un
+téléchargement (T-D1, via les `url` des descripteurs) puis, en dernier recours,
+on génère un échantillon synthétique FR pour que la lane nlp puisse démarrer.
 
 Usage :
     uv run --with langdetect python -m pipeline.ingest.build
     uv run --with langdetect python -m pipeline.ingest.build --max-per-source 5000
+    uv run python -m pipeline.ingest.build --descriptor path/to/desc.json --out x.jsonl
     uv run python -m pipeline.ingest.build --synthetic   # force le synthétique
 """
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
-import zipfile
 from collections import Counter
 from pathlib import Path
 from typing import Iterable, Iterator
@@ -27,61 +31,7 @@ from typing import Iterable, Iterator
 from . import config, download, lang, synthetic
 from .anonymize import author_hash
 from .normalize import clean_text, is_empty_like, make_label
-
-csv.field_size_limit(10_000_000)  # certains témoignages libres sont longs
-
-
-# ---------------------------------------------------------------------------
-# Lecture des sources brutes -> enregistrements {raw_id, text, author, source, ts}
-# ---------------------------------------------------------------------------
-def read_xstance() -> Iterator[dict]:
-    if not config.XSTANCE_ZIP.exists():
-        return
-    with zipfile.ZipFile(config.XSTANCE_ZIP) as z:
-        names = set(z.namelist())
-        for fname in config.XSTANCE_COMMENT_FILES:
-            if fname not in names:
-                continue
-            with z.open(fname) as f:
-                for line in f:
-                    try:
-                        d = json.loads(line)
-                    except json.JSONDecodeError:
-                        continue
-                    if config.XSTANCE_FR_ONLY and d.get("language") != "fr":
-                        continue
-                    yield {
-                        "raw_id": str(d.get("id", "")),
-                        "text": d.get("comment", "") or "",
-                        "author": str(d.get("author", "")),
-                        "source": "xstance",
-                        "ts": "",  # x-stance ne fournit pas d'horodatage
-                    }
-
-
-def read_tiktok() -> Iterator[dict]:
-    if not config.TIKTOK_CSV.exists():
-        return
-    with open(config.TIKTOK_CSV, encoding=config.TIKTOK_ENCODING, newline="") as f:
-        rd = csv.reader(f, delimiter=";")
-        try:
-            next(rd)  # en-tête
-        except StopIteration:
-            return
-        ncols = max(config.TIKTOK_ID_COL, config.TIKTOK_TS_COL, config.TIKTOK_TEXT_COL)
-        for row in rd:
-            if len(row) <= ncols:
-                continue
-            text = row[config.TIKTOK_TEXT_COL]
-            if not text.strip():  # on ne garde que les réponses à la question ouverte
-                continue
-            yield {
-                "raw_id": row[config.TIKTOK_ID_COL],
-                "text": text,
-                "author": row[config.TIKTOK_ID_COL],  # 1 réponse = 1 répondant
-                "source": "tiktok",
-                "ts": row[config.TIKTOK_TS_COL],
-            }
+from .sources import SourceDescriptor, load_descriptors, read_generic
 
 
 def read_synthetic(n: int = 300) -> Iterator[dict]:
@@ -99,6 +49,15 @@ def to_idea(rec: dict) -> dict | None:
         return None
     source = rec["source"]
     idea_id = f"{source}:{rec['raw_id']}"
+    # Langue fournie par la source si présente, sinon (re)détection. Défaut 'und'
+    # (jamais 'fr') pour ne pas mal-étiqueter un corpus importé sans langue (#13).
+    src_lang = (rec.get("lang") or "").strip()
+    lang_code = src_lang if src_lang else lang.detect_lang(text_clean)
+    # Poids social : fourni par la source si mappé, sinon 1.0.
+    try:
+        weight = float(rec.get("weight", 1.0))
+    except (TypeError, ValueError):
+        weight = 1.0
     return {
         "id": idea_id,
         "type": "idea",
@@ -107,10 +66,10 @@ def to_idea(rec: dict) -> dict | None:
             "text": raw_text.strip(),
             "text_clean": text_clean,
             "ts": (rec.get("ts") or "").strip(),
-            "lang": lang.detect_lang(text_clean),
+            "lang": lang_code,
             "author_hash": author_hash(rec.get("author", ""), source),
             "source": source,
-            "weight": 1.0,
+            "weight": weight,
         },
     }
 
@@ -126,12 +85,9 @@ def assert_no_pii(idea: dict) -> None:
 # ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
-def iter_sources(use_synthetic: bool, max_per_source: int | None) -> Iterator[dict]:
-    readers: list[tuple[str, Iterable[dict]]]
-    if use_synthetic:
-        readers = [("synthetic", read_synthetic())]
-    else:
-        readers = [("xstance", read_xstance()), ("tiktok", read_tiktok())]
+def iter_sources(
+    readers: list[tuple[str, Iterable[dict]]], max_per_source: int | None
+) -> Iterator[dict]:
     for name, it in readers:
         count = 0
         for rec in it:
@@ -142,7 +98,19 @@ def iter_sources(use_synthetic: bool, max_per_source: int | None) -> Iterator[di
                 break
 
 
-def build(out: Path, use_synthetic: bool, max_per_source: int | None) -> dict:
+def build_readers(
+    descriptors: list[SourceDescriptor], use_synthetic: bool
+) -> list[tuple[str, Iterable[dict]]]:
+    if use_synthetic:
+        return [("synthetic", read_synthetic())]
+    return [(d.name, read_generic(d)) for d in descriptors]
+
+
+def build(
+    out: Path,
+    readers: list[tuple[str, Iterable[dict]]],
+    max_per_source: int | None,
+) -> dict:
     out.parent.mkdir(parents=True, exist_ok=True)
     by_source = Counter()
     by_lang = Counter()
@@ -151,7 +119,7 @@ def build(out: Path, use_synthetic: bool, max_per_source: int | None) -> dict:
 
     tmp = out.with_suffix(out.suffix + ".part")
     with open(tmp, "w", encoding="utf-8") as fout:
-        for rec in iter_sources(use_synthetic, max_per_source):
+        for rec in iter_sources(readers, max_per_source):
             seen_raw += 1
             idea = to_idea(rec)
             if idea is None:
@@ -191,25 +159,31 @@ def print_report(out: Path, stats: dict, used_synthetic: bool) -> None:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Construit data/processed/ideas.jsonl")
     ap.add_argument("--synthetic", action="store_true",
-                    help="forcer l'échantillon synthétique (ignore data/raw)")
+                    help="forcer l'échantillon synthétique (ignore les descripteurs)")
+    ap.add_argument("--descriptor", type=Path, action="append", default=None,
+                    help="descripteur(s) JSON explicite(s) (répétable). "
+                         "Par défaut : tous ceux de descriptors/.")
     ap.add_argument("--max-per-source", type=int, default=None,
                     help="plafonner le nb d'avis par source (box sobre)")
     ap.add_argument("--out", type=Path, default=config.IDEAS_JSONL)
     args = ap.parse_args(argv)
 
     use_synthetic = args.synthetic
+    descriptors: list[SourceDescriptor] = []
     if not use_synthetic:
-        have = config.XSTANCE_ZIP.exists() or config.TIKTOK_CSV.exists()
-        if not have:
+        descriptors = load_descriptors(args.descriptor)
+        have = any(d.resolved_path().exists() for d in descriptors)
+        if not have and args.descriptor is None:
             print("Aucune source dans data/raw/ — tentative de téléchargement…")
             download.main([])
-            have = config.XSTANCE_ZIP.exists() or config.TIKTOK_CSV.exists()
+            have = any(d.resolved_path().exists() for d in descriptors)
         if not have:
-            print("Téléchargement indisponible — repli sur l'échantillon synthétique.",
+            print("Source(s) indisponible(s) — repli sur l'échantillon synthétique.",
                   file=sys.stderr)
             use_synthetic = True
 
-    stats = build(args.out, use_synthetic, args.max_per_source)
+    readers = build_readers(descriptors, use_synthetic)
+    stats = build(args.out, readers, args.max_per_source)
     print_report(args.out, stats, use_synthetic)
 
     if stats["kept"] == 0:
