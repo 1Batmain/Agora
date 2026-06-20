@@ -34,7 +34,7 @@ from pipeline.cluster.hierarchy import (
 )
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
-from pipeline.cluster.naming import name_clusters
+from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.palette import color_for
 from pipeline.cluster.scoring import rank_clusters, score_cluster
 from pipeline.embed.embedder import Embedder
@@ -105,7 +105,9 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan):
 
     scores = {cid: score_cluster(idxs, vecs, weights) for cid, idxs in members.items()}
     cluster_docs = {cid: [ideas[i].text for i in idxs] for cid, idxs in members.items()}
-    names = name_clusters(cluster_docs)
+    # Mots-vides saturants dérivés du corpus GLOBAL (un avis = un document).
+    corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
+    names = name_clusters(cluster_docs, corpus_stopwords=corpus_stop)
 
     nodes = []
     for idx, idea in enumerate(ideas):
@@ -169,15 +171,18 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
     macro_scores = {m: score_cluster(idxs, vecs, weights) for m, idxs in macro_members.items()}
     leaf_scores = {l: score_cluster(idxs, vecs, weights) for l, idxs in leaf_members.items()}
 
-    # Naming macro : TF-IDF inter-macros (chaque macro = un document).
-    macro_docs = {m: [ideas[i].text for i in idxs] for m, idxs in macro_members.items()}
-    macro_names = name_clusters(macro_docs)
+    # Mots-vides saturants dérivés du corpus GLOBAL (partagés macro + sous-thèmes).
+    corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
 
-    # Naming sous-thèmes : TF-IDF CONTRASTÉ dans chaque macro (sous-thèmes entre eux).
+    # Naming macro : c-TF-IDF inter-macros (chaque macro = un document).
+    macro_docs = {m: [ideas[i].text for i in idxs] for m, idxs in macro_members.items()}
+    macro_names = name_clusters(macro_docs, corpus_stopwords=corpus_stop)
+
+    # Naming sous-thèmes : c-TF-IDF CONTRASTÉ dans chaque macro (sous-thèmes entre eux).
     leaf_names: dict[int, dict] = {}
     for m, children in h.macro_children.items():
         sub_docs = {l: [ideas[i].text for i in leaf_members[l]] for l in children}
-        leaf_names.update(name_clusters(sub_docs))
+        leaf_names.update(name_clusters(sub_docs, corpus_stopwords=corpus_stop))
 
     macro_color = {m: color_for(m) for m in macro_members}
 
