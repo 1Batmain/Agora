@@ -111,6 +111,7 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan,
     corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
     names = name_clusters(cluster_docs, corpus_stopwords=corpus_stop)
 
+    n_colors = leiden.n_clusters
     nodes = []
     for idx, idea in enumerate(ideas):
         cid = int(membership[idx])
@@ -120,14 +121,14 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan,
             "label": _node_label(idea),
             "props": _node_props(idea, weights[idx]),
             "cluster_id": cid,
-            "color": color_for(cid),
+            "color": color_for(cid, n_colors),
         })
 
     themes = []
     for cid in rank_clusters(scores):
         nm = names.get(cid, {"label": f"thème {cid}", "keywords": []})
         themes.append(_theme_entry(
-            cid, members[cid], ideas, scores[cid], nm, color_for(cid),
+            cid, members[cid], ideas, scores[cid], nm, color_for(cid, n_colors),
             level=0, parent_id=None, children=[],
         ))
 
@@ -189,7 +190,7 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
         sub_docs = {l: [ideas[i].text for i in leaf_members[l]] for l in children}
         leaf_names.update(name_clusters(sub_docs, corpus_stopwords=corpus_stop))
 
-    macro_color = {m: color_for(m) for m in macro_members}
+    macro_color = {m: color_for(m, len(macro_members)) for m in macro_members}
 
     # Nœuds : feuille + macro_id + couleur du macro.
     nodes = []
