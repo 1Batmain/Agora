@@ -5,8 +5,8 @@ top-mots TF-IDF d'un même cluster doivent **co-occurrer** dans le corpus de
 référence. NPMI ∈ [-1, 1] : 1 = co-occurrence parfaite, 0 = indépendance,
 < 0 = anti-corrélation. Plus haut = thèmes plus cohérents.
 
-⚠️ Confusion multilingue évitée. Le corpus est trilingue (DE/FR/IT) et chaque
-commentaire est monolingue : un mot allemand et un mot français ne co-occurrent
+⚠️ Confusion multilingue évitée. Le corpus peut être multilingue et chaque
+commentaire est monolingue : deux mots de langues différentes ne co-occurrent
 jamais. Si on mélangeait les langues, un BON cluster trans-langues serait puni
 (top-mots de langues différentes → co-occurrence ≈ 0). On calcule donc la
 cohérence **par langue** (top-mots et co-occurrences restreints à une langue),
@@ -26,53 +26,33 @@ from collections import Counter
 
 import numpy as np
 
-# Stopwords compacts DE/FR/IT (sklearn ne couvre que l'anglais). On retire le
-# bruit grammatical pour que les top-mots portent du sens thématique.
-STOPWORDS: set[str] = {
-    # --- français ---
-    "le", "la", "les", "un", "une", "des", "de", "du", "et", "ou", "à", "au",
-    "aux", "en", "dans", "pour", "par", "sur", "avec", "sans", "sous", "vers",
-    "ce", "cet", "cette", "ces", "se", "sa", "son", "ses", "leur", "leurs",
-    "notre", "nos", "votre", "vos", "mon", "ma", "mes", "il", "elle", "ils",
-    "elles", "on", "nous", "vous", "que", "qui", "quoi", "dont", "où", "ne",
-    "pas", "plus", "moins", "très", "trop", "peu", "tout", "tous", "toute",
-    "toutes", "est", "sont", "être", "était", "ont", "avoir", "fait", "faire",
-    "faut", "doit", "comme", "aussi", "encore", "déjà", "donc", "car", "mais",
-    "afin", "ainsi", "entre", "si", "non", "oui", "cela", "ça", "les", "ces",
-    "été", "avait", "aussi", "leur", "même", "alors", "bien", "deux",
-    # --- allemand ---
-    "der", "die", "das", "den", "dem", "des", "ein", "eine", "einen", "einem",
-    "einer", "und", "oder", "aber", "doch", "denn", "weil", "dass", "wenn",
-    "als", "wie", "auch", "noch", "schon", "nur", "nicht", "kein", "keine",
-    "ist", "sind", "war", "waren", "sein", "haben", "hat", "hatte", "werden",
-    "wird", "wurde", "muss", "soll", "kann", "können", "für", "mit", "von",
-    "zu", "zum", "zur", "auf", "aus", "bei", "nach", "über", "unter", "vor",
-    "durch", "gegen", "ohne", "um", "im", "in", "an", "am", "es", "sie", "er",
-    "ich", "wir", "ihr", "man", "sich", "dieser", "diese", "dieses", "mehr",
-    "sehr", "schon", "immer", "wieder", "hier", "dann", "also", "etwa",
-    # --- italien ---
-    "il", "lo", "la", "le", "gli", "un", "uno", "una", "di", "del", "della",
-    "dei", "delle", "e", "ed", "o", "ma", "se", "che", "chi", "cui", "non",
-    "più", "meno", "molto", "poco", "tutto", "tutti", "è", "sono", "era",
-    "essere", "avere", "ha", "hanno", "per", "con", "su", "tra", "fra", "da",
-    "in", "nel", "nella", "al", "alla", "come", "anche", "ancora", "già",
-    "quindi", "perché", "questo", "questa", "quello", "si", "ci", "ne", "lui",
-    "lei", "loro", "noi", "voi", "io", "tu", "essi", "deve", "può", "sempre",
-}
+from pipeline.cluster.naming import derive_corpus_stopwords
 
-_WORD_RE = re.compile(r"[a-zàâäéèêëîïôöùûüçœßüäö]+", re.IGNORECASE)
+# Tokenizer Unicode générique : suites de lettres de N'IMPORTE QUELLE écriture
+# (latin, cyrillique, grec, CJK…), aucun mot listé. Identique à
+# `pipeline/cluster/naming.py` pour que cohérence et naming partagent la même
+# segmentation. Les mots-vides ne sont PAS figés par langue : ils sont DÉRIVÉS
+# du corpus (cf. `derive_corpus_stopwords`), donc la métrique reste valide sur
+# une consultation dans n'importe quelle langue — y compris non-latine.
+_WORD_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
 
 
-def tokenize(text: str) -> list[str]:
-    """Tokens alphabétiques minuscules, > 2 lettres, hors stopwords."""
+def tokenize(text: str, stopwords: frozenset[str] | set[str] = frozenset()) -> list[str]:
+    """Tokens (toutes écritures) minuscules, > 2 lettres, hors `stopwords`.
+
+    `stopwords` est dérivé du corpus par l'appelant (jamais une liste de langue
+    figée). Par défaut vide → tokenisation pure, langue-agnostique.
+    """
     return [
         w for w in (m.lower() for m in _WORD_RE.findall(text))
-        if len(w) > 2 and w not in STOPWORDS
+        if len(w) > 2 and w not in stopwords
     ]
 
 
 def top_words_per_cluster(
-    cluster_docs: dict[int, list[str]], top_n: int = 10
+    cluster_docs: dict[int, list[str]],
+    top_n: int = 10,
+    stopwords: frozenset[str] | set[str] = frozenset(),
 ) -> dict[int, list[str]]:
     """Top-N mots (unigrammes) par cluster via TF-IDF inter-clusters.
 
@@ -87,8 +67,11 @@ def top_words_per_cluster(
     if not any(docs):
         return {c: [] for c in cids}
 
+    def _tok(text: str) -> list[str]:
+        return tokenize(text, stopwords)
+
     vec = TfidfVectorizer(
-        tokenizer=tokenize, token_pattern=None, ngram_range=(1, 1),
+        tokenizer=_tok, token_pattern=None, ngram_range=(1, 1),
         min_df=1, sublinear_tf=True,
     )
     tfidf = vec.fit_transform(docs)
@@ -190,8 +173,11 @@ def per_language_coherence(
             per_lang[lg] = None
             weights[lg] = len(idxs)
             continue
-        tw = top_words_per_cluster(cdocs, top_n=top_n)
-        ref = [set(tokenize(texts[i])) for i in idxs]
+        # Mots-vides DÉRIVÉS de ce sous-corpus (fonctionnels multilingues +
+        # saturation de domaine), jamais une liste de langue figée.
+        stop, _ = derive_corpus_stopwords([texts[i] for i in idxs])
+        tw = top_words_per_cluster(cdocs, top_n=top_n, stopwords=stop)
+        ref = [set(tokenize(texts[i], stop)) for i in idxs]
         per_lang[lg] = npmi_coherence(list(tw.values()), ref)
         weights[lg] = len(idxs)
 
