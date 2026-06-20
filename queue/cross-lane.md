@@ -29,6 +29,10 @@ TikTok (33 609 réponses, FR).
 - **Embeddings pluggables** : registre de modèles derrière une interface unique,
   chacun avec sa convention de préfixe. Contenders au banc : `multilingual-e5-small`
   (baseline), `nomic-embed-text-v2-moe`, `BAAI/bge-m3`. Gagnant choisi par la mesure.
+- **VERDICT (banc qualité, `eval/quality_report.md`) : modèle de PROD = `nomic-v2`**
+  (`nomic-ai/nomic-embed-text-v2-moe`), composite 0.850. e5-small clusterise PAR LANGUE
+  (NMI cluster↔langue=0.81, topic=0.05) — inutilisable en multilingue ; nomic-v2 mixe
+  les langues par thème (NMI langue=0.008, topic=0.41). bge-m3 second (0.567).
 - **Naming** : reste TF-IDF (inchangé — décision Bob).
 - **Thèmes hiérarchiques** : 2 niveaux (macro `level=0` → sous-thèmes `level=1`),
   via `parent_id`/`children[]`. Le drill-down viz devient un arbre.
