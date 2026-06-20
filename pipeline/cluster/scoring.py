@@ -19,6 +19,10 @@ from dataclasses import dataclass
 
 import numpy as np
 
+# Repli SEULEMENT si aucun seuil near-dup n'est fourni/dérivé par l'appelant.
+# Le défaut réel est DÉRIVÉ de la distribution des cosinus k-NN
+# (`pipeline.cluster.adaptive.derive_dup_threshold`, audit #9) ou LIÉ au knob
+# `dedup` — ce 0.93 n'est qu'un filet de sécurité hors pipeline.
 DUP_THRESHOLD = 0.93
 
 
@@ -40,8 +44,10 @@ def score_cluster(
     member_idx: list[int],
     vecs: np.ndarray,
     weights: np.ndarray,
-    dup_threshold: float = DUP_THRESHOLD,
+    dup_threshold: float | None = None,
 ) -> ClusterScore:
+    if dup_threshold is None:
+        dup_threshold = DUP_THRESHOLD
     size = len(member_idx)
     sub = vecs[member_idx]
     w = weights[member_idx]
