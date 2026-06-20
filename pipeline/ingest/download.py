@@ -1,14 +1,14 @@
 """T-D1 — récupération idempotente des sources brutes dans `data/raw/`.
 
-Aucune donnée n'est versionnée (`data/` est gitignored). Les téléchargements
-sont idempotents : un fichier déjà présent (taille > 0) n'est pas re-téléchargé,
-sauf `--force`. En cas d'échec réseau, on NE BLOQUE PAS : `build` retombera sur
-l'échantillon synthétique.
+Générique (audit #1) : on télécharge l'`url` de chaque **descripteur** vers son
+`path`. Aucune source codée en dur. Les téléchargements sont idempotents : un
+fichier déjà présent (taille > 0) n'est pas re-téléchargé, sauf `--force`. En cas
+d'échec réseau, on NE BLOQUE PAS : `build` retombera sur l'échantillon synthétique.
 
 Usage :
-    uv run python -m pipeline.ingest.download            # télécharge tout
-    uv run python -m pipeline.ingest.download --force     # re-télécharge
-    uv run python -m pipeline.ingest.download --only xstance|tiktok
+    uv run python -m pipeline.ingest.download                 # toutes les sources
+    uv run python -m pipeline.ingest.download --force          # re-télécharge
+    uv run python -m pipeline.ingest.download --only tiktok    # une source (par nom)
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ import urllib.request
 from pathlib import Path
 
 from . import config
+from .sources import load_descriptors
 
 _UA = {"User-Agent": "agora-an-2026/ingest (open-data)"}
 
@@ -45,31 +46,26 @@ def _fetch(url: str, dest: Path, force: bool) -> bool:
     return True
 
 
-def download_xstance(force: bool = False) -> bool:
-    print("x-stance (ZurichNLP) :")
-    return _fetch(config.XSTANCE_URL, config.XSTANCE_ZIP, force)
-
-
-def download_tiktok(force: bool = False) -> bool:
-    print("Consultation TikTok (Assemblée nationale) :")
-    return _fetch(config.TIKTOK_URL, config.TIKTOK_CSV, force)
-
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Téléchargement idempotent des sources data.")
     ap.add_argument("--force", action="store_true", help="re-télécharger même si présent")
-    ap.add_argument("--only", choices=["xstance", "tiktok"], help="une seule source")
+    ap.add_argument("--only", help="une seule source (nom du descripteur)")
     args = ap.parse_args(argv)
 
+    descriptors = load_descriptors()
     results = {}
-    if args.only in (None, "xstance"):
-        results["xstance"] = download_xstance(args.force)
-    if args.only in (None, "tiktok"):
-        results["tiktok"] = download_tiktok(args.force)
+    for d in descriptors:
+        if args.only and d.name != args.only:
+            continue
+        if not d.url:
+            print(f"{d.name} : pas d'URL dans le descripteur — ignoré.")
+            continue
+        print(f"{d.name} :")
+        results[d.name] = _fetch(d.url, d.resolved_path(), args.force)
 
     ok = sum(results.values())
     print(f"\n{ok}/{len(results)} source(s) disponible(s) dans {config.RAW_DIR}")
-    if ok == 0:
+    if results and ok == 0:
         print("Aucune source réseau : `build` utilisera l'échantillon synthétique.",
               file=sys.stderr)
     # On retourne 0 même en cas d'échec réseau : le fallback synthétique couvre.
