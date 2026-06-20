@@ -1,0 +1,941 @@
+{
+  "seed": 42,
+  "baseline_params": {
+    "dedup": 0.95,
+    "min_chars": 12,
+    "k": 12,
+    "threshold": 0.6,
+    "resolution_macro": 1.0,
+    "resolution_sub": 1.5,
+    "min_sub_size": 18
+  },
+  "set": {
+    "n_cached": 1621,
+    "n_after_minlen": 1604,
+    "n_baseline": 1597,
+    "n_macros": 8,
+    "n_leaves": 47
+  },
+  "exp1_saturation": {
+    "n_docs": 1597,
+    "doc_share_per_keyword": {
+      "tiktok": 0.3275,
+      "tik": 0.0895,
+      "tok": 0.0908,
+      "appli/application": 0.1127,
+      "réseau(x)": 0.1115
+    },
+    "doc_share_family": 0.4339,
+    "top10_tokens_global": [
+      [
+        "de",
+        2876
+      ],
+      [
+        "et",
+        1397
+      ],
+      [
+        "des",
+        1162
+      ],
+      [
+        "à",
+        1075
+      ],
+      [
+        "l",
+        921
+      ],
+      [
+        "les",
+        859
+      ],
+      [
+        "que",
+        825
+      ],
+      [
+        "je",
+        821
+      ],
+      [
+        "la",
+        816
+      ],
+      [
+        "est",
+        744
+      ]
+    ],
+    "rank_tiktok_among_all": {
+      "count": 519,
+      "rank": 20
+    },
+    "rank_le_among_all": {
+      "count": 729,
+      "rank": 11
+    },
+    "rank_la_among_all": {
+      "count": 816,
+      "rank": 9
+    },
+    "top15_content_tokens": [
+      [
+        "tiktok",
+        519
+      ],
+      [
+        "mal",
+        468
+      ],
+      [
+        "temps",
+        386
+      ],
+      [
+        "vidéos",
+        246
+      ],
+      [
+        "application",
+        211
+      ],
+      [
+        "tok",
+        197
+      ],
+      [
+        "contenus",
+        194
+      ],
+      [
+        "tik",
+        194
+      ],
+      [
+        "sentiment",
+        186
+      ],
+      [
+        "même",
+        185
+      ],
+      [
+        "réseaux",
+        182
+      ],
+      [
+        "contenu",
+        165
+      ],
+      [
+        "personnes",
+        165
+      ],
+      [
+        "beaucoup",
+        150
+      ],
+      [
+        "autres",
+        128
+      ]
+    ]
+  },
+  "exp2_common_component": {
+    "cos_to_global_centroid_mean": 0.7609,
+    "cos_to_global_centroid_std": 0.0498,
+    "mean_pairwise_cos": 0.5786,
+    "centroid_norm": 0.7609,
+    "evr_pc1_5": [
+      0.1071,
+      0.0615,
+      0.0396,
+      0.0317,
+      0.0258
+    ],
+    "evr_cumulative_pc1_5": 0.2657,
+    "pc_correlations": [
+      {
+        "pc": 1,
+        "evr": 0.1071,
+        "corr_mentions_tiktok": -0.8129,
+        "corr_doc_length": -0.5124
+      },
+      {
+        "pc": 2,
+        "evr": 0.0615,
+        "corr_mentions_tiktok": 0.0985,
+        "corr_doc_length": -0.0489
+      },
+      {
+        "pc": 3,
+        "evr": 0.0396,
+        "corr_mentions_tiktok": 0.1208,
+        "corr_doc_length": -0.2752
+      },
+      {
+        "pc": 4,
+        "evr": 0.0317,
+        "corr_mentions_tiktok": 0.0,
+        "corr_doc_length": 0.1862
+      },
+      {
+        "pc": 5,
+        "evr": 0.0258,
+        "corr_mentions_tiktok": 0.1146,
+        "corr_doc_length": -0.1255
+      }
+    ],
+    "share_mentions_tiktok": 0.4339
+  },
+  "exp3_ablation": {
+    "baseline": {
+      "n_macros": 8,
+      "n_leaves": 47,
+      "silhouette_leaf": 0.0309,
+      "silhouette_macro": 0.0674
+    },
+    "variants": {
+      "mask_preembed": {
+        "ari_leaf": 0.2686,
+        "ari_macro": 0.2719,
+        "n_macros": 10,
+        "n_leaves": 43,
+        "silhouette_leaf": 0.0262,
+        "cos_to_centroid_mean": 0.7645,
+        "neighbor_jaccard_vs_baseline": 0.486
+      },
+      "all_but_top_1": {
+        "fixed": {
+          "ari_leaf": 0.0152,
+          "ari_macro": 0.0034,
+          "n_macros": 1449,
+          "n_leaves": 1449,
+          "note": "seuil 0.60 → graphe effondré (artefact d'échelle)"
+        },
+        "matched": {
+          "threshold": 0.2638,
+          "avg_degree": 16.0,
+          "ari_leaf": 0.2551,
+          "ari_macro": 0.2829,
+          "n_macros": 14,
+          "n_leaves": 46,
+          "silhouette_leaf": 0.0349
+        },
+        "cos_to_centroid_mean": 0.015,
+        "neighbor_jaccard_vs_baseline": 0.4032
+      },
+      "all_but_top_2": {
+        "fixed": {
+          "ari_leaf": 0.0078,
+          "ari_macro": 0.0016,
+          "n_macros": 1509,
+          "n_leaves": 1509,
+          "note": "seuil 0.60 → graphe effondré (artefact d'échelle)"
+        },
+        "matched": {
+          "threshold": 0.2334,
+          "avg_degree": 16.0,
+          "ari_leaf": 0.2123,
+          "ari_macro": 0.2227,
+          "n_macros": 12,
+          "n_leaves": 44,
+          "silhouette_leaf": 0.0329
+        },
+        "cos_to_centroid_mean": 0.0142,
+        "neighbor_jaccard_vs_baseline": 0.3617
+      },
+      "all_but_top_3": {
+        "fixed": {
+          "ari_leaf": 0.0067,
+          "ari_macro": 0.0012,
+          "n_macros": 1529,
+          "n_leaves": 1529,
+          "note": "seuil 0.60 → graphe effondré (artefact d'échelle)"
+        },
+        "matched": {
+          "threshold": 0.2194,
+          "avg_degree": 16.0,
+          "ari_leaf": 0.2054,
+          "ari_macro": 0.2049,
+          "n_macros": 13,
+          "n_leaves": 44,
+          "silhouette_leaf": 0.0391
+        },
+        "cos_to_centroid_mean": 0.013,
+        "neighbor_jaccard_vs_baseline": 0.3303
+      }
+    },
+    "baseline_matched": {
+      "target_avg_degree": 16.0,
+      "threshold": 0.7154,
+      "avg_degree": 16.0,
+      "n_macros": 81,
+      "n_leaves": 116,
+      "ari_leaf_vs_prod": 0.451
+    }
+  },
+  "exp4_naming": {
+    "leaf": {
+      "n_clusters": 47,
+      "tfidf_tiktok_labels": 16,
+      "ctfidf_tiktok_labels": 18,
+      "fix_tiktok_labels": 0,
+      "tfidf_tiktok_rate": 0.3404,
+      "ctfidf_tiktok_rate": 0.383,
+      "fix_tiktok_rate": 0.0,
+      "per_cluster": [
+        {
+          "cluster_id": 54,
+          "size": 78,
+          "tfidf_label": "parfait · grosse · corps",
+          "ctfidf_label": "corps · parfait · comparaison",
+          "fix_label": "corps · parfait · comparaison"
+        },
+        {
+          "cluster_id": 43,
+          "size": 63,
+          "tfidf_label": "tiktok · collège · collége",
+          "ctfidf_label": "tiktok · collège · filles",
+          "fix_label": "collège · filles · avait"
+        },
+        {
+          "cluster_id": 19,
+          "size": 58,
+          "tfidf_label": "faux compte · divulgation · live",
+          "ctfidf_label": "harcèlement · personne · personnes",
+          "fix_label": "harcèlement · personne · personnes"
+        },
+        {
+          "cluster_id": 11,
+          "size": 56,
+          "tfidf_label": "estime soi · estime · baisse estime",
+          "ctfidf_label": "soi · dépression · estime",
+          "fix_label": "soi · dépression · estime"
+        },
+        {
+          "cluster_id": 29,
+          "size": 47,
+          "tfidf_label": "tiktok · dopamine · scroller",
+          "ctfidf_label": "tiktok · temps · scroller",
+          "fix_label": "scroller · temps · vie"
+        },
+        {
+          "cluster_id": 25,
+          "size": 46,
+          "tfidf_label": "tiktok · tiktok détruit · reels",
+          "ctfidf_label": "application · tiktok · même",
+          "fix_label": "même · instagram · désinstaller"
+        },
+        {
+          "cluster_id": 44,
+          "size": 46,
+          "tfidf_label": "tiktok · compte tiktok · test",
+          "ctfidf_label": "tiktok · enfants · contenus",
+          "fix_label": "enfants · contenus · dangereux"
+        },
+        {
+          "cluster_id": 46,
+          "size": 45,
+          "tfidf_label": "madame · monsieur · parental",
+          "ctfidf_label": "enfants · sociaux · tik",
+          "fix_label": "enfants · sociaux · parents"
+        },
+        {
+          "cluster_id": 21,
+          "size": 43,
+          "tfidf_label": "albou · collège · fille",
+          "ctfidf_label": "fille · fils · lui",
+          "fix_label": "fille · fils · lui"
+        },
+        {
+          "cluster_id": 22,
+          "size": 43,
+          "tfidf_label": "souhaite décrire · souhaite · moquerie",
+          "ctfidf_label": "souhaite · moquerie · principes",
+          "fix_label": "souhaite · moquerie · principes"
+        },
+        {
+          "cluster_id": 51,
+          "size": 42,
+          "tfidf_label": "usages · perd temps · appli",
+          "ctfidf_label": "application · appli · temps",
+          "fix_label": "temps · semaine · désinstallé"
+        },
+        {
+          "cluster_id": 34,
+          "size": 41,
+          "tfidf_label": "maltraitance · vidéos choquantes · vidéo choquante",
+          "ctfidf_label": "vidéos · choquantes · voir",
+          "fix_label": "vidéos · choquantes · voir"
+        },
+        {
+          "cluster_id": 36,
+          "size": 40,
+          "tfidf_label": "risquer · entraînent · censuré",
+          "ctfidf_label": "vidéos · vidéo · mal",
+          "fix_label": "vidéos · vidéo · mal"
+        },
+        {
+          "cluster_id": 23,
+          "size": 40,
+          "tfidf_label": "commentaire · désinformation beaucoup · malveillants",
+          "ctfidf_label": "commentaires · commentaire · méchants",
+          "fix_label": "commentaires · commentaire · méchants"
+        },
+        {
+          "cluster_id": 26,
+          "size": 39,
+          "tfidf_label": "tiktok · arrêter regarder · tiktok envie",
+          "ctfidf_label": "tiktok · sentiment · pouvoir",
+          "fix_label": "sentiment · pouvoir · envie"
+        },
+        {
+          "cluster_id": 45,
+          "size": 39,
+          "tfidf_label": "hospitalisée · scarifier · fille",
+          "ctfidf_label": "fille · tik · tok",
+          "fix_label": "fille · suicide · ans"
+        },
+        {
+          "cluster_id": 48,
+          "size": 39,
+          "tfidf_label": "tiktok · mal tiktok · fonction",
+          "ctfidf_label": "mal · tiktok · triste",
+          "fix_label": "mal · triste · propagande"
+        },
+        {
+          "cluster_id": 28,
+          "size": 38,
+          "tfidf_label": "tok · tik tok · tik",
+          "ctfidf_label": "tok · tik · skinny",
+          "fix_label": "skinny · tca · renferme"
+        },
+        {
+          "cluster_id": 15,
+          "size": 36,
+          "tfidf_label": "procrastination · parfois impression · perte temps",
+          "ctfidf_label": "perte · procrastination · temps",
+          "fix_label": "perte · procrastination · temps"
+        },
+        {
+          "cluster_id": 8,
+          "size": 35,
+          "tfidf_label": "sentiment dépendance · secondes · peut affecter",
+          "ctfidf_label": "téléphone · dépendance · réseaux",
+          "fix_label": "téléphone · dépendance · sentiment"
+        },
+        {
+          "cluster_id": 16,
+          "size": 33,
+          "tfidf_label": "temps dessus · utiliser temps · dessus arrive",
+          "ctfidf_label": "temps · dessus · passe",
+          "fix_label": "temps · dessus · passe"
+        },
+        {
+          "cluster_id": 42,
+          "size": 32,
+          "tfidf_label": "tiktok plateforme · tok · tik tok",
+          "ctfidf_label": "tik · tok · beaucoup",
+          "fix_label": "beaucoup · propos · personnes"
+        },
+        {
+          "cluster_id": 18,
+          "size": 32,
+          "tfidf_label": "haine envers · homophobie · haine",
+          "ctfidf_label": "haine · envers · homophobie",
+          "fix_label": "haine · envers · homophobie"
+        },
+        {
+          "cluster_id": 49,
+          "size": 32,
+          "tfidf_label": "sentiment mal · vidéos mal · vendent",
+          "ctfidf_label": "mal · sentiment · peuvent",
+          "fix_label": "mal · sentiment · peuvent"
+        },
+        {
+          "cluster_id": 47,
+          "size": 31,
+          "tfidf_label": "algorithme · quand algorithme · mal algorithme",
+          "ctfidf_label": "algorithme · propose · alimente",
+          "fix_label": "algorithme · propose · alimente"
+        },
+        {
+          "cluster_id": 27,
+          "size": 31,
+          "tfidf_label": "tiktok · installé · idée utiliser",
+          "ctfidf_label": "tiktok · application · utilise",
+          "fix_label": "utilise · temps · instagram"
+        },
+        {
+          "cluster_id": 53,
+          "size": 31,
+          "tfidf_label": "application malsaine · implique · incapable",
+          "ctfidf_label": "application · malsaine · enfants",
+          "fix_label": "malsaine · enfants · incapable"
+        },
+        {
+          "cluster_id": 37,
+          "size": 30,
+          "tfidf_label": "contenus parfois · violents · certains contenus",
+          "ctfidf_label": "contenus · contenu · certains",
+          "fix_label": "contenus · contenu · violents"
+        },
+        {
+          "cluster_id": 20,
+          "size": 28,
+          "tfidf_label": "fille été · fille · convertir",
+          "ctfidf_label": "fille · suicide · pratiques",
+          "fix_label": "fille · suicide · pratiques"
+        },
+        {
+          "cluster_id": 33,
+          "size": 28,
+          "tfidf_label": "rapeur · américain · sexistes",
+          "ctfidf_label": "vidéo · vidéos · rapeur",
+          "fix_label": "vidéo · vidéos · rapeur"
+        },
+        {
+          "cluster_id": 52,
+          "size": 28,
+          "tfidf_label": "addiction forte · forte · addiction",
+          "ctfidf_label": "addiction · forte · addictif",
+          "fix_label": "addiction · forte · addictif"
+        },
+        {
+          "cluster_id": 17,
+          "size": 28,
+          "tfidf_label": "arrêter scroller · scroller · temps scroller",
+          "ctfidf_label": "scroller · scroll · scrolle",
+          "fix_label": "scroller · scroll · scrolle"
+        },
+        {
+          "cluster_id": 24,
+          "size": 27,
+          "tfidf_label": "insulte · oliv · insulter",
+          "ctfidf_label": "insulter · insulte · insultes",
+          "fix_label": "insulter · insulte · insultes"
+        },
+        {
+          "cluster_id": 32,
+          "size": 26,
+          "tfidf_label": "tiktok · tiktok passer · passer tiktok",
+          "ctfidf_label": "tiktok · passe · temps",
+          "fix_label": "passe · temps · passer"
+        },
+        {
+          "cluster_id": 35,
+          "size": 24,
+          "tfidf_label": "eux même · droite · fake news",
+          "ctfidf_label": "politique · droite · dangereux",
+          "fix_label": "politique · droite · dangereux"
+        },
+        {
+          "cluster_id": 30,
+          "size": 24,
+          "tfidf_label": "quand passe · aurai · tik",
+          "ctfidf_label": "temps · tik · tok",
+          "fix_label": "temps · impression · sens"
+        },
+        {
+          "cluster_id": 13,
+          "size": 23,
+          "tfidf_label": "sentiment infériorité · infériorité · flot",
+          "ctfidf_label": "sentiment · infériorité · flot",
+          "fix_label": "sentiment · infériorité · flot"
+        },
+        {
+          "cluster_id": 10,
+          "size": 21,
+          "tfidf_label": "perte notion · notion · notion temps",
+          "ctfidf_label": "notion · perte · temps",
+          "fix_label": "notion · perte · temps"
+        },
+        {
+          "cluster_id": 14,
+          "size": 21,
+          "tfidf_label": "chose inutile · inutile sensation · mal vient",
+          "ctfidf_label": "mal · temps · prennent",
+          "fix_label": "mal · temps · prennent"
+        },
+        {
+          "cluster_id": 40,
+          "size": 21,
+          "tfidf_label": "images choquantes · airbus · choquantes",
+          "ctfidf_label": "images · choquantes · choqué",
+          "fix_label": "images · choquantes · choqué"
+        },
+        {
+          "cluster_id": 12,
+          "size": 20,
+          "tfidf_label": "passé application · application sentiment · temps application",
+          "ctfidf_label": "passé · sentiment · application",
+          "fix_label": "passé · sentiment · temps"
+        },
+        {
+          "cluster_id": 39,
+          "size": 20,
+          "tfidf_label": "vidéos stupides · détails · atteris",
+          "ctfidf_label": "vidéos · hommes · contenus",
+          "fix_label": "vidéos · hommes · contenus"
+        },
+        {
+          "cluster_id": 9,
+          "size": 19,
+          "tfidf_label": "culpabilité après · sentiment culpabilité · culpabilité",
+          "ctfidf_label": "culpabilité · temps · dessus",
+          "fix_label": "culpabilité · temps · dessus"
+        },
+        {
+          "cluster_id": 50,
+          "size": 19,
+          "tfidf_label": "algorithme · parfois même · algorithme tiktok",
+          "ctfidf_label": "algorithme · tristesse · triste",
+          "fix_label": "algorithme · tristesse · triste"
+        },
+        {
+          "cluster_id": 38,
+          "size": 18,
+          "tfidf_label": "thème · scène · fille",
+          "ctfidf_label": "thème · scène · jeunes",
+          "fix_label": "thème · scène · jeunes"
+        },
+        {
+          "cluster_id": 31,
+          "size": 18,
+          "tfidf_label": "tiktok · addictif · tablette",
+          "ctfidf_label": "addictif · devoirs · tiktok",
+          "fix_label": "addictif · devoirs · arrive"
+        },
+        {
+          "cluster_id": 41,
+          "size": 18,
+          "tfidf_label": "video · mauvais · visionnage",
+          "ctfidf_label": "video · mauvais · visionnage",
+          "fix_label": "video · mauvais · visionnage"
+        }
+      ]
+    },
+    "macro": {
+      "n_clusters": 8,
+      "tfidf_tiktok_labels": 4,
+      "ctfidf_tiktok_labels": 4,
+      "fix_tiktok_labels": 0,
+      "tfidf_tiktok_rate": 0.5,
+      "ctfidf_tiktok_rate": 0.5,
+      "fix_tiktok_rate": 0.0,
+      "per_cluster": [
+        {
+          "cluster_id": 0,
+          "size": 292,
+          "tfidf_label": "baisse · perdu temps · culpabilité après",
+          "ctfidf_label": "temps · sentiment · perte",
+          "fix_label": "temps · sentiment · perte"
+        },
+        {
+          "cluster_id": 1,
+          "size": 271,
+          "tfidf_label": "faux compte · collège · menaces",
+          "ctfidf_label": "personnes · harcèlement · fille",
+          "fix_label": "personnes · harcèlement · fille"
+        },
+        {
+          "cluster_id": 2,
+          "size": 269,
+          "tfidf_label": "tiktok · tok · tik",
+          "ctfidf_label": "tiktok · temps · application",
+          "fix_label": "temps · mal · même"
+        },
+        {
+          "cluster_id": 3,
+          "size": 240,
+          "tfidf_label": "rapeur · voile · video",
+          "ctfidf_label": "vidéos · contenus · vidéo",
+          "fix_label": "vidéos · contenus · vidéo"
+        },
+        {
+          "cluster_id": 4,
+          "size": 225,
+          "tfidf_label": "interdit · tik · tok",
+          "ctfidf_label": "tiktok · tik · tok",
+          "fix_label": "fille · sociaux · enfants"
+        },
+        {
+          "cluster_id": 5,
+          "size": 121,
+          "tfidf_label": "tiktok · rend triste · algorithme",
+          "ctfidf_label": "mal · algorithme · tiktok",
+          "fix_label": "mal · algorithme · vidéos"
+        },
+        {
+          "cluster_id": 6,
+          "size": 101,
+          "tfidf_label": "application · appli · addiction",
+          "ctfidf_label": "application · addiction · temps",
+          "fix_label": "addiction · temps · mal"
+        },
+        {
+          "cluster_id": 7,
+          "size": 78,
+          "tfidf_label": "parfait · comparer · grosse",
+          "ctfidf_label": "corps · parfait · comparaison",
+          "fix_label": "corps · parfait · comparaison"
+        }
+      ]
+    }
+  },
+  "exp5_two_clusters": {
+    "n_tiktok_top_clusters": 13,
+    "median_consensus_all_clusters": 0.6955,
+    "clusters": [
+      {
+        "cluster_id": 42,
+        "size": 32,
+        "consensus": 0.7109,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok plateforme · tok · tik tok",
+        "ctfidf_label": "tik · tok · beaucoup",
+        "ctfidf_distinctive": [
+          "beaucoup",
+          "personnes",
+          "propos",
+          "plateforme"
+        ],
+        "sample_avis": [
+          "Je trouve que le Tik tok est un lieu dit \"toxic\", il y a beaucoup de contenus choquant, que les gens semblèrent ignorer et prendre pour la norme. Je ne comprends pas vraiment le but de cette application et je ne comprends pas non plus pourquoi tous les ados de mon âge sont accro ",
+          "Tik tok nous renferme dans une idée de la vie qui n’est pas la vraie. Des fois je vais sur tik tok sans même m’en rendre compte et lorsque je lève la tete ça fait déjà 2 heures que je scroll parfois même plus et je me dis que j’ai rien fait de ma journée et parfois c’est importan",
+          "le mal être est lié à l'utilisation des réseaux sociaux en général . tik tok véhicule un tas considérable d'informations fausses et débiles uniquement destinées à rémunérer leur créateur. Je souhaite l'interdiction de tiktok sur le sol francais"
+        ]
+      },
+      {
+        "cluster_id": 25,
+        "size": 46,
+        "consensus": 0.7313,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · tiktok détruit · reels",
+        "ctfidf_label": "application · tiktok · même",
+        "ctfidf_distinctive": [
+          "même",
+          "instagram",
+          "désinstaller",
+          "moi"
+        ],
+        "sample_avis": [
+          "Je trouve que l’utilisation de tiktok est un cercle vicieux, on est comme pris dans l’élan des vidéos, totalement déconnectées de la réalité. C’est comme si une partie de notre conscience se bat pour quitter cette application mais que l’autre y trouve du plaisir. On a aucune cons",
+          "Tiktok utilise un algorithme très poussé sur ce qui  intéresse chaque personne. Lorsque les individus ont un mal-être déjà présent ou non,  ils vont avoir tendance à regarder du contenu néfaste pour le bien-être moral car ce contenu est « classique » sur TikTok. Par la suite, seu",
+          "J'ai désinstallé TikTok il y a déjà plusieurs mois car je passais énormément de temps dessus et je négligeais mon travail. Pour préparer au mieux mon bac, j'ai  désinstallé cette application et je me suis rendu compte qu'elle avait contribué à un sentiment de mal-être quotidien. "
+        ]
+      },
+      {
+        "cluster_id": 26,
+        "size": 39,
+        "consensus": 0.7351,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · arrêter regarder · tiktok envie",
+        "ctfidf_label": "tiktok · sentiment · pouvoir",
+        "ctfidf_distinctive": [
+          "sentiment",
+          "pouvoir",
+          "envie",
+          "voyais"
+        ],
+        "sample_avis": [
+          "Sentiment de ne pas réussir à arrêter de regarder tiktok",
+          "Sentiment de mal-être en voyant que je passais beaucoup de temps sur tiktok avant de le supprimer définitivement",
+          "Impression de ne pas pouvoir s'arrêter de regarder tiktok, et après l'avoir arrêté impression d'avoir gâcher un temps précieux, regrets"
+        ]
+      },
+      {
+        "cluster_id": 43,
+        "size": 63,
+        "consensus": 0.6761,
+        "diversity": 0.9995,
+        "tfidf_label": "tiktok · collège · collége",
+        "ctfidf_label": "tiktok · collège · filles",
+        "ctfidf_distinctive": [
+          "collège",
+          "filles",
+          "avait",
+          "harceler"
+        ],
+        "sample_avis": [
+          "Ont m'a insulté parce que j'avais mis un truc sur tiktok et c'était des personnes de mon collège",
+          "J'étais assez jeune, et mon ancienne meilleure amie à commencé à me harceler sur Tiktok. Surtout en utilisant l'espace des commentaires.",
+          "J'ai fait un tiktok et reçu des remarques méchantes sur mon physique puis de l'harcèlement au collège."
+        ]
+      },
+      {
+        "cluster_id": 44,
+        "size": 46,
+        "consensus": 0.6807,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · compte tiktok · test",
+        "ctfidf_label": "tiktok · enfants · contenus",
+        "ctfidf_distinctive": [
+          "enfants",
+          "contenus",
+          "dangereux",
+          "jeunes"
+        ],
+        "sample_avis": [
+          "les contenus de tiktok sont crétins, inadaptés, trompeurs, falsifiés. J'interdis l'application à mes enfants car je ne veux pas qu'elles soient en contact avec la circulation massive de ces contenus inintéressants et ravageurs.",
+          "j'ai arrêté d'utiliser tiktok a cause du contenue trop choquant, que l'on ne retrouve pas dans les réels Instagram. lorsqu'on utilise tiktok ou Instagram,  c'est pour se \"divertir\", pas s'abrutir devant des vidéo qui sont des fakes news, ou des contenus choquant. lorsque j'utilis",
+          "Il arrive souvent que des gens republient des vidéos TikTok sur d'autres réseaux sociaux. Il m'est encore jamais arrivé de tomber sur un contenu dégradant mais il est claire que je sais l'impact qu'a Tiktok sur les personnes de mon âge.  Après avoir visionné des vidéos YouTube su"
+        ]
+      },
+      {
+        "cluster_id": 27,
+        "size": 31,
+        "consensus": 0.7528,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · installé · idée utiliser",
+        "ctfidf_label": "tiktok · application · utilise",
+        "ctfidf_distinctive": [
+          "utilise",
+          "temps",
+          "instagram",
+          "vais"
+        ],
+        "sample_avis": [
+          "Simplement mal a l'aise à l'idée d'utiliser Tiktok, comme l'impression de perdre du temps mais de ne pas s'arrêter",
+          "Je ressens parfois comme un manque de l’utilisation de TikTok. Il me “faut” mon temps quotidien de TikTok.",
+          "On est facilement tenté de regarder tiktok, on se rend pas compte du temps mis dans cette application et c’est dure d’y faire obstacle malgré la volonté"
+        ]
+      },
+      {
+        "cluster_id": 53,
+        "size": 31,
+        "consensus": 0.6839,
+        "diversity": 1.0,
+        "tfidf_label": "application malsaine · implique · incapable",
+        "ctfidf_label": "application · malsaine · enfants",
+        "ctfidf_distinctive": [
+          "malsaine",
+          "enfants",
+          "incapable",
+          "dérrière"
+        ],
+        "sample_avis": [
+          "Lié à une utilisation compulsive de l’application",
+          "Une certaine culpabilité de perdre son temps sur cette application",
+          "Culpabiliser de rester sur l’application."
+        ]
+      },
+      {
+        "cluster_id": 12,
+        "size": 20,
+        "consensus": 0.7392,
+        "diversity": 1.0,
+        "tfidf_label": "passé application · application sentiment · temps application",
+        "ctfidf_label": "passé · sentiment · application",
+        "ctfidf_distinctive": [
+          "passé",
+          "sentiment",
+          "temps",
+          "culpabilité"
+        ],
+        "sample_avis": [
+          "Trop de temps passé sur l'application.\nSentiment de perte de temps",
+          "C’est un sentiment de regret, suite au temps passé sur l’application on se rend compte du temps perdu ce qui éveille un sentiment de mal-être.",
+          "Mal être ressenti après avoir passé trop de temps sur l’application, sentiment de deception, dévalorisation"
+        ]
+      },
+      {
+        "cluster_id": 48,
+        "size": 39,
+        "consensus": 0.7041,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · mal tiktok · fonction",
+        "ctfidf_label": "mal · tiktok · triste",
+        "ctfidf_distinctive": [
+          "mal",
+          "triste",
+          "propagande",
+          "contenu"
+        ],
+        "sample_avis": [
+          "TikTok aggrave le mal être lorsqu’on se sent mal on va aller regarder TikTok et nos pour toi vont être baser la plupart du temps sur des tiktoks triste ce qui va aggraver notre mal être et nous enfoncer encore + dedans",
+          "Je pense que tiktok a beaucoup de bons côtés comme la découverte de beaucoup des choses variées mais aussi lorsque tu traverses une phase de mal être tu ne sauras pas forcément vers qui te tourner et tu te diras qu'ils pourront pas comprendre, donc tu vas voir sur tiktok et tu vo",
+          "Je me sentais déjà mal à la base mais j'ai regardé tiktok et j'avoue que ça m'a mise encore plus dans le mal avec une certaine incitation à me faire du mal et même a me tuer. Le mal être a grandi et j'ai fini par m'y noyer dans mes pourtoi tiktok ."
+        ]
+      },
+      {
+        "cluster_id": 28,
+        "size": 38,
+        "consensus": 0.7394,
+        "diversity": 1.0,
+        "tfidf_label": "tok · tik tok · tik",
+        "ctfidf_label": "tok · tik · skinny",
+        "ctfidf_distinctive": [
+          "skinny",
+          "tca",
+          "renferme"
+        ],
+        "sample_avis": [
+          "Sentiment de culpabilité à passer trop de temps sur tik tok",
+          "Mal être du au fait de passer trop de temps sur tik tok sans s’en rendre compte",
+          "Sentiment de décalage avec la réalité après une trop longue utilisation de Tik Tok"
+        ]
+      },
+      {
+        "cluster_id": 29,
+        "size": 47,
+        "consensus": 0.714,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · dopamine · scroller",
+        "ctfidf_label": "tiktok · temps · scroller",
+        "ctfidf_distinctive": [
+          "temps",
+          "scroller",
+          "vie",
+          "dopamine"
+        ],
+        "sample_avis": [
+          "Je me sens mal d’être autant sur tiktok. Je perds du temps inutilement, pour faire quelque chose de bête.",
+          "depuis que j'utilise tiktok je me sens plus triste car selon le contenu de nos pourtois cela peut nous influencer, je sais que c'est en une partie à cause de ça mais c'est vraiment trop addictif pour que j'arrête",
+          "Le fait de regarder tiktok me donne l'impression de ne rien faire et d'être accro je n'aime pas ce sentiment, j'essaie d'arrêter de plus en plus!"
+        ]
+      },
+      {
+        "cluster_id": 31,
+        "size": 18,
+        "consensus": 0.7505,
+        "diversity": 1.0,
+        "tfidf_label": "tiktok · addictif · tablette",
+        "ctfidf_label": "addictif · devoirs · tiktok",
+        "ctfidf_distinctive": [
+          "addictif",
+          "devoirs",
+          "arrive",
+          "generation"
+        ],
+        "sample_avis": [
+          "TikTok est addictif, on peut y passer des heures sans s'en rendre compte. Ça vous gâche du temps précieux que vous pourriez passer ailleurs et surtout donne une image de comparaison néfaste pour nous même.",
+          "Tiktok est addictif et m'a fait perdre beaucoup de temps à rester dessus et enchaîner les vidéos sans pouvoir m'arrêter de façon raisonnable. Je l'ai desinstallé par précaution.",
+          "Je trouve que TikTok et Instagram est très addictif et j’ai l’impression de perdre mon temps. J’y vais pour me reposer mais en réalité ça me fatigue plus qu’autre choses."
+        ]
+      },
+      {
+        "cluster_id": 32,
+        "size": 26,
+        "consensus": 0.7643,
+        "diversity": 0.9969,
+        "tfidf_label": "tiktok · tiktok passer · passer tiktok",
+        "ctfidf_label": "tiktok · passe · temps",
+        "ctfidf_distinctive": [
+          "passe",
+          "temps",
+          "passer",
+          "passé"
+        ],
+        "sample_avis": [
+          "Il m'arrive de culpabiliser de ne pas voir le temps passer sur Tiktok.",
+          "Je culpabilise de regarder autant Tiktok mais une fois qu'on commence on ne voit pas le temps passer.",
+          "Trop de temps passé sur tiktok"
+        ]
+      }
+    ]
+  }
+}
