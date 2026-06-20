@@ -96,7 +96,63 @@ body {
   color: var(--accent);
 }
 
-/* ---- Theme card ---- */
+/* ---- Macro-theme card (level 0 — the drill-down tree root) ---- */
+.macro {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 10px 4px;
+  padding: 12px 14px;
+  background: var(--panel-bg2);
+  transition: border-color 0.15s ease;
+}
+
+.macro--open {
+  border-color: var(--accent);
+}
+
+.macro__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text);
+  text-align: left;
+}
+
+.macro__caret {
+  flex: 0 0 auto;
+  width: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.macro__title {
+  flex: 1 1 auto;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.macro__meta {
+  margin: 4px 0 8px 22px;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Sub-themes are indented under their macro, with a guide rail. */
+.macro__subs {
+  margin: 6px 0 0 10px;
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+}
+
+/* ---- Theme card (sub-theme — level 1) ---- */
 .theme {
   border: 1px solid var(--line);
   border-radius: 10px;
