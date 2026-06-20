@@ -38,19 +38,29 @@ class Idea:
     @classmethod
     def from_row(cls, row: dict, idx: int) -> "Idea":
         known = {
-            "id", "text", "text_clean", "ts", "lang",
+            "id", "type", "label", "props", "text", "text_clean", "ts", "lang",
             "author_hash", "source", "weight",
         }
-        text = row.get("text") or row.get("text_clean") or ""
+        # Le JSONL canonique de la lane data niche les champs sous `props`
+        # (cf. queue/cross-lane.md). Le fixture de dev cluster est plat. On
+        # supporte les deux : `props` a la priorité, repli sur le top-level.
+        props = row.get("props") or {}
+
+        def get(key, default=None):
+            if key in props:
+                return props[key]
+            return row.get(key, default)
+
+        text = get("text") or get("text_clean") or ""
         return cls(
             id=str(row.get("id") or row.get("idea_id") or f"idea-{idx}"),
             text=text,
-            text_clean=row.get("text_clean") or text,
-            ts=row.get("ts"),
-            lang=row.get("lang", "fr"),
-            author_hash=row.get("author_hash"),
-            source=row.get("source", "unknown"),
-            weight=float(row.get("weight", 1.0) or 1.0),
+            text_clean=get("text_clean") or text,
+            ts=get("ts"),
+            lang=get("lang", "fr"),
+            author_hash=get("author_hash"),
+            source=get("source", "unknown"),
+            weight=float(get("weight", 1.0) or 1.0),
             extra={k: v for k, v in row.items() if k not in known},
         )
 
