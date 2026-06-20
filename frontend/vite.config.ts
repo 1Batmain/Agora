@@ -9,6 +9,9 @@ export default defineConfig({
     port: 5180,
     strictPort: true,
     host: true,
+    // Allow reaching the dev server by the tailnet hostname `forge` (Vite blocks
+    // unknown Host headers by default → "Blocked request. This host ... not allowed").
+    allowedHosts: ['forge', 'localhost'],
     headers: {
       // SharedArrayBuffer for the force-layout worker (zero-copy position SAB).
       'Cross-Origin-Opener-Policy': 'same-origin',
@@ -18,6 +21,7 @@ export default defineConfig({
   preview: {
     port: 5180,
     strictPort: true,
+    allowedHosts: ['forge', 'localhost'],
   },
   worker: {
     format: 'es',
