@@ -21,8 +21,9 @@ export interface GraphNode {
     source?: string;
     weight?: number;
   };
-  cluster_id: number; // top-level — Leiden community
-  color: string; // top-level — hex, palette colour for the swarm
+  cluster_id: number; // top-level — leaf (sub-theme) Leiden community
+  macro_id?: number; // top-level — parent macro-theme (hierarchical mode)
+  color: string; // top-level — hex, palette colour for the swarm (macro colour)
 }
 
 export interface GraphLink {
@@ -43,6 +44,10 @@ export interface Theme {
   label: string;
   keywords: string[];
   color: string;
+  // Hierarchy (cross-lane contract): macro = level 0, sub-theme = level 1.
+  level: number;
+  parent_id: number | null; // macro id for a sub-theme, null for a macro
+  children: number[]; // leaf ids for a macro, [] for a sub-theme
 }
 
 export interface GraphPayload {
@@ -69,6 +74,31 @@ export interface GraphIndex {
   meta: Record<string, unknown>;
   indexOf: Map<string, number>;
   byId: Map<string, IndexedNode>;
+  themesById: Map<number, Theme>;
+}
+
+/** A macro-theme paired with its resolved sub-themes — the drill-down tree. */
+export interface MacroNode {
+  macro: Theme;
+  subs: Theme[];
+}
+
+/**
+ * Build the macro→sub drill-down tree from a flat `themes[]` list. Macros
+ * (`level === 0`) are sorted by weight; each macro's children are resolved via
+ * `themesById` and likewise weight-sorted. Falls back gracefully on flat
+ * payloads (no `level`): every theme is treated as its own macro with no subs.
+ */
+export function buildThemeTree(index: GraphIndex): MacroNode[] {
+  const byWeight = (a: Theme, b: Theme) => b.weight_sum - a.weight_sum;
+  const macros = index.themes.filter((t) => (t.level ?? 0) === 0);
+  return macros.sort(byWeight).map((macro) => ({
+    macro,
+    subs: (macro.children ?? [])
+      .map((id) => index.themesById.get(id))
+      .filter((t): t is Theme => t != null)
+      .sort(byWeight),
+  }));
 }
 
 export function buildIndex(payload: GraphPayload): GraphIndex {
@@ -79,6 +109,8 @@ export function buildIndex(payload: GraphPayload): GraphIndex {
     indexOf.set(n.id, n.index);
     byId.set(n.id, n);
   }
+  const themesById = new Map<number, Theme>();
+  for (const t of payload.themes) themesById.set(t.cluster_id, t);
   return {
     nodes,
     links: payload.links,
@@ -86,5 +118,6 @@ export function buildIndex(payload: GraphPayload): GraphIndex {
     meta: payload.meta,
     indexOf,
     byId,
+    themesById,
   };
 }
