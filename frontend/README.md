@@ -1,46 +1,75 @@
-# Agora — Lane VIZ (frontend)
+# Agora — Lane CONSOLE (frontend)
 
-Essaim 3D des consultations citoyennes : un nuage de nœuds (avis) qui s'auto-organise
-en **communautés Leiden = thèmes**, coloré par thème, avec un panneau latéral
-auditable (drill-down thème → avis sources).
+Console d'exploration du pipeline de consultation citoyenne. Tous les knobs de
+clustering sont réglables **en live** → re-clustering serveur → **viz 2D circle
+packing zoomable** sur la hiérarchie `macro → sous-thème → avis`.
 
 Port : **5180 uniquement**.
 
-## D'où vient la base
+> Pivot UX (2026-06-20) : l'ancien essaim 3D (R3F / three / d3-force-3d, forké de
+> `dummy`) a été **retiré**. Plus de web worker, plus de three.js — la console est
+> du React + SVG + `d3-hierarchy` (pack layout). `package.json` est allégé d'autant.
 
-Le **moteur de layout** est forké (lecture seule) de `~/forge/dummy/frontend` :
-React + `@react-three/fiber` + `d3-force-3d` exécuté dans un **web worker**.
+## Ce que fait la console
 
-Repris **verbatim** (le contrat figé, cf. `queue/cross-lane.md`) :
+1. **Circle packing zoomable** (`d3-hierarchy` `pack`) — `src/CirclePack.tsx` :
+   - macro-thèmes = grandes bulles (taille ∝ `weight_sum`, couleur = `color` du
+     thème, label) ;
+   - **clic sur un macro = zoom** dans ses sous-thèmes ;
+   - **clic sur un sous-thème = zoom + avis sources** (`node.props.text`) listés
+     dans le panneau de droite ;
+   - **clic sur un avis** = l'avis en entier dans le panneau ;
+   - **clic sur le fond = dézoom** d'un niveau. Transitions douces (tween rAF du
+     `view` [centre, diamètre] → labels à taille d'écran constante, pas de jank).
 
-- `src/workers/forceLayout.protocol.ts` — protocole worker STABLE
-  (`init` batch · `addNodes` live · `focus` · `setParams` · `pin`/`unpin`).
-- `src/workers/forceLayout.worker.ts` — la simulation d3-force-3d (forces +
-  gravité par nœud + collision), émet les positions à ~30 Hz (SharedArrayBuffer
-  si dispo, sinon buffers transférables).
-- `src/workers/forceLayout.client.ts` — client mince autour du worker.
-- `src/types/d3-force-3d.d.ts` — typings du module.
+2. **Panneau KNOBS** (`src/KnobsPanel.tsx`) construit depuis `GET /api/params` :
+   un slider par knob (`dedup`, `min_chars`, `k`, `threshold`, `resolution_macro`,
+   `resolution_sub`, `min_sub_size`). Chaque changement est **debouncé ~300 ms**
+   puis envoyé en `POST /api/recluster {knobs}` → la viz et les stats se mettent à
+   jour.
 
-**Réécrit / nettoyé** (le HUD métier de dummy — exercices/anatomie/nutrition/chat/
-agent — est jeté) :
+3. **Stats live** (`src/StatsBar.tsx`) : `meta.stats` du payload — `n_macros`,
+   `n_subs`, `n_nodes`, `modularité`, `took_ms` — pour bâtir l'intuition « ce knob
+   fait ça ». Indicateur `● live :8010` / `○ statique`.
 
-- `src/scene/{GraphScene,Nodes,Links}.tsx` — rendu R3F autonome (Canvas +
-  `OrbitControls` drei), spheres instanciées colorées par `node.color`, arêtes
-  k-NN en `LineSegments` (luminosité ∝ `props.weight`).
-- `src/hud/ThemesPanel.tsx` — panneau latéral générique (le seul HUD conservé).
-- `src/state/useGraphStore.ts` — état UI minimal (thème sélectionné, hover).
-- `src/lib/graphData.ts` — types canoniques + indexation.
+## Backend & proxy
 
-> dummy n'est **jamais** modifié ni lancé. Le moteur est copié, pas importé.
+Le backend de re-clustering (lane *stream*) vit sur **:8010**. `vite.config.ts`
+configure un **proxy** : `server.proxy['/api'] → http://localhost:8010` avec
+`rewrite` qui retire le préfixe `/api`. Le front appelle donc `/api/params` et
+`/api/recluster` (→ `:8010/params`, `:8010/recluster`), sans souci CORS/host.
 
-## Données (Phase 1 — batch, pas de backend)
+Knobs (défauts + bornes — contrat figé, gagnant `nomic-v2`) :
 
-`public/graph.sample.json` = copie de
-`pipeline/cluster/fixtures/graph.sample.json`, un `GraphPayload { meta, nodes,
-links, themes }` (36 avis, 188 arêtes k-NN, 6 thèmes Leiden).
+| knob | défaut | borne | effet |
+|---|---|---|---|
+| `dedup` (cosine) | 0.95 | 0.90–0.99 | fusion near-dups |
+| `min_chars` | 12 | 0–40 | filtre avis courts |
+| `k` (voisins) | 12 | 5–30 | densité k-NN |
+| `threshold` (cosine) | 0.60 | 0.40–0.85 | coupe les arêtes |
+| `resolution_macro` | 1.0 | 0.3–3.0 | granularité macros |
+| `resolution_sub` | 1.5 | 0.5–4.0 | granularité sous-thèmes |
+| `min_sub_size` | 18 | 5–40 | fusion des miettes |
 
-⚠️ **Contrat** : sur chaque nœud, `cluster_id` (int) et `color` (hex) sont au
-**TOP-LEVEL** (pas dans `props`). L'essaim est coloré par `node.color`.
+`GET /api/params` peut surcharger ces défauts/bornes/pas ; sinon ce sont les
+valeurs ci-dessus (`src/api.ts` → `DEFAULT_KNOBS`).
+
+## Repli (backend down)
+
+Si `:8010` ne répond pas, la console charge le `graph.json` statique de `public/`
+(à défaut `graph.sample.json`) en **lecture seule** : les sliders sont **grisés**
+et l'indicateur passe à `○ statique`. Les stats sont alors reconstruites depuis
+`themes`/`nodes`/`meta.clustering`. C'est l'état par défaut tant que la lane
+stream n'a pas démarré son serveur.
+
+## Données
+
+`GraphPayload { meta, nodes, links, themes }` — même shape que `graph.json`.
+
+- `themes` = hiérarchie à 2 niveaux : `level=0` (macros) → `level=1`
+  (sous-thèmes, `parent_id`/`children[]`).
+- chaque nœud porte `cluster_id` (sous-thème) et `macro_id` (macro) au
+  **TOP-LEVEL**, plus `color` ; `props.text` = l'avis source, `props.weight` = poids.
 
 ## Lancer
 
@@ -48,36 +77,29 @@ links, themes }` (36 avis, 188 arêtes k-NN, 6 thèmes Leiden).
 cd frontend
 npm install          # une seule fois (box partagée — sobre)
 npm run dev          # → http://localhost:5180
+npm run build        # tsc -b && vite build (type-check + bundle)
 ```
 
-`npm run dev` force déjà `--port 5180` (et `vite.config.ts` met `strictPort`).
+`npm run dev` force `--port 5180` (`vite.config.ts` met `strictPort`).
 Ports interdits (autres projets / Ollama) : `8000 5173 8765 11434`.
 
-Les en-têtes COOP/COEP sont activés (`vite.config.ts`) pour autoriser
-`SharedArrayBuffer` (transport zéro-copie des positions du worker).
+## Vérification d'acceptation
 
-## À livrer — Phase 1 (fait)
+- `npm run build` (tsc) passe ✅
+- `:5180` sert l'app ; `/graph.json` statique = 200 ; `/api/params` proxifie vers
+  `:8010` (500/ECONNREFUSED quand le backend est down → repli statique) ✅
+- Hiérarchie réelle vérifiée (1 root, 8 macros, 47 sous-thèmes, 1597 avis ;
+  rayons pack tous positifs, 0 avis orphelin) ✅
+- Flux live vérifié via backend mock éphémère : `/api/params` lu, `/api/recluster`
+  POST → `meta.stats` rendues ✅
 
-1. Essaim 3D force-directed des 36 avis, coloré par thème (`node.color`).
-2. Liens = arêtes k-NN (`links`, `props.weight`).
-3. Panneau thèmes trié par poids : `label`, `keywords`, `size`, `weight_sum`,
-   `diversity`, `consensus`.
-4. Drill-down auditable : clic sur un thème (ou un nœud) → liste des avis membres
-   (`node.props.text`) du cluster — la transparence est un critère jury.
+Checklist visuelle (pas de navigateur headless dans cet env — à confirmer à l'œil
+sur `http://localhost:5180`) :
 
-## Phase 2 (live) — ce qui reste
-
-Le protocole worker expose déjà `addNodes` (ajout incrémental, positions
-préservées). Pour passer au live, **sans réécrire le scaffold** :
-
-1. Dans `src/scene/GraphScene.tsx`, à l'endroit marqué `// Phase 2 hook`, ouvrir
-   un WebSocket (cf. `queue/cross-lane.md` → backend lane `:8010`).
-2. Sur `snapshot` : reconstruire le `GraphPayload` initial (comme le fetch actuel).
-3. Sur `idea_added` / `edges_added` : appeler
-   `clientRef.current.addNodes(nodes, links)` à chaque vague d'avis → l'essaim
-   grandit, le layout se ré-équilibre localement.
-4. Sur `cluster_updated` / `cluster_merged` / `cluster_split` : mettre à jour
-   `themes` + recolorer (recopier `node.color` depuis le nouvel état du cluster).
-
-Le rendu (`Nodes`/`Links`) lit déjà les positions par index depuis le buffer du
-worker — il suivra l'essaim qui grandit sans modification.
+- [ ] 8 grandes bulles macro colorées + labels visibles à l'ouverture
+- [ ] clic sur une macro → zoom doux, labels des sous-thèmes apparaissent
+- [ ] clic sur un sous-thème → zoom + liste des avis sources à droite
+- [ ] clic sur un avis → texte complet à droite
+- [ ] clic sur le fond → dézoom d'un niveau
+- [ ] (backend up) bouger un slider → après ~300 ms la viz + les stats changent
+- [ ] (backend down) sliders grisés, bandeau « lecture seule », viz depuis graph.json
