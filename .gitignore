@@ -1,0 +1,16 @@
+# Données (téléchargées, non versionnées — peuvent contenir des données personnelles)
+data/
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# OS / IDE / outils
+.DS_Store
+.idea/
+.vscode/
+.claude/
