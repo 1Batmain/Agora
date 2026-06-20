@@ -25,9 +25,9 @@ from pathlib import Path
 import numpy as np
 
 from pipeline.cluster import io
+from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
 from pipeline.cluster.hierarchy import (
-    DEFAULT_MIN_SUB_SIZE,
     DEFAULT_RESOLUTION_MACRO,
     DEFAULT_RESOLUTION_SUB,
     run_hierarchical,
@@ -80,7 +80,8 @@ def _theme_entry(cid, member_idxs, ideas, score, name, color, *,
     }
 
 
-def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan):
+def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan,
+                dup_threshold):
     """Mode PLAT (non-régression) : Leiden 1 niveau. level=0, sans hiérarchie."""
     leiden = run_leiden(knn, resolution=resolution, seed=seed)
     membership = leiden.membership
@@ -103,7 +104,8 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan):
     for idx, cid in enumerate(membership):
         members[cid].append(idx)
 
-    scores = {cid: score_cluster(idxs, vecs, weights) for cid, idxs in members.items()}
+    scores = {cid: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
+              for cid, idxs in members.items()}
     cluster_docs = {cid: [ideas[i].text for i in idxs] for cid, idxs in members.items()}
     # Mots-vides saturants dérivés du corpus GLOBAL (un avis = un document).
     corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
@@ -144,7 +146,8 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan):
 
 
 def _build_hierarchical(ideas, vecs, weights, knn, *,
-                        resolution_macro, resolution_sub, min_sub_size, seed):
+                        resolution_macro, resolution_sub, min_sub_size, seed,
+                        dup_threshold=None):
     """Mode HIÉRARCHIQUE : macro (level=0) → sous-thèmes (level=1).
 
     Nœud coloré par le MACRO parent ; `cluster_id` = feuille (sous-thème),
@@ -168,8 +171,10 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
         leaf_members[h.leaf_membership[idx]].append(idx)
 
     # Scores aux deux niveaux.
-    macro_scores = {m: score_cluster(idxs, vecs, weights) for m, idxs in macro_members.items()}
-    leaf_scores = {l: score_cluster(idxs, vecs, weights) for l, idxs in leaf_members.items()}
+    macro_scores = {m: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
+                    for m, idxs in macro_members.items()}
+    leaf_scores = {l: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
+                   for l, idxs in leaf_members.items()}
 
     # Mots-vides saturants dérivés du corpus GLOBAL (partagés macro + sous-thèmes).
     corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
@@ -238,8 +243,8 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
 
 def build_payload(
     input_path: str | None = None,
-    k: int = 8,
-    threshold: float = 0.84,
+    k: int | None = None,
+    threshold: float | None = None,
     resolution: float = 1.5,
     seed: int = 42,
     model_id: str | None = None,
@@ -252,8 +257,12 @@ def build_payload(
     hierarchical: bool = False,
     resolution_macro: float = DEFAULT_RESOLUTION_MACRO,
     resolution_sub: float = DEFAULT_RESOLUTION_SUB,
-    min_sub_size: int = DEFAULT_MIN_SUB_SIZE,
+    min_sub_size: int | None = None,
+    dup_threshold: float | None = None,
 ) -> dict:
+    """Construit le GraphPayload. `k`, `threshold`, `min_sub_size`, `dup_threshold`
+    valant ``None`` sont **dérivés des données** (cf. `pipeline.cluster.adaptive`,
+    audit #6/#7/#9) ; passer une valeur explicite la force (knob)."""
     ideas = io.load_ideas(input_path)
     src = io.resolve_input(input_path)
 
@@ -296,6 +305,22 @@ def build_payload(
             "n_collapsed": dd.n_collapsed,
         }
 
+    # 1.75) Défauts DÉRIVÉS des données (audit #6/#7/#9) ---------------------
+    #       Tout knob laissé à None est dérivé de la distribution des cosinus
+    #       k-NN du corpus DÉDUPLIQUÉ (pas de ré-embed : on réutilise `vecs`).
+    #       Une valeur explicite est toujours respectée.
+    derived = derive_defaults(vecs, k=k)
+    k = k if k is not None else derived.k
+    if threshold is None:
+        threshold = derived.threshold
+    if min_sub_size is None:
+        min_sub_size = derived.min_sub_size
+    # near-dup (diversity) DÉRIVÉ de la distribution (p98), sous le seuil `dedup`
+    # (dedup collapse les paires > dedup ; diversity mesure le résidu juste en
+    # dessous). Forçable en knob (`dup_threshold`).
+    if dup_threshold is None:
+        dup_threshold = derived.dup_threshold
+
     # 2) Graphe k-NN sémantique --------------------------------------------
     knn = build_knn_graph(vecs, k=k, threshold=threshold)
 
@@ -311,11 +336,13 @@ def build_payload(
             resolution_sub=resolution_sub,
             min_sub_size=min_sub_size,
             seed=seed,
+            dup_threshold=dup_threshold,
         )
     else:
         nodes, themes, clustering_meta = _build_flat(
             ideas, vecs, weights, knn,
             resolution=resolution, seed=seed, with_hdbscan=with_hdbscan,
+            dup_threshold=dup_threshold,
         )
 
     id_by_idx = [idea.id for idea in ideas]
@@ -358,14 +385,27 @@ def build_payload(
             "dedup": dedup_meta,
             "params": {
                 "k": k,
-                "threshold": threshold,
+                "threshold": round(float(threshold), 4),
                 "resolution": resolution,
+                "min_sub_size": min_sub_size,
+                "dup_threshold": round(float(dup_threshold), 4),
                 "seed": seed,
                 "knn_backend": knn.backend,
                 "avg_degree": round(knn.avg_degree, 3),
                 "max_links": max_links,
                 "n_links_total": n_links_total,
                 "links_capped": links_capped,
+            },
+            # Traçabilité des défauts DÉRIVÉS (audit #6/#7/#9) : ce qui a été
+            # auto-calculé vs forcé, + la distribution dont le seuil sort.
+            "derived": {
+                "k": derived.k,
+                "threshold": round(derived.threshold, 4),
+                "min_sub_size": derived.min_sub_size,
+                "dup_threshold": round(derived.dup_threshold, 4),
+                "knn_sim_mean": derived.pool_mean,
+                "knn_sim_std": derived.pool_std,
+                "edge_sigma": EDGE_SIGMA,
             },
             "clustering": clustering_meta,
         },
@@ -380,8 +420,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Build GraphPayload (NLP batch).")
     ap.add_argument("--input", default=None, help="ideas.jsonl (sinon auto-résolu)")
     ap.add_argument("--out", default=str(DEFAULT_OUT), help="chemin graph.json")
-    ap.add_argument("--k", type=int, default=8)
-    ap.add_argument("--threshold", type=float, default=0.84)
+    ap.add_argument("--k", type=int, default=None,
+                    help="voisins k-NN (défaut: DÉRIVÉ ∝ log10(N))")
+    ap.add_argument("--threshold", type=float, default=None,
+                    help="seuil d'arête cosine (défaut: DÉRIVÉ μ−σ·k des cosinus k-NN)")
     ap.add_argument("--resolution", type=float, default=1.5)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--model", default=None, help="override model_id")
@@ -401,8 +443,10 @@ def main() -> None:
                     help="résolution Leiden niveau macro (basse → peu de grandes communautés)")
     ap.add_argument("--resolution-sub", type=float, default=DEFAULT_RESOLUTION_SUB,
                     help="résolution Leiden des sous-thèmes (haute → finesse intra-macro)")
-    ap.add_argument("--min-sub-size", type=int, default=DEFAULT_MIN_SUB_SIZE,
-                    help="taille mini d'un sous-thème (les miettes sont fusionnées)")
+    ap.add_argument("--min-sub-size", type=int, default=None,
+                    help="taille mini d'un sous-thème (défaut: DÉRIVÉ, relatif à N)")
+    ap.add_argument("--dup-threshold", type=float, default=None, metavar="COSINE",
+                    help="seuil near-dup pour diversity (défaut: DÉRIVÉ p98, ou lié à --dedup)")
     ap.add_argument("--fixture", action="store_true",
                     help="écrit aussi le fixture viz graph.sample.json")
     args = ap.parse_args()
@@ -424,6 +468,7 @@ def main() -> None:
         resolution_macro=args.resolution_macro,
         resolution_sub=args.resolution_sub,
         min_sub_size=args.min_sub_size,
+        dup_threshold=args.dup_threshold,
     )
 
     out = Path(args.out)
@@ -448,7 +493,14 @@ def main() -> None:
         print(f"  dedup      : cosine>{d['threshold']}  "
               f"{d['n_in']}→{d['n_out']} (−{d['n_collapsed']} near-dups)")
     print(f"  model_id   : {m['model_id']} (dim {m['embedding_dim']})")
-    print(f"  nodes/links: {m['n_nodes']} / {m['n_links']}  (avg_deg {m['params']['avg_degree']})")
+    d = m.get("derived", {})
+    p = m["params"]
+    print(f"  DÉRIVÉ     : k={d.get('k')}  seuil={d.get('threshold')} "
+          f"(μ={d.get('knn_sim_mean')} −{d.get('edge_sigma')}·σ={d.get('knn_sim_std')})  "
+          f"min_sub={d.get('min_sub_size')}  dup={d.get('dup_threshold')}")
+    print(f"  effectif   : k={p['k']}  seuil={p['threshold']}  "
+          f"min_sub={p.get('min_sub_size')}  dup={p.get('dup_threshold')}")
+    print(f"  nodes/links: {m['n_nodes']} / {m['n_links']}  (avg_deg {p['avg_degree']})")
     cl = m["clustering"]
     if cl.get("mode") == "hierarchical":
         lh = cl["leiden_hierarchy"]
