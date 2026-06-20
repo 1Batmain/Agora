@@ -17,6 +17,7 @@ from time import perf_counter
 
 import numpy as np
 
+from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.build import _build_hierarchical
 from pipeline.cluster.dedup import dedup_near
 from pipeline.cluster.io import Idea
@@ -60,17 +61,22 @@ def recluster(
     *,
     dedup: float | None = 0.95,
     min_chars: int = 12,
-    k: int = 12,
-    threshold: float = 0.60,
+    k: int | None = None,
+    threshold: float | None = None,
     resolution_macro: float = 1.0,
     resolution_sub: float = 1.5,
-    min_sub_size: int = 18,
+    min_sub_size: int | None = None,
+    dup_threshold: float | None = None,
     seed: int = SEED,
 ) -> dict:
     """Re-clusterise le superset caché et renvoie un GraphPayload hiérarchique.
 
     `ideas`/`vecs`/`weights` sont le superset CACHÉ aligné. Les filtres
     `min_chars`/`dedup` réduisent ce set (sans ré-embedder).
+
+    `k`, `threshold`, `min_sub_size`, `dup_threshold` valant ``None`` sont
+    **dérivés des données** (audit #6/#7/#9) sur le set filtré/dédupliqué — aucun
+    ré-embed : on réutilise les vecteurs cachés. Une valeur explicite la force.
     """
     t0 = perf_counter()
     n_cached = len(ideas)
@@ -103,6 +109,21 @@ def recluster(
             "n_collapsed": dd.n_collapsed,
         }
 
+    # 2.5) Défauts DÉRIVÉS des données (audit #6/#7/#9) sur le set dédupliqué.
+    #      Aucun ré-embed : la distribution des cosinus k-NN sort des vecteurs
+    #      cachés. Un knob explicite (non-None) est toujours respecté.
+    derived = derive_defaults(vecs, k=k)
+    k = k if k is not None else derived.k
+    if threshold is None:
+        threshold = derived.threshold
+    if min_sub_size is None:
+        min_sub_size = derived.min_sub_size
+    # near-dup (diversity) DÉRIVÉ de la distribution (p98) — volontairement SOUS
+    # le seuil `dedup` : dedup a déjà collapsé les paires > dedup, donc diversity
+    # mesure les quasi-doublons RÉSIDUELS juste en dessous (sinon diversity≈1).
+    if dup_threshold is None:
+        dup_threshold = derived.dup_threshold
+
     # 3) Graphe k-NN cosine.
     knn = build_knn_graph(vecs, k=k, threshold=threshold)
 
@@ -113,6 +134,7 @@ def recluster(
         resolution_sub=resolution_sub,
         min_sub_size=min_sub_size,
         seed=seed,
+        dup_threshold=dup_threshold,
     )
 
     id_by_idx = [idea.id for idea in ideas]
@@ -153,13 +175,24 @@ def recluster(
                 "dedup": dedup,
                 "min_chars": min_chars,
                 "k": k,
-                "threshold": threshold,
+                "threshold": round(float(threshold), 4),
                 "resolution_macro": resolution_macro,
                 "resolution_sub": resolution_sub,
                 "min_sub_size": min_sub_size,
+                "dup_threshold": round(float(dup_threshold), 4),
                 "seed": seed,
                 "knn_backend": knn.backend,
                 "avg_degree": round(knn.avg_degree, 3),
+            },
+            # Défauts DÉRIVÉS effectivement calculés (traçabilité audit #6/#7/#9).
+            "derived": {
+                "k": derived.k,
+                "threshold": round(derived.threshold, 4),
+                "min_sub_size": derived.min_sub_size,
+                "dup_threshold": round(derived.dup_threshold, 4),
+                "knn_sim_mean": derived.pool_mean,
+                "knn_sim_std": derived.pool_std,
+                "edge_sigma": EDGE_SIGMA,
             },
             "clustering": clustering_meta,
             "stats": stats,
