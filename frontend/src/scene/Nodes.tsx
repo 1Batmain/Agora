@@ -24,7 +24,7 @@ export function Nodes({ graph, getPositions }: NodesProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const count = graph.nodes.length;
 
-  const selectCluster = useGraphStore((s) => s.selectCluster);
+  const focusNode = useGraphStore((s) => s.focusNode);
   const hover = useGraphStore((s) => s.hover);
 
   // Per-node base colours from node.color — parsed once.
@@ -64,14 +64,20 @@ export function Nodes({ graph, getPositions }: NodesProps) {
     mesh.boundingSphere = null;
 
     // (2) Colours — only when emphasis state changes.
-    const { selectedClusterId, hoveredNodeId } = useGraphStore.getState();
-    const key = `${selectedClusterId ?? ''}|${hoveredNodeId ?? ''}`;
+    const { expandedMacroId, selectedClusterId, hoveredNodeId } = useGraphStore.getState();
+    const key = `${expandedMacroId ?? ''}|${selectedClusterId ?? ''}|${hoveredNodeId ?? ''}`;
     if (key !== lastPaintKey.current) {
       for (let i = 0; i < count; i++) {
         const node = graph.nodes[i];
         _base.copy(baseColors[i]);
+        // A picked sub-theme narrows emphasis to that leaf; otherwise an open
+        // macro lights its whole branch; otherwise everything is full colour.
         const inSelection =
-          selectedClusterId == null || node.cluster_id === selectedClusterId;
+          selectedClusterId != null
+            ? node.cluster_id === selectedClusterId
+            : expandedMacroId != null
+              ? node.macro_id === expandedMacroId
+              : true;
         if (!inSelection) {
           // Dim out-of-theme nodes toward the dark background.
           _col.copy(_base).lerp(_base.clone().multiplyScalar(0.18), 0.85);
@@ -96,8 +102,9 @@ export function Nodes({ graph, getPositions }: NodesProps) {
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     if (e.instanceId == null) return;
     e.stopPropagation();
-    // Click a node → open its theme's drill-down.
-    selectCluster(graph.nodes[e.instanceId].cluster_id);
+    // Click a node → open its macro branch then its sub-theme drill-down.
+    const node = graph.nodes[e.instanceId];
+    focusNode(node.macro_id ?? null, node.cluster_id);
   };
 
   return (
