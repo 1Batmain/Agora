@@ -36,6 +36,15 @@ uv run python -m pipeline.cluster.build --with-hdbscan
 Options : `--input PATH` `--out PATH` `--k 8` `--threshold 0.84`
 `--resolution 1.5` `--seed 42` `--model <model_id>`.
 
+```bash
+# thèmes HIÉRARCHIQUES (macro → sous-thèmes, Leiden 2 niveaux)
+uv run python -m pipeline.cluster.build --hierarchical
+```
+
+Options hiérarchie : `--resolution-macro 1.0` (basse → grandes communautés)
+`--resolution-sub 3.0` (plus fine, par sous-graphe induit) `--min-sub-size 15`
+(fusion des miettes). Voir **`HIERARCHY_NOTE.md`** pour l'arbre obtenu sur le réel.
+
 ### Dépendances optionnelles
 
 ```bash
@@ -69,10 +78,12 @@ Chaque ligne = un avis : au minimum `{ "id", "text" }`, optionnellement
     }
   },
   "nodes": [ { "id", "type":"idea", "label", "props": { text, text_clean, ts,
-               lang, author_hash, source, weight }, "cluster_id", "color" } ],
+               lang, author_hash, source, weight }, "cluster_id", "color",
+               "macro_id"? } ],   // macro_id présent en mode --hierarchical
   "links": [ { "source", "target", "type":"knn", "props": { "weight": cosine } } ],
-  "themes": [ { "cluster_id", "member_ids", "size", "weight_sum", "diversity",
-                "consensus", "centroid", "label", "keywords", "color" } ]
+  "themes": [ { "cluster_id", "level", "parent_id", "children", "member_ids",
+                "size", "weight_sum", "diversity", "consensus", "centroid",
+                "label", "keywords", "color" } ]
 }
 ```
 
@@ -96,6 +107,42 @@ Chaque ligne = un avis : au minimum `{ "id", "text" }`, optionnellement
 
 TF-IDF inter-clusters (uni + bigrammes, stopwords FR) — **pas de LLM**
 (décision Bob). `keywords[]` = top termes distinctifs, `label` = 3 premiers.
+
+## Thèmes hiérarchiques (`--hierarchical`)
+
+Deux niveaux interprétables pour un·e député·e : quelques **macro-thèmes**
+(`level=0`) qu'on ouvre en **sous-thèmes** (`level=1`). Cf. `hierarchy.py`.
+
+- **Niveau 0 (macro)** : Leiden **basse** résolution (`--resolution-macro`) sur le
+  graphe k-NN complet → grandes communautés.
+- **Niveau 1 (sous-thèmes)** : pour chaque macro, Leiden **haute** résolution
+  (`--resolution-sub`) sur son **sous-graphe induit**. Les sous-clusters
+  < `--min-sub-size` sont fusionnés dans le sous-thème viable **le plus proche**
+  (cosine) → pas de poussière de singletons.
+- **Naming inchangé** (TF-IDF) appliqué aux deux niveaux : macro = TF-IDF
+  inter-macros ; sous-thème = TF-IDF **contrasté dans son macro**.
+
+Forme de sortie (contrat `Theme` étendu) :
+
+| niveau | `level` | `parent_id` | `children` |
+|--------|---------|-------------|------------|
+| macro  | `0`     | `null`      | `[ids des sous-thèmes]` |
+| sous   | `1`     | `<macro_id>`| `[]` |
+
+- **`cluster_id`** d'un thème = id du macro (level 0) **ou** de la feuille (level 1).
+  Espaces d'ids **disjoints** (macros `[0,M)`, feuilles `[M,M+L)`).
+- **Nœuds** : `cluster_id` = la **feuille** (sous-thème) ; `macro_id` = le macro
+  parent ; `color` = couleur du **macro** (l'essaim se lit par macro-thème, la
+  finesse apparaît au drill-down). Les trois sont au **top-level** du nœud.
+- `meta.clustering` trace `mode`, `resolution_macro/sub`, `min_sub_size`,
+  `macro_modularity`, `n_macros`, `n_leaves`, `seed`.
+
+**Intégrité** : `hierarchy.check_integrity(payload)` renvoie la liste des erreurs
+(vide = arbre cohérent : `children` d'un macro = exactement les feuilles dont
+`parent_id` = ce macro ; chaque nœud → feuille valide + `macro_id` concordant).
+
+Le **mode plat** (Leiden 1 niveau, défaut sans `--hierarchical`) reste disponible
+pour non-régression ; ses thèmes portent `level=0, parent_id=null, children=[]`.
 
 ## Reproductibilité
 

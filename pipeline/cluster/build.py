@@ -26,6 +26,12 @@ import numpy as np
 
 from pipeline.cluster import io
 from pipeline.cluster.dedup import dedup_near
+from pipeline.cluster.hierarchy import (
+    DEFAULT_MIN_SUB_SIZE,
+    DEFAULT_RESOLUTION_MACRO,
+    DEFAULT_RESOLUTION_SUB,
+    run_hierarchical,
+)
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import name_clusters
@@ -36,6 +42,193 @@ from pipeline.embed.embedder import Embedder
 REPO_ROOT = io.REPO_ROOT
 DEFAULT_OUT = REPO_ROOT / "data" / "graph.json"
 FIXTURE_OUT = REPO_ROOT / "pipeline" / "cluster" / "fixtures" / "graph.sample.json"
+
+
+def _node_props(idea, weight: float) -> dict:
+    return {
+        "text": idea.text,
+        "text_clean": idea.text_clean or idea.text,
+        "ts": idea.ts,
+        "lang": idea.lang,
+        "author_hash": idea.author_hash,
+        "source": idea.source,
+        "weight": round(float(weight), 4),
+    }
+
+
+def _node_label(idea) -> str:
+    return (idea.text[:80] + "…") if len(idea.text) > 80 else idea.text
+
+
+def _theme_entry(cid, member_idxs, ideas, score, name, color, *,
+                 level, parent_id, children) -> dict:
+    """Une entrée `Theme` du contrat (commune aux deux niveaux)."""
+    return {
+        "cluster_id": cid,
+        "level": level,
+        "parent_id": parent_id,
+        "children": children,
+        "member_ids": [ideas[i].id for i in member_idxs],
+        "size": score.size,
+        "weight_sum": score.weight_sum,
+        "diversity": score.diversity,
+        "consensus": score.consensus,
+        "centroid": score.centroid,
+        "label": name["label"],
+        "keywords": name["keywords"],
+        "color": color,
+    }
+
+
+def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan):
+    """Mode PLAT (non-régression) : Leiden 1 niveau. level=0, sans hiérarchie."""
+    leiden = run_leiden(knn, resolution=resolution, seed=seed)
+    membership = leiden.membership
+
+    hdbscan_meta = None
+    if with_hdbscan:
+        from pipeline.cluster import hdbscan_contender as hc
+
+        if hc.available():
+            res = hc.run_hdbscan(vecs, seed=seed)
+            hdbscan_meta = {
+                "n_clusters": res.n_clusters,
+                "n_noise": res.n_noise,
+                "params": res.params,
+            }
+        else:
+            hdbscan_meta = {"available": False}
+
+    members: dict[int, list[int]] = defaultdict(list)
+    for idx, cid in enumerate(membership):
+        members[cid].append(idx)
+
+    scores = {cid: score_cluster(idxs, vecs, weights) for cid, idxs in members.items()}
+    cluster_docs = {cid: [ideas[i].text for i in idxs] for cid, idxs in members.items()}
+    names = name_clusters(cluster_docs)
+
+    nodes = []
+    for idx, idea in enumerate(ideas):
+        cid = int(membership[idx])
+        nodes.append({
+            "id": idea.id,
+            "type": "idea",
+            "label": _node_label(idea),
+            "props": _node_props(idea, weights[idx]),
+            "cluster_id": cid,
+            "color": color_for(cid),
+        })
+
+    themes = []
+    for cid in rank_clusters(scores):
+        nm = names.get(cid, {"label": f"thème {cid}", "keywords": []})
+        themes.append(_theme_entry(
+            cid, members[cid], ideas, scores[cid], nm, color_for(cid),
+            level=0, parent_id=None, children=[],
+        ))
+
+    clustering_meta = {
+        "mode": "flat",
+        "primary": "leiden",
+        "leiden": {
+            "n_clusters": leiden.n_clusters,
+            "modularity": leiden.modularity,
+            "resolution": leiden.resolution,
+            "seed": leiden.seed,
+        },
+        "hdbscan_contender": hdbscan_meta,
+    }
+    return nodes, themes, clustering_meta
+
+
+def _build_hierarchical(ideas, vecs, weights, knn, *,
+                        resolution_macro, resolution_sub, min_sub_size, seed):
+    """Mode HIÉRARCHIQUE : macro (level=0) → sous-thèmes (level=1).
+
+    Nœud coloré par le MACRO parent ; `cluster_id` = feuille (sous-thème),
+    `macro_id` = macro parent. Naming TF-IDF inchangé : macro inter-macros,
+    sous-thème contrasté DANS son macro.
+    """
+    h = run_hierarchical(
+        knn,
+        vecs,
+        resolution_macro=resolution_macro,
+        resolution_sub=resolution_sub,
+        min_sub_size=min_sub_size,
+        seed=seed,
+    )
+
+    # Regroupe les index de nœuds par macro et par feuille.
+    macro_members: dict[int, list[int]] = defaultdict(list)
+    leaf_members: dict[int, list[int]] = defaultdict(list)
+    for idx in range(len(ideas)):
+        macro_members[h.macro_membership[idx]].append(idx)
+        leaf_members[h.leaf_membership[idx]].append(idx)
+
+    # Scores aux deux niveaux.
+    macro_scores = {m: score_cluster(idxs, vecs, weights) for m, idxs in macro_members.items()}
+    leaf_scores = {l: score_cluster(idxs, vecs, weights) for l, idxs in leaf_members.items()}
+
+    # Naming macro : TF-IDF inter-macros (chaque macro = un document).
+    macro_docs = {m: [ideas[i].text for i in idxs] for m, idxs in macro_members.items()}
+    macro_names = name_clusters(macro_docs)
+
+    # Naming sous-thèmes : TF-IDF CONTRASTÉ dans chaque macro (sous-thèmes entre eux).
+    leaf_names: dict[int, dict] = {}
+    for m, children in h.macro_children.items():
+        sub_docs = {l: [ideas[i].text for i in leaf_members[l]] for l in children}
+        leaf_names.update(name_clusters(sub_docs))
+
+    macro_color = {m: color_for(m) for m in macro_members}
+
+    # Nœuds : feuille + macro_id + couleur du macro.
+    nodes = []
+    for idx, idea in enumerate(ideas):
+        leaf = int(h.leaf_membership[idx])
+        macro = int(h.macro_membership[idx])
+        nodes.append({
+            "id": idea.id,
+            "type": "idea",
+            "label": _node_label(idea),
+            "props": _node_props(idea, weights[idx]),
+            "cluster_id": leaf,
+            "macro_id": macro,
+            "color": macro_color[macro],
+        })
+
+    # Thèmes : pour chaque macro (rangé par intérêt), le macro puis ses sous-thèmes.
+    themes = []
+    for m in rank_clusters(macro_scores):
+        mnm = macro_names.get(m, {"label": f"macro {m}", "keywords": []})
+        children = h.macro_children[m]
+        themes.append(_theme_entry(
+            m, macro_members[m], ideas, macro_scores[m], mnm, macro_color[m],
+            level=0, parent_id=None, children=children,
+        ))
+        # sous-thèmes du macro, rangés par intérêt (entre eux)
+        ranked_children = rank_clusters({c: leaf_scores[c] for c in children})
+        for l in ranked_children:
+            lnm = leaf_names.get(l, {"label": f"sous-thème {l}", "keywords": []})
+            themes.append(_theme_entry(
+                l, leaf_members[l], ideas, leaf_scores[l], lnm, macro_color[m],
+                level=1, parent_id=m, children=[],
+            ))
+
+    clustering_meta = {
+        "mode": "hierarchical",
+        "primary": "leiden",
+        "leiden_hierarchy": {
+            "n_macros": h.n_macros,
+            "n_leaves": h.n_leaves,
+            "resolution_macro": h.resolution_macro,
+            "resolution_sub": h.resolution_sub,
+            "min_sub_size": h.min_sub_size,
+            "macro_modularity": h.macro_modularity,
+            "seed": h.seed,
+        },
+        "hdbscan_contender": None,
+    }
+    return nodes, themes, clustering_meta
 
 
 def build_payload(
@@ -51,6 +244,10 @@ def build_payload(
     min_chars: int = 0,
     dedup_threshold: float | None = None,
     max_links: int | None = None,
+    hierarchical: bool = False,
+    resolution_macro: float = DEFAULT_RESOLUTION_MACRO,
+    resolution_sub: float = DEFAULT_RESOLUTION_SUB,
+    min_sub_size: int = DEFAULT_MIN_SUB_SIZE,
 ) -> dict:
     ideas = io.load_ideas(input_path)
     src = io.resolve_input(input_path)
@@ -97,59 +294,24 @@ def build_payload(
     # 2) Graphe k-NN sémantique --------------------------------------------
     knn = build_knn_graph(vecs, k=k, threshold=threshold)
 
-    # 3) Leiden -------------------------------------------------------------
-    leiden = run_leiden(knn, resolution=resolution, seed=seed)
-    membership = leiden.membership
-
-    # Contender HDBSCAN (optionnel — juste tracé dans meta pour l'éval).
-    hdbscan_meta = None
-    if with_hdbscan:
-        from pipeline.cluster import hdbscan_contender as hc
-
-        if hc.available():
-            res = hc.run_hdbscan(vecs, seed=seed)
-            hdbscan_meta = {
-                "n_clusters": res.n_clusters,
-                "n_noise": res.n_noise,
-                "params": res.params,
-            }
-        else:
-            hdbscan_meta = {"available": False}
-
-    # 4) Scoring + naming par communauté -----------------------------------
-    members: dict[int, list[int]] = defaultdict(list)
-    for idx, cid in enumerate(membership):
-        members[cid].append(idx)
-
-    scores = {
-        cid: score_cluster(idxs, vecs, weights)
-        for cid, idxs in members.items()
-    }
-    cluster_docs = {
-        cid: [ideas[i].text for i in idxs] for cid, idxs in members.items()
-    }
-    names = name_clusters(cluster_docs)
-
-    # 5) Sérialisation GraphPayload ----------------------------------------
-    nodes = []
-    for idx, idea in enumerate(ideas):
-        cid = int(membership[idx])
-        nodes.append({
-            "id": idea.id,
-            "type": "idea",
-            "label": (idea.text[:80] + "…") if len(idea.text) > 80 else idea.text,
-            "props": {
-                "text": idea.text,
-                "text_clean": idea.text_clean or idea.text,
-                "ts": idea.ts,
-                "lang": idea.lang,
-                "author_hash": idea.author_hash,
-                "source": idea.source,
-                "weight": round(float(weights[idx]), 4),
-            },
-            "cluster_id": cid,
-            "color": color_for(cid),
-        })
+    # 3-5) Clustering + scoring + naming + nœuds ----------------------------
+    #      Deux modes : plat (Leiden 1 niveau, défaut) ou hiérarchique
+    #      (macro→sous-thèmes, Leiden 2 niveaux). Les nœuds sont colorés
+    #      différemment (plat = communauté ; hiérarchique = macro-thème), d'où
+    #      deux constructeurs distincts mais des `links` communs.
+    if hierarchical:
+        nodes, themes, clustering_meta = _build_hierarchical(
+            ideas, vecs, weights, knn,
+            resolution_macro=resolution_macro,
+            resolution_sub=resolution_sub,
+            min_sub_size=min_sub_size,
+            seed=seed,
+        )
+    else:
+        nodes, themes, clustering_meta = _build_flat(
+            ideas, vecs, weights, knn,
+            resolution=resolution, seed=seed, with_hdbscan=with_hdbscan,
+        )
 
     id_by_idx = [idea.id for idea in ideas]
     # Leiden clustering ci-dessus utilise le graphe k-NN COMPLET. Pour le rendu,
@@ -170,23 +332,6 @@ def build_payload(
         }
         for (i, j, w) in edges
     ]
-
-    themes = []
-    for cid in rank_clusters(scores):
-        s = scores[cid]
-        nm = names.get(cid, {"label": f"thème {cid}", "keywords": []})
-        themes.append({
-            "cluster_id": cid,
-            "member_ids": [ideas[i].id for i in members[cid]],
-            "size": s.size,
-            "weight_sum": s.weight_sum,
-            "diversity": s.diversity,
-            "consensus": s.consensus,
-            "centroid": s.centroid,
-            "label": nm["label"],
-            "keywords": nm["keywords"],
-            "color": color_for(cid),
-        })
 
     payload = {
         "meta": {
@@ -217,16 +362,7 @@ def build_payload(
                 "n_links_total": n_links_total,
                 "links_capped": links_capped,
             },
-            "clustering": {
-                "primary": "leiden",
-                "leiden": {
-                    "n_clusters": leiden.n_clusters,
-                    "modularity": leiden.modularity,
-                    "resolution": leiden.resolution,
-                    "seed": leiden.seed,
-                },
-                "hdbscan_contender": hdbscan_meta,
-            },
+            "clustering": clustering_meta,
         },
         "nodes": nodes,
         "links": links,
@@ -254,6 +390,14 @@ def main() -> None:
     ap.add_argument("--max-links", type=int, default=None,
                     help="plafonne les arêtes affichées (garde les + fortes ; tous les nœuds restent)")
     ap.add_argument("--with-hdbscan", action="store_true", help="trace le contender")
+    ap.add_argument("--hierarchical", action="store_true",
+                    help="thèmes hiérarchiques macro→sous-thèmes (Leiden 2 niveaux)")
+    ap.add_argument("--resolution-macro", type=float, default=DEFAULT_RESOLUTION_MACRO,
+                    help="résolution Leiden niveau macro (basse → peu de grandes communautés)")
+    ap.add_argument("--resolution-sub", type=float, default=DEFAULT_RESOLUTION_SUB,
+                    help="résolution Leiden des sous-thèmes (haute → finesse intra-macro)")
+    ap.add_argument("--min-sub-size", type=int, default=DEFAULT_MIN_SUB_SIZE,
+                    help="taille mini d'un sous-thème (les miettes sont fusionnées)")
     ap.add_argument("--fixture", action="store_true",
                     help="écrit aussi le fixture viz graph.sample.json")
     args = ap.parse_args()
@@ -271,6 +415,10 @@ def main() -> None:
         min_chars=args.min_chars,
         dedup_threshold=args.dedup,
         max_links=args.max_links,
+        hierarchical=args.hierarchical,
+        resolution_macro=args.resolution_macro,
+        resolution_sub=args.resolution_sub,
+        min_sub_size=args.min_sub_size,
     )
 
     out = Path(args.out)
@@ -296,12 +444,27 @@ def main() -> None:
               f"{d['n_in']}→{d['n_out']} (−{d['n_collapsed']} near-dups)")
     print(f"  model_id   : {m['model_id']} (dim {m['embedding_dim']})")
     print(f"  nodes/links: {m['n_nodes']} / {m['n_links']}  (avg_deg {m['params']['avg_degree']})")
-    print(f"  leiden     : {m['clustering']['leiden']['n_clusters']} communautés "
-          f"(modularité {m['clustering']['leiden']['modularity']}, backend {m['params']['knn_backend']})")
-    print("  thèmes     :")
-    for t in payload["themes"]:
-        print(f"    [{t['cluster_id']}] {t['label']}  "
-              f"(n={t['size']}, w={t['weight_sum']}, div={t['diversity']}, cons={t['consensus']})")
+    cl = m["clustering"]
+    if cl.get("mode") == "hierarchical":
+        lh = cl["leiden_hierarchy"]
+        print(f"  hiérarchie : {lh['n_macros']} macros → {lh['n_leaves']} sous-thèmes "
+              f"(modul. macro {lh['macro_modularity']}, "
+              f"res {lh['resolution_macro']}/{lh['resolution_sub']}, backend {m['params']['knn_backend']})")
+        print("  arbre      :")
+        for t in payload["themes"]:
+            if t["level"] == 0:
+                print(f"    ▸ [{t['cluster_id']}] {t['label']}  "
+                      f"(n={t['size']}, w={t['weight_sum']}, {len(t['children'])} sous-thèmes)")
+            else:
+                print(f"        └ [{t['cluster_id']}] {t['label']}  "
+                      f"(n={t['size']}, w={t['weight_sum']}, cons={t['consensus']})")
+    else:
+        print(f"  leiden     : {cl['leiden']['n_clusters']} communautés "
+              f"(modularité {cl['leiden']['modularity']}, backend {m['params']['knn_backend']})")
+        print("  thèmes     :")
+        for t in payload["themes"]:
+            print(f"    [{t['cluster_id']}] {t['label']}  "
+                  f"(n={t['size']}, w={t['weight_sum']}, div={t['diversity']}, cons={t['consensus']})")
 
 
 if __name__ == "__main__":
