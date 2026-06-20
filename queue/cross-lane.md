@@ -22,13 +22,29 @@ TikTok (33 609 réponses, FR).
 4. **Naming des thèmes** = **TF-IDF / KeyBERT seul** pour l'instant (pas de LLM).
    Titrage LLM = amélioration ultérieure.
 
+## Décisions — itération « amélioration clustering » (2026-06-20 bis)
+- **Multilingue = contrainte de 1er ordre** (usage européen/international visé).
+  Les avis peuvent être en plusieurs langues ; un bon clustering regroupe par
+  THÈME, pas par langue.
+- **Embeddings pluggables** : registre de modèles derrière une interface unique,
+  chacun avec sa convention de préfixe. Contenders au banc : `multilingual-e5-small`
+  (baseline), `nomic-embed-text-v2-moe`, `BAAI/bge-m3`. Gagnant choisi par la mesure.
+- **Naming** : reste TF-IDF (inchangé — décision Bob).
+- **Thèmes hiérarchiques** : 2 niveaux (macro `level=0` → sous-thèmes `level=1`),
+  via `parent_id`/`children[]`. Le drill-down viz devient un arbre.
+- **Banc qualité de clustering** (étend la lane eval) : cohérence de thèmes
+  (NPMI / c_v) + intrinsèques (silhouette, modularité) + **mixité linguistique**
+  (NMI cluster↔langue, qu'on veut BAS = clusters trans-langues) + stabilité.
+  x-stance (DE/FR/IT) sert le test cross-lingue ; TikTok (FR) la cohérence.
+
 ## Modèle de données (canonique — aligné sur les shapes viz de dummy)
 ```
 Idea  → GraphNode { id, type, label, props{ text, text_clean, ts, lang,
                                             author_hash, source, weight=1.0 } }
 Edge  → GraphLink { source, target, type, props{ weight=cosine } }   # k-NN, > seuil
 Theme            { cluster_id, member_ids[], size, weight_sum,
-                   diversity, consensus, centroid, label, keywords[], color }
+                   diversity, consensus, centroid, label, keywords[], color,
+                   level, parent_id, children[] }   # hiérarchie macro→sous-thèmes
 Embedding        { idea_id, vector[d], model_id }
 ```
 - `type` du nœud = `idea` (extensible). `author_hash` = anonymisation. `weight` = social.
