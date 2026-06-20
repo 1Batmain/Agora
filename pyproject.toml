@@ -1,0 +1,37 @@
+[project]
+name = "agora-pipeline"
+version = "0.0.0"
+description = "Agora — pipeline batch NLP (embeddings, graphe k-NN, Leiden, scoring, naming)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
+    "sentence-transformers>=3.0",
+    "torch>=2.2",
+    "igraph>=0.11",
+    "leidenalg>=0.10",
+]
+
+# Contender pour le banc d'éval + accélérateur k-NN (optionnels, CPU).
+[project.optional-dependencies]
+contender = [
+    "hdbscan>=0.8.33",
+    "umap-learn>=0.5.5",
+]
+faiss = [
+    "faiss-cpu>=1.8",
+]
+
+[tool.uv]
+# Projet "virtuel" : on ne build/installe pas le paquet, juste l'env + deps.
+# Le code est importé depuis la racine repo (namespace package `pipeline`).
+package = false
+
+# Torch CPU-only (box partagée, pas de GPU) — évite le wheel CUDA volumineux.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
