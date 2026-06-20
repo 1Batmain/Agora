@@ -55,7 +55,13 @@ def build_knn_graph(
     threshold: float = 0.80,
     prefer_faiss: bool = True,
 ) -> KnnGraph:
-    """Construit le graphe k-NN cosine (arêtes > seuil)."""
+    """Construit le graphe k-NN cosine (arêtes > seuil).
+
+    Les défauts `k`/`threshold` ne sont que des REPLIS neutres : en production,
+    build et le backend passent des valeurs DÉRIVÉES des données (k ∝ log N,
+    seuil = μ−σ·k des cosinus k-NN — cf. `pipeline.cluster.adaptive`, audit #6).
+    Ce module ne porte donc plus de magic-number corpus-spécifique « actif ».
+    """
     n = vecs.shape[0]
     if n <= 1:
         return KnnGraph(n=n, edges=[], k=k, threshold=threshold, backend="none")
