@@ -108,3 +108,31 @@ exécutions produisent un `graph.json` identique. `model_id` tracé dans `meta`.
 (transport·environnement / école / santé / sécurité / services publics /
 numérique·territoire). La lane **eval** ajustera ces params sur le batch TikTok
 (33 609 réponses) et arbitrera Leiden vs HDBSCAN.
+
+## Subset réel + dédup (consultation TikTok FR)
+
+Pour brancher la **vraie** consultation à la place du fixture, on filtre le
+corpus, on déduplique les répétitions, et on re-tune Leiden pour ~1,5 k avis
+bruités (cf. `REALDATA_NOTE.md`) :
+
+```bash
+uv run python -m pipeline.cluster.build \
+  --source tiktok --lang fr --min-chars 12 --dedup 0.95 \
+  --k 12 --threshold 0.84 --resolution 2.0 \
+  --out frontend/public/graph.json
+```
+
+Nouvelles options :
+
+| Option | Effet |
+|--------|-------|
+| `--source tiktok` | ne garde que cette source |
+| `--lang fr` | ne garde que cette langue |
+| `--min-chars 12` | retire les avis trop courts (« Néant », « Déprime »…) |
+| `--dedup 0.95` | fusionne les near-dups (cosine > seuil) ; le `weight` du représentant cumule celui des copies (`dedup.py`) |
+| `--max-links N` | plafonne les arêtes **affichées** (garde les plus fortes) ; tous les nœuds restent — Leiden, lui, voit le graphe complet |
+
+Le subset accepte aussi bien le JSONL **niché** `props{...}` de la lane data que
+le format **plat** du fixture de dev (`io.from_row` gère les deux).
+Réglages retenus : `k=12, threshold=0.84, resolution=2.0` → **15 thèmes**
+(modularité 0.53) sur 1 514 nœuds après dédup.
