@@ -39,9 +39,9 @@ FIXTURE_OUT = REPO_ROOT / "pipeline" / "cluster" / "fixtures" / "graph.sample.js
 
 def build_payload(
     input_path: str | None = None,
-    k: int = 10,
-    threshold: float = 0.80,
-    resolution: float = 1.0,
+    k: int = 8,
+    threshold: float = 0.84,
+    resolution: float = 1.5,
     seed: int = 42,
     model_id: str | None = None,
     with_hdbscan: bool = False,
@@ -181,9 +181,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Build GraphPayload (NLP batch).")
     ap.add_argument("--input", default=None, help="ideas.jsonl (sinon auto-résolu)")
     ap.add_argument("--out", default=str(DEFAULT_OUT), help="chemin graph.json")
-    ap.add_argument("--k", type=int, default=10)
-    ap.add_argument("--threshold", type=float, default=0.80)
-    ap.add_argument("--resolution", type=float, default=1.0)
+    ap.add_argument("--k", type=int, default=8)
+    ap.add_argument("--threshold", type=float, default=0.84)
+    ap.add_argument("--resolution", type=float, default=1.5)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--model", default=None, help="override model_id")
     ap.add_argument("--with-hdbscan", action="store_true", help="trace le contender")

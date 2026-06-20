@@ -1,0 +1,4580 @@
+{
+  "meta": {
+    "model_id": "intfloat/multilingual-e5-small",
+    "embedding_dim": 384,
+    "n_nodes": 36,
+    "n_links": 188,
+    "n_themes": 6,
+    "input": "pipeline/cluster/fixtures/ideas.sample.jsonl",
+    "params": {
+      "k": 8,
+      "threshold": 0.84,
+      "resolution": 1.5,
+      "seed": 42,
+      "knn_backend": "sklearn",
+      "avg_degree": 10.444
+    },
+    "clustering": {
+      "primary": "leiden",
+      "leiden": {
+        "n_clusters": 6,
+        "modularity": 0.2562,
+        "resolution": 1.5,
+        "seed": 42
+      },
+      "hdbscan_contender": null
+    }
+  },
+  "nodes": [
+    {
+      "id": "i001",
+      "type": "idea",
+      "label": "Il faut développer les pistes cyclables pour encourager les déplacements à vélo …",
+      "props": {
+        "text": "Il faut développer les pistes cyclables pour encourager les déplacements à vélo en ville.",
+        "text_clean": "Il faut développer les pistes cyclables pour encourager les déplacements à vélo en ville.",
+        "ts": "2026-06-01T09:00:00Z",
+        "lang": "fr",
+        "author_hash": "a01",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i002",
+      "type": "idea",
+      "label": "Aménager davantage de voies pour les vélos rendrait la circulation plus sûre.",
+      "props": {
+        "text": "Aménager davantage de voies pour les vélos rendrait la circulation plus sûre.",
+        "text_clean": "Aménager davantage de voies pour les vélos rendrait la circulation plus sûre.",
+        "ts": "2026-06-01T09:05:00Z",
+        "lang": "fr",
+        "author_hash": "a02",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 3,
+      "color": "#e15759"
+    },
+    {
+      "id": "i003",
+      "type": "idea",
+      "label": "Les transports en commun devraient être gratuits et plus fréquents aux heures de…",
+      "props": {
+        "text": "Les transports en commun devraient être gratuits et plus fréquents aux heures de pointe.",
+        "text_clean": "Les transports en commun devraient être gratuits et plus fréquents aux heures de pointe.",
+        "ts": "2026-06-01T09:10:00Z",
+        "lang": "fr",
+        "author_hash": "a03",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 3,
+      "color": "#e15759"
+    },
+    {
+      "id": "i004",
+      "type": "idea",
+      "label": "Augmentons la fréquence des bus et des tramways pour réduire l'usage de la voitu…",
+      "props": {
+        "text": "Augmentons la fréquence des bus et des tramways pour réduire l'usage de la voiture.",
+        "text_clean": "Augmentons la fréquence des bus et des tramways pour réduire l'usage de la voiture.",
+        "ts": "2026-06-01T09:15:00Z",
+        "lang": "fr",
+        "author_hash": "a04",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i005",
+      "type": "idea",
+      "label": "Créer des parkings relais à l'entrée des villes pour désengorger le centre.",
+      "props": {
+        "text": "Créer des parkings relais à l'entrée des villes pour désengorger le centre.",
+        "text_clean": "Créer des parkings relais à l'entrée des villes pour désengorger le centre.",
+        "ts": "2026-06-01T09:20:00Z",
+        "lang": "fr",
+        "author_hash": "a05",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i006",
+      "type": "idea",
+      "label": "Réduire la place de la voiture en ville au profit des mobilités douces.",
+      "props": {
+        "text": "Réduire la place de la voiture en ville au profit des mobilités douces.",
+        "text_clean": "Réduire la place de la voiture en ville au profit des mobilités douces.",
+        "ts": "2026-06-01T09:25:00Z",
+        "lang": "fr",
+        "author_hash": "a06",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i007",
+      "type": "idea",
+      "label": "Investir massivement dans les énergies renouvelables comme le solaire et l'éolie…",
+      "props": {
+        "text": "Investir massivement dans les énergies renouvelables comme le solaire et l'éolien.",
+        "text_clean": "Investir massivement dans les énergies renouvelables comme le solaire et l'éolien.",
+        "ts": "2026-06-01T10:00:00Z",
+        "lang": "fr",
+        "author_hash": "a07",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i008",
+      "type": "idea",
+      "label": "Développer le solaire et l'éolien pour sortir des énergies fossiles.",
+      "props": {
+        "text": "Développer le solaire et l'éolien pour sortir des énergies fossiles.",
+        "text_clean": "Développer le solaire et l'éolien pour sortir des énergies fossiles.",
+        "ts": "2026-06-01T10:05:00Z",
+        "lang": "fr",
+        "author_hash": "a08",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i009",
+      "type": "idea",
+      "label": "Lutter contre la pollution de l'air en limitant les émissions industrielles.",
+      "props": {
+        "text": "Lutter contre la pollution de l'air en limitant les émissions industrielles.",
+        "text_clean": "Lutter contre la pollution de l'air en limitant les émissions industrielles.",
+        "ts": "2026-06-01T10:10:00Z",
+        "lang": "fr",
+        "author_hash": "a09",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i010",
+      "type": "idea",
+      "label": "Il faut réduire les émissions de gaz à effet de serre pour le climat.",
+      "props": {
+        "text": "Il faut réduire les émissions de gaz à effet de serre pour le climat.",
+        "text_clean": "Il faut réduire les émissions de gaz à effet de serre pour le climat.",
+        "ts": "2026-06-01T10:15:00Z",
+        "lang": "fr",
+        "author_hash": "a10",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i011",
+      "type": "idea",
+      "label": "Planter des arbres et créer des espaces verts pour rafraîchir les villes.",
+      "props": {
+        "text": "Planter des arbres et créer des espaces verts pour rafraîchir les villes.",
+        "text_clean": "Planter des arbres et créer des espaces verts pour rafraîchir les villes.",
+        "ts": "2026-06-01T10:20:00Z",
+        "lang": "fr",
+        "author_hash": "a11",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i012",
+      "type": "idea",
+      "label": "Protéger la biodiversité et reboiser pour préserver l'environnement.",
+      "props": {
+        "text": "Protéger la biodiversité et reboiser pour préserver l'environnement.",
+        "text_clean": "Protéger la biodiversité et reboiser pour préserver l'environnement.",
+        "ts": "2026-06-01T10:25:00Z",
+        "lang": "fr",
+        "author_hash": "a12",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 0,
+      "color": "#4e79a7"
+    },
+    {
+      "id": "i013",
+      "type": "idea",
+      "label": "Réduire les effectifs par classe pour un meilleur suivi des élèves.",
+      "props": {
+        "text": "Réduire les effectifs par classe pour un meilleur suivi des élèves.",
+        "text_clean": "Réduire les effectifs par classe pour un meilleur suivi des élèves.",
+        "ts": "2026-06-01T11:00:00Z",
+        "lang": "fr",
+        "author_hash": "a13",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i014",
+      "type": "idea",
+      "label": "Diminuer le nombre d'élèves par classe améliorerait la réussite scolaire.",
+      "props": {
+        "text": "Diminuer le nombre d'élèves par classe améliorerait la réussite scolaire.",
+        "text_clean": "Diminuer le nombre d'élèves par classe améliorerait la réussite scolaire.",
+        "ts": "2026-06-01T11:05:00Z",
+        "lang": "fr",
+        "author_hash": "a14",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i015",
+      "type": "idea",
+      "label": "Revaloriser le salaire des enseignants pour rendre le métier attractif.",
+      "props": {
+        "text": "Revaloriser le salaire des enseignants pour rendre le métier attractif.",
+        "text_clean": "Revaloriser le salaire des enseignants pour rendre le métier attractif.",
+        "ts": "2026-06-01T11:10:00Z",
+        "lang": "fr",
+        "author_hash": "a15",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i016",
+      "type": "idea",
+      "label": "Mieux payer les professeurs et reconnaître leur travail au quotidien.",
+      "props": {
+        "text": "Mieux payer les professeurs et reconnaître leur travail au quotidien.",
+        "text_clean": "Mieux payer les professeurs et reconnaître leur travail au quotidien.",
+        "ts": "2026-06-01T11:15:00Z",
+        "lang": "fr",
+        "author_hash": "a16",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i017",
+      "type": "idea",
+      "label": "Former les élèves au numérique et à l'esprit critique dès le collège.",
+      "props": {
+        "text": "Former les élèves au numérique et à l'esprit critique dès le collège.",
+        "text_clean": "Former les élèves au numérique et à l'esprit critique dès le collège.",
+        "ts": "2026-06-01T11:20:00Z",
+        "lang": "fr",
+        "author_hash": "a17",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i018",
+      "type": "idea",
+      "label": "Renforcer l'apprentissage des langues et de l'informatique à l'école.",
+      "props": {
+        "text": "Renforcer l'apprentissage des langues et de l'informatique à l'école.",
+        "text_clean": "Renforcer l'apprentissage des langues et de l'informatique à l'école.",
+        "ts": "2026-06-01T11:25:00Z",
+        "lang": "fr",
+        "author_hash": "a18",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i019",
+      "type": "idea",
+      "label": "Réduire les délais d'attente aux urgences en recrutant plus de soignants.",
+      "props": {
+        "text": "Réduire les délais d'attente aux urgences en recrutant plus de soignants.",
+        "text_clean": "Réduire les délais d'attente aux urgences en recrutant plus de soignants.",
+        "ts": "2026-06-01T12:00:00Z",
+        "lang": "fr",
+        "author_hash": "a19",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 5,
+      "color": "#76b7b2"
+    },
+    {
+      "id": "i020",
+      "type": "idea",
+      "label": "Embaucher davantage d'infirmières et de médecins à l'hôpital public.",
+      "props": {
+        "text": "Embaucher davantage d'infirmières et de médecins à l'hôpital public.",
+        "text_clean": "Embaucher davantage d'infirmières et de médecins à l'hôpital public.",
+        "ts": "2026-06-01T12:05:00Z",
+        "lang": "fr",
+        "author_hash": "a20",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 1,
+      "color": "#f28e2b"
+    },
+    {
+      "id": "i021",
+      "type": "idea",
+      "label": "Lutter contre les déserts médicaux dans les zones rurales.",
+      "props": {
+        "text": "Lutter contre les déserts médicaux dans les zones rurales.",
+        "text_clean": "Lutter contre les déserts médicaux dans les zones rurales.",
+        "ts": "2026-06-01T12:10:00Z",
+        "lang": "fr",
+        "author_hash": "a21",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 2,
+      "color": "#59a14f"
+    },
+    {
+      "id": "i022",
+      "type": "idea",
+      "label": "Faciliter l'accès à un médecin traitant dans les campagnes isolées.",
+      "props": {
+        "text": "Faciliter l'accès à un médecin traitant dans les campagnes isolées.",
+        "text_clean": "Faciliter l'accès à un médecin traitant dans les campagnes isolées.",
+        "ts": "2026-06-01T12:15:00Z",
+        "lang": "fr",
+        "author_hash": "a22",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 2,
+      "color": "#59a14f"
+    },
+    {
+      "id": "i023",
+      "type": "idea",
+      "label": "Améliorer le remboursement des soins dentaires et optiques.",
+      "props": {
+        "text": "Améliorer le remboursement des soins dentaires et optiques.",
+        "text_clean": "Améliorer le remboursement des soins dentaires et optiques.",
+        "ts": "2026-06-01T12:20:00Z",
+        "lang": "fr",
+        "author_hash": "a23",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 5,
+      "color": "#76b7b2"
+    },
+    {
+      "id": "i024",
+      "type": "idea",
+      "label": "Mieux rembourser les lunettes et les soins dentaires par la sécurité sociale.",
+      "props": {
+        "text": "Mieux rembourser les lunettes et les soins dentaires par la sécurité sociale.",
+        "text_clean": "Mieux rembourser les lunettes et les soins dentaires par la sécurité sociale.",
+        "ts": "2026-06-01T12:25:00Z",
+        "lang": "fr",
+        "author_hash": "a24",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 5,
+      "color": "#76b7b2"
+    },
+    {
+      "id": "i025",
+      "type": "idea",
+      "label": "Augmenter la présence de police de proximité dans les quartiers.",
+      "props": {
+        "text": "Augmenter la présence de police de proximité dans les quartiers.",
+        "text_clean": "Augmenter la présence de police de proximité dans les quartiers.",
+        "ts": "2026-06-01T13:00:00Z",
+        "lang": "fr",
+        "author_hash": "a25",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 3,
+      "color": "#e15759"
+    },
+    {
+      "id": "i026",
+      "type": "idea",
+      "label": "Renforcer les patrouilles de police dans les rues pour rassurer les habitants.",
+      "props": {
+        "text": "Renforcer les patrouilles de police dans les rues pour rassurer les habitants.",
+        "text_clean": "Renforcer les patrouilles de police dans les rues pour rassurer les habitants.",
+        "ts": "2026-06-01T13:05:00Z",
+        "lang": "fr",
+        "author_hash": "a26",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 4,
+      "color": "#b07aa1"
+    },
+    {
+      "id": "i027",
+      "type": "idea",
+      "label": "Installer plus de caméras de vidéosurveillance dans les lieux publics.",
+      "props": {
+        "text": "Installer plus de caméras de vidéosurveillance dans les lieux publics.",
+        "text_clean": "Installer plus de caméras de vidéosurveillance dans les lieux publics.",
+        "ts": "2026-06-01T13:10:00Z",
+        "lang": "fr",
+        "author_hash": "a27",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 3,
+      "color": "#e15759"
+    },
+    {
+      "id": "i028",
+      "type": "idea",
+      "label": "Développer la vidéosurveillance pour prévenir la délinquance en centre-ville.",
+      "props": {
+        "text": "Développer la vidéosurveillance pour prévenir la délinquance en centre-ville.",
+        "text_clean": "Développer la vidéosurveillance pour prévenir la délinquance en centre-ville.",
+        "ts": "2026-06-01T13:15:00Z",
+        "lang": "fr",
+        "author_hash": "a28",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 3,
+      "color": "#e15759"
+    },
+    {
+      "id": "i029",
+      "type": "idea",
+      "label": "Mieux accompagner les victimes et simplifier le dépôt de plainte.",
+      "props": {
+        "text": "Mieux accompagner les victimes et simplifier le dépôt de plainte.",
+        "text_clean": "Mieux accompagner les victimes et simplifier le dépôt de plainte.",
+        "ts": "2026-06-01T13:20:00Z",
+        "lang": "fr",
+        "author_hash": "a29",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 5,
+      "color": "#76b7b2"
+    },
+    {
+      "id": "i030",
+      "type": "idea",
+      "label": "Simplifier les démarches administratives en ligne pour les usagers.",
+      "props": {
+        "text": "Simplifier les démarches administratives en ligne pour les usagers.",
+        "text_clean": "Simplifier les démarches administratives en ligne pour les usagers.",
+        "ts": "2026-06-01T14:00:00Z",
+        "lang": "fr",
+        "author_hash": "a30",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 4,
+      "color": "#b07aa1"
+    },
+    {
+      "id": "i031",
+      "type": "idea",
+      "label": "Dématérialiser les services publics tout en gardant des guichets physiques.",
+      "props": {
+        "text": "Dématérialiser les services publics tout en gardant des guichets physiques.",
+        "text_clean": "Dématérialiser les services publics tout en gardant des guichets physiques.",
+        "ts": "2026-06-01T14:05:00Z",
+        "lang": "fr",
+        "author_hash": "a31",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 4,
+      "color": "#b07aa1"
+    },
+    {
+      "id": "i032",
+      "type": "idea",
+      "label": "Garantir un accueil humain dans les services publics pour les personnes âgées.",
+      "props": {
+        "text": "Garantir un accueil humain dans les services publics pour les personnes âgées.",
+        "text_clean": "Garantir un accueil humain dans les services publics pour les personnes âgées.",
+        "ts": "2026-06-01T14:10:00Z",
+        "lang": "fr",
+        "author_hash": "a32",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 4,
+      "color": "#b07aa1"
+    },
+    {
+      "id": "i033",
+      "type": "idea",
+      "label": "Lutter contre la fracture numérique en accompagnant les usagers éloignés du web.",
+      "props": {
+        "text": "Lutter contre la fracture numérique en accompagnant les usagers éloignés du web.",
+        "text_clean": "Lutter contre la fracture numérique en accompagnant les usagers éloignés du web.",
+        "ts": "2026-06-01T14:15:00Z",
+        "lang": "fr",
+        "author_hash": "a33",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 2,
+      "color": "#59a14f"
+    },
+    {
+      "id": "i034",
+      "type": "idea",
+      "label": "Déployer la fibre optique partout pour un internet rapide en zone rurale.",
+      "props": {
+        "text": "Déployer la fibre optique partout pour un internet rapide en zone rurale.",
+        "text_clean": "Déployer la fibre optique partout pour un internet rapide en zone rurale.",
+        "ts": "2026-06-01T14:20:00Z",
+        "lang": "fr",
+        "author_hash": "a34",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 2,
+      "color": "#59a14f"
+    },
+    {
+      "id": "i035",
+      "type": "idea",
+      "label": "Assurer une couverture internet et mobile de qualité dans tout le territoire.",
+      "props": {
+        "text": "Assurer une couverture internet et mobile de qualité dans tout le territoire.",
+        "text_clean": "Assurer une couverture internet et mobile de qualité dans tout le territoire.",
+        "ts": "2026-06-01T14:25:00Z",
+        "lang": "fr",
+        "author_hash": "a35",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 2,
+      "color": "#59a14f"
+    },
+    {
+      "id": "i036",
+      "type": "idea",
+      "label": "Protéger les données personnelles des citoyens face aux grandes plateformes.",
+      "props": {
+        "text": "Protéger les données personnelles des citoyens face aux grandes plateformes.",
+        "text_clean": "Protéger les données personnelles des citoyens face aux grandes plateformes.",
+        "ts": "2026-06-01T14:30:00Z",
+        "lang": "fr",
+        "author_hash": "a36",
+        "source": "sample",
+        "weight": 1.0
+      },
+      "cluster_id": 4,
+      "color": "#b07aa1"
+    }
+  ],
+  "links": [
+    {
+      "source": "i001",
+      "target": "i002",
+      "type": "knn",
+      "props": {
+        "weight": 0.9293
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i006",
+      "type": "knn",
+      "props": {
+        "weight": 0.924
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i005",
+      "type": "knn",
+      "props": {
+        "weight": 0.916
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9142
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.9136
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9062
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.8972
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i004",
+      "type": "knn",
+      "props": {
+        "weight": 0.8952
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i006",
+      "type": "knn",
+      "props": {
+        "weight": 0.9061
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.8968
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.8945
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.8927
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i003",
+      "type": "knn",
+      "props": {
+        "weight": 0.8916
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.8899
+      }
+    },
+    {
+      "source": "i002",
+      "target": "i004",
+      "type": "knn",
+      "props": {
+        "weight": 0.8895
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i004",
+      "type": "knn",
+      "props": {
+        "weight": 0.8849
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i006",
+      "type": "knn",
+      "props": {
+        "weight": 0.8767
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i016",
+      "type": "knn",
+      "props": {
+        "weight": 0.8765
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i019",
+      "type": "knn",
+      "props": {
+        "weight": 0.8756
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.8729
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.8714
+      }
+    },
+    {
+      "source": "i003",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.8714
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i006",
+      "type": "knn",
+      "props": {
+        "weight": 0.9215
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i005",
+      "type": "knn",
+      "props": {
+        "weight": 0.9068
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.902
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i008",
+      "type": "knn",
+      "props": {
+        "weight": 0.8928
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.8928
+      }
+    },
+    {
+      "source": "i004",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.8913
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i006",
+      "type": "knn",
+      "props": {
+        "weight": 0.9316
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9285
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.927
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9265
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9092
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i015",
+      "type": "knn",
+      "props": {
+        "weight": 0.899
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.9233
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9225
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9197
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9148
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i022",
+      "type": "knn",
+      "props": {
+        "weight": 0.911
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i008",
+      "type": "knn",
+      "props": {
+        "weight": 0.9273
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.8983
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.8913
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.8878
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.8867
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.886
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.8859
+      }
+    },
+    {
+      "source": "i007",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.8835
+      }
+    },
+    {
+      "source": "i008",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.9151
+      }
+    },
+    {
+      "source": "i008",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.9076
+      }
+    },
+    {
+      "source": "i008",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.9019
+      }
+    },
+    {
+      "source": "i008",
+      "target": "i009",
+      "type": "knn",
+      "props": {
+        "weight": 0.8931
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i008",
+      "type": "knn",
+      "props": {
+        "weight": 0.892
+      }
+    },
+    {
+      "source": "i008",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.8902
+      }
+    },
+    {
+      "source": "i009",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.9159
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i009",
+      "type": "knn",
+      "props": {
+        "weight": 0.9068
+      }
+    },
+    {
+      "source": "i009",
+      "target": "i021",
+      "type": "knn",
+      "props": {
+        "weight": 0.9018
+      }
+    },
+    {
+      "source": "i009",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.9006
+      }
+    },
+    {
+      "source": "i009",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.9
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i009",
+      "type": "knn",
+      "props": {
+        "weight": 0.8973
+      }
+    },
+    {
+      "source": "i009",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.8925
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.9018
+      }
+    },
+    {
+      "source": "i010",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.8965
+      }
+    },
+    {
+      "source": "i010",
+      "target": "i011",
+      "type": "knn",
+      "props": {
+        "weight": 0.8917
+      }
+    },
+    {
+      "source": "i001",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.8896
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i010",
+      "type": "knn",
+      "props": {
+        "weight": 0.8861
+      }
+    },
+    {
+      "source": "i011",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.9318
+      }
+    },
+    {
+      "source": "i011",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9144
+      }
+    },
+    {
+      "source": "i011",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9005
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i012",
+      "type": "knn",
+      "props": {
+        "weight": 0.9104
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9089
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9066
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9048
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.9048
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.9018
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i014",
+      "type": "knn",
+      "props": {
+        "weight": 0.9337
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i015",
+      "type": "knn",
+      "props": {
+        "weight": 0.9336
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i019",
+      "type": "knn",
+      "props": {
+        "weight": 0.9195
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i016",
+      "type": "knn",
+      "props": {
+        "weight": 0.9106
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i017",
+      "type": "knn",
+      "props": {
+        "weight": 0.9085
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.9067
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9006
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.9003
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i015",
+      "type": "knn",
+      "props": {
+        "weight": 0.912
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.9088
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i019",
+      "type": "knn",
+      "props": {
+        "weight": 0.8972
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i017",
+      "type": "knn",
+      "props": {
+        "weight": 0.8953
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i016",
+      "type": "knn",
+      "props": {
+        "weight": 0.8921
+      }
+    },
+    {
+      "source": "i005",
+      "target": "i014",
+      "type": "knn",
+      "props": {
+        "weight": 0.8885
+      }
+    },
+    {
+      "source": "i014",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.8875
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i019",
+      "type": "knn",
+      "props": {
+        "weight": 0.9171
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i016",
+      "type": "knn",
+      "props": {
+        "weight": 0.9166
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.9068
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i015",
+      "type": "knn",
+      "props": {
+        "weight": 0.9038
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.9026
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9006
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9099
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.9069
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.8934
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.8905
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.8897
+      }
+    },
+    {
+      "source": "i017",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.9174
+      }
+    },
+    {
+      "source": "i017",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.9031
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i017",
+      "type": "knn",
+      "props": {
+        "weight": 0.8903
+      }
+    },
+    {
+      "source": "i017",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8901
+      }
+    },
+    {
+      "source": "i016",
+      "target": "i017",
+      "type": "knn",
+      "props": {
+        "weight": 0.8887
+      }
+    },
+    {
+      "source": "i017",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.8881
+      }
+    },
+    {
+      "source": "i018",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.9126
+      }
+    },
+    {
+      "source": "i018",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.9038
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i018",
+      "type": "knn",
+      "props": {
+        "weight": 0.9017
+      }
+    },
+    {
+      "source": "i018",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.9
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i020",
+      "type": "knn",
+      "props": {
+        "weight": 0.9362
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i022",
+      "type": "knn",
+      "props": {
+        "weight": 0.9154
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.9122
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.9102
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.9099
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9077
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.9167
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.9146
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9106
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9102
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.9059
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i022",
+      "type": "knn",
+      "props": {
+        "weight": 0.9051
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i022",
+      "type": "knn",
+      "props": {
+        "weight": 0.9172
+      }
+    },
+    {
+      "source": "i020",
+      "target": "i021",
+      "type": "knn",
+      "props": {
+        "weight": 0.9031
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.903
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9019
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9015
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.9012
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i021",
+      "type": "knn",
+      "props": {
+        "weight": 0.8996
+      }
+    },
+    {
+      "source": "i022",
+      "target": "i030",
+      "type": "knn",
+      "props": {
+        "weight": 0.9057
+      }
+    },
+    {
+      "source": "i022",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.9057
+      }
+    },
+    {
+      "source": "i022",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9054
+      }
+    },
+    {
+      "source": "i022",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9026
+      }
+    },
+    {
+      "source": "i023",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.9477
+      }
+    },
+    {
+      "source": "i023",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9086
+      }
+    },
+    {
+      "source": "i023",
+      "target": "i025",
+      "type": "knn",
+      "props": {
+        "weight": 0.9019
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i023",
+      "type": "knn",
+      "props": {
+        "weight": 0.8998
+      }
+    },
+    {
+      "source": "i024",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9146
+      }
+    },
+    {
+      "source": "i024",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.8999
+      }
+    },
+    {
+      "source": "i013",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.8984
+      }
+    },
+    {
+      "source": "i018",
+      "target": "i024",
+      "type": "knn",
+      "props": {
+        "weight": 0.895
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i026",
+      "type": "knn",
+      "props": {
+        "weight": 0.9357
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.9306
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9145
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9088
+      }
+    },
+    {
+      "source": "i026",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.921
+      }
+    },
+    {
+      "source": "i026",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9133
+      }
+    },
+    {
+      "source": "i027",
+      "target": "i028",
+      "type": "knn",
+      "props": {
+        "weight": 0.9292
+      }
+    },
+    {
+      "source": "i027",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.9031
+      }
+    },
+    {
+      "source": "i026",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.9028
+      }
+    },
+    {
+      "source": "i023",
+      "target": "i027",
+      "type": "knn",
+      "props": {
+        "weight": 0.8993
+      }
+    },
+    {
+      "source": "i029",
+      "target": "i030",
+      "type": "knn",
+      "props": {
+        "weight": 0.9122
+      }
+    },
+    {
+      "source": "i022",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9013
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i029",
+      "type": "knn",
+      "props": {
+        "weight": 0.9009
+      }
+    },
+    {
+      "source": "i030",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.9189
+      }
+    },
+    {
+      "source": "i030",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9057
+      }
+    },
+    {
+      "source": "i030",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.9054
+      }
+    },
+    {
+      "source": "i018",
+      "target": "i030",
+      "type": "knn",
+      "props": {
+        "weight": 0.8988
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i030",
+      "type": "knn",
+      "props": {
+        "weight": 0.896
+      }
+    },
+    {
+      "source": "i030",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.8946
+      }
+    },
+    {
+      "source": "i031",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9267
+      }
+    },
+    {
+      "source": "i031",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.9035
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.8995
+      }
+    },
+    {
+      "source": "i015",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.8992
+      }
+    },
+    {
+      "source": "i026",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.8957
+      }
+    },
+    {
+      "source": "i027",
+      "target": "i031",
+      "type": "knn",
+      "props": {
+        "weight": 0.8954
+      }
+    },
+    {
+      "source": "i032",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.9056
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i032",
+      "type": "knn",
+      "props": {
+        "weight": 0.9053
+      }
+    },
+    {
+      "source": "i033",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.9129
+      }
+    },
+    {
+      "source": "i021",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.8973
+      }
+    },
+    {
+      "source": "i032",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.8958
+      }
+    },
+    {
+      "source": "i019",
+      "target": "i033",
+      "type": "knn",
+      "props": {
+        "weight": 0.8946
+      }
+    },
+    {
+      "source": "i034",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.9241
+      }
+    },
+    {
+      "source": "i028",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8963
+      }
+    },
+    {
+      "source": "i033",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8939
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8873
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8871
+      }
+    },
+    {
+      "source": "i031",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8851
+      }
+    },
+    {
+      "source": "i011",
+      "target": "i034",
+      "type": "knn",
+      "props": {
+        "weight": 0.8851
+      }
+    },
+    {
+      "source": "i012",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.9008
+      }
+    },
+    {
+      "source": "i023",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8987
+      }
+    },
+    {
+      "source": "i006",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8945
+      }
+    },
+    {
+      "source": "i031",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8939
+      }
+    },
+    {
+      "source": "i028",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8936
+      }
+    },
+    {
+      "source": "i033",
+      "target": "i035",
+      "type": "knn",
+      "props": {
+        "weight": 0.8919
+      }
+    },
+    {
+      "source": "i026",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.9006
+      }
+    },
+    {
+      "source": "i025",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.8984
+      }
+    },
+    {
+      "source": "i028",
+      "target": "i036",
+      "type": "knn",
+      "props": {
+        "weight": 0.8956
+      }
+    }
+  ],
+  "themes": [
+    {
+      "cluster_id": 0,
+      "member_ids": [
+        "i001",
+        "i004",
+        "i005",
+        "i006",
+        "i007",
+        "i008",
+        "i009",
+        "i010",
+        "i011",
+        "i012"
+      ],
+      "size": 10,
+      "weight_sum": 10.0,
+      "diversity": 0.9556,
+      "consensus": 0.897,
+      "centroid": [
+        0.012002,
+        -0.019779,
+        -0.01718,
+        -0.081467,
+        0.087589,
+        -0.018584,
+        -0.005728,
+        0.03563,
+        0.039756,
+        0.013384,
+        0.058291,
+        0.009753,
+        0.071035,
+        0.012208,
+        -0.052108,
+        0.030471,
+        0.068169,
+        -0.053257,
+        -0.041773,
+        -0.036276,
+        0.008116,
+        -0.017883,
+        -0.057945,
+        0.054665,
+        0.058874,
+        0.05896,
+        -0.036092,
+        0.032161,
+        0.057366,
+        -0.057832,
+        -0.037759,
+        -0.052281,
+        0.051134,
+        -0.044731,
+        0.065246,
+        0.014219,
+        -0.06437,
+        -0.0621,
+        0.031906,
+        -0.08004,
+        -0.058643,
+        0.022336,
+        0.012592,
+        0.087048,
+        0.050641,
+        0.025314,
+        -0.083255,
+        0.027032,
+        -0.047701,
+        -0.023695,
+        -0.051516,
+        0.058379,
+        0.002211,
+        0.086787,
+        0.007604,
+        -0.062426,
+        -0.03419,
+        -0.052898,
+        -0.051968,
+        0.046152,
+        0.071702,
+        0.017165,
+        0.025343,
+        0.027498,
+        0.112536,
+        0.04441,
+        0.04946,
+        0.046708,
+        -0.046151,
+        -0.027417,
+        -0.039676,
+        0.056216,
+        -0.015786,
+        -0.029872,
+        0.021207,
+        0.027804,
+        0.036806,
+        -0.046938,
+        0.06632,
+        -0.016943,
+        -0.065215,
+        -0.051711,
+        -0.061866,
+        0.040011,
+        -0.054316,
+        0.059052,
+        0.051626,
+        -0.078874,
+        0.05357,
+        -0.029867,
+        0.045706,
+        0.030376,
+        -0.058164,
+        -0.029498,
+        -0.06198,
+        -0.04887,
+        -0.051799,
+        0.066994,
+        0.066138,
+        -0.042868,
+        0.043269,
+        0.002931,
+        0.073698,
+        -0.078903,
+        -0.09172,
+        0.056021,
+        0.019003,
+        -0.066733,
+        0.074214,
+        -0.076534,
+        -0.032545,
+        0.001853,
+        0.014929,
+        0.017295,
+        -0.065959,
+        -0.026481,
+        -0.039105,
+        -0.030342,
+        0.041472,
+        -0.06501,
+        0.060908,
+        -0.023774,
+        -0.038621,
+        -0.07058,
+        -0.041552,
+        -0.056655,
+        0.026408,
+        0.030501,
+        -0.008673,
+        -0.005036,
+        0.049082,
+        0.070355,
+        0.037759,
+        0.04485,
+        0.058818,
+        0.119848,
+        -0.046174,
+        -0.014862,
+        -0.014814,
+        -0.009708,
+        -0.057977,
+        0.063198,
+        -0.039546,
+        0.049876,
+        0.030665,
+        0.081441,
+        0.101051,
+        -0.020507,
+        0.064591,
+        -0.02787,
+        0.051383,
+        -0.000361,
+        0.02537,
+        -0.00438,
+        0.079137,
+        -0.047317,
+        -0.078156,
+        -0.043396,
+        0.07347,
+        0.065503,
+        -0.04729,
+        -0.083212,
+        -0.061622,
+        -0.045685,
+        -0.061117,
+        -0.047828,
+        0.054161,
+        0.07234,
+        -0.107722,
+        -0.027292,
+        -0.0327,
+        0.048653,
+        -0.004811,
+        0.038124,
+        -0.010189,
+        0.062679,
+        -0.058436,
+        0.087642,
+        0.088889,
+        0.039091,
+        -0.003743,
+        -0.034969,
+        -0.016085,
+        -0.036406,
+        -0.074469,
+        -0.030008,
+        -0.028602,
+        0.023331,
+        0.013297,
+        -0.049235,
+        -0.0061,
+        0.026355,
+        -0.068719,
+        -0.071679,
+        -0.051977,
+        0.063281,
+        -0.04682,
+        0.055979,
+        0.045889,
+        0.041797,
+        0.021881,
+        -0.048348,
+        0.062561,
+        0.047104,
+        0.06812,
+        -0.005783,
+        -0.042327,
+        0.076596,
+        -0.038342,
+        0.050927,
+        0.037552,
+        -0.055341,
+        -0.043373,
+        0.038727,
+        -0.037859,
+        0.000882,
+        0.009862,
+        0.075781,
+        -0.05311,
+        0.000732,
+        0.077517,
+        -0.039525,
+        0.073005,
+        -0.067516,
+        -0.041619,
+        0.047901,
+        0.031313,
+        -0.063655,
+        -0.065434,
+        0.012423,
+        -0.048808,
+        -0.001038,
+        -0.093691,
+        -0.042,
+        -0.06943,
+        -0.061631,
+        0.01741,
+        -0.002084,
+        0.062912,
+        -0.049257,
+        -0.02104,
+        -0.052994,
+        0.047257,
+        -0.096228,
+        0.066411,
+        -0.032724,
+        -0.036075,
+        -0.007055,
+        -0.043831,
+        0.053223,
+        0.058848,
+        -0.029211,
+        -0.059645,
+        -0.050621,
+        -0.021505,
+        0.002085,
+        0.069282,
+        0.040017,
+        -0.06957,
+        0.029977,
+        0.037475,
+        -0.062983,
+        0.072075,
+        0.065264,
+        0.05991,
+        0.032329,
+        -0.085333,
+        -0.026534,
+        -0.076409,
+        -0.065284,
+        -0.059591,
+        0.016233,
+        0.041729,
+        -0.073062,
+        -0.023794,
+        -0.035901,
+        0.028479,
+        0.030132,
+        -0.015936,
+        -0.041525,
+        0.026277,
+        0.041242,
+        0.06305,
+        0.070816,
+        0.05365,
+        -0.031332,
+        -0.010102,
+        0.062878,
+        -0.038446,
+        -0.062379,
+        -0.039162,
+        -0.106247,
+        0.033391,
+        -0.037426,
+        0.035519,
+        0.025704,
+        0.016943,
+        0.064995,
+        -0.036569,
+        0.054892,
+        0.028737,
+        -0.060313,
+        0.032042,
+        0.026926,
+        -0.094568,
+        0.085313,
+        0.0011,
+        0.001298,
+        0.03072,
+        0.066505,
+        0.048125,
+        0.059108,
+        -0.069118,
+        -0.022735,
+        -0.000847,
+        0.062678,
+        0.046561,
+        0.01679,
+        -0.069008,
+        -0.053784,
+        -0.054039,
+        -0.045278,
+        -0.02027,
+        -0.05521,
+        0.074585,
+        0.046756,
+        -0.011179,
+        -0.024999,
+        0.042818,
+        0.0057,
+        0.051659,
+        -0.066541,
+        -0.072224,
+        0.017046,
+        -0.072844,
+        -0.009845,
+        -0.068044,
+        0.051683,
+        -0.058009,
+        -0.070184,
+        0.026317,
+        0.065858,
+        -0.03037,
+        0.051921,
+        -0.006716,
+        -0.079136,
+        0.054115,
+        -0.041796,
+        -0.024276,
+        0.021066,
+        0.038134,
+        -0.107311,
+        0.030378,
+        0.019109,
+        -0.054901,
+        0.037811,
+        -0.080611,
+        -0.046517,
+        0.062335,
+        0.05125,
+        -0.057204,
+        0.018323,
+        0.049183,
+        0.057251,
+        0.074987,
+        0.067304,
+        -0.010073,
+        -0.051498,
+        0.036396,
+        -0.042508,
+        0.046441,
+        0.060426,
+        -0.045576,
+        -0.016078,
+        -0.013987,
+        -0.040643,
+        -0.046441,
+        0.039827,
+        -0.042858,
+        -0.053211,
+        0.049907,
+        0.055559,
+        0.052598,
+        0.06703
+      ],
+      "label": "éolien · voiture · créer",
+      "keywords": [
+        "éolien",
+        "voiture",
+        "créer",
+        "villes",
+        "énergies",
+        "émissions"
+      ],
+      "color": "#4e79a7"
+    },
+    {
+      "cluster_id": 1,
+      "member_ids": [
+        "i013",
+        "i014",
+        "i015",
+        "i016",
+        "i017",
+        "i018",
+        "i020"
+      ],
+      "size": 7,
+      "weight_sum": 7.0,
+      "diversity": 0.9048,
+      "consensus": 0.9041,
+      "centroid": [
+        0.015219,
+        -0.003359,
+        -0.027148,
+        -0.060329,
+        0.067091,
+        -0.026397,
+        -0.007028,
+        0.061732,
+        0.062218,
+        0.024878,
+        0.054383,
+        0.042588,
+        0.111466,
+        -0.0086,
+        -0.050897,
+        0.03649,
+        0.071082,
+        -0.058635,
+        -0.060271,
+        -0.033243,
+        -0.00093,
+        -0.025233,
+        -0.061016,
+        0.058243,
+        0.053306,
+        0.042757,
+        0.005205,
+        0.029388,
+        0.051775,
+        -0.074004,
+        -0.037103,
+        -0.023012,
+        0.046893,
+        -0.061057,
+        0.044933,
+        0.016627,
+        -0.061123,
+        -0.057498,
+        0.022896,
+        -0.081494,
+        -0.061601,
+        -5e-06,
+        0.039,
+        0.07353,
+        0.057089,
+        0.025414,
+        -0.07056,
+        0.049739,
+        -0.053661,
+        -0.019278,
+        -0.040101,
+        0.049773,
+        0.008632,
+        0.101681,
+        0.00682,
+        -0.079161,
+        -0.026945,
+        -0.072706,
+        -0.069033,
+        0.002259,
+        0.079085,
+        0.004097,
+        0.018303,
+        0.029044,
+        0.10214,
+        0.044049,
+        0.046975,
+        0.037667,
+        -0.067819,
+        -0.011328,
+        -0.04642,
+        0.063161,
+        -0.01022,
+        -0.025431,
+        0.006296,
+        0.038566,
+        0.054248,
+        -0.03659,
+        0.054094,
+        -0.007929,
+        -0.036587,
+        -0.049171,
+        -0.068263,
+        0.041489,
+        -0.051749,
+        0.04423,
+        0.049583,
+        -0.062353,
+        0.060164,
+        -0.027188,
+        0.061295,
+        0.028768,
+        -0.064173,
+        -0.062974,
+        -0.058057,
+        -0.062814,
+        -0.053584,
+        0.048238,
+        0.039245,
+        -0.033788,
+        0.029887,
+        -0.006263,
+        0.070521,
+        -0.073871,
+        -0.085401,
+        0.079742,
+        0.027773,
+        -0.046626,
+        0.095106,
+        -0.07609,
+        -0.050076,
+        0.043271,
+        0.033306,
+        0.000191,
+        -0.070332,
+        -0.011507,
+        -0.059574,
+        -0.057538,
+        0.066074,
+        -0.070595,
+        0.06342,
+        -0.024767,
+        -0.027771,
+        -0.058939,
+        -0.056237,
+        -0.030081,
+        0.043247,
+        0.029553,
+        0.001457,
+        0.014146,
+        0.043477,
+        0.057449,
+        0.013823,
+        0.038567,
+        0.056593,
+        0.115385,
+        -0.039045,
+        -0.003265,
+        -0.012777,
+        -0.027634,
+        -0.052459,
+        0.039431,
+        -0.01977,
+        0.030701,
+        0.046762,
+        0.068374,
+        0.081101,
+        -0.018409,
+        0.060765,
+        -0.080678,
+        0.043131,
+        0.020805,
+        0.026107,
+        0.008414,
+        0.08083,
+        -0.052177,
+        -0.066847,
+        -0.04017,
+        0.073221,
+        0.044827,
+        -0.046124,
+        -0.075792,
+        -0.072367,
+        -0.044457,
+        -0.062992,
+        -0.052405,
+        0.039338,
+        0.065218,
+        -0.087567,
+        -0.034303,
+        -0.0352,
+        0.05159,
+        -0.030303,
+        0.029524,
+        -0.020856,
+        0.056691,
+        -0.056857,
+        0.090235,
+        0.070116,
+        0.038022,
+        -0.012944,
+        -0.052456,
+        -0.020688,
+        -0.028129,
+        -0.092934,
+        -0.044175,
+        -0.030864,
+        0.012808,
+        0.020539,
+        -0.04679,
+        -0.019881,
+        0.018715,
+        -0.052685,
+        -0.076925,
+        -0.053856,
+        0.053713,
+        -0.047951,
+        0.069138,
+        0.053636,
+        0.031192,
+        0.008513,
+        -0.02772,
+        0.085478,
+        0.041475,
+        0.050937,
+        0.005004,
+        -0.073218,
+        0.049889,
+        -0.019913,
+        0.035189,
+        0.036766,
+        -0.050401,
+        -0.023925,
+        0.045718,
+        -0.013739,
+        -0.004675,
+        0.026332,
+        0.052156,
+        -0.077953,
+        -0.006747,
+        0.0637,
+        -0.029969,
+        0.070474,
+        -0.065278,
+        -0.037688,
+        0.02753,
+        0.045603,
+        -0.070113,
+        -0.057998,
+        0.021348,
+        -0.040705,
+        -0.019328,
+        -0.080163,
+        -0.051023,
+        -0.069512,
+        -0.052667,
+        0.002528,
+        0.021948,
+        0.039375,
+        -0.031175,
+        -0.013447,
+        -0.047863,
+        0.038117,
+        -0.089376,
+        0.073496,
+        -0.032513,
+        -0.025803,
+        0.020102,
+        -0.044112,
+        0.071736,
+        0.063428,
+        -0.038088,
+        -0.045852,
+        -0.045405,
+        -0.028398,
+        0.002894,
+        0.084198,
+        0.039068,
+        -0.059155,
+        0.030884,
+        0.056779,
+        -0.050781,
+        0.071237,
+        0.052957,
+        0.071019,
+        0.066901,
+        -0.084753,
+        -0.026723,
+        -0.092253,
+        -0.048948,
+        -0.055297,
+        -0.002738,
+        0.057144,
+        -0.061091,
+        -0.039105,
+        -0.040115,
+        0.016369,
+        0.043072,
+        -0.014073,
+        -0.041259,
+        0.001085,
+        0.044546,
+        0.055029,
+        0.076675,
+        0.069227,
+        -0.016955,
+        -0.009943,
+        0.066432,
+        -0.034855,
+        -0.05176,
+        -0.030704,
+        -0.092807,
+        0.034623,
+        -0.036678,
+        0.059416,
+        0.022064,
+        0.01755,
+        0.05738,
+        -0.046364,
+        0.061514,
+        0.016201,
+        -0.042109,
+        0.032728,
+        0.034254,
+        -0.110419,
+        0.085671,
+        -0.021364,
+        -0.002822,
+        0.029189,
+        0.059412,
+        0.0312,
+        0.056482,
+        -0.065837,
+        -0.02467,
+        0.004096,
+        0.078972,
+        0.03543,
+        0.043098,
+        -0.061006,
+        -0.052093,
+        -0.059296,
+        -0.050549,
+        -0.014285,
+        -0.032782,
+        0.049552,
+        0.067041,
+        -0.029589,
+        -0.040251,
+        0.057602,
+        0.011701,
+        0.04869,
+        -0.060826,
+        -0.090491,
+        0.018067,
+        -0.075339,
+        -0.039368,
+        -0.054514,
+        0.031935,
+        -0.056471,
+        -0.038459,
+        0.057055,
+        0.074389,
+        -0.027906,
+        0.056526,
+        -0.01289,
+        -0.087254,
+        0.04959,
+        -0.019627,
+        -0.01554,
+        0.00812,
+        0.055909,
+        -0.106212,
+        0.044355,
+        0.037837,
+        -0.048134,
+        0.048632,
+        -0.097121,
+        -0.036824,
+        0.05168,
+        0.058074,
+        -0.057757,
+        0.00596,
+        0.053768,
+        0.064552,
+        0.089869,
+        0.02709,
+        -0.014281,
+        -0.070602,
+        0.024272,
+        -0.043415,
+        0.054119,
+        0.050654,
+        -0.060588,
+        -0.021723,
+        -0.001753,
+        -0.04892,
+        -0.04843,
+        0.039054,
+        -0.050852,
+        -0.031395,
+        0.052671,
+        0.03461,
+        0.072831,
+        0.05706
+      ],
+      "label": "élèves · classe · critique dès",
+      "keywords": [
+        "élèves",
+        "classe",
+        "critique dès",
+        "collège renforcer",
+        "critique",
+        "classe meilleur"
+      ],
+      "color": "#f28e2b"
+    },
+    {
+      "cluster_id": 4,
+      "member_ids": [
+        "i026",
+        "i030",
+        "i031",
+        "i032",
+        "i036"
+      ],
+      "size": 5,
+      "weight_sum": 5.0,
+      "diversity": 1.0,
+      "consensus": 0.9031,
+      "centroid": [
+        0.015795,
+        -0.017942,
+        -0.026144,
+        -0.08039,
+        0.06023,
+        -0.041641,
+        0.009413,
+        0.045442,
+        0.034329,
+        0.028834,
+        0.067519,
+        0.027419,
+        0.099137,
+        -0.021279,
+        -0.052482,
+        0.032976,
+        0.079598,
+        -0.048103,
+        -0.035649,
+        -0.041992,
+        0.00939,
+        -0.016669,
+        -0.049461,
+        0.062091,
+        0.078296,
+        0.057114,
+        -0.017834,
+        0.040733,
+        0.05081,
+        -0.046997,
+        -0.058425,
+        -0.016581,
+        0.059273,
+        -0.055553,
+        0.056914,
+        0.028362,
+        -0.080004,
+        -0.062239,
+        0.051282,
+        -0.076292,
+        -0.053962,
+        0.041666,
+        0.036534,
+        0.097541,
+        0.047325,
+        0.024862,
+        -0.073414,
+        0.046875,
+        -0.053988,
+        -0.027046,
+        -0.045095,
+        0.053614,
+        -0.003404,
+        0.079231,
+        0.005997,
+        -0.074335,
+        -0.026784,
+        -0.063533,
+        -0.062265,
+        0.002406,
+        0.091561,
+        0.018831,
+        0.024764,
+        0.017471,
+        0.085471,
+        0.046248,
+        0.053239,
+        0.06102,
+        -0.05972,
+        0.00157,
+        -0.043723,
+        0.06592,
+        -0.01883,
+        -0.037737,
+        0.004467,
+        0.04254,
+        0.070169,
+        -0.026129,
+        0.070796,
+        -0.012309,
+        -0.050325,
+        -0.047418,
+        -0.043097,
+        0.052605,
+        -0.056853,
+        0.034491,
+        0.063234,
+        -0.068038,
+        0.055081,
+        -0.045432,
+        0.059548,
+        0.022178,
+        -0.04699,
+        -0.04104,
+        -0.049762,
+        -0.06089,
+        -0.070203,
+        0.067041,
+        0.060152,
+        -0.039678,
+        0.050105,
+        -0.019117,
+        0.089684,
+        -0.100601,
+        -0.099705,
+        0.063694,
+        0.036256,
+        -0.074074,
+        0.051515,
+        -0.071073,
+        -0.031845,
+        0.00862,
+        0.024329,
+        0.020653,
+        -0.079474,
+        0.00365,
+        -0.035767,
+        -0.0362,
+        0.042835,
+        -0.07529,
+        0.052399,
+        -0.014767,
+        -0.041821,
+        -0.045823,
+        -0.045009,
+        -0.047543,
+        0.023523,
+        0.017119,
+        0.002179,
+        -0.004271,
+        0.034768,
+        0.061301,
+        0.03636,
+        0.05078,
+        0.050828,
+        0.127085,
+        -0.031472,
+        0.014752,
+        -0.028818,
+        -0.040116,
+        -0.042664,
+        0.058138,
+        -0.017566,
+        0.028545,
+        0.020092,
+        0.071213,
+        0.087638,
+        -0.03494,
+        0.073867,
+        -0.043661,
+        0.062543,
+        0.006795,
+        0.043969,
+        -0.014742,
+        0.075195,
+        -0.042259,
+        -0.073148,
+        -0.052838,
+        0.048077,
+        0.046813,
+        -0.046325,
+        -0.075034,
+        -0.086716,
+        -0.003815,
+        -0.062614,
+        -0.038349,
+        0.047975,
+        0.080872,
+        -0.078084,
+        -0.044973,
+        -0.025096,
+        0.04279,
+        -0.022455,
+        0.061279,
+        -0.035558,
+        0.071561,
+        -0.054369,
+        0.084065,
+        0.073096,
+        0.034931,
+        -0.014656,
+        -0.04901,
+        -0.016763,
+        -0.055872,
+        -0.058379,
+        -0.050245,
+        -0.047091,
+        0.02443,
+        0.004506,
+        -0.038195,
+        -0.014997,
+        0.028778,
+        -0.064992,
+        -0.069704,
+        -0.05458,
+        0.046203,
+        -0.046192,
+        0.046217,
+        0.029371,
+        0.061197,
+        -0.001963,
+        -0.033004,
+        0.055626,
+        0.044689,
+        0.037023,
+        -0.019932,
+        -0.059424,
+        0.046114,
+        -0.037492,
+        0.060166,
+        0.027021,
+        -0.04405,
+        -0.01244,
+        0.07256,
+        -0.030713,
+        -0.01886,
+        0.025968,
+        0.072888,
+        -0.05829,
+        -0.020236,
+        0.064232,
+        -0.025765,
+        0.077494,
+        -0.063588,
+        -0.033718,
+        0.030182,
+        0.034675,
+        -0.060963,
+        -0.082012,
+        0.033294,
+        -0.031698,
+        -0.025218,
+        -0.080635,
+        -0.044236,
+        -0.070032,
+        -0.065099,
+        0.000836,
+        0.025586,
+        0.041557,
+        -0.026075,
+        -0.033279,
+        -0.020402,
+        0.05424,
+        -0.085506,
+        0.066709,
+        -0.012898,
+        -0.036909,
+        -0.000232,
+        -0.030222,
+        0.064528,
+        0.031105,
+        -0.068687,
+        -0.070129,
+        -0.035875,
+        -0.036837,
+        0.005521,
+        0.072431,
+        0.043475,
+        -0.067063,
+        0.029991,
+        0.040798,
+        -0.060366,
+        0.087359,
+        0.03556,
+        0.065247,
+        0.031147,
+        -0.082428,
+        -0.007918,
+        -0.078368,
+        -0.080913,
+        -0.036856,
+        -0.001376,
+        0.043148,
+        -0.073807,
+        -0.042492,
+        -0.051766,
+        0.001906,
+        0.035286,
+        -0.025948,
+        -0.045281,
+        0.021616,
+        0.023495,
+        0.076834,
+        0.081823,
+        0.074653,
+        -0.01776,
+        0.007091,
+        0.050277,
+        -0.049291,
+        -0.058282,
+        -0.030316,
+        -0.091107,
+        0.021653,
+        -0.047758,
+        0.024082,
+        0.037527,
+        0.012362,
+        0.05836,
+        -0.0306,
+        0.051036,
+        0.015922,
+        -0.052952,
+        0.024759,
+        0.012975,
+        -0.093647,
+        0.087718,
+        -0.012066,
+        0.004877,
+        0.01664,
+        0.077515,
+        0.043723,
+        0.042586,
+        -0.045173,
+        -0.038225,
+        -0.002055,
+        0.061442,
+        0.047508,
+        0.020671,
+        -0.064834,
+        -0.043429,
+        -0.061034,
+        -0.033854,
+        0.00924,
+        -0.042269,
+        0.061984,
+        0.06162,
+        -0.015405,
+        -0.036587,
+        0.048561,
+        0.017716,
+        0.056337,
+        -0.042341,
+        -0.061111,
+        0.027404,
+        -0.079012,
+        -0.045283,
+        -0.081058,
+        0.031919,
+        -0.059424,
+        -0.041519,
+        0.035073,
+        0.083082,
+        -0.033,
+        0.044154,
+        0.014112,
+        -0.089541,
+        0.047945,
+        -0.057882,
+        -0.040682,
+        0.011214,
+        0.055316,
+        -0.11718,
+        0.042597,
+        0.041892,
+        -0.050807,
+        0.052594,
+        -0.091171,
+        -0.041031,
+        0.073401,
+        0.052259,
+        -0.056673,
+        -1e-05,
+        0.046635,
+        0.061245,
+        0.070159,
+        0.051544,
+        -0.015629,
+        -0.047297,
+        0.030795,
+        -0.046097,
+        0.039796,
+        0.034463,
+        -0.0462,
+        -0.034927,
+        -0.018373,
+        -0.047601,
+        -0.038456,
+        0.05053,
+        -0.046866,
+        -0.030131,
+        0.062223,
+        0.036932,
+        0.060233,
+        0.066892
+      ],
+      "label": "services publics · services · publics",
+      "keywords": [
+        "services publics",
+        "services",
+        "publics",
+        "dématérialiser",
+        "démarches administratives",
+        "démarches"
+      ],
+      "color": "#b07aa1"
+    },
+    {
+      "cluster_id": 2,
+      "member_ids": [
+        "i021",
+        "i022",
+        "i033",
+        "i034",
+        "i035"
+      ],
+      "size": 5,
+      "weight_sum": 5.0,
+      "diversity": 1.0,
+      "consensus": 0.8972,
+      "centroid": [
+        0.040568,
+        -0.022798,
+        -0.047455,
+        -0.069178,
+        0.069507,
+        -0.022354,
+        0.006717,
+        0.052391,
+        0.033294,
+        0.029892,
+        0.052369,
+        0.024177,
+        0.095245,
+        -0.004049,
+        -0.052858,
+        0.043735,
+        0.080081,
+        -0.052966,
+        -0.065552,
+        -0.040238,
+        0.031507,
+        -0.012559,
+        -0.050139,
+        0.05357,
+        0.040713,
+        0.0583,
+        -0.012156,
+        0.050511,
+        0.036951,
+        -0.075058,
+        -0.044986,
+        -0.027016,
+        0.032663,
+        -0.052337,
+        0.051422,
+        0.026587,
+        -0.073821,
+        -0.06413,
+        0.070328,
+        -0.078581,
+        -0.059688,
+        0.034431,
+        0.034283,
+        0.09695,
+        0.040623,
+        0.030428,
+        -0.070169,
+        0.034136,
+        -0.054648,
+        -0.027232,
+        -0.032204,
+        0.061126,
+        0.000689,
+        0.077898,
+        0.00939,
+        -0.082911,
+        -0.042888,
+        -0.077391,
+        -0.058919,
+        0.009282,
+        0.050923,
+        0.020843,
+        0.034316,
+        0.018705,
+        0.09232,
+        0.04903,
+        0.053614,
+        0.044546,
+        -0.078216,
+        0.001003,
+        -0.047681,
+        0.078715,
+        -0.000223,
+        -0.021691,
+        0.018388,
+        0.037529,
+        0.047318,
+        -0.048699,
+        0.071474,
+        -0.009709,
+        -0.054309,
+        -0.04116,
+        -0.054987,
+        0.047451,
+        -0.064325,
+        0.060634,
+        0.055412,
+        -0.062352,
+        0.040621,
+        -0.045366,
+        0.068484,
+        0.033492,
+        -0.051649,
+        -0.054897,
+        -0.0511,
+        -0.060976,
+        -0.05365,
+        0.066324,
+        0.057827,
+        -0.031089,
+        0.029592,
+        0.000557,
+        0.062496,
+        -0.085737,
+        -0.100589,
+        0.071644,
+        0.050354,
+        -0.062531,
+        0.036155,
+        -0.076887,
+        -0.045823,
+        0.031256,
+        0.014987,
+        0.026772,
+        -0.083399,
+        -0.022546,
+        -0.037585,
+        -0.035697,
+        0.060776,
+        -0.074518,
+        0.058912,
+        -0.018,
+        -0.043952,
+        -0.055879,
+        -0.052687,
+        -0.065573,
+        0.029828,
+        -0.015076,
+        0.01709,
+        0.008366,
+        0.031076,
+        0.054291,
+        0.024771,
+        0.061365,
+        0.044979,
+        0.113924,
+        -0.043659,
+        0.001904,
+        -0.012466,
+        -0.025927,
+        -0.036658,
+        0.063499,
+        -0.030879,
+        0.031524,
+        0.041778,
+        0.068094,
+        0.081031,
+        -0.019832,
+        0.08637,
+        -0.035559,
+        0.056908,
+        -0.02296,
+        0.033448,
+        0.017541,
+        0.066574,
+        -0.041957,
+        -0.07675,
+        -0.026556,
+        0.055623,
+        0.055114,
+        -0.046125,
+        -0.064568,
+        -0.069365,
+        -0.015611,
+        -0.072459,
+        -0.025044,
+        0.04368,
+        0.059014,
+        -0.103994,
+        -0.048425,
+        -0.015343,
+        0.035936,
+        -0.013866,
+        0.057883,
+        0.001673,
+        0.052427,
+        -0.062116,
+        0.086267,
+        0.071721,
+        0.038679,
+        -0.020077,
+        -0.055827,
+        -0.029248,
+        -0.04408,
+        -0.07157,
+        -0.04938,
+        -0.03209,
+        0.02696,
+        0.007221,
+        -0.05734,
+        -0.017225,
+        0.036574,
+        -0.07628,
+        -0.067168,
+        -0.057793,
+        0.075459,
+        -0.043617,
+        0.055972,
+        0.046248,
+        0.042311,
+        0.006078,
+        -0.029963,
+        0.064598,
+        0.032203,
+        0.054358,
+        -0.006108,
+        -0.062466,
+        0.045515,
+        -0.028451,
+        0.039512,
+        0.025131,
+        -0.033737,
+        -0.035655,
+        0.064278,
+        -0.04026,
+        0.022156,
+        0.040384,
+        0.07039,
+        -0.053674,
+        -0.03337,
+        0.059173,
+        -0.037736,
+        0.069677,
+        -0.082242,
+        -0.040121,
+        0.040118,
+        0.047921,
+        -0.057565,
+        -0.105388,
+        0.040044,
+        -0.049752,
+        0.00906,
+        -0.084955,
+        -0.046184,
+        -0.056244,
+        -0.056876,
+        0.026145,
+        0.000457,
+        0.03847,
+        -0.035201,
+        -0.030989,
+        -0.023991,
+        0.039007,
+        -0.082269,
+        0.049965,
+        -0.024667,
+        -0.028398,
+        0.003756,
+        -0.033017,
+        0.068341,
+        0.038012,
+        -0.062689,
+        -0.057759,
+        -0.042415,
+        -0.037794,
+        0.020257,
+        0.064673,
+        0.039478,
+        -0.063057,
+        0.017726,
+        0.050093,
+        -0.046359,
+        0.0659,
+        0.054411,
+        0.062808,
+        0.03209,
+        -0.070694,
+        -0.036732,
+        -0.073224,
+        -0.049813,
+        -0.049967,
+        0.004858,
+        0.037643,
+        -0.067005,
+        -0.03865,
+        -0.058006,
+        0.006726,
+        0.023439,
+        -0.015636,
+        -0.047348,
+        0.038177,
+        0.037248,
+        0.068965,
+        0.06651,
+        0.082463,
+        -0.019544,
+        -0.009089,
+        0.069397,
+        -0.052541,
+        -0.032149,
+        -0.049856,
+        -0.083538,
+        0.026805,
+        -0.05773,
+        0.028609,
+        0.015718,
+        0.01983,
+        0.08592,
+        -0.016853,
+        0.064418,
+        0.006892,
+        -0.071852,
+        0.031724,
+        0.02241,
+        -0.087282,
+        0.106254,
+        -9.5e-05,
+        -0.008439,
+        0.026433,
+        0.05552,
+        0.030869,
+        0.047909,
+        -0.053709,
+        -0.032045,
+        -0.008617,
+        0.061684,
+        0.032632,
+        0.030169,
+        -0.072504,
+        -0.058034,
+        -0.067152,
+        -0.042754,
+        -0.004146,
+        -0.062684,
+        0.069743,
+        0.062256,
+        -0.033548,
+        -0.041642,
+        0.051104,
+        -0.005986,
+        0.072262,
+        -0.038456,
+        -0.060469,
+        0.026095,
+        -0.064111,
+        -0.033293,
+        -0.054985,
+        0.034951,
+        -0.048405,
+        -0.044436,
+        0.024828,
+        0.068713,
+        -0.054028,
+        0.058031,
+        0.005328,
+        -0.089895,
+        0.031945,
+        -0.035012,
+        -0.024935,
+        0.026729,
+        0.051913,
+        -0.114203,
+        0.034042,
+        0.045198,
+        -0.037137,
+        0.040685,
+        -0.070036,
+        -0.065874,
+        0.06844,
+        0.051798,
+        -0.088642,
+        0.004462,
+        0.074748,
+        0.04575,
+        0.081113,
+        0.046376,
+        -0.007759,
+        -0.047473,
+        0.036614,
+        -0.044991,
+        0.048305,
+        0.052537,
+        -0.040528,
+        -0.01816,
+        -0.01232,
+        -0.04381,
+        -0.033487,
+        0.035623,
+        -0.037318,
+        -0.034116,
+        0.066309,
+        0.052827,
+        0.067073,
+        0.06052
+      ],
+      "label": "internet · contre · lutter",
+      "keywords": [
+        "internet",
+        "contre",
+        "lutter",
+        "lutter contre",
+        "assurer",
+        "web déployer"
+      ],
+      "color": "#59a14f"
+    },
+    {
+      "cluster_id": 3,
+      "member_ids": [
+        "i002",
+        "i003",
+        "i025",
+        "i027",
+        "i028"
+      ],
+      "size": 5,
+      "weight_sum": 5.0,
+      "diversity": 0.9,
+      "consensus": 0.8945,
+      "centroid": [
+        0.024125,
+        -0.029269,
+        -0.026438,
+        -0.062859,
+        0.074627,
+        -0.033999,
+        0.00942,
+        0.038407,
+        0.035646,
+        0.025178,
+        0.068769,
+        0.025068,
+        0.091102,
+        0.011327,
+        -0.048499,
+        0.040715,
+        0.064707,
+        -0.04112,
+        -0.04757,
+        -0.040156,
+        0.010232,
+        -0.052669,
+        -0.053348,
+        0.051841,
+        0.074489,
+        0.065748,
+        -0.027422,
+        0.045322,
+        0.062551,
+        -0.067392,
+        -0.055662,
+        -0.027085,
+        0.030657,
+        -0.065503,
+        0.060679,
+        0.031989,
+        -0.06583,
+        -0.065825,
+        0.03235,
+        -0.063697,
+        -0.053747,
+        0.001499,
+        0.022477,
+        0.10433,
+        0.059695,
+        0.023894,
+        -0.048638,
+        0.050833,
+        -0.035278,
+        -0.024862,
+        -0.041966,
+        0.062662,
+        0.001744,
+        0.089047,
+        0.005675,
+        -0.070643,
+        -0.02579,
+        -0.065711,
+        -0.056651,
+        0.023208,
+        0.084667,
+        0.028985,
+        0.001818,
+        0.016459,
+        0.10155,
+        0.055129,
+        0.055228,
+        0.064482,
+        -0.052221,
+        -0.014292,
+        -0.055579,
+        0.065196,
+        -0.007192,
+        -0.025169,
+        0.0115,
+        0.030117,
+        0.046937,
+        -0.030509,
+        0.06,
+        -0.031086,
+        -0.058272,
+        -0.054663,
+        -0.039202,
+        0.047835,
+        -0.049593,
+        0.059754,
+        0.056846,
+        -0.081934,
+        0.049655,
+        -0.023809,
+        0.040968,
+        0.042619,
+        -0.059402,
+        -0.037553,
+        -0.065668,
+        -0.061339,
+        -0.036036,
+        0.073259,
+        0.052355,
+        -0.061301,
+        0.042303,
+        -0.001575,
+        0.073228,
+        -0.071019,
+        -0.068819,
+        0.061352,
+        0.050574,
+        -0.051127,
+        0.076507,
+        -0.062697,
+        -0.046724,
+        0.0183,
+        0.028485,
+        0.01923,
+        -0.087248,
+        -0.005705,
+        -0.021612,
+        -0.034364,
+        0.062918,
+        -0.060453,
+        0.040089,
+        -0.005158,
+        -0.025958,
+        -0.06786,
+        -0.034711,
+        -0.03588,
+        0.036614,
+        0.018756,
+        -0.005074,
+        -0.006543,
+        0.044228,
+        0.065011,
+        0.026736,
+        0.036023,
+        0.057397,
+        0.105992,
+        -0.066524,
+        0.015704,
+        -0.0236,
+        -0.040379,
+        -0.060518,
+        0.072011,
+        -0.04029,
+        0.02497,
+        0.043601,
+        0.068924,
+        0.083581,
+        -0.039809,
+        0.062187,
+        -0.044854,
+        0.048455,
+        -0.003483,
+        0.011881,
+        0.00621,
+        0.078465,
+        -0.031794,
+        -0.08011,
+        -0.055506,
+        0.050479,
+        0.050331,
+        -0.060791,
+        -0.064598,
+        -0.06176,
+        -0.018158,
+        -0.059247,
+        -0.040056,
+        0.071196,
+        0.081613,
+        -0.089254,
+        -0.044442,
+        -0.038437,
+        0.045481,
+        -0.025107,
+        0.049517,
+        -0.01957,
+        0.060967,
+        -0.061628,
+        0.08297,
+        0.052827,
+        0.041012,
+        -0.008023,
+        -0.049188,
+        -0.025108,
+        -0.024622,
+        -0.061507,
+        -0.034048,
+        -0.037098,
+        0.00561,
+        0.009681,
+        -0.048288,
+        -0.009901,
+        0.04544,
+        -0.069721,
+        -0.076704,
+        -0.073886,
+        0.049336,
+        -0.049672,
+        0.059392,
+        0.053727,
+        0.032603,
+        -0.00161,
+        -0.044298,
+        0.054714,
+        0.041024,
+        0.039678,
+        -0.01701,
+        -0.026239,
+        0.063155,
+        -0.033367,
+        0.048818,
+        0.063656,
+        -0.066696,
+        -0.027041,
+        0.060295,
+        -0.013216,
+        -0.005152,
+        0.013495,
+        0.069472,
+        -0.054336,
+        -0.012909,
+        0.101954,
+        -0.031324,
+        0.069978,
+        -0.074857,
+        -0.044008,
+        0.043327,
+        0.040548,
+        -0.066254,
+        -0.082621,
+        0.02829,
+        -0.042276,
+        -0.011061,
+        -0.08423,
+        -0.036069,
+        -0.078633,
+        -0.040897,
+        0.007668,
+        0.010235,
+        0.05273,
+        -0.017585,
+        -0.018834,
+        -0.038477,
+        0.048359,
+        -0.096443,
+        0.07969,
+        -0.029233,
+        -0.025668,
+        -0.011358,
+        -0.055436,
+        0.055922,
+        0.034726,
+        -0.033862,
+        -0.058045,
+        -0.056181,
+        -0.028491,
+        0.011499,
+        0.070894,
+        0.017886,
+        -0.052267,
+        0.039724,
+        0.053219,
+        -0.072387,
+        0.081713,
+        0.041239,
+        0.04823,
+        0.02783,
+        -0.09386,
+        -0.057425,
+        -0.071547,
+        -0.061928,
+        -0.063184,
+        0.019973,
+        0.046077,
+        -0.062489,
+        -0.034984,
+        -0.047482,
+        0.020483,
+        0.022736,
+        -0.037992,
+        -0.056267,
+        0.019356,
+        0.023751,
+        0.057273,
+        0.071502,
+        0.051512,
+        -0.037739,
+        0.004634,
+        0.049625,
+        -0.047742,
+        -0.049524,
+        -0.047021,
+        -0.08531,
+        0.043443,
+        -0.091093,
+        0.028763,
+        0.03402,
+        0.020007,
+        0.04524,
+        -0.031874,
+        0.046585,
+        0.022754,
+        -0.042665,
+        0.019956,
+        0.0201,
+        -0.091361,
+        0.083482,
+        -0.017349,
+        -0.01776,
+        0.032935,
+        0.059892,
+        0.052843,
+        0.039334,
+        -0.044664,
+        -0.033227,
+        0.012503,
+        0.068217,
+        0.017311,
+        0.041642,
+        -0.062749,
+        -0.047667,
+        -0.067584,
+        -0.036006,
+        -0.009538,
+        -0.056219,
+        0.065222,
+        0.049153,
+        -0.031676,
+        -0.022239,
+        0.060542,
+        0.006368,
+        0.061031,
+        -0.045851,
+        -0.08711,
+        0.021359,
+        -0.067859,
+        -0.032192,
+        -0.092246,
+        0.043261,
+        -0.050313,
+        -0.075992,
+        0.031376,
+        0.067334,
+        -0.037035,
+        0.058989,
+        -0.004701,
+        -0.072338,
+        0.061765,
+        -0.037365,
+        -0.017627,
+        0.012968,
+        0.059032,
+        -0.111404,
+        0.043542,
+        0.033399,
+        -0.037162,
+        0.040892,
+        -0.088213,
+        -0.059499,
+        0.084093,
+        0.059823,
+        -0.051773,
+        0.048813,
+        0.043561,
+        0.04419,
+        0.087839,
+        0.068704,
+        -0.011456,
+        -0.053675,
+        0.018441,
+        -0.044533,
+        0.029494,
+        0.041716,
+        -0.065937,
+        -0.016637,
+        -0.002804,
+        -0.039519,
+        -0.03157,
+        0.030264,
+        -0.053389,
+        -0.039622,
+        0.061158,
+        0.048122,
+        0.047682,
+        0.071171
+      ],
+      "label": "vidéosurveillance · gratuits fréquents · davantage voies",
+      "keywords": [
+        "vidéosurveillance",
+        "gratuits fréquents",
+        "davantage voies",
+        "transports",
+        "proximité",
+        "publics développer"
+      ],
+      "color": "#e15759"
+    },
+    {
+      "cluster_id": 5,
+      "member_ids": [
+        "i019",
+        "i023",
+        "i024",
+        "i029"
+      ],
+      "size": 4,
+      "weight_sum": 4.0,
+      "diversity": 0.8333,
+      "consensus": 0.9157,
+      "centroid": [
+        0.015905,
+        -0.025537,
+        -0.036871,
+        -0.080421,
+        0.057996,
+        -0.031309,
+        0.006917,
+        0.034927,
+        0.056862,
+        0.02266,
+        0.052198,
+        0.047038,
+        0.092738,
+        0.002403,
+        -0.057482,
+        0.021546,
+        0.095812,
+        -0.080394,
+        -0.063837,
+        -0.037766,
+        0.000357,
+        -0.026771,
+        -0.038279,
+        0.042651,
+        0.06392,
+        0.065531,
+        -0.005806,
+        0.036305,
+        0.045705,
+        -0.070252,
+        -0.046803,
+        -0.032777,
+        0.045358,
+        -0.063356,
+        0.041863,
+        0.035418,
+        -0.047955,
+        -0.059068,
+        0.052851,
+        -0.066344,
+        -0.066346,
+        0.023958,
+        0.022333,
+        0.081434,
+        0.054583,
+        0.004945,
+        -0.079041,
+        0.036621,
+        -0.049685,
+        -0.024326,
+        -0.054889,
+        0.056978,
+        -0.001341,
+        0.104895,
+        -0.016027,
+        -0.093791,
+        -0.042405,
+        -0.087461,
+        -0.061343,
+        -0.008437,
+        0.07489,
+        0.011,
+        0.011725,
+        0.017582,
+        0.097302,
+        0.045405,
+        0.071617,
+        0.046745,
+        -0.059546,
+        -0.019606,
+        -0.049371,
+        0.049235,
+        -0.007324,
+        0.000797,
+        0.007662,
+        0.052046,
+        0.062262,
+        -0.049757,
+        0.059278,
+        -0.004838,
+        -0.045116,
+        -0.052517,
+        -0.065576,
+        0.047435,
+        -0.0603,
+        0.040419,
+        0.084518,
+        -0.065281,
+        0.048145,
+        -0.024012,
+        0.0545,
+        0.016833,
+        -0.064156,
+        -0.038322,
+        -0.065094,
+        -0.054484,
+        -0.051671,
+        0.061906,
+        0.061408,
+        -0.037885,
+        0.039073,
+        -0.01165,
+        0.058033,
+        -0.089511,
+        -0.077985,
+        0.061699,
+        0.034531,
+        -0.050345,
+        0.069203,
+        -0.083782,
+        -0.05191,
+        0.033594,
+        0.048622,
+        0.012469,
+        -0.077477,
+        -0.009927,
+        -0.040813,
+        -0.03549,
+        0.058016,
+        -0.075274,
+        0.07683,
+        -0.019643,
+        -0.024059,
+        -0.057592,
+        -0.054345,
+        -0.0415,
+        0.045448,
+        0.013962,
+        9.5e-05,
+        -0.007606,
+        0.050488,
+        0.053793,
+        0.027327,
+        0.051913,
+        0.051358,
+        0.112702,
+        -0.045902,
+        0.024796,
+        -0.008071,
+        -0.041537,
+        -0.045274,
+        0.062327,
+        -0.031276,
+        0.007892,
+        0.024156,
+        0.072755,
+        0.092529,
+        -0.01566,
+        0.069145,
+        -0.064294,
+        0.051461,
+        0.015821,
+        0.041404,
+        0.000746,
+        0.077227,
+        -0.05308,
+        -0.061257,
+        -0.055157,
+        0.059779,
+        0.05016,
+        -0.036895,
+        -0.064231,
+        -0.067451,
+        -0.028947,
+        -0.064685,
+        -0.052772,
+        0.070152,
+        0.077343,
+        -0.100156,
+        -0.04074,
+        -0.037717,
+        0.054621,
+        -0.02206,
+        0.036137,
+        -0.014625,
+        0.054113,
+        -0.070256,
+        0.088346,
+        0.053356,
+        0.036996,
+        0.005489,
+        -0.047316,
+        -0.013115,
+        -0.048647,
+        -0.076565,
+        -0.046471,
+        -0.036019,
+        0.012706,
+        0.010981,
+        -0.043313,
+        -0.017708,
+        0.016568,
+        -0.059769,
+        -0.07018,
+        -0.052981,
+        0.04363,
+        -0.05869,
+        0.05651,
+        0.036012,
+        0.046942,
+        0.038078,
+        -0.035703,
+        0.060433,
+        0.041955,
+        0.046639,
+        -0.024807,
+        -0.050639,
+        0.057739,
+        -0.022149,
+        0.063073,
+        0.047496,
+        -0.0652,
+        -0.041804,
+        0.034464,
+        -0.04165,
+        0.001856,
+        0.017864,
+        0.061433,
+        -0.087332,
+        -0.009791,
+        0.080063,
+        -0.026582,
+        0.075737,
+        -0.090164,
+        -0.029113,
+        0.036342,
+        0.053929,
+        -0.093739,
+        -0.084928,
+        0.022979,
+        -0.019872,
+        0.001331,
+        -0.078476,
+        -0.043205,
+        -0.067591,
+        -0.04606,
+        -0.001485,
+        0.036857,
+        0.037266,
+        -0.033138,
+        -0.006255,
+        -0.042522,
+        0.0259,
+        -0.076181,
+        0.05197,
+        -0.032606,
+        -0.03954,
+        0.027611,
+        -0.042545,
+        0.076886,
+        0.03899,
+        -0.043833,
+        -0.056848,
+        -0.06648,
+        -0.043696,
+        0.017749,
+        0.075716,
+        0.053227,
+        -0.056497,
+        0.025632,
+        0.063774,
+        -0.064401,
+        0.068234,
+        0.056019,
+        0.050014,
+        0.052148,
+        -0.075722,
+        -0.025612,
+        -0.078097,
+        -0.064603,
+        -0.044301,
+        0.005351,
+        0.043761,
+        -0.065837,
+        -0.069435,
+        -0.0268,
+        0.017919,
+        0.031733,
+        -0.015132,
+        -0.050626,
+        0.028352,
+        0.014028,
+        0.046875,
+        0.067274,
+        0.060123,
+        -0.018614,
+        -0.005267,
+        0.054704,
+        -0.041703,
+        -0.030394,
+        -0.04178,
+        -0.076029,
+        0.034882,
+        -0.035798,
+        0.030161,
+        0.038876,
+        0.013302,
+        0.045912,
+        -0.036748,
+        0.0632,
+        0.011752,
+        -0.026247,
+        0.025034,
+        0.016681,
+        -0.11268,
+        0.083526,
+        -0.023854,
+        -0.004451,
+        0.017001,
+        0.061562,
+        0.035197,
+        0.04357,
+        -0.056573,
+        -0.00385,
+        0.010906,
+        0.051574,
+        0.039216,
+        0.055351,
+        -0.061814,
+        -0.041778,
+        -0.069574,
+        -0.055157,
+        -0.017774,
+        -0.055072,
+        0.052593,
+        0.053385,
+        -0.024805,
+        -0.039111,
+        0.037579,
+        0.015101,
+        0.036462,
+        -0.073794,
+        -0.072358,
+        0.041418,
+        -0.044232,
+        -0.006291,
+        -0.052441,
+        0.032792,
+        -0.051592,
+        -0.043796,
+        0.045385,
+        0.050776,
+        -0.013782,
+        0.057041,
+        0.001241,
+        -0.072313,
+        0.06937,
+        -0.032349,
+        -0.011125,
+        0.017234,
+        0.045859,
+        -0.100655,
+        0.037159,
+        0.018287,
+        -0.034924,
+        0.059742,
+        -0.086515,
+        -0.047793,
+        0.058287,
+        0.064472,
+        -0.064122,
+        -0.002079,
+        0.070519,
+        0.06311,
+        0.119869,
+        0.059687,
+        -0.01461,
+        -0.035081,
+        0.02107,
+        -0.043207,
+        0.039844,
+        0.040153,
+        -0.050534,
+        -0.036608,
+        -0.012087,
+        -0.028274,
+        -0.044189,
+        0.033822,
+        -0.046294,
+        -0.014623,
+        0.076306,
+        0.043401,
+        0.048803,
+        0.056337
+      ],
+      "label": "soins dentaires · soins · dentaires",
+      "keywords": [
+        "soins dentaires",
+        "soins",
+        "dentaires",
+        "mieux",
+        "améliorer",
+        "optiques"
+      ],
+      "color": "#76b7b2"
+    }
+  ]
+}
