@@ -33,10 +33,11 @@ import numpy as np
 from pipeline.cluster.knn import KnnGraph
 from pipeline.cluster.leiden_cluster import run_leiden
 
-# Défauts calés sur la consultation TikTok FR (~1,5 k avis après dédup) :
-# macro basse résolution (7 grandes communautés, modularité ~0.57), sous-thèmes
-# plus fins puis fusion des miettes < min_sub_size dans le sous-thème le plus
-# PROCHE sémantiquement.
+# Résolutions = granularité, exposées en knobs (défauts d'usage raisonnables).
+# `DEFAULT_MIN_SUB_SIZE` n'est plus qu'un REPLI : le vrai défaut est DÉRIVÉ,
+# relatif à N (`pipeline.cluster.adaptive.derive_min_sub_size`, audit #7) ; build
+# et le backend passent la valeur dérivée. Cette constante ne sert que si un
+# appelant direct n'en fournit aucune.
 DEFAULT_RESOLUTION_MACRO = 1.0
 DEFAULT_RESOLUTION_SUB = 3.0
 DEFAULT_MIN_SUB_SIZE = 15
