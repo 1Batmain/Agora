@@ -31,8 +31,11 @@ Theme            { cluster_id, member_ids[], size, weight_sum,
                    diversity, consensus, centroid, label, keywords[], color }
 Embedding        { idea_id, vector[d], model_id }
 ```
-- `type` du nœud = `idea` (extensible). La **couleur** du nœud = `cluster_id` Leiden
-  (palette type dummy). `author_hash` = anonymisation. `weight` = poids social.
+- `type` du nœud = `idea` (extensible). `author_hash` = anonymisation. `weight` = social.
+- **PRÉCISION (post-merge nlp)** : `cluster_id` (int communauté Leiden) et `color`
+  (hex palette) vivent **au TOP-LEVEL du nœud** (à côté de `id/type/label/props`),
+  PAS dans `props`. La lane viz colore l'essaim par `node.cluster_id` / `node.color`.
+  Artefact batch de référence = `pipeline/cluster/fixtures/graph.sample.json`.
 - `diversity` = 1 − densité de duplicats. `consensus` = même intention, formulations
   variées.
 
