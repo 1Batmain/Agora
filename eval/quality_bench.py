@@ -390,9 +390,33 @@ def write_report(bench: dict, out_path: str) -> str:
         if len(results) > 1:
             worst_mix = max(results, key=lambda r: r.nmi_lang)
             a(f"- Pire mixité : **{worst_mix.alias}** "
-              f"(NMI langue={_fmt(worst_mix.nmi_lang)}) — tend à regrouper par langue.")
+              f"(NMI langue={_fmt(worst_mix.nmi_lang)}, pureté linguistique "
+              f"{_fmt(worst_mix.lang_purity)}) — regroupe par LANGUE, pas par thème.")
         a("- La mixité linguistique est le critère central : un NMI(cluster,langue) "
           "élevé trahit un modèle qui sépare les langues au lieu des thèmes.")
+        # Piège classique : les métriques internes récompensent la dégénérescence.
+        internal_best = max(
+            results,
+            key=lambda r: ((r.silhouette or -1) + (r.stability or -1) + r.modularity),
+        )
+        if internal_best.nmi_lang > 0.3:
+            a(f"- ⚠️ **Piège des métriques internes** : **{internal_best.alias}** "
+              f"a la meilleure silhouette/modularité/stabilité — mais ses clusters "
+              f"sont mono-langues (pureté linguistique {_fmt(internal_best.lang_purity)}). "
+              f"Des clusters internes nets mais **faux** : silhouette, modularité et "
+              f"stabilité récompensent la solution dégénérée « 1 langue = 1 cluster ». "
+              f"D'où le rôle **décisif** de NMI(cluster,langue) et NMI(cluster,thème), "
+              f"qui seuls voient que le clustering n'a pas trouvé les thèmes.")
+        # Départage des deux meilleurs (utile quand la mixité est à égalité).
+        if len(results) >= 2:
+            r1, r2 = results[0], results[1]
+            a(f"- **{r1.alias} vs {r2.alias}** : mixité quasi identique "
+              f"(NMI langue {_fmt(r1.nmi_lang)} vs {_fmt(r2.nmi_lang)}) ; "
+              f"{r1.alias} l'emporte sur la cohérence ({_fmt(r1.coherence)} vs "
+              f"{_fmt(r2.coherence)}), la récupération de thème ({_fmt(r1.nmi_topic)} "
+              f"vs {_fmt(r2.nmi_topic)}) et/ou le coût "
+              f"({_fmt(r1.latency_ms_per_text, 0)} vs {_fmt(r2.latency_ms_per_text, 0)} "
+              f"ms/texte). {r2.alias} reste un second proche.")
     a("")
 
     # Limites
