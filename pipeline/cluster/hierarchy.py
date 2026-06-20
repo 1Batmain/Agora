@@ -28,12 +28,18 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass, field
 
+import numpy as np
+
 from pipeline.cluster.knn import KnnGraph
 from pipeline.cluster.leiden_cluster import run_leiden
 
-DEFAULT_RESOLUTION_MACRO = 0.6
-DEFAULT_RESOLUTION_SUB = 2.0
-DEFAULT_MIN_SUB_SIZE = 5
+# Défauts calés sur la consultation TikTok FR (~1,5 k avis après dédup) :
+# macro basse résolution (7 grandes communautés, modularité ~0.57), sous-thèmes
+# plus fins puis fusion des miettes < min_sub_size dans le sous-thème le plus
+# PROCHE sémantiquement.
+DEFAULT_RESOLUTION_MACRO = 1.0
+DEFAULT_RESOLUTION_SUB = 3.0
+DEFAULT_MIN_SUB_SIZE = 15
 
 
 @dataclass
@@ -73,24 +79,46 @@ def _induced_subgraph(
     return g, members
 
 
-def _merge_crumbs(local_membership: list[int], min_sub_size: int) -> list[int]:
-    """Fusionne les sous-clusters < min_sub_size dans le plus gros (déterministe).
+def _merge_crumbs(
+    local_membership: list[int],
+    sub_vecs: np.ndarray,
+    min_sub_size: int,
+) -> list[int]:
+    """Fusionne les sous-clusters < min_sub_size dans le plus PROCHE (cosine).
 
-    Si tout est trop petit (macro minuscule), on retombe sur un seul sous-thème.
+    Plutôt que de tout déverser dans le plus gros (qui gonflerait en fourre-tout),
+    chaque miette rejoint le sous-thème viable dont le centroïde lui ressemble le
+    plus. Si aucun sous-cluster n'atteint la taille mini (macro minuscule), le
+    macro reste indivis (un seul sous-thème). Déterministe.
     """
     sizes: dict[int, int] = defaultdict(int)
     for c in local_membership:
         sizes[c] += 1
-    # Plus gros sous-cluster (tie-break : plus petit id → déterministe).
-    biggest = max(sizes, key=lambda c: (sizes[c], -c))
-    big_enough = {c for c, n in sizes.items() if n >= min_sub_size}
+    big_enough = sorted(c for c, n in sizes.items() if n >= min_sub_size)
     if not big_enough:
-        # Aucun sous-cluster viable → le macro reste indivis.
         return [0 for _ in local_membership]
-    # Réassigne les membres des sous-clusters trop petits au plus gros viable.
-    target_for: dict[int, int] = {}
-    for c in sizes:
-        target_for[c] = c if c in big_enough else biggest
+    if len(big_enough) == len(sizes):
+        target_for = {c: c for c in sizes}
+    else:
+        # Centroïdes (L2-normalisés) des sous-clusters viables et des miettes.
+        members_of: dict[int, list[int]] = defaultdict(list)
+        for pos, c in enumerate(local_membership):
+            members_of[c].append(pos)
+
+        def centroid(idxs: list[int]) -> np.ndarray:
+            v = sub_vecs[idxs].mean(axis=0)
+            nrm = np.linalg.norm(v)
+            return v / nrm if nrm > 0 else v
+
+        viable_cent = {c: centroid(members_of[c]) for c in big_enough}
+        target_for = {}
+        for c in sizes:
+            if c in viable_cent:
+                target_for[c] = c
+                continue
+            cc = centroid(members_of[c])
+            # tie-break déterministe : plus petit id viable
+            target_for[c] = max(big_enough, key=lambda b: (float(viable_cent[b] @ cc), -b))
     remapped = [target_for[c] for c in local_membership]
     # Compacte les ids en 0..k-1 (ordre stable par 1re apparition).
     seen: dict[int, int] = {}
@@ -104,6 +132,7 @@ def _merge_crumbs(local_membership: list[int], min_sub_size: int) -> list[int]:
 
 def run_hierarchical(
     graph: KnnGraph,
+    vecs: np.ndarray,
     resolution_macro: float = DEFAULT_RESOLUTION_MACRO,
     resolution_sub: float = DEFAULT_RESOLUTION_SUB,
     min_sub_size: int = DEFAULT_MIN_SUB_SIZE,
@@ -138,7 +167,7 @@ def run_hierarchical(
         else:
             subg, _ = _induced_subgraph(graph.edges, members)
             sub = run_leiden(subg, resolution=resolution_sub, seed=seed)
-            local = _merge_crumbs(list(sub.membership), min_sub_size)
+            local = _merge_crumbs(list(sub.membership), vecs[members], min_sub_size)
 
         # Mappe les sous-clusters locaux vers des ids feuilles globaux.
         local_to_leaf: dict[int, int] = {}
@@ -171,3 +200,58 @@ def run_hierarchical(
         macro_modularity=macro.modularity,
         leaf_sizes=leaf_sizes,
     )
+
+
+def check_integrity(payload: dict) -> list[str]:
+    """Vérifie l'arbre macro→sous d'un GraphPayload hiérarchique.
+
+    Retourne la liste des erreurs (vide = arbre cohérent). Règles :
+      - chaque thème a un `level` ∈ {0,1} ;
+      - `children` d'un macro = EXACTEMENT les feuilles dont `parent_id` = ce macro ;
+      - chaque feuille (level=1) pointe un `parent_id` macro valide ;
+      - chaque nœud référence une feuille existante (`cluster_id`) et un macro
+        (`macro_id`) qui CONCORDENT (la feuille appartient bien à ce macro).
+    """
+    errors: list[str] = []
+    themes = payload.get("themes", [])
+    macros = {t["cluster_id"]: t for t in themes if t.get("level") == 0}
+    leaves = {t["cluster_id"]: t for t in themes if t.get("level") == 1}
+
+    for t in themes:
+        if t.get("level") not in (0, 1):
+            errors.append(f"thème {t.get('cluster_id')} : level invalide {t.get('level')}")
+
+    # macros : parent_id null, children = feuilles dont parent_id == macro
+    leaf_parent = {lid: lt.get("parent_id") for lid, lt in leaves.items()}
+    for mid, mt in macros.items():
+        if mt.get("parent_id") is not None:
+            errors.append(f"macro {mid} : parent_id devrait être null")
+        declared = set(mt.get("children", []))
+        actual = {lid for lid, p in leaf_parent.items() if p == mid}
+        if declared != actual:
+            errors.append(
+                f"macro {mid} : children {sorted(declared)} ≠ feuilles réelles {sorted(actual)}")
+
+    # feuilles : parent macro valide, children vide
+    for lid, lt in leaves.items():
+        p = lt.get("parent_id")
+        if p not in macros:
+            errors.append(f"feuille {lid} : parent_id {p} n'est pas un macro")
+        if lt.get("children"):
+            errors.append(f"feuille {lid} : ne devrait pas avoir d'enfants")
+
+    # nœuds : cluster_id = feuille valide ; macro_id concorde avec le parent
+    for nd in payload.get("nodes", []):
+        leaf = nd.get("cluster_id")
+        macro = nd.get("macro_id")
+        if leaf not in leaves:
+            errors.append(f"nœud {nd.get('id')} : cluster_id {leaf} n'est pas une feuille")
+            continue
+        if macro not in macros:
+            errors.append(f"nœud {nd.get('id')} : macro_id {macro} n'est pas un macro")
+            continue
+        if leaf_parent.get(leaf) != macro:
+            errors.append(
+                f"nœud {nd.get('id')} : feuille {leaf} appartient au macro "
+                f"{leaf_parent.get(leaf)}, pas {macro}")
+    return errors
