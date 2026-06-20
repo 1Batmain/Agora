@@ -3,6 +3,17 @@
 > Architecte = seul auteur. Les lanes lisent, ne réécrivent pas. Freeze imminent
 > (commit du contrat) une fois ce v0 validé par Bob.
 
+## ⚠️ PRINCIPE DIRECTEUR — GÉNÉRICITÉ (zéro hardcoding)
+L'outil tournera sur **des centaines de consultations originales**, sujets et **langues**
+variés. Toute solution doit être **générique et dérivée des données**, JAMAIS spécifique à
+un corpus :
+- Aucun mot/sujet codé en dur (pas de « tiktok », pas de liste de domaine figée). Les
+  mots-vides de domaine se **dérivent des statistiques du corpus** (document-frequency).
+- Pas de magic number calé sur un corpus : les défauts (seuils, k…) se **dérivent de la
+  distribution** observée, ou sont exposés en knobs.
+- Langue-agnostique par défaut (multilingue = 1er ordre). Le corpus TikTok est un **cas de
+  test**, pas une cible. Tout littéral corpus-spécifique dans le code = bug.
+
 ## Vision produit
 Consultation **batch d'abord, live ensuite** : on bâtit le pipeline + l'éval sur
 batch, puis on rejoue/streame les avis pour l'animation d'un essaim de nœuds qui
