@@ -315,9 +315,11 @@ def build_payload(
         threshold = derived.threshold
     if min_sub_size is None:
         min_sub_size = derived.min_sub_size
-    # near-dup (diversity) : lié au knob `dedup` s'il est posé, sinon dérivé (p98).
+    # near-dup (diversity) DÉRIVÉ de la distribution (p98), sous le seuil `dedup`
+    # (dedup collapse les paires > dedup ; diversity mesure le résidu juste en
+    # dessous). Forçable en knob (`dup_threshold`).
     if dup_threshold is None:
-        dup_threshold = dedup_threshold if dedup_threshold is not None else derived.dup_threshold
+        dup_threshold = derived.dup_threshold
 
     # 2) Graphe k-NN sémantique --------------------------------------------
     knn = build_knn_graph(vecs, k=k, threshold=threshold)
