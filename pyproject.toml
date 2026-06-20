@@ -10,6 +10,9 @@ dependencies = [
     "torch>=2.2",
     "igraph>=0.11",
     "leidenalg>=0.10",
+    # Stopwords multilingues standard (50+ langues) — linguistique, chargé
+    # dynamiquement par le naming. AUCUN mot de domaine ; repli statistique si absent.
+    "stopwordsiso>=0.7",
 ]
 
 # Contender pour le banc d'éval + accélérateur k-NN (optionnels, CPU).
