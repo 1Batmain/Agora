@@ -4,9 +4,11 @@ Embeddings sémantiques robustes au paraphrasing via sentence-transformers, CPU.
 Trois modèles multilingues derrière UNE interface, chacun avec SA convention de
 préfixe (cf. `pipeline.embed.registry`) :
 
-  - `intfloat/multilingual-e5-small` (défaut) : "passage: " / "query: "
-  - `nomic-ai/nomic-embed-text-v2-moe`       : "search_document: " / "search_query: "
-  - `BAAI/bge-m3`                            : aucun préfixe
+  - `nomic-ai/nomic-embed-text-v2-moe` (défaut) : "search_document: " / "search_query: "
+  - `intfloat/multilingual-e5-small`            : "passage: " / "query: "
+  - `BAAI/bge-m3`                               : aucun préfixe
+
+Le DÉFAUT est le winner multilingue (nomic-v2) — cohérent batch ↔ backend live.
 
 API (inchangée, utilisée par cluster/eval) :
   `Embedder(model_id).embed(texts, is_query=False) -> np.ndarray`
@@ -27,7 +29,11 @@ import numpy as np
 
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
-DEFAULT_MODEL_ID = "intfloat/multilingual-e5-small"
+# Défaut = le WINNER multilingue validé (banc qualité, cf. queue/cross-lane.md).
+# nomic-v2 mixe les langues PAR THÈME (NMI cluster↔langue=0.008) ; e5-small
+# clusterise PAR LANGUE (NMI=0.81) → inutilisable en multilingue. Le défaut batch
+# doit être COHÉRENT avec le backend live (qui embedde déjà en nomic-v2 / cache).
+DEFAULT_MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
 
 
 class Embedder:
@@ -201,7 +207,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Embedder multilingue — smoke & bench.")
     parser.add_argument(
         "--model", default=DEFAULT_MODEL_ID,
-        help="model_id ou alias (e5 | nomic | bge-m3). Défaut: e5-small.",
+        help="model_id ou alias (e5 | nomic | bge-m3). Défaut: nomic-v2 (winner).",
     )
     parser.add_argument(
         "--smoke", action="store_true",
