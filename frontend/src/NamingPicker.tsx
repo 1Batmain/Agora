@@ -7,13 +7,13 @@ import type { NamingMethod } from './types';
  * same knobs.
  *   - c-TF-IDF : distinctive keywords derived from the corpus (default).
  *   - Centroïde: the most representative citizen verbatim (medoid).
- *   - LLM      : a short title from a LOCAL Ollama model; falls back to c-TF-IDF
- *                if Ollama is unreachable (signalled discreetly under the toggle).
+ *   - LLM      : short titles from the Mistral API (batched); falls back to
+ *                c-TF-IDF if the key is missing / API is down (signalled discreetly).
  */
 const NAMINGS: { id: NamingMethod; label: string; hint: string }[] = [
   { id: 'ctfidf', label: 'c-TF-IDF', hint: 'mots-clés distinctifs (défaut)' },
   { id: 'centroid', label: 'Centroïde', hint: 'verbatim citoyen représentatif' },
-  { id: 'llm', label: 'LLM local', hint: 'titre court (Ollama local), repli c-TF-IDF' },
+  { id: 'llm', label: 'LLM (Mistral)', hint: 'titre court via Mistral, repli c-TF-IDF' },
 ];
 
 export function NamingPicker({
@@ -28,7 +28,7 @@ export function NamingPicker({
   onChange: (n: NamingMethod) => void;
 }) {
   const hint = NAMINGS.find((n) => n.id === current)?.hint ?? '';
-  // Discreet notice when the user asked for LLM but Ollama was down → c-TF-IDF.
+  // Discreet notice when the user asked for LLM but Mistral was unavailable → c-TF-IDF.
   const fellBack = fallback && current === 'llm';
   return (
     <div className="method">
@@ -51,7 +51,7 @@ export function NamingPicker({
       </div>
       <p className="method__hint">
         {hint}
-        {fellBack && <span className="method__warn"> · Ollama indisponible → repli c-TF-IDF</span>}
+        {fellBack && <span className="method__warn"> · Mistral indisponible → repli c-TF-IDF</span>}
       </p>
     </div>
   );
