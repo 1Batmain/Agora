@@ -12,6 +12,7 @@ augmenté de `meta.stats { n_macros, n_subs, n_nodes, modularity, took_ms }`.
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 from time import perf_counter
 
@@ -25,33 +26,112 @@ from pipeline.cluster.knn import build_knn_graph
 
 SEED = 42
 
+# Cache MULTI-DATASET : `backend/cache/<dataset>/{embeddings.npy, ideas.jsonl,
+# meta.json}`. Un dataset = un sous-dossier (aucun nom de corpus codé en dur ;
+# les datasets sont DÉCOUVERTS en scannant le dossier). Défaut rétro-compat =
+# "tiktok".
 CACHE_DIR = Path(__file__).resolve().parent / "cache"
-EMB_PATH = CACHE_DIR / "embeddings.npy"
-IDEAS_PATH = CACHE_DIR / "ideas.jsonl"
+DEFAULT_DATASET = "tiktok"
 
 MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
 
+EMB_NAME = "embeddings.npy"
+IDEAS_NAME = "ideas.jsonl"
+META_NAME = "meta.json"
 
-def load_cache() -> tuple[list[Idea], np.ndarray, np.ndarray]:
-    """Charge le superset caché (vecteurs + ideas alignés). Aucun torch."""
-    if not EMB_PATH.exists() or not IDEAS_PATH.exists():
+
+def dataset_dir(dataset: str) -> Path:
+    return CACHE_DIR / dataset
+
+
+def cache_paths(dataset: str) -> tuple[Path, Path, Path]:
+    d = dataset_dir(dataset)
+    return d / EMB_NAME, d / IDEAS_NAME, d / META_NAME
+
+
+def list_datasets() -> list[str]:
+    """Datasets disponibles = sous-dossiers de cache/ avec un cache complet.
+
+    Découverte pure (zéro littéral de corpus) : on liste les dossiers qui
+    contiennent à la fois `embeddings.npy` et `ideas.jsonl`. Triés avec le défaut
+    (`tiktok`) en tête pour la rétro-compat de l'UI.
+    """
+    if not CACHE_DIR.exists():
+        return []
+    found = [
+        p.name for p in CACHE_DIR.iterdir()
+        if p.is_dir() and (p / EMB_NAME).exists() and (p / IDEAS_NAME).exists()
+    ]
+    found.sort(key=lambda n: (n != DEFAULT_DATASET, n))
+    return found
+
+
+def load_cache(dataset: str = DEFAULT_DATASET) -> tuple[list[Idea], np.ndarray, np.ndarray]:
+    """Charge le cache d'UN dataset (vecteurs + ideas alignés). Aucun torch."""
+    emb_path, ideas_path, _ = cache_paths(dataset)
+    if not emb_path.exists() or not ideas_path.exists():
         raise RuntimeError(
-            f"Cache absent ({EMB_PATH}). Lance d'abord :\n"
-            "  uv run --extra embed-contender python -m backend.build_cache"
+            f"Cache absent ({emb_path}). Construis-le d'abord :\n"
+            f"  uv run --extra embed-contender python -m backend.build_cache --dataset {dataset}"
         )
-    vecs = np.load(EMB_PATH).astype(np.float32)
+    vecs = np.load(emb_path).astype(np.float32)
     ideas: list[Idea] = []
-    with open(IDEAS_PATH, "r", encoding="utf-8") as fh:
+    with open(ideas_path, "r", encoding="utf-8") as fh:
         for i, line in enumerate(fh):
             line = line.strip()
             if line:
                 ideas.append(Idea.from_row(json.loads(line), i))
     if len(ideas) != vecs.shape[0]:
         raise RuntimeError(
-            f"Cache désaligné : {len(ideas)} ideas vs {vecs.shape[0]} vecteurs."
+            f"Cache désaligné ({dataset}) : {len(ideas)} ideas vs {vecs.shape[0]} vecteurs."
         )
     weights = np.array([idea.weight for idea in ideas], dtype=np.float32)
     return ideas, vecs, weights
+
+
+def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> dict:
+    """Métadonnées d'un dataset pour `GET /datasets`.
+
+    Lit `meta.json` s'il existe (écrit par build_cache), sinon DÉRIVE tout des
+    `ideas` cachés (langues, n, source). Générique : aucune valeur en dur.
+    """
+    _, ideas_path, meta_path = cache_paths(dataset)
+    meta: dict = {}
+    if meta_path.exists():
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            meta = {}
+
+    if ideas is None and (not meta or "languages" not in meta or "n_nodes" not in meta):
+        ideas = []
+        if ideas_path.exists():
+            with open(ideas_path, "r", encoding="utf-8") as fh:
+                for i, line in enumerate(fh):
+                    line = line.strip()
+                    if line:
+                        ideas.append(Idea.from_row(json.loads(line), i))
+
+    if ideas is not None:
+        lang_counts = Counter(idea.lang for idea in ideas if idea.lang)
+        src_counts = Counter(idea.source for idea in ideas if idea.source)
+        derived = {
+            "n_nodes": len(ideas),
+            "languages": [lg for lg, _ in lang_counts.most_common()],
+            "lang_counts": dict(lang_counts.most_common()),
+            "source": src_counts.most_common(1)[0][0] if src_counts else dataset,
+        }
+    else:
+        derived = {}
+
+    return {
+        "id": dataset,
+        "label": meta.get("label", dataset),
+        "n_nodes": meta.get("n_nodes", derived.get("n_nodes", 0)),
+        "languages": meta.get("languages", derived.get("languages", [])),
+        "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
+        "source": meta.get("source", derived.get("source", dataset)),
+    }
 
 
 def recluster(
@@ -68,6 +148,7 @@ def recluster(
     min_sub_size: int | None = None,
     dup_threshold: float | None = None,
     seed: int = SEED,
+    dataset: str = DEFAULT_DATASET,
 ) -> dict:
     """Re-clusterise le superset caché et renvoie un GraphPayload hiérarchique.
 
@@ -160,6 +241,7 @@ def recluster(
 
     return {
         "meta": {
+            "dataset": dataset,
             "model_id": MODEL_ID,
             "embedding_dim": int(vecs.shape[1]),
             "n_nodes": len(nodes),
