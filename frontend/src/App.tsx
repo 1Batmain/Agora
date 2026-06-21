@@ -4,6 +4,7 @@ import { CirclePack } from './CirclePack';
 import { KnobsPanel } from './KnobsPanel';
 import { DatasetPicker } from './DatasetPicker';
 import { MethodPicker } from './MethodPicker';
+import { NamingPicker } from './NamingPicker';
 import { StatsBar } from './StatsBar';
 import { AvisPanel } from './AvisPanel';
 import {
@@ -15,7 +16,7 @@ import {
   recluster,
 } from './api';
 import type { PackNode } from './hierarchy';
-import type { ClusterMethod, Dataset, GraphPayload, KnobSpec, Knobs } from './types';
+import type { ClusterMethod, Dataset, GraphPayload, KnobSpec, Knobs, NamingMethod } from './types';
 
 const DEBOUNCE_MS = 300;
 
@@ -36,6 +37,7 @@ export default function App() {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
   const [method, setMethod] = useState<ClusterMethod>('leiden');
+  const [naming, setNaming] = useState<NamingMethod>('ctfidf');
 
   // Boot: discover datasets, then load the default one's knobs + first graph.
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function App() {
         setSpecs(ps);
         const v = knobsFrom(ps);
         setValues(v);
-        const g = await recluster(v, first ?? undefined, 'leiden');
+        const g = await recluster(v, first ?? undefined, 'leiden', 'ctfidf');
         if (cancelled) return;
         setPayload(g);
         setLive(true);
@@ -75,25 +77,27 @@ export default function App() {
   // Debounced recluster on knob change (live mode only). Always tied to the
   // currently-selected dataset.
   const timer = useRef<number | null>(null);
-  const runRecluster = useCallbackRef(async (v: Knobs, ds: string | null, m: ClusterMethod) => {
-    setBusy(true);
-    try {
-      const g = await recluster(v, ds ?? undefined, m);
-      setPayload(g);
-      setError(null);
-    } catch (e) {
-      setError(`recluster a échoué : ${String(e)}`);
-    } finally {
-      setBusy(false);
-    }
-  });
+  const runRecluster = useCallbackRef(
+    async (v: Knobs, ds: string | null, m: ClusterMethod, nm: NamingMethod) => {
+      setBusy(true);
+      try {
+        const g = await recluster(v, ds ?? undefined, m, nm);
+        setPayload(g);
+        setError(null);
+      } catch (e) {
+        setError(`recluster a échoué : ${String(e)}`);
+      } finally {
+        setBusy(false);
+      }
+    },
+  );
 
   function onKnob(key: string, value: number) {
     if (!live) return;
     const next = { ...values, [key]: value };
     setValues(next);
     if (timer.current) clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => runRecluster(next, dataset, method), DEBOUNCE_MS);
+    timer.current = window.setTimeout(() => runRecluster(next, dataset, method, naming), DEBOUNCE_MS);
   }
 
   function onReset() {
@@ -101,13 +105,13 @@ export default function App() {
     const v = knobsFrom(specs);
     setValues(v);
     if (timer.current) clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => runRecluster(v, dataset, method), DEBOUNCE_MS);
+    timer.current = window.setTimeout(() => runRecluster(v, dataset, method, naming), DEBOUNCE_MS);
   }
 
   // Load a (dataset, method) pair: pull THAT combination's derived knobs from
   // /params, reset values, and recluster. Shared by the dataset and method
   // switches — both re-pull knobs because the panel adapts to the method.
-  const loadConfig = useCallbackRef(async (id: string | null, m: ClusterMethod) => {
+  const loadConfig = useCallbackRef(async (id: string | null, m: ClusterMethod, nm: NamingMethod) => {
     setSelected(null);
     setBusy(true);
     if (timer.current) clearTimeout(timer.current);
@@ -116,7 +120,7 @@ export default function App() {
       setSpecs(ps);
       const v = knobsFrom(ps);
       setValues(v);
-      const g = await recluster(v, id ?? undefined, m);
+      const g = await recluster(v, id ?? undefined, m, nm);
       setPayload(g);
       setError(null);
     } catch (e) {
@@ -126,19 +130,29 @@ export default function App() {
     }
   });
 
-  // Switch dataset (keeps the current method).
+  // Switch dataset (keeps the current method + naming).
   const onDataset = useCallbackRef(async (id: string) => {
     if (!live || id === dataset) return;
     setDataset(id);
-    await loadConfig(id, method);
+    await loadConfig(id, method, naming);
   });
 
-  // Switch clustering method (keeps the current dataset). The knobs panel
-  // re-renders with the new method's sliders.
+  // Switch clustering method (keeps the current dataset + naming). The knobs
+  // panel re-renders with the new method's sliders.
   const onMethod = useCallbackRef(async (m: ClusterMethod) => {
     if (!live || m === method) return;
     setMethod(m);
-    await loadConfig(dataset, m);
+    await loadConfig(dataset, m, naming);
+  });
+
+  // Switch naming method (orthogonal: same clusters/knobs, just re-titled).
+  // No knob re-pull — naming doesn't change the slider set.
+  const onNaming = useCallbackRef(async (nm: NamingMethod) => {
+    if (!live || nm === naming) return;
+    setNaming(nm);
+    setSelected(null);
+    if (timer.current) clearTimeout(timer.current);
+    await runRecluster(values, dataset, method, nm);
   });
 
   const stats = useMemo(() => (payload ? deriveStats(payload) : null), [payload]);
@@ -156,6 +170,12 @@ export default function App() {
           onChange={onDataset}
         />
         <MethodPicker current={method} disabled={!live || busy} onChange={onMethod} />
+        <NamingPicker
+          current={naming}
+          fallback={stats?.naming_fallback ?? false}
+          disabled={!live || busy}
+          onChange={onNaming}
+        />
         <KnobsPanel
           specs={specs}
           values={values}
