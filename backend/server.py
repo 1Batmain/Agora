@@ -29,14 +29,17 @@ from pydantic import BaseModel, Field
 from backend.recluster import (
     DEFAULT_DATASET,
     DEFAULT_METHOD,
+    DEFAULT_NAMING_METHOD,
     METHODS,
     MODEL_ID,
+    NAMINGS,
     SEED,
     dataset_descriptor,
     list_datasets,
     load_cache,
     recluster,
 )
+from pipeline.cluster.naming_methods import OLLAMA_MODEL
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
 from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defaults
@@ -44,6 +47,17 @@ from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defa
 # Filtres par défaut (mêmes que recluster) pour DÉRIVER les défauts data-driven.
 _DEFAULT_DEDUP = 0.95
 _DEFAULT_MIN_CHARS = 12
+
+# Options de NOMMAGE switchable (orthogonales à method/dataset). Le front bâtit
+# son sélecteur depuis cette liste — aucune valeur de corpus en dur.
+NAMING_OPTIONS = [
+    {"name": "ctfidf", "label": "c-TF-IDF",
+     "help": "mots-clés distinctifs dérivés du corpus (défaut, déterministe)"},
+    {"name": "centroid", "label": "Centroïde",
+     "help": "verbatim citoyen le plus représentatif du cluster"},
+    {"name": "llm", "label": "LLM local",
+     "help": f"titre court généré par Ollama ({OLLAMA_MODEL}) ; repli c-TF-IDF si indisponible"},
+]
 
 
 def _derive_startup_defaults(ideas, vecs, weights):
@@ -175,6 +189,7 @@ class ReclusterBody(BaseModel):
     """
     dataset: str | None = None
     method: str | None = None
+    naming: str | None = None
     dedup: float | None = Field(_DEFAULT_DEDUP, ge=0.0, le=1.0)
     min_chars: int = Field(_DEFAULT_MIN_CHARS, ge=0)
     # Leiden
@@ -218,7 +233,11 @@ def health() -> dict:
 @app.get("/datasets")
 def datasets() -> list[dict]:
     """Datasets disponibles (caches construits) → de quoi peupler le sélecteur."""
-    return [DATASETS[ds].descriptor for ds in DATASETS]
+    return [
+        {**DATASETS[ds].descriptor,
+         "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
+        for ds in DATASETS
+    ]
 
 
 @app.get("/params")
@@ -240,6 +259,10 @@ def params(dataset: str | None = Query(None),
         "method": meth,
         "methods": list(METHODS),
         "default_method": DEFAULT_METHOD,
+        "namings": NAMING_OPTIONS,
+        "naming_methods": list(NAMINGS),
+        "default_naming": DEFAULT_NAMING_METHOD,
+        "ollama_model": OLLAMA_MODEL,
         "knobs": ds.knobs_by_method[meth],
         "defaults": ds.defaults_by_method[meth],
         "knobs_by_method": ds.knobs_by_method,
@@ -273,9 +296,16 @@ def do_recluster(body: ReclusterBody) -> dict:
             status_code=404,
             detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
         )
+    naming = (body.naming or DEFAULT_NAMING_METHOD).lower()
+    if naming not in NAMINGS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"nommage inconnu: {naming!r} (disponibles: {list(NAMINGS)})",
+        )
     return recluster(
         ds.ideas, ds.vecs, ds.weights,
         method=meth,
+        naming=naming,
         dedup=body.dedup,
         min_chars=body.min_chars,
         k=body.k,
