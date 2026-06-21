@@ -1,3 +1,5 @@
 logs/
 __pycache__/
 *.pyc
+# Clé Mistral locale (lue par pipeline.cluster.mistral_client) — jamais commit.
+.env

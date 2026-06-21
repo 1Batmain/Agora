@@ -33,7 +33,7 @@ METHODS = ("leiden", "hdbscan")
 DEFAULT_METHOD = "leiden"
 
 # Méthodes de NOMMAGE switchables (orthogonales au clustering). "ctfidf" = défaut
-# (rétro-compat) ; "centroid" = verbatim représentatif ; "llm" = titre Ollama local.
+# (rétro-compat) ; "centroid" = verbatim représentatif ; "llm" = titre via API Mistral.
 NAMINGS = NAMING_METHODS
 DEFAULT_NAMING_METHOD = DEFAULT_NAMING
 
