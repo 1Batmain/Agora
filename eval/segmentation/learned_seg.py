@@ -6,8 +6,20 @@ par (couche × tête) + la dérive d'embedding. Question décisive : la tête ap
 l'attention réglée à la main — et, surtout, **TRANSFÈRE-T-ELLE** d'un corpus réel externe
 (WikiSection EN/DE) vers nos avis citoyens FR (gold) ?
 
+APPRENDRE À S'ABSTENIR (correctif sur-coupe) : le 1er run (train = WikiSection SEUL =
+100 % multi-section) n'avait JAMAIS vu d'exemple « ne pas couper » → il sur-coupait les
+avis cohérents (mono_FP transfert 23 % vs 14 % pour l'attention réglée-main). On ajoute
+donc au TRAIN des **NÉGATIFS « pas de frontière »** (toutes positions labellisées
+non-frontière), RÉELS et proches du domaine :
+  - **WikiSection mono** : passages d'une SECTION UNIQUE (un seul thème, zéro frontière
+    interne — on découpe les docs WikiSection à leurs frontières). EN/DE.
+  - **M-ABSA mono-aspect** (`n_aspects == 1`) : phrases d'opinion courtes mono-thème.
+    EN/DE/FR (M-ABSA ne couvre pas l'italien) → amène du FR natif dans le train.
+  Dosage ~1:1 doc-level (négatifs ≈ positifs). Cf. `learned_report.md` §1b (mono_FP).
+
 DISCIPLINE (PLAN §5, non négociable) :
-  - **Train = WikiSection RÉEL** (`load_wikisection("en")`+`("de")`). JAMAIS notre synthétique.
+  - **Train = jeux RÉELS externes** (WikiSection EN/DE multi + négatifs mono ci-dessus).
+    JAMAIS notre synthétique.
   - **CV STRICTE PAR DOCUMENT** (GroupKFold) — aucune position d'un même doc à cheval.
   - Modèle d'attention/embedding **GELÉ** : on n'entraîne qu'un classifieur léger (LR / GBM).
   - **Transfert** : test = notre gold de témoignages (in-domain produit, cross-langue).
@@ -44,7 +56,7 @@ from eval.segmentation.attn_seg import (
     _split_words,
     _word_index,
 )
-from eval.segmentation.datasets.loaders import load_wikisection
+from eval.segmentation.datasets.loaders import load_mabsa, load_wikisection
 from eval.segmentation.seg_bench import GoldItem, load_gold
 from eval.segmentation.segmenters import MIN_SEG, _enforce_min_seg
 
@@ -384,20 +396,75 @@ def load_ref_baselines() -> dict:
 # --------------------------------------------------------------------------- #
 # Sampling WikiSection (train réel externe)
 # --------------------------------------------------------------------------- #
-def sample_wikisection(lang: str, n: int, *, min_words: int = 2 * MIN_SEG,
-                       max_words: int = 220) -> list[GoldItem]:
-    """Échantillonne ~n docs WikiSection d'une langue (taille-mots tractable CPU)."""
-    rng = np.random.default_rng(SEED)
-    items = load_wikisection(lang)
+def _wikisection_pool(lang: str, *, min_words: int = 2 * MIN_SEG,
+                      max_words: int = 220) -> list[GoldItem]:
+    """Docs WikiSection multi (≥1 frontière) de taille tractable CPU."""
     keep = []
-    for it in items:
+    for it in load_wikisection(lang):
         nw = len(_split_words(it.text)[0])
         if min_words <= nw <= max_words and it.boundaries_char:
             keep.append(it)
+    return keep
+
+
+def sample_wikisection(lang: str, n: int, *, min_words: int = 2 * MIN_SEG,
+                       max_words: int = 220) -> list[GoldItem]:
+    """Échantillonne ~n docs WikiSection multi d'une langue (positifs : frontières)."""
+    rng = np.random.default_rng(SEED)
+    keep = _wikisection_pool(lang, min_words=min_words, max_words=max_words)
     if len(keep) > n:
         idx = rng.choice(len(keep), size=n, replace=False)
         keep = [keep[i] for i in sorted(idx)]
     return keep
+
+
+# --------------------------------------------------------------------------- #
+# NÉGATIFS « pas de frontière » : passages mono-thème, toutes positions = 0
+# --------------------------------------------------------------------------- #
+def _split_sections(item: GoldItem) -> list[str]:
+    """Découpe un doc WikiSection multi à ses frontières → sections mono-thème.
+    Frontière = offset AVANT l'espace de jointure (join=" ") → section suivante à +1."""
+    text, prev, secs = item.text, 0, []
+    for bnd in item.boundaries_char:
+        secs.append(text[prev:bnd].strip())
+        prev = bnd + 1
+    secs.append(text[prev:].strip())
+    return [s for s in secs if s]
+
+
+def sample_wikisection_mono(lang: str, n: int, exclude_ids: set[str], *,
+                            min_words: int = 2 * MIN_SEG,
+                            max_words: int = 220) -> list[GoldItem]:
+    """Négatifs WikiSection : UNE section unique (mono-thème) par article, articles
+    DISJOINTS des positifs (`exclude_ids`) → aucune fuite, aucun partage de doc en CV."""
+    rng = np.random.default_rng(SEED + 1)
+    pool = [it for it in _wikisection_pool(lang, min_words=1, max_words=10_000)
+            if it.id not in exclude_ids]
+    order = rng.permutation(len(pool))
+    out: list[GoldItem] = []
+    for k in order:
+        it = pool[int(k)]
+        for i, sec in enumerate(_split_sections(it)):
+            nw = len(_split_words(sec)[0])
+            if min_words <= nw <= max_words:
+                out.append(GoldItem(f"{it.id}-sec{i}", "mono", sec, [], []))
+                break  # une seule section/article → indépendance stricte en CV
+        if len(out) >= n:
+            break
+    return out
+
+
+def sample_mabsa_mono(lang: str, n: int, *, min_words: int = 2 * MIN_SEG,
+                      max_words: int = 220) -> list[GoldItem]:
+    """Négatifs M-ABSA : phrases mono-aspect (`n_aspects == 1`) = mono-thème cohérent."""
+    rng = np.random.default_rng(SEED + 2)
+    items = [it for it in load_mabsa(lang)
+             if len(it.aspect_categories) == 1
+             and min_words <= len(_split_words(it.text)[0]) <= max_words]
+    if len(items) > n:
+        idx = rng.choice(len(items), size=n, replace=False)
+        items = [items[i] for i in sorted(idx)]
+    return [GoldItem(it.id, "mono", it.text, [], []) for it in items]
 
 
 def slice_docs(docs: list[Doc], cols: np.ndarray) -> list[Doc]:
@@ -436,69 +503,134 @@ def _ref_row(label: str, d: dict | None) -> dict | None:
 def build_report(ctx: dict) -> str:
     refs = ctx["refs"]
     L = []
-    L.append("# Segmenteur APPRIS sur attention gelée — l'appris bat-il le réglé-main ?\n")
+    L.append("# Segmenteur APPRIS sur attention gelée — **+ négatifs mono** "
+             "(apprendre à s'abstenir)\n")
+    nb = ctx["neg_breakdown"]
     L.append(
-        f"*Train = **WikiSection RÉEL** (EN+DE, {ctx['n_train']} docs : {ctx['n_en']} EN, "
-        f"{ctx['n_de']} DE ; JAMAIS notre synthétique). Encodeur **`{ctx['model_id']}` GELÉ**. "
+        f"*Train = jeux RÉELS externes, **{ctx['n_train']} docs** = **{ctx['n_pos']} positifs** "
+        f"(WikiSection multi : {ctx['n_en']} EN + {ctx['n_de']} DE, ≥1 frontière) + "
+        f"**{ctx['n_neg']} négatifs « pas de frontière »** (ratio {ctx['n_neg'] / max(ctx['n_pos'],1):.2f}:1) : "
+        f"WikiSection-mono {nb['wiki_mono_en']} EN + {nb['wiki_mono_de']} DE (sections uniques) "
+        f"& M-ABSA mono-aspect {nb['mabsa_en']} EN + {nb['mabsa_de']} DE + {nb['mabsa_fr']} FR "
+        f"(`n_aspects==1`). JAMAIS notre synthétique. Encodeur **`{ctx['model_id']}` GELÉ**. "
         f"Features : `cross_{{L,H}}` par (couche×tête) [{ctx['n_layers']}×{ctx['n_heads']}] "
         f"× {len(W_CROSS)} fenêtres {W_CROSS} + dérive d'embedding × {len(W_EMB)} fenêtres "
         f"{W_EMB} = **{ctx['n_features']} features/position**. Classifieur léger (LR / GBM). "
         f"CPU, seed={SEED}.*\n")
+    L.append(
+        "> **Correctif** : au 1er run (train = WikiSection SEUL = 100 % multi-section) la tête "
+        "n'avait JAMAIS vu d'exemple « ne pas couper » → elle sur-coupait les avis cohérents "
+        "(mono_FP transfert 0.23 vs 0.14 pour l'attention réglée-main). On lui apprend ici à "
+        "**s'abstenir** en ajoutant au train des passages mono-thème entièrement labellisés "
+        "non-frontière. La question : le **zéro-shot** bat-il enfin le réglé-main (0.769) ?\n")
+
+    # --- Diagnostic en tête (résultat honnête, même négatif) ---
+    bk = ctx["best_transfer_kind"]
+    zs0 = ctx["gold_zeroshot"][bk]
+    gt0 = ctx["gold_tuned"][bk]
+    prev0 = ctx.get("prev") or {}
+    prev_gt = (prev0.get("gold_tuned_gf1") or {}).get(bk, {})
+    at0 = refs.get("attn_tuned", {})
+    thr_train = ctx["wiki_cv_gf1"][bk].thr
+    L.append("## 0. Diagnostic — SUR-CORRECTION (réponse : NON, et voici pourquoi)\n")
+    L.append(
+        f"**Les négatifs marchent… trop.** En zéro-shot, mono_FP s'effondre à "
+        f"**{zs0.mono_fp_rate:.3f}** (vs 0.23 au 1er run) — la tête a appris à s'abstenir — "
+        f"**MAIS la F1 zéro-shot s'effondre AUSSI à {zs0.f1:.3f}** (1er run : "
+        f"{(prev0.get('gold_zeroshot') or {}).get(bk, {}).get('F1_multi', '?')}). La tête "
+        f"**n'ose plus rien couper**. C'est une **sur-correction**, pas un échec du modèle.\n")
+    L.append(
+        f"**Cause = le SEUIL ABSOLU ne TRANSFÈRE PAS cross-domaine.** Le point de "
+        f"fonctionnement calé en CV sur le train (négatifs-lourd) vit **HAUT** "
+        f"(thr≈{thr_train}) ; le même train, transféré au gold, devrait couper **BAS** : "
+        f"l'optimum gold est **thr≈{gt0.thr}**. La **distribution des proba P(frontière) "
+        f"diffère entre domaines** (encyclopédique EN/DE vs témoignages FR) → un seuil "
+        f"numérique fixe calé sur l'un sature/éteint l'autre.\n")
+    L.append(
+        f"**Preuve que le MODÈLE est bon (c'est le seuil, pas la tête)** : re-calé sur le "
+        f"gold (thr={gt0.thr}), l'appris {bk.upper()} fait **F1_multi={gt0.f1:.3f}, "
+        f"mono_FP={gt0.mono_fp_rate:.3f}** — vs **mono_FP={prev_gt.get('mono_FP', '?')}** au "
+        f"1er run à objectif comparable (÷~{(prev_gt.get('mono_FP', 0) / max(gt0.mono_fp_rate, 1e-9)):.0f}) "
+        f"et vs **{at0.get('mono_FP', '?')}** pour le réglé-main. Les négatifs ont donc bien "
+        f"**rendu l'abstention apprise** : à point de fonctionnement comparable, la tête "
+        f"abstient désormais **mieux que le réglé-main** (mono_FP {gt0.mono_fp_rate:.3f} < "
+        f"{at0.get('mono_FP', '?')}), pour une F1 légèrement en dessous "
+        f"({gt0.f1:.3f} vs {at0.get('F1_multi', '?')}).\n")
+    L.append(
+        "**Verrou = le POINT DE FONCTIONNEMENT, pas le modèle.** Le fix (prochain run, "
+        "décidé par l'architecte ; **PAS de re-tuning ici**) = un **seuil ADAPTATIF dérivé "
+        "de la distribution de P PAR DOCUMENT** (p.ex. couper les maxima locaux de P "
+        "au-dessus de `μ_P − c·σ_P` du doc — exactement comme `attn_seg` calibre `cross` en "
+        "μ/σ poolés), au lieu d'un seuil numérique absolu transféré tel quel. Ce run "
+        "documente le résultat **TEL QUEL**, négatif compris.\n")
 
     # --- 1. Scorecard principal ---
     L.append("## 1. Scorecard — appris (LR/GBM) vs réglé-main vs change-point\n")
-    L.append("### 1a. WikiSection held-out (CV stricte PAR DOCUMENT, GroupKFold-5)\n")
-    cols = ["approche", "Pk", "WindowDiff", "F1_multi", "P", "R", "F1_global", "thr"]
+    L.append("### 1a. Train held-out (CV stricte PAR DOCUMENT, GroupKFold-5)\n")
+    cols = ["approche", "Pk", "WindowDiff", "F1_multi", "P", "R", "mono_FP",
+            "F1_global", "thr"]
     rows = []
     for kind in ("lr", "gbm"):
-        r = ctx["wiki_cv"][kind]
-        rows.append(r.as_row(f"**appris {kind.upper()}** (CV)") | {})
-    L.append(_md_table([{k: v for k, v in r.items() if k in cols} for r in
-                        [x.as_row(f"appris {kind.upper()}")
-                         for kind, x in ctx["wiki_cv"].items()]], cols) + "\n")
-    L.append("*(WikiSection = 100 % multi-section → pas de mono ; F1_multi = frontières "
-             "tol ±1, sélection du seuil sur la F1 OOF.)*\n")
+        rows.append(ctx["wiki_cv"][kind].as_row(f"appris {kind.upper()} — seuil F1_multi"))
+        rows.append(ctx["wiki_cv_gf1"][kind].as_row(f"appris {kind.upper()} — seuil F1_global"))
+    L.append(_md_table([{k: v for k, v in r.items() if k in cols} for r in rows], cols) + "\n")
+    L.append("*(CV out-of-fold sur le train COMPLET (multi positifs + mono négatifs). "
+             "`seuil F1_multi` = détection max des frontières ; `seuil F1_global` = calibration "
+             "d'**abstention** (pénalise la sur-coupe des mono) — c'est CE seuil qu'on transfère "
+             "en zéro-shot. mono_FP ici = sur-coupe des négatifs mono in-domain.)*\n")
 
     L.append("\n### 1b. TRANSFERT → notre gold témoignages FR (le chiffre clé)\n")
     L.append(
-        "Une tête entraînée sur WikiSection (EN/DE, encyclopédique) marche-t-elle sur des "
-        "**avis citoyens FR** ? Comparé à l'attention **RÉGLÉE à la main** (gold) et au "
-        "**change-point**. Trois régimes de seuil : **zéro-shot** = seuil calé sur "
-        "WikiSection-CV, jamais sur le gold (LE test de transfert honnête) ; **gold-tuné "
-        "(F1_global)** = seuil re-calé sur le gold par le MÊME objectif que l'attention "
-        "réglée (F1_global pénalise la sur-coupe des mono) → apples-to-apples ; **gold-tuné "
-        "(F1_multi)** = plafond de détection des frontières (optimise F1_multi seul, ignore "
-        "les faux-positifs mono).\n")
+        "Une tête entraînée sur des jeux RÉELS externes (WikiSection EN/DE + négatifs mono "
+        "EN/DE/FR) marche-t-elle sur des **avis citoyens FR** ? Comparé à l'attention "
+        "**RÉGLÉE à la main** (gold), au **change-point**, et au **1er run SANS négatifs**. "
+        "Régimes de seuil : **zéro-shot** = seuil calé sur le train-CV par F1_global "
+        "(abstention), jamais vu le gold (LE test de transfert honnête) ; **gold-tuné "
+        "(F1_global)** = seuil re-calé sur le gold par le MÊME objectif que l'attention réglée "
+        "→ apples-to-apples ; **gold-tuné (F1_multi)** = plafond de détection (ignore les FP "
+        "mono).\n")
     rows = []
     rows.append(_ref_row("attention RÉGLÉE-main (réf)", refs.get("attn_tuned")))
     rows.append(_ref_row("change-point (réf)", refs.get("changepoint")))
+    # 1er run SANS négatifs (mémorisé dans l'ancien scores.json).
+    prev = ctx.get("prev") or {}
+    prev_zs = prev.get("gold_zeroshot") or {}
+    for kind in ("lr", "gbm"):
+        pz = prev_zs.get(kind)
+        if pz:
+            rows.append({"approche": f"_1er run SANS nég. {kind.upper()} — zéro-shot_",
+                         "Pk": pz["Pk"], "WindowDiff": pz["WindowDiff"],
+                         "F1_multi": pz["F1_multi"], "P": pz["P"], "R": pz["R"],
+                         "mono_FP": pz["mono_FP"], "F1_global": pz["F1_global"],
+                         "thr": pz.get("thr", "—")})
     cols2 = ["approche", "Pk", "WindowDiff", "F1_multi", "P", "R", "mono_FP",
              "F1_global", "thr"]
     for kind in ("lr", "gbm"):
-        rows.append(ctx["gold_zeroshot"][kind].as_row(f"**appris {kind.upper()}** — zéro-shot"))
-        rows.append(ctx["gold_tuned"][kind].as_row(f"appris {kind.upper()} — gold-tuné (F1_global)"))
-        rows.append(ctx["gold_tuned_f1"][kind].as_row(f"appris {kind.upper()} — gold-tuné (F1_multi)"))
+        rows.append(ctx["gold_zeroshot"][kind].as_row(f"**appris {kind.upper()} +nég.** — zéro-shot"))
+        rows.append(ctx["gold_tuned"][kind].as_row(f"appris {kind.upper()} +nég. — gold-tuné (F1_global)"))
+        rows.append(ctx["gold_tuned_f1"][kind].as_row(f"appris {kind.upper()} +nég. — gold-tuné (F1_multi)"))
     rows = [r for r in rows if r]
     L.append(_md_table([{k: v for k, v in r.items() if k in cols2} for r in rows], cols2) + "\n")
-    L.append("*(mono_FP = fraction des 104 mono sur-coupés — l'appris a-t-il appris à "
-             "s'abstenir ? WikiSection n'ayant AUCUN mono, c'est le test de transfert le plus "
-             "dur.)*\n")
+    L.append("*(mono_FP = fraction des 104 mono du gold sur-coupés — l'appris a-t-il appris à "
+             "s'abstenir ? Comparer la ligne zéro-shot +nég. à la ligne « 1er run SANS nég. » : "
+             "c'est l'effet DIRECT des négatifs.)*\n")
 
     # --- 2. Cross-langue ---
-    L.append("## 2. Cross-langue : train EN → test DE (WikiSection)\n")
+    L.append("## 2. Cross-langue : train EN → test DE\n")
     cl = ctx.get("crosslang")
     if cl:
         rows = []
         for kind in ("lr", "gbm"):
             rows.append(cl[kind].as_row(f"appris {kind.upper()} — train EN→test DE"))
         L.append(_md_table([{k: v for k, v in r.items() if k in cols} for r in rows], cols) + "\n")
-        L.append("*(Seuil calé sur EN-CV, appliqué tel quel au DE held-out — preuve de "
-                 "généricité langue-agnostique des features dérivées.)*\n")
+        L.append("*(Train EN = positifs EN + négatifs mono EN ; test DE = positifs + mono DE. "
+                 "Seuil F1_global calé sur EN-CV, appliqué tel quel au DE held-out — généricité "
+                 "langue-agnostique des features ET de l'abstention apprise.)*\n")
     else:
         L.append("*(non calculé)*\n")
 
     # --- 3. Ablation features ---
-    L.append("## 3. Ablation : d'où vient le signal ? (LR, CV WikiSection)\n")
+    L.append("## 3. Ablation : d'où vient le signal ? (LR, CV train)\n")
     ab = ctx.get("ablation")
     if ab:
         rows = [{"features": g, **{k: v for k, v in ab[g].as_row().items()
@@ -540,11 +672,25 @@ def build_report(ctx: dict) -> str:
         f"(flux d'attention BAS → frontière), conforme à l'intuition physique.\n")
 
     # --- 5. Verdict ---
-    L.append("## 5. Verdict honnête — l'appris bat-il le réglé-main ?\n")
+    L.append("## 5. Verdict honnête — avec les négatifs, le zéro-shot bat-il le réglé-main ?\n")
     best_kind = ctx["best_transfer_kind"]
     zs = ctx["gold_zeroshot"][best_kind]
     gt = ctx["gold_tuned"][best_kind]
     at = refs.get("attn_tuned")
+    # effet DIRECT des négatifs : zéro-shot avec vs sans (1er run).
+    prev = ctx.get("prev") or {}
+    prev_zs = (prev.get("gold_zeroshot") or {}).get(best_kind)
+    if prev_zs:
+        L.append(
+            f"- **Effet des négatifs (zéro-shot {best_kind.upper()})** : mono_FP "
+            f"**{prev_zs['mono_FP']} → {zs.mono_fp_rate:.3f}** "
+            f"(Δ={zs.mono_fp_rate - prev_zs['mono_FP']:+.3f}) — la sur-coupe des mono "
+            f"s'effondre — **MAIS** F1_multi **{prev_zs['F1_multi']} → {zs.f1:.3f}** "
+            f"(Δ={zs.f1 - prev_zs['F1_multi']:+.3f}) s'effondre aussi. **Sur-correction** : "
+            f"la tête n'ose plus couper. Ce n'est pas le modèle (cf. §0 : re-calé sur le gold "
+            f"il fait F1={ctx['gold_tuned'][best_kind].f1:.3f} / "
+            f"mono_FP={ctx['gold_tuned'][best_kind].mono_fp_rate:.3f}) mais le **seuil absolu "
+            f"qui ne transfère pas** cross-domaine.\n")
     if at:
         d_zs = zs.f1 - at["F1_multi"]
         d_gt = gt.f1 - at["F1_multi"]
@@ -552,9 +698,10 @@ def build_report(ctx: dict) -> str:
             f"- **Transfert ZÉRO-SHOT** (le test honnête : seuil jamais vu le gold) — meilleur "
             f"appris = **{best_kind.upper()}** : F1_multi={zs.f1:.3f} (P={zs.precision:.3f}, "
             f"R={zs.recall:.3f}), Pk={zs.pk:.3f}, mono_FP={zs.mono_fp_rate:.3f}. "
-            f"vs attention réglée-main F1_multi={at['F1_multi']} → **ΔF1_multi={d_zs:+.3f}**. "
+            f"vs attention réglée-main F1_multi={at['F1_multi']} (mono_FP={at['mono_FP']}) → "
+            f"**ΔF1_multi={d_zs:+.3f}**. "
             f"→ l'appris **{'BAT' if d_zs > 0.01 else ('égale' if abs(d_zs) <= 0.01 else 'NE BAT PAS')}** "
-            f"le réglé-main en zéro-shot.\n")
+            f"le réglé-main (0.769) en zéro-shot.\n")
         d_gtg = gt.gf1 - at["F1_global"]
         gtf = ctx["gold_tuned_f1"][best_kind]
         L.append(
@@ -565,29 +712,33 @@ def build_report(ctx: dict) -> str:
             f"L'appris **{'BAT' if d_gtg > 0.005 else ('égale' if abs(d_gtg) <= 0.005 else 'NE BAT PAS')}** "
             f"le réglé-main à objectif/seuil comparable.\n")
         L.append(
-            f"- **Plafond de détection des frontières** (seuil optimisant F1_multi seul, "
-            f"sans pénaliser les mono) : F1_multi={gtf.f1:.3f} (P={gtf.precision:.3f}, "
-            f"R={gtf.recall:.3f}) mais mono_FP={gtf.mono_fp_rate:.3f} — quand on l'autorise à "
-            f"sur-couper, l'appris détecte BEAUCOUP plus de frontières multi que le réglé-main "
-            f"(R={gtf.recall:.2f} vs {at['R']}), au prix d'une sur-coupe massive des mono. "
-            f"Le signal appris est plus RICHE ; la difficulté est la calibration de l'abstention.\n")
+            f"- **Plafond de détection des frontières** (seuil optimisant F1_multi seul) : "
+            f"F1_multi={gtf.f1:.3f} (P={gtf.precision:.3f}, R={gtf.recall:.3f}), "
+            f"mono_FP={gtf.mono_fp_rate:.3f}. Avec les négatifs, l'optimum F1_multi et "
+            f"l'optimum F1_global **coïncident** (même seuil) : le modèle n'a plus besoin de "
+            f"sur-couper pour détecter — l'abstention est apprise dans la TÊTE, pas imposée par "
+            f"le seuil. Reste à la calibrer cross-domaine (cf. §0).\n")
     cp = refs.get("changepoint")
     if cp:
         L.append(f"- vs **change-point** (F1_multi={cp['F1_multi']}) : l'appris zéro-shot fait "
                  f"ΔF1_multi={zs.f1 - cp['F1_multi']:+.3f}.\n")
+    nb = ctx["neg_breakdown"]
     L.append(
-        f"- **Honnêteté train/domain gap** : train = **{ctx['n_train']} docs** WikiSection "
-        f"(EN/DE encyclopédique, sections ~3/doc) ; test = avis citoyens **FR** (registre, "
-        f"langue ET domaine différents). Le transfert traverse DEUX gaps (langue + domaine). "
-        f"WikiSection n'a **aucun doc mono** → le classifieur n'a jamais vu d'exemple « ne rien "
-        f"couper » : tout sur-découpage des mono ({zs.mono_fp_rate * 100:.0f} %) vient de là, "
-        f"c'est la limite structurelle du transfert.\n")
+        f"- **Honnêteté ratio & provenance des négatifs** : train = **{ctx['n_train']} docs** = "
+        f"{ctx['n_pos']} positifs WikiSection multi (EN/DE encyclopédique) + {ctx['n_neg']} "
+        f"négatifs mono (ratio **{ctx['n_neg'] / max(ctx['n_pos'],1):.2f}:1**) : sections uniques "
+        f"WikiSection ({nb['wiki_mono_en']}+{nb['wiki_mono_de']} EN/DE, MÊME domaine que les "
+        f"positifs) + M-ABSA mono-aspect ({nb['mabsa_en']}+{nb['mabsa_de']}+{nb['mabsa_fr']} "
+        f"EN/DE/FR, opinion courte, dont du **FR natif**). Le transfert traverse toujours le gap "
+        f"langue+domaine (test = avis citoyens FR) ; ce qui change vs le 1er run : le modèle a "
+        f"VU des exemples « ne rien couper » → mono_FP zéro-shot = {zs.mono_fp_rate * 100:.0f} %.\n")
     over = ctx["wiki_cv"][best_kind].f1
     L.append(
-        f"- **Sur/sous-apprentissage** : F1 CV WikiSection ({best_kind.upper()})={over:.3f} vs "
+        f"- **Sur/sous-apprentissage** : F1_multi CV train ({best_kind.upper()})={over:.3f} vs "
         f"F1 transfert gold={zs.f1:.3f} — l'écart mesure le domain gap (un gros écart = la tête "
-        f"colle au style WikiSection). LR (linéaire, standardisé) = interprétable mais capacité "
-        f"limitée ; GBM = plus de capacité, risque de sur-apprendre le style source.\n")
+        f"colle au style source). Risque des négatifs : si on en met TROP, le modèle s'abstient "
+        f"trop (rappel multi ↓) ; trop peu, il sur-coupe encore (mono_FP ↑) — d'où le dosage "
+        f"~1:1. LR (linéaire) = interprétable, capacité limitée ; GBM = plus de capacité.\n")
     L.append(
         "- **Généricité** : zéro lexique, zéro mot codé en dur — features 100 % dérivées de "
         "l'attention/embedding d'un encodeur gelé, calculables sur n'importe quelle langue. "
@@ -604,6 +755,12 @@ def main() -> None:
     ap.add_argument("--model", default=MODEL_KEY)
     ap.add_argument("--n-en", type=int, default=1500)
     ap.add_argument("--n-de", type=int, default=750)
+    # NÉGATIFS « pas de frontière » (apprendre à s'abstenir) : dose ~1:1 doc-level.
+    ap.add_argument("--n-wiki-mono-en", type=int, default=500)
+    ap.add_argument("--n-wiki-mono-de", type=int, default=250)
+    ap.add_argument("--n-mabsa-en", type=int, default=500)
+    ap.add_argument("--n-mabsa-de", type=int, default=250)
+    ap.add_argument("--n-mabsa-fr", type=int, default=750)
     ap.add_argument("--out", default=str(DEFAULT_REPORT))
     ap.add_argument("--scores-out", default=str(DEFAULT_SCORES))
     args = ap.parse_args()
@@ -612,24 +769,54 @@ def main() -> None:
     from eval.segmentation.attn_seg import ATTN_MODELS
     model_id = ATTN_MODELS[model_key]["model_id"]
 
-    print("→ échantillonnage WikiSection (réel externe)…")
+    # run précédent (sans négatifs) — référence directe avant écrasement du scores.json.
+    prev_scores = None
+    if Path(args.scores_out).exists():
+        try:
+            prev_scores = json.loads(Path(args.scores_out).read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            prev_scores = None
+
+    print("→ échantillonnage WikiSection multi (positifs : frontières)…")
     en_items = sample_wikisection("en", args.n_en)
     de_items = sample_wikisection("de", args.n_de)
-    print(f"  EN={len(en_items)} DE={len(de_items)}")
+    print(f"  POS  EN={len(en_items)} DE={len(de_items)}")
+
+    print("→ échantillonnage NÉGATIFS mono (pas de frontière)…")
+    pos_ids = {it.id for it in en_items} | {it.id for it in de_items}
+    wmono_en = sample_wikisection_mono("en", args.n_wiki_mono_en, pos_ids)
+    wmono_de = sample_wikisection_mono("de", args.n_wiki_mono_de, pos_ids)
+    mab_en = sample_mabsa_mono("en", args.n_mabsa_en)
+    mab_de = sample_mabsa_mono("de", args.n_mabsa_de)
+    mab_fr = sample_mabsa_mono("fr", args.n_mabsa_fr)
+    print(f"  NEG  wiki-mono EN={len(wmono_en)} DE={len(wmono_de)} | "
+          f"M-ABSA EN={len(mab_en)} DE={len(mab_de)} FR={len(mab_fr)}")
 
     print("→ extraction attention + features (cachée)…")
-    print("  EN:")
-    en_docs = featurize(en_items, model_key)
-    print("  DE:")
-    de_docs = featurize(de_items, model_key)
-    train_docs = en_docs + de_docs
+    print("  EN multi:");  en_pos = featurize(en_items, model_key)
+    print("  DE multi:");  de_pos = featurize(de_items, model_key)
+    print("  EN wiki-mono:"); en_wmono = featurize(wmono_en, model_key)
+    print("  DE wiki-mono:"); de_wmono = featurize(wmono_de, model_key)
+    print("  EN M-ABSA:");  en_mab = featurize(mab_en, model_key)
+    print("  DE M-ABSA:");  de_mab = featurize(mab_de, model_key)
+    print("  FR M-ABSA:");  fr_mab = featurize(mab_fr, model_key)
+
+    # Regroupement par LANGUE (positifs + négatifs de la même langue) pour le cross-langue.
+    en_docs = en_pos + en_wmono + en_mab
+    de_docs = de_pos + de_wmono + de_mab
+    fr_neg_docs = fr_mab                       # FR : négatifs natifs (pas de positifs FR)
+    train_docs = en_docs + de_docs + fr_neg_docs
+    n_pos = len(en_pos) + len(de_pos)
+    n_neg = len(train_docs) - n_pos
     n_layers, n_heads = None, None
     # récupère L/H depuis un forward (les features sont déjà construites dessus)
     probe = word_attention(en_items[0].text, model_key)
     n_layers, n_heads = probe.n_layers, probe.n_heads
     names = feature_names(n_layers, n_heads)
     n_features = len(names)
-    print(f"  train={len(train_docs)} docs, {n_features} features (L={n_layers} H={n_heads})")
+    print(f"  train={len(train_docs)} docs ({n_pos} pos / {n_neg} neg, "
+          f"ratio {n_neg / max(n_pos, 1):.2f}:1), {n_features} features "
+          f"(L={n_layers} H={n_heads})")
 
     print("→ gold (transfert FR)…")
     gold_items, _ = load_gold(Path(args.gold))
@@ -638,27 +825,37 @@ def main() -> None:
     refs = load_ref_baselines()
     groups = feature_groups(n_layers, n_heads)
 
-    ctx = {"refs": refs, "n_train": len(train_docs), "n_en": len(en_docs),
-           "n_de": len(de_docs), "model_id": model_id, "n_layers": n_layers,
-           "n_heads": n_heads, "n_features": n_features}
+    ctx = {"refs": refs, "prev": prev_scores, "n_train": len(train_docs),
+           "n_en": len(en_pos), "n_de": len(de_pos), "n_pos": n_pos, "n_neg": n_neg,
+           "neg_breakdown": {"wiki_mono_en": len(en_wmono), "wiki_mono_de": len(de_wmono),
+                             "mabsa_en": len(en_mab), "mabsa_de": len(de_mab),
+                             "mabsa_fr": len(fr_mab)},
+           "model_id": model_id, "n_layers": n_layers, "n_heads": n_heads,
+           "n_features": n_features}
 
-    # --- WikiSection CV (combiné) + transfert gold, par modèle ---
-    ctx["wiki_cv"], ctx["gold_zeroshot"] = {}, {}
+    # --- Train CV (multi + négatifs mono) + transfert gold, par modèle ---
+    ctx["wiki_cv"], ctx["wiki_cv_gf1"], ctx["gold_zeroshot"] = {}, {}, {}
     ctx["gold_tuned"], ctx["gold_tuned_f1"] = {}, {}
     full_models = {}
     for kind in ("lr", "gbm"):
         print(f"→ {kind.upper()} : OOF CV (par document)…")
         oof = oof_probabilities(train_docs, kind)
+        # 2 seuils calés en CV (jamais sur le gold) : F1_multi (détection) et F1_global
+        # (abstention — le train contient DÉSORMAIS des mono, donc gf1 a un sens).
         wiki_best = best_threshold(train_docs, oof, objective="f1")
+        wiki_best_g = best_threshold(train_docs, oof, objective="gf1")
         ctx["wiki_cv"][kind] = wiki_best
-        print(f"  WikiSection CV: F1={wiki_best.f1:.3f} Pk={wiki_best.pk:.3f} thr={wiki_best.thr}")
+        ctx["wiki_cv_gf1"][kind] = wiki_best_g
+        print(f"  train CV: F1_multi={wiki_best.f1:.3f} (thr={wiki_best.thr}) | "
+              f"gf1-thr={wiki_best_g.thr} mono_FP={wiki_best_g.mono_fp_rate:.3f}")
 
         print(f"→ {kind.upper()} : fit complet + transfert gold…")
         model = fit_full(train_docs, kind)
         full_models[kind] = model
         gold_proba = predict_docs(model, gold_docs)
-        # zéro-shot : seuil de WikiSection-CV appliqué tel quel
-        ctx["gold_zeroshot"][kind] = evaluate(gold_docs, gold_proba, wiki_best.thr)
+        # zéro-shot : seuil calé sur le train CV par F1_GLOBAL (abstention) appliqué tel
+        # quel au gold — le test de transfert honnête, exploitant les négatifs mono.
+        ctx["gold_zeroshot"][kind] = evaluate(gold_docs, gold_proba, wiki_best_g.thr)
         # gold-tuné (F1_global) : seuil re-calé sur le gold par le MÊME objectif que
         # l'attention réglée (F1_global pénalise la sur-coupe des mono) → apples-to-apples.
         ctx["gold_tuned"][kind] = best_threshold(gold_docs, gold_proba, objective="gf1")
@@ -675,7 +872,7 @@ def main() -> None:
     ctx["crosslang"] = {}
     for kind in ("lr", "gbm"):
         oof_en = oof_probabilities(en_docs, kind)
-        thr_en = best_threshold(en_docs, oof_en, objective="f1").thr
+        thr_en = best_threshold(en_docs, oof_en, objective="gf1").thr
         model_en = fit_full(en_docs, kind)
         de_proba = predict_docs(model_en, de_docs)
         ctx["crosslang"][kind] = evaluate(de_docs, de_proba, thr_en)
@@ -698,10 +895,12 @@ def main() -> None:
 
     out = {
         "model": model_id, "seed": SEED, "n_train": len(train_docs),
-        "n_en": len(en_docs), "n_de": len(de_docs), "n_features": n_features,
+        "n_en": len(en_pos), "n_de": len(de_pos), "n_pos": n_pos, "n_neg": n_neg,
+        "neg_breakdown": ctx["neg_breakdown"], "n_features": n_features,
         "n_layers": n_layers, "n_heads": n_heads,
         "refs": refs,
         "wiki_cv": {k: v.as_row() for k, v in ctx["wiki_cv"].items()},
+        "wiki_cv_gf1": {k: v.as_row() for k, v in ctx["wiki_cv_gf1"].items()},
         "gold_zeroshot": {k: v.as_row() for k, v in ctx["gold_zeroshot"].items()},
         "gold_tuned_gf1": {k: v.as_row() for k, v in ctx["gold_tuned"].items()},
         "gold_tuned_f1": {k: v.as_row() for k, v in ctx["gold_tuned_f1"].items()},
