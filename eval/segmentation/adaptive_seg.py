@@ -435,7 +435,20 @@ def main():
     ap.add_argument("--n-mabsa-fr", type=int, default=500)
     ap.add_argument("--out", default=str(DEFAULT_REPORT))
     ap.add_argument("--scores-out", default=str(DEFAULT_SCORES))
+    # Checkpoint du ctx (résultats lourds) → ré-écrire le rapport SANS tout recalculer.
+    ap.add_argument("--ckpt", default=str(HERE / ".adaptive_ctx.pkl"))
+    ap.add_argument("--rebuild", action="store_true",
+                    help="recharge --ckpt et régénère seulement le rapport (pas de calcul).")
     args = ap.parse_args()
+
+    import pickle
+    if args.rebuild:
+        print(f"→ rebuild depuis {args.ckpt} (aucun recalcul)…")
+        with open(args.ckpt, "rb") as fh:
+            ctx = pickle.load(fh)
+        Path(args.out).write_text(build_report(ctx), encoding="utf-8")
+        print(f"✓ {args.out}")
+        return
 
     from eval.segmentation.attn_seg import ATTN_MODELS
     model_id = ATTN_MODELS[args.model]["model_id"]
@@ -460,6 +473,9 @@ def main():
     ctx = {"model_id": model_id, "refs": refs, "breakdown": breakdown,
            "n_source": len(source_docs), "results": results,
            "gold_pre": gold_pre_holder, "gold_docs": gold_docs}
+    with open(args.ckpt, "wb") as fh:                 # checkpoint pour --rebuild
+        pickle.dump(ctx, fh)
+    print(f"✓ {args.ckpt}")
     report = build_report(ctx)
     Path(args.out).write_text(report, encoding="utf-8")
     print(f"\n✓ {args.out}")
@@ -507,6 +523,56 @@ def _best_detection(ctx):
         if best is None or key > best[0]:
             best = (key, kind, nm, name, r)
     return best
+
+
+def _best_adaptive(ctx, mono_cap):
+    """Meilleure variante ADAPTATIVE (famille `rel`, hors seuil fixe/calibré) sous
+    contrainte mono_FP ≤ cap — ce que le décodage par-document apporte SEUL."""
+    best = None
+    for kind, nm, name, r in _all_rows(ctx):
+        if not name.startswith("rel"):
+            continue
+        g = r["gold"]
+        if g.mono_fp_rate <= mono_cap:
+            key = (round(g.f1, 4), -round(g.mono_fp_rate, 4))
+            if best is None or key > best[0]:
+                best = (key, kind, nm, name, r)
+    return best
+
+
+def _oracle_data(ctx, mono_cap):
+    """Pour chaque config, RÈGLE chaque variante sur le gold (triche) et garde la meilleure
+    sous contrainte mono_FP ≤ cap. Renvoie (lignes table, meilleur oracle global)."""
+    orows = []
+    gold_docs = ctx["gold_docs"]
+    oof_y_gold = np.concatenate([d.y for d in gold_docs])
+    best_global = None
+    for kind in ("lr", "gbm"):
+        for nm in ("with_neg", "without_neg"):
+            gold_pre = ctx["gold_pre"][(kind, nm)]
+            res = ctx["results"][(kind, nm)]
+            bg = next(iter(res.values()))["best_gate"]
+            tag = f"{kind.upper()} {'+nég' if nm == 'with_neg' else 'sans nég'}"
+            oof_p_gold = np.concatenate([gold_pre[d.id].proba for d in gold_docs
+                                         if gold_pre[d.id].proba.size])
+            variants = []
+            for name, _d in DECODER_SPECS:
+                dec = build_decoder(name, gold_docs, gold_pre, oof_p_gold, oof_y_gold,
+                                    best_gate=bg)
+                variants.append((name, evaluate(gold_docs, gold_pre, dec)))
+            ok = [(n, r) for n, r in variants if r.mono_fp_rate <= mono_cap]
+            if ok:
+                oname, r = max(ok, key=lambda t: (round(t[1].f1, 4), -round(t[1].mono_fp_rate, 4)))
+                if best_global is None or r.f1 > best_global[0]:
+                    best_global = (r.f1, r.mono_fp_rate, tag, oname.replace("best", bg), r)
+            else:
+                oname, r = min(variants, key=lambda t: round(t[1].mono_fp_rate, 4))
+                oname = oname + " (cap non tenu)"
+            orows.append({"config": tag, "meilleur décodage (oracle)": oname.replace("best", bg),
+                          "F1_multi": round(r.f1, 4), "Pk": round(r.pk, 3),
+                          "mono_FP": round(r.mono_fp_rate, 3),
+                          "P": round(r.precision, 3), "R": round(r.recall, 3)})
+    return orows, best_global
 
 
 def build_report(ctx):
@@ -582,6 +648,8 @@ def build_report(ctx):
     mono_cap = round(at_mfp + 0.03, 3)
     win = _winner_constrained(ctx, mono_cap)
     det = _best_detection(ctx)
+    adp = _best_adaptive(ctx, mono_cap)
+    orows, oracle_best = _oracle_data(ctx, mono_cap)
     L_.append(
         f"*Le point de fonctionnement utile doit **détecter ET s'abstenir** : on retient la "
         f"variante de **F1_multi max SOUS contrainte mono_FP ≤ {mono_cap}** (réglé-main "
@@ -594,94 +662,93 @@ def build_report(ctx):
     L_.append(
         f"- **Plafond de détection** (mono ignoré) : `{ddisp}` sur {dk.upper()} "
         f"{'+nég' if dnm == 'with_neg' else 'sans nég'} → F1_multi={dg.f1:.3f} "
-        f"(mais mono_FP={dg.mono_fp_rate:.3f} → sur-coupe).\n")
+        f"mais mono_FP={dg.mono_fp_rate:.3f} → **sur-coupe tout** : les variantes purement "
+        f"relatives (`rel`, `peak_z`, `kurt`) montent à ~0.9 de F1 en coupant CHAQUE avis, "
+        f"mono compris. Inutilisable.\n")
 
     if win is None:
-        L_.append(
-            f"- **Sous contrainte mono_FP ≤ {mono_cap}** : **AUCUNE** variante zéro-shot ne "
-            f"qualifie — toutes celles qui détectent (F1 élevé) sur-coupent les mono.\n")
-        verdict = (f"❌ **NON** — aucune variante adaptative ne tient le point de fonctionnement "
-                   f"du réglé-main en zéro-shot (détecter SANS sur-couper). Le décodage adaptatif "
-                   f"aide vs le seuil fixe mais le transfert reste incomplet — signal qu'il faut "
-                   f"un autre angle (cf. plafond oracle ci-dessous : la marge existe, c'est le "
-                   f"réglage zéro-shot du gate qui ne transfère pas).")
+        verdict = (f"❌ **NON** — sous contrainte mono_FP ≤ {mono_cap}, **AUCUNE** variante "
+                   f"zéro-shot ne qualifie : tout ce qui détecte sur-coupe, tout ce qui "
+                   f"s'abstient s'éteint. Il faut un autre angle.")
         L_.append(f"- **{verdict}**\n")
+        wnm = wkind = None
     else:
         _key, wkind, wnm, wname, wr = win
         g = wr["gold"]
         disp = wname.replace("best", wr["best_gate"]) if "best" in wname else wname
         beats = g.f1 > at_f1 + 0.005
         near = g.f1 >= at_f1 - 0.03
+        is_adaptive = wname.startswith("rel")
         L_.append(
             f"- **Meilleur zéro-shot UTILE** (mono_FP ≤ {mono_cap}) : `{disp}` sur "
             f"**{wkind.upper()} {'+nég' if wnm == 'with_neg' else 'sans nég'}** → "
             f"F1_multi=**{g.f1:.4f}** (P={g.precision:.3f}, R={g.recall:.3f}), Pk={g.pk:.3f}, "
-            f"**mono_FP={g.mono_fp_rate:.3f}**.\n")
+            f"**mono_FP={g.mono_fp_rate:.3f}**"
+            + ("" if is_adaptive else " — c'est le **seuil "
+               f"{'fixe' if wname == 'fixed' else 'calibré'}, PAS une variante adaptative**, "
+               f"qui gagne sous contrainte.") + "\n")
         L_.append(
             f"- vs **réglé-main** (F1_multi={at_f1}, mono_FP={at_mfp}) : "
             f"ΔF1_multi=**{g.f1 - at_f1:+.4f}**, Δmono_FP={g.mono_fp_rate - at_mfp:+.3f}.\n")
+        # ce que l'adaptatif (famille rel) apporte SEUL, vs le seuil fixe de la même tête.
+        if adp:
+            _ak, akind, anm, aname, ar = adp
+            ag = ar["gold"]
+            adisp = aname.replace("best", ar["best_gate"]) if "best" in aname else aname
+            fx = ctx["results"][(akind, anm)]["fixed"]["gold"]
+            L_.append(
+                f"- **Apport propre du décodage adaptatif** : meilleure variante de la "
+                f"famille `rel` sous contrainte = `{adisp}` ({akind.upper()} "
+                f"{'+nég' if anm == 'with_neg' else 'sans nég'}) → F1_multi={ag.f1:.3f}, "
+                f"mono_FP={ag.mono_fp_rate:.3f}. vs son seuil fixe (même tête) F1_multi="
+                f"{fx.f1:.3f} → Δ={ag.f1 - fx.f1:+.3f}. "
+                f"{'Le décodage par-document AIDE.' if ag.f1 - fx.f1 > 0.01 else 'Le décodage par-document **n’améliore pas** le seuil fixe à ce point de fonctionnement.'}\n")
         if beats:
             verdict = (f"✅ **OUI** — `{disp}` bat le réglé-main en zéro-shot (F1_multi "
                        f"{g.f1:.3f} > 0.769) AVEC mono_FP bas ({g.mono_fp_rate:.3f} ≤ "
-                       f"{mono_cap}). Le décodage adaptatif débloque le transfert : le "
-                       f"segmenteur appris est **mûr pour la prod**.")
+                       f"{mono_cap}). Le segmenteur appris est **mûr pour la prod**.")
         elif near:
             verdict = (f"≈ **QUASI** — `{disp}` approche le réglé-main (F1_multi {g.f1:.3f} vs "
-                       f"0.769) avec mono_FP comparable/meilleur ({g.mono_fp_rate:.3f}). Le "
-                       f"décodage adaptatif TRANSFÈRE (contre le seuil fixe qui s'éteignait) "
-                       f"mais ne dépasse pas encore le réglé-main.")
+                       f"0.769) avec mono_FP comparable ({g.mono_fp_rate:.3f}), mais ne le "
+                       f"dépasse pas.")
         else:
             verdict = (f"❌ **NON** — sous contrainte d'abstention, le meilleur zéro-shot "
                        f"(F1_multi={g.f1:.3f}) reste loin du réglé-main (0.769). Détecter ET "
-                       f"s'abstenir en zéro-shot n'est pas atteint — il faut un autre angle.")
+                       f"s'abstenir en zéro-shot n'est pas atteint.")
         L_.append(f"- **{verdict}**\n")
 
-        # adaptatif vs fixe (effet DIRECT du décodage), même config gagnante.
-        fixed_r = ctx["results"][(wkind, wnm)]["fixed"]["gold"]
-        L_.append(
-            f"- **Effet du décodage adaptatif vs seuil fixe** (même tête {wkind.upper()} "
-            f"{'+nég' if wnm == 'with_neg' else 'sans nég'}, zéro-shot) : fixe → F1_multi="
-            f"{fixed_r.f1:.3f} / mono_FP={fixed_r.mono_fp_rate:.3f} ; adaptatif `{disp}` → "
-            f"F1_multi={g.f1:.3f} / mono_FP={g.mono_fp_rate:.3f} "
-            f"(ΔF1_multi={g.f1 - fixed_r.f1:+.3f}). C'est l'apport NET du point de "
-            f"fonctionnement par-document.\n")
+    # diagnostic clé : l'oracle (réglé sur le gold) plafonne-t-il SOUS 0.769 ?
+    if oracle_best:
+        ob_f1, ob_mono, ob_tag, ob_name, _obr = oracle_best
+        if ob_f1 < at_f1:
+            diag = (f"- **Diagnostic (oracle) — c'est le RANKING, pas seulement le point de "
+                    f"coupe** : même réglé DIRECTEMENT sur le gold (triche) sous la même "
+                    f"contrainte, le meilleur plafonne à F1_multi=**{ob_f1:.3f}** "
+                    f"(mono_FP={ob_mono:.3f}, `{ob_name}`, {ob_tag}) — **encore sous 0.769**. "
+                    f"Donc le décodage adaptatif ne laisse pas d'argent sur la table : à "
+                    f"mono_FP comparable au réglé-main, le **score de la tête apprise lui-même "
+                    f"plafonne** sous l'attention réglée-main. Le verrou n'est pas (que) le "
+                    f"transfert du seuil — c'est la séparabilité multi/mono dans le score "
+                    f"appris, que le par-document ne crée pas s'il n'y est pas.\n")
+        else:
+            diag = (f"- **Diagnostic (oracle)** : réglé sur le gold, le décodage atteint "
+                    f"F1_multi=**{ob_f1:.3f}** (mono_FP={ob_mono:.3f}, `{ob_name}`, {ob_tag}) "
+                    f"≥ 0.769 — la marge EXISTE dans le score, c'est son **réglage zéro-shot** "
+                    f"qui ne transfère pas. Piste : mieux caler le gate sur la source.\n")
+        L_.append(diag)
+
+    cpf = (cp or {}).get("F1_multi")
+    if cpf is not None and win is not None:
+        L_.append(f"- vs **change-point** (F1_multi={cpf}) : le meilleur zéro-shot utile "
+                  f"({win[4]['gold'].f1:.3f}) fait Δ={win[4]['gold'].f1 - cpf:+.3f}.\n")
 
     # --- Plafond (oracle gold) : headroom du décodage ---
     L_.append("## Plafond (oracle) — décodage réglé sur le gold (triche, pour le headroom)\n")
-    L_.append(f"*Mêmes variantes mais réglées DIRECTEMENT sur le gold (sous la MÊME contrainte "
-              f"mono_FP ≤ {mono_cap}) : mesure ce que le ranking de la tête permettrait avec un "
-              f"point de coupe PARFAIT. Si l'oracle dépasse 0.769 mais pas le zéro-shot → c'est "
-              f"le **réglage du gate** qui ne transfère pas, pas le modèle. Sinon → le ranking "
-              f"lui-même plafonne.*\n")
+    L_.append(f"*Mêmes variantes mais réglées DIRECTEMENT sur le gold (meilleure SOUS la même "
+              f"contrainte mono_FP ≤ {mono_cap} ; « cap non tenu » = aucune ne tient, on montre "
+              f"la moins sur-coupante). Si l'oracle dépasse 0.769 mais pas le zéro-shot → c'est "
+              f"le **réglage** qui ne transfère pas ; sinon → le **ranking** lui-même plafonne.*\n")
     ocols = ["config", "meilleur décodage (oracle)", "F1_multi", "Pk", "mono_FP", "P", "R"]
-    orows = []
-    gold_docs = ctx["gold_docs"]
-    oof_y_gold = np.concatenate([d.y for d in gold_docs])
-    for kind in ("lr", "gbm"):
-        for nm in ("with_neg", "without_neg"):
-            gold_pre = ctx["gold_pre"][(kind, nm)]
-            res = ctx["results"][(kind, nm)]
-            bg = next(iter(res.values()))["best_gate"]
-            tag = f"{kind.upper()} {'+nég' if nm == 'with_neg' else 'sans nég'}"
-            oof_p_gold = np.concatenate([gold_pre[d.id].proba for d in gold_docs
-                                         if gold_pre[d.id].proba.size])
-            # évalue chaque variante UNE fois (réglée sur le gold), puis sélectionne.
-            variants = []
-            for name, _d in DECODER_SPECS:
-                dec = build_decoder(name, gold_docs, gold_pre, oof_p_gold, oof_y_gold,
-                                    best_gate=bg)
-                variants.append((name, evaluate(gold_docs, gold_pre, dec)))
-            ok = [(n, r) for n, r in variants if r.mono_fp_rate <= mono_cap]
-            if ok:
-                oname, r = max(ok, key=lambda t: (round(t[1].f1, 4), -round(t[1].mono_fp_rate, 4)))
-            else:                                  # aucun ne tient le cap même en oracle
-                oname, r = min(variants, key=lambda t: round(t[1].mono_fp_rate, 4))
-                oname = oname + " (cap non tenu)"
-            disp = oname.replace("best", bg)
-            orows.append({"config": tag, "meilleur décodage (oracle)": disp,
-                          "F1_multi": round(r.f1, 4), "Pk": round(r.pk, 3),
-                          "mono_FP": round(r.mono_fp_rate, 3),
-                          "P": round(r.precision, 3), "R": round(r.recall, 3)})
     L_.append(L._md_table(orows, ocols) + "\n")
 
     # --- Honnêteté / généricité ---
