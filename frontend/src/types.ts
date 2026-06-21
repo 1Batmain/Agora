@@ -17,10 +17,15 @@ export interface GraphNode {
     source?: string;
     weight?: number;
   };
-  cluster_id: number; // sub-theme id (level 1)
+  cluster_id: number; // sub-theme id (Leiden level 1) / flat cluster (HDBSCAN; -1 = noise)
   macro_id: number; // macro id (level 0)
   color?: string;
+  x?: number; // UMAP-2D coord (HDBSCAN method only)
+  y?: number;
 }
+
+/** Clustering methods the backend can switch between. */
+export type ClusterMethod = 'leiden' | 'hdbscan';
 
 export interface Theme {
   cluster_id: number;
@@ -38,9 +43,12 @@ export interface Theme {
 }
 
 export interface GraphStats {
+  method: ClusterMethod;
   n_macros: number;
   n_subs: number;
   n_nodes: number;
+  n_clusters: number | null; // HDBSCAN: flat cluster count
+  n_noise: number | null; // HDBSCAN: unclassified (cluster_id -1) count
   modularity: number | null;
   took_ms: number | null;
 }

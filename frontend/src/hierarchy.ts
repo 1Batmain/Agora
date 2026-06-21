@@ -43,6 +43,16 @@ function toDatum(payload: GraphPayload): PackDatum {
     nodesBySub.set(n.cluster_id, arr);
   }
 
+  const avisChildren = (parentColor: string, nodes: GraphNode[]): PackDatum[] =>
+    nodes.map((n) => ({
+      kind: 'avis' as const,
+      id: n.id,
+      label: n.label,
+      color: n.color ?? parentColor,
+      value: n.props.weight ?? 1,
+      node: n,
+    }));
+
   return {
     kind: 'root',
     id: 'root',
@@ -51,31 +61,33 @@ function toDatum(payload: GraphPayload): PackDatum {
     value: 0,
     children: macros
       .sort((a, b) => b.weight_sum - a.weight_sum)
-      .map((m) => ({
-        kind: 'macro' as const,
-        id: `macro:${m.cluster_id}`,
-        label: m.label,
-        color: m.color,
-        value: m.weight_sum,
-        theme: m,
-        children: (subsByParent.get(m.cluster_id) ?? [])
-          .sort((a, b) => b.weight_sum - a.weight_sum)
-          .map((s) => ({
-            kind: 'sub' as const,
-            id: `sub:${s.cluster_id}`,
-            label: s.label,
-            color: s.color,
-            value: s.weight_sum,
-            theme: s,
-            children: (nodesBySub.get(s.cluster_id) ?? []).map((n) => ({
-              kind: 'avis' as const,
-              id: n.id,
-              label: n.label,
-              color: n.color ?? s.color,
-              value: n.props.weight ?? 1,
-              node: n,
-            })),
-          })),
-      })),
+      .map((m) => {
+        const childSubs = (subsByParent.get(m.cluster_id) ?? []).sort(
+          (a, b) => b.weight_sum - a.weight_sum,
+        );
+        // FLAT method (HDBSCAN): a macro has no sub-themes → its avis hang
+        // directly off the macro (cluster_id == macro id). HIERARCHICAL (Leiden):
+        // avis hang off each sub-theme.
+        const children: PackDatum[] = childSubs.length
+          ? childSubs.map((s) => ({
+              kind: 'sub' as const,
+              id: `sub:${s.cluster_id}`,
+              label: s.label,
+              color: s.color,
+              value: s.weight_sum,
+              theme: s,
+              children: avisChildren(s.color, nodesBySub.get(s.cluster_id) ?? []),
+            }))
+          : avisChildren(m.color, nodesBySub.get(m.cluster_id) ?? []);
+        return {
+          kind: 'macro' as const,
+          id: `macro:${m.cluster_id}`,
+          label: m.label,
+          color: m.color,
+          value: m.weight_sum,
+          theme: m,
+          children,
+        };
+      }),
   };
 }
