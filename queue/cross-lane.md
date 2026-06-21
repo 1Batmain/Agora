@@ -86,6 +86,24 @@ d'exploration du pipeline** : tous les knobs réglables en live → re-clusterin
 - **Panneau knobs** (sliders/inputs) → debounce → `POST /recluster` → re-render + stats.
 - Port `:5180`. Garde un repli `graph.json` statique si backend down.
 
+## Multi-dataset (console — 2026-06-21)
+La console expose **plusieurs jeux** sélectionnables (consultation TikTok FR + **x-stance**
+multilingue DE/FR/IT). x-stance met en vitrine le multilingue (clusters par THÈME, pas par
+langue). Générique : **un dataset = un descripteur + un cache**, pas de code spécifique.
+
+### Contrat backend (multi-dataset)
+- Cache **par dataset** : `backend/cache/<dataset>/{embeddings.npy, ideas.jsonl}`.
+  `build_cache.py --dataset <id>` le construit via `read_generic(descriptors/<id>.json)`
+  + subset (échantillon équilibré par langue, cap renderable, min_chars, dédup) + embed nomic-v2.
+- `GET /datasets` → `[{id, label, n_nodes, languages, source}]` (caches disponibles).
+- `POST /recluster` et `GET /params` prennent un champ **`dataset`** (défaut `"tiktok"`,
+  rétro-compat). `load_cache(dataset)`.
+- x-stance subset : ~2.5–3.5k avis, **équilibré DE/FR/IT**, toutes questions mêlées.
+
+### Front
+- Sélecteur de dataset (depuis `/datasets`) → `/recluster {dataset}` → re-render. Affiche
+  les métadonnées (langues, n) ; pour x-stance, montrer la **mixité linguistique** des thèmes.
+
 ## Modèle de données (canonique — aligné sur les shapes viz de dummy)
 ```
 Idea  → GraphNode { id, type, label, props{ text, text_clean, ts, lang,
