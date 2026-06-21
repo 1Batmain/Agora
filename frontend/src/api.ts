@@ -1,4 +1,4 @@
-import type { Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, Theme } from './types';
+import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, Theme } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -44,8 +44,11 @@ export async function fetchDatasets(): Promise<Dataset[]> {
  * older `{key:{default,…}}` shape; throws on any error so the caller knows the
  * backend is unreachable and can fall back to the static graph.
  */
-export async function fetchParams(dataset?: string): Promise<KnobSpec[]> {
-  const q = dataset ? `?dataset=${encodeURIComponent(dataset)}` : '';
+export async function fetchParams(dataset?: string, method?: ClusterMethod): Promise<KnobSpec[]> {
+  const qs = new URLSearchParams();
+  if (dataset) qs.set('dataset', dataset);
+  if (method) qs.set('method', method);
+  const q = qs.toString() ? `?${qs}` : '';
   const raw = await jsonFetch(`/api/params${q}`);
   const knobs = raw?.knobs;
   if (Array.isArray(knobs) && knobs.length) {
@@ -79,9 +82,15 @@ function num(v: unknown, fallback: number): number {
   return typeof v === 'number' && Number.isFinite(v) ? v : fallback;
 }
 
-/** POST /api/recluster {knobs, dataset?} → fresh GraphPayload. */
-export async function recluster(knobs: Knobs, dataset?: string): Promise<GraphPayload> {
-  const body = dataset ? { ...knobs, dataset } : knobs;
+/** POST /api/recluster {knobs, dataset?, method?} → fresh GraphPayload. */
+export async function recluster(
+  knobs: Knobs,
+  dataset?: string,
+  method?: ClusterMethod,
+): Promise<GraphPayload> {
+  const body: Record<string, unknown> = { ...knobs };
+  if (dataset) body.dataset = dataset;
+  if (method) body.method = method;
   return (await jsonFetch('/api/recluster', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -108,10 +117,26 @@ export function deriveStats(payload: GraphPayload): GraphStats {
   const macros = payload.themes.filter((t: Theme) => t.level === 0);
   const subs = payload.themes.filter((t: Theme) => t.level === 1);
   const lh = payload.meta?.clustering?.leiden_hierarchy ?? {};
+  const method: ClusterMethod = payload.meta?.method === 'hdbscan' ? 'hdbscan' : 'leiden';
+  const noiseTheme = macros.find((t: Theme) => t.cluster_id === -1);
   return {
+    method,
     n_macros: num(s.n_macros, macros.length),
     n_subs: num(s.n_subs, subs.length),
     n_nodes: num(s.n_nodes, payload.nodes.length),
+    // HDBSCAN: flat clusters exclude the noise group; noise = its theme size.
+    n_clusters:
+      typeof s.n_clusters === 'number'
+        ? s.n_clusters
+        : method === 'hdbscan'
+          ? macros.length - (noiseTheme ? 1 : 0)
+          : null,
+    n_noise:
+      typeof s.n_noise === 'number'
+        ? s.n_noise
+        : method === 'hdbscan'
+          ? (noiseTheme?.size ?? 0)
+          : null,
     modularity:
       typeof s.modularity === 'number'
         ? s.modularity
