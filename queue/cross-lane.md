@@ -104,6 +104,29 @@ langue). Générique : **un dataset = un descripteur + un cache**, pas de code s
 - Sélecteur de dataset (depuis `/datasets`) → `/recluster {dataset}` → re-render. Affiche
   les métadonnées (langues, n) ; pour x-stance, montrer la **mixité linguistique** des thèmes.
 
+## Méthode de clustering switchable (console — 2026-06-21)
+La console permet de **comparer deux méthodes** sur le même corpus : **Leiden** (hiérarchique,
+défaut) et **UMAP+HDBSCAN** (contender). Switch côté front.
+
+### Contrat backend (méthode)
+- `POST /recluster` prend un champ **`method`** : `"leiden"` (défaut, rétro-compat) | `"hdbscan"`.
+  - `leiden` → graphe k-NN → Leiden **hiérarchique** macro→sous (inchangé).
+  - `hdbscan` → **UMAP(n_components=5)** sur les embeddings cachés → **HDBSCAN** → clusters
+    **PLATS** (level 0) + un groupe **bruit** (`cluster_id=-1`, label « non classé »). Réutilise/
+    étend `pipeline/cluster/hdbscan_contender.py`. Inclure aussi des coords **UMAP-2D** (`x,y`)
+    par nœud (pour un éventuel affichage 2D ; le circle packing reste l'affichage par défaut).
+  - Réponse = **même shape GraphPayload** ; `meta.method` indique la méthode + ses stats
+    (n_clusters, n_noise, took_ms).
+- `GET /params` retourne les **knobs par méthode** (le front affiche les bons sliders) :
+  - leiden : `k, threshold, resolution_macro, resolution_sub, min_sub_size`.
+  - hdbscan : `min_cluster_size` (défaut **dérivé/relatif à N**, cf. min_sub_size), `min_samples`,
+    `umap_n_neighbors` ; `n_components=5` FIXE. **Généricité** : pas de magic-number corpus.
+
+### Front
+- **Switch de méthode** (Leiden ⇄ HDBSCAN) à côté du sélecteur de dataset → `/recluster {method}`.
+- Le panneau de knobs **s'adapte** à la méthode (depuis `/params`). Le circle packing rend les
+  clusters plats HDBSCAN + un groupe « non classé » (bruit).
+
 ## Modèle de données (canonique — aligné sur les shapes viz de dummy)
 ```
 Idea  → GraphNode { id, type, label, props{ text, text_clean, ts, lang,
