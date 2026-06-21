@@ -127,6 +127,26 @@ défaut) et **UMAP+HDBSCAN** (contender). Switch côté front.
 - Le panneau de knobs **s'adapte** à la méthode (depuis `/params`). Le circle packing rend les
   clusters plats HDBSCAN + un groupe « non classé » (bruit).
 
+## Nommage des en-têtes switchable (console — 2026-06-21)
+La console permet de **switcher la méthode de nommage** des clusters (s'applique aux 2
+méthodes de clustering et aux 2 datasets).
+
+### Contrat backend (nommage)
+- `POST /recluster` prend un champ **`naming`** : `"ctfidf"` (défaut) | `"centroid"` | `"llm"`.
+  - `ctfidf` → nommage générique actuel (c-TF-IDF + mots-vides dérivés). Inchangé.
+  - `centroid` → label = le **témoignage le plus représentatif** (medoïde : membre le plus
+    proche du centroïde du cluster en cosinus). Un vrai verbatim citoyen comme en-tête.
+  - `llm` → titre court généré par **LLM LOCAL via Ollama** (`:11434`, modèle p.ex. `qwen3:4b`
+    — souverain, zéro donnée qui sort) à partir des top-membres + keywords. **Langue-agnostique**
+    (titre dans la langue dominante du cluster). **Repli gracieux sur `ctfidf`** si Ollama
+    injoignable. Usage **parcimonieux** (Ollama partagé). `meta.naming` indique la méthode réelle.
+- `GET /params` (ou `/datasets`) expose les options de nommage dispo.
+- Le nommage est orthogonal à `method`/`dataset` : combinable librement.
+
+### Front
+- **Switch de nommage** (c-TF-IDF / Centroïde / LLM) à côté des autres sélecteurs →
+  `/recluster {naming}` → re-render les labels. Indique si repli (LLM indispo).
+
 ## Modèle de données (canonique — aligné sur les shapes viz de dummy)
 ```
 Idea  → GraphNode { id, type, label, props{ text, text_clean, ts, lang,
