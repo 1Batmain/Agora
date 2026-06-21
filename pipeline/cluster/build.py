@@ -282,7 +282,7 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
 
     # Naming macro : SWITCHABLE (ctfidf | centroïde | LLM). PARCIMONIE : seuls les
     # macros (level=0) passent par centroïde/LLM ; les sous-thèmes restent c-TF-IDF
-    # (bien plus nombreux → on épargne l'Ollama partagé, cf. NAMING_SWITCH_NOTE).
+    # (bien plus nombreux → on épargne un appel LLM coûteux, cf. NAMING_SWITCH_NOTE).
     macro_docs = {m: [ideas[i].text for i in idxs] for m, idxs in macro_members.items()}
     macro_names, naming_meta = name_clusters_method(
         macro_docs, method=naming, members=dict(macro_members),

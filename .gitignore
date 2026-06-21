@@ -11,6 +11,10 @@ __pycache__/
 venv/
 .env
 
+# Secrets (clé API Mistral — JAMAIS commit). Cf. backend/MISTRAL_NOTE.md.
+var/
+*.key
+
 # OS / IDE / outils
 .DS_Store
 .idea/
