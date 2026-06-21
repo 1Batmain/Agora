@@ -125,6 +125,47 @@ body {
   color: #5fd08a;
 }
 
+/* ---- method picker (Leiden ⇄ HDBSCAN) ---- */
+.method {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.method__toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.method__btn {
+  flex: 1;
+  background: var(--panel-bg2);
+  border: none;
+  color: var(--muted);
+  padding: 7px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.method__btn + .method__btn {
+  border-left: 1px solid var(--line);
+}
+.method__btn.is-active {
+  background: var(--accent);
+  color: #0b0d12;
+  font-weight: 600;
+}
+.method__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.method__hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
 /* ---- knobs ---- */
 .panel__head {
   display: flex;

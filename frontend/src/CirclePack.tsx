@@ -81,15 +81,16 @@ export function CirclePack({ payload, onSelect, selectedId }: Props) {
       onSelect(d); // leaf: show in panel, no zoom
       return;
     }
-    // macro / sub: zoom in. For a sub-theme, also surface its avis in the panel.
+    // macro / sub: zoom in. Surface avis in the panel whenever this circle holds
+    // avis directly (a sub-theme in Leiden, OR a flat cluster in HDBSCAN).
     zoomTo(d);
-    onSelect(d.data.kind === 'sub' ? d : null);
+    onSelect(holdsAvis(d) ? d : null);
   }
 
   function handleBackground() {
     const up = focus.parent ?? root;
     zoomTo(up);
-    onSelect(up.data.kind === 'sub' ? up : null);
+    onSelect(holdsAvis(up) ? up : null);
   }
 
   const k = side / view.r;
@@ -166,4 +167,9 @@ export function CirclePack({ payload, onSelect, selectedId }: Props) {
 
 function truncate(s: string, n: number): string {
   return s.length <= n ? s : s.slice(0, n - 1) + '…';
+}
+
+/** True if this circle's direct children are avis (sub-theme or flat cluster). */
+function holdsAvis(d: PackNode): boolean {
+  return !!d.children?.some((c) => c.data.kind === 'avis');
 }
