@@ -63,6 +63,68 @@ body {
   font-weight: 400;
 }
 
+/* ---- dataset picker ---- */
+.dataset {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.dataset__select {
+  width: 100%;
+  background: var(--panel-bg2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.dataset__select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.dataset__meta {
+  margin-top: 10px;
+}
+.dataset__n {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dataset__langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.lang-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  background: var(--panel-bg2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.lang-chip em {
+  font-style: normal;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dataset__mix {
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.dataset__mix strong {
+  color: #5fd08a;
+}
+
 /* ---- knobs ---- */
 .panel__head {
   display: flex;

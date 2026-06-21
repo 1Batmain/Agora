@@ -1,0 +1,26 @@
+{
+  "id": "xstance",
+  "label": "x-stance (DE/FR/IT)",
+  "n_nodes": 3000,
+  "languages": [
+    "de",
+    "fr",
+    "it"
+  ],
+  "lang_counts": {
+    "de": 1000,
+    "fr": 1000,
+    "it": 1000
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "n_loaded": 67271,
+  "built_with": {
+    "min_chars": 12,
+    "dedup_exact": true,
+    "balance": "lang",
+    "cap": 3000,
+    "seed": 42
+  }
+}
