@@ -66,6 +66,20 @@ export interface GraphPayload {
   themes: Theme[];
 }
 
+/** `POST /api/synthesize` → short Markdown report (Mistral). */
+export interface SynthesisResult {
+  report_markdown: string;
+  meta: {
+    model?: string;
+    took_ms?: number;
+    n_clusters?: number;
+    fallback?: boolean; // true when no key / API error → report is a notice
+    reason?: string;
+    lang?: string;
+    truncated?: boolean;
+  };
+}
+
 /** One selectable dataset, from `GET /api/datasets`. */
 export interface Dataset {
   id: string;

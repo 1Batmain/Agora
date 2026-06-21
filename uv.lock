@@ -13,6 +13,7 @@ name = "agora-pipeline"
 version = "0.0.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "httpx" },
     { name = "igraph" },
     { name = "leidenalg" },
     { name = "numpy" },
@@ -40,6 +41,7 @@ requires-dist = [
     { name = "einops", marker = "extra == 'embed-contender'", specifier = ">=0.7" },
     { name = "faiss-cpu", marker = "extra == 'faiss'", specifier = ">=1.8" },
     { name = "hdbscan", marker = "extra == 'contender'", specifier = ">=0.8.33" },
+    { name = "httpx", specifier = ">=0.27" },
     { name = "igraph", specifier = ">=0.11" },
     { name = "leidenalg", specifier = ">=0.10" },
     { name = "numpy", specifier = ">=1.26" },

@@ -14,6 +14,7 @@ Endpoints :
   - GET  /datasets  → [{id, label, n_nodes, languages, source}]
   - GET  /params    → table des knobs (?dataset=…, défaut tiktok)
   - POST /recluster → GraphPayload hiérarchique + meta.stats (body.dataset)
+  - POST /synthesize→ rapport Markdown (synthèse + pertinence) via Mistral
 
 Lancer :
     uv run --extra contender uvicorn backend.server:app --host 0.0.0.0 --port 8010
@@ -39,7 +40,8 @@ from backend.recluster import (
     load_cache,
     recluster,
 )
-from pipeline.cluster.naming_methods import OLLAMA_MODEL
+from backend.synthesize import synthesize
+from pipeline.cluster.naming_methods import MISTRAL_MODEL
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
 from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defaults
@@ -55,8 +57,8 @@ NAMING_OPTIONS = [
      "help": "mots-clés distinctifs dérivés du corpus (défaut, déterministe)"},
     {"name": "centroid", "label": "Centroïde",
      "help": "verbatim citoyen le plus représentatif du cluster"},
-    {"name": "llm", "label": "LLM local",
-     "help": f"titre court généré par Ollama ({OLLAMA_MODEL}) ; repli c-TF-IDF si indisponible"},
+    {"name": "llm", "label": "LLM (Mistral)",
+     "help": f"titre court généré via l'API Mistral ({MISTRAL_MODEL}) ; repli c-TF-IDF si indisponible"},
 ]
 
 
@@ -262,7 +264,7 @@ def params(dataset: str | None = Query(None),
         "namings": NAMING_OPTIONS,
         "naming_methods": list(NAMINGS),
         "default_naming": DEFAULT_NAMING_METHOD,
-        "ollama_model": OLLAMA_MODEL,
+        "llm_model": MISTRAL_MODEL,
         "knobs": ds.knobs_by_method[meth],
         "defaults": ds.defaults_by_method[meth],
         "knobs_by_method": ds.knobs_by_method,
@@ -318,4 +320,42 @@ def do_recluster(body: ReclusterBody) -> dict:
         min_samples=body.min_samples,
         umap_n_neighbors=body.umap_n_neighbors,
         dataset=ds.id,
+    )
+
+
+class SynthesizeBody(BaseModel):
+    """Corps de /synthesize — sélectionne le dataset + la vue à synthétiser.
+
+    `method`/`naming` (mêmes valeurs que /recluster) déterminent le découpage et
+    les titres résumés. Le reste du clustering utilise les défauts dérivés.
+    """
+    dataset: str | None = None
+    method: str | None = None
+    naming: str | None = None
+
+
+@app.post("/synthesize")
+def do_synthesize(body: SynthesizeBody) -> dict:
+    """Rapport Markdown (synthèse + pertinence des clusters) via Mistral.
+
+    Repli gracieux côté `synthesize` : sans clé Mistral, renvoie un rapport
+    « indisponible » avec `meta.fallback=True` — pas une erreur HTTP.
+    """
+    ds = _resolve(body.dataset)
+    meth = (body.method or DEFAULT_METHOD).lower()
+    if meth not in METHODS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
+        )
+    naming = (body.naming or DEFAULT_NAMING_METHOD).lower()
+    if naming not in NAMINGS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"nommage inconnu: {naming!r} (disponibles: {list(NAMINGS)})",
+        )
+    return synthesize(
+        ds.ideas, ds.vecs, ds.weights,
+        dataset=ds.id, method=meth, naming=naming,
+        languages=ds.descriptor.get("languages"),
     )

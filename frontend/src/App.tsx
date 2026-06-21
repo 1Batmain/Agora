@@ -7,6 +7,7 @@ import { MethodPicker } from './MethodPicker';
 import { NamingPicker } from './NamingPicker';
 import { StatsBar } from './StatsBar';
 import { AvisPanel } from './AvisPanel';
+import { SynthesisPanel } from './SynthesisPanel';
 import {
   DEFAULT_KNOBS,
   deriveStats,
@@ -184,6 +185,7 @@ export default function App() {
           onChange={onKnob}
           onReset={onReset}
         />
+        <SynthesisPanel dataset={dataset} method={method} naming={naming} disabled={!live || busy} />
         {error && <p className="app__error">{error}</p>}
       </aside>
 
