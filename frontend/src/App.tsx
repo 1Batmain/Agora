@@ -2,11 +2,19 @@ import { useCallbackRef } from './useCallbackRef';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CirclePack } from './CirclePack';
 import { KnobsPanel } from './KnobsPanel';
+import { DatasetPicker } from './DatasetPicker';
 import { StatsBar } from './StatsBar';
 import { AvisPanel } from './AvisPanel';
-import { DEFAULT_KNOBS, deriveStats, fetchParams, fetchStatic, recluster } from './api';
+import {
+  DEFAULT_KNOBS,
+  deriveStats,
+  fetchDatasets,
+  fetchParams,
+  fetchStatic,
+  recluster,
+} from './api';
 import type { PackNode } from './hierarchy';
-import type { GraphPayload, KnobSpec, Knobs } from './types';
+import type { Dataset, GraphPayload, KnobSpec, Knobs } from './types';
 
 const DEBOUNCE_MS = 300;
 
@@ -24,18 +32,25 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<PackNode | null>(null);
+  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [dataset, setDataset] = useState<string | null>(null);
 
-  // Boot.
+  // Boot: discover datasets, then load the default one's knobs + first graph.
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const ps = await fetchParams();
+        const ds = await fetchDatasets().catch(() => [] as Dataset[]);
+        if (cancelled) return;
+        setDatasets(ds);
+        const first = ds[0]?.id ?? null;
+        setDataset(first);
+        const ps = await fetchParams(first ?? undefined);
         if (cancelled) return;
         setSpecs(ps);
         const v = knobsFrom(ps);
         setValues(v);
-        const g = await recluster(v);
+        const g = await recluster(v, first ?? undefined);
         if (cancelled) return;
         setPayload(g);
         setLive(true);
@@ -55,12 +70,13 @@ export default function App() {
     };
   }, []);
 
-  // Debounced recluster on knob change (live mode only).
+  // Debounced recluster on knob change (live mode only). Always tied to the
+  // currently-selected dataset.
   const timer = useRef<number | null>(null);
-  const runRecluster = useCallbackRef(async (v: Knobs) => {
+  const runRecluster = useCallbackRef(async (v: Knobs, ds: string | null) => {
     setBusy(true);
     try {
-      const g = await recluster(v);
+      const g = await recluster(v, ds ?? undefined);
       setPayload(g);
       setError(null);
     } catch (e) {
@@ -75,7 +91,7 @@ export default function App() {
     const next = { ...values, [key]: value };
     setValues(next);
     if (timer.current) clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => runRecluster(next), DEBOUNCE_MS);
+    timer.current = window.setTimeout(() => runRecluster(next, dataset), DEBOUNCE_MS);
   }
 
   function onReset() {
@@ -83,8 +99,31 @@ export default function App() {
     const v = knobsFrom(specs);
     setValues(v);
     if (timer.current) clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => runRecluster(v), DEBOUNCE_MS);
+    timer.current = window.setTimeout(() => runRecluster(v, dataset), DEBOUNCE_MS);
   }
+
+  // Switch dataset: pull THAT dataset's derived knob defaults, reset values,
+  // and recluster it (the circle packing + stats re-render).
+  const onDataset = useCallbackRef(async (id: string) => {
+    if (!live || id === dataset) return;
+    setDataset(id);
+    setSelected(null);
+    setBusy(true);
+    if (timer.current) clearTimeout(timer.current);
+    try {
+      const ps = await fetchParams(id);
+      setSpecs(ps);
+      const v = knobsFrom(ps);
+      setValues(v);
+      const g = await recluster(v, id);
+      setPayload(g);
+      setError(null);
+    } catch (e) {
+      setError(`changement de jeu a échoué : ${String(e)}`);
+    } finally {
+      setBusy(false);
+    }
+  });
 
   const stats = useMemo(() => (payload ? deriveStats(payload) : null), [payload]);
 
@@ -94,6 +133,12 @@ export default function App() {
         <h1 className="brand">
           Agora <span>· console</span>
         </h1>
+        <DatasetPicker
+          datasets={datasets}
+          current={dataset}
+          disabled={!live || busy}
+          onChange={onDataset}
+        />
         <KnobsPanel
           specs={specs}
           values={values}
