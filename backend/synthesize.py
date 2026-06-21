@@ -159,6 +159,19 @@ def _build_messages(summary: str, lang: str | None) -> list[dict]:
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
+def _strip_code_fence(text: str) -> str:
+    """Retire un fence Markdown enveloppant (``` ou ```markdown) si le LLM en met un,
+    sinon le rapport s'afficherait comme un bloc de code brut côté front."""
+    t = text.strip()
+    if t.startswith("```"):
+        nl = t.find("\n")
+        if nl != -1:
+            t = t[nl + 1:]
+        if t.rstrip().endswith("```"):
+            t = t.rstrip()[:-3]
+    return t.strip()
+
+
 def synthesize(
     ideas: list,
     vecs: np.ndarray,
@@ -215,6 +228,6 @@ def synthesize(
         }
 
     return {
-        "report_markdown": content.strip(),
+        "report_markdown": _strip_code_fence(content),
         "meta": _stamp({"model": model, "fallback": False, "lang": lang}),
     }
