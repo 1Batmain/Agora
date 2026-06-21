@@ -20,3 +20,6 @@ var/
 .idea/
 .vscode/
 .claude/
+
+# datasets externes téléchargés (volumineux, non versionnés)
+data/datasets/
