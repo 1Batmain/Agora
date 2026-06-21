@@ -17,7 +17,10 @@ export const DEFAULT_KNOBS: KnobSpec[] = [
   { key: 'min_sub_size', label: 'min_sub_size', value: 18, min: 5, max: 40, step: 1, hint: 'fusion des miettes' },
 ];
 
-const TIMEOUT_MS = 8000;
+// Généreux : certaines combinaisons sont légitimement lentes — HDBSCAN fait 2 passes
+// UMAP (~15-35 s) et le nommage LLM (Ollama local) ~40-84 s. Un timeout court avortait
+// ces requêtes valides (AbortError). 180 s couvre le pire cas (hdbscan + LLM sur x-stance).
+const TIMEOUT_MS = 180000;
 
 async function jsonFetch(url: string, init?: RequestInit): Promise<any> {
   const ctrl = new AbortController();
