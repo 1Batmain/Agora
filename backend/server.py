@@ -28,6 +28,8 @@ from pydantic import BaseModel, Field
 
 from backend.recluster import (
     DEFAULT_DATASET,
+    DEFAULT_METHOD,
+    METHODS,
     MODEL_ID,
     SEED,
     dataset_descriptor,
@@ -37,6 +39,7 @@ from backend.recluster import (
 )
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
+from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defaults
 
 # Filtres par défaut (mêmes que recluster) pour DÉRIVER les défauts data-driven.
 _DEFAULT_DEDUP = 0.95
@@ -57,6 +60,32 @@ def _derive_startup_defaults(ideas, vecs, weights):
     dd = dedup_near(v, w, threshold=_DEFAULT_DEDUP)
     v = np.ascontiguousarray(v[dd.keep])
     return derive_defaults(v)
+
+
+def _build_hdbscan_knobs(hd) -> list[dict]:
+    """Knobs de la méthode HDBSCAN — défauts DÉRIVÉS de N (zéro magic-number).
+
+    `n_components=5` est FIXE (contrat) donc N'EST PAS un knob. `min_cluster_size`
+    et `min_samples` ∝ N (cf. min_sub_size) ; `umap_n_neighbors` ∝ log N (cf. k).
+    Bornes = suggestions de slider, pas une validation dure.
+    """
+    return [
+        {"name": "dedup", "label": "Dédup (cosine)", "default": _DEFAULT_DEDUP,
+         "min": 0.80, "max": 1.0, "step": 0.01, "help": "fusion near-dups",
+         "derived": False},
+        {"name": "min_chars", "label": "Min. caractères", "default": _DEFAULT_MIN_CHARS,
+         "min": 0, "max": 200, "step": 1, "help": "filtre avis courts",
+         "derived": False},
+        {"name": "min_cluster_size", "label": "Taille mini cluster", "default": hd.min_cluster_size,
+         "min": 2, "max": 200, "step": 1, "help": "plus grand → moins de clusters (défaut ∝ N)",
+         "derived": True},
+        {"name": "min_samples", "label": "min_samples", "default": hd.min_samples,
+         "min": 1, "max": 200, "step": 1, "help": "plus grand → plus de bruit (défaut = min_cluster_size)",
+         "derived": True},
+        {"name": "umap_n_neighbors", "label": "UMAP voisins", "default": hd.umap_n_neighbors,
+         "min": 2, "max": 100, "step": 1, "help": "voisinage UMAP (défaut ∝ log N)",
+         "derived": True},
+    ]
 
 
 def _build_knobs(derived) -> list[dict]:
@@ -98,8 +127,19 @@ class _Dataset:
         self.id = dataset_id
         self.ideas, self.vecs, self.weights = load_cache(dataset_id)
         self.derived = _derive_startup_defaults(self.ideas, self.vecs, self.weights)
-        self.knobs = _build_knobs(self.derived)
-        self.defaults = {k["name"]: k["default"] for k in self.knobs}
+        self.hdbscan_derived = derive_hdbscan_defaults(self.derived.n)
+        # Knobs PAR MÉTHODE : le front affiche les bons selon `method`.
+        self.knobs_by_method = {
+            "leiden": _build_knobs(self.derived),
+            "hdbscan": _build_hdbscan_knobs(self.hdbscan_derived),
+        }
+        self.defaults_by_method = {
+            m: {k["name"]: k["default"] for k in knobs}
+            for m, knobs in self.knobs_by_method.items()
+        }
+        # Rétro-compat : `knobs`/`defaults` = méthode par défaut (leiden).
+        self.knobs = self.knobs_by_method[DEFAULT_METHOD]
+        self.defaults = self.defaults_by_method[DEFAULT_METHOD]
         self.descriptor = dataset_descriptor(dataset_id, self.ideas)
 
 
@@ -134,14 +174,20 @@ class ReclusterBody(BaseModel):
     `min_sub_size`/`dup_threshold` à ``None`` ⇒ **dérivés** des données.
     """
     dataset: str | None = None
+    method: str | None = None
     dedup: float | None = Field(_DEFAULT_DEDUP, ge=0.0, le=1.0)
     min_chars: int = Field(_DEFAULT_MIN_CHARS, ge=0)
+    # Leiden
     k: int | None = Field(None, ge=2)
     threshold: float | None = Field(None, ge=0.0, le=1.0)
     resolution_macro: float = Field(1.0, gt=0.0)
     resolution_sub: float = Field(1.5, gt=0.0)
     min_sub_size: int | None = Field(None, ge=1)
     dup_threshold: float | None = Field(None, ge=0.0, le=1.0)
+    # HDBSCAN
+    min_cluster_size: int | None = Field(None, ge=2)
+    min_samples: int | None = Field(None, ge=1)
+    umap_n_neighbors: int | None = Field(None, ge=2)
 
 
 app = FastAPI(title="Agora — recluster live (multi-dataset)", version="2.0")
@@ -176,15 +222,35 @@ def datasets() -> list[dict]:
 
 
 @app.get("/params")
-def params(dataset: str | None = Query(None)) -> dict:
+def params(dataset: str | None = Query(None),
+           method: str | None = Query(None)) -> dict:
     # `derived` expose la PROVENANCE des défauts data-driven du DATASET demandé.
+    # `method` (défaut leiden) choisit la table de knobs renvoyée dans `knobs`.
     ds = _resolve(dataset)
+    meth = (method or DEFAULT_METHOD).lower()
+    if meth not in METHODS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
+        )
     d = ds.derived
+    hd = ds.hdbscan_derived
     return {
         "dataset": ds.id,
-        "knobs": ds.knobs,
-        "defaults": ds.defaults,
+        "method": meth,
+        "methods": list(METHODS),
+        "default_method": DEFAULT_METHOD,
+        "knobs": ds.knobs_by_method[meth],
+        "defaults": ds.defaults_by_method[meth],
+        "knobs_by_method": ds.knobs_by_method,
         "seed": SEED,
+        "hdbscan_derived": {
+            "min_cluster_size": hd.min_cluster_size,
+            "min_samples": hd.min_samples,
+            "umap_n_neighbors": hd.umap_n_neighbors,
+            "n_components": N_COMPONENTS,
+            "n": hd.n,
+        },
         "derived": {
             "k": d.k,
             "threshold": round(d.threshold, 4),
@@ -201,8 +267,15 @@ def params(dataset: str | None = Query(None)) -> dict:
 @app.post("/recluster")
 def do_recluster(body: ReclusterBody) -> dict:
     ds = _resolve(body.dataset)
+    meth = (body.method or DEFAULT_METHOD).lower()
+    if meth not in METHODS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
+        )
     return recluster(
         ds.ideas, ds.vecs, ds.weights,
+        method=meth,
         dedup=body.dedup,
         min_chars=body.min_chars,
         k=body.k,
@@ -211,5 +284,8 @@ def do_recluster(body: ReclusterBody) -> dict:
         resolution_sub=body.resolution_sub,
         min_sub_size=body.min_sub_size,
         dup_threshold=body.dup_threshold,
+        min_cluster_size=body.min_cluster_size,
+        min_samples=body.min_samples,
+        umap_n_neighbors=body.umap_n_neighbors,
         dataset=ds.id,
     )
