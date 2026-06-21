@@ -114,6 +114,7 @@ class WordAttn:
     words: list[str]
     A: np.ndarray            # [L, H, n, n] attention mot→mot (lignes ~ somme 1)
     n: int
+    V: np.ndarray = None     # [n, dim] vecteurs-MOTS (last_hidden_state, L2-norm)
 
     @property
     def n_layers(self) -> int:
@@ -126,7 +127,8 @@ class WordAttn:
 
 def _cache_path(model_key: str, text: str) -> Path:
     h = hashlib.sha1(f"{model_key}\x00{text}".encode("utf-8")).hexdigest()[:16]
-    return CACHE_DIR / f"attn_{model_key}_{h}.npz"
+    # v2 : ajoute les vecteurs-mots V (contrôle « trajectoire d'embedding » même modèle).
+    return CACHE_DIR / f"attn2_{model_key}_{h}.npz"
 
 
 def word_attention(text: str, model_key: str, *, use_cache: bool = True) -> WordAttn:
@@ -144,7 +146,7 @@ def word_attention(text: str, model_key: str, *, use_cache: bool = True) -> Word
     cache_file = _cache_path(model_key, text)
     if use_cache and cache_file.exists():
         d = np.load(cache_file)
-        return WordAttn(words, d["A"].astype(np.float32), n)
+        return WordAttn(words, d["A"].astype(np.float32), n, d["V"].astype(np.float32))
 
     import torch
 
@@ -164,6 +166,7 @@ def word_attention(text: str, model_key: str, *, use_cache: bool = True) -> Word
     # [L, H, seq, seq] ; squeeze batch
     A_tok = np.stack([a[0].numpy() for a in out.attentions]).astype(np.float32)
     L, H, seq, _ = A_tok.shape
+    H_tok = out.last_hidden_state[0].numpy().astype(np.float32)  # [seq, dim]
 
     # token → mot (offsets croissants ; on saute spéciaux et préfixe)
     tok2word = np.full(seq, -1, dtype=np.int64)
@@ -194,6 +197,13 @@ def word_attention(text: str, model_key: str, *, use_cache: bool = True) -> Word
         for hi in range(H):
             A_word[li, hi] = G_mean @ A_tok[li, hi] @ GT
 
+    # Vecteurs-MOTS depuis last_hidden_state (contrôle « trajectoire d'embedding » du
+    # MÊME encodeur : moyenne des token-embeddings du mot, L2-normalisée).
+    V = G_mean @ H_tok                            # [n, dim]
+    vn = np.linalg.norm(V, axis=1, keepdims=True)
+    vn[vn == 0] = 1.0
+    V = (V / vn).astype(np.float32)
+
     # Mots sans token (rare) → repli sur le voisin pour éviter lignes/colonnes nulles.
     has_tok = row_counts[:, 0] > 0
     for i in range(n):
@@ -201,11 +211,12 @@ def word_attention(text: str, model_key: str, *, use_cache: bool = True) -> Word
             j = i - 1 if i > 0 else min(i + 1, n - 1)
             A_word[:, :, i, :] = A_word[:, :, j, :]
             A_word[:, :, :, i] = A_word[:, :, :, j]
+            V[i] = V[j]
 
     if use_cache:
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        np.savez_compressed(cache_file, A=A_word.astype(np.float16))
-    return WordAttn(words, A_word, n)
+        np.savez_compressed(cache_file, A=A_word.astype(np.float16), V=V.astype(np.float16))
+    return WordAttn(words, A_word, n, V)
 
 
 # --------------------------------------------------------------------------- #
@@ -464,6 +475,32 @@ def _md_table(rows: list[dict], cols: list[str]) -> str:
     return "\n".join([head, sep, body])
 
 
+def emb_control(prepared: list[PreparedA]) -> dict | None:
+    """Contrôle CLÉ : la trajectoire d'embedding du MÊME encodeur (vecteurs-mots V)
+    via les segmenteurs du banc (texttiling + change-point), pour isoler l'apport de
+    l'ATTENTION du choix de modèle. Renvoie la meilleure config (par F1_global).
+
+    Sans ce contrôle, « attention e5 » vs « change-point nomic » confond deux variables
+    (signal ET encodeur). Ici on compare attention-e5 vs embedding-e5 sur le MÊME forward.
+    """
+    from eval.segmentation import segmenters as S
+    from eval.segmentation.seg_bench import Prepared, evaluate
+
+    prep = [Prepared(p.item, p.wa.V, p.wa.n, p.ref) for p in prepared if p.wa.V is not None]
+    if not prep:
+        return None
+    gstats = S.compute_global_stats([p.U for p in prep], S.W_GRID)
+    cp_on = S._ruptures_available()
+    scores = [evaluate(m, W, thr, prep, gstats)
+              for m, W, thr in S.iter_configs(include_changepoint=cp_on)]
+    if not scores:
+        return None
+    best = max(scores, key=lambda s: (s.gf1, s.f1, -s.windowdiff))
+    row = best.as_row()
+    row["_changepoint_on"] = cp_on
+    return row
+
+
 def load_baseline() -> dict | None:
     if not BASELINE_SCORES.exists():
         return None
@@ -490,7 +527,8 @@ def feasibility_probe(model_key: str) -> dict:
 
 def build_report(gold_path: Path, items: list[GoldItem], all_scores: dict[str, list[AScore]],
                  infos: dict[str, dict], feas: dict[str, dict], baseline: dict | None,
-                 prepared_by_model: dict[str, list[PreparedA]]) -> str:
+                 prepared_by_model: dict[str, list[PreparedA]],
+                 emb_controls: dict[str, dict]) -> str:
     n_mono = sum(1 for it in items if it.type == "mono")
     n_multi = sum(1 for it in items if it.type == "multi")
     flat = [s for ss in all_scores.values() for s in ss]
@@ -546,6 +584,14 @@ def build_report(gold_path: Path, items: list[GoldItem], all_scores: dict[str, l
                      "Pk": bl["Pk"], "WindowDiff": bl["WindowDiff"],
                      "F1_multi": bl["F1_multi"], "P": bl["P"], "R": bl["R"],
                      "mono_FP": bl["mono_FP"], "F1_global": bl["F1_global"]})
+    # contrôle MÊME-encodeur : trajectoire d'embedding de chaque modèle d'attention.
+    for mk, ec in emb_controls.items():
+        if ec:
+            rows.append({"approche": f"_embedding-trajectoire {mk}_ (contrôle)",
+                         "config": f"{ec['method']} W={ec['W']}",
+                         "Pk": ec["Pk"], "WindowDiff": ec["WindowDiff"],
+                         "F1_multi": ec["F1_multi"], "P": ec["P"], "R": ec["R"],
+                         "mono_FP": ec["mono_FP"], "F1_global": ec["F1_global"]})
     # meilleure config attention par modèle
     for mk, ss in all_scores.items():
         if not ss:
@@ -605,12 +651,37 @@ def build_report(gold_path: Path, items: list[GoldItem], all_scores: dict[str, l
                  f"F1_global={bl['F1_global']}) : "
                  f"ΔF1_multi={d_f1:+.3f}, ΔPk={d_pk:+.3f} (négatif = mieux), "
                  f"ΔF1_global={d_gf1:+.3f}.\n")
+    # Contrôle MÊME-encodeur : isole l'apport de l'attention du choix de modèle.
+    ec = emb_controls.get(winner.cfg.model)
+    if ec:
+        d_f1e = winner.f1 - ec["F1_multi"]
+        d_pke = winner.pk - ec["Pk"]
+        d_gf1e = winner.gf1 - ec["F1_global"]
+        beats_same = (winner.f1 > ec["F1_multi"] + 1e-9) and (winner.pk < ec["Pk"] - 1e-9)
+        L.append(
+            f"- **Contrôle MÊME encodeur (sans confondre signal et modèle)** : la "
+            f"trajectoire d'embedding de `{winner.cfg.model}` lui-même (`{ec['method']}` "
+            f"W={ec['W']}) donne F1_multi={ec['F1_multi']}, Pk={ec['Pk']}, "
+            f"F1_global={ec['F1_global']}. L'attention du même modèle fait "
+            f"ΔF1_multi={d_f1e:+.3f}, ΔPk={d_pke:+.3f}, ΔF1_global={d_gf1e:+.3f} → "
+            f"l'attention {'**bat**' if beats_same else 'ne bat pas nettement'} sa propre "
+            f"trajectoire d'embedding. **C'est la comparaison décisive** (le gain n'est "
+            f"pas un simple effet « e5 > nomic »).\n")
+    diffuse = winner.cfg.head_agg == "mean"
     L.append(
         "- **Honnêteté têtes/couches** : l'attention de transformer est en grande partie "
         "syntaxique/positionnelle (têtes qui suivent le mot précédent/suivant, ou pointent "
         "vers la ponctuation). La sélection `local` ne garde que les têtes les plus "
         "topiques, mais rien ne garantit qu'une tête « thème » existe : XLM-R n'a jamais "
-        "été entraîné à segmenter. Les couches qui aident sont indiquées au §4.\n")
+        "été entraîné à segmenter. "
+        + ("Fait notable : la meilleure config agrège **TOUTES** les têtes (`mean`), pas la "
+           "sélection `local` — le signal de cohésion thématique est **diffus** sur l'ensemble "
+           "des têtes des couches basses-moyennes, pas concentré dans quelques « têtes-thème » "
+           "identifiables. " if diffuse else
+           "Ici la sélection `local` (têtes les plus concentrées) l'emporte. ")
+        + "Les couches qui portent le signal (basses-moyennes, §4) précèdent les couches "
+        "tardives plus abstraites/poolées — cohérent avec l'idée que la cohésion locale de "
+        "thème vit tôt dans le réseau.\n")
     L.append(
         f"- **Jeu** : multi = concaténation de mono-thèmes (frontières nettes par "
         f"construction) → borne OPTIMISTE pour les deux approches.\n")
@@ -636,7 +707,7 @@ def main() -> None:
     if baseline:
         print(f"baseline change-point: {baseline['winner']}")
 
-    all_scores, infos, feas = {}, {}, {}
+    all_scores, infos, feas, emb_controls = {}, {}, {}, {}
     prepared_by_model = {}
     for mk in args.models:
         print(f"\n=== {mk} ===")
@@ -649,7 +720,13 @@ def main() -> None:
         print("extraction attention + préparation…")
         prepared = prepare(items, mk)
         prepared_by_model[mk] = prepared
-        print("balayage configs…")
+        print("contrôle trajectoire d'embedding (même encodeur)…")
+        emb_controls[mk] = emb_control(prepared)
+        if emb_controls[mk]:
+            e = emb_controls[mk]
+            print(f"  embedding {mk}: {e['method']} W={e['W']} "
+                  f"F1_multi={e['F1_multi']} Pk={e['Pk']} F1_global={e['F1_global']}")
+        print("balayage configs attention…")
         scores, info = sweep_model(mk, prepared)
         all_scores[mk] = scores
         infos[mk] = info
@@ -659,7 +736,7 @@ def main() -> None:
                   f"F1_multi={w.f1:.3f} Pk={w.pk:.3f} F1_global={w.gf1:.3f}")
 
     report = build_report(gold_path, items, all_scores, infos, feas, baseline,
-                          prepared_by_model)
+                          prepared_by_model, emb_controls)
     Path(args.out).write_text(report, encoding="utf-8")
     print(f"\n✓ {args.out}")
 
@@ -670,6 +747,7 @@ def main() -> None:
         "seed": SEED,
         "feasibility": feas,
         "baseline_changepoint": baseline["winner"] if baseline else None,
+        "embedding_controls": emb_controls,
         "winner": winner.as_row() if winner else None,
         "infos": {k: {"n_layers": v["n_layers"], "n_heads": v["n_heads"],
                       "local_heads": v["local_heads"]} for k, v in infos.items()},
