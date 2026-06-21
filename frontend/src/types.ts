@@ -27,6 +27,9 @@ export interface GraphNode {
 /** Clustering methods the backend can switch between. */
 export type ClusterMethod = 'leiden' | 'hdbscan';
 
+/** Theme-naming methods (orthogonal to the clustering method). */
+export type NamingMethod = 'ctfidf' | 'centroid' | 'llm';
+
 export interface Theme {
   cluster_id: number;
   level: 0 | 1; // 0 = macro, 1 = sub-theme
@@ -44,6 +47,9 @@ export interface Theme {
 
 export interface GraphStats {
   method: ClusterMethod;
+  naming: NamingMethod; // naming method ACTUALLY applied (may differ if LLM fell back)
+  naming_requested: NamingMethod | null; // what the user asked for
+  naming_fallback: boolean; // true when LLM fell back to c-TF-IDF
   n_macros: number;
   n_subs: number;
   n_nodes: number;

@@ -1,4 +1,4 @@
-import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, Theme } from './types';
+import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, NamingMethod, Theme } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -82,15 +82,21 @@ function num(v: unknown, fallback: number): number {
   return typeof v === 'number' && Number.isFinite(v) ? v : fallback;
 }
 
-/** POST /api/recluster {knobs, dataset?, method?} → fresh GraphPayload. */
+function asNaming<T extends NamingMethod | null>(v: unknown, fallback: T): NamingMethod | T {
+  return v === 'ctfidf' || v === 'centroid' || v === 'llm' ? v : fallback;
+}
+
+/** POST /api/recluster {knobs, dataset?, method?, naming?} → fresh GraphPayload. */
 export async function recluster(
   knobs: Knobs,
   dataset?: string,
   method?: ClusterMethod,
+  naming?: NamingMethod,
 ): Promise<GraphPayload> {
   const body: Record<string, unknown> = { ...knobs };
   if (dataset) body.dataset = dataset;
   if (method) body.method = method;
+  if (naming) body.naming = naming;
   return (await jsonFetch('/api/recluster', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -119,8 +125,18 @@ export function deriveStats(payload: GraphPayload): GraphStats {
   const lh = payload.meta?.clustering?.leiden_hierarchy ?? {};
   const method: ClusterMethod = payload.meta?.method === 'hdbscan' ? 'hdbscan' : 'leiden';
   const noiseTheme = macros.find((t: Theme) => t.cluster_id === -1);
+  // Naming actually applied (meta.naming reflects an LLM→c-TF-IDF fallback).
+  const nm = payload.meta?.naming_meta ?? {};
+  const naming = asNaming(s.naming ?? payload.meta?.naming, 'ctfidf');
+  const naming_requested = asNaming(s.naming_requested ?? nm.requested, null);
   return {
     method,
+    naming,
+    naming_requested,
+    naming_fallback:
+      typeof s.naming_fallback === 'boolean'
+        ? s.naming_fallback
+        : Boolean(nm.fallback) || (naming_requested != null && naming_requested !== naming),
     n_macros: num(s.n_macros, macros.length),
     n_subs: num(s.n_subs, subs.length),
     n_nodes: num(s.n_nodes, payload.nodes.length),
