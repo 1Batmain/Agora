@@ -35,6 +35,7 @@ from pipeline.cluster.hierarchy import (
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
+from pipeline.cluster.naming_methods import DEFAULT_NAMING, name_clusters_method
 from pipeline.cluster.palette import color_for
 from pipeline.cluster.scoring import rank_clusters, score_cluster
 from pipeline.embed.embedder import Embedder
@@ -152,7 +153,7 @@ NOISE_LABEL = "non classé"
 
 def _build_hdbscan(ideas, vecs, weights, *,
                    min_cluster_size, min_samples, umap_n_neighbors, seed,
-                   dup_threshold=None):
+                   dup_threshold=None, naming=DEFAULT_NAMING):
     """Mode UMAP+HDBSCAN : clusters PLATS (level=0) + bruit (cluster_id=-1).
 
     UMAP(5D)→HDBSCAN sur les vecteurs cachés (pas de ré-embed). Les nœuds non
@@ -187,11 +188,18 @@ def _build_hdbscan(ideas, vecs, weights, *,
     scores = {cid: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
               for cid, idxs in members.items()}
 
-    # Naming TF-IDF des clusters réels (le bruit a un label fixe « non classé »).
+    # Naming SWITCHABLE des clusters réels (le bruit a un label fixe « non classé »).
+    # HDBSCAN = clusters PLATS : la méthode de nommage s'applique à TOUS les clusters.
     real_ids = [cid for cid in members if cid >= 0]
     cluster_docs = {cid: [ideas[i].text for i in members[cid]] for cid in real_ids}
     corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
-    names = name_clusters(cluster_docs, corpus_stopwords=corpus_stop) if cluster_docs else {}
+    if cluster_docs:
+        names, naming_meta = name_clusters_method(
+            cluster_docs, method=naming, members={c: members[c] for c in real_ids},
+            vecs=vecs, ideas=ideas, corpus_stopwords=corpus_stop,
+        )
+    else:
+        names, naming_meta = {}, {"naming": (naming or DEFAULT_NAMING)}
 
     n_colors = max(1, res.n_clusters)
     nodes = []
@@ -233,13 +241,14 @@ def _build_hdbscan(ideas, vecs, weights, *,
             "n_noise": res.n_noise,
             "params": res.params,
         },
+        "naming": naming_meta,
     }
     return nodes, themes, clustering_meta
 
 
 def _build_hierarchical(ideas, vecs, weights, knn, *,
                         resolution_macro, resolution_sub, min_sub_size, seed,
-                        dup_threshold=None):
+                        dup_threshold=None, naming=DEFAULT_NAMING):
     """Mode HIÉRARCHIQUE : macro (level=0) → sous-thèmes (level=1).
 
     Nœud coloré par le MACRO parent ; `cluster_id` = feuille (sous-thème),
@@ -271,9 +280,15 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
     # Mots-vides saturants dérivés du corpus GLOBAL (partagés macro + sous-thèmes).
     corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
 
-    # Naming macro : c-TF-IDF inter-macros (chaque macro = un document).
+    # Naming macro : SWITCHABLE (ctfidf | centroïde | LLM). PARCIMONIE : seuls les
+    # macros (level=0) passent par centroïde/LLM ; les sous-thèmes restent c-TF-IDF
+    # (bien plus nombreux → on épargne l'Ollama partagé, cf. NAMING_SWITCH_NOTE).
     macro_docs = {m: [ideas[i].text for i in idxs] for m, idxs in macro_members.items()}
-    macro_names = name_clusters(macro_docs, corpus_stopwords=corpus_stop)
+    macro_names, naming_meta = name_clusters_method(
+        macro_docs, method=naming, members=dict(macro_members),
+        vecs=vecs, ideas=ideas, corpus_stopwords=corpus_stop,
+    )
+    naming_meta = {**naming_meta, "scope": "macros (sous-thèmes=ctfidf)"}
 
     # Naming sous-thèmes : c-TF-IDF CONTRASTÉ dans chaque macro (sous-thèmes entre eux).
     leaf_names: dict[int, dict] = {}
@@ -329,6 +344,7 @@ def _build_hierarchical(ideas, vecs, weights, knn, *,
             "seed": h.seed,
         },
         "hdbscan_contender": None,
+        "naming": naming_meta,
     }
     return nodes, themes, clustering_meta
 
