@@ -136,10 +136,20 @@ méthodes de clustering et aux 2 datasets).
   - `ctfidf` → nommage générique actuel (c-TF-IDF + mots-vides dérivés). Inchangé.
   - `centroid` → label = le **témoignage le plus représentatif** (medoïde : membre le plus
     proche du centroïde du cluster en cosinus). Un vrai verbatim citoyen comme en-tête.
-  - `llm` → titre court généré par **LLM LOCAL via Ollama** (`:11434`, modèle p.ex. `qwen3:4b`
-    — souverain, zéro donnée qui sort) à partir des top-membres + keywords. **Langue-agnostique**
-    (titre dans la langue dominante du cluster). **Repli gracieux sur `ctfidf`** si Ollama
-    injoignable. Usage **parcimonieux** (Ollama partagé). `meta.naming` indique la méthode réelle.
+  - `llm` → titre court généré via **API Mistral** (EU, `MISTRAL_API_KEY` depuis l'env ;
+    `mistral-small-latest` par défaut, configurable). Le LLM **local Ollama est abandonné**
+    (le VPS ne peut pas l'exécuter). **Batché** (un appel → titres de tous les clusters).
+    **Langue-agnostique** (titre dans la langue dominante du cluster). **Repli gracieux sur
+    `ctfidf`** si pas de clé / API down. `meta.naming` indique la méthode réelle.
+
+### Synthèse (rapport LLM sur l'ensemble des clusters) — 2026-06-21
+- `POST /synthesize` `{dataset, method, naming}` → construit un résumé de TOUS les clusters
+  (labels, keywords, tailles, témoignages représentatifs) → **Mistral** → **rapport court** :
+  (a) synthèse des grands thèmes / de la parole citoyenne, (b) **feedback sur la pertinence**
+  des clusters (cohérents ? redondants ? couverture ? qualité du découpage). Markdown, dans la
+  langue dominante du corpus. Front : **panneau « Synthèse »** (bouton → rapport).
+- ⚠️ **Sortie de données** : la synthèse + le naming LLM envoient des résumés de clusters +
+  échantillons (déjà anonymisés) à l'API Mistral (EU). Acceptable (choix Bob, VPS sans LLM local).
 - `GET /params` (ou `/datasets`) expose les options de nommage dispo.
 - Le nommage est orthogonal à `method`/`dataset` : combinable librement.
 
