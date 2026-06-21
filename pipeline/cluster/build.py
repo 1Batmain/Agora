@@ -146,6 +146,97 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan,
     return nodes, themes, clustering_meta
 
 
+# Label du groupe « bruit » HDBSCAN (cluster_id = -1). UI, pas un mot de corpus.
+NOISE_LABEL = "non classé"
+
+
+def _build_hdbscan(ideas, vecs, weights, *,
+                   min_cluster_size, min_samples, umap_n_neighbors, seed,
+                   dup_threshold=None):
+    """Mode UMAP+HDBSCAN : clusters PLATS (level=0) + bruit (cluster_id=-1).
+
+    UMAP(5D)→HDBSCAN sur les vecteurs cachés (pas de ré-embed). Les nœuds non
+    assignés tombent dans le groupe « non classé » (-1). Une UMAP-2D fournit des
+    coords `(x,y)` par nœud (affichage 2D futur ; le circle packing reste défaut).
+    Même shape GraphPayload que les autres modes.
+    """
+    from pipeline.cluster import hdbscan_contender as hc
+
+    if not hc.available():
+        raise RuntimeError(
+            "Méthode 'hdbscan' indisponible : installe les extras contender "
+            "(uv run --extra contender …) pour umap-learn + hdbscan."
+        )
+
+    res = hc.run_hdbscan(
+        vecs,
+        n_neighbors=umap_n_neighbors,
+        n_components=hc.N_COMPONENTS,
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        seed=seed,
+        compute_2d=True,
+    )
+    membership = res.membership
+    coords = res.coords_2d or [[0.0, 0.0]] * len(ideas)
+
+    members: dict[int, list[int]] = defaultdict(list)
+    for idx, cid in enumerate(membership):
+        members[cid].append(idx)
+
+    scores = {cid: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
+              for cid, idxs in members.items()}
+
+    # Naming TF-IDF des clusters réels (le bruit a un label fixe « non classé »).
+    real_ids = [cid for cid in members if cid >= 0]
+    cluster_docs = {cid: [ideas[i].text for i in members[cid]] for cid in real_ids}
+    corpus_stop, _ = derive_corpus_stopwords([idea.text for idea in ideas])
+    names = name_clusters(cluster_docs, corpus_stopwords=corpus_stop) if cluster_docs else {}
+
+    n_colors = max(1, res.n_clusters)
+    nodes = []
+    for idx, idea in enumerate(ideas):
+        cid = int(membership[idx])
+        x, y = coords[idx]
+        nodes.append({
+            "id": idea.id,
+            "type": "idea",
+            "label": _node_label(idea),
+            "props": _node_props(idea, weights[idx]),
+            "cluster_id": cid,
+            "macro_id": cid,        # plat : le nœud EST son macro (pas de hiérarchie)
+            "color": color_for(cid, n_colors),
+            "x": x,
+            "y": y,
+        })
+
+    # Thèmes plats : clusters réels rangés par intérêt, puis le bruit en dernier.
+    themes = []
+    for cid in rank_clusters({c: scores[c] for c in real_ids}):
+        nm = names.get(cid, {"label": f"thème {cid}", "keywords": []})
+        themes.append(_theme_entry(
+            cid, members[cid], ideas, scores[cid], nm, color_for(cid, n_colors),
+            level=0, parent_id=None, children=[],
+        ))
+    if -1 in members:
+        themes.append(_theme_entry(
+            -1, members[-1], ideas, scores[-1],
+            {"label": NOISE_LABEL, "keywords": []}, color_for(-1),
+            level=0, parent_id=None, children=[],
+        ))
+
+    clustering_meta = {
+        "mode": "flat",
+        "primary": "hdbscan",
+        "hdbscan": {
+            "n_clusters": res.n_clusters,
+            "n_noise": res.n_noise,
+            "params": res.params,
+        },
+    }
+    return nodes, themes, clustering_meta
+
+
 def _build_hierarchical(ideas, vecs, weights, knn, *,
                         resolution_macro, resolution_sub, min_sub_size, seed,
                         dup_threshold=None):
