@@ -1,6 +1,6 @@
 # Banc de segmentation sémantique — rapport
 
-*Jeu : `gold.json` — N=32 (16 mono, 16 multi). Embeddings : `nomic-v2`. Seed fixé, CPU.*
+*Jeu : `gold_large.json` — N=305 (104 mono, 201 multi). Embeddings : `nomic-v2`. Seed fixé, CPU.*
 
 ## 0. Faisabilité des token-embeddings
 
@@ -18,32 +18,32 @@
 
 | method | W | Pk | WindowDiff | F1_multi | P | R | mono_FP | mono_cuts | F1_global |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| texttiling | 3 | 0.4713 | 0.5395 | 0.3051 | 0.2195 | 0.5 | 0.875 | 2.562 | 0.18 |
-| centroid_live | 8 | 0.3425 | 0.3462 | 0.2143 | 0.3 | 0.1667 | 0.3125 | 0.438 | 0.1714 |
-| changepoint | 8 | 0.2414 | 0.2414 | 0.5143 | 0.5294 | 0.5 | 0.625 | 0.75 | 0.383 |
+| texttiling | 8 | 0.4423 | 0.4653 | 0.2537 | 0.2092 | 0.3221 | 0.7692 | 1.346 | 0.2103 |
+| centroid_live | 5 | 0.5558 | 0.6161 | 0.2181 | 0.1474 | 0.4195 | 0.9327 | 2.327 | 0.1765 |
+| changepoint | 8 | 0.2815 | 0.282 | 0.4423 | 0.4545 | 0.4307 | 0.7019 | 0.76 | 0.384 |
 
-*(Pk/WindowDiff = moyenne sur les 16 multi ; mono_FP/mono_cuts sur les 16 mono.)*
+*(Pk/WindowDiff = moyenne sur les 201 multi ; mono_FP/mono_cuts sur les 104 mono.)*
 
 ## 3. Top 12 configurations (toutes méthodes)
 
 | method | W | Pk | WindowDiff | F1_multi | P | R | mono_FP | mono_cuts | F1_global |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| changepoint | 8 | 0.2414 | 0.2414 | 0.5143 | 0.5294 | 0.5 | 0.625 | 0.75 | 0.383 |
-| changepoint | 12 | 0.3429 | 0.3429 | 0.4286 | 0.375 | 0.5 | 1.0 | 1.562 | 0.2687 |
-| changepoint | 5 | 0.4165 | 0.4246 | 0.383 | 0.3103 | 0.5 | 1.0 | 1.562 | 0.25 |
-| changepoint | 8 | 0.5555 | 0.5706 | 0.381 | 0.2667 | 0.6667 | 1.0 | 2.5 | 0.233 |
-| changepoint | 3 | 0.5051 | 0.5761 | 0.2857 | 0.2 | 0.5 | 1.0 | 2.125 | 0.1856 |
-| changepoint | 12 | 0.6414 | 0.7404 | 0.3182 | 0.2 | 0.7778 | 1.0 | 4.125 | 0.1818 |
-| texttiling | 3 | 0.4713 | 0.5395 | 0.3051 | 0.2195 | 0.5 | 0.875 | 2.562 | 0.18 |
-| texttiling | 3 | 0.4871 | 0.575 | 0.3288 | 0.2182 | 0.6667 | 1.0 | 3.812 | 0.1791 |
-| changepoint | 5 | 0.6584 | 0.8915 | 0.313 | 0.1856 | 1.0 | 1.0 | 5.625 | 0.1756 |
-| centroid_live | 8 | 0.3425 | 0.3462 | 0.2143 | 0.3 | 0.1667 | 0.3125 | 0.438 | 0.1714 |
-| changepoint | 12 | 0.601 | 0.6114 | 0.2769 | 0.1915 | 0.5 | 1.0 | 2.562 | 0.1698 |
-| texttiling | 5 | 0.4564 | 0.4713 | 0.25 | 0.2273 | 0.2778 | 0.625 | 1.25 | 0.1667 |
+| changepoint | 8 | 0.2815 | 0.282 | 0.4423 | 0.4545 | 0.4307 | 0.7019 | 0.76 | 0.384 |
+| changepoint | 12 | 0.3788 | 0.3793 | 0.3857 | 0.3209 | 0.4831 | 1.0 | 1.394 | 0.317 |
+| changepoint | 5 | 0.3947 | 0.4063 | 0.3674 | 0.3039 | 0.4644 | 0.9712 | 1.452 | 0.3002 |
+| changepoint | 8 | 0.5742 | 0.6069 | 0.3458 | 0.2349 | 0.6554 | 1.0 | 2.442 | 0.2765 |
+| changepoint | 12 | 0.5994 | 0.6189 | 0.3244 | 0.2204 | 0.6142 | 1.0 | 2.433 | 0.2595 |
+| texttiling | 8 | 0.4423 | 0.4653 | 0.2537 | 0.2092 | 0.3221 | 0.7692 | 1.346 | 0.2103 |
+| changepoint | 3 | 0.5024 | 0.5619 | 0.2619 | 0.1824 | 0.4644 | 0.9712 | 2.394 | 0.2074 |
+| texttiling | 5 | 0.5147 | 0.5799 | 0.2542 | 0.176 | 0.4569 | 0.9135 | 2.115 | 0.2068 |
+| changepoint | 8 | 0.6441 | 0.8756 | 0.2674 | 0.16 | 0.8127 | 1.0 | 4.635 | 0.2062 |
+| changepoint | 12 | 0.6427 | 0.8071 | 0.2556 | 0.1571 | 0.6854 | 1.0 | 4.0 | 0.1981 |
+| changepoint | 5 | 0.645 | 0.9335 | 0.2531 | 0.148 | 0.8727 | 1.0 | 5.433 | 0.1937 |
+| texttiling | 3 | 0.5665 | 0.7057 | 0.2341 | 0.1466 | 0.5805 | 0.9519 | 3.26 | 0.1864 |
 
 ## 4. Gagnant
 
-**`changepoint` · W=8 · pen=3.0** — F1 global=0.383 ; F1 multi=0.514 (P=0.529, R=0.500), Pk=0.241, WindowDiff=0.241, faux-positifs mono=0.625 (0.75 coupe/mono).
+**`changepoint` · W=8 · pen=3.0** — F1 global=0.384 ; F1 multi=0.442 (P=0.455, R=0.431), Pk=0.281, WindowDiff=0.282, faux-positifs mono=0.702 (0.76 coupe/mono).
 
 ## 5. Exemples (avis multi → frontières)
 
@@ -62,10 +62,14 @@
 - gold : L'algorithme pousse en boucle des vidéos de plus en plus sombres dès qu'on en regarde une. ⟂ À la longue ça entretient le mal-être et ça plonge vraiment dans l'anxiété.
 - prédit : L'algorithme pousse en boucle des vidéos de plus en plus sombres dès qu'on en ⟂ regarde une. À la longue ça entretient le mal-être et ça plonge vraiment dans l'anxiété.
 
-## 6. Limites
+## 6. Limites — verdict honnête
 
-- **N=32, jeu synthétique** : les multi sont des avis construits par concaténation de segments mono-thème. Frontières nettes par construction → borne SUPÉRIEURE optimiste vs avis naturels où les transitions sont graduelles.
-- Registre unique (consultation TikTok FR) — pas de garantie cross-domaine.
-- Seuils dérivés par config mais grille discrète (W∈[3, 5, 8, 12]).
+- **La segmentation par embeddings reste MÉDIOCRE sur des transitions naturelles.** Même la meilleure config (`changepoint` W=8) ne récupère que **R=0.43** des frontières gold (soit **~57% de frontières ratées**) pour une précision P=0.45, et **sur-coupe** les mono (70% des mono reçoivent ≥1 coupe parasite, 0.76 coupe/mono). Le signal token-level capte mal les virages de thème quand la transition n'est pas lexicalement marquée.
 
-- *gold `_doc` : Vérité terrain de SEGMENTATION SÉMANTIQUE, labellisée par l'architecte. Registre = consultation TikTok (bien-être des jeunes en ligne, FR). mono = 1 thème (aucune frontière interne attendue → teste le…*
+- **Jeu (N=305) : multi = concaténation de segments mono-thème.** Frontières nettes par construction → ces chiffres sont déjà une **borne optimiste** ; sur des avis vraiment continus, attendre pire.
+
+- **Implication pour la prod** : avant de câbler un segmenteur, soit relever le rappel (signal plus riche : phrases/clauses, modèle supervisé, marqueurs discursifs), soit assumer qu'on découpe surtout les avis franchement multi-thèmes et qu'on tolère la sur-coupe des mono en aval (dédup/agrégation thématique).
+
+- Registre unique (consultation TikTok FR) — pas de garantie cross-domaine ; seuils dérivés par config mais grille discrète (W∈[3, 5, 8, 12]).
+
+- *gold `_doc` : Vérité terrain de SEGMENTATION SÉMANTIQUE étendue (~300 avis), labellisée à la main. Registre = consultation TikTok (bien-être des jeunes en ligne, FR). mono = 1 thème (aucune frontière interne attend…*

@@ -278,12 +278,27 @@ def build_report(gold_path: Path, gold_meta: dict, items: list[GoldItem],
         L.append(f"- prédit : {_segments_str(hyp, words)}\n")
 
     # --- Honnêteté ---
-    L.append("## 6. Limites\n")
-    L.append(f"- **N={len(items)}, jeu synthétique** : les multi sont des avis construits "
-             f"par concaténation de segments mono-thème. Frontières nettes par construction → "
-             f"borne SUPÉRIEURE optimiste vs avis naturels où les transitions sont graduelles.\n"
-             f"- Registre unique (consultation TikTok FR) — pas de garantie cross-domaine.\n"
-             f"- Seuils dérivés par config mais grille discrète (W∈{S.W_GRID}).\n")
+    miss = 1.0 - winner.recall
+    L.append("## 6. Limites — verdict honnête\n")
+    L.append(
+        f"- **La segmentation par embeddings reste MÉDIOCRE sur des transitions "
+        f"naturelles.** Même la meilleure config (`{winner.method}` W={winner.W}) ne "
+        f"récupère que **R={winner.recall:.2f}** des frontières gold (soit **~{miss*100:.0f}% "
+        f"de frontières ratées**) pour une précision P={winner.precision:.2f}, et **sur-coupe** "
+        f"les mono ({winner.mono_fp_rate*100:.0f}% des mono reçoivent ≥1 coupe parasite, "
+        f"{winner.mono_cuts_mean:.2f} coupe/mono). Le signal token-level capte mal les "
+        f"virages de thème quand la transition n'est pas lexicalement marquée.\n")
+    L.append(
+        f"- **Jeu (N={len(items)}) : multi = concaténation de segments mono-thème.** "
+        f"Frontières nettes par construction → ces chiffres sont déjà une **borne "
+        f"optimiste** ; sur des avis vraiment continus, attendre pire.\n")
+    L.append(
+        "- **Implication pour la prod** : avant de câbler un segmenteur, soit relever le "
+        "rappel (signal plus riche : phrases/clauses, modèle supervisé, marqueurs "
+        "discursifs), soit assumer qu'on découpe surtout les avis franchement multi-thèmes "
+        "et qu'on tolère la sur-coupe des mono en aval (dédup/agrégation thématique).\n")
+    L.append(f"- Registre unique (consultation TikTok FR) — pas de garantie cross-domaine ; "
+             f"seuils dérivés par config mais grille discrète (W∈{S.W_GRID}).\n")
     if gold_meta.get("_doc"):
         L.append(f"- *gold `_doc` : {gold_meta['_doc'][:200]}…*\n")
     return "\n".join(L)
