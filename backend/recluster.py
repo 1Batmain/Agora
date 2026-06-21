@@ -24,12 +24,18 @@ from pipeline.cluster.dedup import dedup_near
 from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defaults
 from pipeline.cluster.io import Idea
 from pipeline.cluster.knn import build_knn_graph
+from pipeline.cluster.naming_methods import DEFAULT_NAMING, NAMING_METHODS
 
 SEED = 42
 
 # Méthodes de clustering switchables. "leiden" = défaut (rétro-compat).
 METHODS = ("leiden", "hdbscan")
 DEFAULT_METHOD = "leiden"
+
+# Méthodes de NOMMAGE switchables (orthogonales au clustering). "ctfidf" = défaut
+# (rétro-compat) ; "centroid" = verbatim représentatif ; "llm" = titre Ollama local.
+NAMINGS = NAMING_METHODS
+DEFAULT_NAMING_METHOD = DEFAULT_NAMING
 
 # Cache MULTI-DATASET : `backend/cache/<dataset>/{embeddings.npy, ideas.jsonl,
 # meta.json}`. Un dataset = un sous-dossier (aucun nom de corpus codé en dur ;
@@ -179,6 +185,7 @@ def recluster(
     weights: np.ndarray,
     *,
     method: str = DEFAULT_METHOD,
+    naming: str = DEFAULT_NAMING_METHOD,
     dedup: float | None = 0.95,
     min_chars: int = 12,
     k: int | None = None,
@@ -206,6 +213,9 @@ def recluster(
     method = (method or DEFAULT_METHOD).lower()
     if method not in METHODS:
         raise ValueError(f"méthode inconnue: {method!r} (attendu: {METHODS})")
+    naming = (naming or DEFAULT_NAMING_METHOD).lower()
+    if naming not in NAMINGS:
+        raise ValueError(f"nommage inconnu: {naming!r} (attendu: {NAMINGS})")
 
     t0 = perf_counter()
     n_cached = len(ideas)
@@ -231,7 +241,7 @@ def recluster(
             min_cluster_size=min_cluster_size, min_samples=min_samples,
             umap_n_neighbors=umap_n_neighbors, dup_threshold=dup_threshold,
             seed=seed, dataset=dataset, dedup=dedup, min_chars=min_chars,
-            subset_meta=subset_meta, dedup_meta=dedup_meta, t0=t0,
+            subset_meta=subset_meta, dedup_meta=dedup_meta, t0=t0, naming=naming,
         )
 
     # --- LEIDEN (défaut, inchangé) ----------------------------------------
@@ -249,6 +259,7 @@ def recluster(
         min_sub_size=min_sub_size,
         seed=seed,
         dup_threshold=dup_threshold,
+        naming=naming,
     )
 
     id_by_idx = [idea.id for idea in ideas]
@@ -264,8 +275,12 @@ def recluster(
 
     took_ms = round((perf_counter() - t0) * 1000)
     lh = clustering_meta["leiden_hierarchy"]
+    naming_meta = clustering_meta.get("naming", {"naming": naming})
     stats = {
         "method": "leiden",
+        "naming": naming_meta.get("naming", naming),
+        "naming_requested": naming,
+        "naming_fallback": bool(naming_meta.get("fallback", False)),
         "n_macros": lh["n_macros"],
         "n_subs": lh["n_leaves"],
         "n_nodes": len(nodes),
@@ -277,6 +292,8 @@ def recluster(
         "meta": {
             "dataset": dataset,
             "method": "leiden",
+            "naming": naming_meta.get("naming", naming),
+            "naming_meta": naming_meta,
             "model_id": MODEL_ID,
             "embedding_dim": int(vecs.shape[1]),
             "n_nodes": len(nodes),
@@ -320,6 +337,7 @@ def _payload_hdbscan(
     ideas, vecs, weights, *,
     min_cluster_size, min_samples, umap_n_neighbors, dup_threshold,
     seed, dataset, dedup, min_chars, subset_meta, dedup_meta, t0,
+    naming=DEFAULT_NAMING_METHOD,
 ) -> dict:
     """GraphPayload pour la méthode HDBSCAN (clusters PLATS + bruit, coords 2D).
 
@@ -336,13 +354,17 @@ def _payload_hdbscan(
     nodes, themes, clustering_meta = _build_hdbscan(
         ideas, vecs, weights,
         min_cluster_size=mcs, min_samples=msa, umap_n_neighbors=unn,
-        seed=seed, dup_threshold=dup_threshold,
+        seed=seed, dup_threshold=dup_threshold, naming=naming,
     )
 
     took_ms = round((perf_counter() - t0) * 1000)
     hc_meta = clustering_meta["hdbscan"]
+    naming_meta = clustering_meta.get("naming", {"naming": naming})
     stats = {
         "method": "hdbscan",
+        "naming": naming_meta.get("naming", naming),
+        "naming_requested": naming,
+        "naming_fallback": bool(naming_meta.get("fallback", False)),
         "n_clusters": hc_meta["n_clusters"],
         "n_noise": hc_meta["n_noise"],
         # Compat StatsBar : un cluster plat = un « macro », pas de sous-thème.
@@ -357,6 +379,8 @@ def _payload_hdbscan(
         "meta": {
             "dataset": dataset,
             "method": "hdbscan",
+            "naming": naming_meta.get("naming", naming),
+            "naming_meta": naming_meta,
             "model_id": MODEL_ID,
             "embedding_dim": int(vecs.shape[1]),
             "n_nodes": len(nodes),
