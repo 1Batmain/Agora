@@ -52,6 +52,16 @@ export interface GraphPayload {
   themes: Theme[];
 }
 
+/** One selectable dataset, from `GET /api/datasets`. */
+export interface Dataset {
+  id: string;
+  label: string;
+  n_nodes: number;
+  languages: string[];
+  lang_counts?: Record<string, number>;
+  source?: string;
+}
+
 /** One tunable knob, used to build a slider in the panel. */
 export interface KnobSpec {
   key: string;

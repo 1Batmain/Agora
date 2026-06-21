@@ -1,4 +1,4 @@
-import type { GraphPayload, GraphStats, KnobSpec, Knobs, Theme } from './types';
+import type { Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, Theme } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -31,14 +31,35 @@ async function jsonFetch(url: string, init?: RequestInit): Promise<any> {
   }
 }
 
+/** List the datasets the backend has a cache for (populates the selector). */
+export async function fetchDatasets(): Promise<Dataset[]> {
+  const raw = await jsonFetch('/api/datasets');
+  return Array.isArray(raw) ? (raw as Dataset[]) : [];
+}
+
 /**
- * Build the knob specs. Tries `GET /api/params` and merges any
- * default/min/max/step it returns over our contract defaults. Tolerant of a few
- * response shapes ({k:{default,min,max,step}} or {k:{value,...}}); falls back to
- * pure defaults on any error → throws so the caller knows backend is unreachable.
+ * Build the knob specs for a dataset. Reads `GET /api/params?dataset=…`: the
+ * backend returns a `knobs` array whose defaults are DERIVED per-dataset (so the
+ * sliders reflect THIS corpus, not hardcoded TikTok numbers). Tolerant of the
+ * older `{key:{default,…}}` shape; throws on any error so the caller knows the
+ * backend is unreachable and can fall back to the static graph.
  */
-export async function fetchParams(): Promise<KnobSpec[]> {
-  const raw = await jsonFetch('/api/params');
+export async function fetchParams(dataset?: string): Promise<KnobSpec[]> {
+  const q = dataset ? `?dataset=${encodeURIComponent(dataset)}` : '';
+  const raw = await jsonFetch(`/api/params${q}`);
+  const knobs = raw?.knobs;
+  if (Array.isArray(knobs) && knobs.length) {
+    return knobs.map((k: any) => ({
+      key: k.name,
+      label: k.label ?? k.name,
+      value: num(k.default ?? k.value, 0),
+      min: num(k.min, 0),
+      max: num(k.max, 1),
+      step: num(k.step, 0.01),
+      hint: k.help ?? k.hint,
+    }));
+  }
+  // Legacy shape: a map keyed by knob name. Merge over the contract defaults.
   const params = raw?.params ?? raw ?? {};
   return DEFAULT_KNOBS.map((spec) => {
     const p = params[spec.key];
@@ -58,12 +79,13 @@ function num(v: unknown, fallback: number): number {
   return typeof v === 'number' && Number.isFinite(v) ? v : fallback;
 }
 
-/** POST /api/recluster {knobs} → fresh GraphPayload. */
-export async function recluster(knobs: Knobs): Promise<GraphPayload> {
+/** POST /api/recluster {knobs, dataset?} → fresh GraphPayload. */
+export async function recluster(knobs: Knobs, dataset?: string): Promise<GraphPayload> {
+  const body = dataset ? { ...knobs, dataset } : knobs;
   return (await jsonFetch('/api/recluster', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(knobs),
+    body: JSON.stringify(body),
   })) as GraphPayload;
 }
 
