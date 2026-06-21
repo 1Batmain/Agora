@@ -1,4 +1,4 @@
-import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, NamingMethod, Theme } from './types';
+import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, NamingMethod, SynthesisResult, Theme } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -105,6 +105,28 @@ export async function recluster(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })) as GraphPayload;
+}
+
+/**
+ * POST /api/synthesize {dataset?, method?, naming?} → short Markdown report
+ * (synthesis + cluster-pertinence feedback, written by Mistral). On a missing
+ * key / API error the backend still returns 200 with `meta.fallback=true` and a
+ * notice in `report_markdown`, so callers render the message rather than error.
+ */
+export async function synthesize(
+  dataset?: string,
+  method?: ClusterMethod,
+  naming?: NamingMethod,
+): Promise<SynthesisResult> {
+  const body: Record<string, unknown> = {};
+  if (dataset) body.dataset = dataset;
+  if (method) body.method = method;
+  if (naming) body.naming = naming;
+  return (await jsonFetch('/api/synthesize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })) as SynthesisResult;
 }
 
 /** Static fallback: REAL consultation first, committed fixture otherwise. */
