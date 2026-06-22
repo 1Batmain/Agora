@@ -4,6 +4,7 @@ import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from 'd3-zo
 import { hierarchy, pack } from 'd3-hierarchy';
 import 'd3-transition';
 import type { SpatialEdge, SpatialTheme } from './contract';
+import { themeCaption } from './labels';
 
 /**
  * F3 — theme BUBBLES, rendered with **D3** (d3-selection data-join, d3-zoom,
@@ -125,8 +126,9 @@ export function SpatialMap({
     return pos;
   }, [visible]);
 
-  // Preferred caption: LLM `title` when present, else the keyword `label` stub.
-  const captionOf = (t: SpatialTheme) => t.title?.trim() || t.label;
+  // Preferred caption: LLM `title` when present, else the keyword `label` stub
+  // (single source of truth — `themeCaption`).
+  const captionOf = themeCaption;
 
   const isDim = (t: SpatialTheme) =>
     (q !== '' && !captionOf(t).toLowerCase().includes(q)) || t.consensus < minConsensus;
@@ -280,7 +282,7 @@ export function SpatialMap({
  */
 function MapTooltip({ tip }: { tip: Tip }) {
   const t = tip.theme;
-  const title = t.title?.trim() || t.label;
+  const title = themeCaption(t);
   // Keyword line: explicit keywords if the backend sent them, else the keyword
   // stub `label` when it differs from the (LLM) title shown above.
   const keywords = t.keywords?.length
