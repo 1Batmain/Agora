@@ -176,11 +176,28 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     }
   }
 
+  // Dataset-level indices (mock) — demoes the dashboard offline. Derived from the
+  // generated tree so they stay coherent with the bubbles on screen.
+  const totalAvis = roots.reduce((s, t) => s + t.n_avis, 0);
+  const sorted = [...roots].sort((a, b) => b.n_avis - a.n_avis);
+  const top2 = sorted.slice(0, 2).reduce((s, t) => s + t.n_avis, 0);
+  const wConsensus = totalAvis
+    ? roots.reduce((s, t) => s + t.consensus * t.n_avis, 0) / totalAvis
+    : 0;
+  const dataset_stats = {
+    n_avis: totalAvis,
+    n_themes: roots.length,
+    consensus: Number(wConsensus.toFixed(2)),
+    diversity: Number(Math.min(1, roots.length / 8).toFixed(2)),
+    concentration: totalAvis ? Number((top2 / totalAvis).toFixed(2)) : 0,
+  };
+
   return {
     themes,
     edges,
     params: { mock: true, seed: hash(dataset || 'default'), median_dispersion: medianDisp },
     backend_used: backend,
+    dataset_stats,
   };
 }
 
