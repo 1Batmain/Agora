@@ -11,5 +11,6 @@
     "ts": 1,
     "text": 141
   },
-  "_note": "Consultation citoyenne TikTok (open data Assemblee nationale, ~33 609 reponses). CSV LimeSurvey cp1252, separateur ';'. col 141 = question ouverte 'decrire ce sentiment de mal-etre / faits de harcelement', seul champ texte libre riche (~1772 temoignages). author non mappe => defaut = id (1 reponse = 1 repondant)."
+  "_note": "Consultation citoyenne TikTok (open data Assemblee nationale, ~33 609 reponses). CSV LimeSurvey cp1252, separateur ';'. col 141 = question ouverte 'decrire ce sentiment de mal-etre / faits de harcelement', seul champ texte libre riche (~1772 temoignages). author non mappe => defaut = id (1 reponse = 1 repondant).",
+  "context": "Consultation citoyenne de l'Assemblée nationale sur l'usage de TikTok et ses effets. Les contributions sont des réponses libres de citoyens décrivant leur vécu et leurs préoccupations face à l'application (sentiment de mal-être, temps passé, contenus, etc.)."
 }
