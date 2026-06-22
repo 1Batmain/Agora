@@ -1,0 +1,144 @@
+{
+  "input": "ideas.jsonl",
+  "n_avis": 40,
+  "n_claims": 154,
+  "claims_per_avis": 3.85,
+  "model": "ministral-3:latest",
+  "embedder": "nomic-v2",
+  "limited": true,
+  "resolution": 1.0,
+  "seed": 42,
+  "derived_defaults": {
+    "k": 8,
+    "threshold": 0.5345,
+    "dup_threshold": 0.8271
+  },
+  "n_clusters": 5,
+  "modularity": 0.5465,
+  "themes": [
+    {
+      "cluster_id": 0,
+      "label": "comportement · sensation · souffre",
+      "keywords": [
+        "comportement",
+        "sensation",
+        "souffre",
+        "intense",
+        "troubles",
+        "personnelle"
+      ],
+      "n_claims": 43,
+      "n_avis": 19,
+      "weight": 43.0,
+      "consensus": 0.612,
+      "diversity": 0.999,
+      "examples": [
+        "Cette pratique peut générer des sentiments de frustration ou d'insatisfaction personnelle",
+        "Elle exprime une impression persistante d’étourdissement physique et mental.",
+        "La personne ressent une dépendance intense à quelque chose.",
+        "Il éprouve un sentiment de perte de maîtrise ou de contrôle sur son utilisation."
+      ]
+    },
+    {
+      "cluster_id": 2,
+      "label": "application · temps · sociaux",
+      "keywords": [
+        "application",
+        "temps",
+        "sociaux",
+        "réseaux",
+        "difficile",
+        "plateformes"
+      ],
+      "n_claims": 39,
+      "n_avis": 18,
+      "weight": 39.0,
+      "consensus": 0.649,
+      "diversity": 0.987,
+      "examples": [
+        "L’utilisateur ressent une dépendance à l’activité en question.",
+        "L'utilisation excessive de ces plateformes génère un sentiment de perte de temps inutile.",
+        "Ces plateformes créent une dépendance forte, même chez celles et ceux qui ne les trouvent pas agréables.",
+        "Les utilisateurs ressentent une dépendance sans accompagnement pour en sortir."
+      ]
+    },
+    {
+      "cluster_id": 1,
+      "label": "ligne · haine · plateformes",
+      "keywords": [
+        "ligne",
+        "haine",
+        "plateformes",
+        "mineurs",
+        "contenu",
+        "individus"
+      ],
+      "n_claims": 40,
+      "n_avis": 16,
+      "weight": 40.0,
+      "consensus": 0.604,
+      "diversity": 0.999,
+      "examples": [
+        "Les contenus en ligne peuvent propager de la haine envers certains groupes spécifiques comme les Juifs",
+        "Certains contenus visent à ridiculiser gratuitement des individus.",
+        "La personne concernée a subi des allusions ou des contenus problématiques dans ses publications en ligne.",
+        "Les échanges sur la plateforme incluent souvent des propos violents ou haineux."
+      ]
+    },
+    {
+      "cluster_id": 3,
+      "label": "instagram · utilisation · reels",
+      "keywords": [
+        "instagram",
+        "utilisation",
+        "reels",
+        "utilisateurs",
+        "contenu",
+        "plateformes"
+      ],
+      "n_claims": 24,
+      "n_avis": 9,
+      "weight": 24.0,
+      "consensus": 0.651,
+      "diversity": 0.996,
+      "examples": [
+        "L’utilisation de TikTok peut créer une dépendance très rapide.",
+        "TikTok contribue à induire un état de mal-être chez ses utilisateurs via son algorithme addictif.",
+        "Les échanges avec des personnes habituées à TikTok deviennent plus compliqués en raison de cette dépendance aux informations ou opinions diffusées sur la plateforme.",
+        "L’utilisation de TikTok a déclenché des troubles du bien-être chez une adolescente."
+      ]
+    },
+    {
+      "cluster_id": 4,
+      "label": "vidéos · courtes · vidéo",
+      "keywords": [
+        "vidéos",
+        "courtes",
+        "vidéo",
+        "répétée",
+        "résolution",
+        "meurtre"
+      ],
+      "n_claims": 8,
+      "n_avis": 4,
+      "weight": 8.0,
+      "consensus": 0.649,
+      "diversity": 1.0,
+      "examples": [
+        "Les vidéos disponibles peuvent contribuer à une détérioration du bien-être mental des individus.",
+        "Une utilisation intensive de vidéos courtes peut créer une dépendance, comme l’a été mon expérience au lycée.",
+        "Les vidéos courtes ne procurent aucune valeur éducative ou informative notable.",
+        "Certaines vidéos encouragent ou normalisent les comportements autodestructeurs comme les scarifications."
+      ]
+    }
+  ],
+  "cost": {
+    "ollama_calls": 40,
+    "cache_hits": 0,
+    "errors": 0,
+    "cold_seconds": 97.77,
+    "ms_per_avis": 2444.2,
+    "eval_tokens": 3798,
+    "endpoint": "http://macbat.tail0b8aa8.ts.net:11434"
+  }
+}
