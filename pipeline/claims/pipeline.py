@@ -27,8 +27,9 @@ from itertools import combinations
 
 import numpy as np
 
+from pipeline.claims.backend import resolve_backend
 from pipeline.claims.extract import extract_claims
-from pipeline.claims.ollama import OllamaClient, OllamaStats
+from pipeline.claims.ollama import OllamaStats
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
@@ -267,39 +268,41 @@ def run_claims(
     avis: list,
     *,
     resolution: float = 1.0,
+    backend: str | None = None,
     ollama_url: str | None = None,
-    model: str = DEFAULT_MODEL,
+    model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
     seed: int = DEFAULT_SEED,
     claims_by_id: dict[str, list[str]] | None = None,
     progress: Callable[[int, int], None] | None = None,
 ) -> dict:
-    """Pipeline complet : extraction (LLM local) → clustering émergent → carte.
+    """Pipeline complet : extraction (backend claims) → clustering émergent → carte.
 
-    `claims_by_id` permet de RÉUTILISER une extraction cachée (le backend la
-    persiste par dataset → rejeu de résolution sans ré-extraire). Si l'endpoint
-    Ollama est injoignable, lève `RuntimeError` (l'appelant renvoie une erreur
-    HTTP claire — pas de crash silencieux). La sortie inclut `params.cost`.
+    `backend` choisit le moteur d'extraction (``api`` par défaut via Mistral, ``mac``
+    Ollama souverain, ``auto`` Mac→repli API ; sinon `AGORA_CLAIMS_BACKEND`). `model`
+    surcharge le modèle du backend. `claims_by_id` permet de RÉUTILISER une extraction
+    cachée (rejeu de résolution sans ré-extraire). Si le backend est inutilisable, lève
+    `BackendUnavailable` (l'appelant renvoie une erreur HTTP claire). La sortie inclut
+    `params.backend`, `params.model` et `params.cost`.
     """
     avis = as_avis(avis)
     stats = OllamaStats()
 
+    used_backend = (backend or "?")
+    used_model = model or DEFAULT_MODEL
+    sovereign = None
     if claims_by_id is None:
-        client = OllamaClient(ollama_url)
-        ok, think = client.warmup(model)
-        if not ok:
-            raise RuntimeError(
-                f"Modèle {model!r} injoignable sur l'endpoint Ollama "
-                "(exporter AGORA_OLLAMA_URL depuis var/MAC_LOCAL_OLLAMA)."
-            )
-        claims_by_id = extract_claims(avis, model=model, client=client, think=think,
-                                      stats=stats, progress=progress)
+        be = resolve_backend(backend, ollama_url=ollama_url, model=model)
+        used_backend, used_model, sovereign = be.name, be.model, be.sovereign
+        claims_by_id = extract_claims(avis, backend=be, stats=stats, progress=progress)
 
     result = cluster_claims(avis, claims_by_id, resolution=resolution, seed=seed,
                             embedder=embedder)
-    result["params"]["model"] = model
+    result["params"]["backend"] = used_backend
+    result["params"]["sovereign"] = sovereign
+    result["params"]["model"] = used_model
     result["params"]["cost"] = {
-        "ollama_calls": stats.calls,
+        "calls": stats.calls,
         "cache_hits": stats.cache_hits,
         "errors": stats.errors,
         "cold_seconds": round(stats.cold_seconds, 2),
