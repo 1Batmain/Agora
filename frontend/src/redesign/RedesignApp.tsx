@@ -1,5 +1,5 @@
 import { useCallbackRef } from '../useCallbackRef';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchDatasets } from '../api';
 import type { Dataset } from '../types';
 import type {
@@ -14,7 +14,8 @@ import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
-import { ToolsPanel, type ClusterMethod } from './ToolsPanel';
+import { IndicesDashboard } from './IndicesDashboard';
+import { themeCaption } from './labels';
 
 type Tab = 'deputes' | 'analystes';
 
@@ -26,11 +27,17 @@ const SOURCE_LABEL: Record<DataSource, string> = {
   error: 'backend indisponible',
 };
 
+// Right panel width (px) — drag-resizable, persisted, with sane bounds.
+const RIGHT_MIN = 300;
+const RIGHT_MAX = 760;
+const RIGHT_KEY = 'agora.rightWidth';
+
 /**
- * Redesigned "Agora pour députés". DSFR-inspired shell (recoloured orange), two
- * tabs (Députés épuré / Analystes + réglages), 3 columns: tools | spatial map |
- * insights. Navigation is adaptive drill on the map; the right column follows the
- * zoom level (global synthesis → theme synthesis → leaf citations).
+ * Redesigned "Agora pour députés". DSFR-inspired shell (recoloured orange). The
+ * left tool column is gone: the dataset picker lives in the HEADER, and the page
+ * SCROLLS vertically — map on top, a dashboard of dataset indices beneath it. The
+ * right column (insights → leaf citations) follows the drill level and is
+ * drag-resizable. Navigation is an adaptive drill on the bubbles.
  */
 export default function RedesignApp() {
   const [tab, setTab] = useState<Tab>('deputes');
@@ -45,14 +52,8 @@ export default function RedesignApp() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // analyst knobs
+  // analyst knob: which extraction backend /analysis should use.
   const [backend, setBackend] = useState<Backend>('auto');
-  const [method, setMethod] = useState<ClusterMethod>('leiden');
-  const [resolution, setResolution] = useState(1.0);
-
-  // filters
-  const [query, setQuery] = useState('');
-  const [minConsensus, setMinConsensus] = useState(0);
 
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
@@ -65,6 +66,17 @@ export default function RedesignApp() {
   const [citations, setCitations] = useState<Citation[] | null>(null);
   const [citationsSource, setCitationsSource] = useState<DataSource | null>(null);
   const [citationsLoading, setCitationsLoading] = useState(false);
+
+  // resizable right panel — width persisted in localStorage, clamped to bounds.
+  const [rightWidth, setRightWidth] = useState<number>(() => {
+    const saved = Number(localStorage.getItem(RIGHT_KEY));
+    return Number.isFinite(saved) && saved > 0
+      ? Math.max(RIGHT_MIN, Math.min(RIGHT_MAX, saved))
+      : 380;
+  });
+  useEffect(() => {
+    localStorage.setItem(RIGHT_KEY, String(rightWidth));
+  }, [rightWidth]);
 
   const currentParentId = path.length ? path[path.length - 1].id : null;
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
@@ -176,12 +188,32 @@ export default function RedesignApp() {
     setSelected(null);
   }
 
+  // --- right-panel resize: drag the handle, clamp, persist on release. ---
+  const dragging = useRef(false);
+  const onResizeStart = useCallback((e: React.PointerEvent) => {
+    dragging.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, []);
+  const onResizeMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    // panel hugs the right edge → width = distance from cursor to viewport right.
+    const w = window.innerWidth - e.clientX;
+    setRightWidth(Math.max(RIGHT_MIN, Math.min(RIGHT_MAX, w)));
+  }, []);
+  const onResizeEnd = useCallback((e: React.PointerEvent) => {
+    dragging.current = false;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  }, []);
+
   const themes = analysis?.themes ?? [];
   const edges = analysis?.edges ?? [];
-  const insightTitle = contextTheme ? contextTheme.label : 'Synthèse globale';
+  const insightTitle = contextTheme ? themeCaption(contextTheme) : 'Synthèse globale';
 
   const crumbs = useMemo(
-    () => [{ label: 'Vue globale', idx: -1 }, ...path.map((t, i) => ({ label: t.label, idx: i }))],
+    () => [
+      { label: 'Vue globale', idx: -1 },
+      ...path.map((t, i) => ({ label: themeCaption(t), idx: i })),
+    ],
     [path],
   );
 
@@ -204,6 +236,43 @@ export default function RedesignApp() {
           </div>
         </div>
         <div className="gov-header__right">
+          {/* Dataset picker moved here from the (removed) left tool column. */}
+          <label className="header-dataset">
+            <span>Consultation</span>
+            <select
+              className="header-dataset__select"
+              value={dataset ?? ''}
+              disabled={busy || datasets.length === 0}
+              onChange={(e) => onDataset(e.target.value)}
+            >
+              {datasets.length === 0 && <option value="">(aucun dataset)</option>}
+              {datasets.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.label}
+                  {d.n_nodes ? ` (${d.n_nodes})` : ''}
+                </option>
+              ))}
+            </select>
+          </label>
+          {analyst && (
+            <label className="header-dataset">
+              <span>Backend</span>
+              <select
+                className="header-dataset__select"
+                value={backend}
+                disabled={busy}
+                onChange={(e) => {
+                  const be = e.target.value as Backend;
+                  setBackend(be);
+                  loadAnalysis(dataset, be);
+                }}
+              >
+                <option value="auto">auto (API → repli)</option>
+                <option value="api">API Mistral</option>
+                <option value="mac">Mac (Ollama)</option>
+              </select>
+            </label>
+          )}
           {analysisSource && (
             <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
           )}
@@ -224,29 +293,7 @@ export default function RedesignApp() {
         </div>
       </header>
 
-      <div className="agora__body">
-        <aside className="agora__left">
-          <ToolsPanel
-            analyst={analyst}
-            datasets={datasets}
-            dataset={dataset}
-            onDataset={onDataset}
-            query={query}
-            onQuery={setQuery}
-            minConsensus={minConsensus}
-            onMinConsensus={setMinConsensus}
-            backend={backend}
-            onBackend={setBackend}
-            resolution={resolution}
-            onResolution={setResolution}
-            method={method}
-            onMethod={setMethod}
-            onRerun={() => loadAnalysis(dataset, backend)}
-            busy={busy}
-          />
-          {error && <p className="agora__error">{error}</p>}
-        </aside>
-
+      <div className="agora__body" style={{ '--right-w': `${rightWidth}px` } as React.CSSProperties}>
         <main className="agora__center">
           <nav className="breadcrumb">
             {crumbs.map((c, i) => (
@@ -261,42 +308,61 @@ export default function RedesignApp() {
               </span>
             ))}
           </nav>
-          {busy ? (
-            <div className="agora__loading">
-              <span className="spinner" /> calcul de la carte…
-            </div>
-          ) : themes.length ? (
-            <SpatialMap
-              themes={themes}
-              edges={edges}
-              currentParentId={currentParentId}
-              selectedId={selected?.id ?? null}
-              onSelect={setSelected}
-              onDrill={onDrill}
-              query={query}
-              minConsensus={minConsensus}
-            />
-          ) : analysisSource === 'building' ? (
-            <div className="agora__loading agora__building">
-              <span className="spinner" />
-              <strong>Analyse en cours…</strong>
-              <p>{buildLine}</p>
-            </div>
-          ) : analysisSource === 'error' ? (
-            <div className="agora__loading agora__build-error">
-              <strong>Backend indisponible</strong>
-              <p>{buildProgress?.error || error || "l'analyse n'a pas pu être chargée."}</p>
-            </div>
-          ) : (
-            <div className="agora__loading">{error ?? 'aucune donnée'}</div>
-          )}
+
+          <div className="agora__canvas">
+            {busy ? (
+              <div className="agora__loading">
+                <span className="spinner" /> calcul de la carte…
+              </div>
+            ) : themes.length ? (
+              <SpatialMap
+                themes={themes}
+                edges={edges}
+                currentParentId={currentParentId}
+                selectedId={selected?.id ?? null}
+                onSelect={setSelected}
+                onDrill={onDrill}
+              />
+            ) : analysisSource === 'building' ? (
+              <div className="agora__loading agora__building">
+                <span className="spinner" />
+                <strong>Analyse en cours…</strong>
+                <p>{buildLine}</p>
+              </div>
+            ) : analysisSource === 'error' ? (
+              <div className="agora__loading agora__build-error">
+                <strong>Backend indisponible</strong>
+                <p>{buildProgress?.error || error || "l'analyse n'a pas pu être chargée."}</p>
+              </div>
+            ) : (
+              <div className="agora__loading">{error ?? 'aucune donnée'}</div>
+            )}
+          </div>
+
+          {/* F8 — dataset indices under the map (graceful when absent). */}
+          {!busy && themes.length > 0 && <IndicesDashboard stats={analysis?.dataset_stats} />}
+
+          {error && <p className="agora__error">{error}</p>}
         </main>
+
+        <div
+          className="agora__resizer"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Redimensionner le panneau"
+          onPointerDown={onResizeStart}
+          onPointerMove={onResizeMove}
+          onPointerUp={onResizeEnd}
+        >
+          <span className="agora__resizer-grip" />
+        </div>
 
         <aside className="agora__right">
           {showCitations && selected ? (
             <CitationsPanel
               dataset={dataset}
-              themeLabel={selected.label}
+              themeLabel={themeCaption(selected)}
+              themeColor={selected.color}
               citations={citations}
               loading={citationsLoading}
               source={citationsSource}
