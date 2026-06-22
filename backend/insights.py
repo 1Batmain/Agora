@@ -1,0 +1,269 @@
+"""Endpoint `/insights` — synthèses LLM Markdown LIÉES AU NIVEAU DE ZOOM (B3 du contrat).
+
+Le panneau droit du front affiche un texte généré par LLM qui dépend du niveau courant :
+
+  - `level="global"`        → synthèse de TOUTE la consultation (grands thèmes,
+                              convergences/tensions, points saillants) ;
+  - `level="theme", id=…`  → synthèse d'UN thème (sa parole, ses sous-thèmes, son poids).
+
+Réutilise l'arbre variance-adaptatif (`backend.analysis`) pour le contenu et le client
+`pipeline.cluster.mistral_client` (**API Mistral par défaut**) pour la rédaction.
+**Caché par `(dataset, level, id)`** (mémoire + disque) → le 2ᵉ appel est instantané
+(acceptance). Repli gracieux : sans clé Mistral, renvoie un message clair (`fallback=True`),
+jamais un crash. Langue-agnostique : rédigé dans la langue dominante du corpus.
+
+    GET /insights {dataset, level:global|theme, id?} -> {markdown, meta}
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from time import perf_counter
+
+from backend.analysis import ThemeNode, ThemeTree, get_or_build_tree
+from backend.recluster import dataset_dir
+from pipeline.cluster import mistral_client
+
+INSIGHTS_DIRNAME = "insights"
+INSIGHTS_MAX_TOKENS = 1200          # rapport COURT (tient dans le panneau)
+MAX_THEMES_IN_GLOBAL = 40           # garde-fou structurel de taille de prompt
+REP_PER_THEME = 2                   # claims représentatives citées par thème
+
+# Cache MÉMOIRE : (dataset, level, id, model, resolution) -> payload. Le disque
+# persiste entre redémarrages ; la mémoire sert l'acceptance « 2ᵉ appel rapide ».
+_MEM_CACHE: dict[tuple, dict] = {}
+
+
+def _theme_block(node: ThemeNode, children: list[ThemeNode]) -> str:
+    """Bloc texte compact d'un thème (label, poids, mots-clés, sous-thèmes, verbatims)."""
+    kw = ", ".join((node.keywords or [])[:6])
+    head = (f"[{node.id}] {node.label} — {node.n_avis} avis, poids {node.weight}, "
+            f"cohérence {node.consensus}, dispersion {node.dispersion}")
+    lines = [head]
+    if kw:
+        lines.append(f"  mots-clés : {kw}")
+    for rep in node.representative_claims[:REP_PER_THEME]:
+        lines.append(f"  • {rep}")
+    for c in children:
+        ckw = ", ".join((c.keywords or [])[:4])
+        lines.append(f"  ↳ sous-thème [{c.id}] {c.label} ({c.n_avis} avis"
+                     + (f" ; {ckw}" if ckw else "") + ")")
+    return "\n".join(lines)
+
+
+def _global_summary(tree: ThemeTree) -> str:
+    """Résumé compact de la consultation : tous les macro-thèmes (triés par poids)."""
+    macros = [tree.nodes[mid] for mid in tree.macros]
+    macros = [m for m in macros if m.n_claims > 0]
+    truncated = len(macros) > MAX_THEMES_IN_GLOBAL
+    macros = macros[:MAX_THEMES_IN_GLOBAL]
+    prep = tree.prepared
+    lines = [
+        f"Consultation : {tree.dataset}",
+        f"Avis analysés : {len(prep.avis)} · claims extraites : {len(prep.claim_texts)}",
+        f"Grands thèmes : {len(macros)}" + (" (tronqué)" if truncated else ""),
+        "",
+        "THÈMES (du plus au moins porté) :",
+    ]
+    for m in macros:
+        children = [tree.nodes[c] for c in m.children]
+        lines.append("")
+        lines.append(_theme_block(m, children))
+    return "\n".join(lines)
+
+
+def _theme_summary(tree: ThemeTree, node: ThemeNode) -> str:
+    """Résumé compact d'UN thème pour la synthèse ciblée."""
+    children = [tree.nodes[c] for c in node.children]
+    lines = [
+        f"Thème : {node.label}",
+        f"Poids social : {node.weight} · avis : {node.n_avis} · claims : {node.n_claims}",
+        f"Cohérence interne : {node.consensus} · dispersion : {node.dispersion}",
+    ]
+    if node.keywords:
+        lines.append(f"Mots-clés : {', '.join(node.keywords[:8])}")
+    lines.append("")
+    lines.append("Claims représentatives :")
+    for rep in node.representative_claims:
+        lines.append(f"  • {rep}")
+    if children:
+        lines.append("")
+        lines.append("Sous-thèmes :")
+        for c in children:
+            ckw = ", ".join((c.keywords or [])[:5])
+            lines.append(f"  - [{c.id}] {c.label} ({c.n_avis} avis"
+                         + (f" ; {ckw}" if ckw else "") + ")")
+            for rep in c.representative_claims[:1]:
+                lines.append(f"      • {rep}")
+    return "\n".join(lines)
+
+
+def _global_messages(summary: str) -> list[dict]:
+    system = (
+        "Tu es analyste de consultations citoyennes pour des parlementaires. Tu "
+        "produis des synthèses neutres, factuelles et concises à partir de thèmes "
+        "déjà regroupés automatiquement. Tu n'inventes rien hors des données fournies."
+    )
+    user = (
+        "À partir du résumé des thèmes ci-dessous (regroupement automatique de "
+        "contributions citoyennes), rédige une SYNTHÈSE GLOBALE en Markdown COURT, "
+        "structurée ainsi :\n\n"
+        "## Synthèse\n"
+        "Les grands thèmes qui ressortent, leur importance relative, les points de "
+        "convergence et de tension. Quelques phrases par grand thème.\n\n"
+        "## Points saillants\n"
+        "3 à 6 puces : faits marquants, signaux forts, thèmes minoritaires mais "
+        "remarquables.\n\n"
+        "Rédige dans la langue dominante des contributions. Reste COURT (≈ une demi-page). "
+        "N'invente aucun chiffre absent du résumé.\n\n"
+        f"Résumé des thèmes :\n\n{summary}\n"
+    )
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+def _theme_messages(summary: str) -> list[dict]:
+    system = (
+        "Tu es analyste de consultations citoyennes pour des parlementaires. Tu "
+        "synthétises la parole citoyenne d'UN thème, de façon neutre et factuelle, "
+        "sans rien inventer hors des données fournies."
+    )
+    user = (
+        "À partir du résumé d'UN thème ci-dessous (issu d'un regroupement automatique "
+        "de contributions citoyennes), rédige une SYNTHÈSE DU THÈME en Markdown COURT, "
+        "structurée ainsi :\n\n"
+        "## Ce que disent les citoyens\n"
+        "Le cœur de la parole sur ce thème : préoccupations, propositions, nuances. "
+        "Si des sous-thèmes existent, montre comment ils se répartissent.\n\n"
+        "## À retenir\n"
+        "2 à 4 puces : l'essentiel pour un décideur.\n\n"
+        "Rédige dans la langue dominante des contributions. Reste COURT. N'invente "
+        "aucun chiffre absent du résumé.\n\n"
+        f"Résumé du thème :\n\n{summary}\n"
+    )
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+def _strip_code_fence(text: str) -> str:
+    t = (text or "").strip()
+    if t.startswith("```"):
+        nl = t.find("\n")
+        if nl != -1:
+            t = t[nl + 1:]
+        if t.rstrip().endswith("```"):
+            t = t.rstrip()[:-3]
+    return t.strip()
+
+
+def _disk_path(dataset: str, key_hash: str) -> Path:
+    return dataset_dir(dataset) / INSIGHTS_DIRNAME / f"{key_hash}.json"
+
+
+def _cache_key(dataset: str, level: str, theme_id: str | None, model: str,
+               resolution: float) -> tuple:
+    return (dataset, level, theme_id or "", model, round(resolution, 4))
+
+
+def _key_hash(key: tuple) -> str:
+    return hashlib.sha256("\x00".join(str(k) for k in key).encode("utf-8")).hexdigest()[:16]
+
+
+def insights_payload(
+    ds,
+    *,
+    level: str = "global",
+    theme_id: str | None = None,
+    backend: str | None = None,
+    model: str | None = None,
+    embedder: str | None = None,
+    resolution: float = 1.0,
+    refresh: bool = False,
+) -> dict:
+    """Synthèse Markdown LLM d'un niveau de zoom, CACHÉE par (dataset, level, id).
+
+    `level="global"` synthétise toute la consultation ; `level="theme"` + `theme_id`
+    synthétise un thème. Renvoie `{markdown, meta}`. L'arbre est réutilisé depuis le
+    cache mémoire (`get_or_build_tree`). 2ᵉ appel identique = servi du cache (mémoire
+    puis disque) sans rappeler le LLM. Repli gracieux sans clé Mistral.
+    """
+    t0 = perf_counter()
+    level = (level or "global").strip().lower()
+    if level not in ("global", "theme"):
+        raise ValueError(f"level inconnu: {level!r} (attendu: global | theme).")
+    if level == "theme" and not theme_id:
+        raise ValueError("level='theme' exige un `id` de thème.")
+
+    synth_model = mistral_client.SYNTHESIS_MODEL
+    key = _cache_key(ds.id, level, theme_id, synth_model, resolution)
+
+    # 1) Cache mémoire (sert l'acceptance « 2ᵉ appel rapide »).
+    if not refresh and key in _MEM_CACHE:
+        out = dict(_MEM_CACHE[key])
+        out["meta"] = {**out["meta"], "cache": "memory",
+                       "took_ms": round((perf_counter() - t0) * 1000)}
+        return out
+
+    # 2) Cache disque (persistant entre redémarrages).
+    disk = _disk_path(ds.id, _key_hash(key))
+    if not refresh and disk.exists():
+        try:
+            out = json.loads(disk.read_text(encoding="utf-8"))
+            _MEM_CACHE[key] = out
+            return {**out, "meta": {**out["meta"], "cache": "disk",
+                                    "took_ms": round((perf_counter() - t0) * 1000)}}
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # 3) Construction (arbre partagé) + appel LLM.
+    kw = {} if embedder is None else {"embedder": embedder}
+    tree = get_or_build_tree(ds, backend=backend, model=model, resolution=resolution, **kw)
+
+    if level == "global":
+        summary = _global_summary(tree)
+        messages = _global_messages(summary)
+        target_label = "global"
+    else:
+        node = tree.get(theme_id)
+        if node is None:
+            raise ValueError(f"thème inconnu: {theme_id!r} (dataset {ds.id!r}).")
+        summary = _theme_summary(tree, node)
+        messages = _theme_messages(summary)
+        target_label = node.label
+
+    def _stamp(extra: dict) -> dict:
+        return {"dataset": ds.id, "level": level, "id": theme_id,
+                "target": target_label, "model": synth_model,
+                "took_ms": round((perf_counter() - t0) * 1000), **extra}
+
+    if not mistral_client.available():
+        out = {
+            "markdown": "_Synthèse indisponible : clé Mistral manquante "
+                        "(`MISTRAL_API_KEY` non configurée)._",
+            "meta": _stamp({"fallback": True, "reason": "no_api_key", "cache": "miss"}),
+        }
+        return out  # repli NON caché (pour réessayer dès que la clé est là)
+
+    try:
+        content = mistral_client.chat(
+            messages, model=synth_model, temperature=0.3, max_tokens=INSIGHTS_MAX_TOKENS,
+        )
+    except mistral_client.MistralError as exc:
+        return {
+            "markdown": f"_Synthèse indisponible : l'appel à Mistral a échoué "
+                        f"(statut {exc.status})._",
+            "meta": _stamp({"fallback": True, "reason": f"api_error:{exc.status}",
+                            "cache": "miss"}),
+        }
+
+    out = {"markdown": _strip_code_fence(content),
+           "meta": _stamp({"fallback": False, "cache": "miss"})}
+
+    # Persiste (mémoire + disque) pour les appels suivants.
+    _MEM_CACHE[key] = out
+    try:
+        disk.parent.mkdir(parents=True, exist_ok=True)
+        disk.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+    except OSError:
+        pass
+    return out
