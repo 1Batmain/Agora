@@ -15,6 +15,7 @@ import { SpatialMap } from './SpatialMap';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
+import { themeCaption } from './labels';
 
 type Tab = 'deputes' | 'analystes';
 
@@ -206,12 +207,12 @@ export default function RedesignApp() {
 
   const themes = analysis?.themes ?? [];
   const edges = analysis?.edges ?? [];
-  const insightTitle = contextTheme ? captionOf(contextTheme) : 'Synthèse globale';
+  const insightTitle = contextTheme ? themeCaption(contextTheme) : 'Synthèse globale';
 
   const crumbs = useMemo(
     () => [
       { label: 'Vue globale', idx: -1 },
-      ...path.map((t, i) => ({ label: captionOf(t), idx: i })),
+      ...path.map((t, i) => ({ label: themeCaption(t), idx: i })),
     ],
     [path],
   );
@@ -360,7 +361,7 @@ export default function RedesignApp() {
           {showCitations && selected ? (
             <CitationsPanel
               dataset={dataset}
-              themeLabel={captionOf(selected)}
+              themeLabel={themeCaption(selected)}
               citations={citations}
               loading={citationsLoading}
               source={citationsSource}
@@ -378,9 +379,4 @@ export default function RedesignApp() {
       </div>
     </div>
   );
-}
-
-/** Preferred human caption: LLM `title` when present, else the keyword `label`. */
-function captionOf(t: SpatialTheme): string {
-  return t.title?.trim() || t.label;
 }
