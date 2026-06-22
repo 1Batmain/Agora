@@ -60,6 +60,7 @@ class ThemeNode:
     n_claims: int
     n_avis: int
     label: str = ""
+    title: str = ""                 # titre court LLM (3-7 mots) précalculé au build
     keywords: list[str] = field(default_factory=list)
     representative_claims: list[str] = field(default_factory=list)
     children: list[str] = field(default_factory=list)
@@ -88,6 +89,7 @@ class ThemeTree:
     base_resolution: float
     seed: int
     derived_global: object          # DerivedDefaults sur tout le corpus de claims
+    root_coarsen: dict | None = None  # diagnostic du coarsening racine (fusion macros)
 
     def get(self, node_id: str) -> ThemeNode | None:
         return self.nodes.get(node_id)
@@ -195,13 +197,83 @@ def _subdivide(members: list[int], vecs: np.ndarray, base_resolution: float,
 
 
 # --------------------------------------------------------------------------- #
+# COARSENING racine — fusionne les macro-thèmes dont les centroïdes se recoupent
+# --------------------------------------------------------------------------- #
+def _coarsen_roots(groups: list[list[int]], vecs: np.ndarray
+                   ) -> tuple[list[list[int]], float]:
+    """Regroupe les clusters RACINES qui se recoupent → entrée plus grossière, distincte.
+
+    Leiden à sa résolution naturelle (pic de modularité) sur-fragmente l'ENTRÉE quand le
+    corpus est mono-sujet : beaucoup de racines aux centroïdes très proches (« se
+    recoupent »). On les fusionne par un DOUBLE critère DÉRIVÉ — deux racines fusionnent
+    si le cosinus de leurs centroïdes dépasse À LA FOIS :
+      1. **μ + σ** de la distribution des similarités inter-centroïdes (la QUEUE HAUTE =
+         paires anormalement proches *relativement* à ce corpus ; σ-boundary standard) ;
+      2. **min(cohésion_A, cohésion_B)**, où cohésion = similarité moyenne d'un membre à
+         son centroïde (= 1 − dispersion). Garde-fou ABSOLU de généricité : on ne fusionne
+         que si les centroïdes sont plus proches l'un de l'autre que les membres ne le sont
+         de leur propre centroïde — i.e. les deux thèmes se recoupent réellement.
+
+    Le critère 2 est crucial pour la généricité : sur un corpus MULTI-SUJETS bien séparé
+    (clusters serrés, centroïdes distants), la similarité inter-centroïde tombe sous la
+    cohésion → AUCUNE fusion (on s'abstient). Sur un corpus mono-sujet (tiktok : sim 0.89
+    > cohésion 0.83), le critère 1 borne la fusion à la queue haute. Aucun seuil de corpus
+    codé en dur. Fusion TRANSITIVE (union-find). Le détail fin reste en drill-down : les
+    clusters fusionnés deviennent les enfants du macro.
+
+    Renvoie (super-groupes = listes d'INDICES de `groups`, seuil μ+σ retenu). Repli : si
+    <2 groupes, ou si la fusion s'effondre à <2 macros, on s'abstient (chaque groupe seul).
+    """
+    n = len(groups)
+    if n < 2:
+        return [[i] for i in range(n)], float("nan")
+    cents, cohesion = [], []
+    for g in groups:
+        s = vecs[g].sum(axis=0)
+        nrm = float(np.linalg.norm(s))
+        cents.append(s / nrm if nrm > 0 else s)
+        cohesion.append(nrm / len(g) if g else 0.0)    # ‖Σv‖/n = cos moyen au centroïde
+    sim = np.asarray(cents) @ np.asarray(cents).T
+    coh = np.asarray(cohesion)
+    iu = np.triu_indices(n, 1)
+    pair = sim[iu]
+    thr = float(pair.mean() + pair.std())          # μ+σ : un écart-type au-dessus de la moyenne
+
+    parent = list(range(n))
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    for a in range(n):
+        for b in range(a + 1, n):
+            # critère relatif (queue haute) ET absolu (recoupement réel vs cohésion).
+            if sim[a, b] > thr and sim[a, b] > min(coh[a], coh[b]):
+                parent[find(a)] = find(b)
+    comps: dict[int, list[int]] = {}
+    for i in range(n):
+        comps.setdefault(find(i), []).append(i)
+    supers = list(comps.values())
+    if len(supers) < 2:                            # sur-fusion : on s'abstient
+        return [[i] for i in range(n)], thr
+    return supers, thr
+
+
+# --------------------------------------------------------------------------- #
 # Construction de l'arbre (récursive, variance-adaptative)
 # --------------------------------------------------------------------------- #
 def _build_subtree(members: list[int], parent_id: str | None, depth: int,
                    counter: list[int], nodes: dict[str, ThemeNode], order: list[str],
                    vecs: np.ndarray, weights: np.ndarray, owner: list[int],
-                   tau: float, base_resolution: float, seed: int) -> str:
-    """Crée le nœud de `members`, le subdivise si hétérogène (dispersion > τ), récursif."""
+                   tau: float, base_resolution: float, seed: int,
+                   forced_children: list[list[int]] | None = None) -> str:
+    """Crée le nœud de `members`, le subdivise si hétérogène (dispersion > τ), récursif.
+
+    `forced_children` (optionnel) impose la partition des enfants au lieu de la dériver
+    par variance — sert au COARSENING racine : un macro fusionné prend pour enfants les
+    clusters fins qu'il regroupe (détail préservé en drill-down). Les enfants, eux,
+    re-subdivisent normalement (variance-adaptatif).
+    """
     node_id = f"n{counter[0]}"
     counter[0] += 1
     centroid, dispersion, consensus, weight = _node_stats(members, vecs, weights)
@@ -214,13 +286,14 @@ def _build_subtree(members: list[int], parent_id: str | None, depth: int,
     nodes[node_id] = node
     order.append(node_id)
 
-    if depth < MAX_DEPTH and dispersion > tau:
+    child_groups = forced_children
+    if child_groups is None and depth < MAX_DEPTH and dispersion > tau:
         child_groups = _subdivide(members, vecs, base_resolution, seed)
-        if child_groups:
-            for grp in child_groups:
-                cid = _build_subtree(grp, node_id, depth + 1, counter, nodes, order,
-                                     vecs, weights, owner, tau, base_resolution, seed)
-                node.children.append(cid)
+    if child_groups:
+        for grp in child_groups:
+            cid = _build_subtree(grp, node_id, depth + 1, counter, nodes, order,
+                                 vecs, weights, owner, tau, base_resolution, seed)
+            node.children.append(cid)
     return node_id
 
 
@@ -390,32 +463,50 @@ def build_theme_tree(
     macros: list[str] = []
     derived_global = derive_defaults(vecs.astype(np.float32)) if n_claims else None
     tau = float("inf")
+    root_coarsen: dict | None = None
 
     if n_claims:
-        # Niveau 0 : macro-thèmes (Leiden base sur le graphe global dérivé).
+        # Niveau 0 brut : clusters FINS (Leiden base sur le graphe global dérivé).
         graph = build_knn_graph(vecs, k=derived_global.k, threshold=derived_global.threshold)
         membership = run_leiden(graph, resolution=resolution, seed=seed).membership
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership):
             by_cluster.setdefault(c, []).append(i)
-        macro_groups = list(by_cluster.values())
+        fine_groups = list(by_cluster.values())
 
-        # Seuil de dispersion DÉRIVÉ de la distribution des dispersions macro. On ne
-        # garde que les macros RÉELLEMENT subdivisibles (≥ min_sub_size) : les macros
+        # COARSENING de l'ENTRÉE : fusionne les racines aux centroïdes trop proches
+        # (μ+σ, dérivé) → moins de macros, plus distincts. Les clusters fins fusionnés
+        # deviennent les enfants (drill-down). Aucun effet si rien ne se recoupe.
+        super_groups, merge_thr = _coarsen_roots(fine_groups, vecs)
+
+        # Seuil de dispersion DÉRIVÉ de la distribution des dispersions des clusters
+        # FINS. On ne garde que ceux RÉELLEMENT subdivisibles (≥ min_sub_size) : les
         # singletons/outliers (1-2 avis) ne peuvent pas être coupés et fausseraient le
         # gap en tirant le seuil vers 0 (→ sur-subdivision de tout le reste).
         floor = derived_global.min_sub_size
         macro_disp = [_node_stats(g, vecs, weights)[1]
-                      for g in macro_groups if len(g) >= floor]
+                      for g in fine_groups if len(g) >= floor]
         tau = _derive_tau(macro_disp)
 
         counter = [0]
-        # Macros triés par poids social décroissant (ordre d'affichage stable).
-        macro_groups.sort(key=lambda g: -_node_stats(g, vecs, weights)[3])
-        for grp in macro_groups:
-            mid = _build_subtree(grp, None, 0, counter, nodes, order, vecs, weights,
-                                 owner, tau, resolution, seed)
+        # Macros (super-groupes) triés par poids social décroissant ; à l'intérieur, les
+        # clusters fins fusionnés sont triés de même (ordre d'affichage stable).
+        def _w(members: list[int]) -> float:
+            return _node_stats(members, vecs, weights)[3]
+        merged = [sorted((fine_groups[i] for i in sg), key=lambda g: -_w(g))
+                  for sg in super_groups]
+        merged.sort(key=lambda fine: -_w([m for g in fine for m in g]))
+        for fine in merged:
+            union = [m for g in fine for m in g]
+            forced = fine if len(fine) >= 2 else None    # ≥2 fins fusionnés ⇒ drill-down
+            mid = _build_subtree(union, None, 0, counter, nodes, order, vecs, weights,
+                                 owner, tau, resolution, seed, forced_children=forced)
             macros.append(mid)
+        root_coarsen = {
+            "n_fine": len(fine_groups), "n_macros": len(macros),
+            "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
+            "criterion": "fusion racines si cos(centroïdes) > μ+σ des sims inter-centroïdes ET > min(cohésion) (garde-fou généricité)",
+        }
 
         _name_nodes(nodes, prepared.claim_texts)
         _assign_colors(nodes, macros)
@@ -425,6 +516,7 @@ def build_theme_tree(
     return ThemeTree(
         nodes=nodes, order=order, macros=macros, dataset=ds.id, prepared=prepared,
         tau=tau, base_resolution=resolution, seed=seed, derived_global=derived_global,
+        root_coarsen=root_coarsen,
     )
 
 
@@ -459,6 +551,136 @@ def get_or_build_tree(
     return tree
 
 
+# --------------------------------------------------------------------------- #
+# Indices GLOBAUX du dataset — « capter le débat d'un coup d'œil »
+# --------------------------------------------------------------------------- #
+# Quatre index DÉRIVÉS, normalisés [0..1], calculés sur les thèmes MACRO (le niveau
+# que la carte montre par défaut). Choisis pour être ORTHOGONAUX : deux lisent la
+# distribution des TAILLES (diversité = équilibre, concentration = domination), un
+# lit l'ACCORD interne (consensus, pondéré-évidence comme la carte), un lit la
+# STRUCTURE hiérarchique (facettes). Tout est dérivé des données — aucun seuil de
+# corpus, aucun magic-number arbitraire.
+def _gini(values: list[float]) -> float:
+    """Coefficient de Gini d'une distribution positive (0 = égal, → 1 = concentré).
+
+    Formulation par différences absolues moyennes, normalisée par 2·n·moyenne.
+    Renvoie 0.0 sur cas dégénéré (≤1 valeur ou somme nulle).
+    """
+    n = len(values)
+    if n < 2:
+        return 0.0
+    total = sum(values)
+    if total <= 0:
+        return 0.0
+    s = sorted(values)
+    # Σ (2i − n − 1) xᵢ  /  (n · Σx)   (i de 1..n) — identité de la moyenne des écarts.
+    cum = sum((2 * (i + 1) - n - 1) * x for i, x in enumerate(s))
+    return max(0.0, min(1.0, cum / (n * total)))
+
+
+def _dataset_stats(tree: ThemeTree) -> dict:
+    """Indices globaux dérivés du dataset, prêts pour l'UI (valeur + libellé + explication).
+
+    Calculés sur les thèmes MACRO. Chaque index porte `value` ∈ [0..1], un `label`
+    court et une `explanation` d'une phrase, plus un `detail` chiffré lisible.
+    """
+    macros = [tree.nodes[mid] for mid in tree.macros]
+    pops = [max(0, m.n_avis) for m in macros]
+    total_avis = sum(pops)
+    k = len(macros)
+
+    totals = {
+        "n_avis": total_avis,
+        "n_claims": sum(m.n_claims for m in macros),
+        "n_themes": k,
+        "n_leaves": sum(1 for n in tree.nodes.values() if not n.children),
+        "max_depth": max((n.depth for n in tree.nodes.values()), default=0),
+    }
+    if k == 0 or total_avis == 0:
+        return {"totals": totals, "indices": []}
+
+    shares = [p / total_avis for p in pops]
+
+    # 1) DIVERSITÉ — équitabilité de Pielou = entropie de Shannon normalisée par ln(K).
+    #    0 = un thème écrase tout (débat monolithique) ; 1 = voix réparties également.
+    #    `effective_themes` = exp(H) : « nombre effectif de sujets » (Hill q=1).
+    nz = [s for s in shares if s > 0]
+    h = -sum(s * np.log(s) for s in nz)
+    evenness = float(h / np.log(k)) if k > 1 else 0.0
+    eff_themes = float(np.exp(h))
+
+    # 2) CONCENTRATION — part des voix dans le thème dominant (lecture immédiate).
+    #    0 = aucune domination ; 1 = tout dans un seul thème. Gini en détail.
+    top_share = max(shares)
+
+    # 3) CONSENSUS GLOBAL — moyenne pondérée-population du consensus_eff (shrinkage
+    #    bayésien, MÊME formule que la carte : prior bas, k = population médiane d'un
+    #    thème). Un thème à peu d'avis ne peut pas peser comme un fort accord.
+    sorted_pops = sorted(pops)
+    mid = k // 2
+    median_pop = (sorted_pops[mid - 1] + sorted_pops[mid]) / 2 if k % 2 == 0 else sorted_pops[mid]
+    kk = max(1.0, float(median_pop))            # force de shrinkage ~ taille typique
+    eff = [(p / (p + kk)) * m.consensus for p, m in zip(pops, macros)]  # PRIOR = 0
+    consensus_global = sum(p * e for p, e in zip(pops, eff)) / total_avis
+    consensus_global = float(max(0.0, min(1.0, consensus_global)))
+
+    # 4) STRUCTURATION — part des voix dans des thèmes SUBDIVISÉS (à facettes). Lit la
+    #    hiérarchie variance-adaptative : 0 = débat plat (sujets simples) ; 1 = gros
+    #    thèmes tous multi-facettes. Dimension orthogonale aux tailles et à l'accord.
+    structured_avis = sum(p for p, m in zip(pops, macros) if m.children)
+    structuration = structured_avis / total_avis
+
+    indices = [
+        {
+            "key": "diversite",
+            "label": "Diversité thématique",
+            "value": round(evenness, 4),
+            "explanation": (
+                f"Le débat se répartit sur ~{eff_themes:.1f} sujets effectifs "
+                f"(sur {k} thèmes). Proche de 1 = voix équilibrées entre sujets ; "
+                "proche de 0 = un sujet domine."
+            ),
+            "detail": {"effective_themes": round(eff_themes, 2), "n_themes": k},
+        },
+        {
+            "key": "concentration",
+            "label": "Concentration",
+            "value": round(top_share, 4),
+            "explanation": (
+                f"Le thème dominant capte {top_share * 100:.0f} % des voix. "
+                "Proche de 1 = débat accaparé par un sujet ; proche de 0 = dispersé."
+            ),
+            "detail": {"top_share": round(top_share, 4), "gini": round(_gini(pops), 4)},
+        },
+        {
+            "key": "consensus",
+            "label": "Consensus global",
+            "value": round(consensus_global, 4),
+            "explanation": (
+                "Accord moyen au sein des thèmes, pondéré par la population "
+                "(les petits thèmes pèsent moins). Proche de 1 = forte cohésion ; "
+                "proche de 0 = avis éclatés."
+            ),
+            "detail": {"shrinkage_k": round(kk, 2), "prior": 0.0},
+        },
+        {
+            "key": "structuration",
+            "label": "Structuration",
+            "value": round(structuration, 4),
+            "explanation": (
+                f"{structuration * 100:.0f} % des voix relèvent de thèmes à facettes "
+                "(subdivisés en sous-thèmes). Proche de 1 = sujets riches/complexes ; "
+                "0 = débat plat."
+            ),
+            "detail": {
+                "structured_macros": sum(1 for m in macros if m.children),
+                "n_macros": k,
+            },
+        },
+    ]
+    return {"totals": totals, "indices": indices}
+
+
 def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
     """Sérialise l'arbre au format du contrat : themes(x,y) + edges + params + backend_used.
 
@@ -478,6 +700,7 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         {
             "id": n.id,
             "label": n.label,
+            "title": n.title or n.label,    # titre court LLM (repli label si non calculé)
             "x": n.x,
             "y": n.y,
             "n_avis": n.n_avis,
@@ -514,6 +737,7 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
             "note": "subdivision si dispersion > seuil DÉRIVÉ (plus grand écart "
                     "des dispersions macro) ET ≥2 sous-thèmes viables",
         },
+        "root_coarsen": tree.root_coarsen,   # fusion des racines trop proches (entrée grossière)
         "derived": None if dg is None else {
             "k": dg.k,
             "threshold": round(dg.threshold, 4),
@@ -531,5 +755,6 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         "themes": themes,
         "edges": edges,
         "params": params,
+        "dataset_stats": _dataset_stats(tree),   # indices globaux dérivés (UI : coup d'œil)
         "backend_used": prep.backend.name,
     }

@@ -38,6 +38,7 @@ from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.recluster import CACHE_DIR, load_cache
+from backend.titles import title_for_node
 
 ProgressFn = Callable[[str, str, int, int], None]
 
@@ -93,6 +94,16 @@ def build_analysis(
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
 
+        # 1b) Titre court LLM par thème (3-7 mots), CACHÉ par contenu → baké dans
+        #     analysis.json. Rebuild idempotent : contenu inchangé ⇒ zéro appel LLM.
+        total = len(node_ids)
+        report("titles", "titres courts (LLM, caché)", 0, total)
+        for i, nid in enumerate(node_ids, 1):
+            node = tree.nodes[nid]
+            node.title = title_for_node(dataset, node)  # modèle de nommage (≠ extraction)
+            if i == total or i % 25 == 0:
+                report("titles", "titres courts (LLM, caché)", i, total)
+
         # 2) Carte spatiale : UMAP des centroïdes + co-occurrence (B1) → analysis.json.
         report("analysis", "projection UMAP 2D + co-occurrence")
         payload = analysis_payload(tree)
@@ -105,7 +116,6 @@ def build_analysis(
         store.write_avis(dataset, build_avis_provenance(tree))
 
         # 3) Citations triées centroïde, par nœud (B4) — aucun LLM, rapide.
-        total = len(node_ids)
         for i, nid in enumerate(node_ids, 1):
             store.write_citations(dataset, nid, citations_for_theme(tree, nid))
             if i == total or i % 25 == 0:
