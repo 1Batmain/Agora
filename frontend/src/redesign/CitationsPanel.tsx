@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { AvisProvenance, Citation, DataSource } from './contract';
 import { fetchAvis } from './analysisApi';
 import { AvisDetail } from './AvisDetail';
+import { Markdown } from './Markdown';
 
 /** Short badge text per data source. */
 const BADGE: Record<DataSource, string> = {
@@ -22,6 +23,9 @@ export function CitationsPanel({
   dataset,
   themeLabel,
   themeColor,
+  hook,
+  description,
+  convergence,
   citations,
   loading,
   source,
@@ -31,6 +35,12 @@ export function CitationsPanel({
   themeLabel: string;
   /** Selected leaf cluster colour — tints the header so the panel reads as "this cluster". */
   themeColor?: string;
+  /** LLM accroche for this exact cluster (graceful if absent). */
+  hook?: string;
+  /** LLM synthesis for this exact cluster, rendered as markdown above the list. */
+  description?: string;
+  /** 0..1 convergence of ideas inside this cluster (graceful if absent). */
+  convergence?: number;
   citations: Citation[] | null;
   loading: boolean;
   source: DataSource | null;
@@ -81,6 +91,27 @@ export function CitationsPanel({
       <button className="link-back" onClick={onBack}>
         ← retour aux thèmes
       </button>
+      {/* Cluster synthesis — a short LLM note about THIS exact cluster, shown ABOVE
+          the testimonials so the reader has the gist before the verbatims. */}
+      {(hook || description || typeof convergence === 'number') && (
+        <aside
+          className="cluster-note"
+          style={themeColor ? { borderLeftColor: themeColor } : undefined}
+        >
+          <span className="cluster-note__tag">Synthèse du cluster</span>
+          {hook && <p className="cluster-note__hook">{hook}</p>}
+          {description && (
+            <div className="cluster-note__body">
+              <Markdown source={description} />
+            </div>
+          )}
+          {typeof convergence === 'number' && Number.isFinite(convergence) && (
+            <p className="cluster-note__conv">
+              Convergence des idées : <strong>{Math.round(convergence * 100)} %</strong>
+            </p>
+          )}
+        </aside>
+      )}
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> chargement des citations…
