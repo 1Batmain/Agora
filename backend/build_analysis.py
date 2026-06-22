@@ -37,7 +37,7 @@ from backend.analysis import (
 from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
-from backend.recluster import load_cache
+from backend.recluster import CACHE_DIR, load_cache
 
 ProgressFn = Callable[[str, str, int, int], None]
 
@@ -145,12 +145,19 @@ def main() -> None:
     ap.add_argument("--embedder", default=DEFAULT_EMBEDDER)
     ap.add_argument("--resolution", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
-    ap.add_argument("--force", action="store_true", help="efface l'analyse persistée avant de rebuild")
+    ap.add_argument("--force", action="store_true", help="efface l'analyse persistée avant de rebuild (garde claims.json -> re-clusterise sans réextraire)")
+    ap.add_argument("--reextract", action="store_true", help="efface AUSSI claims.json -> réextraction LLM fraîche (ex. après changement du prompt d'extraction)")
     args = ap.parse_args()
 
-    if args.force:
+    if args.force or args.reextract:
         store.clear(args.dataset)
-        _log(f"{args.dataset} · analyse persistée effacée (--force)")
+        _log(f"{args.dataset} · analyse persistée effacée")
+
+    if args.reextract:
+        claims_cache = CACHE_DIR / args.dataset / "claims.json"
+        if claims_cache.exists():
+            claims_cache.unlink()
+            _log(f"{args.dataset} · claims.json effacé (--reextract) -> réextraction LLM fraîche")
 
     ds = load_dataset(args.dataset)
     build_analysis(
