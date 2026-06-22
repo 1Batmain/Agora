@@ -60,6 +60,7 @@ class ThemeNode:
     n_claims: int
     n_avis: int
     label: str = ""
+    title: str = ""                 # titre court LLM (3-7 mots) précalculé au build
     keywords: list[str] = field(default_factory=list)
     representative_claims: list[str] = field(default_factory=list)
     children: list[str] = field(default_factory=list)
@@ -478,6 +479,7 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         {
             "id": n.id,
             "label": n.label,
+            "title": n.title or n.label,    # titre court LLM (repli label si non calculé)
             "x": n.x,
             "y": n.y,
             "n_avis": n.n_avis,
