@@ -2,7 +2,14 @@ import { useCallbackRef } from '../useCallbackRef';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchDatasets } from '../api';
 import type { Dataset } from '../types';
-import type { AnalysisPayload, Backend, Citation, DataSource, SpatialTheme } from './contract';
+import type {
+  AnalysisPayload,
+  Backend,
+  BuildProgress,
+  Citation,
+  DataSource,
+  SpatialTheme,
+} from './contract';
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { InsightsPanel } from './InsightsPanel';
@@ -10,6 +17,14 @@ import { CitationsPanel } from './CitationsPanel';
 import { ToolsPanel, type ClusterMethod } from './ToolsPanel';
 
 type Tab = 'deputes' | 'analystes';
+
+/** Human badge label per data source (live / build / mock / error). */
+const SOURCE_LABEL: Record<DataSource, string> = {
+  live: 'backend live',
+  building: 'analyse en cours',
+  mock: 'données mock',
+  error: 'backend indisponible',
+};
 
 /**
  * Redesigned "Agora pour députés". DSFR-inspired shell (recoloured orange), two
@@ -26,6 +41,7 @@ export default function RedesignApp() {
 
   const [analysis, setAnalysis] = useState<AnalysisPayload | null>(null);
   const [analysisSource, setAnalysisSource] = useState<DataSource | null>(null);
+  const [buildProgress, setBuildProgress] = useState<BuildProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,20 +70,26 @@ export default function RedesignApp() {
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
   const showCitations = selected != null && !selected.has_children;
 
-  const loadAnalysis = useCallbackRef(async (ds: string | null, be: Backend) => {
+  // `poll=true` is a background re-check while the backend is still BUILDING:
+  // it must not flash the busy spinner nor reset the user's drill path/selection.
+  const loadAnalysis = useCallbackRef(async (ds: string | null, be: Backend, poll = false) => {
     if (!ds) return;
-    setBusy(true);
-    setError(null);
-    setPath([]);
-    setSelected(null);
+    if (!poll) {
+      setBusy(true);
+      setError(null);
+      setPath([]);
+      setSelected(null);
+    }
     try {
-      const { data, source } = await fetchAnalysis(ds, be);
-      setAnalysis(data);
+      const { data, source, progress } = await fetchAnalysis(ds, be);
       setAnalysisSource(source);
+      setBuildProgress(progress ?? null);
+      if (data) setAnalysis(data);
+      else if (!poll) setAnalysis(null);
     } catch (e) {
       setError(`chargement de la carte impossible : ${String(e)}`);
     } finally {
-      setBusy(false);
+      if (!poll) setBusy(false);
     }
   });
 
@@ -90,6 +112,16 @@ export default function RedesignApp() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Poll while the backend is BUILDING: re-check every few seconds until the real
+  // analysis is ready. `buildProgress` gets a fresh object each poll, so this effect
+  // re-arms itself; it stops as soon as the source flips away from 'building'.
+  useEffect(() => {
+    if (analysisSource !== 'building' || !dataset) return;
+    const t = setTimeout(() => loadAnalysis(dataset, backend, true), 2500);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [analysisSource, buildProgress, dataset, backend]);
 
   // Insights effect — follows the zoom level (skipped when showing citations).
   useEffect(() => {
@@ -153,6 +185,12 @@ export default function RedesignApp() {
     [path],
   );
 
+  const buildLine = buildProgress?.detail
+    ? `${buildProgress.detail}${
+        buildProgress.total ? ` (${buildProgress.done ?? 0}/${buildProgress.total})` : ''
+      }`
+    : 'le backend précalcule les thèmes, les citations et les synthèses…';
+
   return (
     <div className="agora">
       <header className="gov-header">
@@ -167,9 +205,7 @@ export default function RedesignApp() {
         </div>
         <div className="gov-header__right">
           {analysisSource && (
-            <span className={`badge badge--${analysisSource}`}>
-              {analysisSource === 'mock' ? 'données mock' : 'backend live'}
-            </span>
+            <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
           )}
           <nav className="tabs">
             <button
@@ -240,6 +276,17 @@ export default function RedesignApp() {
               query={query}
               minConsensus={minConsensus}
             />
+          ) : analysisSource === 'building' ? (
+            <div className="agora__loading agora__building">
+              <span className="spinner" />
+              <strong>Analyse en cours…</strong>
+              <p>{buildLine}</p>
+            </div>
+          ) : analysisSource === 'error' ? (
+            <div className="agora__loading agora__build-error">
+              <strong>Backend indisponible</strong>
+              <p>{buildProgress?.error || error || "l'analyse n'a pas pu être chargée."}</p>
+            </div>
           ) : (
             <div className="agora__loading">{error ?? 'aucune donnée'}</div>
           )}
