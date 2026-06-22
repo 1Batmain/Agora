@@ -37,6 +37,7 @@ from backend.analysis import (
 from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
+from backend.cluster_enrich import description_for_node, hook_for_node
 from backend.recluster import CACHE_DIR, load_cache
 from backend.titles import title_for_node
 
@@ -103,6 +104,16 @@ def build_analysis(
             node.title = title_for_node(dataset, node)  # modèle de nommage (≠ extraction)
             if i == total or i % 25 == 0:
                 report("titles", "titres courts (LLM, caché)", i, total)
+
+        # 1c) Accroche + description LLM par thème (CACHÉES par contenu) → analysis.json.
+        #     Même infra que les titres : rebuild idempotent, zéro appel si inchangé.
+        report("enrich", "accroches + descriptions (LLM, caché)", 0, total)
+        for i, nid in enumerate(node_ids, 1):
+            node = tree.nodes[nid]
+            node.hook = hook_for_node(dataset, node)
+            node.description = description_for_node(dataset, node)
+            if i == total or i % 25 == 0:
+                report("enrich", "accroches + descriptions (LLM, caché)", i, total)
 
         # 2) Carte spatiale : UMAP des centroïdes + co-occurrence (B1) → analysis.json.
         report("analysis", "projection UMAP 2D + co-occurrence")
