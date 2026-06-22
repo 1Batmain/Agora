@@ -105,7 +105,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     description:
       `Les contributions rattachées à **${label.toLowerCase()}** dégagent quelques ` +
       `lignes de force : attentes concrètes, points de friction et propositions. ` +
-      `\n\n_Synthèse de démonstration (mock)._`,
+      `\n\n*Synthèse de démonstration (mock).*`,
     convergence: Number((0.35 + r() * 0.6).toFixed(2)),
   });
 
