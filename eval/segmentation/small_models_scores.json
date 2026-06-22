@@ -1,0 +1,619 @@
+{
+  "gold": "gold_large.json",
+  "n_items": 305,
+  "n_mono": 104,
+  "n_multi": 201,
+  "folds": 5,
+  "seed": 0,
+  "reference_mistral": {
+    "micro_f1": 0.928,
+    "macro_f1": 0.9346,
+    "exact_set": 0.73,
+    "model": "mistral-small-latest"
+  },
+  "classifier": [
+    {
+      "embedder": "nomic-v2",
+      "head": "logreg",
+      "micro_P": 0.8873,
+      "micro_R": 0.8951,
+      "micro_F1": 0.8912,
+      "macro_F1": 0.892,
+      "exact_set": 0.6492,
+      "embed_ms_per_avis": 58.31,
+      "predict_ms_per_avis": 0.0102,
+      "fit_seconds": 0.39,
+      "thresholds": {
+        "harcelement": 0.5,
+        "addiction": 0.55,
+        "image_corps": 0.55,
+        "algorithme": 0.55,
+        "contenus_choquants": 0.5,
+        "enfants": 0.5,
+        "desinformation": 0.5,
+        "sante_mentale": 0.55
+      },
+      "per_theme": {
+        "harcelement": {
+          "p": 0.9178,
+          "r": 0.9178,
+          "f1": 0.9178,
+          "tp": 67,
+          "fp": 6,
+          "fn": 6
+        },
+        "addiction": {
+          "p": 0.8955,
+          "r": 0.8451,
+          "f1": 0.8696,
+          "tp": 60,
+          "fp": 7,
+          "fn": 11
+        },
+        "image_corps": {
+          "p": 0.9286,
+          "r": 0.942,
+          "f1": 0.9353,
+          "tp": 65,
+          "fp": 5,
+          "fn": 4
+        },
+        "algorithme": {
+          "p": 0.8592,
+          "r": 0.8592,
+          "f1": 0.8592,
+          "tp": 61,
+          "fp": 10,
+          "fn": 10
+        },
+        "contenus_choquants": {
+          "p": 0.7532,
+          "r": 0.8923,
+          "f1": 0.8169,
+          "tp": 58,
+          "fp": 19,
+          "fn": 7
+        },
+        "enfants": {
+          "p": 0.8205,
+          "r": 0.9552,
+          "f1": 0.8828,
+          "tp": 64,
+          "fp": 14,
+          "fn": 3
+        },
+        "desinformation": {
+          "p": 0.9474,
+          "r": 0.9474,
+          "f1": 0.9474,
+          "tp": 54,
+          "fp": 3,
+          "fn": 3
+        },
+        "sante_mentale": {
+          "p": 0.9881,
+          "r": 0.8384,
+          "f1": 0.9071,
+          "tp": 83,
+          "fp": 1,
+          "fn": 16
+        }
+      }
+    },
+    {
+      "embedder": "nomic-v2",
+      "head": "mlp",
+      "micro_P": 0.9451,
+      "micro_R": 0.9336,
+      "micro_F1": 0.9393,
+      "macro_F1": 0.9385,
+      "exact_set": 0.7934,
+      "embed_ms_per_avis": 58.31,
+      "predict_ms_per_avis": 0.0037,
+      "fit_seconds": 22.72,
+      "thresholds": {
+        "harcelement": 0.35,
+        "addiction": 0.3,
+        "image_corps": 0.15,
+        "algorithme": 0.35,
+        "contenus_choquants": 0.35,
+        "enfants": 0.35,
+        "desinformation": 0.45,
+        "sante_mentale": 0.3
+      },
+      "per_theme": {
+        "harcelement": {
+          "p": 0.9589,
+          "r": 0.9589,
+          "f1": 0.9589,
+          "tp": 70,
+          "fp": 3,
+          "fn": 3
+        },
+        "addiction": {
+          "p": 0.9538,
+          "r": 0.8732,
+          "f1": 0.9118,
+          "tp": 62,
+          "fp": 3,
+          "fn": 9
+        },
+        "image_corps": {
+          "p": 0.9571,
+          "r": 0.971,
+          "f1": 0.964,
+          "tp": 67,
+          "fp": 3,
+          "fn": 2
+        },
+        "algorithme": {
+          "p": 0.9265,
+          "r": 0.8873,
+          "f1": 0.9065,
+          "tp": 63,
+          "fp": 5,
+          "fn": 8
+        },
+        "contenus_choquants": {
+          "p": 0.9091,
+          "r": 0.9231,
+          "f1": 0.916,
+          "tp": 60,
+          "fp": 6,
+          "fn": 5
+        },
+        "enfants": {
+          "p": 0.9014,
+          "r": 0.9552,
+          "f1": 0.9275,
+          "tp": 64,
+          "fp": 7,
+          "fn": 3
+        },
+        "desinformation": {
+          "p": 0.9818,
+          "r": 0.9474,
+          "f1": 0.9643,
+          "tp": 54,
+          "fp": 1,
+          "fn": 3
+        },
+        "sante_mentale": {
+          "p": 0.9691,
+          "r": 0.9495,
+          "f1": 0.9592,
+          "tp": 94,
+          "fp": 3,
+          "fn": 5
+        }
+      }
+    },
+    {
+      "embedder": "e5-small",
+      "head": "logreg",
+      "micro_P": 0.7946,
+      "micro_R": 0.8724,
+      "micro_F1": 0.8317,
+      "macro_F1": 0.8338,
+      "exact_set": 0.5148,
+      "embed_ms_per_avis": 10.76,
+      "predict_ms_per_avis": 0.0078,
+      "fit_seconds": 0.34,
+      "thresholds": {
+        "harcelement": 0.5,
+        "addiction": 0.55,
+        "image_corps": 0.5,
+        "algorithme": 0.5,
+        "contenus_choquants": 0.5,
+        "enfants": 0.55,
+        "desinformation": 0.5,
+        "sante_mentale": 0.5
+      },
+      "per_theme": {
+        "harcelement": {
+          "p": 0.8667,
+          "r": 0.8904,
+          "f1": 0.8784,
+          "tp": 65,
+          "fp": 10,
+          "fn": 8
+        },
+        "addiction": {
+          "p": 0.9153,
+          "r": 0.7606,
+          "f1": 0.8308,
+          "tp": 54,
+          "fp": 5,
+          "fn": 17
+        },
+        "image_corps": {
+          "p": 0.7765,
+          "r": 0.9565,
+          "f1": 0.8571,
+          "tp": 66,
+          "fp": 19,
+          "fn": 3
+        },
+        "algorithme": {
+          "p": 0.7857,
+          "r": 0.9296,
+          "f1": 0.8516,
+          "tp": 66,
+          "fp": 18,
+          "fn": 5
+        },
+        "contenus_choquants": {
+          "p": 0.6543,
+          "r": 0.8154,
+          "f1": 0.726,
+          "tp": 53,
+          "fp": 28,
+          "fn": 12
+        },
+        "enfants": {
+          "p": 0.9091,
+          "r": 0.8955,
+          "f1": 0.9023,
+          "tp": 60,
+          "fp": 6,
+          "fn": 7
+        },
+        "desinformation": {
+          "p": 0.7812,
+          "r": 0.8772,
+          "f1": 0.8264,
+          "tp": 50,
+          "fp": 14,
+          "fn": 7
+        },
+        "sante_mentale": {
+          "p": 0.7456,
+          "r": 0.8586,
+          "f1": 0.7981,
+          "tp": 85,
+          "fp": 29,
+          "fn": 14
+        }
+      }
+    },
+    {
+      "embedder": "e5-small",
+      "head": "mlp",
+      "micro_P": 0.9416,
+      "micro_R": 0.9021,
+      "micro_F1": 0.9214,
+      "macro_F1": 0.9214,
+      "exact_set": 0.7541,
+      "embed_ms_per_avis": 10.76,
+      "predict_ms_per_avis": 0.0034,
+      "fit_seconds": 17.03,
+      "thresholds": {
+        "harcelement": 0.35,
+        "addiction": 0.6,
+        "image_corps": 0.35,
+        "algorithme": 0.35,
+        "contenus_choquants": 0.6,
+        "enfants": 0.45,
+        "desinformation": 0.2,
+        "sante_mentale": 0.25
+      },
+      "per_theme": {
+        "harcelement": {
+          "p": 0.9571,
+          "r": 0.9178,
+          "f1": 0.9371,
+          "tp": 67,
+          "fp": 3,
+          "fn": 6
+        },
+        "addiction": {
+          "p": 0.9833,
+          "r": 0.831,
+          "f1": 0.9008,
+          "tp": 59,
+          "fp": 1,
+          "fn": 12
+        },
+        "image_corps": {
+          "p": 0.9565,
+          "r": 0.9565,
+          "f1": 0.9565,
+          "tp": 66,
+          "fp": 3,
+          "fn": 3
+        },
+        "algorithme": {
+          "p": 0.9437,
+          "r": 0.9437,
+          "f1": 0.9437,
+          "tp": 67,
+          "fp": 4,
+          "fn": 4
+        },
+        "contenus_choquants": {
+          "p": 0.9423,
+          "r": 0.7538,
+          "f1": 0.8376,
+          "tp": 49,
+          "fp": 3,
+          "fn": 16
+        },
+        "enfants": {
+          "p": 0.9688,
+          "r": 0.9254,
+          "f1": 0.9466,
+          "tp": 62,
+          "fp": 2,
+          "fn": 5
+        },
+        "desinformation": {
+          "p": 0.9474,
+          "r": 0.9474,
+          "f1": 0.9474,
+          "tp": 54,
+          "fp": 3,
+          "fn": 3
+        },
+        "sante_mentale": {
+          "p": 0.8762,
+          "r": 0.9293,
+          "f1": 0.902,
+          "tp": 92,
+          "fp": 13,
+          "fn": 7
+        }
+      }
+    }
+  ],
+  "ollama": [
+    {
+      "model": "qwen3:4b",
+      "batch_size": 1,
+      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "reasoner": true,
+      "micro_P": 0.8032,
+      "micro_R": 0.8706,
+      "micro_F1": 0.8356,
+      "macro_F1": 0.843,
+      "exact_set": 0.5082,
+      "ms_per_avis": 525.1,
+      "cold_seconds": 160.16,
+      "eval_tokens": 8320,
+      "calls": 0,
+      "cache_hits": 305,
+      "errors": 0,
+      "per_theme": {
+        "harcelement": {
+          "p": 0.9787,
+          "r": 0.6301,
+          "f1": 0.7667,
+          "tp": 46,
+          "fp": 1,
+          "fn": 27
+        },
+        "addiction": {
+          "p": 0.9839,
+          "r": 0.8592,
+          "f1": 0.9173,
+          "tp": 61,
+          "fp": 1,
+          "fn": 10
+        },
+        "image_corps": {
+          "p": 0.8841,
+          "r": 0.8841,
+          "f1": 0.8841,
+          "tp": 61,
+          "fp": 8,
+          "fn": 8
+        },
+        "algorithme": {
+          "p": 0.8841,
+          "r": 0.8592,
+          "f1": 0.8714,
+          "tp": 61,
+          "fp": 8,
+          "fn": 10
+        },
+        "contenus_choquants": {
+          "p": 0.7209,
+          "r": 0.9538,
+          "f1": 0.8212,
+          "tp": 62,
+          "fp": 24,
+          "fn": 3
+        },
+        "enfants": {
+          "p": 0.7179,
+          "r": 0.8358,
+          "f1": 0.7724,
+          "tp": 56,
+          "fp": 22,
+          "fn": 11
+        },
+        "desinformation": {
+          "p": 0.9298,
+          "r": 0.9298,
+          "f1": 0.9298,
+          "tp": 53,
+          "fp": 4,
+          "fn": 4
+        },
+        "sante_mentale": {
+          "p": 0.6447,
+          "r": 0.9899,
+          "f1": 0.7809,
+          "tp": 98,
+          "fp": 54,
+          "fn": 1
+        }
+      }
+    },
+    {
+      "model": "ministral-3:latest",
+      "batch_size": 1,
+      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "reasoner": true,
+      "micro_P": 0.9337,
+      "micro_R": 0.9353,
+      "micro_F1": 0.9345,
+      "macro_F1": 0.934,
+      "exact_set": 0.7803,
+      "ms_per_avis": 663.5,
+      "cold_seconds": 202.36,
+      "eval_tokens": 5559,
+      "calls": 0,
+      "cache_hits": 305,
+      "errors": 0,
+      "per_theme": {
+        "harcelement": {
+          "p": 1.0,
+          "r": 0.9041,
+          "f1": 0.9496,
+          "tp": 66,
+          "fp": 0,
+          "fn": 7
+        },
+        "addiction": {
+          "p": 0.9103,
+          "r": 1.0,
+          "f1": 0.953,
+          "tp": 71,
+          "fp": 7,
+          "fn": 0
+        },
+        "image_corps": {
+          "p": 0.9718,
+          "r": 1.0,
+          "f1": 0.9857,
+          "tp": 69,
+          "fp": 2,
+          "fn": 0
+        },
+        "algorithme": {
+          "p": 0.9194,
+          "r": 0.8028,
+          "f1": 0.8571,
+          "tp": 57,
+          "fp": 5,
+          "fn": 14
+        },
+        "contenus_choquants": {
+          "p": 0.9143,
+          "r": 0.9846,
+          "f1": 0.9481,
+          "tp": 64,
+          "fp": 6,
+          "fn": 1
+        },
+        "enfants": {
+          "p": 0.8243,
+          "r": 0.9104,
+          "f1": 0.8652,
+          "tp": 61,
+          "fp": 13,
+          "fn": 6
+        },
+        "desinformation": {
+          "p": 0.9818,
+          "r": 0.9474,
+          "f1": 0.9643,
+          "tp": 54,
+          "fp": 1,
+          "fn": 3
+        },
+        "sante_mentale": {
+          "p": 0.9588,
+          "r": 0.9394,
+          "f1": 0.949,
+          "tp": 93,
+          "fp": 4,
+          "fn": 6
+        }
+      }
+    },
+    {
+      "model": "nemotron3:33b",
+      "batch_size": 1,
+      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "reasoner": true,
+      "micro_P": 0.8669,
+      "micro_R": 0.8881,
+      "micro_F1": 0.8774,
+      "macro_F1": 0.8726,
+      "exact_set": 0.6393,
+      "ms_per_avis": 788.6,
+      "cold_seconds": 240.51,
+      "eval_tokens": 6408,
+      "calls": 0,
+      "cache_hits": 305,
+      "errors": 0,
+      "per_theme": {
+        "harcelement": {
+          "p": 1.0,
+          "r": 0.9178,
+          "f1": 0.9571,
+          "tp": 67,
+          "fp": 0,
+          "fn": 6
+        },
+        "addiction": {
+          "p": 0.7113,
+          "r": 0.9718,
+          "f1": 0.8214,
+          "tp": 69,
+          "fp": 28,
+          "fn": 2
+        },
+        "image_corps": {
+          "p": 0.9828,
+          "r": 0.8261,
+          "f1": 0.8976,
+          "tp": 57,
+          "fp": 1,
+          "fn": 12
+        },
+        "algorithme": {
+          "p": 0.9756,
+          "r": 0.5634,
+          "f1": 0.7143,
+          "tp": 40,
+          "fp": 1,
+          "fn": 31
+        },
+        "contenus_choquants": {
+          "p": 0.7143,
+          "r": 1.0,
+          "f1": 0.8333,
+          "tp": 65,
+          "fp": 26,
+          "fn": 0
+        },
+        "enfants": {
+          "p": 0.875,
+          "r": 0.9403,
+          "f1": 0.9065,
+          "tp": 63,
+          "fp": 9,
+          "fn": 4
+        },
+        "desinformation": {
+          "p": 0.9434,
+          "r": 0.8772,
+          "f1": 0.9091,
+          "tp": 50,
+          "fp": 3,
+          "fn": 7
+        },
+        "sante_mentale": {
+          "p": 0.9065,
+          "r": 0.9798,
+          "f1": 0.9417,
+          "tp": 97,
+          "fp": 10,
+          "fn": 2
+        }
+      }
+    }
+  ]
+}
