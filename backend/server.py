@@ -496,6 +496,29 @@ def get_citations(
     return data
 
 
+@app.get("/avis/{avis_id}")
+def get_avis(
+    avis_id: str,
+    response: Response,
+    dataset: str | None = Query(None),
+) -> dict:
+    """SERVE-only : un avis EN ENTIER + ses portions verbatim surlignables.
+
+    Lit `analysis/avis.json` (précalculé, instantané) → `{id, text, spans}` où chaque
+    span `{start, end, cluster_id, color, theme_label}` est une portion extractive
+    (sous-chaîne exacte) colorée à la couleur de son macro-thème (= couleur des bulles).
+    Si l'analyse n'est pas prête → 202 `building` ; 404 si l'avis est inconnu.
+    """
+    ds = _resolve(dataset)
+    if analysis_store.state(ds.id) != analysis_store.READY:
+        return _not_ready_response(ds, response)
+    data = analysis_store.read_avis(ds.id, avis_id)
+    if data is None:
+        raise HTTPException(status_code=404,
+                            detail=f"avis inconnu: {avis_id!r} (dataset {ds.id!r}).")
+    return data
+
+
 class BuildBody(BaseModel):
     """Corps de `POST /build` — (re)déclenche le précalcul d'un dataset.
 

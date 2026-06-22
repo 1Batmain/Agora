@@ -34,6 +34,7 @@ from backend.analysis import (
     analysis_payload,
     build_theme_tree,
 )
+from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.recluster import load_cache
@@ -97,6 +98,11 @@ def build_analysis(
         payload = analysis_payload(tree)
         payload["status"] = store.READY
         store.write_analysis(dataset, payload)
+
+        # 2b) Provenance : texte de chaque avis + ses portions verbatim colorées par
+        #     macro (pour le surlignage côté front) → avis.json.
+        report("avis", "provenance des portions verbatim")
+        store.write_avis(dataset, build_avis_provenance(tree))
 
         # 3) Citations triées centroïde, par nœud (B4) — aucun LLM, rapide.
         total = len(node_ids)
