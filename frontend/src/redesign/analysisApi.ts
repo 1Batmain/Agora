@@ -2,14 +2,20 @@
  * Client for the redesigned-front endpoints (`/analysis`, `/insights`,
  * `/citations`) behind the vite `/api/*` proxy → :8010.
  *
- * Strategy: try the REAL backend first; on any failure (endpoint not built yet,
- * backend down) fall back to the seeded MOCK so the UI stays navigable. A build
- * flag `VITE_FORCE_MOCK=1` forces the mock path (dev without a backend). Each
- * call reports its `DataSource` so the shell can badge mock vs live.
+ * SERVE-only backend: these endpoints ONLY read the precomputed analysis cache.
+ * When an analysis isn't ready yet the backend answers `{status: building|absent|
+ * error}` (HTTP 202/503) while a BUILD runs in the background. This client maps
+ * that to a `building`/`error` `DataSource` so the shell shows "Analyse en cours…"
+ * (and polls), instead of silently swapping in mock data.
+ *
+ * Mock is ONLY used when `VITE_FORCE_MOCK=1` (isolated dev without a backend) —
+ * never as a hidden prod fallback. Each call reports its `DataSource` so the shell
+ * can badge live / build / mock / error.
  */
 import type {
   AnalysisPayload,
   Backend,
+  BuildProgress,
   Citation,
   DataSource,
   InsightLevel,
@@ -20,82 +26,95 @@ const FORCE_MOCK = import.meta.env.VITE_FORCE_MOCK === '1';
 const TIMEOUT_MS = 180000;
 
 export interface Sourced<T> {
-  data: T;
+  data: T | null;
   source: DataSource;
+  progress?: BuildProgress;
 }
 
-async function jsonFetch(url: string, init?: RequestInit): Promise<any> {
+interface RawResult {
+  status: number;
+  body: any;
+}
+
+/** Fetch + parse JSON, returning status code and body (never throws on non-2xx). */
+async function rawFetch(url: string, init?: RequestInit): Promise<RawResult> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
     const r = await fetch(url, { ...init, signal: ctrl.signal });
-    if (!r.ok) {
-      const detail = await r
-        .clone()
-        .json()
-        .then((b) => (b && typeof b.detail === 'string' ? b.detail : null))
-        .catch(() => null);
-      throw new Error(detail ? `HTTP ${r.status} — ${detail}` : `HTTP ${r.status}`);
-    }
-    return await r.json();
+    const body = await r.json().catch(() => null);
+    return { status: r.status, body };
   } finally {
     clearTimeout(t);
   }
 }
 
-/** POST /analysis {dataset, backend?} → spatial map (themes x,y + edges). */
+/** Map a not-ready backend body to a building/error source (no mock fallback). */
+function notReady<T>(body: any): Sourced<T> {
+  const status: string = (body && body.status) || 'building';
+  const source: DataSource = status === 'error' ? 'error' : 'building';
+  return { data: null, source, progress: (body as BuildProgress) ?? undefined };
+}
+
+/** POST /analysis {dataset} → spatial map (themes x,y + edges), or building/error. */
 export async function fetchAnalysis(
   dataset: string,
   backend: Backend = 'auto',
 ): Promise<Sourced<AnalysisPayload>> {
-  if (!FORCE_MOCK) {
-    try {
-      const data = (await jsonFetch('/api/analysis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dataset, backend }),
-      })) as AnalysisPayload;
-      if (data && Array.isArray(data.themes)) return { data, source: 'live' };
-    } catch {
-      /* fall through to mock */
+  if (FORCE_MOCK) return { data: mockAnalysis(dataset, backend), source: 'mock' };
+  try {
+    const { status, body } = await rawFetch('/api/analysis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataset, backend }),
+    });
+    if (status === 200 && body && Array.isArray(body.themes)) {
+      return { data: body as AnalysisPayload, source: 'live' };
     }
+    return notReady<AnalysisPayload>(body);
+  } catch (e) {
+    // Backend unreachable — surface an error, do NOT silently show mock.
+    return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
   }
-  return { data: mockAnalysis(dataset, backend), source: 'mock' };
 }
 
-/** GET /insights {dataset, level, id?} → { markdown }. */
+/** GET /insights {dataset, level, id?} → { markdown }, or building/error. */
 export async function fetchInsights(
   dataset: string,
   level: InsightLevel,
   themeId?: string,
   themeForMock?: import('./contract').SpatialTheme,
 ): Promise<Sourced<string>> {
-  if (!FORCE_MOCK) {
-    try {
-      const qs = new URLSearchParams({ dataset, level });
-      if (themeId) qs.set('id', themeId);
-      const data = await jsonFetch(`/api/insights?${qs}`);
-      if (data && typeof data.markdown === 'string') return { data: data.markdown, source: 'live' };
-    } catch {
-      /* fall through to mock */
-    }
+  if (FORCE_MOCK) {
+    return { data: mockInsights(dataset, level, themeForMock).markdown, source: 'mock' };
   }
-  return { data: mockInsights(dataset, level, themeForMock).markdown, source: 'mock' };
+  try {
+    const qs = new URLSearchParams({ dataset, level });
+    if (themeId) qs.set('id', themeId);
+    const { status, body } = await rawFetch(`/api/insights?${qs}`);
+    if (status === 200 && body && typeof body.markdown === 'string') {
+      return { data: body.markdown, source: 'live' };
+    }
+    return notReady<string>(body);
+  } catch (e) {
+    return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
+  }
 }
 
-/** GET /citations {dataset, theme_id} → Citation[] sorted by centroid distance. */
+/** GET /citations {dataset, theme_id} → Citation[] (centroid-sorted), or building/error. */
 export async function fetchCitations(
   dataset: string,
   themeId: string,
 ): Promise<Sourced<Citation[]>> {
-  if (!FORCE_MOCK) {
-    try {
-      const qs = new URLSearchParams({ dataset, theme_id: themeId });
-      const data = await jsonFetch(`/api/citations?${qs}`);
-      if (Array.isArray(data)) return { data: data as Citation[], source: 'live' };
-    } catch {
-      /* fall through to mock */
+  if (FORCE_MOCK) return { data: mockCitations(dataset, themeId), source: 'mock' };
+  try {
+    const qs = new URLSearchParams({ dataset, theme_id: themeId });
+    const { status, body } = await rawFetch(`/api/citations?${qs}`);
+    if (status === 200 && Array.isArray(body)) {
+      return { data: body as Citation[], source: 'live' };
     }
+    return notReady<Citation[]>(body);
+  } catch (e) {
+    return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
   }
-  return { data: mockCitations(dataset, themeId), source: 'mock' };
 }

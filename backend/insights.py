@@ -145,6 +145,60 @@ def _theme_messages(summary: str) -> list[dict]:
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
+def render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) -> dict:
+    """Génère (sans cache) la synthèse Markdown d'un niveau à partir d'un arbre déjà bâti.
+
+    Cœur PUR (résumé → prompt → LLM → `{markdown, meta}`) partagé entre le BUILD
+    (`backend.build_analysis`, qui persiste le résultat) et `insights_payload` (compat).
+    Repli gracieux sans clé Mistral (`meta.fallback=True`) — jamais un crash. `level`
+    vaut `global` (toute la consultation) ou `theme` (+`theme_id`).
+    """
+    t0 = perf_counter()
+    level = (level or "global").strip().lower()
+    if level not in ("global", "theme"):
+        raise ValueError(f"level inconnu: {level!r} (attendu: global | theme).")
+    synth_model = mistral_client.SYNTHESIS_MODEL
+
+    if level == "global":
+        summary = _global_summary(tree)
+        messages = _global_messages(summary)
+        target_label = "global"
+    else:
+        if not theme_id:
+            raise ValueError("level='theme' exige un `id` de thème.")
+        node = tree.get(theme_id)
+        if node is None:
+            raise ValueError(f"thème inconnu: {theme_id!r} (dataset {tree.dataset!r}).")
+        summary = _theme_summary(tree, node)
+        messages = _theme_messages(summary)
+        target_label = node.label
+
+    def _stamp(extra: dict) -> dict:
+        return {"dataset": tree.dataset, "level": level, "id": theme_id,
+                "target": target_label, "model": synth_model,
+                "took_ms": round((perf_counter() - t0) * 1000), **extra}
+
+    if not mistral_client.available():
+        return {
+            "markdown": "_Synthèse indisponible : clé Mistral manquante "
+                        "(`MISTRAL_API_KEY` non configurée)._",
+            "meta": _stamp({"fallback": True, "reason": "no_api_key"}),
+        }
+
+    try:
+        content = mistral_client.chat(
+            messages, model=synth_model, temperature=0.3, max_tokens=INSIGHTS_MAX_TOKENS,
+        )
+    except mistral_client.MistralError as exc:
+        return {
+            "markdown": f"_Synthèse indisponible : l'appel à Mistral a échoué "
+                        f"(statut {exc.status})._",
+            "meta": _stamp({"fallback": True, "reason": f"api_error:{exc.status}"}),
+        }
+
+    return {"markdown": _strip_code_fence(content), "meta": _stamp({"fallback": False})}
+
+
 def _strip_code_fence(text: str) -> str:
     t = (text or "").strip()
     if t.startswith("```"):

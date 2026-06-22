@@ -23,3 +23,11 @@ var/
 
 # datasets externes téléchargés (volumineux, non versionnés)
 data/datasets/
+
+# Artefacts de PRÉCALCUL (BUILD/SERVE) régénérés par backend.build_analysis :
+# analyse persistée + caches claims/embeddings de claims (volumineux, contiennent
+# de la sortie LLM). Les caches d'ENTRÉE (embeddings.npy/ideas.jsonl/meta.json)
+# restent versionnés pour la démo.
+backend/cache/*/analysis/
+backend/cache/*/claims.json
+backend/cache/*/claims_emb.npz

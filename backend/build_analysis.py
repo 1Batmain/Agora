@@ -1,0 +1,157 @@
+"""BUILD — précalcule et PERSISTE l'analyse complète d'un dataset (B1–B4 d'un coup).
+
+Pendant **BUILD** de la séparation BUILD/SERVE : le pipeline lourd
+(claims → embed → cluster → UMAP → hiérarchie variance-adaptative → insights LLM)
+tourne ICI, sur le backend, **dès que la donnée est dispo**, et écrit tout sous
+`backend/cache/<dataset>/analysis/` via `backend.analysis_store`. Les endpoints
+(`backend.server`) ne font alors plus que LIRE ces fichiers (instantané).
+
+Réutilise tel quel l'existant :
+  - `prepare_claims` (extraction LLM + embed, déjà CACHÉS sur disque) ;
+  - `build_theme_tree` + `analysis_payload` (B1+B2) ;
+  - `citations_for_theme` (B4) ;
+  - `render_insight` (B3, synthèse LLM par niveau).
+
+Idempotent : reprend les caches claims/embeddings existants ; un rebuild ne ré-extrait
+pas si le modèle n'a pas changé. Logue la progression et la reflète dans `status.json`.
+
+Usage CLI :
+    uv run python -m backend.build_analysis --dataset tiktok
+    uv run python -m backend.build_analysis --dataset tiktok --force   # rebuild propre
+"""
+
+from __future__ import annotations
+
+import argparse
+from time import perf_counter
+from types import SimpleNamespace
+from typing import Callable
+
+from backend import analysis_store as store
+from backend.analysis import (
+    DEFAULT_EMBEDDER,
+    DEFAULT_SEED,
+    analysis_payload,
+    build_theme_tree,
+)
+from backend.citations import citations_for_theme
+from backend.insights import render_insight
+from backend.recluster import load_cache
+
+ProgressFn = Callable[[str, str, int, int], None]
+
+
+def _log(msg: str) -> None:
+    print(f"[build_analysis] {msg}", flush=True)
+
+
+def load_dataset(dataset_id: str):
+    """Charge un dataset léger (id + ideas) depuis le cache disque — zéro torch.
+
+    Suffisant pour `prepare_claims`/`build_theme_tree`, qui n'ont besoin que de
+    `ds.id` et `ds.ideas` (les vecteurs d'avis ne servent pas aux claims).
+    """
+    ideas, _vecs, _weights = load_cache(dataset_id)
+    return SimpleNamespace(id=dataset_id, ideas=ideas)
+
+
+def build_analysis(
+    ds,
+    *,
+    backend: str | None = None,
+    model: str | None = None,
+    embedder: str = DEFAULT_EMBEDDER,
+    resolution: float = 1.0,
+    seed: int = DEFAULT_SEED,
+    on_progress: ProgressFn | None = None,
+) -> dict:
+    """Calcule TOUTE l'analyse d'un dataset et la persiste. Renvoie le status final.
+
+    `ds` porte `.id` et `.ideas` (un `_Dataset` du serveur ou un `load_dataset`). Écrit
+    `status.json` au fil de l'eau (phase + done/total) pour que le front montre une
+    progression. En cas d'échec, écrit `status=error` et relève l'exception (le manager
+    décide quoi faire). LLM = backend par défaut (API) sauf `backend=` explicite.
+    """
+    t0 = perf_counter()
+    dataset = ds.id
+
+    def report(phase: str, detail: str, done: int = 0, total: int = 0) -> None:
+        store.write_status(dataset, store.BUILDING, phase=phase, detail=detail,
+                           done=done, total=total)
+        _log(f"{dataset} · {phase} · {detail}" + (f" ({done}/{total})" if total else ""))
+        if on_progress:
+            on_progress(phase, detail, done, total)
+
+    try:
+        # 1) Claims (extraction LLM + embed, cachés) + arbre variance-adaptatif (B1+B2).
+        report("claims", "extraction + embeddings (caché si déjà fait)")
+        tree = build_theme_tree(
+            ds, backend=backend, model=model, embedder=embedder,
+            resolution=resolution, seed=seed,
+        )
+        node_ids = list(tree.order)
+        report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
+
+        # 2) Carte spatiale : UMAP des centroïdes + co-occurrence (B1) → analysis.json.
+        report("analysis", "projection UMAP 2D + co-occurrence")
+        payload = analysis_payload(tree)
+        payload["status"] = store.READY
+        store.write_analysis(dataset, payload)
+
+        # 3) Citations triées centroïde, par nœud (B4) — aucun LLM, rapide.
+        total = len(node_ids)
+        for i, nid in enumerate(node_ids, 1):
+            store.write_citations(dataset, nid, citations_for_theme(tree, nid))
+            if i == total or i % 25 == 0:
+                report("citations", "tri par proximité au centroïde", i, total)
+
+        # 4) Insights LLM par niveau (B3) : global + un par thème, persistés.
+        report("insights", "synthèse globale (LLM)", 0, total + 1)
+        store.write_insights(dataset, "global", None, render_insight(tree, "global"))
+        for i, nid in enumerate(node_ids, 1):
+            store.write_insights(dataset, "theme", nid,
+                                 render_insight(tree, "theme", nid))
+            report("insights", "synthèses par thème (LLM)", i, total)
+
+        took_s = round(perf_counter() - t0, 1)
+        final = store.write_status(
+            dataset, store.READY,
+            phase="done", detail=f"analyse prête en {took_s}s",
+            done=total, total=total, error=None,
+            n_themes=len(node_ids), n_macros=len(tree.macros),
+            backend_used=payload.get("backend_used"),
+            took_seconds=took_s,
+        )
+        _log(f"{dataset} · ✓ READY · {len(node_ids)} thèmes · {took_s}s")
+        return final
+    except Exception as exc:  # noqa: BLE001 — on persiste l'échec puis on relève
+        store.write_status(dataset, store.ERROR, phase="error",
+                           detail="échec du build", error=str(exc))
+        _log(f"{dataset} · ✗ ERROR · {exc}")
+        raise
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description="Précalcul + persistance de l'analyse complète d'un dataset.")
+    ap.add_argument("--dataset", required=True, help="id du dataset (sous backend/cache/)")
+    ap.add_argument("--backend", default=None, help="api (défaut) | mac | auto")
+    ap.add_argument("--model", default=None, help="modèle d'extraction (défaut du backend)")
+    ap.add_argument("--embedder", default=DEFAULT_EMBEDDER)
+    ap.add_argument("--resolution", type=float, default=1.0)
+    ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    ap.add_argument("--force", action="store_true", help="efface l'analyse persistée avant de rebuild")
+    args = ap.parse_args()
+
+    if args.force:
+        store.clear(args.dataset)
+        _log(f"{args.dataset} · analyse persistée effacée (--force)")
+
+    ds = load_dataset(args.dataset)
+    build_analysis(
+        ds, backend=args.backend, model=args.model, embedder=args.embedder,
+        resolution=args.resolution, seed=args.seed,
+    )
+
+
+if __name__ == "__main__":
+    main()
