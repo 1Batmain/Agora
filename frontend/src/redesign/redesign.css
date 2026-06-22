@@ -131,31 +131,6 @@ body {
   outline-offset: 1px;
 }
 
-/* ---------- tabs ---------- */
-.tabs {
-  display: flex;
-  gap: 4px;
-}
-.tab {
-  border: none;
-  background: transparent;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--grey-700);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  font-family: inherit;
-}
-.tab:hover {
-  background: var(--agora-soft);
-}
-.tab--active {
-  color: var(--agora);
-  border-bottom-color: var(--agora);
-  font-weight: 700;
-}
-
 /* ---------- 2-column body (canvas | resizable right panel) ---------- */
 .agora__body {
   display: flex;
@@ -278,6 +253,40 @@ body {
 .breadcrumb__sep {
   color: var(--grey-300);
   margin: 0 2px;
+}
+
+/* ---------- dataset intro (global view) ---------- */
+.dataset-intro {
+  padding: 14px 18px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+}
+.dataset-intro__desc .md {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--grey-1000);
+}
+.dataset-intro__desc .md h2 {
+  font-size: 17px;
+  margin: 0 0 6px;
+}
+.dataset-intro__desc .md p {
+  margin: 4px 0;
+}
+.dataset-intro__context {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--grey-700);
+}
+.dataset-intro__label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--grey-500);
+  margin-bottom: 2px;
 }
 
 /* ---------- tools panel ---------- */
@@ -638,6 +647,47 @@ body {
   color: var(--grey-500);
   font-size: 14px;
   padding: 20px 0;
+}
+
+/* ---------- cluster synthesis note (above the testimonials) ---------- */
+.cluster-note {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  background: var(--agora-soft);
+  border: 1px solid var(--agora-soft2);
+  border-left: 3px solid var(--agora);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.cluster-note__tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--agora-active);
+  margin-bottom: 4px;
+}
+.cluster-note__hook {
+  margin: 2px 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--grey-1000);
+}
+.cluster-note__body .md {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.cluster-note__body .md p {
+  margin: 4px 0;
+}
+.cluster-note__conv {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  color: var(--grey-700);
+}
+.cluster-note__conv strong {
+  color: var(--agora-active);
 }
 
 /* ---------- citations ---------- */

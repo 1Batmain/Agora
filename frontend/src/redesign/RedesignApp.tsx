@@ -14,6 +14,7 @@ import { SpatialMap } from './SpatialMap';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
+import { Markdown } from './Markdown';
 import { themeCaption } from './labels';
 
 /** Human badge label per data source (live / build / mock / error). */
@@ -75,6 +76,7 @@ export default function RedesignApp() {
   const currentParentId = path.length ? path[path.length - 1].id : null;
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
   const showCitations = selected != null && !selected.has_children;
+  const atGlobal = path.length === 0 && !selected;
 
   // `poll=true` is a background re-check while the backend is still BUILDING:
   // it must not flash the busy spinner nor reset the user's drill path/selection.
@@ -270,6 +272,25 @@ export default function RedesignApp() {
             ))}
           </nav>
 
+          {/* GLOBAL view intro: a description of the consultation + the context in
+              which contributions were collected (graceful when the backend omits
+              both). Hidden once the user drills or selects a leaf. */}
+          {atGlobal && (analysis?.dataset_description || analysis?.dataset_context) && (
+            <section className="dataset-intro" aria-label="Présentation de la consultation">
+              {analysis?.dataset_description && (
+                <div className="dataset-intro__desc">
+                  <Markdown source={analysis.dataset_description} />
+                </div>
+              )}
+              {analysis?.dataset_context && (
+                <p className="dataset-intro__context">
+                  <span className="dataset-intro__label">Contexte de collecte</span>
+                  {analysis.dataset_context}
+                </p>
+              )}
+            </section>
+          )}
+
           <div className="agora__canvas">
             {busy ? (
               <div className="agora__loading">
@@ -324,6 +345,9 @@ export default function RedesignApp() {
               dataset={dataset}
               themeLabel={themeCaption(selected)}
               themeColor={selected.color}
+              hook={selected.hook}
+              description={selected.description}
+              convergence={selected.convergence}
               citations={citations}
               loading={citationsLoading}
               source={citationsSource}
