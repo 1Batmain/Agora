@@ -40,7 +40,13 @@ from backend.recluster import (
     load_cache,
     recluster,
 )
+from backend.claims_endpoint import (
+    DEFAULT_MIN_CHARS as CLAIMS_MIN_CHARS,
+    OllamaUnavailable,
+    claims_payload,
+)
 from backend.synthesize import synthesize
+from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_MODEL
 from pipeline.cluster.naming_methods import MISTRAL_MODEL
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
@@ -321,6 +327,44 @@ def do_recluster(body: ReclusterBody) -> dict:
         umap_n_neighbors=body.umap_n_neighbors,
         dataset=ds.id,
     )
+
+
+class ClaimsBody(BaseModel):
+    """Corps de `/claims` — thèmes ÉMERGENTS (pipeline ouvert avis→claims→cluster).
+
+    `dataset` sélectionne le cache (défaut rétro-compat). `resolution` règle la
+    granularité Leiden (rejouable sans ré-extraire). `model`/`embedder` sont
+    optionnels (défauts souverains) ; changer de `model` invalide le cache claims.
+    """
+    dataset: str | None = None
+    resolution: float = Field(1.0, gt=0.0)
+    model: str | None = None
+    embedder: str | None = None
+    min_chars: int = Field(CLAIMS_MIN_CHARS, ge=0)
+
+
+@app.post("/claims")
+def do_claims(body: ClaimsBody) -> dict:
+    """Carte des thèmes émergents : extraction LLM cachée → embed caché → clustering.
+
+    1er run : extrait les claims (Mac via `AGORA_OLLAMA_URL`) puis embed — lent.
+    Runs suivants (même dataset/modèle), y compris autre `resolution` : rejoue le
+    clustering depuis le cache, SANS toucher au Mac. 503 si le Mac est nécessaire
+    mais injoignable ; 500 en cas d'erreur de calcul.
+    """
+    ds = _resolve(body.dataset)
+    try:
+        return claims_payload(
+            ds,
+            resolution=body.resolution,
+            model=body.model or DEFAULT_MODEL,
+            embedder=body.embedder or DEFAULT_EMBEDDER,
+            min_chars=body.min_chars,
+        )
+    except OllamaUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
 
 class SynthesizeBody(BaseModel):
