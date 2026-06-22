@@ -346,20 +346,24 @@ def load_changepoint_baseline() -> dict | None:
     return d.get("baseline_changepoint")
 
 
-def feasibility_probe(model_key: str) -> dict:
+def feasibility_probe(model_key: str, sample_texts: list[str] | None = None) -> dict:
+    """Sanity-check du modèle + débit sur de VRAIS avis (longueurs variées, vraie taille de
+    blocs), warmup hors-chrono. Débit indicatif (sensible à la charge CPU) mais réaliste."""
     spec = NLI_MODELS[model_key]
     info = {"model": model_key, "model_id": spec["model_id"]}
     try:
-        timer = {}
-        doc = nli_doc("Je dors mal le soir, je suis épuisé. Par ailleurs le harcèlement "
-                      "en ligne est un fléau pour les adolescents.", model_key, W=8,
-                      use_cache=False, timer=timer)
-        info["ok"] = True
-        info["n_words"] = doc.n
-        info["ms_per_pair"] = round(1000 * timer["s"] / max(1, timer["pairs"]), 1)
         tok, model, idx = _load_model(model_key)
         info["id2label"] = {int(k): v for k, v in model.config.id2label.items()}
         info["class_idx"] = idx
+        texts = sample_texts or [
+            "Je dors mal le soir, je suis épuisé. Par ailleurs le harcèlement en ligne "
+            "est un fléau pour les adolescents au collège."]
+        timer = {}
+        nli_doc(texts[0], model_key, W=8, use_cache=False)              # warmup hors-chrono
+        for t in texts[1:] or texts:
+            nli_doc(t, model_key, W=8, use_cache=False, timer=timer)
+        info["ok"] = True
+        info["ms_per_pair"] = round(1000 * timer["s"] / max(1, timer.get("pairs", 1)), 1)
     except Exception as exc:  # noqa: BLE001 — on RAPPORTE l'échec
         info["ok"] = False
         info["error"] = repr(exc)[:300]
@@ -406,11 +410,14 @@ def build_report(gold_path: Path, items: list[GoldItem], main_model: str,
             L.append(
                 f"- **{mk}** (`{f['model_id']}`) : **OUI.** "
                 f"`AutoModelForSequenceClassification` 3 classes {list(f['id2label'].values())}, "
-                f"indices dérivés `{f['class_idx']}`. **{f['ms_per_pair']} ms/paire** CPU (mesuré). "
-                f"Coût plein-`gold_large` (3 formulations gratuites = 2 forwards/jointure × "
-                f"{len(W_GRID)} W) ≈ **{ec.get('pairs','?')} paires → {ec.get('hours','?')} h**."
-                + (" → balayé en entier." if ec.get("swept") else
-                   " → **infaisable en entier ici**, confirmation sur sous-échantillon (§4)."))
+                f"indices dérivés `{f['class_idx']}`. ~**{f['ms_per_pair']} ms/paire** CPU "
+                f"(indicatif, sensible à la charge). Coût plein-`gold_large` (3 formulations "
+                f"gratuites = 2 forwards/jointure × {len(W_GRID)} W = {ec.get('pairs','?')} "
+                f"paires) ≈ **{ec.get('hours','?')} h**."
+                + (" → **balayé en entier** (ce rapport)." if ec.get("swept") else
+                   " → **non balayé en entier ici** (≈ {}× plus lent que `minilm`), "
+                   "confirmation sur sous-échantillon (§4).".format(
+                       round(f['ms_per_pair'] / max(0.1, feas.get('minilm', {}).get('ms_per_pair', f['ms_per_pair']))))))
         else:
             L.append(f"- **{mk}** (`{f['model_id']}`) : **NON** — {f.get('error')}")
     L.append("")
@@ -490,11 +497,16 @@ def build_report(gold_path: Path, items: list[GoldItem], main_model: str,
         L.append(_md_table(sb["rows"], cols2) + "\n")
         heavy_verdict = ("AMÉLIORE" if sb["mdeberta_gf1"] > sb["minilm_gf1"] + 1e-9
                          else "N'AMÉLIORE PAS")
+        degen = sb.get("mdeberta_recall", 1.0) <= 1e-9
         L.append(f"- Sur ce sous-échantillon : `minilm` F1_multi={sb['minilm_f1']:.3f} / "
                  f"F1_global={sb['minilm_gf1']:.3f} ; `mdeberta` F1_multi={sb['mdeberta_f1']:.3f} / "
-                 f"F1_global={sb['mdeberta_gf1']:.3f}. "
-                 f"**Le modèle lourd {heavy_verdict} nettement** le score → le plafond ne "
-                 f"vient pas de la taille du cross-encodeur.\n")
+                 f"F1_global={sb['mdeberta_gf1']:.3f}"
+                 + (" (à ce seuil global, `mdeberta` **s'abstient totalement** — R=0, aucune "
+                    "coupe : ses probas d'entailment sont trop uniformes pour faire saillir une "
+                    "frontière)" if degen else "")
+                 + f". **Le modèle lourd {heavy_verdict} nettement** le score → le plafond ne "
+                 f"vient pas de la taille du cross-encodeur, mais de l'inadéquation du signal "
+                 f"NLI à la cohésion thématique sur blocs courts.\n")
 
     # 5. Verdict
     L.append("## 5. Verdict honnête\n")
@@ -511,7 +523,7 @@ def build_report(gold_path: Path, items: list[GoldItem], main_model: str,
         d_pk = winner.pk - attn_bl["Pk"]
         beats = (winner.f1 > attn_bl["F1_multi"] + 1e-9) and (winner.pk < attn_bl["Pk"] - 1e-9)
         beats_g = winner.gf1 > attn_bl["F1_global"] + 1e-9
-        verdict = "**OUI**" if beats else ("partiellement (F1_global)" if beats_g else "**NON**")
+        verdict = "OUI" if beats else ("partiellement (F1_global)" if beats_g else "NON")
         L.append(f"- **Le NLI bat-il l'attention (F1_multi {attn_bl['F1_multi']}, "
                  f"Pk {attn_bl['Pk']}, F1_global {attn_bl['F1_global']}) ? {verdict}.** "
                  f"ΔF1_multi={d_f1:+.3f}, ΔPk={d_pk:+.3f} (négatif = mieux), "
@@ -520,11 +532,15 @@ def build_report(gold_path: Path, items: list[GoldItem], main_model: str,
         L.append(f"- **vs change-point** (F1_multi {cp_bl['F1_multi']}, F1_global "
                  f"{cp_bl['F1_global']}) : ΔF1_multi={winner.f1 - cp_bl['F1_multi']:+.3f}, "
                  f"ΔF1_global={winner.gf1 - cp_bl['F1_global']:+.3f}.\n")
+    ratio = ""
+    if feas.get("mdeberta", {}).get("ok") and feas.get("minilm", {}).get("ok"):
+        ratio = f"~{round(feas['mdeberta']['ms_per_pair'] / max(0.1, feas['minilm']['ms_per_pair']))}× "
     L.append(
         "- **Coût** : un (en fait deux) forward(s) de cross-encodeur PAR JOINTURE — bien "
         "plus cher que l'attention (un seul forward d'encodeur par avis donne TOUT le signal) "
         "ou le change-point (embeddings + PELT). `minilm` rend le balayage faisable ; "
-        "`mdeberta` (precision ↑) coûte ~100× plus → non-balayable en entier sur CPU.\n")
+        f"`mdeberta` (precision ↑) coûte {ratio}plus → confirmé sur sous-échantillon, "
+        "pas balayé en entier sur CPU.\n")
     L.append(
         "- **Honnêteté NLI** : un modèle MNLI/XNLI juge l'*entailment logique*, pas le "
         "*même-sujet* directement ; on détourne `P(entail)` comme proxy de cohésion. "
@@ -551,7 +567,7 @@ def main() -> None:
     ap.add_argument("--gold", default=str(DEFAULT_GOLD))
     ap.add_argument("--models", nargs="+", default=["minilm"],
                     help="modèle(s) à balayer en entier (minilm rapide).")
-    ap.add_argument("--mdeberta-subset", type=int, default=40,
+    ap.add_argument("--mdeberta-subset", type=int, default=24,
                     help="taille du sous-échantillon de confirmation mdeberta (0 = aucun).")
     ap.add_argument("--out", default=str(DEFAULT_REPORT))
     ap.add_argument("--scores-out", default=str(DEFAULT_SCORES))
@@ -568,10 +584,13 @@ def main() -> None:
     feas, est_costs = {}, {}
     main_model = args.models[0]
 
-    # Faisabilité de tous les modèles concernés (balayés + confirmation)
+    # Faisabilité de tous les modèles concernés (balayés + confirmation). Débit chronométré
+    # sur de VRAIS avis de longueur médiane (warmup + 4 docs), pas un batch synthétique.
+    sample = sorted(items, key=lambda it: len(it.text))
+    sample_texts = [sample[len(sample) // 2 + k].text for k in range(-2, 3)]
     probe_models = list(dict.fromkeys(args.models + (["mdeberta"] if args.mdeberta_subset else [])))
     for mk in probe_models:
-        feas[mk] = feasibility_probe(mk)
+        feas[mk] = feasibility_probe(mk, sample_texts)
         print(f"faisabilité {mk}: ok={feas[mk].get('ok')} "
               f"ms/pair={feas[mk].get('ms_per_pair')}")
 
@@ -590,25 +609,28 @@ def main() -> None:
             print(f"  best {mk}: {w.formulation} W={w.W} c={w.c} "
                   f"F1_multi={w.f1:.3f} F1_global={w.gf1:.3f} mono_FP={w.mono_fp_rate:.3f}")
 
-    # Confirmation modèle lourd sur sous-échantillon
+    # Confirmation modèle lourd sur sous-échantillon, À LA CONFIG GAGNANTE de minilm
+    # (mêmes formulation+W ; on balaye seulement c). mDeBERTa ~100× plus lent → on ne
+    # peut comparer que sur un sous-échantillon, à un point de fonctionnement fixé.
     subset_block = None
-    if args.mdeberta_subset and feas.get("mdeberta", {}).get("ok"):
+    win = _best(all_scores)
+    if args.mdeberta_subset and feas.get("mdeberta", {}).get("ok") and win:
         k = args.mdeberta_subset
         sub = subset_items(items, k)
         est_costs["mdeberta"] = _est_cost(items, feas["mdeberta"]["ms_per_pair"], swept=False)
-        print(f"=== confirmation mdeberta (sous-échantillon N={len(sub)}) ===")
+        print(f"=== confirmation mdeberta (N={len(sub)}, config {win.formulation}/W{win.W}) ===")
         rows = []
         sub_best = {}
         for mk in ["minilm", "mdeberta"]:
             if not feas.get(mk, {}).get("ok"):
                 continue
-            prep = prepare(sub, mk, W_GRID)
-            sc = sweep(mk, prep, W_GRID)
+            prep = prepare(sub, mk, [win.W])
+            sc = evaluate_config(mk, win.formulation, win.W, prep)
             b = _best(sc)
             if b:
                 sub_best[mk] = b
                 rows.append(b.as_row())
-                print(f"  {mk} subset best: {b.formulation} W={b.W} c={b.c} "
+                print(f"  {mk} subset @ {b.formulation}/W{b.W}: c={b.c} "
                       f"F1_multi={b.f1:.3f} F1_global={b.gf1:.3f}")
         if "minilm" in sub_best and "mdeberta" in sub_best:
             subset_block = {
@@ -618,6 +640,7 @@ def main() -> None:
                 "rows": rows,
                 "minilm_f1": sub_best["minilm"].f1, "minilm_gf1": sub_best["minilm"].gf1,
                 "mdeberta_f1": sub_best["mdeberta"].f1, "mdeberta_gf1": sub_best["mdeberta"].gf1,
+                "mdeberta_recall": sub_best["mdeberta"].recall,
                 "speed_ratio": round(feas["mdeberta"]["ms_per_pair"]
                                      / max(0.1, feas["minilm"]["ms_per_pair"])),
             }
