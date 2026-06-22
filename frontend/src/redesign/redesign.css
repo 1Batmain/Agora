@@ -564,6 +564,39 @@ body {
   font-size: 12px;
   color: var(--grey-500);
 }
+.citations__item--open {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.citations__item--open:hover {
+  background: var(--agora-soft2);
+}
+.citations__open {
+  color: var(--agora);
+  font-weight: 600;
+}
+
+/* ---------- avis detail (provenance, highlighted spans) ---------- */
+.avisdetail {
+  display: flex;
+  flex-direction: column;
+}
+.avisdetail__meta {
+  font-size: 12px;
+  color: var(--grey-500);
+  margin: 8px 0 12px;
+}
+.avisdetail__text {
+  font-size: 15px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.avisdetail__hl {
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
 
 /* ---------- spinner ---------- */
 .spinner {
