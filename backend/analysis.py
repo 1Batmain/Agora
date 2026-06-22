@@ -61,6 +61,9 @@ class ThemeNode:
     n_avis: int
     label: str = ""
     title: str = ""                 # titre court LLM (3-7 mots) précalculé au build
+    hook: str = ""                  # accroche LLM (phrase d'accroche) précalculée au build
+    description: str = ""           # description LLM markdown (relaie les mots-clés)
+    convergence: float = 0.0        # accord intra-cluster = consensus_eff (shrinkage pop.)
     keywords: list[str] = field(default_factory=list)
     representative_claims: list[str] = field(default_factory=list)
     children: list[str] = field(default_factory=list)
@@ -337,6 +340,38 @@ def _assign_colors(nodes: dict[str, ThemeNode], macros: list[str]) -> None:
         node.color = color_for(rank.get(macro_of(node, nodes).id, 0), n)
 
 
+def _shrinkage_k(pops: list[int]) -> float:
+    """Force de shrinkage bayésien = population MÉDIANE d'un macro-thème (≥1).
+
+    Source UNIQUE du `k` partagé par l'indice de consensus global, la convergence
+    intra-cluster et la teinte de la carte → une seule définition de « combien
+    d'évidence il faut pour qu'un accord compte ».
+    """
+    k = len(pops)
+    if k == 0:
+        return 1.0
+    s = sorted(pops)
+    mid = k // 2
+    median = (s[mid - 1] + s[mid]) / 2 if k % 2 == 0 else s[mid]
+    return max(1.0, float(median))
+
+
+def _assign_convergence(nodes: dict[str, ThemeNode], macros: list[str]) -> None:
+    """Convergence intra-cluster de chaque nœud = consensus_eff (shrinkage population).
+
+    consensus_eff = (N / (N + k)) · consensus, prior 0, k = population macro médiane
+    (cf. `_shrinkage_k`) — MÊME formule que l'indice de consensus global et que la
+    teinte de la carte. Un thème à peu d'avis ne peut pas afficher un accord fort
+    (évidence insuffisante) ; normalisé [0..1].
+    """
+    if not macros:
+        return
+    kk = _shrinkage_k([max(0, nodes[m].n_avis) for m in macros])
+    for node in nodes.values():
+        n = max(0, node.n_avis)
+        node.convergence = round((n / (n + kk)) * node.consensus, 4) if n else 0.0
+
+
 def _representatives(node: ThemeNode, vecs: np.ndarray, claim_texts: list[str],
                      k: int = N_REPRESENTATIVE) -> list[str]:
     """Claims les plus proches du centroïde (médoïdes), sans quasi-doublon littéral."""
@@ -510,6 +545,7 @@ def build_theme_tree(
 
         _name_nodes(nodes, prepared.claim_texts)
         _assign_colors(nodes, macros)
+        _assign_convergence(nodes, macros)
         for node in nodes.values():
             node.representative_claims = _representatives(node, vecs, prepared.claim_texts)
 
@@ -578,6 +614,57 @@ def _gini(values: list[float]) -> float:
     return max(0.0, min(1.0, cum / (n * total)))
 
 
+def _cumulative_convergence(prepared) -> tuple[float, dict]:
+    """Convergence CUMULÉE : alignement directionnel global du nuage d'avis [0..1].
+
+    Mesure DÉRIVÉE et INDÉPENDANTE du nombre de clusters/sujets — c'est l'intention de
+    Bob : « tout le monde tire dans la même direction » même si les sujets sont
+    éparpillés. On calcule la **longueur du vecteur résultant moyen** (mean resultant
+    length des statistiques directionnelles) : pour chaque avis on agrège ses claims en
+    une direction unitaire uᵢ (somme L2-renormalisée), puis
+
+        R = ‖ Σ wᵢ uᵢ ‖ / Σ wᵢ ∈ [0..1]
+
+    pondérée par le poids social wᵢ de l'avis. R→1 si tous les avis pointent vers un
+    MÊME axe sémantique dominant ; R→0 si les directions se compensent. Aucun cluster
+    n'intervient : c'est une propriété brute du nuage d'embeddings.
+
+    HONNÊTEMENT, ce que ça capte : la concentration DIRECTIONNELLE / THÉMATIQUE du
+    corpus, PAS la « stance » pour/contre. Les embeddings encodent surtout le SUJET
+    (de quoi on parle), pas la polarité de l'opinion. Un R élevé signifie donc « le
+    débat converge vers un même pôle thématique » (corpus mono-sujet), pas forcément
+    « les gens sont d'accord entre eux ». Sur un corpus multi-sujets bien séparé, R
+    chute mécaniquement. À lire comme un signal de direction commune, pas d'unanimité.
+    """
+    vecs = prepared.claim_vecs
+    owner = prepared.claim_owner
+    weights = prepared.claim_weight
+    if len(vecs) == 0:
+        return 0.0, {}
+    # Direction unitaire par avis = somme de ses claims, renormalisée. Le poids social
+    # est hérité (identique sur les claims d'un avis) → on prend celui du 1er claim vu.
+    avis_sum: dict[int, np.ndarray] = {}
+    avis_w: dict[int, float] = {}
+    for i, a in enumerate(owner):
+        cur = avis_sum.get(a)
+        avis_sum[a] = vecs[i].copy() if cur is None else cur + vecs[i]
+        avis_w.setdefault(a, float(weights[i]))
+    dirs, ws = [], []
+    for a, s in avis_sum.items():
+        nrm = float(np.linalg.norm(s))
+        if nrm > 0:
+            dirs.append(s / nrm)
+            ws.append(avis_w[a])
+    if not dirs:
+        return 0.0, {}
+    D = np.asarray(dirs)
+    w = np.asarray(ws)
+    resultant = float(np.linalg.norm((D * w[:, None]).sum(axis=0)) / w.sum())
+    return max(0.0, min(1.0, resultant)), {
+        "measure": "mean_resultant_length", "basis": "avis", "n_avis": len(dirs),
+    }
+
+
 def _dataset_stats(tree: ThemeTree) -> dict:
     """Indices globaux dérivés du dataset, prêts pour l'UI (valeur + libellé + explication).
 
@@ -590,6 +677,7 @@ def _dataset_stats(tree: ThemeTree) -> dict:
     k = len(macros)
 
     totals = {
+        "participants": total_avis,     # = n_avis : « nombre de participants » (exposé clair)
         "n_avis": total_avis,
         "n_claims": sum(m.n_claims for m in macros),
         "n_themes": k,
@@ -601,9 +689,10 @@ def _dataset_stats(tree: ThemeTree) -> dict:
 
     shares = [p / total_avis for p in pops]
 
-    # 1) DIVERSITÉ — équitabilité de Pielou = entropie de Shannon normalisée par ln(K).
-    #    0 = un thème écrase tout (débat monolithique) ; 1 = voix réparties également.
-    #    `effective_themes` = exp(H) : « nombre effectif de sujets » (Hill q=1).
+    # 1) EFFUSION (variété des avis) — équitabilité de Pielou = entropie de Shannon
+    #    normalisée par ln(K). 0 = un thème écrase tout (débat monolithique) ; 1 = voix
+    #    réparties également entre sujets. `effective_themes` = exp(H) : « nombre
+    #    effectif de sujets » (Hill q=1). Affinage de l'ancienne « diversité ».
     nz = [s for s in shares if s > 0]
     h = -sum(s * np.log(s) for s in nz)
     evenness = float(h / np.log(k)) if k > 1 else 0.0
@@ -614,15 +703,17 @@ def _dataset_stats(tree: ThemeTree) -> dict:
     top_share = max(shares)
 
     # 3) CONSENSUS GLOBAL — moyenne pondérée-population du consensus_eff (shrinkage
-    #    bayésien, MÊME formule que la carte : prior bas, k = population médiane d'un
-    #    thème). Un thème à peu d'avis ne peut pas peser comme un fort accord.
-    sorted_pops = sorted(pops)
-    mid = k // 2
-    median_pop = (sorted_pops[mid - 1] + sorted_pops[mid]) / 2 if k % 2 == 0 else sorted_pops[mid]
-    kk = max(1.0, float(median_pop))            # force de shrinkage ~ taille typique
+    #    bayésien, MÊME formule que la carte/convergence intra : prior bas, k = population
+    #    médiane). Un thème à peu d'avis ne peut pas peser comme un fort accord.
+    kk = _shrinkage_k(pops)                     # force de shrinkage ~ taille typique
     eff = [(p / (p + kk)) * m.consensus for p, m in zip(pops, macros)]  # PRIOR = 0
     consensus_global = sum(p * e for p, e in zip(pops, eff)) / total_avis
     consensus_global = float(max(0.0, min(1.0, consensus_global)))
+
+    # 3bis) CONVERGENCE CUMULÉE — alignement directionnel du nuage d'avis, INDÉPENDANT
+    #       du nombre de clusters (cf. `_cumulative_convergence`). Élevée = tout le débat
+    #       tire vers un même axe sémantique, même si les sujets sont éparpillés.
+    conv_cumul, conv_detail = _cumulative_convergence(tree.prepared)
 
     # 4) STRUCTURATION — part des voix dans des thèmes SUBDIVISÉS (à facettes). Lit la
     #    hiérarchie variance-adaptative : 0 = débat plat (sujets simples) ; 1 = gros
@@ -632,15 +723,27 @@ def _dataset_stats(tree: ThemeTree) -> dict:
 
     indices = [
         {
-            "key": "diversite",
-            "label": "Diversité thématique",
+            "key": "effusion",
+            "label": "Effusion (variété des avis)",
             "value": round(evenness, 4),
             "explanation": (
-                f"Le débat se répartit sur ~{eff_themes:.1f} sujets effectifs "
-                f"(sur {k} thèmes). Proche de 1 = voix équilibrées entre sujets ; "
-                "proche de 0 = un sujet domine."
+                f"Les avis se répartissent sur ~{eff_themes:.1f} sujets effectifs "
+                f"(sur {k} thèmes). Proche de 1 = parole foisonnante, voix équilibrées "
+                "entre sujets ; proche de 0 = un sujet domine tout."
             ),
             "detail": {"effective_themes": round(eff_themes, 2), "n_themes": k},
+        },
+        {
+            "key": "convergence_cumulee",
+            "label": "Convergence cumulée",
+            "value": round(conv_cumul, 4),
+            "explanation": (
+                "À quel point TOUS les avis tirent dans une même direction sémantique, "
+                "indépendamment du nombre de sujets. Proche de 1 = le débat converge "
+                "vers un même pôle ; proche de 0 = directions dispersées. Mesure la "
+                "concentration thématique (de quoi on parle), pas l'accord pour/contre."
+            ),
+            "detail": conv_detail,
         },
         {
             "key": "concentration",
@@ -701,12 +804,15 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
             "id": n.id,
             "label": n.label,
             "title": n.title or n.label,    # titre court LLM (repli label si non calculé)
+            "hook": n.hook,                 # accroche LLM (phrase d'accroche)
+            "description": n.description,   # description LLM markdown (relaie les mots-clés)
             "x": n.x,
             "y": n.y,
             "n_avis": n.n_avis,
             "n_claims": n.n_claims,
             "weight": n.weight,
             "consensus": n.consensus,
+            "convergence": n.convergence,   # accord intra-cluster (consensus_eff pondéré pop.)
             "dispersion": n.dispersion,
             "parent_id": n.parent_id,
             "has_children": n.has_children,
