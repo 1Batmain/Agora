@@ -326,10 +326,6 @@ body {
 .map__svg:active {
   cursor: grabbing;
 }
-.map__edge {
-  stroke: var(--agora-soft2);
-  opacity: 0.7;
-}
 .bubble {
   cursor: pointer;
   transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -402,11 +398,12 @@ body {
   border-radius: 50%;
   display: inline-block;
 }
-.dot--low {
-  background: #f6d9b8;
+/* Legend swatches: same hue, low vs high population-weighted consensus. */
+.dot--pale {
+  background: hsl(28, 22%, 84%);
 }
-.dot--high {
-  background: #c85312;
+.dot--vivid {
+  background: hsl(28, 78%, 54%);
 }
 .map__tooltip {
   position: absolute;
