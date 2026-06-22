@@ -784,6 +784,24 @@ def _dataset_stats(tree: ThemeTree) -> dict:
     return {"totals": totals, "indices": indices}
 
 
+def _dataset_context(dataset_id: str) -> str:
+    """Intro lisible du dataset (description + contexte de collecte) pour la vue globale.
+
+    Générique : lit le champ optionnel ``context`` du descripteur d'ingestion
+    ``pipeline/ingest/descriptors/<id>.json`` (repli sur ``label``, sinon vide).
+    Aucun texte corpus-spécifique dans le code — tout vient du descripteur.
+    """
+    import json
+    from pathlib import Path
+    desc = (Path(__file__).resolve().parent.parent
+            / "pipeline" / "ingest" / "descriptors" / f"{dataset_id}.json")
+    try:
+        d = json.loads(desc.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    return (d.get("context") or d.get("label") or "").strip()
+
+
 def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
     """Sérialise l'arbre au format du contrat : themes(x,y) + edges + params + backend_used.
 
@@ -862,5 +880,6 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         "edges": edges,
         "params": params,
         "dataset_stats": _dataset_stats(tree),   # indices globaux dérivés (UI : coup d'œil)
+        "dataset_context": _dataset_context(tree.dataset),  # intro vue globale (descripteur)
         "backend_used": prep.backend.name,
     }
