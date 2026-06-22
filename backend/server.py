@@ -46,7 +46,7 @@ from backend.claims_endpoint import (
     claims_payload,
 )
 from backend.synthesize import synthesize
-from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_MODEL
+from pipeline.claims.pipeline import DEFAULT_EMBEDDER
 from pipeline.cluster.naming_methods import MISTRAL_MODEL
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.dedup import dedup_near
@@ -338,6 +338,7 @@ class ClaimsBody(BaseModel):
     """
     dataset: str | None = None
     resolution: float = Field(1.0, gt=0.0)
+    backend: str | None = None      # api (défaut) | mac | auto ; sinon AGORA_CLAIMS_BACKEND
     model: str | None = None
     embedder: str | None = None
     min_chars: int = Field(CLAIMS_MIN_CHARS, ge=0)
@@ -347,17 +348,19 @@ class ClaimsBody(BaseModel):
 def do_claims(body: ClaimsBody) -> dict:
     """Carte des thèmes émergents : extraction LLM cachée → embed caché → clustering.
 
-    1er run : extrait les claims (Mac via `AGORA_OLLAMA_URL`) puis embed — lent.
-    Runs suivants (même dataset/modèle), y compris autre `resolution` : rejoue le
-    clustering depuis le cache, SANS toucher au Mac. 503 si le Mac est nécessaire
-    mais injoignable ; 500 en cas d'erreur de calcul.
+    1er run : extrait les claims via le backend (`api` API Mistral par DÉFAUT, `mac`
+    Ollama souverain, `auto` Mac→repli API) puis embed — lent. Runs suivants (même
+    dataset/modèle), y compris autre `resolution` : rejoue le clustering depuis le cache,
+    SANS ré-extraire. La réponse expose `meta.backend`/`meta.sovereign`. 503 si une
+    extraction est nécessaire mais le backend est inutilisable ; 500 sinon.
     """
     ds = _resolve(body.dataset)
     try:
         return claims_payload(
             ds,
             resolution=body.resolution,
-            model=body.model or DEFAULT_MODEL,
+            backend=body.backend,            # None → AGORA_CLAIMS_BACKEND (défaut api)
+            model=body.model,                # None → modèle par défaut du backend
             embedder=body.embedder or DEFAULT_EMBEDDER,
             min_chars=body.min_chars,
         )
