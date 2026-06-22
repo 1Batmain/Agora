@@ -56,6 +56,7 @@ SEED = 0
 # registre de prod (e5 EXIGE `passage: `, bge-m3 n'en veut AUCUN).
 ATTN_MODELS = {
     "e5-base": {"model_id": "intfloat/multilingual-e5-base", "doc_prefix": "passage: "},
+    "e5-large": {"model_id": "intfloat/multilingual-e5-large", "doc_prefix": "passage: "},
     "bge-m3": {"model_id": "BAAI/bge-m3", "doc_prefix": ""},
 }
 
