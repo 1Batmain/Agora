@@ -1,5 +1,8 @@
 logs/
 __pycache__/
 *.pyc
+# Caches dérivés du pipeline claims (extraction LLM + embeddings) — régénérables.
+cache/*/claims.json
+cache/*/claims_emb.npz
 # Clé Mistral locale (lue par pipeline.cluster.mistral_client) — jamais commit.
 .env
