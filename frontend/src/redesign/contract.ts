@@ -15,6 +15,13 @@ export type Backend = 'api' | 'mac' | 'auto';
 export interface SpatialTheme {
   id: string;
   label: string;
+  /**
+   * Optional LLM-generated human title — the preferred bubble caption when
+   * present. Falls back to `label` (the keyword stub) until the backend emits it.
+   */
+  title?: string;
+  /** Optional keyword stubs (legacy caption / hover detail). */
+  keywords?: string[];
   x: number; // UMAP-2D position (semantic proximity)
   y: number;
   n_avis: number;
@@ -34,12 +41,34 @@ export interface SpatialEdge {
   weight: number;
 }
 
+/**
+ * One headline indicator about the whole dataset (a card/gauge in the dashboard
+ * under the map). The backend may emit these as objects (preferred) or, more
+ * loosely, as a flat `{key: number}` record — the dashboard normalises both.
+ */
+export interface DatasetStat {
+  key: string;
+  label: string; // human-readable name ("Diversité des opinions")
+  value: number; // raw value
+  /** 0..1 fill for a gauge bar; omit → rendered as a plain count card. */
+  gauge?: number;
+  /** preformatted value for display ("72 %", "1 234"); else `value` is shown. */
+  display?: string;
+  /** one-line explanation of what the indicator means. */
+  hint?: string;
+}
+
+/** Dataset-level indicators. Either a ready list, or a loose record of numbers. */
+export type DatasetStats = DatasetStat[] | Record<string, number>;
+
 /** `POST /analysis` → the whole spatial map (full adaptive tree + edges). */
 export interface AnalysisPayload {
   themes: SpatialTheme[];
   edges: SpatialEdge[];
   params: Record<string, unknown>;
   backend_used: Backend;
+  /** Optional headline indicators for the dashboard under the map (graceful if absent). */
+  dataset_stats?: DatasetStats;
 }
 
 /** `GET /insights` → LLM Markdown synthesis for the current zoom level. */
