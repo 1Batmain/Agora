@@ -460,6 +460,136 @@ def get_or_build_tree(
     return tree
 
 
+# --------------------------------------------------------------------------- #
+# Indices GLOBAUX du dataset — « capter le débat d'un coup d'œil »
+# --------------------------------------------------------------------------- #
+# Quatre index DÉRIVÉS, normalisés [0..1], calculés sur les thèmes MACRO (le niveau
+# que la carte montre par défaut). Choisis pour être ORTHOGONAUX : deux lisent la
+# distribution des TAILLES (diversité = équilibre, concentration = domination), un
+# lit l'ACCORD interne (consensus, pondéré-évidence comme la carte), un lit la
+# STRUCTURE hiérarchique (facettes). Tout est dérivé des données — aucun seuil de
+# corpus, aucun magic-number arbitraire.
+def _gini(values: list[float]) -> float:
+    """Coefficient de Gini d'une distribution positive (0 = égal, → 1 = concentré).
+
+    Formulation par différences absolues moyennes, normalisée par 2·n·moyenne.
+    Renvoie 0.0 sur cas dégénéré (≤1 valeur ou somme nulle).
+    """
+    n = len(values)
+    if n < 2:
+        return 0.0
+    total = sum(values)
+    if total <= 0:
+        return 0.0
+    s = sorted(values)
+    # Σ (2i − n − 1) xᵢ  /  (n · Σx)   (i de 1..n) — identité de la moyenne des écarts.
+    cum = sum((2 * (i + 1) - n - 1) * x for i, x in enumerate(s))
+    return max(0.0, min(1.0, cum / (n * total)))
+
+
+def _dataset_stats(tree: ThemeTree) -> dict:
+    """Indices globaux dérivés du dataset, prêts pour l'UI (valeur + libellé + explication).
+
+    Calculés sur les thèmes MACRO. Chaque index porte `value` ∈ [0..1], un `label`
+    court et une `explanation` d'une phrase, plus un `detail` chiffré lisible.
+    """
+    macros = [tree.nodes[mid] for mid in tree.macros]
+    pops = [max(0, m.n_avis) for m in macros]
+    total_avis = sum(pops)
+    k = len(macros)
+
+    totals = {
+        "n_avis": total_avis,
+        "n_claims": sum(m.n_claims for m in macros),
+        "n_themes": k,
+        "n_leaves": sum(1 for n in tree.nodes.values() if not n.children),
+        "max_depth": max((n.depth for n in tree.nodes.values()), default=0),
+    }
+    if k == 0 or total_avis == 0:
+        return {"totals": totals, "indices": []}
+
+    shares = [p / total_avis for p in pops]
+
+    # 1) DIVERSITÉ — équitabilité de Pielou = entropie de Shannon normalisée par ln(K).
+    #    0 = un thème écrase tout (débat monolithique) ; 1 = voix réparties également.
+    #    `effective_themes` = exp(H) : « nombre effectif de sujets » (Hill q=1).
+    nz = [s for s in shares if s > 0]
+    h = -sum(s * np.log(s) for s in nz)
+    evenness = float(h / np.log(k)) if k > 1 else 0.0
+    eff_themes = float(np.exp(h))
+
+    # 2) CONCENTRATION — part des voix dans le thème dominant (lecture immédiate).
+    #    0 = aucune domination ; 1 = tout dans un seul thème. Gini en détail.
+    top_share = max(shares)
+
+    # 3) CONSENSUS GLOBAL — moyenne pondérée-population du consensus_eff (shrinkage
+    #    bayésien, MÊME formule que la carte : prior bas, k = population médiane d'un
+    #    thème). Un thème à peu d'avis ne peut pas peser comme un fort accord.
+    sorted_pops = sorted(pops)
+    mid = k // 2
+    median_pop = (sorted_pops[mid - 1] + sorted_pops[mid]) / 2 if k % 2 == 0 else sorted_pops[mid]
+    kk = max(1.0, float(median_pop))            # force de shrinkage ~ taille typique
+    eff = [(p / (p + kk)) * m.consensus for p, m in zip(pops, macros)]  # PRIOR = 0
+    consensus_global = sum(p * e for p, e in zip(pops, eff)) / total_avis
+    consensus_global = float(max(0.0, min(1.0, consensus_global)))
+
+    # 4) STRUCTURATION — part des voix dans des thèmes SUBDIVISÉS (à facettes). Lit la
+    #    hiérarchie variance-adaptative : 0 = débat plat (sujets simples) ; 1 = gros
+    #    thèmes tous multi-facettes. Dimension orthogonale aux tailles et à l'accord.
+    structured_avis = sum(p for p, m in zip(pops, macros) if m.children)
+    structuration = structured_avis / total_avis
+
+    indices = [
+        {
+            "key": "diversite",
+            "label": "Diversité thématique",
+            "value": round(evenness, 4),
+            "explanation": (
+                f"Le débat se répartit sur ~{eff_themes:.1f} sujets effectifs "
+                f"(sur {k} thèmes). Proche de 1 = voix équilibrées entre sujets ; "
+                "proche de 0 = un sujet domine."
+            ),
+            "detail": {"effective_themes": round(eff_themes, 2), "n_themes": k},
+        },
+        {
+            "key": "concentration",
+            "label": "Concentration",
+            "value": round(top_share, 4),
+            "explanation": (
+                f"Le thème dominant capte {top_share * 100:.0f} % des voix. "
+                "Proche de 1 = débat accaparé par un sujet ; proche de 0 = dispersé."
+            ),
+            "detail": {"top_share": round(top_share, 4), "gini": round(_gini(pops), 4)},
+        },
+        {
+            "key": "consensus",
+            "label": "Consensus global",
+            "value": round(consensus_global, 4),
+            "explanation": (
+                "Accord moyen au sein des thèmes, pondéré par la population "
+                "(les petits thèmes pèsent moins). Proche de 1 = forte cohésion ; "
+                "proche de 0 = avis éclatés."
+            ),
+            "detail": {"shrinkage_k": round(kk, 2), "prior": 0.0},
+        },
+        {
+            "key": "structuration",
+            "label": "Structuration",
+            "value": round(structuration, 4),
+            "explanation": (
+                f"{structuration * 100:.0f} % des voix relèvent de thèmes à facettes "
+                "(subdivisés en sous-thèmes). Proche de 1 = sujets riches/complexes ; "
+                "0 = débat plat."
+            ),
+            "detail": {
+                "structured_macros": sum(1 for m in macros if m.children),
+                "n_macros": k,
+            },
+        },
+    ]
+    return {"totals": totals, "indices": indices}
+
+
 def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
     """Sérialise l'arbre au format du contrat : themes(x,y) + edges + params + backend_used.
 
@@ -533,5 +663,6 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         "themes": themes,
         "edges": edges,
         "params": params,
+        "dataset_stats": _dataset_stats(tree),   # indices globaux dérivés (UI : coup d'œil)
         "backend_used": prep.backend.name,
     }
