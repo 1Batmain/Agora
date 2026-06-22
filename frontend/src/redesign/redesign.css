@@ -672,6 +672,55 @@ body {
   color: inherit;
   border-radius: 2px;
   padding: 0 1px;
+  position: relative;
+  cursor: help;
+}
+/* Inline cluster tag, revealed on hover over a highlight (the rest of the time
+   the cluster is conveyed by colour + the legend above). */
+.avisdetail__hltag {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 4px;
+  z-index: 6;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 7px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+.avisdetail__hl:hover .avisdetail__hltag {
+  display: inline-block;
+}
+/* per-avis cluster legend */
+.avisdetail__legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.avisdetail__legenditem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--grey-700);
+}
+.avisdetail__chip {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 /* ---------- spinner ---------- */

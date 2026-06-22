@@ -28,21 +28,36 @@ export function AvisDetail({
         <>
           <p className="avisdetail__meta">
             {avis.spans.length} portion{avis.spans.length > 1 ? 's' : ''} extraite
-            {avis.spans.length > 1 ? 's' : ''} · surlignées à la couleur de leur thème
+            {avis.spans.length > 1 ? 's' : ''} · chaque surlignage est rattaché à son thème
           </p>
+          {/* Cluster legend: the distinct themes highlighted in THIS avis, each in
+              its cluster colour → every highlight below maps to a named cluster. */}
+          {clustersOf(avis.spans).length > 0 && (
+            <ul className="avisdetail__legend">
+              {clustersOf(avis.spans).map((c) => (
+                <li key={c.key} className="avisdetail__legenditem">
+                  <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
+                  {c.label}
+                </li>
+              ))}
+            </ul>
+          )}
           <article className="avisdetail__text">
             {segments(avis.text, avis.spans).map((seg, i) =>
               seg.span ? (
                 <mark
                   key={i}
                   className="avisdetail__hl"
-                  title={seg.span.theme_label}
+                  title={`Thème : ${seg.span.theme_label}`}
                   style={{
                     backgroundColor: tint(seg.span.color),
                     borderBottom: `2px solid ${seg.span.color}`,
                   }}
                 >
                   {seg.text}
+                  <span className="avisdetail__hltag" style={{ color: seg.span.color }}>
+                    {seg.span.theme_label}
+                  </span>
                 </mark>
               ) : (
                 <span key={i}>{seg.text}</span>
@@ -60,6 +75,23 @@ export function AvisDetail({
 interface Seg {
   text: string;
   span: AvisSpan | null;
+}
+
+interface ClusterRef {
+  key: string;
+  label: string;
+  color: string;
+}
+
+/** Distinct clusters present in this avis (for the legend), in first-seen order. */
+function clustersOf(spans: AvisSpan[]): ClusterRef[] {
+  const seen = new Map<string, ClusterRef>();
+  for (const s of spans) {
+    const key = s.cluster_id ?? s.theme_label;
+    if (!key || seen.has(key)) continue;
+    seen.set(key, { key, label: s.theme_label, color: s.color });
+  }
+  return [...seen.values()];
 }
 
 /**
