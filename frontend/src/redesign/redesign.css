@@ -158,6 +158,23 @@ body {
   font-size: 13px;
   margin-top: 12px;
 }
+.agora__building {
+  text-align: center;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.agora__building strong {
+  color: var(--grey-1000);
+  font-size: 16px;
+}
+.agora__building p {
+  font-size: 13px;
+  color: var(--grey-500);
+}
+.agora__build-error {
+  text-align: center;
+  color: #ce0500;
+}
 
 /* ---------- breadcrumb ---------- */
 .breadcrumb {
@@ -427,6 +444,14 @@ body {
 .badge--live {
   background: #d7f5e3;
   color: #18753c;
+}
+.badge--building {
+  background: #e8edff;
+  color: #0063cb;
+}
+.badge--error {
+  background: #ffe9e9;
+  color: #ce0500;
 }
 
 /* markdown */

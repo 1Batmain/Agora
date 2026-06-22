@@ -55,5 +55,21 @@ export interface Citation {
   weight: number;
 }
 
-/** Where the data came from — surfaced in the UI so it's clear mock vs live. */
-export type DataSource = 'live' | 'mock';
+/**
+ * Where the data came from — surfaced in the UI so it's clear what's on screen:
+ *  - `live`     : real precomputed analysis served from the backend cache;
+ *  - `building` : backend is still precomputing (BUILD in background) — show "Analyse en cours…";
+ *  - `error`    : backend reachable but the build failed / endpoint errored;
+ *  - `mock`     : seeded demo data (ONLY under VITE_FORCE_MOCK, never a silent prod fallback).
+ */
+export type DataSource = 'live' | 'mock' | 'building' | 'error';
+
+/** Progress of a backend BUILD, surfaced while an analysis isn't ready yet. */
+export interface BuildProgress {
+  status: string; // building | absent | error | ready
+  phase?: string | null;
+  detail?: string | null;
+  done?: number | null;
+  total?: number | null;
+  error?: string | null;
+}
