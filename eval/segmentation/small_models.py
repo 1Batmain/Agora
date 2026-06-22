@@ -1,11 +1,12 @@
 """Benchmark PETITS MODÈLES pour le VRAI but : multi-label de thèmes par avis.
 
+    AGORA_OLLAMA_URL="http://macbat…ts.net:11434" \
     uv run --extra contender --extra embed-contender \
         python -m eval.segmentation.small_models
         [--gold eval/segmentation/gold_large.json]
         [--embedders nomic-v2,e5-small]
-        [--ollama llama3.2:3b,qwen3:4b]
-        [--folds 5] [--seed 0] [--theme-batch 6]
+        [--ollama qwen3:4b,ministral-3:latest,nemotron3:33b]
+        [--folds 5] [--seed 0] [--theme-batch 1]
         [--no-classifier] [--no-ollama]
         [--out eval/segmentation/small_models_report.md]
 
@@ -23,10 +24,13 @@ Deux familles de candidats, mêmes métriques que Mistral (micro/macro-F1, exact
   pli, aucune fuite). Probas hors-pli (OOF) → seuil PAR CLASSE calé pour max-F1.
   Inférence quasi-nulle (embed + produit matriciel).
 
-**Candidat 2 — petit LLM LOCAL via Ollama** (filet souverain) : `llama3.2:3b`
-  (non-raisonneur) et `qwen3:4b` (raisonneur — pensée désactivée via `think:false`).
-  MÊME prompt fermé que Mistral (réutilise `llm_seg.theme_sys/theme_prompt`),
-  choix fermé sur les 8 thèmes. ms/avis CPU = clé de scalabilité sur le VPS.
+**Candidat 2 — LLM LOCAL via Ollama, sur le Mac de Bob** (filet souverain) :
+  endpoint via `AGORA_OLLAMA_URL` (Mac Apple Silicon, Tailscale — bien plus rapide
+  que l'Ollama CPU du VPS). Modèles réels du Mac (cf. `/api/tags`) : `qwen3:4b`
+  (raisonneur), `ministral-3` (petit dense), `nemotron3:33b` (gros — option
+  souveraine haute qualité, peut viser Mistral 0.928). MÊME prompt fermé que Mistral
+  (réutilise `llm_seg.theme_prompt`), choix fermé sur les 8 thèmes. Warm-up par
+  modèle (sort le cold-start), puis ms/avis mesuré **À CHAUD**.
 
 Honnêteté : le classifieur est entraîné sur NOS 8 thèmes — en prod la taxo est
 par-consultation (il faudrait un échantillon labellisé par consultation). Les
@@ -43,6 +47,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import time
 from dataclasses import dataclass, field
@@ -65,7 +70,11 @@ DEFAULT_GOLD = HERE / "gold_large.json"
 DEFAULT_REPORT = HERE / "small_models_report.md"
 DEFAULT_SCORES = HERE / "small_models_scores.json"
 OLLAMA_CACHE = HERE / ".cache" / "ollama"
-OLLAMA_URL = "http://localhost:11434/api/chat"
+# Endpoint Ollama : Mac de Bob via Tailscale (rapide, GPU Apple Silicon) si
+# AGORA_OLLAMA_URL est exporté, sinon Ollama local du VPS (CPU, lent). Le cache
+# est clé PAR endpoint → la latence d'un host ne contamine pas l'autre.
+OLLAMA_BASE = os.environ.get("AGORA_OLLAMA_URL", "http://localhost:11434").rstrip("/")
+OLLAMA_URL = OLLAMA_BASE + "/api/chat"
 
 # Référence Mistral-small (llm_report.md — NON relancée, citée).
 MISTRAL = {"micro_f1": 0.928, "macro_f1": 0.9346, "exact_set": 0.73,
@@ -237,16 +246,54 @@ _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 
 def _ollama_key(model: str, messages: list[dict]) -> Path:
-    blob = json.dumps([model, messages], ensure_ascii=False, sort_keys=True)
+    # Clé par (endpoint, modèle, messages) : un host lent ne pollue pas la latence
+    # mémorisée d'un host rapide pour le même modèle.
+    blob = json.dumps([OLLAMA_BASE, model, messages], ensure_ascii=False, sort_keys=True)
     h = hashlib.sha256(blob.encode("utf-8")).hexdigest()[:32]
     return OLLAMA_CACHE / f"{h}.json"
 
 
-def ollama_chat(messages: list[dict], *, model: str, stats: OllamaStats,
-                timeout: float = 600.0) -> str | None:
-    """Chat Ollama (JSON mode, temp 0, pensée désactivée) avec cache disque."""
+def _ollama_post(messages: list[dict], *, model: str, think: bool | None,
+                 timeout: float) -> dict:
+    """POST /api/chat. `think=None` → on n'envoie pas le champ (modèle non-raisonneur)."""
     import httpx
 
+    payload = {
+        "model": model, "messages": messages, "stream": False,
+        "format": "json",
+        "options": {"temperature": 0.0, "num_ctx": 4096},
+    }
+    if think is not None:
+        payload["think"] = think
+    r = httpx.post(OLLAMA_URL, json=payload, timeout=timeout)
+    r.raise_for_status()
+    return r.json()
+
+
+def ollama_warmup(model: str, *, timeout: float = 600.0) -> tuple[bool, bool | None]:
+    """Charge le modèle sur le serveur (sort le cold-start du timing).
+
+    Renvoie (ok, think) où `think` est le réglage de pensée retenu : `False` si le
+    modèle accepte `think:false` (raisonneur), `None` s'il ne le supporte pas
+    (non-raisonneur → champ omis). On mesure ENSUITE la latence à chaud.
+    """
+    msg = [{"role": "user", "content": 'Réponds en JSON: {"ok": true}'}]
+    for think in (False, None):
+        try:
+            _ollama_post(msg, model=model, think=think, timeout=timeout)
+            return True, think
+        except Exception as exc:  # noqa: BLE001
+            # 400 « does not support thinking » → on retombe sur think=None.
+            if think is False:
+                continue
+            print(f"  ⚠️ warmup {model}: {type(exc).__name__}")
+            return False, None
+    return False, None
+
+
+def ollama_chat(messages: list[dict], *, model: str, think: bool | None,
+                stats: OllamaStats, timeout: float = 600.0) -> str | None:
+    """Chat Ollama (JSON mode, temp 0) avec cache disque clé par endpoint."""
     OLLAMA_CACHE.mkdir(parents=True, exist_ok=True)
     cpath = _ollama_key(model, messages)
     if cpath.exists():
@@ -257,16 +304,9 @@ def ollama_chat(messages: list[dict], *, model: str, stats: OllamaStats,
         stats.eval_tokens += int(rec.get("eval_count", 0))
         return rec["content"]
 
-    payload = {
-        "model": model, "messages": messages, "stream": False,
-        "format": "json", "think": False,
-        "options": {"temperature": 0.0, "num_ctx": 4096},
-    }
     t0 = time.monotonic()
     try:
-        r = httpx.post(OLLAMA_URL, json=payload, timeout=timeout)
-        r.raise_for_status()
-        data = r.json()
+        data = _ollama_post(messages, model=model, think=think, timeout=timeout)
     except Exception as exc:  # noqa: BLE001 — on rapporte, on ne masque pas
         stats.errors += 1
         print(f"  ⚠️ ollama[{model}]: {type(exc).__name__}")
@@ -286,12 +326,13 @@ def ollama_chat(messages: list[dict], *, model: str, stats: OllamaStats,
 
 
 def run_ollama_themes(prepared: list[Prepared], taxonomy: dict[str, str], model: str,
-                      batch_size: int, stats: OllamaStats) -> dict[str, set[str]]:
+                      batch_size: int, stats: OllamaStats,
+                      think: bool | None) -> dict[str, set[str]]:
     valid = set(taxonomy)
     hyps: dict[str, set[str]] = {}
     batches = [prepared[i:i + batch_size] for i in range(0, len(prepared), batch_size)]
     for bi, batch in enumerate(batches):
-        raw = ollama_chat(theme_prompt(batch, taxonomy), model=model, stats=stats)
+        raw = ollama_chat(theme_prompt(batch, taxonomy), model=model, think=think, stats=stats)
         obj = parse_json_object(raw or "")
         if (bi + 1) % 20 == 0 or bi == 0 or obj is None:
             print(f"  [{model}] thèmes lot {bi + 1}/{len(batches)} ({len(batch)} avis)"
@@ -322,18 +363,30 @@ class OllamaResult:
     ms_per_avis: float
     stats: OllamaStats
     batch_size: int
+    endpoint: str
+    reasoner: bool          # think:false accepté & envoyé (pensée coupée)
+    ok: bool = True
 
 
 def run_ollama(prepared: list[Prepared], taxonomy: dict[str, str], labels: list[str],
                model: str, batch_size: int) -> OllamaResult:
     stats = OllamaStats()
-    hyps = run_ollama_themes(prepared, taxonomy, model, batch_size, stats)
+    print(f"  [{model}] warm-up ({OLLAMA_BASE})…")
+    ok, think = ollama_warmup(model)
+    if not ok:
+        print(f"  ⚠️ [{model}] injoignable / non chargé — ignoré")
+        return OllamaResult(model=model, score=ThemeScore(), ms_per_avis=0.0,
+                            stats=stats, batch_size=batch_size, endpoint=OLLAMA_BASE,
+                            reasoner=False, ok=False)
+    hyps = run_ollama_themes(prepared, taxonomy, model, batch_size, stats, think)
     sc = score_themes(prepared, hyps, labels)
     ms = 1000.0 * stats.cold_seconds / len(prepared) if prepared else 0.0
     print(f"  [{model}] micro-F1={sc.micro_f1:.3f} macro-F1={sc.macro_f1:.3f} "
-          f"exact={sc.exact_set:.3f} {ms:.0f}ms/avis ({stats.errors} err)")
+          f"exact={sc.exact_set:.3f} {ms:.0f}ms/avis à chaud "
+          f"(pensée coupée={think is False}, {stats.errors} err)")
     return OllamaResult(model=model, score=sc, ms_per_avis=round(ms, 1),
-                        stats=stats, batch_size=batch_size)
+                        stats=stats, batch_size=batch_size, endpoint=OLLAMA_BASE,
+                        reasoner=(think is False), ok=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -379,20 +432,23 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
             "exact-set": _pct(s.exact_set),
             "ms/avis": f"{r.embed_ms_per_avis + r.predict_ms_per_avis:.1f}",
             "local": "**oui**", "données sortent": "non"})
+    endpoint = olm[0].endpoint if olm else OLLAMA_BASE
     for r in olm:
         s = r.score
         rows.append({
-            "Modèle": f"{r.model} (Ollama)", "type": "LLM local",
+            "Modèle": f"{r.model}", "type": "LLM local (Mac)",
             "micro-F1": round(s.micro_f1, 3), "macro-F1": round(s.macro_f1, 3),
             "exact-set": _pct(s.exact_set), "ms/avis": f"{r.ms_per_avis:.0f}",
             "local": "**oui**", "données sortent": "non"})
     cols = ["Modèle", "type", "micro-F1", "macro-F1", "exact-set", "ms/avis",
             "local", "données sortent"]
     L.append(_md_table(rows, cols) + "\n")
-    L.append("*\\* Mistral ms/avis = ~70s cumulés / 305 avis ≈ 230 ms/avis amorti "
-             "(batché 12/appel, réseau UE) — cf. `llm_report.md`. ms/avis classifieur = "
-             "embedding (dominant) + tête (quasi-nul). ms/avis Ollama = latence à froid "
-             "cumulée / N (CPU partagé, indicatif).*\n")
+    L.append(f"*\\* Mistral ms/avis = ~70s cumulés / 305 avis ≈ 230 ms/avis amorti "
+             f"(batché 12/appel, réseau UE) — cf. `llm_report.md`. ms/avis classifieur = "
+             f"embedding (dominant) + tête (quasi-nul), 100% sur le VPS. ms/avis Ollama = "
+             f"latence **À CHAUD** (warm-up préalable, modèle déjà chargé) cumulée / N, "
+             f"1 avis/appel, sur le Mac de Bob (`{endpoint}`, Apple Silicon via Tailscale ; "
+             f"souverain — la donnée ne sort pas du réseau privé).*\n")
 
     # --- Classifieur : détail ---
     if clf:
@@ -427,22 +483,27 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
 
     # --- Ollama : détail ---
     if olm:
-        L.append("## Candidat 2 — petit LLM local via Ollama (filet souverain)\n")
-        L.append(f"MÊME prompt fermé que Mistral (`llm_seg.theme_prompt`), choix fermé sur "
-                 f"les {len(labels)} thèmes, JSON mode, température 0, pensée désactivée "
-                 f"(`think:false`). {theme_batch} avis/appel. Cache disque "
-                 f"`.cache/ollama/` (relances gratuites, coût à froid mémorisé).\n")
+        L.append("## Candidat 2 — petit LLM local via Ollama, sur le Mac (filet souverain)\n")
+        L.append(f"Serveur **Ollama du Mac de Bob** (`{endpoint}`, Apple Silicon via "
+                 f"Tailscale) — bien plus rapide que l'Ollama CPU du VPS. MÊME prompt fermé "
+                 f"que Mistral (`llm_seg.theme_prompt`), choix fermé sur les {len(labels)} "
+                 f"thèmes, JSON mode, température 0. Les raisonneurs ont leur pensée coupée "
+                 f"(`think:false`) ; un **warm-up** charge chaque modèle AVANT le timing → "
+                 f"latence mesurée **à chaud**. {theme_batch} avis/appel (mapping non "
+                 f"ambigu + vraie latence/avis). Cache disque `.cache/ollama/` clé par "
+                 f"endpoint (relances gratuites, la latence d'un host ne pollue pas l'autre).\n")
         orows = []
         for r in olm:
             s = r.score
             orows.append({
-                "modèle": r.model,
+                "modèle": r.model, "pensée coupée": "oui" if r.reasoner else "non",
                 "micro-P": round(s.micro_p, 3), "micro-R": round(s.micro_r, 3),
                 "micro-F1": round(s.micro_f1, 3), "macro-F1": round(s.macro_f1, 3),
-                "exact-set": _pct(s.exact_set), "ms/avis": f"{r.ms_per_avis:.0f}",
+                "exact-set": _pct(s.exact_set), "ms/avis (chaud)": f"{r.ms_per_avis:.0f}",
                 "tokens générés": r.stats.eval_tokens, "erreurs": r.stats.errors})
-        L.append(_md_table(orows, ["modèle", "micro-P", "micro-R", "micro-F1", "macro-F1",
-                                   "exact-set", "ms/avis", "tokens générés", "erreurs"]) + "\n")
+        L.append(_md_table(orows, ["modèle", "pensée coupée", "micro-P", "micro-R", "micro-F1",
+                                   "macro-F1", "exact-set", "ms/avis (chaud)",
+                                   "tokens générés", "erreurs"]) + "\n")
         for r in olm:
             s = r.score
             per = s.per_theme
@@ -481,16 +542,18 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
         "C'est le compromis : très bon marché à l'inférence, mais coût d'amorçage par "
         "consultation.\n")
     L.append(
-        "- **Les LLM locaux (Ollama)** ne demandent AUCUN entraînement (zéro-shot, "
-        "taxo passée dans le prompt → générique par consultation comme Mistral), mais "
-        "la latence CPU (~×10–×100 le classifieur) est le prix de la scalabilité sur VPS "
-        "partagé. Le raisonneur `qwen3:4b` (pensée coupée) vs le non-raisonneur "
-        "`llama3.2:3b` : voir l'écart qualité/vitesse ci-dessus.\n")
+        "- **Les LLM locaux du Mac (Ollama)** ne demandent AUCUN entraînement (zéro-shot, "
+        "taxo passée dans le prompt → générique par consultation, comme Mistral) et "
+        "tournent sur une machine **souveraine** (Apple Silicon, le réseau privé Tailscale ; "
+        "la donnée ne sort jamais vers une API). C'est l'axe « souveraineté haute qualité » : "
+        "le petit `qwen3:4b`/`ministral-3` pour le débit, le gros `nemotron3:33b` pour "
+        "viser la qualité de Mistral en restant chez soi. Le prix est la latence (voir "
+        "ms/avis à chaud) et la dépendance au Mac allumé.\n")
     L.append(
         "- **Honnêteté** : seuils du classifieur calés sur les probas OOF servant aussi "
-        "au score (léger optimisme, pas de fuite d'entraînement). Vitesse Ollama "
-        "indicative (CPU partagé, 1 requête à la fois). Mistral non relancé (chiffres "
-        "`llm_report.md`).\n")
+        "au score (léger optimisme, pas de fuite d'entraînement). Latence Ollama mesurée "
+        "à chaud (warm-up) mais sur un Mac partagé, 1 requête à la fois (pas de batching/"
+        "parallélisme) → indicative. Mistral non relancé (chiffres `llm_report.md`).\n")
     return "\n".join(L)
 
 
@@ -499,7 +562,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Bench petits modèles — multi-label thèmes.")
     ap.add_argument("--gold", default=str(DEFAULT_GOLD))
     ap.add_argument("--embedders", default="nomic-v2,e5-small")
-    ap.add_argument("--ollama", default="llama3.2:3b,qwen3:4b")
+    # Modèles réels du Mac de Bob (cf. /api/tags) : qwen3:4b (raisonneur),
+    # ministral-3 (petit dense), nemotron3:33b (gros — option souveraine HQ).
+    ap.add_argument("--ollama", default="qwen3:4b,ministral-3:latest,nemotron3:33b")
     ap.add_argument("--folds", type=int, default=5)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--theme-batch", type=int, default=1,
@@ -537,9 +602,11 @@ def main() -> None:
 
     olm: list[OllamaResult] = []
     if not args.no_ollama:
+        print(f"CANDIDAT 2 — Ollama @ {OLLAMA_BASE}")
         for model in [m.strip() for m in args.ollama.split(",") if m.strip()]:
-            print(f"CANDIDAT 2 — Ollama / {model}…")
-            olm.append(run_ollama(prepared, taxonomy, labels, model, args.theme_batch))
+            r = run_ollama(prepared, taxonomy, labels, model, args.theme_batch)
+            if r.ok:
+                olm.append(r)
 
     report = build_report(gold_path, len(prepared), n_mono, n_multi, labels,
                           clf, olm, args.folds, args.seed, args.theme_batch)
@@ -563,6 +630,7 @@ def main() -> None:
         } for r in clf],
         "ollama": [{
             "model": r.model, "batch_size": r.batch_size,
+            "endpoint": r.endpoint, "reasoner": r.reasoner,
             "micro_P": round(r.score.micro_p, 4), "micro_R": round(r.score.micro_r, 4),
             "micro_F1": round(r.score.micro_f1, 4), "macro_F1": round(r.score.macro_f1, 4),
             "exact_set": round(r.score.exact_set, 4), "ms_per_avis": r.ms_per_avis,
