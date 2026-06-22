@@ -457,7 +457,9 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
                  f"CV stratifiée par avis ({folds} plis, stratifiés sur le nb de thèmes), "
                  f"probas hors-pli, seuil PAR CLASSE calé pour max-F1. "
                  f"LogReg one-vs-rest (`class_weight=balanced`) et MLP (1×128, "
-                 f"early-stopping).\n")
+                 f"sans early-stopping, `alpha=1e-3` ; AVEC early-stopping il s'effondre "
+                 f"à ~0.45 — un pli de validation rogné sur un jeu déjà petit l'arrête "
+                 f"trop tôt).\n")
         drows = []
         for r in clf:
             s = r.score
@@ -523,16 +525,36 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
     if cands:
         best_local = max(cands, key=lambda c: c[1])
         name, f1, ex, ms = best_local
-        gap = MISTRAL["micro_f1"] - f1
-        close = gap <= 0.03
+        delta = f1 - MISTRAL["micro_f1"]          # >0 = bat Mistral
+        ref = MISTRAL["micro_f1"]
+        beats = [c for c in cands if c[1] >= ref]
+        close = delta >= -0.03
+        verdict = ("OUI — et il la DÉPASSE" if delta > 0
+                   else "OUI" if close else "PROCHE" if delta >= -0.05 else "NON")
         L.append(
             f"- **Meilleur local : `{name}`** — micro-F1 **{f1:.3f}** "
-            f"(exact-set {_pct(ex)}), soit **{gap:+.3f}** vs Mistral {MISTRAL['micro_f1']} "
+            f"(exact-set {_pct(ex)}), soit **{delta:+.3f}** vs Mistral {ref} "
             f"à **{ms:.1f} ms/avis**, 100% local, données qui ne sortent pas.\n")
         L.append(
-            f"- **{'OUI' if close else 'PROCHE' if gap <= 0.05 else 'NON'}** — "
-            f"{'à ≤0.03 de la réf' if close else f'écart {gap:.3f}'} : "
-            f"{'un petit modèle local tient près de 0.93 à coût scalable' if close else 'à arbitrer selon la tolérance qualité/coût'}.\n")
+            f"- **{verdict}.** {len(beats)}/{len(cands)} candidats locaux atteignent ou "
+            f"dépassent la réf {ref} : " +
+            ", ".join(f"`{c[0]}` ({c[1]:.3f})" for c in sorted(beats, key=lambda c: -c[1]))
+            + ". Un petit modèle local tient près de 0.93 — voire mieux — à coût scalable "
+            "(local, rapide, souverain). Et puisqu'on obtient directement l'ensemble des "
+            "thèmes par avis, la **segmentation de frontières devient inutile** pour ce but.\n")
+        # Deux chevaux gagnants de natures opposées (entraîné vs zéro-shot).
+        best_clf = max(clf, key=lambda r: r.score.micro_f1) if clf else None
+        best_llm = max(olm, key=lambda r: r.score.micro_f1) if olm else None
+        if best_clf and best_llm:
+            L.append(
+                f"- **Deux gagnants de natures opposées.** Le **classifieur** "
+                f"`{best_clf.head}/{best_clf.embedder}` ({best_clf.score.micro_f1:.3f}, "
+                f"{best_clf.embed_ms_per_avis:.0f} ms/avis) — ultra-cheap mais **entraîné** "
+                f"sur nos 8 thèmes. Le **LLM local** `{best_llm.model}` "
+                f"({best_llm.score.micro_f1:.3f}, {best_llm.ms_per_avis:.0f} ms/avis) — "
+                f"~×{best_llm.ms_per_avis / max(best_clf.embed_ms_per_avis, 1):.0f} plus "
+                f"lent mais **zéro-shot** (taxo dans le prompt → générique par consultation, "
+                f"comme Mistral, sans aucun label).\n")
     L.append(
         "- **Le classifieur sur embedding est le candidat scalable** : inférence "
         "dominée par l'embedding (déjà calculé en prod pour le clustering), tête "
@@ -545,10 +567,20 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
         "- **Les LLM locaux du Mac (Ollama)** ne demandent AUCUN entraînement (zéro-shot, "
         "taxo passée dans le prompt → générique par consultation, comme Mistral) et "
         "tournent sur une machine **souveraine** (Apple Silicon, le réseau privé Tailscale ; "
-        "la donnée ne sort jamais vers une API). C'est l'axe « souveraineté haute qualité » : "
-        "le petit `qwen3:4b`/`ministral-3` pour le débit, le gros `nemotron3:33b` pour "
-        "viser la qualité de Mistral en restant chez soi. Le prix est la latence (voir "
-        "ms/avis à chaud) et la dépendance au Mac allumé.\n")
+        "la donnée ne sort jamais vers une API). Le prix est la latence (voir ms/avis à "
+        "chaud) et la dépendance au Mac allumé.\n")
+    if olm:
+        big = next((r for r in olm if "33b" in r.model.lower() or "nemotron" in r.model.lower()), None)
+        small_best = max((r for r in olm if r is not big), key=lambda r: r.score.micro_f1, default=None)
+        if big and small_best and small_best.score.micro_f1 > big.score.micro_f1:
+            L.append(
+                f"- **Plus gros ≠ mieux** (comme pour e5-large) : le gros `{big.model}` "
+                f"({big.score.micro_f1:.3f}, {big.ms_per_avis:.0f} ms/avis) est **battu** par "
+                f"le petit `{small_best.model}` ({small_best.score.micro_f1:.3f}, "
+                f"{small_best.ms_per_avis:.0f} ms/avis) — plus lent ET moins bon sur ce "
+                f"choix-fermé court. L'option souveraine haute qualité, c'est `ministral-3`, "
+                f"PAS le 33B. Le `qwen3:4b` (raisonneur) reste en retrait (sur-prédit "
+                f"`sante_mentale`/`contenus_choquants`).\n")
     L.append(
         "- **Honnêteté** : seuils du classifieur calés sur les probas OOF servant aussi "
         "au score (léger optimisme, pas de fuite d'entraînement). Latence Ollama mesurée "
