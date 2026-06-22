@@ -7,11 +7,18 @@ import type { SpatialEdge, SpatialTheme } from './contract';
 
 /**
  * F3 — spatial theme map, rendered with **D3** (d3-selection data-join, d3-zoom,
- * d3-scale). Themes are placed at their UMAP (x,y); proximity = semantic
- * similarity. Bubble area ∝ weight (volume of avis), colour = consensus.
- * Edges = co-occurrence, drawn between the *centres* of the source/target nodes
- * via a shared position map, so they stay attached at any zoom/pan level (this
- * is the FIX over the hand-rolled SVG: links never detach from clusters).
+ * d3-scale). Themes are anchored at their UMAP (x,y); proximity = semantic
+ * similarity. A deterministic collision relaxation (fixed iterations, no RNG)
+ * then nudges overlapping bubbles apart while a weak spring keeps them near the
+ * UMAP anchor — readable, non-overlapping, yet faithful to the embedding.
+ *
+ * Bubble area ∝ weight (volume of avis). Colour encodes TWO things at once:
+ *   - HUE   = cluster identity (categorical, stable per theme id → coherent with
+ *             highlights and across drill levels);
+ *   - SATURATION/LIGHTNESS = `consensus_eff`, the population-weighted consensus
+ *             (Bayesian shrinkage of consensus by evidence volume, N = n_avis).
+ *             A theme backed by a single avis stays PALE; a large consensual
+ *             theme is vivid — so volume can no longer masquerade as agreement.
  *
  * Navigation is ADAPTIVE drill: you only ever see ONE level (the children of the
  * current parent); double-clicking a drillable bubble (`has_children`) descends;
@@ -20,10 +27,15 @@ import type { SpatialEdge, SpatialTheme } from './contract';
  *
  * Free wheel-zoom + drag-pan (d3-zoom) inspect a dense level; the SEMANTIC zoom
  * (which level is shown) is driven by the parent via `currentParentId` — on a
- * level change the d3-zoom transform resets.
+ * level change the d3-zoom transform resets. (Co-occurrence edges were removed:
+ * they were visual noise; the data may stay in the contract, we just don't draw it.)
  */
 const VB = 1000; // internal viewBox size (square); SVG scales to the container.
 const PAD = 120;
+const COLLIDE_PAD = 5; // px gap enforced between bubble rims
+const RELAX_ITERS = 400; // fixed → deterministic, stable layout across renders
+const COLLIDE_PASSES = 3; // collision sub-iterations per tick (helps dense levels converge)
+const SPRING_K = 0.03; // pull back toward the UMAP anchor each iteration
 
 interface Pos {
   cx: number;
@@ -63,8 +75,41 @@ export function SpatialMap({
     [themes, currentParentId],
   );
 
-  // Layout: normalise the visible themes' x,y into the padded viewBox via d3 scales.
+  // Population-weighted consensus (Bayesian shrinkage):
+  //   consensus_eff = (N/(N+k))*consensus + (k/(N+k))*prior
+  // N = n_avis; k = median n_avis over the visible level (derived "typical sample
+  // size", no magic number) → a theme with the median volume gets exactly half
+  // confidence. We shrink toward a LOW prior (the brief's "ou bas" branch) rather
+  // than the mean: the consensus metric is compressed (~0.6–0.8 here), so
+  // regressing to the mean would leave a 1-avis fluke looking middling. With a
+  // low prior, consensus_eff ≈ confidence × consensus → thin-evidence themes go
+  // PALE and only big-AND-consensual themes are vivid (exactly "gros & consensuels
+  // = vifs"; a single témoignage can never read as full consensus).
+  const PRIOR = 0;
+  const consensusEff = useMemo(() => {
+    const eff = new Map<string, number>();
+    if (visible.length === 0) return eff;
+    const sortedN = visible.map((t) => t.n_avis).sort((a, b) => a - b);
+    const mid = Math.floor(sortedN.length / 2);
+    const medianN =
+      sortedN.length % 2 === 0
+        ? (sortedN[mid - 1] + sortedN[mid]) / 2
+        : sortedN[mid];
+    const k = Math.max(1, medianN); // shrinkage strength ~ a typical theme's size
+    for (const t of visible) {
+      const N = Math.max(0, t.n_avis);
+      eff.set(t.id, (N / (N + k)) * t.consensus + (k / (N + k)) * PRIOR);
+    }
+    return eff;
+  }, [visible]);
+
+  // Layout: normalise the visible themes' x,y into the padded viewBox via d3
+  // scales, then run a DETERMINISTIC collision relaxation (fixed iterations, no
+  // RNG) so bubbles separate while staying near their UMAP anchor.
   const layout = useMemo(() => {
+    const pos = new Map<string, Pos>();
+    if (visible.length === 0) return pos;
+
     const xs = visible.map((t) => t.x);
     const ys = visible.map((t) => t.y);
     const minX = Math.min(...xs),
@@ -78,22 +123,65 @@ export function SpatialMap({
     const sy = scaleLinear().domain([minY, maxY]).range([VB - PAD, PAD]);
     const sr = scaleSqrt().domain([0, maxW]).range([26, 96]);
 
-    const pos = new Map<string, Pos>();
-    for (const t of visible) {
-      pos.set(t.id, { cx: sx(t.x), cy: sy(t.y), r: sr(t.weight) });
+    // Nodes carry an immutable UMAP anchor (ax,ay) + a mutable position (x,y).
+    const nodes = visible.map((t) => {
+      const ax = sx(t.x);
+      const ay = sy(t.y);
+      return { id: t.id, ax, ay, x: ax, y: ay, r: sr(t.weight) };
+    });
+
+    // Keep a bubble fully inside the viewBox. Applied as a CONSTRAINT *inside* the
+    // loop (before & after collision) — not just once at the end — so collision
+    // resolves against the walls and converges to a packed, non-overlapping state.
+    // (A single trailing clamp would re-stack bubbles it shoves off a crammed edge.)
+    const clamp = (n: { x: number; y: number; r: number }) => {
+      n.x = Math.max(n.r, Math.min(VB - n.r, n.x));
+      n.y = Math.max(n.r, Math.min(VB - n.r, n.y));
+    };
+
+    for (let it = 0; it < RELAX_ITERS; it++) {
+      // weak spring back toward the UMAP anchor (keeps the map ~faithful)
+      for (const n of nodes) {
+        n.x += (n.ax - n.x) * SPRING_K;
+        n.y += (n.ay - n.y) * SPRING_K;
+        clamp(n);
+      }
+      // pairwise collision: push overlapping bubbles apart, half each
+      for (let pass = 0; pass < COLLIDE_PASSES; pass++) {
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i];
+            const b = nodes[j];
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            const minDist = a.r + b.r + COLLIDE_PAD;
+            if (dist < minDist) {
+              if (dist < 1e-6) {
+                // coincident anchors: deterministic nudge derived from indices
+                dx = ((i % 3) - 1) || 1;
+                dy = ((j % 3) - 1) || 1;
+                dist = Math.sqrt(dx * dx + dy * dy);
+              }
+              const push = (minDist - dist) / 2;
+              const ux = dx / dist;
+              const uy = dy / dist;
+              a.x -= ux * push;
+              a.y -= uy * push;
+              b.x += ux * push;
+              b.y += uy * push;
+            }
+          }
+        }
+      }
+      for (const n of nodes) clamp(n);
+    }
+
+    for (const n of nodes) {
+      pos.set(n.id, { cx: n.x, cy: n.y, r: n.r });
     }
     return pos;
   }, [visible]);
-
-  const visibleIds = useMemo(() => new Set(visible.map((t) => t.id)), [visible]);
-  const shownEdges = useMemo(
-    () => edges.filter((e) => visibleIds.has(e.a) && visibleIds.has(e.b)),
-    [edges, visibleIds],
-  );
-  const maxEdge = useMemo(
-    () => Math.max(1, ...shownEdges.map((e) => e.weight)),
-    [shownEdges],
-  );
 
   const isDim = (t: SpatialTheme) =>
     (q !== '' && !t.label.toLowerCase().includes(q)) || t.consensus < minConsensus;
@@ -139,26 +227,9 @@ export function SpatialMap({
     setTip(null);
   }, [currentParentId]);
 
-  // --- render: data-join edges + bubbles. Edges read node centres from `layout`
-  //     so they are ALWAYS anchored to the bubbles, at any zoom/pan. ---
+  // --- render: data-join bubbles. (Co-occurrence edges intentionally not drawn.) ---
   useEffect(() => {
     const g = select<SVGGElement, unknown>(gRef.current!);
-
-    // edges layer ----------------------------------------------------------
-    const edgeLayer = ensureLayer(g, 'map__edges');
-    edgeLayer
-      .selectAll<SVGLineElement, SpatialEdge>('line.map__edge')
-      .data(shownEdges, (e) => `${e.a}--${e.b}`)
-      .join(
-        (enter) => enter.append('line').attr('class', 'map__edge'),
-        (update) => update,
-        (exit) => exit.remove(),
-      )
-      .attr('x1', (e) => layout.get(e.a)!.cx)
-      .attr('y1', (e) => layout.get(e.a)!.cy)
-      .attr('x2', (e) => layout.get(e.b)!.cx)
-      .attr('y2', (e) => layout.get(e.b)!.cy)
-      .attr('stroke-width', (e) => 0.5 + (e.weight / maxEdge) * 3);
 
     // bubbles layer --------------------------------------------------------
     const nodeLayer = ensureLayer(g, 'map__nodes');
@@ -205,7 +276,9 @@ export function SpatialMap({
     nodes
       .select<SVGCircleElement>('circle.bubble__circle')
       .attr('r', (t) => layout.get(t.id)!.r)
-      .style('fill', (t) => consensusColor(t.consensus));
+      .style('fill', (t) =>
+        themeColor(t.id, consensusEff.get(t.id) ?? t.consensus),
+      );
 
     nodes
       .select<SVGCircleElement>('circle.bubble__ring')
@@ -221,7 +294,7 @@ export function SpatialMap({
       .attr('y', (t) => layout.get(t.id)!.r + 22)
       .text((t) => truncate(t.label, 26));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, shownEdges, layout, maxEdge, selectedId, q, minConsensus]);
+  }, [visible, layout, consensusEff, selectedId, q, minConsensus]);
 
   return (
     <div className="map">
@@ -238,13 +311,14 @@ export function SpatialMap({
       )}
       <div className="map__legend">
         <span className="map__legenditem">
-          <i className="dot dot--low" /> consensus faible
+          <i className="dot dot--pale" /> consensus pondéré faible
         </span>
         <span className="map__legenditem">
-          <i className="dot dot--high" /> consensus fort
+          <i className="dot dot--vivid" /> consensus pondéré fort
         </span>
         <span className="map__legenditem map__legendhint">
-          taille = volume d'avis · molette = zoom · double-clic = explorer
+          teinte = thème · pâleur = consensus pondéré population · taille = volume
+          d'avis · molette = zoom · double-clic = explorer
         </span>
       </div>
     </div>
@@ -280,15 +354,28 @@ function ensureLayer(
   return layer;
 }
 
-/** Consensus → orange ramp (pale = low, saturated Agora orange = high). */
-function consensusColor(c: number): string {
-  const t = Math.max(0, Math.min(1, c));
-  // interpolate from pale sand to deep Agora orange
-  const lerp = (a: number, b: number) => Math.round(a + (b - a) * t);
-  const r = lerp(0xf6, 0xc8);
-  const g = lerp(0xd9, 0x53);
-  const b = lerp(0xb8, 0x12);
-  return `rgb(${r}, ${g}, ${b})`;
+/**
+ * Bubble fill: HUE = stable categorical identity of the theme (hash of its id),
+ * SATURATION + LIGHTNESS = population-weighted consensus. Low consensus_eff →
+ * pale (washed out, near-white); high → vivid and darker. The hue is invariant
+ * to consensus, so a theme keeps its colour across drill levels / highlights.
+ */
+function themeColor(id: string, consensusEff: number): string {
+  const c = Math.max(0, Math.min(1, consensusEff));
+  const hue = hashHue(id);
+  const sat = Math.round(18 + 82 * c); // 18% (washed, near-grey) → 100% (vivid)
+  const light = Math.round(88 - 44 * c); // 88% (near-white) → 44% (deep)
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
+}
+
+/** Deterministic hue (0..359) from a theme id — stable categorical identity. */
+function hashHue(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = (h * 31 + id.charCodeAt(i)) | 0;
+  }
+  // golden-angle spread on the hash keeps neighbouring ids visually distinct
+  return Math.abs(h * 137) % 360;
 }
 
 function truncate(s: string, n: number): string {
