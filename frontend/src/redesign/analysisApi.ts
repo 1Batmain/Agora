@@ -14,6 +14,7 @@
  */
 import type {
   AnalysisPayload,
+  AvisProvenance,
   Backend,
   BuildProgress,
   Citation,
@@ -114,6 +115,24 @@ export async function fetchCitations(
       return { data: body as Citation[], source: 'live' };
     }
     return notReady<Citation[]>(body);
+  } catch (e) {
+    return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
+  }
+}
+
+/** GET /avis/{id} {dataset} → full avis text + verbatim spans, or building/error. */
+export async function fetchAvis(
+  dataset: string,
+  avisId: string,
+): Promise<Sourced<AvisProvenance>> {
+  if (FORCE_MOCK) return { data: null, source: 'mock' };
+  try {
+    const qs = new URLSearchParams({ dataset });
+    const { status, body } = await rawFetch(`/api/avis/${encodeURIComponent(avisId)}?${qs}`);
+    if (status === 200 && body && typeof body.text === 'string' && Array.isArray(body.spans)) {
+      return { data: body as AvisProvenance, source: 'live' };
+    }
+    return notReady<AvisProvenance>(body);
   } catch (e) {
     return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
   }

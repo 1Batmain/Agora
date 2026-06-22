@@ -98,12 +98,13 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     return topic;
   };
 
-  rootSpecs.forEach((spec) => {
+  rootSpecs.forEach((spec, ri) => {
     const id = nextId();
     const x = Math.cos(spec.angle) * spec.radius;
     const y = Math.sin(spec.angle) * spec.radius;
     const hasChildren = spec.dispersion > medianDisp;
     const label = labelFor(r);
+    const color = mockColor(ri, nRoots); // macro colour, inherited by descendants
     themes.push({
       id,
       label,
@@ -116,6 +117,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
       dispersion: spec.dispersion,
       parent_id: null,
       has_children: hasChildren,
+      color,
     });
 
     if (!hasChildren) return;
@@ -139,6 +141,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
         dispersion: kdisp,
         parent_id: id,
         has_children: grand,
+        color,
       });
       if (!grand) continue;
       const nG = 2 + Math.floor(r() * 2);
@@ -156,6 +159,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
           dispersion: r() * 0.4,
           parent_id: kid,
           has_children: false,
+          color,
         });
       }
     }
@@ -234,4 +238,10 @@ export function mockCitations(dataset: string, themeId: string): Citation[] {
     weight: 1 + Math.floor(r() * 4),
   }));
   return out.sort((a, b) => a.dist_to_centroid - b.dist_to_centroid);
+}
+
+/** Macro colour for a mock theme — golden-angle hue, distinct per root (synthetic). */
+function mockColor(i: number, n: number): string {
+  const hue = n > 0 ? (i / n) * 360 : (i * 137.508) % 360;
+  return `hsl(${hue.toFixed(0)} 62% 55%)`;
 }
