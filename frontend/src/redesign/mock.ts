@@ -98,6 +98,17 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     return topic;
   };
 
+  // Synthetic LLM hover/cluster fields (hook + markdown description + convergence).
+  // Demo-only — exercises the tooltip & cluster-note repli paths offline.
+  const richFor = (label: string) => ({
+    hook: `${label} : ce qui ressort de la parole citoyenne.`,
+    description:
+      `Les contributions rattachées à **${label.toLowerCase()}** dégagent quelques ` +
+      `lignes de force : attentes concrètes, points de friction et propositions. ` +
+      `\n\n_Synthèse de démonstration (mock)._`,
+    convergence: Number((0.35 + r() * 0.6).toFixed(2)),
+  });
+
   rootSpecs.forEach((spec, ri) => {
     const id = nextId();
     const x = Math.cos(spec.angle) * spec.radius;
@@ -118,6 +129,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
       parent_id: null,
       has_children: hasChildren,
       color,
+      ...richFor(label),
     });
 
     if (!hasChildren) return;
@@ -129,9 +141,10 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
       const kdisp = r() * 0.7; // children rarely subdivide further
       const grand = kdisp > 0.55;
       const kAvis = Math.max(8, Math.floor(spec.n_avis / nKids) + Math.floor((r() - 0.5) * 30));
+      const kidLabel = `${label} — ${pick(FACETS, r)}`;
       themes.push({
         id: kid,
-        label: `${label} — ${pick(FACETS, r)}`,
+        label: kidLabel,
         x: x + Math.cos(ka) * kr,
         y: y + Math.sin(ka) * kr,
         n_avis: kAvis,
@@ -142,14 +155,16 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
         parent_id: id,
         has_children: grand,
         color,
+        ...richFor(kidLabel),
       });
       if (!grand) continue;
       const nG = 2 + Math.floor(r() * 2);
       for (let g = 0; g < nG; g++) {
         const gAvis = Math.max(5, Math.floor(kAvis / nG));
+        const gLabel = `${label} · ${pick(FACETS, r)} (${g + 1})`;
         themes.push({
           id: nextId(),
-          label: `${label} · ${pick(FACETS, r)} (${g + 1})`,
+          label: gLabel,
           x: x + Math.cos(ka) * kr + (r() - 0.5) * 0.08,
           y: y + Math.sin(ka) * kr + (r() - 0.5) * 0.08,
           n_avis: gAvis,
@@ -160,6 +175,7 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
           parent_id: kid,
           has_children: false,
           color,
+          ...richFor(gLabel),
         });
       }
     }
@@ -185,10 +201,11 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     ? roots.reduce((s, t) => s + t.consensus * t.n_avis, 0) / totalAvis
     : 0;
   const dataset_stats = {
+    participants: Math.round(totalAvis * (0.78 + r() * 0.18)),
     n_avis: totalAvis,
     n_themes: roots.length,
-    consensus: Number(wConsensus.toFixed(2)),
-    diversity: Number(Math.min(1, roots.length / 8).toFixed(2)),
+    effusion: Number(Math.min(1, roots.length / 8).toFixed(2)),
+    convergence_cumulee: Number(wConsensus.toFixed(2)),
     concentration: totalAvis ? Number((top2 / totalAvis).toFixed(2)) : 0,
   };
 
@@ -198,6 +215,14 @@ export function mockAnalysis(dataset: string, backend: Backend = 'auto'): Analys
     params: { mock: true, seed: hash(dataset || 'default'), median_dispersion: medianDisp },
     backend_used: backend,
     dataset_stats,
+    dataset_description:
+      `## Consultation « ${dataset} »\n\n` +
+      `Cette consultation citoyenne recueille des contributions ouvertes. La carte ` +
+      `ci-dessous regroupe les avis par **thèmes émergents** ; survolez une bulle pour ` +
+      `sa synthèse, cliquez pour explorer ou lire les témoignages.`,
+    dataset_context:
+      `Contributions collectées en ligne auprès du grand public, librement et de ` +
+      `manière anonyme (données de démonstration).`,
   };
 }
 
