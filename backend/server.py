@@ -22,6 +22,8 @@ Lancer :
 
 from __future__ import annotations
 
+from time import perf_counter
+
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,6 +47,9 @@ from backend.claims_endpoint import (
     OllamaUnavailable,
     claims_payload,
 )
+from backend.analysis import analysis_payload, get_or_build_tree
+from backend.citations import citations_payload
+from backend.insights import insights_payload
 from backend.synthesize import synthesize
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER
 from pipeline.cluster.naming_methods import MISTRAL_MODEL
@@ -368,6 +373,99 @@ def do_claims(body: ClaimsBody) -> dict:
         raise HTTPException(status_code=503, detail=str(exc))
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+# ===================== Refonte « carte spatiale » (B1–B4) ===================== #
+# Trois endpoints du CONTRAT figé (queue/front-redesign.md), tous adossés à l'arbre
+# de thèmes émergents variance-adaptatif (backend.analysis). LLM API par défaut.
+
+class AnalysisBody(BaseModel):
+    """Corps de `/analysis` — carte spatiale + hiérarchie adaptative d'un dataset.
+
+    Contrat : `{dataset, backend?(api|mac|auto)}`. `model`/`embedder`/`resolution`
+    sont des surcharges OPTIONNELLES (mêmes valeurs que `/claims`) — utiles pour
+    rejouer une autre granularité ou viser le cache d'un modèle précis.
+    """
+    dataset: str | None = None
+    backend: str | None = None          # api (défaut) | mac | auto
+    model: str | None = None
+    embedder: str | None = None
+    resolution: float = Field(1.0, gt=0.0)
+
+
+@app.post("/analysis")
+def do_analysis(body: AnalysisBody) -> dict:
+    """Carte 2D des thèmes (UMAP des centroïdes) + arbre adaptatif + co-occurrence.
+
+    `themes[i]` porte `x,y` (position UMAP), les stats (`n_avis/n_claims/weight/
+    consensus/dispersion`) et la hiérarchie (`parent_id`, `has_children`). `edges`
+    relie les thèmes frères par co-occurrence. 1er appel : extrait+embed (lent, caché) ;
+    suivants : rejoue depuis les caches. 503 si extraction nécessaire mais backend KO.
+    """
+    ds = _resolve(body.dataset)
+    t0 = perf_counter()
+    try:
+        tree = get_or_build_tree(
+            ds, backend=body.backend, model=body.model,
+            embedder=body.embedder or DEFAULT_EMBEDDER, resolution=body.resolution,
+        )
+    except OllamaUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return analysis_payload(tree, took_ms=round((perf_counter() - t0) * 1000))
+
+
+@app.get("/insights")
+def get_insights(
+    dataset: str | None = Query(None),
+    level: str = Query("global"),
+    id: str | None = Query(None),
+    backend: str | None = Query(None),
+    model: str | None = Query(None),
+    resolution: float = Query(1.0, gt=0.0),
+    refresh: bool = Query(False),
+) -> dict:
+    """Synthèse Markdown LLM LIÉE AU NIVEAU (global | theme) — cachée par (dataset,level,id).
+
+    `level=global` synthétise toute la consultation ; `level=theme&id=<theme_id>`
+    synthétise un thème. 2ᵉ appel identique = servi du cache (rapide). Repli gracieux
+    sans clé Mistral (`meta.fallback=true`).
+    """
+    ds = _resolve(dataset)
+    try:
+        return insights_payload(
+            ds, level=level, theme_id=id, backend=backend, model=model,
+            resolution=resolution, refresh=refresh,
+        )
+    except OllamaUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@app.get("/citations")
+def get_citations(
+    dataset: str | None = Query(None),
+    theme_id: str = Query(...),
+    backend: str | None = Query(None),
+    model: str | None = Query(None),
+    resolution: float = Query(1.0, gt=0.0),
+) -> list[dict]:
+    """Claims d'un thème, TRIÉES par proximité au centroïde (plus représentatives d'abord).
+
+    `[{text, dist_to_centroid, weight}]` (+ `avis_id`/`rank` bonus). 503 si extraction
+    nécessaire mais backend KO ; 404 si le thème est inconnu.
+    """
+    ds = _resolve(dataset)
+    try:
+        return citations_payload(
+            ds, theme_id=theme_id, backend=backend, model=model, resolution=resolution,
+        )
+    except OllamaUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
 
 
 class SynthesizeBody(BaseModel):
