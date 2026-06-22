@@ -13,8 +13,12 @@ ré-extraire.
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
-from pipeline.claims.ollama import OllamaClient, OllamaStats, parse_json_object
+from pipeline.claims.ollama import OllamaStats, parse_json_object
+
+if TYPE_CHECKING:
+    from pipeline.claims.backend import ClaimBackend
 
 # Prompt OUVERT : on demande des assertions atomiques, sans catégorie ni étiquette.
 CLAIM_SYS = (
@@ -51,25 +55,23 @@ def parse_claims(raw: str | None) -> list[str]:
 def extract_claims(
     avis: list,
     *,
-    model: str,
-    client: OllamaClient | None = None,
-    think: bool | None = None,
+    backend: "ClaimBackend",
     stats: OllamaStats | None = None,
     progress: Callable[[int, int], None] | None = None,
 ) -> dict[str, list[str]]:
     """Extrait les claims de chaque avis → ``{avis_id: [claim, ...]}``.
 
     `avis` : liste d'objets portant ``.id`` et ``.text`` (cf. `pipeline.claims.pipeline.Avis`).
-    `client` : un `OllamaClient` (défaut = endpoint `AGORA_OLLAMA_URL`). `think`
-    vient du warm-up. Repli : un avis dont l'extraction échoue devient 1 claim =
-    son texte entier (jamais perdu). `progress(i, n)` est appelé pour le suivi.
+    `backend` : un `ClaimBackend` (API Mistral, Mac Ollama…) — le prompt et le parsing
+    sont IDENTIQUES quel que soit le backend, donc des claims au format identique. Repli :
+    un avis dont l'extraction échoue devient 1 claim = son texte entier (jamais perdu).
+    `progress(i, n)` est appelé pour le suivi.
     """
-    client = client or OllamaClient()
     stats = stats if stats is not None else OllamaStats()
     out: dict[str, list[str]] = {}
     n = len(avis)
     for i, a in enumerate(avis):
-        raw = client.chat(claim_prompt(a.text), model=model, think=think, stats=stats)
+        raw = backend.complete(claim_prompt(a.text), stats=stats)
         out[a.id] = parse_claims(raw) or [a.text]
         if progress is not None:
             progress(i + 1, n)

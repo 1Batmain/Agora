@@ -22,11 +22,11 @@ from time import perf_counter
 
 import numpy as np
 
+from pipeline.claims.backend import BackendUnavailable, resolve_backend
 from pipeline.claims.extract import extract_claims
-from pipeline.claims.ollama import OllamaClient
+from pipeline.claims.ollama import OllamaStats
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
-    DEFAULT_MODEL,
     DEFAULT_SEED,
     Avis,
     cluster_claims,
@@ -40,7 +40,10 @@ DEFAULT_MIN_CHARS = 12
 
 
 class OllamaUnavailable(RuntimeError):
-    """Le LLM local (Mac) est injoignable — l'API doit renvoyer un 503 clair."""
+    """Backend d'extraction inutilisable (Mac injoignable, clé absente…) — 503 clair.
+
+    Conservé pour compat ; `BackendUnavailable` (générique) en est un alias logique.
+    """
 
 
 def _avis_from_ideas(ideas: list, min_chars: int) -> list[Avis]:
@@ -100,7 +103,8 @@ def claims_payload(
     ds,
     *,
     resolution: float = 1.0,
-    model: str = DEFAULT_MODEL,
+    backend: str | None = None,
+    model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
     ollama_url: str | None = None,
     min_chars: int = DEFAULT_MIN_CHARS,
@@ -108,8 +112,11 @@ def claims_payload(
 ) -> dict:
     """Calcule (ou rejoue depuis le cache) la carte des thèmes émergents d'un dataset.
 
-    `ds` est un `_Dataset` du serveur (porte `.id` et `.ideas`). Lève
-    `OllamaUnavailable` si une extraction est nécessaire mais le Mac est injoignable.
+    `ds` est un `_Dataset` du serveur (porte `.id` et `.ideas`). `backend` choisit le
+    moteur d'extraction (``api`` par défaut, ``mac``, ``auto`` ; sinon `AGORA_CLAIMS_BACKEND`).
+    Le cache claims est clé par MODÈLE → API et Mac ne se mélangent pas. Lève
+    `BackendUnavailable` si une extraction est nécessaire mais le backend est inutilisable
+    (clé absente, Mac injoignable).
     """
     t0 = perf_counter()
     ollama_url = ollama_url or os.environ.get("AGORA_OLLAMA_URL")
@@ -118,25 +125,24 @@ def claims_payload(
         raise ValueError(f"Aucun avis ≥ {min_chars} caractères dans le dataset {ds.id!r}.")
 
     ddir = dataset_dir(ds.id)
-    claims_path = ddir / CLAIMS_NAME
     emb_path = ddir / CLAIMS_EMB_NAME
 
-    # 1) Extraction (cachée). On n'appelle le Mac que pour les avis manquants.
+    # 1) Extraction (cachée). On résout le backend pour connaître le MODÈLE (clé de cache)
+    #    et n'extraire que les avis manquants. La résolution est paresseuse côté réseau :
+    #    `api` ne valide que la présence de la clé, `mac`/`auto` ne sondent qu'à l'usage.
+    be = resolve_backend(backend, ollama_url=ollama_url, model=model)
+    model = be.model
+    claims_path = ddir / CLAIMS_NAME
     claims_by_id = _load_claims_cache(claims_path, model)
     missing = [a for a in avis if a.id not in claims_by_id]
     extracted = len(missing)
     cold_seconds = 0.0
     if missing:
-        client = OllamaClient(ollama_url)
-        ok, think = client.warmup(model)
-        if not ok:
-            raise OllamaUnavailable(
-                f"LLM local {model!r} injoignable — exporter AGORA_OLLAMA_URL "
-                "depuis var/MAC_LOCAL_OLLAMA et vérifier que le Mac est allumé."
-            )
-        from pipeline.claims.ollama import OllamaStats
         stats = OllamaStats()
-        new = extract_claims(missing, model=model, client=client, think=think, stats=stats)
+        try:
+            new = extract_claims(missing, backend=be, stats=stats)
+        except BackendUnavailable as exc:
+            raise OllamaUnavailable(str(exc)) from exc
         claims_by_id.update(new)
         cold_seconds = round(stats.cold_seconds, 2)
         _save_claims_cache(claims_path, model, claims_by_id)
@@ -156,6 +162,9 @@ def claims_payload(
 
     result["meta"] = {
         "dataset": ds.id,
+        "backend": be.name,            # `api` (Mistral UE) | `mac` (souverain local)
+        "sovereign": be.sovereign,     # la donnée reste-t-elle dans le réseau privé ?
+        "data_note": be.note,          # phrase honnête : où part la donnée
         "model": model,
         "embedder": embedder,
         "min_chars": min_chars,
