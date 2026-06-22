@@ -1,5 +1,13 @@
 import type { Citation, DataSource } from './contract';
 
+/** Short badge text per data source. */
+const BADGE: Record<DataSource, string> = {
+  live: 'live',
+  building: 'en cours',
+  mock: 'mock',
+  error: 'erreur',
+};
+
 /**
  * F6 — leaf-level citations. When a leaf theme is selected the right column shows
  * its source avis, sorted by proximity to the cluster centroid (most
@@ -23,9 +31,7 @@ export function CitationsPanel({
     <section className="panel citations">
       <header className="panel__head">
         <h2 title={themeLabel}>{themeLabel}</h2>
-        {source && (
-          <span className={`badge badge--${source}`}>{source === 'mock' ? 'mock' : 'live'}</span>
-        )}
+        {source && <span className={`badge badge--${source}`}>{BADGE[source]}</span>}
       </header>
       <button className="link-back" onClick={onBack}>
         ← retour aux thèmes
@@ -33,6 +39,10 @@ export function CitationsPanel({
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> chargement des citations…
+        </div>
+      ) : source === 'building' ? (
+        <div className="insights__loading">
+          <span className="spinner" /> Analyse en cours…
         </div>
       ) : citations && citations.length ? (
         <>
