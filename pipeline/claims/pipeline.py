@@ -30,7 +30,9 @@ import numpy as np
 from pipeline.claims.backend import resolve_backend
 from pipeline.claims.extract import extract_claims
 from pipeline.claims.ollama import OllamaStats
+from pipeline.claims.span import Claim, as_claim
 from pipeline.cluster.adaptive import derive_defaults
+from pipeline.cluster.palette import color_for
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
@@ -62,6 +64,7 @@ class Theme:
     consensus: float
     diversity: float
     representative_claims: list[str]
+    color: str                      # couleur cluster (source unique : palette.py)
 
     def to_dict(self) -> dict:
         return {
@@ -74,6 +77,7 @@ class Theme:
             "consensus": self.consensus,
             "diversity": self.diversity,
             "representative_claims": self.representative_claims,
+            "color": self.color,
         }
 
 
@@ -116,18 +120,26 @@ def embed_claim_texts(texts: list[str], *, embedder: str = DEFAULT_EMBEDDER) -> 
 # --------------------------------------------------------------------------- #
 # Aplatissement claims (alignés à l'ordre des avis)
 # --------------------------------------------------------------------------- #
-def _flatten(avis: list[Avis], claims_by_id: dict[str, list[str]]
-             ) -> tuple[list[str], list[int], np.ndarray]:
-    """→ (claim_texts, claim_owner[idx d'avis], claim_weight) alignés."""
+def _flatten(avis: list[Avis], claims_by_id: dict[str, list]
+             ) -> tuple[list[str], list[int], np.ndarray, list[tuple[int, int]]]:
+    """→ (claim_texts, claim_owner[idx d'avis], claim_weight, claim_spans) alignés.
+
+    `claims_by_id` porte des `Claim` (ou des dicts du cache / str legacy, normalisés
+    via `as_claim`). `claim_spans[i] = (start, end)` = offsets verbatim du claim dans
+    le texte de son avis (−1,−1 si non ancré).
+    """
     texts: list[str] = []
     owner: list[int] = []
     weight: list[float] = []
+    spans: list[tuple[int, int]] = []
     for ai, a in enumerate(avis):
-        for ctext in claims_by_id.get(a.id, []):
-            texts.append(ctext)
+        for raw in claims_by_id.get(a.id, []):
+            c = as_claim(raw, avis_text=a.text)
+            texts.append(c.text)
             owner.append(ai)
             weight.append(a.weight)
-    return texts, owner, np.asarray(weight, dtype=np.float64)
+            spans.append((c.start, c.end))
+    return texts, owner, np.asarray(weight, dtype=np.float64), spans
 
 
 # --------------------------------------------------------------------------- #
@@ -139,6 +151,7 @@ def _build_themes(membership: list[int], claim_vecs: np.ndarray, claim_texts: li
     by_cluster: dict[int, list[int]] = {}
     for i, cid in enumerate(membership):
         by_cluster.setdefault(cid, []).append(i)
+    n_clusters = len(by_cluster)
 
     themes: list[Theme] = []
     for cid, idx in by_cluster.items():
@@ -165,6 +178,7 @@ def _build_themes(membership: list[int], claim_vecs: np.ndarray, claim_texts: li
             consensus=round(sc.consensus, 3),
             diversity=round(sc.diversity, 3),
             representative_claims=reps,
+            color=color_for(cid, n_clusters),
         ))
     # tri : poids social × consensus (préoccupations partagées ET cohérentes d'abord).
     themes.sort(key=lambda t: -(t.weight * max(t.consensus, 0.0)))
@@ -191,7 +205,7 @@ def _cooccurrence(membership: list[int], claim_owner: list[int]) -> list[dict]:
 
 def cluster_claims(
     avis: list,
-    claims_by_id: dict[str, list[str]],
+    claims_by_id: dict[str, list],
     *,
     resolution: float = 1.0,
     seed: int = DEFAULT_SEED,
@@ -205,7 +219,7 @@ def cluster_claims(
     Renvoie le dict de sortie du pipeline (themes / cooccurrence / params).
     """
     avis = as_avis(avis)
-    claim_texts, claim_owner, claim_weight = _flatten(avis, claims_by_id)
+    claim_texts, claim_owner, claim_weight, _claim_spans = _flatten(avis, claims_by_id)
     n_claims = len(claim_texts)
     n_avis = len(avis)
 

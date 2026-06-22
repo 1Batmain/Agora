@@ -26,6 +26,7 @@ import numpy as np
 from pipeline.claims.backend import BackendUnavailable, ClaimBackend, resolve_backend
 from pipeline.claims.extract import extract_claims
 from pipeline.claims.ollama import OllamaStats
+from pipeline.claims.span import Claim, as_claim
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
     DEFAULT_SEED,
@@ -59,8 +60,11 @@ def _avis_from_ideas(ideas: list, min_chars: int) -> list[Avis]:
     return out
 
 
-def _load_claims_cache(path: Path, model: str) -> dict[str, list[str]]:
-    """Charge l'extraction cachée si elle correspond au modèle, sinon {}."""
+def _load_claims_cache(path: Path, model: str) -> dict[str, list[Claim]]:
+    """Charge l'extraction cachée (claims ancrés) si elle matche le modèle, sinon {}.
+
+    Le cache sérialise des `Claim` en dicts `{text,start,end}` ; on les renormalise.
+    """
     if not path.exists():
         return {}
     try:
@@ -70,12 +74,15 @@ def _load_claims_cache(path: Path, model: str) -> dict[str, list[str]]:
     if rec.get("model") != model:
         return {}  # modèle différent → ré-extraire (claims dépendent du LLM)
     claims = rec.get("claims")
-    return claims if isinstance(claims, dict) else {}
+    if not isinstance(claims, dict):
+        return {}
+    return {aid: [as_claim(c) for c in (lst or [])] for aid, lst in claims.items()}
 
 
-def _save_claims_cache(path: Path, model: str, claims: dict[str, list[str]]) -> None:
+def _save_claims_cache(path: Path, model: str, claims: dict[str, list[Claim]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"model": model, "claims": claims}, ensure_ascii=False),
+    serializable = {aid: [as_claim(c).to_dict() for c in lst] for aid, lst in claims.items()}
+    path.write_text(json.dumps({"model": model, "claims": serializable}, ensure_ascii=False),
                     encoding="utf-8")
 
 
@@ -111,11 +118,13 @@ class PreparedClaims:
     index) sur `claim_vecs`, dans l'ordre des avis.
     """
     avis: list[Avis]
-    claims_by_id: dict[str, list[str]]
+    claims_by_id: dict[str, list[Claim]]
     claim_texts: list[str]
     claim_owner: list[int]          # claim idx -> idx d'avis dans `avis`
     claim_weight: np.ndarray        # poids social par claim (hérité de l'avis)
     claim_vecs: np.ndarray          # embeddings L2-normalisés, alignés aux claims
+    claim_start: list[int]          # offset verbatim début du claim dans l'avis
+    claim_end: list[int]            # offset verbatim fin (exclu) du claim dans l'avis
     backend: ClaimBackend
     model: str
     embedder: str
@@ -191,7 +200,7 @@ def prepare_claims(
         _save_claims_cache(claims_path, model, claims_by_id)
 
     # 2) Embeddings des claims (cachés, alignés à l'ordre d'aplatissement).
-    claim_texts, claim_owner, claim_weight = _flatten(avis, claims_by_id)
+    claim_texts, claim_owner, claim_weight, claim_spans = _flatten(avis, claims_by_id)
     fingerprint = _emb_fingerprint(embedder, claim_texts)
     claim_vecs = _load_emb_cache(emb_path, fingerprint)
     embedded = claim_vecs is None
@@ -206,6 +215,8 @@ def prepare_claims(
         claim_owner=claim_owner,
         claim_weight=np.asarray(claim_weight, dtype=np.float64),
         claim_vecs=np.asarray(claim_vecs, dtype=np.float64),
+        claim_start=[s for s, _ in claim_spans],
+        claim_end=[e for _, e in claim_spans],
         backend=be,
         model=model,
         embedder=embedder,
