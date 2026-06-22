@@ -1,0 +1,2 @@
+# Cache disque du LLM local (Ollama) — non versionné.
+.cache/
