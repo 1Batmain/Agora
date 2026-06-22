@@ -60,7 +60,7 @@ export function ClaimsView({
                       className="claims__barfill"
                       style={{
                         width: `${(t.weight / maxWeight) * 100}%`,
-                        background: themeColor(t.cluster_id),
+                        background: t.color,
                       }}
                     />
                   </div>
@@ -108,10 +108,4 @@ export function ClaimsView({
 
 function truncate(s: string, n: number): string {
   return s.length <= n ? s : s.slice(0, n - 1) + '…';
-}
-
-/** Stable color per cluster_id (golden-angle hue) — no hardcoded palette. */
-function themeColor(id: number): string {
-  const hue = (id * 137.508) % 360;
-  return `hsl(${hue.toFixed(0)} 65% 60%)`;
 }

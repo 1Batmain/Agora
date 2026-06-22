@@ -30,6 +30,7 @@ from backend.recluster import dataset_dir
 ANALYSIS_DIRNAME = "analysis"
 STATUS_NAME = "status.json"
 ANALYSIS_NAME = "analysis.json"
+AVIS_NAME = "avis.json"
 CITATIONS_DIRNAME = "citations"
 INSIGHTS_DIRNAME = "insights"
 
@@ -53,6 +54,10 @@ def status_path(dataset: str) -> Path:
 
 def analysis_path(dataset: str) -> Path:
     return analysis_dir(dataset) / ANALYSIS_NAME
+
+
+def avis_path(dataset: str) -> Path:
+    return analysis_dir(dataset) / AVIS_NAME
 
 
 def _safe(name: str) -> str:
@@ -149,6 +154,28 @@ def read_citations(dataset: str, theme_id: str) -> list | None:
     return data if isinstance(data, list) else None
 
 
+# Provenance avis : un seul fichier `{avis_id: {id,text,spans}}` par dataset, mis en
+# cache mémoire (clé = mtime) pour ne pas relire le JSON à chaque requête /avis.
+_AVIS_CACHE: dict[str, tuple[float, dict]] = {}
+
+
+def read_avis(dataset: str, avis_id: str) -> dict | None:
+    """Provenance d'UN avis `{id,text,spans}` depuis `avis.json` (caché par mtime)."""
+    path = avis_path(dataset)
+    if not path.exists():
+        return None
+    mtime = path.stat().st_mtime
+    cached = _AVIS_CACHE.get(dataset)
+    if cached is None or cached[0] != mtime:
+        data = _read_json(path)
+        if not isinstance(data, dict):
+            return None
+        _AVIS_CACHE[dataset] = (mtime, data)
+        cached = _AVIS_CACHE[dataset]
+    entry = cached[1].get(str(avis_id))
+    return entry if isinstance(entry, dict) else None
+
+
 def read_insights(dataset: str, level: str, theme_id: str | None) -> dict | None:
     data = _read_json(insights_path(dataset, level, theme_id))
     return data if isinstance(data, dict) else None
@@ -159,6 +186,12 @@ def read_insights(dataset: str, level: str, theme_id: str | None) -> dict | None
 # --------------------------------------------------------------------------- #
 def write_analysis(dataset: str, payload: dict) -> None:
     write_json(analysis_path(dataset), payload)
+
+
+def write_avis(dataset: str, provenance: dict) -> None:
+    """Persiste la provenance de TOUS les avis (`{avis_id: {id,text,spans}}`)."""
+    write_json(avis_path(dataset), provenance)
+    _AVIS_CACHE.pop(dataset, None)
 
 
 def write_citations(dataset: str, theme_id: str, citations: list) -> None:

@@ -104,6 +104,7 @@ export interface ClaimTheme {
   consensus: number;
   diversity: number;
   representative_claims: string[];
+  color: string; // cluster colour, single source: backend pipeline/cluster/palette.py
 }
 
 /** A co-occurrence edge: `count` avis whose claims bridge themes `a` and `b`. */

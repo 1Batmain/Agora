@@ -24,6 +24,7 @@ export interface SpatialTheme {
   dispersion: number; // internal spread; drives adaptive subdivision (backend-side)
   parent_id: string | null; // null = root (global level)
   has_children: boolean; // true → drillable; false → leaf (→ citations)
+  color: string; // cluster colour (by macro); single source: backend palette.py
 }
 
 /** A co-occurrence edge between two themes (avis whose claims bridge a↔b). */
@@ -48,11 +49,28 @@ export interface InsightsPayload {
 
 export type InsightLevel = 'global' | 'theme';
 
-/** One citation (raw avis text) at a leaf theme, sorted by centroid proximity. */
+/** One citation (verbatim claim) at a leaf theme, sorted by centroid proximity. */
 export interface Citation {
   text: string;
   dist_to_centroid: number; // smaller = more representative
   weight: number;
+  avis_id?: string; // source avis — opens its full text with highlights
+}
+
+/** A verbatim portion of an avis, anchored + coloured by its (macro) cluster. */
+export interface AvisSpan {
+  start: number;
+  end: number;
+  cluster_id: string | null;
+  color: string;
+  theme_label: string;
+}
+
+/** `GET /avis/{id}` → one avis in full, with its extractive spans to highlight. */
+export interface AvisProvenance {
+  id: string;
+  text: string;
+  spans: AvisSpan[];
 }
 
 /**
