@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { select, type Selection } from 'd3-selection';
 import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from 'd3-zoom';
-import { hierarchy, pack } from 'd3-hierarchy';
 import 'd3-transition';
 import type { SpatialEdge, SpatialTheme } from './contract';
 import { themeCaption } from './labels';
+import { Markdown } from './Markdown';
 
 /**
  * F3 — theme BUBBLES, rendered with **D3** (d3-selection data-join, d3-zoom,
@@ -35,7 +35,8 @@ import { themeCaption } from './labels';
  */
 const VB = 1000; // internal viewBox size (square); SVG scales to the container.
 const PAD = 80; // outer margin so rim labels stay inside the viewBox.
-const COLLIDE_PAD = 8; // px gap enforced between packed bubbles.
+const COLLIDE_PAD = 14; // gap (viewBox units) enforced between bubbles.
+const HOVER_SCALE = 1.1; // how much a hovered bubble grows (smooth zoom).
 
 interface Pos {
   cx: number;
@@ -103,28 +104,14 @@ export function SpatialMap({
     return eff;
   }, [visible]);
 
-  // Layout: a DETERMINISTIC circle pack (d3-hierarchy). No semantic x,y — the
-  // only thing encoded is bubble AREA ∝ n_avis. The pack is stable across renders
-  // (no RNG) and naturally non-overlapping, so the old UMAP relaxation is gone.
-  const layout = useMemo(() => {
-    const pos = new Map<string, Pos>();
-    if (visible.length === 0) return pos;
-
-    const root = hierarchy<{ children?: SpatialTheme[] } & Partial<SpatialTheme>>(
-      { children: visible },
-    ).sum((d) => ('n_avis' in d && d.n_avis != null ? Math.max(1, d.n_avis) : 0));
-
-    const packed = pack<{ children?: SpatialTheme[] } & Partial<SpatialTheme>>()
-      .size([VB - 2 * PAD, VB - 2 * PAD])
-      .padding(COLLIDE_PAD)(root);
-
-    for (const leaf of packed.leaves()) {
-      const t = leaf.data as SpatialTheme;
-      if (!t.id) continue;
-      pos.set(t.id, { cx: leaf.x + PAD, cy: leaf.y + PAD, r: leaf.r });
-    }
-    return pos;
-  }, [visible]);
+  // Layout: a DETERMINISTIC force relaxation (no RNG, no extra dependency). The
+  // old circle-pack clumped the big bubble dead-centre and crammed the small ones
+  // around it, leaving empty corners; this seeds the bubbles on a phyllotaxis
+  // (sunflower) spiral — which fills the disc EVENLY — then resolves overlaps with
+  // a few hundred collision passes. Result: a harmonious, breathable spread that
+  // uses the whole canvas, still stable across renders and non-overlapping. As in
+  // the pack, position carries NO meaning — only AREA ∝ n_avis is encoded.
+  const layout = useMemo(() => computeLayout(visible), [visible]);
 
   // Preferred caption: LLM `title` when present, else the keyword `label` stub
   // (single source of truth — `themeCaption`).
@@ -215,11 +202,25 @@ export function SpatialMap({
         if (t.has_children) cb.current.onDrill(t);
         else cb.current.onSelect(t);
       })
-      .on('mouseenter', (_e, t) => {
+      // Hover = smooth ZOOM: the bubble grows slightly and is RAISED to the front
+      // (z-order) so it never hides behind a neighbour; the tooltip anchors to it.
+      .on('mouseenter', function (this: SVGGElement, _e: MouseEvent, t) {
         const p = layout.get(t.id)!;
-        setTip({ x: p.cx, y: p.cy - p.r, theme: t });
+        setTip({ x: p.cx, y: p.cy - p.r * HOVER_SCALE, theme: t });
+        select(this)
+          .raise()
+          .transition('hover')
+          .duration(180)
+          .attr('transform', `translate(${p.cx},${p.cy}) scale(${HOVER_SCALE})`);
       })
-      .on('mouseleave', () => setTip(null));
+      .on('mouseleave', function (this: SVGGElement, _e: MouseEvent, t) {
+        const p = layout.get(t.id)!;
+        setTip(null);
+        select(this)
+          .transition('hover')
+          .duration(180)
+          .attr('transform', `translate(${p.cx},${p.cy})`);
+      });
 
     nodes
       .select<SVGCircleElement>('circle.bubble__circle')
@@ -277,34 +278,123 @@ export function SpatialMap({
 
 /**
  * HTML tooltip overlay, positioned in viewBox space → % of the square SVG. This
- * is where the RICH detail lives (the bubble itself only shows voices + title):
- * title, keyword stubs, voices and consensus.
+ * is where ALL the rich/synthetic detail lives — the bubble itself stays sparse
+ * (voices + short title), so the LLM synthesis NEVER clutters the graph:
+ *   - `hook`        : one-line accroche (when present);
+ *   - `description` : short LLM synthesis, rendered as MARKDOWN;
+ *   - `convergence` : 0..1 convergence of ideas inside the cluster (+ voices).
+ * All three are graceful: absent fields simply don't render (repli on keywords /
+ * consensus from the legacy contract).
  */
 function MapTooltip({ tip }: { tip: Tip }) {
   const t = tip.theme;
   const title = themeCaption(t);
-  // Keyword line: explicit keywords if the backend sent them, else the keyword
-  // stub `label` when it differs from the (LLM) title shown above.
+  // Keyword fallback (only when there's no LLM description): explicit keywords if
+  // the backend sent them, else the keyword stub `label` when it differs.
   const keywords = t.keywords?.length
     ? t.keywords.join(' · ')
     : title !== t.label
       ? t.label
       : '';
+  const hasConv = typeof t.convergence === 'number' && Number.isFinite(t.convergence);
   return (
     <div
       className="map__tooltip"
       style={{ left: `${(tip.x / VB) * 100}%`, top: `${(tip.y / VB) * 100}%` }}
     >
       <strong>{title}</strong>
-      {keywords && <span className="map__tooltipkw">{keywords}</span>}
-      <span>
-        {t.n_avis} voix · consensus {Math.round(t.consensus * 100)}%
+      {t.hook && <span className="map__tooltiphook">{t.hook}</span>}
+      {t.description ? (
+        <div className="map__tooltipdesc">
+          <Markdown source={t.description} />
+        </div>
+      ) : (
+        keywords && <span className="map__tooltipkw">{keywords}</span>
+      )}
+      <span className="map__tooltipmeta">
+        {t.n_avis} voix
+        {hasConv
+          ? ` · convergence ${Math.round((t.convergence as number) * 100)}%`
+          : ` · consensus ${Math.round(t.consensus * 100)}%`}
       </span>
       <span className="map__tooltiphint">
         {t.has_children ? 'clic pour explorer' : 'clic → témoignages'}
       </span>
     </div>
   );
+}
+
+interface Node {
+  id: string;
+  r: number;
+  x: number;
+  y: number;
+}
+
+/**
+ * Deterministic force layout: phyllotaxis seed + collision relaxation. No RNG, so
+ * the same level always yields the same arrangement (stable, like a UMAP seed).
+ */
+function computeLayout(visible: SpatialTheme[]): Map<string, Pos> {
+  const pos = new Map<string, Pos>();
+  const n = visible.length;
+  if (n === 0) return pos;
+
+  const side = VB - 2 * PAD;
+  const cx0 = VB / 2;
+  const cy0 = VB / 2;
+
+  // Radius ∝ √n_avis (area ∝ n_avis), scaled so the bubbles fill a target FRACTION
+  // of the canvas — leaving breathing room (no entassement). A floor keeps the
+  // smallest bubble legible.
+  const totalN = visible.reduce((s, t) => s + Math.max(1, t.n_avis), 0);
+  const FILL = 0.4;
+  const scale = Math.sqrt((FILL * side * side) / (Math.PI * totalN));
+  const rMin = side * 0.05;
+  const rMax = side * 0.34;
+  const rOf = (t: SpatialTheme) =>
+    Math.min(rMax, Math.max(rMin, Math.sqrt(Math.max(1, t.n_avis)) * scale));
+
+  // Seed on a sunflower spiral (golden angle) → even coverage of the disc.
+  const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+  const nodes: Node[] = visible.map((t, i) => {
+    const r = rOf(t);
+    const frac = (i + 0.5) / n;
+    const rad = Math.sqrt(frac) * (side / 2 - r);
+    const theta = i * GOLDEN;
+    return { id: t.id, r, x: cx0 + rad * Math.cos(theta), y: cy0 + rad * Math.sin(theta) };
+  });
+
+  // Relax: push overlapping pairs apart, then clamp inside the padded square.
+  const ITER = 360;
+  for (let it = 0; it < ITER; it++) {
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const a = nodes[i];
+        const b = nodes[j];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let d = Math.hypot(dx, dy) || 0.01;
+        const min = a.r + b.r + COLLIDE_PAD;
+        if (d < min) {
+          const push = (min - d) / 2;
+          dx /= d;
+          dy /= d;
+          a.x -= dx * push;
+          a.y -= dy * push;
+          b.x += dx * push;
+          b.y += dy * push;
+        }
+      }
+    }
+    for (const nd of nodes) {
+      nd.x = Math.max(PAD + nd.r, Math.min(VB - PAD - nd.r, nd.x));
+      nd.y = Math.max(PAD + nd.r, Math.min(VB - PAD - nd.r, nd.y));
+    }
+  }
+
+  for (const nd of nodes) pos.set(nd.id, { cx: nd.x, cy: nd.y, r: nd.r });
+  return pos;
 }
 
 /** Get-or-create a named child <g> layer (stable across renders). */
