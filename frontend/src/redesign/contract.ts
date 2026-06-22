@@ -22,6 +22,15 @@ export interface SpatialTheme {
   title?: string;
   /** Optional keyword stubs (legacy caption / hover detail). */
   keywords?: string[];
+  /**
+   * Optional LLM hover fields (emitted by the backend in parallel — graceful when
+   * absent). `hook` = one-line accroche; `description` = a short Markdown synthesis
+   * shown ONLY in the hover tooltip (never baked onto the bubble); `convergence` =
+   * 0..1 "convergence des idées" within the cluster.
+   */
+  hook?: string;
+  description?: string;
+  convergence?: number;
   x: number; // UMAP-2D position (semantic proximity)
   y: number;
   n_avis: number;
@@ -69,6 +78,13 @@ export interface AnalysisPayload {
   backend_used: Backend;
   /** Optional headline indicators for the dashboard under the map (graceful if absent). */
   dataset_stats?: DatasetStats;
+  /**
+   * Optional dataset-level intro shown in the GLOBAL view (above the map): a short
+   * description of the consultation and the context in which contributions were
+   * collected. Emitted by the backend in parallel — both fields graceful if absent.
+   */
+  dataset_description?: string;
+  dataset_context?: string;
 }
 
 /** `GET /insights` → LLM Markdown synthesis for the current zoom level. */
