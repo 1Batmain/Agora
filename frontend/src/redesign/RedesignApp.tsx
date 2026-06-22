@@ -362,6 +362,7 @@ export default function RedesignApp() {
             <CitationsPanel
               dataset={dataset}
               themeLabel={themeCaption(selected)}
+              themeColor={selected.color}
               citations={citations}
               loading={citationsLoading}
               source={citationsSource}

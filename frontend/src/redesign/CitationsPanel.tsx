@@ -21,6 +21,7 @@ const BADGE: Record<DataSource, string> = {
 export function CitationsPanel({
   dataset,
   themeLabel,
+  themeColor,
   citations,
   loading,
   source,
@@ -28,6 +29,8 @@ export function CitationsPanel({
 }: {
   dataset: string | null;
   themeLabel: string;
+  /** Selected leaf cluster colour — tints the header so the panel reads as "this cluster". */
+  themeColor?: string;
   citations: Citation[] | null;
   loading: boolean;
   source: DataSource | null;
@@ -63,8 +66,16 @@ export function CitationsPanel({
 
   return (
     <section className="panel citations">
-      <header className="panel__head">
-        <h2 title={themeLabel}>{themeLabel}</h2>
+      <header
+        className="panel__head"
+        style={themeColor ? { borderBottomColor: themeColor } : undefined}
+      >
+        <h2 title={themeLabel}>
+          {themeColor && (
+            <i className="citations__dot" style={{ background: themeColor }} aria-hidden />
+          )}
+          {themeLabel}
+        </h2>
         {source && <span className={`badge badge--${source}`}>{BADGE[source]}</span>}
       </header>
       <button className="link-back" onClick={onBack}>
@@ -81,7 +92,8 @@ export function CitationsPanel({
       ) : citations && citations.length ? (
         <>
           <p className="citations__meta">
-            {citations.length} citations · triées par proximité au centroïde
+            {citations.length} témoignage{citations.length > 1 ? 's' : ''} · triés par
+            proximité au cœur du thème
           </p>
           <ol className="citations__list">
             {citations.map((c, i) => {
@@ -104,7 +116,7 @@ export function CitationsPanel({
           </ol>
         </>
       ) : (
-        <p className="panel__empty">Aucune citation pour ce thème.</p>
+        <p className="panel__empty">Aucun témoignage pour ce thème.</p>
       )}
     </section>
   );
