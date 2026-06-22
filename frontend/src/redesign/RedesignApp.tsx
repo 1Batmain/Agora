@@ -4,7 +4,6 @@ import { fetchDatasets } from '../api';
 import type { Dataset } from '../types';
 import type {
   AnalysisPayload,
-  Backend,
   BuildProgress,
   Citation,
   DataSource,
@@ -15,9 +14,8 @@ import { SpatialMap } from './SpatialMap';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
+import { Markdown } from './Markdown';
 import { themeCaption } from './labels';
-
-type Tab = 'deputes' | 'analystes';
 
 /** Human badge label per data source (live / build / mock / error). */
 const SOURCE_LABEL: Record<DataSource, string> = {
@@ -38,11 +36,11 @@ const RIGHT_KEY = 'agora.rightWidth';
  * SCROLLS vertically — map on top, a dashboard of dataset indices beneath it. The
  * right column (insights → leaf citations) follows the drill level and is
  * drag-resizable. Navigation is an adaptive drill on the bubbles.
+ *
+ * Single public view: the Députés/Analystes tabs are gone — the site is open to
+ * all, with one unified view (no backend/extraction knob in the header).
  */
 export default function RedesignApp() {
-  const [tab, setTab] = useState<Tab>('deputes');
-  const analyst = tab === 'analystes';
-
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
 
@@ -51,9 +49,6 @@ export default function RedesignApp() {
   const [buildProgress, setBuildProgress] = useState<BuildProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // analyst knob: which extraction backend /analysis should use.
-  const [backend, setBackend] = useState<Backend>('auto');
 
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
@@ -81,10 +76,11 @@ export default function RedesignApp() {
   const currentParentId = path.length ? path[path.length - 1].id : null;
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
   const showCitations = selected != null && !selected.has_children;
+  const atGlobal = path.length === 0 && !selected;
 
   // `poll=true` is a background re-check while the backend is still BUILDING:
   // it must not flash the busy spinner nor reset the user's drill path/selection.
-  const loadAnalysis = useCallbackRef(async (ds: string | null, be: Backend, poll = false) => {
+  const loadAnalysis = useCallbackRef(async (ds: string | null, poll = false) => {
     if (!ds) return;
     if (!poll) {
       setBusy(true);
@@ -93,7 +89,7 @@ export default function RedesignApp() {
       setSelected(null);
     }
     try {
-      const { data, source, progress } = await fetchAnalysis(ds, be);
+      const { data, source, progress } = await fetchAnalysis(ds);
       setAnalysisSource(source);
       setBuildProgress(progress ?? null);
       if (data) setAnalysis(data);
@@ -117,7 +113,7 @@ export default function RedesignApp() {
       setDatasets(list);
       const first = list[0].id;
       setDataset(first);
-      await loadAnalysis(first, backend);
+      await loadAnalysis(first);
     })();
     return () => {
       cancelled = true;
@@ -130,10 +126,10 @@ export default function RedesignApp() {
   // re-arms itself; it stops as soon as the source flips away from 'building'.
   useEffect(() => {
     if (analysisSource !== 'building' || !dataset) return;
-    const t = setTimeout(() => loadAnalysis(dataset, backend, true), 2500);
+    const t = setTimeout(() => loadAnalysis(dataset, true), 2500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [analysisSource, buildProgress, dataset, backend]);
+  }, [analysisSource, buildProgress, dataset]);
 
   // Insights effect — follows the zoom level (skipped when showing citations).
   useEffect(() => {
@@ -173,7 +169,7 @@ export default function RedesignApp() {
   const onDataset = useCallbackRef(async (id: string) => {
     if (id === dataset) return;
     setDataset(id);
-    await loadAnalysis(id, backend);
+    await loadAnalysis(id);
   });
 
   function onDrill(t: SpatialTheme) {
@@ -254,42 +250,9 @@ export default function RedesignApp() {
               ))}
             </select>
           </label>
-          {analyst && (
-            <label className="header-dataset">
-              <span>Backend</span>
-              <select
-                className="header-dataset__select"
-                value={backend}
-                disabled={busy}
-                onChange={(e) => {
-                  const be = e.target.value as Backend;
-                  setBackend(be);
-                  loadAnalysis(dataset, be);
-                }}
-              >
-                <option value="auto">auto (API → repli)</option>
-                <option value="api">API Mistral</option>
-                <option value="mac">Mac (Ollama)</option>
-              </select>
-            </label>
-          )}
           {analysisSource && (
             <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
           )}
-          <nav className="tabs">
-            <button
-              className={`tab${tab === 'deputes' ? ' tab--active' : ''}`}
-              onClick={() => setTab('deputes')}
-            >
-              Députés
-            </button>
-            <button
-              className={`tab${tab === 'analystes' ? ' tab--active' : ''}`}
-              onClick={() => setTab('analystes')}
-            >
-              Analystes
-            </button>
-          </nav>
         </div>
       </header>
 
@@ -308,6 +271,25 @@ export default function RedesignApp() {
               </span>
             ))}
           </nav>
+
+          {/* GLOBAL view intro: a description of the consultation + the context in
+              which contributions were collected (graceful when the backend omits
+              both). Hidden once the user drills or selects a leaf. */}
+          {atGlobal && (analysis?.dataset_description || analysis?.dataset_context) && (
+            <section className="dataset-intro" aria-label="Présentation de la consultation">
+              {analysis?.dataset_description && (
+                <div className="dataset-intro__desc">
+                  <Markdown source={analysis.dataset_description} />
+                </div>
+              )}
+              {analysis?.dataset_context && (
+                <p className="dataset-intro__context">
+                  <span className="dataset-intro__label">Contexte de collecte</span>
+                  {analysis.dataset_context}
+                </p>
+              )}
+            </section>
+          )}
 
           <div className="agora__canvas">
             {busy ? (
@@ -363,6 +345,9 @@ export default function RedesignApp() {
               dataset={dataset}
               themeLabel={themeCaption(selected)}
               themeColor={selected.color}
+              hook={selected.hook}
+              description={selected.description}
+              convergence={selected.convergence}
               citations={citations}
               loading={citationsLoading}
               source={citationsSource}

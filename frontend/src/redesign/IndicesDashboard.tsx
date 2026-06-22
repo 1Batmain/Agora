@@ -44,6 +44,13 @@ const DICT: Record<
   string,
   { label: string; hint: string; pct?: boolean; gaugeFromValue?: boolean }
 > = {
+  participants: { label: 'Participants', hint: 'Nombre de personnes ayant contribué à la consultation.' },
+  n_participants: { label: 'Participants', hint: 'Nombre de personnes ayant contribué à la consultation.' },
+  effusion: { label: 'Effusion (variété)', hint: 'Variété des opinions exprimées (0 = unanime, 1 = très foisonnant).', pct: true, gaugeFromValue: true },
+  variete: { label: 'Effusion (variété)', hint: 'Variété des opinions exprimées (0 = unanime, 1 = très foisonnant).', pct: true, gaugeFromValue: true },
+  convergence: { label: 'Convergence', hint: 'Degré de convergence des idées exprimées.', pct: true, gaugeFromValue: true },
+  convergence_cumulee: { label: 'Convergence cumulée', hint: 'Accord agrégé sur l’ensemble des contributions (1 = forte convergence).', pct: true, gaugeFromValue: true },
+  'convergence_cumulée': { label: 'Convergence cumulée', hint: 'Accord agrégé sur l’ensemble des contributions (1 = forte convergence).', pct: true, gaugeFromValue: true },
   diversity: { label: 'Diversité des opinions', hint: 'Variété des thèmes exprimés (0 = unanime, 1 = très éclaté).', pct: true, gaugeFromValue: true },
   diversite: { label: 'Diversité des opinions', hint: 'Variété des thèmes exprimés (0 = unanime, 1 = très éclaté).', pct: true, gaugeFromValue: true },
   consensus: { label: 'Consensus global', hint: 'Degré d’accord moyen sur l’ensemble des avis.', pct: true, gaugeFromValue: true },
