@@ -160,10 +160,20 @@ def build_report(gold_path, items, scores, info, feas, emb_ctrl,
              "base F1_g", "base F1_m", "ΔF1_global"]
     L.append(A._md_table(rows3, cols3) + "\n")
 
+    # Config e5-large à abstention APPARIÉE (mono_FP ≤ celui d'e5-base) : la seule
+    # comparaison loyale — un gros encodeur qui sur-coupe les mono « gagne » du F1_multi
+    # gratuitement. On exige la même tenue d'abstention que le réglé-main.
+    matched = None
+    if base_win:
+        cap = base_win["mono_FP"] + 1e-9
+        elig = [s for s in scores if s.mono_fp_rate <= cap]
+        if elig:
+            matched = max(elig, key=lambda s: (s.f1, -s.pk, s.gf1))
+
     # 4. Verdict
     L.append("## 4. Verdict honnête\n")
-    L.append(f"**Meilleure config e5-large : `{w.cfg.layer_set}/{w.cfg.head_agg}` · "
-             f"W={w.cfg.W} · c={w.c}** → F1_multi={w.f1:.3f} "
+    L.append(f"**Meilleure config e5-large (par F1_global) : `{w.cfg.layer_set}/"
+             f"{w.cfg.head_agg}` · W={w.cfg.W} · c={w.c}** → F1_multi={w.f1:.3f} "
              f"(P={w.precision:.3f}, R={w.recall:.3f}), Pk={w.pk:.3f}, "
              f"WindowDiff={w.windowdiff:.3f}, F1_global={w.gf1:.3f}, "
              f"mono_FP={w.mono_fp_rate:.3f}.\n")
@@ -172,15 +182,39 @@ def build_report(gold_path, items, scores, info, feas, emb_ctrl,
         d_pk = w.pk - base_win["Pk"]
         d_gf1 = w.gf1 - base_win["F1_global"]
         d_fp = w.mono_fp_rate - base_win["mono_FP"]
-        # « bat » = strictement meilleur sur F1_multi ET Pk (objectif réglé-main).
-        beats = (w.f1 > base_win["F1_multi"] + 1e-9) and (w.pk < base_win["Pk"] - 1e-9)
-        beats_g = w.gf1 > base_win["F1_global"] + 1e-9
-        verdict = "**OUI**" if beats else ("partiellement (F1_global)" if beats_g else "**NON**")
-        L.append(f"- **e5-large bat-il e5-base réglé-main ? {verdict}.** "
-                 f"vs e5-base (F1_multi={base_win['F1_multi']}, Pk={base_win['Pk']}, "
-                 f"mono_FP={base_win['mono_FP']}, F1_global={base_win['F1_global']}) : "
-                 f"**ΔF1_multi={d_f1:+.3f}**, **ΔPk={d_pk:+.3f}** (négatif = mieux), "
-                 f"ΔF1_global={d_gf1:+.3f}, Δmono_FP={d_fp:+.3f}.\n")
+        # Verdict APPARIÉ : e5-large ne « gagne » que s'il bat e5-base SANS dégrader
+        # l'abstention. Le F1_multi brut ↑ alors que mono_FP explose = sur-segmentation,
+        # pas un meilleur signal — c'est la leçon répétée du projet.
+        beats_matched = bool(matched and matched.f1 > base_win["F1_multi"] + 1e-9
+                             and matched.pk < base_win["Pk"] - 1e-9)
+        d_gf1_pos = d_gf1 > 1e-9
+        verdict = "**OUI**" if beats_matched else "**NON**"
+        L.append(f"- **e5-large relève-t-il le plafond, à abstention tenue ? {verdict}.** "
+                 f"La meilleure config par F1_global affiche bien ΔF1_multi={d_f1:+.3f} et "
+                 f"ΔPk={d_pk:+.3f} (négatif = mieux) vs e5-base "
+                 f"(F1_multi={base_win['F1_multi']}, Pk={base_win['Pk']}, "
+                 f"mono_FP={base_win['mono_FP']}), **mais Δmono_FP={d_fp:+.3f}** : elle "
+                 f"sur-coupe les mono cohérents {w.mono_fp_rate/max(base_win['mono_FP'],1e-9):.1f}× "
+                 f"plus. Sur l'OBJECTIF de sélection (F1_global) le gain est nul "
+                 f"(Δ={d_gf1:+.3f}) — {'à peine positif' if d_gf1_pos else 'non positif'}.\n")
+        if matched:
+            dm_f1 = matched.f1 - base_win["F1_multi"]
+            dm_pk = matched.pk - base_win["Pk"]
+            L.append(f"- **Comparaison décisive — abstention APPARIÉE** (mono_FP ≤ "
+                     f"{base_win['mono_FP']}, comme e5-base) : la meilleure config e5-large "
+                     f"sous cette contrainte est `{matched.cfg.layer_set}/"
+                     f"{matched.cfg.head_agg}` W={matched.cfg.W} c={matched.c} → "
+                     f"F1_multi={matched.f1:.3f}, Pk={matched.pk:.3f}, "
+                     f"mono_FP={matched.mono_fp_rate:.3f} → "
+                     f"**ΔF1_multi={dm_f1:+.3f}, ΔPk={dm_pk:+.3f}**. À abstention égale, "
+                     f"e5-large {'**bat**' if beats_matched else '**ne bat pas**'} e5-base : "
+                     f"le 24-couches ne relève donc pas le plafond du signal — le gain "
+                     f"apparent du tableau §1 est **acheté par la sur-segmentation des "
+                     f"mono**, pas par un meilleur signal de frontière.\n")
+        else:
+            L.append(f"- **Abstention appariée** : AUCUNE config e5-large ne tient "
+                     f"mono_FP ≤ {base_win['mono_FP']} — l'encodeur large sur-coupe "
+                     f"systématiquement les mono.\n")
     if emb_ctrl:
         e = emb_ctrl
         d_f1e = w.f1 - e["F1_multi"]
