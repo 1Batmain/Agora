@@ -1,0 +1,110 @@
+{
+  "gold": "gold_large.json",
+  "model": "mistral-small-latest",
+  "n_items": 305,
+  "n_mono": 104,
+  "n_multi": 201,
+  "limited": false,
+  "boundaries": {
+    "F1_multi": 0.5124,
+    "Pk": 0.2505,
+    "WindowDiff": 0.2505,
+    "P": 0.9688,
+    "R": 0.3483,
+    "mono_FP": 0.0,
+    "mono_cuts": 0.0,
+    "F1_global": 0.5124,
+    "covered": 305,
+    "beats_attention_0769": false,
+    "multi_zero_cut": 119,
+    "n_multi": 201,
+    "pred_mean_multi": 0.478,
+    "gold_mean_multi": 1.328
+  },
+  "themes": {
+    "micro_P": 0.8807,
+    "micro_R": 0.9808,
+    "micro_F1": 0.928,
+    "macro_F1": 0.9346,
+    "exact_set": 0.7344,
+    "covered": 305,
+    "per_theme": {
+      "harcelement": {
+        "p": 0.9863,
+        "r": 0.9863,
+        "f1": 0.9863,
+        "tp": 72,
+        "fp": 1,
+        "fn": 1
+      },
+      "addiction": {
+        "p": 0.8987,
+        "r": 1.0,
+        "f1": 0.9467,
+        "tp": 71,
+        "fp": 8,
+        "fn": 0
+      },
+      "image_corps": {
+        "p": 0.9583,
+        "r": 1.0,
+        "f1": 0.9787,
+        "tp": 69,
+        "fp": 3,
+        "fn": 0
+      },
+      "algorithme": {
+        "p": 0.9697,
+        "r": 0.9014,
+        "f1": 0.9343,
+        "tp": 64,
+        "fp": 2,
+        "fn": 7
+      },
+      "contenus_choquants": {
+        "p": 0.9118,
+        "r": 0.9538,
+        "f1": 0.9323,
+        "tp": 62,
+        "fp": 6,
+        "fn": 3
+      },
+      "enfants": {
+        "p": 0.67,
+        "r": 1.0,
+        "f1": 0.8024,
+        "tp": 67,
+        "fp": 33,
+        "fn": 0
+      },
+      "desinformation": {
+        "p": 1.0,
+        "r": 1.0,
+        "f1": 1.0,
+        "tp": 57,
+        "fp": 0,
+        "fn": 0
+      },
+      "sante_mentale": {
+        "p": 0.8115,
+        "r": 1.0,
+        "f1": 0.8959,
+        "tp": 99,
+        "fp": 23,
+        "fn": 0
+      }
+    }
+  },
+  "cost": {
+    "cold_calls": 77,
+    "cold_seconds": 69.5,
+    "cold_chars": 229502,
+    "this_run_api_calls": 0,
+    "cache_hits": 77,
+    "errors": 0
+  },
+  "baselines": {
+    "attention_F1": 0.769,
+    "changepoint_F1": 0.44
+  }
+}
