@@ -26,6 +26,9 @@
 
   font-family: 'Marianne', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   color: var(--grey-1000);
+
+  /* header height — used to offset the sticky right column / resizer below it. */
+  --header-h: 66px;
 }
 
 * {
@@ -34,20 +37,20 @@
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
   margin: 0;
 }
+/* The PAGE scrolls vertically (map on top, indices dashboard beneath). */
 body {
   background: var(--bg);
   color: var(--grey-1000);
-  overflow: hidden;
 }
 
 .agora {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
 }
 
 /* ---------- header (État style) ---------- */
@@ -55,11 +58,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   padding: 10px 20px;
   background: var(--bg-raised);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
-  z-index: 2;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 .gov-header__brand {
   display: flex;
@@ -93,6 +99,36 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* dataset / backend pickers, relocated into the header */
+.header-dataset {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+}
+.header-dataset > span {
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 700;
+  color: var(--grey-500);
+}
+.header-dataset__select {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-raised);
+  color: var(--grey-1000);
+  max-width: 280px;
+}
+.header-dataset__select:focus {
+  outline: 2px solid var(--agora);
+  outline-offset: 1px;
 }
 
 /* ---------- tabs ---------- */
@@ -120,31 +156,64 @@ body {
   font-weight: 700;
 }
 
-/* ---------- 3-column body ---------- */
+/* ---------- 2-column body (canvas | resizable right panel) ---------- */
 .agora__body {
-  display: grid;
-  grid-template-columns: 300px 1fr 380px;
+  display: flex;
+  align-items: flex-start;
   flex: 1;
   min-height: 0;
-}
-.agora__left,
-.agora__right {
-  background: var(--bg-raised);
-  overflow-y: auto;
-  padding: 16px;
-}
-.agora__left {
-  border-right: 1px solid var(--border);
-}
-.agora__right {
-  border-left: 1px solid var(--border);
 }
 .agora__center {
   display: flex;
   flex-direction: column;
+  flex: 1;
   min-width: 0;
-  min-height: 0;
   background: var(--bg);
+}
+/* The map lives in a fixed-height canvas; the dashboard flows beneath it → the
+   whole page scrolls vertically. */
+.agora__canvas {
+  position: relative;
+  height: 62vh;
+  min-height: 380px;
+}
+
+/* Right panel: sticky beneath the header, its own scroll, drag-resizable width. */
+.agora__right {
+  flex: 0 0 var(--right-w, 380px);
+  width: var(--right-w, 380px);
+  background: var(--bg-raised);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+}
+
+/* Drag handle between the canvas and the right panel. */
+.agora__resizer {
+  flex: 0 0 8px;
+  align-self: stretch;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  cursor: col-resize;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  touch-action: none;
+}
+.agora__resizer:hover .agora__resizer-grip,
+.agora__resizer:active .agora__resizer-grip {
+  background: var(--agora);
+}
+.agora__resizer-grip {
+  width: 3px;
+  height: 42px;
+  border-radius: 3px;
+  background: var(--border);
+  transition: background 0.12s;
 }
 .agora__loading {
   flex: 1;
@@ -152,6 +221,7 @@ body {
   place-items: center;
   color: var(--grey-500);
   gap: 8px;
+  height: 100%;
 }
 .agora__error {
   color: #ce0500;
@@ -313,8 +383,8 @@ body {
 /* ---------- spatial map ---------- */
 .map {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  width: 100%;
+  height: 100%;
 }
 .map__svg {
   width: 100%;
@@ -611,20 +681,90 @@ body {
   }
 }
 
-/* ---------- responsive ---------- */
-@media (max-width: 1100px) {
-  .agora__body {
-    grid-template-columns: 240px 1fr 300px;
-  }
+/* ---------- indices dashboard (under the map) ---------- */
+.dashboard {
+  padding: 20px 24px 28px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
 }
-@media (max-width: 860px) {
+.dashboard__title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--grey-500);
+  margin: 0 0 14px;
+}
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+.indic {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.indic__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.indic__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--grey-700);
+}
+.indic__value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--agora-active);
+  white-space: nowrap;
+}
+.indic__gauge {
+  height: 7px;
+  border-radius: 4px;
+  background: var(--agora-soft);
+  overflow: hidden;
+}
+.indic__gaugefill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--agora), var(--agora-active));
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.indic__hint {
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--grey-500);
+  margin: 0;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  /* Stack the panel beneath the canvas; drop the sticky resizer. */
   .agora__body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    overflow-y: auto;
+    flex-direction: column;
+    align-items: stretch;
   }
-  .agora__left,
+  .agora__resizer {
+    display: none;
+  }
   .agora__right {
-    max-height: 40vh;
+    flex: none;
+    width: 100%;
+    position: static;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+  .agora__canvas {
+    height: 56vh;
   }
 }
