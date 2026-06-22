@@ -5,6 +5,10 @@ import { KnobsPanel } from './KnobsPanel';
 import { DatasetPicker } from './DatasetPicker';
 import { MethodPicker } from './MethodPicker';
 import { NamingPicker } from './NamingPicker';
+import { ViewPicker } from './ViewPicker';
+import { ClaimsControls } from './ClaimsControls';
+import { ClaimsView } from './ClaimsView';
+import { ClaimsThemePanel } from './ClaimsThemePanel';
 import { StatsBar } from './StatsBar';
 import { AvisPanel } from './AvisPanel';
 import { SynthesisPanel } from './SynthesisPanel';
@@ -15,9 +19,20 @@ import {
   fetchParams,
   fetchStatic,
   recluster,
+  runClaims,
 } from './api';
 import type { PackNode } from './hierarchy';
-import type { ClusterMethod, Dataset, GraphPayload, KnobSpec, Knobs, NamingMethod } from './types';
+import type {
+  ClaimsPayload,
+  ClaimTheme,
+  ClusterMethod,
+  Dataset,
+  GraphPayload,
+  KnobSpec,
+  Knobs,
+  NamingMethod,
+  ViewMode,
+} from './types';
 
 const DEBOUNCE_MS = 300;
 
@@ -39,6 +54,14 @@ export default function App() {
   const [dataset, setDataset] = useState<string | null>(null);
   const [method, setMethod] = useState<ClusterMethod>('leiden');
   const [naming, setNaming] = useState<NamingMethod>('ctfidf');
+
+  // Emergent-claims view (orthogonal to the cluster views; never mutates them).
+  const [view, setView] = useState<ViewMode>('clusters');
+  const [claims, setClaims] = useState<ClaimsPayload | null>(null);
+  const [claimsBusy, setClaimsBusy] = useState(false);
+  const [claimsError, setClaimsError] = useState<string | null>(null);
+  const [claimsResolution, setClaimsResolution] = useState(1.0);
+  const [claimsTheme, setClaimsTheme] = useState<ClaimTheme | null>(null);
 
   // Boot: discover datasets, then load the default one's knobs + first graph.
   useEffect(() => {
@@ -135,7 +158,13 @@ export default function App() {
   const onDataset = useCallbackRef(async (id: string) => {
     if (!live || id === dataset) return;
     setDataset(id);
+    // Claims are per-dataset: drop the previous result so the new dataset
+    // recomputes on demand (and auto-runs if we're in the claims view).
+    setClaims(null);
+    setClaimsTheme(null);
+    setClaimsError(null);
     await loadConfig(id, method, naming);
+    if (view === 'claims') await runClaimsNow(id, claimsResolution);
   });
 
   // Switch clustering method (keeps the current dataset + naming). The knobs
@@ -156,6 +185,30 @@ export default function App() {
     await runRecluster(values, dataset, method, nm);
   });
 
+  // Run the emergent-claims pipeline for the current dataset + resolution.
+  const runClaimsNow = useCallbackRef(async (ds: string | null, res: number) => {
+    setClaimsBusy(true);
+    setClaimsError(null);
+    try {
+      const c = await runClaims(ds ?? undefined, res);
+      setClaims(c);
+      setClaimsTheme(null);
+    } catch (e) {
+      setClaimsError(`calcul des thèmes a échoué : ${String(e)}`);
+    } finally {
+      setClaimsBusy(false);
+    }
+  });
+
+  // Switching the view never re-runs clustering. Entering the claims view for the
+  // first time on a dataset auto-runs the pipeline (fast if already cached).
+  const onView = useCallbackRef(async (v: ViewMode) => {
+    setView(v);
+    if (v === 'claims' && !claims && !claimsBusy && live) {
+      await runClaimsNow(dataset, claimsResolution);
+    }
+  });
+
   const stats = useMemo(() => (payload ? deriveStats(payload) : null), [payload]);
 
   return (
@@ -167,39 +220,76 @@ export default function App() {
         <DatasetPicker
           datasets={datasets}
           current={dataset}
-          disabled={!live || busy}
+          disabled={!live || busy || claimsBusy}
           onChange={onDataset}
         />
-        <MethodPicker current={method} disabled={!live || busy} onChange={onMethod} />
-        <NamingPicker
-          current={naming}
-          fallback={stats?.naming_fallback ?? false}
-          disabled={!live || busy}
-          onChange={onNaming}
-        />
-        <KnobsPanel
-          specs={specs}
-          values={values}
-          disabled={!live}
-          busy={busy}
-          onChange={onKnob}
-          onReset={onReset}
-        />
-        <SynthesisPanel dataset={dataset} method={method} naming={naming} disabled={!live || busy} />
+        <ViewPicker current={view} disabled={!live || busy || claimsBusy} onChange={onView} />
+        {view === 'clusters' ? (
+          <>
+            <MethodPicker current={method} disabled={!live || busy} onChange={onMethod} />
+            <NamingPicker
+              current={naming}
+              fallback={stats?.naming_fallback ?? false}
+              disabled={!live || busy}
+              onChange={onNaming}
+            />
+            <KnobsPanel
+              specs={specs}
+              values={values}
+              disabled={!live}
+              busy={busy}
+              onChange={onKnob}
+              onReset={onReset}
+            />
+            <SynthesisPanel dataset={dataset} method={method} naming={naming} disabled={!live || busy} />
+          </>
+        ) : (
+          <ClaimsControls
+            resolution={claimsResolution}
+            onResolution={setClaimsResolution}
+            onRun={() => runClaimsNow(dataset, claimsResolution)}
+            busy={claimsBusy}
+            disabled={!live}
+            payload={claims}
+          />
+        )}
         {error && <p className="app__error">{error}</p>}
+        {view === 'claims' && claimsError && <p className="app__error">{claimsError}</p>}
       </aside>
 
       <main className="app__center">
-        {stats && <StatsBar stats={stats} live={live} />}
-        {payload ? (
-          <CirclePack payload={payload} onSelect={setSelected} selectedId={selected?.data.id ?? null} />
+        {view === 'clusters' ? (
+          <>
+            {stats && <StatsBar stats={stats} live={live} />}
+            {payload ? (
+              <CirclePack
+                payload={payload}
+                onSelect={setSelected}
+                selectedId={selected?.data.id ?? null}
+              />
+            ) : (
+              <div className="app__loading">{error ?? 'chargement…'}</div>
+            )}
+          </>
+        ) : claimsBusy ? (
+          <div className="app__loading">calcul des thèmes émergents…</div>
+        ) : claims ? (
+          <ClaimsView
+            payload={claims}
+            selectedId={claimsTheme?.cluster_id ?? null}
+            onSelect={setClaimsTheme}
+          />
         ) : (
-          <div className="app__loading">{error ?? 'chargement…'}</div>
+          <div className="app__loading">{claimsError ?? 'Lance le calcul des thèmes à gauche.'}</div>
         )}
       </main>
 
       <aside className="app__right">
-        <AvisPanel selected={selected} />
+        {view === 'clusters' ? (
+          <AvisPanel selected={selected} />
+        ) : (
+          <ClaimsThemePanel theme={claimsTheme} />
+        )}
       </aside>
     </div>
   );

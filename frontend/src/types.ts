@@ -90,6 +90,37 @@ export interface Dataset {
   source?: string;
 }
 
+/** View mode: existing cluster views vs the emergent-claims map. */
+export type ViewMode = 'clusters' | 'claims';
+
+/** One emergent theme (cluster of claims) from `POST /api/claims`. */
+export interface ClaimTheme {
+  cluster_id: number;
+  name: string; // c-TF-IDF label
+  keywords: string[];
+  n_claims: number;
+  n_avis: number;
+  weight: number;
+  consensus: number;
+  diversity: number;
+  representative_claims: string[];
+}
+
+/** A co-occurrence edge: `count` avis whose claims bridge themes `a` and `b`. */
+export interface ClaimsCooc {
+  a: number;
+  b: number;
+  count: number;
+}
+
+/** `POST /api/claims` → emergent themes + co-occurrence map. */
+export interface ClaimsPayload {
+  themes: ClaimTheme[];
+  cooccurrence: ClaimsCooc[];
+  params: Record<string, any>;
+  meta?: Record<string, any>;
+}
+
 /** One tunable knob, used to build a slider in the panel. */
 export interface KnobSpec {
   key: string;
