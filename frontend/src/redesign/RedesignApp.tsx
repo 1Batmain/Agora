@@ -295,6 +295,7 @@ export default function RedesignApp() {
         <aside className="agora__right">
           {showCitations && selected ? (
             <CitationsPanel
+              dataset={dataset}
               themeLabel={selected.label}
               citations={citations}
               loading={citationsLoading}

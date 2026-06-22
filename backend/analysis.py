@@ -36,6 +36,7 @@ from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
+from pipeline.cluster.palette import color_for
 
 # --- Hyper-paramètres de FORME (sans unité corpus-spécifique) -------------- #
 # Échelle de résolutions ESSAYÉES pour subdiviser un thème hétérogène : on part de
@@ -62,6 +63,7 @@ class ThemeNode:
     keywords: list[str] = field(default_factory=list)
     representative_claims: list[str] = field(default_factory=list)
     children: list[str] = field(default_factory=list)
+    color: str = ""                 # couleur cluster (source unique : palette.py)
     x: float = 0.0
     y: float = 0.0
 
@@ -241,6 +243,27 @@ def _name_nodes(nodes: dict[str, ThemeNode], claim_texts: list[str]) -> None:
         node.keywords = info.get("keywords", [])
 
 
+def macro_of(node: ThemeNode, nodes: dict[str, ThemeNode]) -> ThemeNode:
+    """Remonte au macro-thème (ancêtre de profondeur 0) qui contient `node`."""
+    cur = node
+    while cur.parent_id is not None:
+        cur = nodes[cur.parent_id]
+    return cur
+
+
+def _assign_colors(nodes: dict[str, ThemeNode], macros: list[str]) -> None:
+    """Couleur cluster par MACRO (source unique : palette.py), héritée par les enfants.
+
+    Tous les nœuds d'un même macro partagent sa couleur → les bulles, les thèmes de
+    `/analysis` et les surlignages d'avis (provenance) restent COHÉRENTS, sans aucune
+    couleur dupliquée côté front. Teintes équiréparties sur le nombre de macros.
+    """
+    n = len(macros)
+    rank = {mid: i for i, mid in enumerate(macros)}
+    for node in nodes.values():
+        node.color = color_for(rank.get(macro_of(node, nodes).id, 0), n)
+
+
 def _representatives(node: ThemeNode, vecs: np.ndarray, claim_texts: list[str],
                      k: int = N_REPRESENTATIVE) -> list[str]:
     """Claims les plus proches du centroïde (médoïdes), sans quasi-doublon littéral."""
@@ -395,6 +418,7 @@ def build_theme_tree(
             macros.append(mid)
 
         _name_nodes(nodes, prepared.claim_texts)
+        _assign_colors(nodes, macros)
         for node in nodes.values():
             node.representative_claims = _representatives(node, vecs, prepared.claim_texts)
 
@@ -463,6 +487,7 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
             "dispersion": n.dispersion,
             "parent_id": n.parent_id,
             "has_children": n.has_children,
+            "color": n.color,       # couleur cluster (source unique : palette.py)
             # extras hors-contrat (le front peut les ignorer) :
             "level": n.depth,
             "keywords": n.keywords,
