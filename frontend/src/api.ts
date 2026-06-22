@@ -1,4 +1,4 @@
-import type { ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, NamingMethod, SynthesisResult, Theme } from './types';
+import type { ClaimsPayload, ClusterMethod, Dataset, GraphPayload, GraphStats, KnobSpec, Knobs, NamingMethod, SynthesisResult, Theme } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -21,13 +21,25 @@ export const DEFAULT_KNOBS: KnobSpec[] = [
 // UMAP (~15-35 s) et le nommage LLM (Ollama local) ~40-84 s. Un timeout court avortait
 // ces requêtes valides (AbortError). 180 s couvre le pire cas (hdbscan + LLM sur x-stance).
 const TIMEOUT_MS = 180000;
+// Claims: the FIRST extraction for an un-cached dataset is long (~1.3 s/avis on
+// the Mac). Subsequent runs (incl. a resolution change) replay from cache and are
+// fast. A generous timeout covers a cold dataset of a few hundred avis.
+const CLAIMS_TIMEOUT_MS = 900000;
 
-async function jsonFetch(url: string, init?: RequestInit): Promise<any> {
+async function jsonFetch(url: string, init?: RequestInit, timeoutMs = TIMEOUT_MS): Promise<any> {
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const r = await fetch(url, { ...init, signal: ctrl.signal });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    if (!r.ok) {
+      // Surface the backend's `detail` (e.g. 503 = Mac unreachable) when present.
+      const detail = await r
+        .clone()
+        .json()
+        .then((b) => (b && typeof b.detail === 'string' ? b.detail : null))
+        .catch(() => null);
+      throw new Error(detail ? `HTTP ${r.status} — ${detail}` : `HTTP ${r.status}`);
+    }
     return await r.json();
   } finally {
     clearTimeout(t);
@@ -127,6 +139,28 @@ export async function synthesize(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })) as SynthesisResult;
+}
+
+/**
+ * POST /api/claims {dataset?, resolution?} → emergent-themes map (avis → claims →
+ * cluster). First call on a cold dataset extracts claims on the Mac (long); later
+ * calls — including a resolution change — replay from the backend cache and are
+ * fast. Uses a long timeout for the cold case. Throws (with the backend `detail`)
+ * on 503 when the Mac is needed but unreachable.
+ */
+export async function runClaims(dataset?: string, resolution?: number): Promise<ClaimsPayload> {
+  const body: Record<string, unknown> = {};
+  if (dataset) body.dataset = dataset;
+  if (typeof resolution === 'number') body.resolution = resolution;
+  return (await jsonFetch(
+    '/api/claims',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+    CLAIMS_TIMEOUT_MS,
+  )) as ClaimsPayload;
 }
 
 /** Static fallback: REAL consultation first, committed fixture otherwise. */
