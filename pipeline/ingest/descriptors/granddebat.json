@@ -1,0 +1,15 @@
+{
+  "name": "granddebat",
+  "format": "csv",
+  "path": "data/raw/granddebat_democratie_citoyennete.csv",
+  "url": "https://static.data.gouv.fr/resources/donnees-ouvertes-du-grand-debat-national/20200611-221937/democratie-et-citoyennete.csv",
+  "encoding": "utf-8",
+  "delimiter": ",",
+  "has_header": true,
+  "columns": {
+    "id": 0,
+    "ts": 3,
+    "text": 14
+  },
+  "_note": "Grand Debat National 2019 — espace 'La democratie et la citoyennete' (open data data.gouv.fr, Licence Ouverte 2.0). CSV UTF-8, separateur ','. Une ligne = une contribution; les colonnes 11..47 sont autant de QUESTIONS OUVERTES (texte libre). col 14 = 'Que faudrait-il faire pour renouer le lien entre les citoyens et les elus qui les representent ?' : question tres ouverte => opinions VARIEES et CONTRASTEES (contrairement a TikTok qui oriente tout). Snapshot 31/01/2019 (92 MB, le plus leger complet) choisi pour limiter l'ingestion. Pour d'autres axes, changer 'text' vers une autre colonne ouverte: 11 (en qui faites-vous confiance), 23 (democratie participative), 26 (controle argent public), 43 (immigration), 47 (sujet libre). author non mappe => defaut = id (1 contribution = 1 repondant). PAS de 'lang_keep': la source n'a pas de colonne langue, le FR est (re)detecte en aval (audit #13); filtrer ensuite via --balance/--lang fr au build_cache. Les lignes a reponse vide sur cette colonne sont filtrees en aval par --min-chars."
+}
