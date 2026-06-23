@@ -201,7 +201,7 @@
 ## CLAIM AVEC CIBLE/ASPECT (target) — note Bob (à faire avec la distillation C2/C3)
 - Chaque claim porte une **cible** (l'aspect dont il parle) : ex. « j'aime les vidéos parce qu'elles me font rire » →
   cible **vidéo** ; « le temps passé sur l'écran me dégoûte » → cible **temps d'écran**.
-- Modèle : `Claim = {spans, text, target}` (target = aspect court extrait par le LLM ; peut être normalisé pour le clustering).
+- Modèle : `Claim = {spans, text, target}` où **target = portion VERBATIM** de l'avis (la phrase-sujet, ex. « temps passé sur l'écran », PAS « temps d'écran »). Le target est **validé comme sous-chaîne exacte** (gate verbatim s'applique aussi). La **normalisation en aspect propre** (« vidéo », « temps d'écran ») se fait EN AVAL par **clustering sémantique des cibles** (embeddings) — pas à l'extraction.
 - **Pourquoi** : (1) clustering **thématique par cible** = thèmes plus nets que par embedding seul ; (2) la **stance**
   (position pour/contre vis-à-vis de LA cible) devient explicite. Aligne extraction → thème → stance sur la même cible.
 - Extraction : le LLM renvoie `{"claims":[{"parts":[...], "target":"vidéo"}, ...]}`. mistral-large devrait gérer ;
@@ -213,4 +213,4 @@
 - Le `text`/spans d'un claim = **TOUJOURS sous-chaîne EXACTE** de l'avis (`align_spans` valide ; non-ancré = rejeté).
   C'est LA garantie de fidélité à l'avis du citoyen. **Métrique DURE de l'éval** : tout prompt/modèle qui paraphrase
   ou « corrige » (fautes comprises) est **disqualifié**, quel que soit son score de découpe.
-- La **cible/aspect** (target) est la SEULE valeur dérivée/non-verbatim (une étiquette), à côté du claim — jamais dans le texte.
+- La **cible/aspect** (target) est AUSSI **extraite verbatim** (sous-chaîne exacte) → validée comme le reste. La normalisation en aspect propre est un traitement EN AVAL (clustering), pas une invention à l'extraction.
