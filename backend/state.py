@@ -46,8 +46,21 @@ from backend.analysis import (
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_SEED
 from pipeline.cluster.adaptive import MIN_SUB_FLOOR, derive_defaults
+from pipeline.cluster.knn import build_knn_graph
+from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.palette import color_for
+
+# Mode de dérivation du niveau MACRO de l'incrémental :
+#   - "root"      : macros = enfants du root (split-racine unique, défaut historique) ;
+#   - "recompute" : RECOMPUTE PARTIEL (option B' — Lane E0) = Leiden sur les centroïdes
+#                   des FEUILLES (n_feuilles ≪ n_claims → cheap), matérialisé en
+#                   root→macro→feuilles. Corrige la STALENESS du split-racine figé tôt.
+# Verdict d'éval (research/inc_macro_report.md) : "recompute" est la seule dérivation
+# GÉNÉRIQUE (ne s'effondre jamais — option A coarsen : granddebat V=0.03) ; gain V
+# modeste, le plafond étant fixé par la structure des feuilles (oracle ≈0.52/0.75).
+MACRO_MODE_ROOT = "root"
+MACRO_MODE_RECOMPUTE = "recompute"
 
 
 class AnalysisState:
@@ -59,9 +72,11 @@ class AnalysisState:
     """
 
     def __init__(self, prepared: PreparedClaims, *, dataset: str = "",
-                 resolution: float = 1.0, seed: int = DEFAULT_SEED) -> None:
+                 resolution: float = 1.0, seed: int = DEFAULT_SEED,
+                 macro_mode: str = MACRO_MODE_ROOT) -> None:
         self.prepared = prepared
         self.dataset = dataset
+        self.macro_mode = macro_mode
         self.mat = np.asarray(prepared.claim_vecs, dtype=np.float64)   # support des vecs
         self.owner = prepared.claim_owner
         self.weights = prepared.claim_weight
@@ -93,10 +108,12 @@ class AnalysisState:
     @classmethod
     def from_dataset(cls, ds, *, backend: str | None = None, model: str | None = None,
                      embedder: str = DEFAULT_EMBEDDER, min_chars: int | None = None,
-                     resolution: float = 1.0, seed: int = DEFAULT_SEED) -> "AnalysisState":
+                     resolution: float = 1.0, seed: int = DEFAULT_SEED,
+                     macro_mode: str = MACRO_MODE_ROOT) -> "AnalysisState":
         kw = {} if min_chars is None else {"min_chars": min_chars}
         prepared = prepare_claims(ds, backend=backend, model=model, embedder=embedder, **kw)
-        return cls(prepared, dataset=ds.id, resolution=resolution, seed=seed)
+        return cls(prepared, dataset=ds.id, resolution=resolution, seed=seed,
+                   macro_mode=macro_mode)
 
     # ------------------------------------------------------------------ #
     # Helpers d'arbre
@@ -235,9 +252,106 @@ class AnalysisState:
         return events
 
     def add_all(self) -> None:
-        """Ajoute tous les claims du cache dans l'ordre (build batch via l'incrémental)."""
+        """Ajoute tous les claims du cache dans l'ordre (build batch via l'incrémental).
+
+        En mode `recompute`, re-dérive le niveau MACRO à la fin (option B' — Lane E0).
+        """
         for idx in range(self._n):
             self.add_claim(idx)
+        if self.macro_mode == MACRO_MODE_RECOMPUTE:
+            self.rebuild_macro_layer()
+
+    # ------------------------------------------------------------------ #
+    # RECOMPUTE PARTIEL du niveau MACRO (option B' — Lane E0, derrière flag)
+    # ------------------------------------------------------------------ #
+    def rebuild_macro_layer(self) -> bool:
+        """Re-dérive la partition MACRO par Leiden sur les CENTROÏDES des feuilles.
+
+        L'incrémental pur fige sa partition macro au 1er split du root (sur un petit
+        échantillon) → trop peu de macros, partition STALE. On la recalcule sur un
+        sous-problème MINUSCULE (n_feuilles ≪ n_claims, borné par n_feuilles) : kNN+Leiden
+        DÉRIVÉS sur les centroïdes des feuilles courantes → communautés de feuilles, puis
+        on MATÉRIALISE un niveau propre `root → macro_i → feuilles` (les subdivisions
+        internes intermédiaires sont aplaties sous les macros). Générique (k/seuil/
+        résolution dérivés), ZÉRO LLM (réutilise les embeddings cachés).
+
+        Verdict d'éval (research/inc_macro_report.md) : option B' (Leiden SANS coarsening)
+        est la seule dérivation à NE JAMAIS s'effondrer — le coarsening final (option B
+        littérale) détruit les corpus multi-sujets (granddebat V 0.38→0.14). Le gain de
+        V-mesure sur la baseline reste modeste, le PLAFOND étant fixé par la structure des
+        feuilles (oracle ≈0.52 granddebat / 0.75 tiktok), pas par la dérivation macro.
+
+        Renvoie True si la partition a été matérialisée, False si abstention (on garde
+        la structure courante : <2 feuilles, ou Leiden ne dégage pas ≥2 communautés).
+        """
+        if self.root_id is None:
+            return False
+        leaves = self._leaves()
+        if len(leaves) < 2:
+            return False
+
+        cents = np.ascontiguousarray(
+            np.asarray([lf.centroid for lf in leaves]), dtype=np.float64)
+        dd = derive_defaults(cents.astype(np.float32))
+        graph = build_knn_graph(cents, k=dd.k, threshold=dd.threshold)
+        membership = run_leiden(graph, resolution=self.base_resolution,
+                                seed=self.seed).membership
+        by_comm: dict[int, list[int]] = {}
+        for li, c in enumerate(membership):
+            by_comm.setdefault(c, []).append(li)
+        groups = list(by_comm.values())
+        if len(groups) < 2:
+            return False                  # abstention : on garde la structure courante
+
+        # Matérialise root → macros → feuilles. On conserve racine + feuilles, on crée un
+        # macro par communauté, on jette les nœuds internes intermédiaires (stale).
+        root = self.nodes[self.root_id]
+        nodes: dict[str, ThemeNode] = {self.root_id: root}
+        order: list[str] = [self.root_id]
+        keep_sum = {self.root_id: self._sum[self.root_id]}
+        keep_wsum = {self.root_id: self._wsum[self.root_id]}
+        keep_owners = {self.root_id: self._owners[self.root_id]}
+        root.children, root.depth = [], 0
+
+        for grp in groups:
+            grp_leaves = [leaves[li] for li in grp]
+            members = [m for lf in grp_leaves for m in lf.members]
+            mid = self._new_id()
+            s = self.mat[members].sum(axis=0)
+            owners: dict[int, int] = {}
+            for i in members:
+                owners[self.owner[i]] = owners.get(self.owner[i], 0) + 1
+            macro = ThemeNode(
+                id=mid, parent_id=self.root_id, depth=1, members=list(members),
+                centroid=s, dispersion=0.0, consensus=1.0, weight=0.0,
+                n_claims=len(members), n_avis=len(owners),
+            )
+            nodes[mid] = macro
+            order.append(mid)
+            keep_sum[mid] = s.astype(np.float64)
+            keep_wsum[mid] = float(self.weights[members].sum())
+            keep_owners[mid] = owners
+            root.children.append(mid)
+            for lf in grp_leaves:                  # ré-parente les feuilles sous le macro
+                lf.parent_id, lf.depth, lf.children = mid, 2, []
+                macro.children.append(lf.id)
+                nodes[lf.id] = lf
+                order.append(lf.id)
+                keep_sum[lf.id] = self._sum[lf.id]
+                keep_wsum[lf.id] = self._wsum[lf.id]
+                keep_owners[lf.id] = self._owners[lf.id]
+
+        self.nodes, self.order = nodes, order
+        self._sum, self._wsum, self._owners = keep_sum, keep_wsum, keep_owners
+        for node in self.nodes.values():
+            self._refresh_stats(node)
+        # Nommage / couleur / convergence LOCAUX (tout l'arbre re-matérialisé).
+        self._name(list(self.nodes.keys()))
+        self._recolor()
+        kk = self._shrink_k()
+        for node in self.nodes.values():
+            self._set_convergence(node, kk)
+        return True
 
     # ------------------------------------------------------------------ #
     # Split LOCAL d'une feuille hétérogène
