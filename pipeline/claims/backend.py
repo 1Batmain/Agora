@@ -65,7 +65,8 @@ class ClaimBackend:
     sovereign = False
     note = ""
 
-    def complete(self, messages: list[dict], *, stats: OllamaStats) -> str | None:
+    def complete(self, messages: list[dict], *, stats: OllamaStats,
+                 max_tokens: int | None = None) -> str | None:
         raise NotImplementedError
 
 
@@ -81,7 +82,8 @@ class ApiBackend(ClaimBackend):
         # quand les claims sont déjà en cache (la clé n'est requise qu'à l'extraction).
         self.model = model or API_MODEL
 
-    def complete(self, messages: list[dict], *, stats: OllamaStats) -> str | None:
+    def complete(self, messages: list[dict], *, stats: OllamaStats,
+                 max_tokens: int | None = None) -> str | None:
         if not mistral_client.available():
             raise BackendUnavailable(
                 "clé API Mistral absente — fournir MISTRAL_API_KEY ou var/mistral.key."
@@ -91,7 +93,7 @@ class ApiBackend(ClaimBackend):
             try:
                 content = mistral_client.chat(
                     messages, model=self.model, temperature=0.0,
-                    max_tokens=MAX_TOKENS, json_mode=True,
+                    max_tokens=max_tokens or MAX_TOKENS, json_mode=True,
                 )
             except mistral_client.MistralError as exc:
                 # `exc.status` seul : ne JAMAIS logger la clé (ni le message de l'API).
@@ -151,13 +153,15 @@ class MacBackend(ClaimBackend):
             print(f"  ℹ️ Mac @ {_redact(self.client.base_url)} injoignable: {type(exc).__name__}")
             return False
 
-    def complete(self, messages: list[dict], *, stats: OllamaStats) -> str | None:
+    def complete(self, messages: list[dict], *, stats: OllamaStats,
+                 max_tokens: int | None = None) -> str | None:
         if not self._ensure_warm():
             raise BackendUnavailable(
                 f"LLM local {self.model!r} injoignable — exporter AGORA_OLLAMA_URL "
                 "depuis var/MAC_LOCAL_OLLAMA et vérifier que le Mac est allumé."
             )
-        return self.client.chat(messages, model=self.model, think=self._think, stats=stats)
+        return self.client.chat(messages, model=self.model, think=self._think,
+                                stats=stats, max_tokens=max_tokens)
 
 
 def resolve_backend(
