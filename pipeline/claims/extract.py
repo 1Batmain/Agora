@@ -31,10 +31,20 @@ if TYPE_CHECKING:
 CLAIM_SYS = (
     "Tu es un analyste d'avis citoyens, multilingue (FR, DE, IT, EN…). On te donne UN "
     "avis. Tu en extrais les CLAIMS : ses idées de FOND distinctes — chaque grief, "
-    "opinion ou proposition du citoyen. Tu RECOPIES chaque claim MOT POUR MOT depuis "
+    "opinion ou proposition du citoyen. Tu RECOPIES chaque portion MOT POUR MOT depuis "
     "l'avis (sous-chaîne EXACTE : mêmes mots, même orthographe, même ponctuation, fautes "
-    "comprises) ; tu ne reformules RIEN, n'ajoutes RIEN, ne corriges RIEN. Chaque claim "
-    "est un extrait CONTIGU de l'avis.\n"
+    "comprises) ; tu ne reformules RIEN, n'ajoutes RIEN, ne corriges RIEN.\n"
+    "\n"
+    "Chaque claim a DEUX champs :\n"
+    "• `parts` : la/les portion(s) verbatim qui PORTENT l'idée. En général UNE seule "
+    "portion contiguë. Mais si l'idée est répartie sur des passages NON-CONTIGUS de "
+    "l'avis (p.ex. la phrase qui pose l'idée + la fin d'une phrase plus loin qui s'y "
+    "réfère), mets CHAQUE morceau verbatim dans `parts` → ils forment UN seul claim. "
+    "N'utilise PLUSIEURS parts QUE si les morceaux appartiennent vraiment à la même idée.\n"
+    "• `target` : la CIBLE de l'idée — l'aspect précis dont parle le claim — recopiée "
+    "VERBATIM depuis l'avis (une courte portion : « temps passé sur l'écran », « les "
+    "vidéos », « la modération »…). C'est une portion DE L'AVIS, pas une étiquette que "
+    "tu inventes ou normalises. Si aucune cible nette ne se dégage, mets `target` à null.\n"
     "\n"
     "RÈGLES :\n"
     "1. SÉLECTIVITÉ — n'extrais que la SUBSTANCE. Laisse de côté le cadrage, le narratif "
@@ -46,24 +56,26 @@ CLAIM_SYS = (
     "contraste (« X et non Y »), une justification (« … parce que … »), une condition "
     "(« si …, alors … ») et une énumération qui DÉTAILLE une seule idée (« que ce soit X "
     "comme Y sur Z »). Ne sépare que des idées RÉELLEMENT distinctes.\n"
-    "3. SUJET + POSITION — chaque claim doit, à lui seul, dire SUR QUOI porte l'idée ET "
-    "la POSITION du citoyen dessus. Choisis la portion qui contient les DEUX ; un "
-    "fragment qui ampute le sujet ou la position est inutilisable.\n"
-    "4. VERBATIM — chaque claim est une sous-chaîne EXACTE de l'avis. En cas de doute, "
-    "recopie un peu plus de contexte plutôt que d'altérer le texte.\n"
+    "3. SUJET + POSITION — chaque claim doit, à lui seul, dire SUR QUOI porte l'idée "
+    "(la `target`) ET la POSITION du citoyen dessus. Choisis des `parts` qui contiennent "
+    "les DEUX ; un fragment qui ampute le sujet ou la position est inutilisable.\n"
+    "4. VERBATIM — chaque part ET la target sont des sous-chaînes EXACTES de l'avis. En "
+    "cas de doute, recopie un peu plus de contexte plutôt que d'altérer le texte.\n"
     "\n"
-    "EXEMPLES (ils illustrent le REGROUPEMENT et le critère SUJET+POSITION) :\n"
+    "EXEMPLES (REGROUPEMENT, SUJET+POSITION, MULTI-PARTS, TARGET) :\n"
     "• « Avoir des élus qui représentent l'intérêt des citoyens et non l'intérêt de ceux "
-    "qui ont financé leur campagne » → UN seul claim (le contraste « … et non … » est UNE "
-    "idée, on ne la coupe pas).\n"
-    "• « Plus de respect, d'honnêteté de la part des élus » → UN seul claim (l'énumération "
-    "détaille une même demande).\n"
-    "• Une énumération « que ce soit X comme Y sur Z » qui précise une seule demande → UN "
-    "seul claim.\n"
+    "qui ont financé leur campagne » → UN claim, parts=[toute la portion], target=« les "
+    "élus » (le contraste « … et non … » est UNE idée, on ne la coupe pas).\n"
+    "• « J'adore les vidéos courtes, elles me détendent » → parts=[« J'adore les vidéos "
+    "courtes, elles me détendent »], target=« les vidéos courtes ».\n"
+    "• « Le temps passé sur l'écran est trop long. […] et ça, ça me dégoûte » → si « ça » "
+    "renvoie au temps d'écran : UN claim, parts=[« Le temps passé sur l'écran est trop "
+    "long », « ça me dégoûte »], target=« temps passé sur l'écran ».\n"
     "\n"
     "Si l'avis ne porte qu'une idée, renvoie un seul claim. S'il n'en porte AUCUNE (pur "
     "narratif/cadrage), renvoie une liste vide. Réponds STRICTEMENT en JSON : "
-    '{"claims": ["extrait verbatim 1", "extrait verbatim 2", …]}.'
+    '{"claims": [{"parts": ["extrait verbatim 1", "extrait verbatim 2"], '
+    '"target": "cible verbatim"}, …]}.'
 )
 
 
@@ -72,8 +84,13 @@ def claim_prompt(text: str) -> list[dict]:
             {"role": "user", "content": "Avis :\n" + text}]
 
 
-def parse_claims(raw: str | None) -> list[str]:
-    """Parse la réponse LLM → liste de claims (tolère une clé renommée)."""
+def parse_claims(raw: str | None) -> list[dict]:
+    """Parse la réponse LLM → liste de specs `{parts:[...], target:str|None}`.
+
+    Tolérant : clé `claims` renommée ; claim donné comme simple chaîne (legacy → une
+    part, sans cible) ; `parts` donné comme chaîne unique ; clés alternatives
+    (`text`/`claim`/`verbatim`) pour la portion. Une spec sans aucune part est écartée.
+    """
     obj = parse_json_object(raw or "")
     if obj is None:
         return []
@@ -85,7 +102,29 @@ def parse_claims(raw: str | None) -> list[str]:
                 break
     if not isinstance(val, list):
         return []
-    return [str(x).strip() for x in val if str(x).strip()]
+
+    specs: list[dict] = []
+    for item in val:
+        if isinstance(item, str):                 # legacy : claim = chaîne unique
+            t = item.strip()
+            if t:
+                specs.append({"parts": [t], "target": None})
+            continue
+        if not isinstance(item, dict):
+            continue
+        parts = item.get("parts")
+        if isinstance(parts, str):
+            parts = [parts]
+        if not isinstance(parts, list):           # repli : clé alternative pour la portion
+            single = item.get("text") or item.get("claim") or item.get("verbatim")
+            parts = [single] if isinstance(single, str) else []
+        parts = [str(p).strip() for p in parts if str(p).strip()]
+        if not parts:
+            continue
+        target = item.get("target")
+        target = str(target).strip() if isinstance(target, str) and str(target).strip() else None
+        specs.append({"parts": parts, "target": target})
+    return specs
 
 
 def extract_claims(

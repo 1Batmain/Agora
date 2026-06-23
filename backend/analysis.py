@@ -454,16 +454,18 @@ def build_theme_tree(
     resolution: float = 1.0,
     seed: int = DEFAULT_SEED,
     prepared: PreparedClaims | None = None,
+    extract_progress=None,
 ) -> ThemeTree:
     """Extrait/charge les claims puis construit l'arbre variance-adaptatif.
 
     `prepared` permet de réutiliser une extraction+embed déjà faite (insights/citations
-    rejouent l'arbre sans re-préparer). Ne calcule PAS les positions UMAP (c'est le
-    rôle de `analysis_payload`) → reste léger pour les endpoints texte.
+    rejouent l'arbre sans re-préparer). `extract_progress(done, total)` suit l'extraction
+    LLM (longue). Ne calcule PAS les positions UMAP (c'est le rôle de `analysis_payload`).
     """
     if prepared is None:
         kw = {} if min_chars is None else {"min_chars": min_chars}
-        prepared = prepare_claims(ds, backend=backend, model=model, embedder=embedder, **kw)
+        prepared = prepare_claims(ds, backend=backend, model=model, embedder=embedder,
+                                  progress=extract_progress, **kw)
 
     vecs = prepared.claim_vecs
     weights = prepared.claim_weight

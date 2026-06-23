@@ -242,12 +242,13 @@ def get_avis(
     response: Response,
     dataset: str | None = Query(None),
 ) -> dict:
-    """SERVE-only : un avis EN ENTIER + ses portions verbatim surlignables.
+    """SERVE-only : un avis EN ENTIER + ses CLAIMS verbatim surlignables.
 
-    Lit `analysis/avis.json` (précalculé, instantané) → `{id, text, spans}` où chaque
-    span `{start, end, cluster_id, color, theme_label}` est une portion extractive
-    (sous-chaîne exacte) colorée à la couleur de son macro-thème (= couleur des bulles).
-    Si l'analyse n'est pas prête → 202 `building` ; 404 si l'avis est inconnu.
+    Lit `analysis/avis.json` (précalculé, instantané) → `{id, text, claims}` où chaque
+    claim `{id, cluster_id, color, spans:[{start,end}], target:{start,end}|null,
+    theme_title}` regroupe ses portions extractives (sous-chaînes exactes, 1..N spans
+    non-contigus) + sa cible verbatim, colorées à la couleur de son macro-thème (=
+    couleur des bulles). Si l'analyse n'est pas prête → 202 `building` ; 404 si inconnu.
     """
     ds = _resolve(dataset)
     if analysis_store.state(ds.id) != analysis_store.READY:
