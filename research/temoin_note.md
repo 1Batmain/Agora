@@ -74,6 +74,38 @@ constat → jugement → demande → nuance → proposition). Le regroupement ne
 - Repli inchangé : un avis dont aucune portion ne s'ancre → 1 claim = avis entier (jamais
   perdu) ; un avis pur narratif → liste vide → repli avis entier.
 
+## Chiffres du build mistral-large (déployé)
+
+- **1604 avis** (≥ `min_chars`) → **2811 claims**, **1,75 claim/avis** (médiane 1).
+- Distribution : 992 avis à 1 claim · 333 à 2 · 145 à 3 · … queue jusqu'à 16 (avis très long).
+- **Verbatim : 2811/2811** ancrés comme sous-chaîne exacte (vs `text_clean`, le texte
+  réellement passé au LLM) → **0 hallucination**.
+- 498 avis = 1 claim court (<120 ch, mono-idée légitime) ; les 68 mono-claims longs
+  vérifiés à la main sont de vraies idées uniques (énumérations de symptômes, griefs
+  d'un bloc), **pas** des replis « avis entier » silencieux.
+- Carte : **235 thèmes / 9 macros** (vs **321 thèmes** pour la découpe ministral-3b
+  d'avant → moins de fragments, cohérent avec la sélectivité/regroupement).
+
+## Deux accrocs rencontrés (corrigés)
+
+1. **429 rate-limit** : mistral-large a un RPM bas ; sans retry, chaque 429 faisait tomber
+   l'avis sur le repli « avis entier » → découpe DÉGRADÉE. Ajout d'un **backoff
+   exponentiel borné** (6 essais, 2s→30s) sur 429/5xx/réseau dans `ApiBackend.complete`.
+   Re-run propre : **0 abandon**.
+2. **`einops` manquant** dans le venv (requis par l'embedder nomic-v2, pourtant déclaré
+   dans `pyproject`) → crash à l'étape embed. `uv pip install einops` ; venf resynchronisé.
+
+## Déploiement pour jugement visuel
+
+Le serveur live (`:8010`, cwd = repo principal) lit `…/Analyse-des-consultations-citoyennes/
+backend/cache/tiktok/`. Le build a été produit dans le worktree puis **copié dans le cache
+du repo principal** (l'ancienne découpe ministral-3b sauvegardée sous
+`backend/cache/tiktok/_bak_ministral3b/` — restauration triviale si besoin). Le serveur
+sert désormais la découpe mistral-large : `themes=235`, `tiktok:29 → 3 portions`.
+
+→ **Explorable maintenant sur `:5180`** (front) / `:8010` (API). Surlignages = portions
+verbatim colorées par macro.
+
 ## Reproduire
 
 ```
