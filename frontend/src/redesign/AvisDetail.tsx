@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import type { AvisClaim, AvisProvenance, CharRange } from './contract';
+import { deleteFlag, upsertFlag } from './analysisApi';
 
 /**
  * Full avis text with each CLAIM rendered over the verbatim source (claim-v2):
@@ -15,17 +17,36 @@ import type { AvisClaim, AvisProvenance, CharRange } from './contract';
 export function AvisDetail({
   avis,
   loading,
+  dataset,
+  flagText,
+  onFlagChange,
   onBack,
 }: {
   avis: AvisProvenance | null;
   loading: boolean;
+  /** Dataset of the open avis — routes the flag upsert/delete to the right cache. */
+  dataset: string | null;
+  /** Current server-side flag text for this avis (undefined = not flagged). */
+  flagText?: string;
+  /** Notifies the parent after a flag is saved/removed so the loaded state stays fresh. */
+  onFlagChange?: (avisId: string, text: string | null) => void;
   onBack: () => void;
 }) {
   return (
     <section className="panel avisdetail">
-      <button className="link-back" onClick={onBack}>
-        ← retour aux citations
-      </button>
+      <div className="avisdetail__topbar">
+        <button className="link-back" onClick={onBack}>
+          ← retour aux citations
+        </button>
+        {avis && dataset && (
+          <FlagControl
+            dataset={dataset}
+            avisId={avis.id}
+            flagText={flagText}
+            onFlagChange={onFlagChange}
+          />
+        )}
+      </div>
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> chargement de l'avis…
@@ -74,6 +95,105 @@ export function AvisDetail({
         <p className="panel__empty">Avis indisponible.</p>
       )}
     </section>
+  );
+}
+
+/**
+ * Flag button (top-right of the avis) → free-text feedback on a bad extraction.
+ * Click opens a small compartment with ONE text field (no select). Enter sends to
+ * the server immediately (upsert); clearing the text + Enter removes the flag.
+ * The button is MARKED when the avis already carries a flag — state visible at load
+ * (the parent feeds `flagText` from the dataset-wide `/flags`). Re-openable to edit.
+ */
+function FlagControl({
+  dataset,
+  avisId,
+  flagText,
+  onFlagChange,
+}: {
+  dataset: string;
+  avisId: string;
+  flagText?: string;
+  onFlagChange?: (avisId: string, text: string | null) => void;
+}) {
+  const flagged = typeof flagText === 'string' && flagText.trim().length > 0;
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState(flagText ?? '');
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Keep the field in sync when the open avis (and thus its flag) changes underneath.
+  useEffect(() => {
+    setText(flagText ?? '');
+    setOpen(false);
+    setSaved(false);
+  }, [avisId, flagText]);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  async function submit() {
+    const value = text.trim();
+    setSaving(true);
+    try {
+      if (!value) {
+        // Empty text on an existing flag → remove it; on a non-flagged avis → no-op.
+        if (flagged) await deleteFlag(dataset, avisId);
+        onFlagChange?.(avisId, null);
+      } else {
+        const flag = await upsertFlag(dataset, avisId, value);
+        onFlagChange?.(avisId, flag ? flag.text : value);
+      }
+      setSaved(true);
+      setOpen(false);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="flag">
+      <button
+        type="button"
+        className={`flag__btn${flagged ? ' flag__btn--on' : ''}`}
+        aria-pressed={flagged}
+        title={flagged ? `Signalé : ${flagText}` : 'Signaler une extraction à corriger'}
+        onClick={() => {
+          setSaved(false);
+          setOpen((o) => !o);
+        }}
+      >
+        <span aria-hidden>⚑</span> {flagged ? 'Signalé' : 'Signaler'}
+      </button>
+      {open && (
+        <div className="flag__panel">
+          <input
+            ref={inputRef}
+            className="flag__input"
+            type="text"
+            value={text}
+            placeholder="Qu'est-ce qui cloche ? (découpe, cible, extraction…)"
+            disabled={saving}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                void submit();
+              } else if (e.key === 'Escape') {
+                setOpen(false);
+              }
+            }}
+          />
+          <p className="flag__hint">
+            Entrée pour {flagged ? 'mettre à jour' : 'envoyer'}
+            {flagged ? ' · videz le champ pour retirer' : ''} · Échap pour fermer
+          </p>
+        </div>
+      )}
+      {saved && !open && <span className="flag__saved">enregistré ✓</span>}
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AvisProvenance, Citation, DataSource } from './contract';
-import { fetchAvis } from './analysisApi';
+import { fetchAvis, fetchFlags } from './analysisApi';
 import { AvisDetail } from './AvisDetail';
 import { Markdown } from './Markdown';
 
@@ -50,12 +50,30 @@ export function CitationsPanel({
   const [avisId, setAvisId] = useState<string | null>(null);
   const [avis, setAvis] = useState<AvisProvenance | null>(null);
   const [avisLoading, setAvisLoading] = useState(false);
+  // Feedback flags for the whole dataset (avis_id → free text), loaded once so an
+  // opened avis shows its flag state immediately (button marked + field pre-filled).
+  const [flags, setFlags] = useState<Record<string, string>>({});
 
   // Reset the opened avis whenever the theme/citation list changes.
   useEffect(() => {
     setAvisId(null);
     setAvis(null);
   }, [themeLabel, citations]);
+
+  // Load the dataset's flags so the avis view can restore each flag at open time.
+  useEffect(() => {
+    if (!dataset) return;
+    let cancelled = false;
+    fetchFlags(dataset).then((list) => {
+      if (cancelled) return;
+      const map: Record<string, string> = {};
+      for (const f of list) map[f.avis_id] = f.text;
+      setFlags(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset]);
 
   useEffect(() => {
     if (!dataset || !avisId) return;
@@ -71,7 +89,23 @@ export function CitationsPanel({
   }, [dataset, avisId]);
 
   if (avisId) {
-    return <AvisDetail avis={avis} loading={avisLoading} onBack={() => setAvisId(null)} />;
+    return (
+      <AvisDetail
+        avis={avis}
+        loading={avisLoading}
+        dataset={dataset}
+        flagText={flags[avisId]}
+        onFlagChange={(id, text) =>
+          setFlags((prev) => {
+            const next = { ...prev };
+            if (text && text.trim()) next[id] = text;
+            else delete next[id];
+            return next;
+          })
+        }
+        onBack={() => setAvisId(null)}
+      />
+    );
   }
 
   return (
