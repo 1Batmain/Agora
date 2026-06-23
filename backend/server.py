@@ -1,20 +1,23 @@
-"""Serveur FastAPI :8010 — re-clustering LIVE, MULTI-DATASET (embeddings cachés).
+"""Serveur FastAPI :8010 — carte spatiale PRÉCALCULÉE, MULTI-DATASET (SERVE-only).
 
 Léger : au démarrage, DÉCOUVRE tous les caches `backend/cache/<dataset>/` et les
-charge (vecteurs `.npy` + `ideas.jsonl`), PAS le modèle torch. Le front (`:5180`,
-proxy vite `/api`) choisit un dataset + bouge les knobs → `POST /recluster` →
-GraphPayload hiérarchique recalculé en ~1–3 s.
+charge (vecteurs `.npy` + `ideas.jsonl`), PAS le modèle torch. Le pipeline lourd
+(claims→embed→cluster→UMAP→hiérarchie→insights) est PRÉCALCULÉ et PERSISTÉ par
+`backend.build_analysis` (en tâche de fond, cf. `build_manager`) ; les endpoints
+ne font que LIRE le cache persisté — AUCUN calcul lourd à la requête.
 
-GÉNÉRIQUE : aucun nom de corpus en dur. Les défauts des knobs sont DÉRIVÉS des
-données de CHAQUE dataset (pas des magic-numbers TikTok). Rétro-compat : sans
-`dataset`, tout se comporte comme avant sur le défaut (`tiktok`).
+GÉNÉRIQUE : aucun nom de corpus en dur. Rétro-compat : sans `dataset`, tout se
+comporte comme sur le défaut (`tiktok`).
 
 Endpoints :
-  - GET  /health    → {ok, datasets, default_dataset}
-  - GET  /datasets  → [{id, label, n_nodes, languages, source}]
-  - GET  /params    → table des knobs (?dataset=…, défaut tiktok)
-  - POST /recluster → GraphPayload hiérarchique + meta.stats (body.dataset)
-  - POST /synthesize→ rapport Markdown (synthèse + pertinence) via Mistral
+  - GET  /health        → {ok, datasets, default_dataset}
+  - GET  /datasets      → [{id, label, n_nodes, languages, source, namings}]
+  - POST /analysis      → carte spatiale précalculée (UMAP + arbre adaptatif + edges)
+  - GET  /insights      → synthèse Markdown LLM précalculée (global | theme)
+  - GET  /citations     → claims d'un thème, triées par proximité au centroïde
+  - GET  /avis/{id}     → un avis entier + ses portions verbatim surlignables
+  - POST /build         → (re)déclenche le précalcul d'un dataset (non bloquant)
+  - GET  /build_status  → état du build d'un dataset (polling front)
 
 Lancer :
     uv run --extra contender uvicorn backend.server:app --host 0.0.0.0 --port 8010
@@ -24,147 +27,28 @@ from __future__ import annotations
 
 import os
 
-import numpy as np
 from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from backend.recluster import (
     DEFAULT_DATASET,
-    DEFAULT_METHOD,
     DEFAULT_NAMING_METHOD,
-    METHODS,
     MODEL_ID,
     NAMINGS,
-    SEED,
     dataset_descriptor,
     list_datasets,
     load_cache,
-    recluster,
-)
-from backend.claims_endpoint import (
-    DEFAULT_MIN_CHARS as CLAIMS_MIN_CHARS,
-    OllamaUnavailable,
-    claims_payload,
 )
 from backend import analysis_store, build_manager
-from backend.synthesize import synthesize
-from pipeline.claims.pipeline import DEFAULT_EMBEDDER
-from pipeline.cluster.naming_methods import MISTRAL_MODEL
-from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
-from pipeline.cluster.dedup import dedup_near
-from pipeline.cluster.hdbscan_contender import N_COMPONENTS, derive_hdbscan_defaults
-
-# Filtres par défaut (mêmes que recluster) pour DÉRIVER les défauts data-driven.
-_DEFAULT_DEDUP = 0.95
-_DEFAULT_MIN_CHARS = 12
-
-# Options de NOMMAGE switchable (orthogonales à method/dataset). Le front bâtit
-# son sélecteur depuis cette liste — aucune valeur de corpus en dur.
-NAMING_OPTIONS = [
-    {"name": "ctfidf", "label": "c-TF-IDF",
-     "help": "mots-clés distinctifs dérivés du corpus (défaut, déterministe)"},
-    {"name": "centroid", "label": "Centroïde",
-     "help": "verbatim citoyen le plus représentatif du cluster"},
-    {"name": "llm", "label": "LLM (Mistral)",
-     "help": f"titre court généré via l'API Mistral ({MISTRAL_MODEL}) ; repli c-TF-IDF si indisponible"},
-]
-
-
-def _derive_startup_defaults(ideas, vecs, weights):
-    """Dérive k/seuil/min_sub/dup sur un cache APRÈS les filtres par défaut.
-
-    Les défauts des sliders ne sont donc PAS des magic-numbers : ils sont la
-    valeur que produit la dérivation sur CE cache (corpus/modèle). Chaque dataset
-    a SES propres défauts, calculés ici (audit #6/#7/#9).
-    """
-    keep = [i for i, idea in enumerate(ideas)
-            if len((idea.text_clean or idea.text).strip()) >= _DEFAULT_MIN_CHARS]
-    v = np.ascontiguousarray(vecs[keep])
-    w = weights[keep]
-    dd = dedup_near(v, w, threshold=_DEFAULT_DEDUP)
-    v = np.ascontiguousarray(v[dd.keep])
-    return derive_defaults(v)
-
-
-def _build_hdbscan_knobs(hd) -> list[dict]:
-    """Knobs de la méthode HDBSCAN — défauts DÉRIVÉS de N (zéro magic-number).
-
-    `n_components=5` est FIXE (contrat) donc N'EST PAS un knob. `min_cluster_size`
-    et `min_samples` ∝ N (cf. min_sub_size) ; `umap_n_neighbors` ∝ log N (cf. k).
-    Bornes = suggestions de slider, pas une validation dure.
-    """
-    return [
-        {"name": "dedup", "label": "Dédup (cosine)", "default": _DEFAULT_DEDUP,
-         "min": 0.80, "max": 1.0, "step": 0.01, "help": "fusion near-dups",
-         "derived": False},
-        {"name": "min_chars", "label": "Min. caractères", "default": _DEFAULT_MIN_CHARS,
-         "min": 0, "max": 200, "step": 1, "help": "filtre avis courts",
-         "derived": False},
-        {"name": "min_cluster_size", "label": "Taille mini cluster", "default": hd.min_cluster_size,
-         "min": 2, "max": 200, "step": 1, "help": "plus grand → moins de clusters (défaut ∝ N)",
-         "derived": True},
-        {"name": "min_samples", "label": "min_samples", "default": hd.min_samples,
-         "min": 1, "max": 200, "step": 1, "help": "plus grand → plus de bruit (défaut = min_cluster_size)",
-         "derived": True},
-        {"name": "umap_n_neighbors", "label": "UMAP voisins", "default": hd.umap_n_neighbors,
-         "min": 2, "max": 100, "step": 1, "help": "voisinage UMAP (défaut ∝ log N)",
-         "derived": True},
-    ]
-
-
-def _build_knobs(derived) -> list[dict]:
-    """Table des knobs pour un dataset (défauts DÉRIVÉS ou réglages d'usage).
-
-    Bornes ÉLARGIES aux limites physiques pour ne JAMAIS rejeter (422) une valeur
-    légitime sur un autre modèle/corpus (audit #8) ; `min/max` = suggestions de
-    slider, pas une validation dure.
-    """
-    return [
-        {"name": "dedup", "label": "Dédup (cosine)", "default": _DEFAULT_DEDUP,
-         "min": 0.80, "max": 1.0, "step": 0.01, "help": "fusion near-dups",
-         "derived": False},
-        {"name": "min_chars", "label": "Min. caractères", "default": _DEFAULT_MIN_CHARS,
-         "min": 0, "max": 200, "step": 1, "help": "filtre avis courts",
-         "derived": False},
-        {"name": "k", "label": "k voisins", "default": derived.k,
-         "min": 2, "max": 100, "step": 1, "help": "densité k-NN (défaut ∝ log N)",
-         "derived": True},
-        {"name": "threshold", "label": "Seuil arêtes (cosine)", "default": round(derived.threshold, 4),
-         "min": 0.0, "max": 0.999, "step": 0.01, "help": "coupe les arêtes (défaut μ−σ·k)",
-         "derived": True},
-        {"name": "resolution_macro", "label": "Résolution macros", "default": 1.0,
-         "min": 0.05, "max": 10.0, "step": 0.1, "help": "granularité macros",
-         "derived": False},
-        {"name": "resolution_sub", "label": "Résolution sous-thèmes", "default": 1.5,
-         "min": 0.05, "max": 10.0, "step": 0.1, "help": "granularité sous-thèmes",
-         "derived": False},
-        {"name": "min_sub_size", "label": "Taille mini sous-thème", "default": derived.min_sub_size,
-         "min": 1, "max": 1000, "step": 1, "help": "fusion des miettes (défaut frac·N)",
-         "derived": True},
-    ]
 
 
 class _Dataset:
-    """Un dataset chargé en mémoire : cache aligné + défauts dérivés + knobs."""
+    """Un dataset chargé en mémoire : cache aligné (avis + vecteurs) + descripteur."""
 
     def __init__(self, dataset_id: str) -> None:
         self.id = dataset_id
         self.ideas, self.vecs, self.weights = load_cache(dataset_id)
-        self.derived = _derive_startup_defaults(self.ideas, self.vecs, self.weights)
-        self.hdbscan_derived = derive_hdbscan_defaults(self.derived.n)
-        # Knobs PAR MÉTHODE : le front affiche les bons selon `method`.
-        self.knobs_by_method = {
-            "leiden": _build_knobs(self.derived),
-            "hdbscan": _build_hdbscan_knobs(self.hdbscan_derived),
-        }
-        self.defaults_by_method = {
-            m: {k["name"]: k["default"] for k in knobs}
-            for m, knobs in self.knobs_by_method.items()
-        }
-        # Rétro-compat : `knobs`/`defaults` = méthode par défaut (leiden).
-        self.knobs = self.knobs_by_method[DEFAULT_METHOD]
-        self.defaults = self.defaults_by_method[DEFAULT_METHOD]
         self.descriptor = dataset_descriptor(dataset_id, self.ideas)
 
 
@@ -191,32 +75,7 @@ def _resolve(dataset: str | None) -> _Dataset:
     return DATASETS[ds]
 
 
-class ReclusterBody(BaseModel):
-    """Corps de /recluster — tous les knobs sont optionnels.
-
-    `dataset` (défaut `"tiktok"`, rétro-compat) sélectionne le cache. Bornes
-    (`ge`/`le`) = limites PHYSIQUES seulement (audit #8). `threshold`/`k`/
-    `min_sub_size`/`dup_threshold` à ``None`` ⇒ **dérivés** des données.
-    """
-    dataset: str | None = None
-    method: str | None = None
-    naming: str | None = None
-    dedup: float | None = Field(_DEFAULT_DEDUP, ge=0.0, le=1.0)
-    min_chars: int = Field(_DEFAULT_MIN_CHARS, ge=0)
-    # Leiden
-    k: int | None = Field(None, ge=2)
-    threshold: float | None = Field(None, ge=0.0, le=1.0)
-    resolution_macro: float = Field(1.0, gt=0.0)
-    resolution_sub: float = Field(1.5, gt=0.0)
-    min_sub_size: int | None = Field(None, ge=1)
-    dup_threshold: float | None = Field(None, ge=0.0, le=1.0)
-    # HDBSCAN
-    min_cluster_size: int | None = Field(None, ge=2)
-    min_samples: int | None = Field(None, ge=1)
-    umap_n_neighbors: int | None = Field(None, ge=2)
-
-
-app = FastAPI(title="Agora — recluster live (multi-dataset)", version="2.0")
+app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0")
 
 # CORS permissif en dev (le front passe par un proxy vite mais on couvre l'accès
 # direct depuis localhost/forge au cas où).
@@ -249,128 +108,6 @@ def datasets() -> list[dict]:
          "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
         for ds in DATASETS
     ]
-
-
-@app.get("/params")
-def params(dataset: str | None = Query(None),
-           method: str | None = Query(None)) -> dict:
-    # `derived` expose la PROVENANCE des défauts data-driven du DATASET demandé.
-    # `method` (défaut leiden) choisit la table de knobs renvoyée dans `knobs`.
-    ds = _resolve(dataset)
-    meth = (method or DEFAULT_METHOD).lower()
-    if meth not in METHODS:
-        raise HTTPException(
-            status_code=404,
-            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
-        )
-    d = ds.derived
-    hd = ds.hdbscan_derived
-    return {
-        "dataset": ds.id,
-        "method": meth,
-        "methods": list(METHODS),
-        "default_method": DEFAULT_METHOD,
-        "namings": NAMING_OPTIONS,
-        "naming_methods": list(NAMINGS),
-        "default_naming": DEFAULT_NAMING_METHOD,
-        "llm_model": MISTRAL_MODEL,
-        "knobs": ds.knobs_by_method[meth],
-        "defaults": ds.defaults_by_method[meth],
-        "knobs_by_method": ds.knobs_by_method,
-        "seed": SEED,
-        "hdbscan_derived": {
-            "min_cluster_size": hd.min_cluster_size,
-            "min_samples": hd.min_samples,
-            "umap_n_neighbors": hd.umap_n_neighbors,
-            "n_components": N_COMPONENTS,
-            "n": hd.n,
-        },
-        "derived": {
-            "k": d.k,
-            "threshold": round(d.threshold, 4),
-            "min_sub_size": d.min_sub_size,
-            "dup_threshold": round(d.dup_threshold, 4),
-            "knn_sim_mean": d.pool_mean,
-            "knn_sim_std": d.pool_std,
-            "edge_sigma": EDGE_SIGMA,
-            "note": "défauts dérivés sur le cache après dedup/min_chars par défaut",
-        },
-    }
-
-
-@app.post("/recluster")
-def do_recluster(body: ReclusterBody) -> dict:
-    ds = _resolve(body.dataset)
-    meth = (body.method or DEFAULT_METHOD).lower()
-    if meth not in METHODS:
-        raise HTTPException(
-            status_code=404,
-            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
-        )
-    naming = (body.naming or DEFAULT_NAMING_METHOD).lower()
-    if naming not in NAMINGS:
-        raise HTTPException(
-            status_code=404,
-            detail=f"nommage inconnu: {naming!r} (disponibles: {list(NAMINGS)})",
-        )
-    return recluster(
-        ds.ideas, ds.vecs, ds.weights,
-        method=meth,
-        naming=naming,
-        dedup=body.dedup,
-        min_chars=body.min_chars,
-        k=body.k,
-        threshold=body.threshold,
-        resolution_macro=body.resolution_macro,
-        resolution_sub=body.resolution_sub,
-        min_sub_size=body.min_sub_size,
-        dup_threshold=body.dup_threshold,
-        min_cluster_size=body.min_cluster_size,
-        min_samples=body.min_samples,
-        umap_n_neighbors=body.umap_n_neighbors,
-        dataset=ds.id,
-    )
-
-
-class ClaimsBody(BaseModel):
-    """Corps de `/claims` — thèmes ÉMERGENTS (pipeline ouvert avis→claims→cluster).
-
-    `dataset` sélectionne le cache (défaut rétro-compat). `resolution` règle la
-    granularité Leiden (rejouable sans ré-extraire). `model`/`embedder` sont
-    optionnels (défauts souverains) ; changer de `model` invalide le cache claims.
-    """
-    dataset: str | None = None
-    resolution: float = Field(1.0, gt=0.0)
-    backend: str | None = None      # api (défaut) | mac | auto ; sinon AGORA_CLAIMS_BACKEND
-    model: str | None = None
-    embedder: str | None = None
-    min_chars: int = Field(CLAIMS_MIN_CHARS, ge=0)
-
-
-@app.post("/claims")
-def do_claims(body: ClaimsBody) -> dict:
-    """Carte des thèmes émergents : extraction LLM cachée → embed caché → clustering.
-
-    1er run : extrait les claims via le backend (`api` API Mistral par DÉFAUT, `mac`
-    Ollama souverain, `auto` Mac→repli API) puis embed — lent. Runs suivants (même
-    dataset/modèle), y compris autre `resolution` : rejoue le clustering depuis le cache,
-    SANS ré-extraire. La réponse expose `meta.backend`/`meta.sovereign`. 503 si une
-    extraction est nécessaire mais le backend est inutilisable ; 500 sinon.
-    """
-    ds = _resolve(body.dataset)
-    try:
-        return claims_payload(
-            ds,
-            resolution=body.resolution,
-            backend=body.backend,            # None → AGORA_CLAIMS_BACKEND (défaut api)
-            model=body.model,                # None → modèle par défaut du backend
-            embedder=body.embedder or DEFAULT_EMBEDDER,
-            min_chars=body.min_chars,
-        )
-    except OllamaUnavailable as exc:
-        raise HTTPException(status_code=503, detail=str(exc))
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
 
 
 # ===================== Refonte « carte spatiale » (B1–B4) ===================== #
@@ -552,41 +289,3 @@ def build_status(dataset: str | None = Query(None)) -> dict:
     prog["dataset"] = ds.id
     prog["building"] = build_manager.is_building(ds.id)
     return prog
-
-
-class SynthesizeBody(BaseModel):
-    """Corps de /synthesize — sélectionne le dataset + la vue à synthétiser.
-
-    `method`/`naming` (mêmes valeurs que /recluster) déterminent le découpage et
-    les titres résumés. Le reste du clustering utilise les défauts dérivés.
-    """
-    dataset: str | None = None
-    method: str | None = None
-    naming: str | None = None
-
-
-@app.post("/synthesize")
-def do_synthesize(body: SynthesizeBody) -> dict:
-    """Rapport Markdown (synthèse + pertinence des clusters) via Mistral.
-
-    Repli gracieux côté `synthesize` : sans clé Mistral, renvoie un rapport
-    « indisponible » avec `meta.fallback=True` — pas une erreur HTTP.
-    """
-    ds = _resolve(body.dataset)
-    meth = (body.method or DEFAULT_METHOD).lower()
-    if meth not in METHODS:
-        raise HTTPException(
-            status_code=404,
-            detail=f"méthode inconnue: {meth!r} (disponibles: {list(METHODS)})",
-        )
-    naming = (body.naming or DEFAULT_NAMING_METHOD).lower()
-    if naming not in NAMINGS:
-        raise HTTPException(
-            status_code=404,
-            detail=f"nommage inconnu: {naming!r} (disponibles: {list(NAMINGS)})",
-        )
-    return synthesize(
-        ds.ideas, ds.vecs, ds.weights,
-        dataset=ds.id, method=meth, naming=naming,
-        languages=ds.descriptor.get("languages"),
-    )
