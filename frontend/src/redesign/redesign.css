@@ -255,40 +255,6 @@ body {
   margin: 0 2px;
 }
 
-/* ---------- dataset intro (global view) ---------- */
-.dataset-intro {
-  padding: 14px 18px;
-  background: var(--bg-raised);
-  border-bottom: 1px solid var(--border);
-}
-.dataset-intro__desc .md {
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--grey-1000);
-}
-.dataset-intro__desc .md h2 {
-  font-size: 17px;
-  margin: 0 0 6px;
-}
-.dataset-intro__desc .md p {
-  margin: 4px 0;
-}
-.dataset-intro__context {
-  margin: 10px 0 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--grey-700);
-}
-.dataset-intro__label {
-  display: block;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--grey-500);
-  margin-bottom: 2px;
-}
-
 /* ---------- tools panel ---------- */
 .tools {
   display: flex;
