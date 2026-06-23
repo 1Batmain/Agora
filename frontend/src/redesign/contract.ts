@@ -102,20 +102,34 @@ export interface Citation {
   avis_id?: string; // source avis — opens its full text with highlights
 }
 
-/** A verbatim portion of an avis, anchored + coloured by its (macro) cluster. */
-export interface AvisSpan {
+/** A character range `[start, end)` into the avis text (verbatim gate applies). */
+export interface CharRange {
   start: number;
   end: number;
-  cluster_id: string | null;
-  color: string;
-  theme_label: string;
 }
 
-/** `GET /avis/{id}` → one avis in full, with its extractive spans to highlight. */
+/**
+ * claim-v2 — one claim extracted from an avis. A claim is made of 1..N verbatim
+ * `spans` (possibly NON-contiguous) all painted in the claim's `color` (its
+ * cluster colour), plus an optional `target`: the verbatim CIBLE, a sub-range
+ * that lives INSIDE one of the claim's spans, underlined so it stands out within
+ * the highlight. Every range (spans AND target) is an EXACT substring of the avis
+ * text — the backend's verbatim gate guarantees no drift.
+ */
+export interface AvisClaim {
+  id: string;
+  cluster_id: string | null;
+  color: string;
+  spans: CharRange[];
+  target: CharRange | null;
+  theme_title: string;
+}
+
+/** `GET /avis/{id}` → one avis in full, with its claims (spans + target) to render. */
 export interface AvisProvenance {
   id: string;
   text: string;
-  spans: AvisSpan[];
+  claims: AvisClaim[];
 }
 
 /**
