@@ -13,7 +13,13 @@ from pipeline.claims.backend import (
     MacBackend,
     resolve_backend,
 )
-from pipeline.claims.extract import claim_prompt, extract_claims, parse_claims
+from pipeline.claims.extract import (
+    batch_claim_prompt,
+    claim_prompt,
+    extract_claims,
+    parse_batch_claims,
+    parse_claims,
+)
 from pipeline.claims.ollama import OllamaClient, OllamaStats
 from pipeline.claims.pipeline import (
     Avis,
@@ -34,10 +40,12 @@ __all__ = [
     "OllamaStats",
     "Theme",
     "as_avis",
+    "batch_claim_prompt",
     "claim_prompt",
     "cluster_claims",
     "embed_claim_texts",
     "extract_claims",
+    "parse_batch_claims",
     "parse_claims",
     "resolve_backend",
     "run_claims",

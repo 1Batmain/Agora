@@ -60,14 +60,21 @@ class OllamaClient:
 
     # -- bas niveau --------------------------------------------------------- #
     def _post(self, messages: list[dict], *, model: str, think: bool | None,
-              timeout: float) -> dict:
-        """POST /api/chat. `think=None` → champ omis (modèle non-raisonneur)."""
+              timeout: float, max_tokens: int | None = None) -> dict:
+        """POST /api/chat. `think=None` → champ omis (modèle non-raisonneur).
+
+        `max_tokens` (lots) → `num_predict` ET un `num_ctx` agrandi (l'entrée d'un lot
+        de N avis dépasse le contexte mono-avis ; sinon le prompt est tronqué)."""
         import httpx
 
+        num_ctx = 4096 if not max_tokens else max(4096, 2 * max_tokens + 2048)
+        options = {"temperature": 0.0, "num_ctx": num_ctx}
+        if max_tokens:
+            options["num_predict"] = max_tokens
         payload = {
             "model": model, "messages": messages, "stream": False,
             "format": "json",
-            "options": {"temperature": 0.0, "num_ctx": 4096},
+            "options": options,
         }
         if think is not None:
             payload["think"] = think
@@ -102,7 +109,8 @@ class OllamaClient:
         return False, None
 
     def chat(self, messages: list[dict], *, model: str, think: bool | None,
-             stats: OllamaStats, timeout: float = 600.0) -> str | None:
+             stats: OllamaStats, timeout: float = 600.0,
+             max_tokens: int | None = None) -> str | None:
         """Chat (JSON mode, temp 0) avec cache disque. Renvoie le contenu ou None."""
         cpath = self._key(model, messages) if self.use_cache else None
         if cpath is not None and cpath.exists():
@@ -114,7 +122,8 @@ class OllamaClient:
 
         t0 = time.monotonic()
         try:
-            data = self._post(messages, model=model, think=think, timeout=timeout)
+            data = self._post(messages, model=model, think=think, timeout=timeout,
+                              max_tokens=max_tokens)
         except Exception as exc:  # noqa: BLE001 — on rapporte, on ne masque pas
             stats.errors += 1
             print(f"  ⚠️ ollama[{model}] @ {_redact(self.base_url)}: {type(exc).__name__}")
