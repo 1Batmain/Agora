@@ -94,7 +94,8 @@ def test_provenance(dataset: str) -> int:
             if c.target is not None:
                 with_target += 1
             if len(c.spans) == 1 and c.start == 0 and c.end == len(text) and c.text == text:
-                whole += 1                      # repli avis-entier (trivialement verbatim)
+                whole += 1                      # claim couvrant l'avis entier (repli OU
+                #                                 sélection légitime d'un avis court entier)
             if not c.anchored:
                 continue
             anchored += 1
@@ -106,7 +107,7 @@ def test_provenance(dataset: str) -> int:
 
     assert not bad, f"{len(bad)} claims NON verbatim (ex: {bad[:3]})"
     pct = 100.0 * exact / anchored if anchored else 100.0
-    print(f"✓ provenance {dataset} : {n_claims} claims ({whole} replis avis-entier, "
+    print(f"✓ provenance {dataset} : {n_claims} claims ({whole} couvrent l'avis entier, "
           f"{multi} multi-spans, {with_target} avec cible) · "
           f"{anchored} ancrés, {exact} verbatim = {pct:.1f}% sous-chaînes exactes")
     return n_claims
