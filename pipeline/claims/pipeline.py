@@ -121,25 +121,29 @@ def embed_claim_texts(texts: list[str], *, embedder: str = DEFAULT_EMBEDDER) -> 
 # Aplatissement claims (alignés à l'ordre des avis)
 # --------------------------------------------------------------------------- #
 def _flatten(avis: list[Avis], claims_by_id: dict[str, list]
-             ) -> tuple[list[str], list[int], np.ndarray, list[tuple[int, int]]]:
-    """→ (claim_texts, claim_owner[idx d'avis], claim_weight, claim_spans) alignés.
+             ) -> tuple[list[str], list[int], np.ndarray,
+                        list[list[tuple[int, int]]], list[tuple[int, int] | None]]:
+    """→ (claim_texts, claim_owner[idx d'avis], claim_weight, claim_spans, claim_target).
 
     `claims_by_id` porte des `Claim` (ou des dicts du cache / str legacy, normalisés
-    via `as_claim`). `claim_spans[i] = (start, end)` = offsets verbatim du claim dans
-    le texte de son avis (−1,−1 si non ancré).
+    via `as_claim`). `claim_texts[i]` = texte JOINT des portions (sert à l'embedding).
+    `claim_spans[i]` = liste des spans verbatim `(start, end)` du claim (1..N portions ;
+    `[(-1,-1)]` si non ancré). `claim_target[i]` = span de la cible verbatim, ou `None`.
     """
     texts: list[str] = []
     owner: list[int] = []
     weight: list[float] = []
-    spans: list[tuple[int, int]] = []
+    spans: list[list[tuple[int, int]]] = []
+    targets: list[tuple[int, int] | None] = []
     for ai, a in enumerate(avis):
         for raw in claims_by_id.get(a.id, []):
             c = as_claim(raw, avis_text=a.text)
             texts.append(c.text)
             owner.append(ai)
             weight.append(a.weight)
-            spans.append((c.start, c.end))
-    return texts, owner, np.asarray(weight, dtype=np.float64), spans
+            spans.append(list(c.spans))
+            targets.append(c.target)
+    return texts, owner, np.asarray(weight, dtype=np.float64), spans, targets
 
 
 # --------------------------------------------------------------------------- #
@@ -219,7 +223,7 @@ def cluster_claims(
     Renvoie le dict de sortie du pipeline (themes / cooccurrence / params).
     """
     avis = as_avis(avis)
-    claim_texts, claim_owner, claim_weight, _claim_spans = _flatten(avis, claims_by_id)
+    claim_texts, claim_owner, claim_weight, _spans, _targets = _flatten(avis, claims_by_id)
     n_claims = len(claim_texts)
     n_avis = len(avis)
 
