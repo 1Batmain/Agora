@@ -12,7 +12,8 @@ comporte comme sur le défaut (`tiktok`).
 Endpoints :
   - GET  /health        → {ok, datasets, default_dataset}
   - GET  /datasets      → [{id, label, n_nodes, languages, source, namings}]
-  - POST /analysis      → carte spatiale précalculée (UMAP + arbre adaptatif + edges)
+  - POST /analysis      → carte précalculée (arbre incrémental + co-occurrence, d3-pack)
+  - GET  /stream        → rejoue le build EN INCRÉMENTAL (SSE, claims cachés, zéro LLM)
   - GET  /insights      → synthèse Markdown LLM précalculée (global | theme)
   - GET  /citations     → claims d'un thème, triées par proximité au centroïde
   - GET  /avis/{id}     → un avis entier + ses portions verbatim surlignables
@@ -25,10 +26,12 @@ Lancer :
 
 from __future__ import annotations
 
+import json
 import os
 
 from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from backend.recluster import (
@@ -278,6 +281,52 @@ def do_build(body: BuildBody, response: Response) -> dict:
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     return prog
+
+
+# ============================ Stream LIVE (SSE) ============================ #
+# Rejoue le build d'un dataset EN INCRÉMENTAL via `AnalysisState` : rattachement
+# plus-proche + maj O(1) + split local sur divergence, à partir des claims +
+# embeddings DÉJÀ CACHÉS (AUCUN LLM, pas de recompute global → rapide). Émet les
+# events du contrat figé (`/tmp/contract-live.md`) en Server-Sent Events.
+
+def _sse(event: dict) -> str:
+    return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+
+@app.get("/stream")
+def stream(dataset: str | None = Query(None),
+           backend: str | None = Query(None)) -> StreamingResponse:
+    """SSE : rejoue les claims CACHÉS d'un dataset via une `AnalysisState` fraîche.
+
+    Émet `snapshot` (état initial) → `claim_added`/`theme_split` (au fil de l'eau) →
+    `done`. Réutilise `claims.json` + `claims_emb.npz` : zéro appel LLM. Si les claims
+    ne sont pas encore extraits (cache absent), émet un event `error` puis se ferme.
+    """
+    from backend.analysis import _dataset_context
+    from backend.claims_endpoint import OllamaUnavailable
+    from backend.state import AnalysisState
+    from pipeline.claims.backend import BackendUnavailable
+
+    ds = _resolve(dataset)
+
+    def gen():
+        try:
+            state = AnalysisState.from_dataset(ds, backend=backend)
+        except (OllamaUnavailable, BackendUnavailable) as exc:
+            yield _sse({"type": "error", "detail": str(exc),
+                        "hint": "claims non extraits : lance POST /build d'abord."})
+            return
+        except Exception as exc:  # noqa: BLE001 — on remonte l'erreur au client SSE
+            yield _sse({"type": "error", "detail": str(exc)})
+            return
+        for event in state.stream_events(dataset_context=_dataset_context(ds.id)):
+            yield _sse(event)
+
+    return StreamingResponse(
+        gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @app.get("/build_status")

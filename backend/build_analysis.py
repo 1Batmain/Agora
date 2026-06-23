@@ -87,6 +87,10 @@ def build_analysis(
 
     try:
         # 1) Claims (extraction LLM + embed, cachés) + arbre variance-adaptatif (B1+B2).
+        #    L'analyse PERSISTÉE/servie utilise le Leiden BATCH (global + coarsening de
+        #    racines), dont la qualité macro est non-négociable. L'incrémental
+        #    (AnalysisState) est réservé au stream live (cf. /stream) : ordre-dépendant,
+        #    il écrase la structure macro et ne convient pas à l'analyse statique.
         report("claims", "extraction + embeddings (caché si déjà fait)")
         tree = build_theme_tree(
             ds, backend=backend, model=model, embedder=embedder,
@@ -115,8 +119,8 @@ def build_analysis(
             if i == total or i % 25 == 0:
                 report("enrich", "accroches + descriptions (LLM, caché)", i, total)
 
-        # 2) Carte spatiale : UMAP des centroïdes + co-occurrence (B1) → analysis.json.
-        report("analysis", "projection UMAP 2D + co-occurrence")
+        # 2) Carte : co-occurrence (B1) → analysis.json (front en d3-pack, plus d'UMAP).
+        report("analysis", "co-occurrence (hiérarchie d3-pack, sans UMAP)")
         payload = analysis_payload(tree)
         payload["status"] = store.READY
         store.write_analysis(dataset, payload)
