@@ -17,6 +17,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter
@@ -161,6 +162,7 @@ def prepare_claims(
     embedder: str = DEFAULT_EMBEDDER,
     ollama_url: str | None = None,
     min_chars: int = DEFAULT_MIN_CHARS,
+    progress: "Callable[[int, int], None] | None" = None,
 ) -> PreparedClaims:
     """Extrait (caché) puis embed (caché) les claims d'un dataset, sans clusteriser.
 
@@ -192,7 +194,7 @@ def prepare_claims(
     if missing:
         stats = OllamaStats()
         try:
-            new = extract_claims(missing, backend=be, stats=stats)
+            new = extract_claims(missing, backend=be, stats=stats, progress=progress)
         except BackendUnavailable as exc:
             raise OllamaUnavailable(str(exc)) from exc
         claims_by_id.update(new)
