@@ -32,7 +32,7 @@ from backend.analysis import _derive_tau, _node_stats, _subdivide, MAX_DEPTH
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from pipeline.claims.pipeline import DEFAULT_SEED, blend_embeddings
 from pipeline.cluster.adaptive import derive_defaults
-from pipeline.cluster.knn import build_knn_graph
+from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 
@@ -292,10 +292,16 @@ def recluster_payload(
                 "n_claims": 0, "ms": round((perf_counter() - t0) * 1000),
                 "clusters": [], "trace": {"pairs": [], "nodes": []}}
 
-    # 2) Défauts dérivés du graphe (k respecté si fourni), k-NN, Leiden.
-    derived = derive_defaults(vecs.astype(np.float32), k=k)
-    k_eff = derived.k
-    graph = build_knn_graph(vecs, k=k_eff, threshold=derived.threshold)
+    # 2) Défauts dérivés du graphe (k respecté si fourni), k-NN, Leiden. Le voisinage
+    #    k-NN est calculé UNE fois (faiss exact) et réutilisé pour le seuil ET le graphe
+    #    (au lieu de deux passes O(n²) — cf. knn_search/pool_from_neighbors).
+    vecs32 = vecs.astype(np.float32)
+    from pipeline.cluster.adaptive import derive_k
+    k_eff = derive_k(n_claims) if k is None else int(k)
+    neighbors = knn_search(vecs32, k_eff)
+    derived = derive_defaults(vecs32, k=k_eff, neighbors=neighbors)
+    graph = build_knn_graph(vecs, k=k_eff, threshold=derived.threshold,
+                            neighbors=neighbors)
     membership = run_leiden(graph, resolution=resolution, seed=seed).membership
     by_cluster: dict[int, list[int]] = {}
     for i, c in enumerate(membership):
