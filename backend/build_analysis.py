@@ -32,8 +32,8 @@ from backend.analysis import (
     DEFAULT_EMBEDDER,
     DEFAULT_SEED,
     analysis_payload,
+    build_theme_tree,
 )
-from backend.state import AnalysisState
 from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
@@ -86,17 +86,16 @@ def build_analysis(
             on_progress(phase, detail, done, total)
 
     try:
-        # 1) Claims (extraction LLM + embed, cachés) + arbre INCRÉMENTAL (B1+B2) :
-        #    on rejoue les claims un par un via AnalysisState (rattachement plus-proche +
-        #    split local sur divergence) — même cœur que le stream live, zéro UMAP.
+        # 1) Claims (extraction LLM + embed, cachés) + arbre variance-adaptatif (B1+B2).
+        #    L'analyse PERSISTÉE/servie utilise le Leiden BATCH (global + coarsening de
+        #    racines), dont la qualité macro est non-négociable. L'incrémental
+        #    (AnalysisState) est réservé au stream live (cf. /stream) : ordre-dépendant,
+        #    il écrase la structure macro et ne convient pas à l'analyse statique.
         report("claims", "extraction + embeddings (caché si déjà fait)")
-        state = AnalysisState.from_dataset(
+        tree = build_theme_tree(
             ds, backend=backend, model=model, embedder=embedder,
             resolution=resolution, seed=seed,
         )
-        state.add_all()
-        state.finalize()
-        tree = state.tree()
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
 
