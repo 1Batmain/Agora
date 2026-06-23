@@ -44,6 +44,7 @@ from backend.analysis import (
     theme_dict,
 )
 from backend.claims_endpoint import PreparedClaims, prepare_claims
+from backend.develop import corpus_idf
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_SEED
 from pipeline.cluster.adaptive import MIN_SUB_FLOOR, derive_defaults
 from pipeline.cluster.knn import build_knn_graph
@@ -446,8 +447,11 @@ class AnalysisState:
         _name_nodes(self.nodes, self.texts)
         self._recolor()
         _assign_convergence(self.nodes, self.effective_macro_ids())
+        # idf corpus calculé une fois, partagé par tous les nœuds (D1) et /citations.
+        self._claim_idf = corpus_idf(self.texts)
         for node in self.nodes.values():
-            node.representative_claims = _representatives(node, self.mat, self.texts)
+            node.representative_claims = _representatives(
+                node, self.mat, self.texts, idf=self._claim_idf)
 
     def tree(self) -> ThemeTree:
         """Vue `ThemeTree` de l'état courant (macros = niveau d'affichage effectif)."""
@@ -459,6 +463,7 @@ class AnalysisState:
             root_coarsen={"mode": "incrémental", "note": "arbre construit claim par claim "
                           "(rattachement plus-proche + split local sur divergence) — "
                           "pas de coarsening de racines"},
+            claim_idf=getattr(self, "_claim_idf", None),
         )
 
     def snapshot(self, *, took_ms: int | None = None, finalize: bool = True) -> dict:
