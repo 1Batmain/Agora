@@ -69,12 +69,29 @@ itérer `body.claims`, surligner les `spans` de chaque claim (couleur cluster) e
   **16 claims, 100% parts verbatim, 15/15 cibles verbatim**, 0 erreur. Sélectivité OK
   (avis « Comparaison à autrui » → 0 claim = pur narratif). Cibles pertinentes
   (« boucle d'addiction », « contenus de haine… », « perte de temps »).
-- **Re-extraction tiktok + rebuild** : `build_analysis --dataset tiktok --force`
-  (extraction mistral-large fraîche + enrichissement cheap). [résultat à compléter]
+- **Re-extraction tiktok + rebuild** (`build_analysis --dataset tiktok --force`,
+  extraction mistral-large fraîche + enrichissement mistral-small) :
+  - **1604 avis → 3024 claims** ; model `mistral-large-latest`.
+  - **100% verbatim** (3024/3024 sous-chaînes exactes, selftest provenance).
+  - **57 multi-spans** ; **2576 claims avec cible** (85%).
+  - Claims couvrant l'avis entier : 561 — dont **470 sélections légitimes** d'un avis
+    court (avec cible) ; vrais replis (extraction vide, fragments vagues type
+    « Comparaison à autrui ») ≤ 91. La sélectivité fait son travail, le repli garantit
+    qu'aucun avis n'est perdu.
+  - **244 thèmes, 13 macros.** `/avis` rend bien le format contrat (vérifié sur
+    multi-span tiktok:58 + multi-claims tiktok:20 : spans, cible, couleur+titre du macro).
+  - **Temps** : extraction mistral-large ~1 h (1604 appels, 429 absorbés par le backoff)
+    puis **CACHÉE** → un rebuild la saute. Rebuild (embed + clustering + enrichissement
+    cheap) = **~19 min** ; un rebuild ultérieur réutilise aussi l'enrichissement caché
+    par contenu → quasi instantané.
+
+> ⚠️ Setup : l'embedder par défaut `nomic-v2` charge du code custom dépendant de
+> `einops` (extra `embed-contender`). Lancer le build avec
+> `uv run --extra embed-contender python -m backend.build_analysis …`.
 
 ## Acceptance
-- [x] claims multi-spans + target, 100% sous-chaînes exactes (unitaire + échantillon).
-- [x] `/avis` au format contrat (claims[] avec spans[] + target + theme_title).
+- [x] claims multi-spans + target, 100% sous-chaînes exactes (unitaire + échantillon + corpus).
+- [x] `/avis` au format contrat (claims[] avec spans[] + target + theme_title) — vérifié.
 - [x] build paramètre deux modèles (extraction large / enrichissement cheap) → rebuild
-      rapide (extraction cachée, enrichissement cheap).
-- [ ] tiktok ré-extrait (mistral-large) + rebuild — en cours (~1h extraction).
+      rapide (extraction cachée ~1 h sautée, enrichissement cheap ~19 min).
+- [x] tiktok ré-extrait (mistral-large) + rebuild → READY (244 thèmes, 100% verbatim).
