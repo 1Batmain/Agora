@@ -36,6 +36,14 @@ MAC_PROBE_TIMEOUT = float(os.environ.get("AGORA_CLAIMS_MAC_TIMEOUT", "4"))
 # Budget JSON par avis (les claims d'un avis tiennent largement dedans).
 MAX_TOKENS = int(os.environ.get("AGORA_CLAIMS_MAX_TOKENS", "1024"))
 
+# Retries sur erreurs TRANSITOIRES de l'API (429 rate-limit, 5xx, réseau). Sans cela,
+# un 429 ferait tomber l'avis sur le repli "avis entier" → découpe DÉGRADÉE. Les gros
+# modèles (mistral-large) ont des RPM bas : on retente avec backoff exponentiel borné.
+API_MAX_RETRIES = int(os.environ.get("AGORA_CLAIMS_MAX_RETRIES", "6"))
+API_BACKOFF_BASE = float(os.environ.get("AGORA_CLAIMS_BACKOFF_BASE", "2.0"))
+API_BACKOFF_CAP = float(os.environ.get("AGORA_CLAIMS_BACKOFF_CAP", "30.0"))
+_RETRIABLE_STATUS = frozenset({0, 408, 409, 429, 500, 502, 503, 504})
+
 
 class BackendUnavailable(RuntimeError):
     """Le backend choisi est inutilisable (clé absente, Mac injoignable…).
@@ -79,19 +87,27 @@ class ApiBackend(ClaimBackend):
                 "clé API Mistral absente — fournir MISTRAL_API_KEY ou var/mistral.key."
             )
         t0 = time.monotonic()
-        try:
-            content = mistral_client.chat(
-                messages, model=self.model, temperature=0.0,
-                max_tokens=MAX_TOKENS, json_mode=True,
-            )
-        except mistral_client.MistralError as exc:
-            # `exc.status` seul : ne JAMAIS logger la clé (le message de l'API non plus).
-            stats.errors += 1
-            print(f"  ⚠️ mistral[{self.model}]: HTTP {exc.status}")
-            return None
-        stats.calls += 1
-        stats.cold_seconds += time.monotonic() - t0
-        return content
+        for attempt in range(API_MAX_RETRIES + 1):
+            try:
+                content = mistral_client.chat(
+                    messages, model=self.model, temperature=0.0,
+                    max_tokens=MAX_TOKENS, json_mode=True,
+                )
+            except mistral_client.MistralError as exc:
+                # `exc.status` seul : ne JAMAIS logger la clé (ni le message de l'API).
+                if exc.status in _RETRIABLE_STATUS and attempt < API_MAX_RETRIES:
+                    delay = min(API_BACKOFF_CAP, API_BACKOFF_BASE * (2 ** attempt))
+                    print(f"  ⏳ mistral[{self.model}]: HTTP {exc.status} — retry "
+                          f"{attempt + 1}/{API_MAX_RETRIES} dans {delay:.0f}s")
+                    time.sleep(delay)
+                    continue
+                stats.errors += 1
+                print(f"  ⚠️ mistral[{self.model}]: HTTP {exc.status} (abandon)")
+                return None
+            stats.calls += 1
+            stats.cold_seconds += time.monotonic() - t0
+            return content
+        return None  # boucle épuisée sans succès (toutes les tentatives 429/5xx)
 
 
 class MacBackend(ClaimBackend):
