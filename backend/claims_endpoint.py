@@ -17,6 +17,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter
@@ -123,8 +124,8 @@ class PreparedClaims:
     claim_owner: list[int]          # claim idx -> idx d'avis dans `avis`
     claim_weight: np.ndarray        # poids social par claim (hérité de l'avis)
     claim_vecs: np.ndarray          # embeddings L2-normalisés, alignés aux claims
-    claim_start: list[int]          # offset verbatim début du claim dans l'avis
-    claim_end: list[int]            # offset verbatim fin (exclu) du claim dans l'avis
+    claim_spans: list[list[tuple[int, int]]]   # spans verbatim par claim (1..N portions)
+    claim_target: list[tuple[int, int] | None]  # cible verbatim par claim (ou None)
     backend: ClaimBackend
     model: str
     embedder: str
@@ -161,6 +162,7 @@ def prepare_claims(
     embedder: str = DEFAULT_EMBEDDER,
     ollama_url: str | None = None,
     min_chars: int = DEFAULT_MIN_CHARS,
+    progress: "Callable[[int, int], None] | None" = None,
 ) -> PreparedClaims:
     """Extrait (caché) puis embed (caché) les claims d'un dataset, sans clusteriser.
 
@@ -192,7 +194,7 @@ def prepare_claims(
     if missing:
         stats = OllamaStats()
         try:
-            new = extract_claims(missing, backend=be, stats=stats)
+            new = extract_claims(missing, backend=be, stats=stats, progress=progress)
         except BackendUnavailable as exc:
             raise OllamaUnavailable(str(exc)) from exc
         claims_by_id.update(new)
@@ -200,7 +202,7 @@ def prepare_claims(
         _save_claims_cache(claims_path, model, claims_by_id)
 
     # 2) Embeddings des claims (cachés, alignés à l'ordre d'aplatissement).
-    claim_texts, claim_owner, claim_weight, claim_spans = _flatten(avis, claims_by_id)
+    claim_texts, claim_owner, claim_weight, claim_spans, claim_target = _flatten(avis, claims_by_id)
     fingerprint = _emb_fingerprint(embedder, claim_texts)
     claim_vecs = _load_emb_cache(emb_path, fingerprint)
     embedded = claim_vecs is None
@@ -215,8 +217,8 @@ def prepare_claims(
         claim_owner=claim_owner,
         claim_weight=np.asarray(claim_weight, dtype=np.float64),
         claim_vecs=np.asarray(claim_vecs, dtype=np.float64),
-        claim_start=[s for s, _ in claim_spans],
-        claim_end=[e for _, e in claim_spans],
+        claim_spans=claim_spans,
+        claim_target=claim_target,
         backend=be,
         model=model,
         embedder=embedder,
