@@ -909,3 +909,101 @@ body {
     height: 56vh;
   }
 }
+
+/* ---------- live replay view (SSE) ---------- */
+/* Compact header buttons — distinct from the full-width .btn used in panels. */
+.live-btn {
+  border: 1px solid var(--agora);
+  background: var(--bg-raised);
+  color: var(--agora);
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.live-btn:hover:not(:disabled) {
+  background: var(--agora-soft);
+}
+.live-btn--primary {
+  background: var(--agora);
+  color: #fff;
+}
+.live-btn--primary:hover:not(:disabled) {
+  background: var(--agora-hover);
+}
+.live-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.live-body {
+  display: block; /* single column — the live view has no persistent right rail */
+}
+
+/* HUD strip above the live canvas: running counters + a "live" pulse. */
+.live-hud {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 10px 4px;
+  color: var(--grey-700);
+  font-size: 14px;
+}
+.live-hud__metric strong {
+  font-size: 20px;
+  color: var(--grey-1000);
+  font-variant-numeric: tabular-nums;
+}
+.live-hud__hint {
+  color: var(--grey-500);
+  font-size: 13px;
+  flex: 1 1 240px;
+}
+.live-hud__pulse {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--agora);
+  box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.6);
+  animation: live-pulse 1.4s ease-out infinite;
+}
+@keyframes live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(202, 88, 16, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0);
+  }
+}
+
+.live-context {
+  margin: 0 4px 8px;
+}
+
+/* Live detail rail (a clicked bubble): floats over the single-column body. */
+.live-aside {
+  position: fixed;
+  right: 16px;
+  top: calc(var(--header-h) + 16px);
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - var(--header-h) - 32px);
+  overflow: auto;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  padding: 14px 16px;
+}
+.live-aside__hook {
+  font-style: italic;
+  color: var(--grey-700);
+  margin: 0 0 8px;
+}
