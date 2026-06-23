@@ -8,6 +8,10 @@ import react from '@vitejs/plugin-react';
 // the browser talks same-origin (no CORS / host headaches). `/api/params` →
 // `:8010/params`, `/api/recluster` → `:8010/recluster` (the `/api` prefix is
 // stripped). If :8010 is down the front falls back to the static graph.json.
+// A worker can point the proxy at its own backend (e.g. a worktree instance on a
+// spare port) via VITE_API_TARGET, without touching this committed default.
+const API_TARGET = process.env.VITE_API_TARGET || 'http://localhost:8010';
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -19,7 +23,7 @@ export default defineConfig({
     allowedHosts: ['forge', 'localhost'],
     proxy: {
       '/api': {
-        target: 'http://localhost:8010',
+        target: API_TARGET,
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, ''),
       },
