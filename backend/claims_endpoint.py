@@ -40,6 +40,7 @@ from backend.recluster import dataset_dir
 
 CLAIMS_NAME = "claims.json"
 CLAIMS_EMB_NAME = "claims_emb.npz"
+TARGET_EMB_NAME = "target_emb.npz"
 DEFAULT_MIN_CHARS = 12
 
 
@@ -109,6 +110,74 @@ def _save_emb_cache(path: Path, fingerprint: str, vecs: np.ndarray) -> None:
     np.savez(path, vecs=vecs.astype(np.float32), fingerprint=np.str_(fingerprint))
 
 
+# --------------------------------------------------------------------------- #
+# Embeddings des CIBLES (target) — pour le knob α du bac à sable
+# --------------------------------------------------------------------------- #
+def _target_texts(avis: list[Avis], claim_owner: list[int],
+                  claim_target: list[tuple[int, int] | None]) -> tuple[list[str], np.ndarray]:
+    """Texte VERBATIM de la cible de chaque claim (ou "" si absente) + masque booléen.
+
+    La cible est un span `(s, e)` dans le texte de l'avis propriétaire ; on relit le
+    verbatim depuis `avis[owner].text`. Aligné à l'ordre d'aplatissement des claims.
+    """
+    texts: list[str] = []
+    mask = np.zeros(len(claim_owner), dtype=bool)
+    for i, tgt in enumerate(claim_target):
+        if tgt is not None:
+            s, e = tgt
+            t = avis[claim_owner[i]].text[s:e].strip()
+            if t:
+                texts.append(t)
+                mask[i] = True
+                continue
+        texts.append("")
+    return texts, mask
+
+
+def _load_target_cache(path: Path, fingerprint: str
+                       ) -> tuple[np.ndarray, np.ndarray] | None:
+    """Charge `target_emb.npz` (vecs + mask) s'il matche l'empreinte, sinon None."""
+    if not path.exists():
+        return None
+    try:
+        d = np.load(path, allow_pickle=False)
+        if str(d["fingerprint"]) == fingerprint:
+            return d["vecs"].astype(np.float64), d["mask"].astype(bool)
+    except (OSError, KeyError, ValueError):
+        return None
+    return None
+
+
+def _save_target_cache(path: Path, fingerprint: str, vecs: np.ndarray,
+                       mask: np.ndarray) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez(path, vecs=vecs.astype(np.float32), mask=mask.astype(bool),
+             fingerprint=np.str_(fingerprint))
+
+
+def _embed_targets(avis, claim_owner, claim_target, claim_vecs, *, embedder, path):
+    """Embeddings des CIBLES alignés aux claims (cachés). Cible absente → vecteur nul.
+
+    Réutilise l'embedder claims (même espace nomic-v2). Cache `target_emb.npz` clé par
+    une empreinte des textes de cibles. Renvoie `(target_vecs, target_mask)` : pour les
+    claims sans cible, ligne nulle et `mask=False` (le blend les laisse intacts).
+    """
+    target_strings, mask = _target_texts(avis, claim_owner, claim_target)
+    fingerprint = _emb_fingerprint(embedder, target_strings)
+    cached = _load_target_cache(path, fingerprint)
+    if cached is not None:
+        return cached[0], cached[1], False
+
+    dim = claim_vecs.shape[1] if claim_vecs.size else 1
+    target_vecs = np.zeros((len(target_strings), dim), dtype=np.float64)
+    idx = [i for i, m in enumerate(mask) if m]
+    if idx:
+        embedded = embed_claim_texts([target_strings[i] for i in idx], embedder=embedder)
+        target_vecs[idx] = embedded
+    _save_target_cache(path, fingerprint, target_vecs, mask)
+    return target_vecs, mask, True
+
+
 @dataclass
 class PreparedClaims:
     """Sortie de `prepare_claims` : claims extraits + embeddings, prêts à clusteriser.
@@ -126,6 +195,8 @@ class PreparedClaims:
     claim_vecs: np.ndarray          # embeddings L2-normalisés, alignés aux claims
     claim_spans: list[list[tuple[int, int]]]   # spans verbatim par claim (1..N portions)
     claim_target: list[tuple[int, int] | None]  # cible verbatim par claim (ou None)
+    target_vecs: np.ndarray         # embeddings L2-normalisés des CIBLES (nul si absente)
+    target_mask: np.ndarray         # booléen : claim a-t-il une cible embeddée ? (knob α)
     backend: ClaimBackend
     model: str
     embedder: str
@@ -149,6 +220,11 @@ class PreparedClaims:
                 "claims_extracted": self.extracted,
                 "claims_cached": len(self.avis) - self.extracted,
                 "embeddings_recomputed": self.embedded,
+            },
+            "targets": {
+                "n_with_target": int(self.target_mask.sum()),
+                "coverage": (round(float(self.target_mask.mean()), 4)
+                             if self.target_mask.size else 0.0),
             },
             "cost": {"cold_seconds": self.cold_seconds},
         }
@@ -209,6 +285,14 @@ def prepare_claims(
     if claim_vecs is None:
         claim_vecs = embed_claim_texts(claim_texts, embedder=embedder)
         _save_emb_cache(emb_path, fingerprint, claim_vecs)
+    claim_vecs = np.asarray(claim_vecs, dtype=np.float64)
+
+    # 2b) Embeddings des CIBLES (cachés, alignés) — alimentent le knob α du bac à sable.
+    #     Cible absente → vecteur nul + mask False (blend gracieux : claim inchangé).
+    target_path = ddir / TARGET_EMB_NAME
+    target_vecs, target_mask, target_embedded = _embed_targets(
+        avis, claim_owner, claim_target, claim_vecs, embedder=embedder, path=target_path,
+    )
 
     return PreparedClaims(
         avis=avis,
@@ -216,9 +300,11 @@ def prepare_claims(
         claim_texts=claim_texts,
         claim_owner=claim_owner,
         claim_weight=np.asarray(claim_weight, dtype=np.float64),
-        claim_vecs=np.asarray(claim_vecs, dtype=np.float64),
+        claim_vecs=claim_vecs,
         claim_spans=claim_spans,
         claim_target=claim_target,
+        target_vecs=np.asarray(target_vecs, dtype=np.float64),
+        target_mask=np.asarray(target_mask, dtype=bool),
         backend=be,
         model=model,
         embedder=embedder,
