@@ -1,6 +1,6 @@
 # NOTE — Ingestion générique (lane ingest-gen)
 
-Résout les constats d'`eval/genericity_audit.md` **#1, #10, #11, #13**.
+Résout les constats d'`research/genericity_audit.md` **#1, #10, #11, #13**.
 Principe : **un corpus = un descripteur (config), pas du code.**
 
 ## Ce qui change
