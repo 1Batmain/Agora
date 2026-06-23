@@ -19,6 +19,9 @@ Endpoints :
   - GET  /avis/{id}     → un avis entier + ses portions verbatim surlignables
   - POST /build         → (re)déclenche le précalcul d'un dataset (non bloquant)
   - GET  /build_status  → état du build d'un dataset (polling front)
+  - GET  /flags         → flags de feedback d'un dataset (réafficher l'état)
+  - POST /flag          → upsert le flag d'un avis (commentaire libre, horodaté)
+  - DELETE /flag/{id}   → retire le flag d'un avis
 
 Lancer :
     uv run --extra contender uvicorn backend.server:app --host 0.0.0.0 --port 8010
@@ -43,7 +46,7 @@ from backend.recluster import (
     list_datasets,
     load_cache,
 )
-from backend import analysis_store, build_manager
+from backend import analysis_store, build_manager, flags_store
 
 
 class _Dataset:
@@ -339,3 +342,42 @@ def build_status(dataset: str | None = Query(None)) -> dict:
     prog["dataset"] = ds.id
     prog["building"] = build_manager.is_building(ds.id)
     return prog
+
+
+# ============================ Flags de feedback ============================ #
+# Bob signale un avis mal découpé / mal ciblé / mal extrait avec un commentaire
+# libre, pour affiner ensuite. Artefact LÉGER, persistant et éditable, indépendant
+# de l'analyse précalculée : upsert par avis_id dans `backend/cache/<dataset>/flags.json`.
+# AUCUN calcul lourd ici.
+
+class FlagBody(BaseModel):
+    """Corps de `POST /flag` — feedback libre sur l'extraction d'un avis (upsert)."""
+    dataset: str | None = None
+    avis_id: str
+    text: str = ""
+
+
+@app.get("/flags")
+def get_flags(dataset: str | None = Query(None)) -> dict:
+    """Tous les flags d'un dataset (pour réafficher l'état au chargement)."""
+    ds = _resolve(dataset)
+    return {"dataset": ds.id, "flags": flags_store.list_flags(ds.id)}
+
+
+@app.post("/flag")
+def post_flag(body: FlagBody) -> dict:
+    """UPSERT du flag d'un avis (crée ou met à jour, horodaté) → {ok, flag}."""
+    ds = _resolve(body.dataset)
+    avis_id = (body.avis_id or "").strip()
+    if not avis_id:
+        raise HTTPException(status_code=422, detail="avis_id requis.")
+    flag = flags_store.upsert_flag(ds.id, avis_id, body.text)
+    return {"ok": True, "flag": flag}
+
+
+@app.delete("/flag/{avis_id}")
+def remove_flag(avis_id: str, dataset: str | None = Query(None)) -> dict:
+    """Retire le flag d'un avis → {ok, removed}."""
+    ds = _resolve(dataset)
+    removed = flags_store.delete_flag(ds.id, avis_id)
+    return {"ok": True, "removed": removed}
