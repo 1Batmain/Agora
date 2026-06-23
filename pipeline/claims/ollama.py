@@ -1,6 +1,6 @@
 """Client Ollama souverain (LLM LOCAL via `AGORA_OLLAMA_URL`).
 
-Promu depuis `eval/segmentation/small_models.py` pour devenir un composant
+Promu depuis `research/segmentation/small_models.py` pour devenir un composant
 DURABLE de `pipeline.claims` — utilisable par le backend sans dépendre du code
 d'évaluation. Cible : le Mac de Bob (Apple Silicon via Tailscale), où tourne
 `ministral-3` ; la donnée citoyenne ne sort jamais du réseau privé.
