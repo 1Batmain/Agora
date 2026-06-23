@@ -195,3 +195,14 @@
   animée** (via `/stream`) puis **se fige** en interactif. **RETIRER** `LiveView` + boutons « Rejouer live/démo » séparés.
 - **Acceptance** : ouvrir la page → le graphe se construit en animé (vraies données, structure batch propre, pas de
   doublons aléatoires) puis devient interactif. Plus de mode séparé.
+
+---
+
+## CLAIM AVEC CIBLE/ASPECT (target) — note Bob (à faire avec la distillation C2/C3)
+- Chaque claim porte une **cible** (l'aspect dont il parle) : ex. « j'aime les vidéos parce qu'elles me font rire » →
+  cible **vidéo** ; « le temps passé sur l'écran me dégoûte » → cible **temps d'écran**.
+- Modèle : `Claim = {spans, text, target}` (target = aspect court extrait par le LLM ; peut être normalisé pour le clustering).
+- **Pourquoi** : (1) clustering **thématique par cible** = thèmes plus nets que par embedding seul ; (2) la **stance**
+  (position pour/contre vis-à-vis de LA cible) devient explicite. Aligne extraction → thème → stance sur la même cible.
+- Extraction : le LLM renvoie `{"claims":[{"parts":[...], "target":"vidéo"}, ...]}`. mistral-large devrait gérer ;
+  **tester si un plus petit modèle tient** (fait partie de la distillation C2). Le `target` enrichit l'éval (accord sur la cible).
