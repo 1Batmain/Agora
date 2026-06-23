@@ -33,8 +33,8 @@ import numpy as np
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from backend.develop import corpus_idf, rerank_order
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_SEED, N_REPRESENTATIVE
-from pipeline.cluster.adaptive import derive_defaults
-from pipeline.cluster.knn import build_knn_graph
+from pipeline.cluster.adaptive import derive_defaults, derive_k
+from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.palette import color_for
@@ -163,8 +163,11 @@ def _subdivide(members: list[int], vecs: np.ndarray, base_resolution: float,
     if len(members) < 2:
         return None
     subvecs = np.ascontiguousarray(vecs[members], dtype=np.float64)
-    dd = derive_defaults(subvecs.astype(np.float32))
-    graph = build_knn_graph(subvecs, k=dd.k, threshold=dd.threshold)
+    subvecs32 = subvecs.astype(np.float32)
+    k_eff = derive_k(subvecs.shape[0])
+    neighbors = knn_search(subvecs32, k_eff)            # 1 passe k-NN → seuil + graphe
+    dd = derive_defaults(subvecs32, k=k_eff, neighbors=neighbors)
+    graph = build_knn_graph(subvecs, k=dd.k, threshold=dd.threshold, neighbors=neighbors)
 
     chosen: list[list[int]] | None = None     # groupes d'indices LOCAUX
     for mult in RES_LADDER:

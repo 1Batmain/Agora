@@ -49,23 +49,26 @@ def _knn_sklearn(vecs: np.ndarray, k: int):
     return sims, idx, "sklearn"
 
 
-def build_knn_graph(
-    vecs: np.ndarray,
-    k: int = 10,
-    threshold: float = 0.80,
-    prefer_faiss: bool = True,
-) -> KnnGraph:
-    """Construit le graphe k-NN cosine (arêtes > seuil).
+@dataclass
+class KnnNeighbors:
+    """Voisinage k-NN BRUT (self inclus) — réutilisable pour le graphe ET les stats.
 
-    Les défauts `k`/`threshold` ne sont que des REPLIS neutres : en production,
-    build et le backend passent des valeurs DÉRIVÉES des données (k ∝ log N,
-    seuil = μ−σ·k des cosinus k-NN — cf. `pipeline.cluster.adaptive`, audit #6).
-    Ce module ne porte donc plus de magic-number corpus-spécifique « actif ».
+    `sims`/`idx` ont la forme `(n, k+1)` : pour chaque nœud, ses `k+1` plus proches
+    voisins par cosinus (self typiquement en tête, sim≈1). Calculé UNE fois (faiss
+    si dispo), il alimente à la fois `build_knn_graph` (arêtes) et `derive_defaults`
+    (pool des cosinus pour le seuil) — au lieu de deux passes O(n²) redondantes.
     """
-    n = vecs.shape[0]
-    if n <= 1:
-        return KnnGraph(n=n, edges=[], k=k, threshold=threshold, backend="none")
+    sims: np.ndarray            # (n, k+1) float32, cosinus décroissants
+    idx: np.ndarray             # (n, k+1) int, indices des voisins
+    backend: str
 
+
+def knn_search(vecs: np.ndarray, k: int, prefer_faiss: bool = True) -> KnnNeighbors:
+    """k-NN brut (top-(k+1), self inclus) — faiss exact si dispo, sinon sklearn.
+
+    EXACT (`IndexFlatIP` = produit scalaire == cosine sur vecteurs normalisés) :
+    pas d'approximation, résultats identiques au dense. Sert de source unique de
+    vérité aux deux consommateurs (graphe + seuil dérivé)."""
     vecs = np.ascontiguousarray(vecs, dtype=np.float32)
     sims = idx = None
     backend = ""
@@ -76,20 +79,55 @@ def build_knn_graph(
             sims = None
     if sims is None:
         sims, idx, backend = _knn_sklearn(vecs, k)
+    return KnnNeighbors(sims=sims, idx=idx, backend=backend)
 
-    seen: dict[tuple[int, int], float] = {}
-    for i in range(n):
-        for col in range(idx.shape[1]):
-            j = int(idx[i, col])
-            if j == i:
-                continue
-            s = float(sims[i, col])
-            if s < threshold:
-                continue
-            a, b = (i, j) if i < j else (j, i)
-            prev = seen.get((a, b))
-            if prev is None or s > prev:
-                seen[(a, b)] = s
 
-    edges = [(a, b, w) for (a, b), w in seen.items()]
+def build_knn_graph(
+    vecs: np.ndarray,
+    k: int = 10,
+    threshold: float = 0.80,
+    prefer_faiss: bool = True,
+    neighbors: "KnnNeighbors | None" = None,
+) -> KnnGraph:
+    """Construit le graphe k-NN cosine (arêtes > seuil).
+
+    Les défauts `k`/`threshold` ne sont que des REPLIS neutres : en production,
+    build et le backend passent des valeurs DÉRIVÉES des données (k ∝ log N,
+    seuil = μ−σ·k des cosinus k-NN — cf. `pipeline.cluster.adaptive`, audit #6).
+    Ce module ne porte donc plus de magic-number corpus-spécifique « actif ».
+
+    `neighbors` (optionnel) = voisinage k-NN DÉJÀ calculé (`knn_search`) : on évite
+    une 2ᵉ passe O(n²) quand l'appelant l'a déjà pour dériver le seuil (cf. sandbox).
+    La construction des arêtes est VECTORISÉE (numpy) — résultat identique à l'ancien
+    double-boucle : arêtes non dirigées i<j, poids = cosine (symétrique en exact, donc
+    `max` sur doublon == la même valeur).
+    """
+    n = vecs.shape[0]
+    if n <= 1:
+        return KnnGraph(n=n, edges=[], k=k, threshold=threshold, backend="none")
+
+    if neighbors is None:
+        neighbors = knn_search(vecs, k, prefer_faiss=prefer_faiss)
+    sims, idx, backend = neighbors.sims, neighbors.idx, neighbors.backend
+
+    # Aplatissement ROW-MAJOR (i croissant, col croissant) == ordre de scan d'origine.
+    rows = np.repeat(np.arange(n), idx.shape[1])
+    cols = idx.reshape(-1).astype(np.int64)
+    w = sims.reshape(-1).astype(np.float64)
+    keep = (cols != rows) & (w >= threshold)
+    rows, cols, w = rows[keep], cols[keep], w[keep]
+    if rows.size == 0:
+        return KnnGraph(n=n, edges=[], k=k, threshold=threshold, backend=backend)
+
+    a = np.minimum(rows, cols)
+    b = np.maximum(rows, cols)
+    key = a * n + b
+    # Dédup en conservant l'ORDRE DE PREMIÈRE APPARITION (comme l'ancien dict) et le
+    # poids MAX par paire (en exact, symétrique → max == la même valeur).
+    uniq, first_idx, inv = np.unique(key, return_index=True, return_inverse=True)
+    maxw = np.zeros(uniq.shape[0], dtype=np.float64)
+    np.maximum.at(maxw, inv, w)
+    o = np.argsort(first_idx, kind="stable")        # ordre de 1ʳᵉ apparition
+    fi = first_idx[o]
+    edges = list(zip(a[fi].tolist(), b[fi].tolist(), maxw[o].tolist()))
     return KnnGraph(n=n, edges=edges, k=k, threshold=threshold, backend=backend)
