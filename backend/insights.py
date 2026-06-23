@@ -22,7 +22,7 @@ import json
 from pathlib import Path
 from time import perf_counter
 
-from backend.analysis import ThemeNode, ThemeTree, get_or_build_tree
+from backend.analysis import ThemeNode, ThemeTree, _dataset_context, get_or_build_tree
 from backend.recluster import dataset_dir
 from pipeline.cluster import mistral_client
 
@@ -145,7 +145,32 @@ def _theme_messages(summary: str) -> list[dict]:
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
+def _attach_global_context(out: dict, dataset_id: str) -> dict:
+    """B2 : la synthèse GLOBALE s'OUVRE sur le contexte de collecte du dataset.
+
+    Le contexte (descripteur d'ingestion, cf. `_dataset_context`) est préfixé en
+    italique au Markdown de l'insight global → une seule synthèse qui commence par le
+    contexte (le front F2 n'affiche plus de bloc intro séparé). `dataset_context` reste
+    par ailleurs exposé dans `/analysis` (repli). Sans contexte, Markdown inchangé.
+    """
+    if out.get("meta", {}).get("level") != "global":
+        return out
+    ctx = _dataset_context(dataset_id)
+    if not ctx:
+        return out
+    md = out.get("markdown", "")
+    if md.startswith(f"_{ctx}_"):          # idempotent (déjà préfixé)
+        return out
+    return {**out, "markdown": f"_{ctx}_\n\n{md}"}
+
+
 def render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) -> dict:
+    """Synthèse Markdown d'un niveau (sans cache) ; la GLOBALE s'ouvre sur le contexte (B2)."""
+    out = _render_insight(tree, level, theme_id)
+    return _attach_global_context(out, tree.dataset)
+
+
+def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) -> dict:
     """Génère (sans cache) la synthèse Markdown d'un niveau à partir d'un arbre déjà bâti.
 
     Cœur PUR (résumé → prompt → LLM → `{markdown, meta}`) partagé entre le BUILD
@@ -223,7 +248,17 @@ def _key_hash(key: tuple) -> str:
     return hashlib.sha256("\x00".join(str(k) for k in key).encode("utf-8")).hexdigest()[:16]
 
 
-def insights_payload(
+def insights_payload(ds, **kwargs) -> dict:
+    """Synthèse Markdown LLM cachée ; la GLOBALE s'ouvre sur le contexte (B2).
+
+    Le contexte est attaché à la VOLÉE (après cache) : le Markdown caché reste « pur »
+    (insensible à un changement de descripteur), le contexte est toujours frais.
+    """
+    out = _insights_payload(ds, **kwargs)
+    return _attach_global_context(out, ds.id)
+
+
+def _insights_payload(
     ds,
     *,
     level: str = "global",
