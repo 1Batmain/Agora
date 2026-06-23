@@ -164,13 +164,15 @@ def _attach_global_context(out: dict, dataset_id: str) -> dict:
     return {**out, "markdown": f"_{ctx}_\n\n{md}"}
 
 
-def render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) -> dict:
+def render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
+                   *, model: str | None = None) -> dict:
     """Synthèse Markdown d'un niveau (sans cache) ; la GLOBALE s'ouvre sur le contexte (B2)."""
-    out = _render_insight(tree, level, theme_id)
+    out = _render_insight(tree, level, theme_id, model=model)
     return _attach_global_context(out, tree.dataset)
 
 
-def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) -> dict:
+def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
+                    *, model: str | None = None) -> dict:
     """Génère (sans cache) la synthèse Markdown d'un niveau à partir d'un arbre déjà bâti.
 
     Cœur PUR (résumé → prompt → LLM → `{markdown, meta}`) partagé entre le BUILD
@@ -182,7 +184,7 @@ def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None) ->
     level = (level or "global").strip().lower()
     if level not in ("global", "theme"):
         raise ValueError(f"level inconnu: {level!r} (attendu: global | theme).")
-    synth_model = mistral_client.SYNTHESIS_MODEL
+    synth_model = model or mistral_client.SYNTHESIS_MODEL
 
     if level == "global":
         summary = _global_summary(tree)
