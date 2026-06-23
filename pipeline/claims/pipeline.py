@@ -117,6 +117,28 @@ def embed_claim_texts(texts: list[str], *, embedder: str = DEFAULT_EMBEDDER) -> 
     return _normalize_rows(np.asarray(vecs, dtype=np.float64))
 
 
+def blend_embeddings(claim_vecs: np.ndarray, target_vecs: np.ndarray,
+                     target_mask: np.ndarray, alpha: float) -> np.ndarray:
+    """Mélange CIBLE↔CLAIM : `normalize(α·emb(target) + (1−α)·emb(claim))` si cible, sinon claim.
+
+    Le knob α (0..1) du bac à sable « console de mixage » : α=0 = clustering par
+    CLAIM (actuel), α↑ = orienté ASPECT (rapproche les claims qui parlent du même
+    aspect, p.ex. les trois « addiction »). Repli GRACIEUX : un claim sans cible
+    (`target_mask[i]` faux) garde son vecteur claim intact, quel que soit α. Tout est
+    vectorisé (zéro boucle) — pensé pour ~3000 claims en quelques ms.
+
+    `claim_vecs`/`target_vecs` sont L2-normalisés et ALIGNÉS (même index, lignes sans
+    cible = vecteur nul dans `target_vecs`). Renvoie des vecteurs L2-normalisés.
+    """
+    a = float(alpha)
+    if a <= 0.0 or target_mask is None or not bool(target_mask.any()):
+        return claim_vecs                       # α=0 ou aucune cible → claims inchangés
+    blended = claim_vecs.copy()
+    m = np.asarray(target_mask, dtype=bool)
+    blended[m] = a * target_vecs[m] + (1.0 - a) * claim_vecs[m]
+    return _normalize_rows(blended)
+
+
 # --------------------------------------------------------------------------- #
 # Aplatissement claims (alignés à l'ordre des avis)
 # --------------------------------------------------------------------------- #
