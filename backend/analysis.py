@@ -68,8 +68,6 @@ class ThemeNode:
     representative_claims: list[str] = field(default_factory=list)
     children: list[str] = field(default_factory=list)
     color: str = ""                 # couleur cluster (source unique : palette.py)
-    x: float = 0.0
-    y: float = 0.0
 
     @property
     def has_children(self) -> bool:
@@ -391,43 +389,6 @@ def _representatives(node: ThemeNode, vecs: np.ndarray, claim_texts: list[str],
 
 
 # --------------------------------------------------------------------------- #
-# Projection 2D (UMAP des centroïdes ; repli déterministe pour très peu de nœuds)
-# --------------------------------------------------------------------------- #
-def _project_2d(centroids: np.ndarray, seed: int) -> np.ndarray:
-    """Positions 2D STABLES des centroïdes de thèmes (distance = proximité sémantique).
-
-    UMAP (cosine, seed fixe) dès qu'il y a assez de nœuds ; sinon repli déterministe
-    (cercle régulier) pour ne jamais planter sur un arbre minuscule. Sortie centrée.
-    """
-    n = centroids.shape[0]
-    if n == 0:
-        return np.zeros((0, 2))
-    if n == 1:
-        return np.zeros((1, 2))
-    if n <= 3:
-        angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
-        return np.column_stack([np.cos(angles), np.sin(angles)])
-    try:
-        import umap
-
-        n_neighbors = int(min(15, n - 1))
-        reducer = umap.UMAP(
-            n_components=2, n_neighbors=n_neighbors, min_dist=0.1,
-            metric="cosine", random_state=seed,
-        )
-        emb = reducer.fit_transform(centroids)
-    except Exception:
-        # Repli linéaire déterministe : 2 premières composantes principales.
-        c = centroids - centroids.mean(axis=0)
-        _, _, vt = np.linalg.svd(c, full_matrices=False)
-        emb = c @ vt[:2].T
-    emb = np.asarray(emb, dtype=np.float64)
-    emb = emb - emb.mean(axis=0)
-    scale = float(np.abs(emb).max()) or 1.0
-    return emb / scale
-
-
-# --------------------------------------------------------------------------- #
 # Co-occurrence — entre frères de chaque groupe (macros, puis enfants de chaque nœud)
 # --------------------------------------------------------------------------- #
 def _cooccurrence(tree: ThemeTree) -> list[dict]:
@@ -445,9 +406,14 @@ def _cooccurrence(tree: ThemeTree) -> list[dict]:
             groups.append(node.children)
 
     counts: dict[tuple[str, str], int] = {}
+    seen: set[frozenset[str]] = set()           # dé-doublonne les fratries identiques
     for sibling_ids in groups:
         if len(sibling_ids) < 2:
             continue
+        key = frozenset(sibling_ids)             # (incrémental : macros == enfants racine)
+        if key in seen:
+            continue
+        seen.add(key)
         claim_to_node: dict[int, str] = {}
         for nid in sibling_ids:
             for ci in tree.nodes[nid].members:
@@ -665,13 +631,17 @@ def _cumulative_convergence(prepared) -> tuple[float, dict]:
     }
 
 
-def _dataset_stats(tree: ThemeTree) -> dict:
+def _dataset_stats(tree: ThemeTree, *, macro_ids: list[str] | None = None) -> dict:
     """Indices globaux dérivés du dataset, prêts pour l'UI (valeur + libellé + explication).
 
     Calculés sur les thèmes MACRO. Chaque index porte `value` ∈ [0..1], un `label`
     court et une `explanation` d'une phrase, plus un `detail` chiffré lisible.
+
+    `macro_ids` permet de fixer le niveau « macro » d'affichage (utile au mode
+    incrémental où la racine unique est un super-nœud : on lit alors ses enfants).
+    Repli sur `tree.macros`.
     """
-    macros = [tree.nodes[mid] for mid in tree.macros]
+    macros = [tree.nodes[mid] for mid in (macro_ids if macro_ids is not None else tree.macros)]
     pops = [max(0, m.n_avis) for m in macros]
     total_avis = sum(pops)
     k = len(macros)
@@ -802,46 +772,42 @@ def _dataset_context(dataset_id: str) -> str:
     return (d.get("context") or d.get("label") or "").strip()
 
 
-def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
-    """Sérialise l'arbre au format du contrat : themes(x,y) + edges + params + backend_used.
+def theme_dict(n: ThemeNode) -> dict:
+    """Sérialise un nœud au format du contrat (SANS x,y — UMAP retiré, front en d3-pack)."""
+    return {
+        "id": n.id,
+        "label": n.label,
+        "title": n.title or n.label,    # titre court LLM (repli label si non calculé)
+        "hook": n.hook,                 # accroche LLM (phrase d'accroche)
+        "description": n.description,   # description LLM markdown (relaie les mots-clés)
+        "n_avis": n.n_avis,
+        "n_claims": n.n_claims,
+        "weight": n.weight,
+        "consensus": n.consensus,
+        "convergence": n.convergence,   # accord intra-cluster (consensus_eff pondéré pop.)
+        "dispersion": n.dispersion,
+        "parent_id": n.parent_id,
+        "has_children": n.has_children,
+        "color": n.color,               # couleur cluster (source unique : palette.py)
+        # extras hors-contrat (le front peut les ignorer) :
+        "level": n.depth,
+        "keywords": n.keywords,
+        "representative_claims": n.representative_claims,
+    }
 
-    Calcule les positions UMAP 2D des centroïdes (B1) puis les arêtes de co-occurrence,
-    et assemble la réponse. `took_ms` (optionnel) trace le coût total côté serveur.
+
+def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None,
+                     macro_ids: list[str] | None = None) -> dict:
+    """Sérialise l'arbre au format du contrat : themes + edges + params + backend_used.
+
+    Plus de positions UMAP (front en d3-pack) : seules les arêtes de co-occurrence et la
+    hiérarchie sont calculées. `took_ms` (optionnel) trace le coût total côté serveur.
+    `macro_ids` fixe le niveau macro d'affichage pour les indices globaux (incrémental).
     """
     t0 = perf_counter()
     ids = tree.order
-    if ids:
-        centroids = np.asarray([tree.nodes[i].centroid for i in ids])
-        coords = _project_2d(centroids, tree.seed)
-        for nid, (x, y) in zip(ids, coords):
-            tree.nodes[nid].x = round(float(x), 4)
-            tree.nodes[nid].y = round(float(y), 4)
 
-    themes = [
-        {
-            "id": n.id,
-            "label": n.label,
-            "title": n.title or n.label,    # titre court LLM (repli label si non calculé)
-            "hook": n.hook,                 # accroche LLM (phrase d'accroche)
-            "description": n.description,   # description LLM markdown (relaie les mots-clés)
-            "x": n.x,
-            "y": n.y,
-            "n_avis": n.n_avis,
-            "n_claims": n.n_claims,
-            "weight": n.weight,
-            "consensus": n.consensus,
-            "convergence": n.convergence,   # accord intra-cluster (consensus_eff pondéré pop.)
-            "dispersion": n.dispersion,
-            "parent_id": n.parent_id,
-            "has_children": n.has_children,
-            "color": n.color,       # couleur cluster (source unique : palette.py)
-            # extras hors-contrat (le front peut les ignorer) :
-            "level": n.depth,
-            "keywords": n.keywords,
-            "representative_claims": n.representative_claims,
-        }
-        for n in (tree.nodes[i] for i in ids)
-    ]
+    themes = [theme_dict(tree.nodes[i]) for i in ids]
     edges = _cooccurrence(tree)
 
     prep = tree.prepared
@@ -879,7 +845,7 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None) -> dict:
         "themes": themes,
         "edges": edges,
         "params": params,
-        "dataset_stats": _dataset_stats(tree),   # indices globaux dérivés (UI : coup d'œil)
+        "dataset_stats": _dataset_stats(tree, macro_ids=macro_ids),   # indices globaux dérivés (UI : coup d'œil)
         "dataset_context": _dataset_context(tree.dataset),  # intro vue globale (descripteur)
         "backend_used": prep.backend.name,
     }
