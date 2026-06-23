@@ -1,7 +1,7 @@
 # NOTE — Modèle gagnant câblé : `nomic-v2` + arbre macro→sous sur le réel
 
 > Pour l'architecte. Le `frontend/public/graph.json` de la démo est désormais
-> régénéré avec le **modèle de prod retenu au banc qualité** (`eval/quality_report.md`) :
+> régénéré avec le **modèle de prod retenu au banc qualité** (`research/quality_report.md`) :
 > **`nomic-ai/nomic-embed-text-v2-moe`** (`nomic-v2`). À comparer avec l'ancien
 > arbre e5-small documenté dans [`HIERARCHY_NOTE.md`](./HIERARCHY_NOTE.md).
 
