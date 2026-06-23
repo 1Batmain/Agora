@@ -32,8 +32,8 @@ from backend.analysis import (
     DEFAULT_EMBEDDER,
     DEFAULT_SEED,
     analysis_payload,
-    build_theme_tree,
 )
+from backend.state import AnalysisState
 from backend.avis import build_avis_provenance
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
@@ -86,12 +86,17 @@ def build_analysis(
             on_progress(phase, detail, done, total)
 
     try:
-        # 1) Claims (extraction LLM + embed, cachés) + arbre variance-adaptatif (B1+B2).
+        # 1) Claims (extraction LLM + embed, cachés) + arbre INCRÉMENTAL (B1+B2) :
+        #    on rejoue les claims un par un via AnalysisState (rattachement plus-proche +
+        #    split local sur divergence) — même cœur que le stream live, zéro UMAP.
         report("claims", "extraction + embeddings (caché si déjà fait)")
-        tree = build_theme_tree(
+        state = AnalysisState.from_dataset(
             ds, backend=backend, model=model, embedder=embedder,
             resolution=resolution, seed=seed,
         )
+        state.add_all()
+        state.finalize()
+        tree = state.tree()
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
 
@@ -115,8 +120,8 @@ def build_analysis(
             if i == total or i % 25 == 0:
                 report("enrich", "accroches + descriptions (LLM, caché)", i, total)
 
-        # 2) Carte spatiale : UMAP des centroïdes + co-occurrence (B1) → analysis.json.
-        report("analysis", "projection UMAP 2D + co-occurrence")
+        # 2) Carte : co-occurrence (B1) → analysis.json (front en d3-pack, plus d'UMAP).
+        report("analysis", "co-occurrence (hiérarchie d3-pack, sans UMAP)")
         payload = analysis_payload(tree)
         payload["status"] = store.READY
         store.write_analysis(dataset, payload)
