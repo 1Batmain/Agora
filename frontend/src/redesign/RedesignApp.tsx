@@ -15,7 +15,6 @@ import { LiveView } from './LiveView';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
-import { Markdown } from './Markdown';
 import { themeCaption } from './labels';
 
 /** Human badge label per data source (live / build / mock / error). */
@@ -209,6 +208,17 @@ export default function RedesignApp() {
   const edges = analysis?.edges ?? [];
   const insightTitle = contextTheme ? themeCaption(contextTheme) : 'Synthèse globale';
 
+  // F2 — the collection context is the START of the GLOBAL synthesis (one
+  // synthesis, no separate intro block). The backend (B2) ideally already folds it
+  // in; this is the FRONT repli: at the global level, if the synthesis doesn't
+  // already open with the context, prefix it as the first paragraph.
+  const panelMarkdown = useMemo(() => {
+    const ctx = analysis?.dataset_context?.trim();
+    if (!atGlobal || !ctx || !markdown) return markdown;
+    const norm = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+    return norm(markdown).startsWith(norm(ctx)) ? markdown : `${ctx}\n\n${markdown}`;
+  }, [atGlobal, analysis?.dataset_context, markdown]);
+
   const crumbs = useMemo(
     () => [
       { label: 'Vue globale', idx: -1 },
@@ -297,24 +307,9 @@ export default function RedesignApp() {
             ))}
           </nav>
 
-          {/* GLOBAL view intro: a description of the consultation + the context in
-              which contributions were collected (graceful when the backend omits
-              both). Hidden once the user drills or selects a leaf. */}
-          {atGlobal && (analysis?.dataset_description || analysis?.dataset_context) && (
-            <section className="dataset-intro" aria-label="Présentation de la consultation">
-              {analysis?.dataset_description && (
-                <div className="dataset-intro__desc">
-                  <Markdown source={analysis.dataset_description} />
-                </div>
-              )}
-              {analysis?.dataset_context && (
-                <p className="dataset-intro__context">
-                  <span className="dataset-intro__label">Contexte de collecte</span>
-                  {analysis.dataset_context}
-                </p>
-              )}
-            </section>
-          )}
+          {/* F2 — no separate intro block anymore. The collection context is folded
+              into the START of the GLOBAL synthesis (right panel), so the global view
+              shows a SINGLE synthesis. See `panelMarkdown` below. */}
 
           <div className="agora__canvas">
             {busy ? (
@@ -381,7 +376,7 @@ export default function RedesignApp() {
           ) : (
             <InsightsPanel
               title={insightTitle}
-              markdown={markdown}
+              markdown={panelMarkdown}
               loading={insightsLoading}
               source={insightsSource}
             />

@@ -4,14 +4,13 @@ import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from 'd3-zo
 import 'd3-transition';
 import type { SpatialEdge, SpatialTheme } from './contract';
 import { themeCaption } from './labels';
-import { Markdown } from './Markdown';
 
 /**
  * F3 — theme BUBBLES, rendered with **D3** (d3-selection data-join, d3-zoom,
  * d3-hierarchy pack). The UMAP "map" was dropped: at every level the bubbles are
  * laid out by a deterministic **circle pack** (no semantic x,y — those positions
- * read as noise to non-experts). Position carries NO meaning; only SIZE, COLOUR
- * and the LABEL do:
+ * read as noise to non-experts). Position carries NO meaning; only SIZE and
+ * COLOUR do:
  *   - AREA  = `n_avis` (volume of voices) — the only thing the packing encodes;
  *   - HUE   = cluster identity (categorical, stable per theme id → coherent with
  *             highlights and across drill levels);
@@ -20,8 +19,9 @@ import { Markdown } from './Markdown';
  *             A theme backed by a single avis stays PALE; a large consensual
  *             theme is vivid — so volume can no longer masquerade as agreement.
  *
- * The default caption is DELIBERATELY sparse: the voice count (+ the LLM `title`
- * when readable). Keywords/consensus live only in the HOVER tooltip.
+ * Bubbles carry NO text caption (the cluster name under each node was too
+ * cluttered) — only the voice count sits inside. The name, accroche, keywords and
+ * consensus live ONLY in the fixed top-right hover panel.
  *
  * Navigation is ADAPTIVE drill: you only ever see ONE level (the children of the
  * current parent). A single CLICK on a drillable bubble (`has_children`)
@@ -46,8 +46,6 @@ interface Pos {
 }
 
 interface Tip {
-  x: number;
-  y: number;
   theme: SpatialTheme;
 }
 
@@ -147,7 +145,8 @@ export function SpatialMap({
       .scaleExtent([0.5, 6])
       .on('zoom', (event: { transform: ZoomTransform }) => {
         g.attr('transform', event.transform.toString());
-        setTip(null); // a moving map invalidates the tooltip anchor
+        // The hover panel is FIXED (top-right), not anchored to the node, so a
+        // moving map no longer invalidates it — leave it in place while zooming.
       });
     svg.call(zb);
     // d3-zoom binds its own dblclick-to-zoom; we use dblclick for semantic drill.
@@ -185,7 +184,6 @@ export function SpatialMap({
           ge.append('circle').attr('class', 'bubble__ring');
           ge.append('circle').attr('class', 'bubble__circle');
           ge.append('text').attr('class', 'bubble__stat').attr('y', 4);
-          ge.append('text').attr('class', 'bubble__label');
           // LIVE: a new bubble (theme_split child) pops in AT its packed spot and
           // inflates from r=0 — so it never flies in from the origin.
           if (live) {
@@ -232,10 +230,11 @@ export function SpatialMap({
         else cb.current.onSelect(t);
       })
       // Hover = smooth ZOOM: the bubble grows slightly and is RAISED to the front
-      // (z-order) so it never hides behind a neighbour; the tooltip anchors to it.
+      // (z-order) so it never hides behind a neighbour; the fixed top-right panel
+      // (`HoverPanel`) shows its name + accroche.
       .on('mouseenter', function (this: SVGGElement, _e: MouseEvent, t) {
         const p = layout.get(t.id)!;
-        setTip({ x: p.cx, y: p.cy - p.r * HOVER_SCALE, theme: t });
+        setTip({ theme: t });
         select(this)
           .raise()
           .transition('hover')
@@ -274,12 +273,9 @@ export function SpatialMap({
       .select<SVGTextElement>('text.bubble__stat')
       .text((t) => String(t.n_avis));
 
-    // Caption ON the bubble when it's big enough to fit it; otherwise the title
-    // lives only in the tooltip so small bubbles stay uncluttered.
-    nodes
-      .select<SVGTextElement>('text.bubble__label')
-      .attr('y', (t) => layout.get(t.id)!.r + 22)
-      .text((t) => (layout.get(t.id)!.r >= 30 ? truncate(captionOf(t), 26) : ''));
+    // F3 — NO text caption under the bubble: the cluster name was too cluttered
+    // ("Temps passé sur les vidéos" all over the graph). Bubbles carry only their
+    // voice count; the name appears solely in the fixed hover panel (top-right).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, layout, consensusEff, selectedId, q, minConsensus, live]);
 
@@ -293,9 +289,7 @@ export function SpatialMap({
       >
         <g ref={gRef} />
       </svg>
-      {tip && (
-        <MapTooltip tip={tip} />
-      )}
+      {tip && <HoverPanel tip={tip} />}
       <div className="map__legend">
         <span className="map__legenditem">
           <i className="dot dot--pale" /> consensus pondéré faible
@@ -313,20 +307,17 @@ export function SpatialMap({
 }
 
 /**
- * HTML tooltip overlay, positioned in viewBox space → % of the square SVG. This
- * is where ALL the rich/synthetic detail lives — the bubble itself stays sparse
- * (voices + short title), so the LLM synthesis NEVER clutters the graph:
- *   - `hook`        : one-line accroche (when present);
- *   - `description` : short LLM synthesis, rendered as MARKDOWN;
- *   - `convergence` : 0..1 convergence of ideas inside the cluster (+ voices).
- * All three are graceful: absent fields simply don't render (repli on keywords /
- * consensus from the legacy contract).
+ * F3 — hover info in a FIXED panel pinned to the TOP-RIGHT of the map (always the
+ * same spot), NOT a tooltip floating over the node (which read as random/unclear).
+ * Content is deliberately light — TITLE + accroche (hook) + voices/convergence.
+ * The `description` (3rd block) was dropped: too much for a hover. Fields are
+ * graceful — absent ones simply don't render (repli on keywords / consensus).
  */
-function MapTooltip({ tip }: { tip: Tip }) {
+function HoverPanel({ tip }: { tip: Tip }) {
   const t = tip.theme;
   const title = themeCaption(t);
-  // Keyword fallback (only when there's no LLM description): explicit keywords if
-  // the backend sent them, else the keyword stub `label` when it differs.
+  // Keyword fallback (only when there's no LLM hook): explicit keywords if the
+  // backend sent them, else the keyword stub `label` when it differs.
   const keywords = t.keywords?.length
     ? t.keywords.join(' · ')
     : title !== t.label
@@ -334,26 +325,20 @@ function MapTooltip({ tip }: { tip: Tip }) {
       : '';
   const hasConv = typeof t.convergence === 'number' && Number.isFinite(t.convergence);
   return (
-    <div
-      className="map__tooltip"
-      style={{ left: `${(tip.x / VB) * 100}%`, top: `${(tip.y / VB) * 100}%` }}
-    >
+    <div className="map__hover">
       <strong>{title}</strong>
-      {t.hook && <span className="map__tooltiphook">{t.hook}</span>}
-      {t.description ? (
-        <div className="map__tooltipdesc">
-          <Markdown source={t.description} />
-        </div>
+      {t.hook ? (
+        <span className="map__hoverhook">{t.hook}</span>
       ) : (
-        keywords && <span className="map__tooltipkw">{keywords}</span>
+        keywords && <span className="map__hoverkw">{keywords}</span>
       )}
-      <span className="map__tooltipmeta">
+      <span className="map__hovermeta">
         {t.n_avis} voix
         {hasConv
           ? ` · convergence ${Math.round((t.convergence as number) * 100)}%`
           : ` · consensus ${Math.round(t.consensus * 100)}%`}
       </span>
-      <span className="map__tooltiphint">
+      <span className="map__hoverhint">
         {t.has_children ? 'clic pour explorer' : 'clic → témoignages'}
       </span>
     </div>
@@ -465,8 +450,4 @@ function hashHue(id: string): number {
   }
   // golden-angle spread on the hash keeps neighbouring ids visually distinct
   return Math.abs(h * 137) % 360;
-}
-
-function truncate(s: string, n: number): string {
-  return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
