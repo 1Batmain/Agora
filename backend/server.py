@@ -263,6 +263,73 @@ def get_avis(
     return data
 
 
+# ===================== Bac à sable « console de mixage » ===================== #
+# RECLUSTER LIVE sans LLM (~1 s) : knobs α/k/resolution/coarsen_mult/tau_mult sur les
+# embeddings CACHÉS (claims + cibles). + decision-trace chiffrée. Cf. /tmp/contract-sandbox.md.
+
+class SandboxBody(BaseModel):
+    """Corps de `POST /sandbox` — recluster live. Tous les knobs optionnels (défauts dérivés)."""
+    dataset: str | None = None
+    alpha: float | None = Field(None, ge=0.0, le=1.0)   # poids cible dans le blend
+    k: int | None = Field(None, ge=2)                   # voisins k-NN
+    resolution: float | None = Field(None, gt=0.0)      # résolution Leiden
+    coarsen_mult: float | None = Field(None, gt=0.0)    # × seuil μ+σ de fusion des racines
+    tau_mult: float | None = Field(None, gt=0.0)        # × seuil τ de subdivision
+
+
+@app.post("/sandbox")
+def do_sandbox(body: SandboxBody, response: Response) -> dict:
+    """RECLUSTER LIVE (aucun LLM) selon les knobs → clusters + decision-trace + ms.
+
+    Lit les claims + embeddings (claims & cibles) CACHÉS. Si les claims ne sont pas
+    encore extraits (cache absent), renvoie 503 avec un indice (lancer POST /build).
+    """
+    from backend.sandbox import recluster_payload
+    from backend.claims_endpoint import OllamaUnavailable
+    from pipeline.claims.backend import BackendUnavailable
+
+    ds = _resolve(body.dataset)
+    try:
+        return recluster_payload(
+            ds, alpha=body.alpha, k=body.k, resolution=body.resolution,
+            coarsen_mult=body.coarsen_mult, tau_mult=body.tau_mult,
+        )
+    except (OllamaUnavailable, BackendUnavailable) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"claims non extraits ({exc}). Lance POST /build d'abord.",
+        ) from exc
+
+
+@app.get("/explain")
+def get_explain(
+    dataset: str | None = Query(None),
+    cluster: str | None = Query(None),
+    pair: str | None = Query(None),
+) -> dict:
+    """Decision-trace d'un nœud (`cluster=nX`) ou d'une paire (`pair=nX,nY`).
+
+    S'appuie sur le DERNIER `/sandbox` du dataset (mémoïsé) ; si aucun, en relance un
+    aux knobs neutres. Renvoie voisinage (k plus proches centroïdes) + critères de
+    fusion/subdivision chiffrés (cf. contrat).
+    """
+    from backend.sandbox import explain_cluster, explain_pair
+
+    ds = _resolve(dataset)
+    if pair:
+        parts = [p.strip() for p in pair.split(",") if p.strip()]
+        if len(parts) != 2:
+            raise HTTPException(status_code=422, detail="pair attend 'nX,nY'.")
+        out = explain_pair(ds, parts[0], parts[1])
+    elif cluster:
+        out = explain_cluster(ds, cluster.strip())
+    else:
+        raise HTTPException(status_code=422, detail="fournir cluster=nX ou pair=nX,nY.")
+    if "error" in out:
+        raise HTTPException(status_code=404, detail=out["error"])
+    return out
+
+
 class BuildBody(BaseModel):
     """Corps de `POST /build` — (re)déclenche le précalcul d'un dataset.
 
