@@ -182,3 +182,16 @@
   qui ne capte que le thématique).
 - **Statut** : à groomer/concevoir plus finement quand on y arrivera ; **note ici** pour orienter dès maintenant le
   critère de claim (C1/C2). Phase après le batch + Lane E.
+
+---
+
+## LANE LOAD-ANIM — l'animation de chargement = rejeu du batch (décidé, après ux-batch)
+> Pas une fonction séparée : c'est **comment le graphe se charge par défaut**. À faire **après le merge d'ux-batch**
+> (touche le front principal, conflit sinon).
+- **Backend** : `/stream` **rejoue l'analyse BATCH cachée** (PAS l'incrémental) — pour chaque claim dans l'ordre,
+  `claim_added` vers son cluster BATCH ; `theme_born`/`theme_split` à l'apparition. Lecture du cache, cheap, déterministe.
+  L'incrémental `AnalysisState` reste dans le code (**parké**) pour quand on craquera sa qualité.
+- **Front** : au **chargement de la page**, le graphe principal (`RedesignApp`+`SpatialMap`) joue la **construction
+  animée** (via `/stream`) puis **se fige** en interactif. **RETIRER** `LiveView` + boutons « Rejouer live/démo » séparés.
+- **Acceptance** : ouvrir la page → le graphe se construit en animé (vraies données, structure batch propre, pas de
+  doublons aléatoires) puis devient interactif. Plus de mode séparé.
