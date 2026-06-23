@@ -21,7 +21,7 @@ import type {
   DataSource,
   InsightLevel,
 } from './contract';
-import { mockAnalysis, mockCitations, mockInsights } from './mock';
+import { mockAnalysis, mockAvis, mockCitations, mockInsights } from './mock';
 
 const FORCE_MOCK = import.meta.env.VITE_FORCE_MOCK === '1';
 const TIMEOUT_MS = 180000;
@@ -120,16 +120,16 @@ export async function fetchCitations(
   }
 }
 
-/** GET /avis/{id} {dataset} → full avis text + verbatim spans, or building/error. */
+/** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */
 export async function fetchAvis(
   dataset: string,
   avisId: string,
 ): Promise<Sourced<AvisProvenance>> {
-  if (FORCE_MOCK) return { data: null, source: 'mock' };
+  if (FORCE_MOCK) return { data: mockAvis(dataset, avisId), source: 'mock' };
   try {
     const qs = new URLSearchParams({ dataset });
     const { status, body } = await rawFetch(`/api/avis/${encodeURIComponent(avisId)}?${qs}`);
-    if (status === 200 && body && typeof body.text === 'string' && Array.isArray(body.spans)) {
+    if (status === 200 && body && typeof body.text === 'string' && Array.isArray(body.claims)) {
       return { data: body as AvisProvenance, source: 'live' };
     }
     return notReady<AvisProvenance>(body);
