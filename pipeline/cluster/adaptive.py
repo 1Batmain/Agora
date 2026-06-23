@@ -95,6 +95,18 @@ def knn_sim_pool(vecs: np.ndarray, k: int, block: int = 512) -> np.ndarray:
     return np.concatenate(out) if out else np.empty(0, dtype=np.float32)
 
 
+def pool_from_neighbors(sims: np.ndarray, idx: np.ndarray) -> np.ndarray:
+    """Pool des cosinus k-NN (self exclu) À PARTIR d'un voisinage déjà calculé.
+
+    `sims`/`idx` = sortie de `knn_search` (top-(k+1), self inclus). On retire, par
+    ligne, l'unique entrée `idx == ligne` (self) → restent les `k` cosinus voisins,
+    MÊME multiset que `knn_sim_pool` (les `k` plus grands non-self). Dérive le seuil
+    SANS 2ᵉ passe O(n²) — voisinage déjà calculé pour le graphe."""
+    n = sims.shape[0]
+    self_mask = idx == np.arange(n)[:, None]
+    return sims[~self_mask].astype(np.float32, copy=False)
+
+
 def derive_threshold(vecs: np.ndarray, k: int,
                      pool: np.ndarray | None = None) -> float:
     """Seuil d'arête = μ − EDGE_SIGMA·σ de la distribution des cosinus k-NN.
@@ -132,16 +144,24 @@ def derive_dup_threshold(vecs: np.ndarray, k: int,
     return float(min(DUP_MAX, max(DUP_MIN, float(np.percentile(pool, DUP_PERCENTILE)))))
 
 
-def derive_defaults(vecs: np.ndarray, *, k: int | None = None) -> DerivedDefaults:
+def derive_defaults(vecs: np.ndarray, *, k: int | None = None,
+                    neighbors=None) -> DerivedDefaults:
     """Dérive en UNE passe (un seul pool de cosinus) tous les défauts du graphe.
 
     Si `k` est fourni, on le respecte (et on dérive le reste cohéremment) ; sinon
     `k` lui-même est dérivé de N. C'est le point d'entrée central — build et
     backend l'appellent pour rester cohérents.
+
+    `neighbors` (optionnel, `KnnNeighbors` de `knn_search`) = voisinage k-NN DÉJÀ
+    calculé : le pool des cosinus en est extrait (`pool_from_neighbors`) au lieu d'une
+    2ᵉ passe dense O(n²). À fournir UNIQUEMENT si calculé avec le même `k_eff`.
     """
     n = vecs.shape[0]
     k_eff = derive_k(n) if k is None else int(k)
-    pool = knn_sim_pool(vecs, k_eff)
+    if neighbors is not None:
+        pool = pool_from_neighbors(neighbors.sims, neighbors.idx)
+    else:
+        pool = knn_sim_pool(vecs, k_eff)
     return DerivedDefaults(
         n=n,
         k=k_eff,
