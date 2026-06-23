@@ -160,7 +160,7 @@ _AVIS_CACHE: dict[str, tuple[float, dict]] = {}
 
 
 def read_avis(dataset: str, avis_id: str) -> dict | None:
-    """Provenance d'UN avis `{id,text,spans}` depuis `avis.json` (caché par mtime)."""
+    """Provenance d'UN avis `{id,text,claims}` depuis `avis.json` (caché par mtime)."""
     path = avis_path(dataset)
     if not path.exists():
         return None
