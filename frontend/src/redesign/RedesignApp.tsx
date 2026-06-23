@@ -12,6 +12,7 @@ import type {
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { LiveView } from './LiveView';
+import { ConsoleView } from './ConsoleView';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
@@ -52,6 +53,8 @@ export default function RedesignApp() {
 
   // LIVE replay overlay — when on, takes over the shell to build the map in SSE.
   const [live, setLive] = useState(false);
+  // ANALYST CONSOLE overlay — the "console de mixage" (live recluster faders).
+  const [consoleMode, setConsoleMode] = useState(false);
 
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
@@ -245,6 +248,17 @@ export default function RedesignApp() {
     );
   }
 
+  // ANALYST CONSOLE overlay — full-screen mixing board; leaves this view intact.
+  if (consoleMode && dataset) {
+    return (
+      <ConsoleView
+        dataset={dataset}
+        datasetLabel={datasets.find((d) => d.id === dataset)?.label}
+        onClose={() => setConsoleMode(false)}
+      />
+    );
+  }
+
   return (
     <div className="agora">
       <header className="gov-header">
@@ -287,6 +301,15 @@ export default function RedesignApp() {
             title="Rejouer la construction de la carte en temps réel"
           >
             ▶ Rejouer en live
+          </button>
+          {/* ANALYST mode — open the recluster mixing console (does not alter this view). */}
+          <button
+            className="live-btn live-btn--console"
+            disabled={!dataset || busy}
+            onClick={() => setConsoleMode(true)}
+            title="Mode analyste : console de mixage (recluster live)"
+          >
+            🎛 Console
           </button>
         </div>
       </header>
