@@ -3,6 +3,30 @@
 > Statut : **GROOMED, pas lancé.** Attendre « go »/« run ». Base = après merge du cleanup (repo propre).
 > Décidé avec Bob (2026-06). Front (flag + esthétique) et Cœur (distillation + représentants) **parallélisables**.
 
+---
+
+## 🔝 PRIORITÉ N°1 — CLAIM v2 : multi-spans + target verbatim par claim (Bob)
+
+> En tête de groom. Évolue le modèle de claim de bout en bout. Re-extraction nécessaire.
+
+**Modèle** : `Span=(start,end)` ; `Claim={spans:[Span,...], text, target:Span|None}`.
+- **Multi-spans** : un claim = 1..N portions VERBATIM non-contiguës (mono-span = liste de 1 → rétro-compatible).
+- **Target** : la cible/aspect, AUSSI **verbatim** (ex. « temps passé sur l'écran »), validée comme sous-chaîne exacte.
+
+**Backend/pipeline** :
+- Prompt extract.py : `{"claims":[{"parts":["verbatim A","verbatim B"], "target":"phrase-cible verbatim"}]}` (garde sélectivité/regroupement/sujet+position/verbatim).
+- `align_spans` : valide CHAQUE part ET la target → offsets ; non-ancré = REJET (gate verbatim dur).
+- Embedding : texte joint. `claims.json` : format {parts, target}.
+- **Provenance `/avis/{id}`** (contrat front) : `{text, claims:[{cluster_id, color, spans:[{start,end}], target:{start,end}|null}]}`.
+- **Enrichissement sur modèle CHEAP** (titres/accroches/descriptions/insights = mistral-small/ministral) ; **extraction = mistral-large** → rebuild rapide.
+
+**Front** : par claim → **highlight** ses spans (couleur cluster) + **souligne** le target span (à l'intérieur).
+
+**Acceptance** : tiktok ré-extrait (mistral-large) avec parts+target verbatim (100% sous-chaînes exactes) ; `/avis` rend claims+target ; front surligne chaque claim + souligne sa cible ; rebuild nettement plus rapide (enrichissement cheap).
+
+---
+
+
 ## Décisions / contexte
 - Le cœur extraction est passé en **extractif verbatim** ; le prompt actuel sur-découpe (énumérations « que…que »,
   contrastes) et ramasse du **narratif/méta** (non-claims). On veut un **témoin mistral-large** comme cible.
