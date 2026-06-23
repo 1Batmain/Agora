@@ -31,6 +31,7 @@ from time import perf_counter
 import numpy as np
 
 from backend.claims_endpoint import PreparedClaims, prepare_claims
+from backend.develop import corpus_idf, rerank_order
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_SEED, N_REPRESENTATIVE
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.knn import build_knn_graph
@@ -91,6 +92,7 @@ class ThemeTree:
     seed: int
     derived_global: object          # DerivedDefaults sur tout le corpus de claims
     root_coarsen: dict | None = None  # diagnostic du coarsening racine (fusion macros)
+    claim_idf: dict | None = None     # idf corpus des claims (D1, calculé une fois au build)
 
     def get(self, node_id: str) -> ThemeNode | None:
         return self.nodes.get(node_id)
@@ -371,15 +373,24 @@ def _assign_convergence(nodes: dict[str, ThemeNode], macros: list[str]) -> None:
 
 
 def _representatives(node: ThemeNode, vecs: np.ndarray, claim_texts: list[str],
-                     k: int = N_REPRESENTATIVE) -> list[str]:
-    """Claims les plus proches du centroïde (médoïdes), sans quasi-doublon littéral."""
+                     k: int = N_REPRESENTATIVE, idf: dict | None = None) -> list[str]:
+    """Représentants du nœud : arguments DÉVELOPPÉS on-topic (D1), sans doublon littéral.
+
+    Re-ranking `centralité(garde-fou) × développement` (`backend.develop`) : on ne
+    surface plus le médoïde court et générique mais l'argument étoffé, la centralité
+    restant en garde-fou anti hors-sujet. `idf` = idf corpus des claims (calculé une
+    fois au build) ; recalculé localement si absent (repli).
+    """
     if not node.members:
         return []
     sims = vecs[node.members] @ node.centroid
-    order = np.argsort(-sims)
+    texts = [claim_texts[ci] for ci in node.members]
+    if idf is None:
+        idf = corpus_idf(texts)
+    order = rerank_order(node.members, sims, texts, idf)
     reps: list[str] = []
     for j in order:
-        t = claim_texts[node.members[j]]
+        t = texts[j]
         if any(t.lower() == e.lower() for e in reps):
             continue
         reps.append(t)
@@ -462,6 +473,8 @@ def build_theme_tree(
     nodes: dict[str, ThemeNode] = {}
     order: list[str] = []
     macros: list[str] = []
+    # idf corpus des claims — calculé UNE fois, partagé par tous les nœuds (D1) et /citations.
+    claim_idf = corpus_idf(prepared.claim_texts) if n_claims else None
     derived_global = derive_defaults(vecs.astype(np.float32)) if n_claims else None
     tau = float("inf")
     root_coarsen: dict | None = None
@@ -513,12 +526,13 @@ def build_theme_tree(
         _assign_colors(nodes, macros)
         _assign_convergence(nodes, macros)
         for node in nodes.values():
-            node.representative_claims = _representatives(node, vecs, prepared.claim_texts)
+            node.representative_claims = _representatives(
+                node, vecs, prepared.claim_texts, idf=claim_idf)
 
     return ThemeTree(
         nodes=nodes, order=order, macros=macros, dataset=ds.id, prepared=prepared,
         tau=tau, base_resolution=resolution, seed=seed, derived_global=derived_global,
-        root_coarsen=root_coarsen,
+        root_coarsen=root_coarsen, claim_idf=claim_idf,
     )
 
 
