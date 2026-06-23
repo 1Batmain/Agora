@@ -433,16 +433,6 @@ body {
 .bubble--dim {
   opacity: 0.18;
 }
-.bubble__label {
-  text-anchor: middle;
-  font-size: 18px;
-  font-weight: 600;
-  fill: var(--grey-1000);
-  pointer-events: none;
-  paint-order: stroke;
-  stroke: rgba(255, 255, 255, 0.85);
-  stroke-width: 3px;
-}
 .bubble__stat {
   text-anchor: middle;
   font-size: 16px;
@@ -485,17 +475,20 @@ body {
 .dot--vivid {
   background: hsl(28, 78%, 54%);
 }
-.map__tooltip {
+/* F3 — hover info panel: FIXED to the top-right corner of the map, always at the
+   same spot (not a tooltip floating over the node). Light content only. */
+.map__hover {
   position: absolute;
-  transform: translate(-50%, -100%) translateY(-10px);
+  top: 14px;
+  right: 14px;
   pointer-events: none;
   z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   width: max-content;
   max-width: 300px;
-  padding: 9px 12px;
+  padding: 12px 14px;
   font-size: 12px;
   line-height: 1.4;
   color: var(--grey-1000);
@@ -504,42 +497,23 @@ body {
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
-.map__tooltip strong {
+.map__hover strong {
   color: var(--agora-active);
-  font-size: 13.5px;
+  font-size: 14px;
 }
-/* accroche (hook) — the single-line teaser above the synthesis. */
-.map__tooltiphook {
+/* accroche (hook) — the single-line teaser. */
+.map__hoverhook {
   font-style: italic;
   color: var(--grey-700);
 }
-.map__tooltipkw {
+.map__hoverkw {
   color: var(--grey-500);
 }
-/* LLM synthesis (markdown) inside the hover — compact typography. */
-.map__tooltipdesc .md {
-  font-size: 12px;
-  line-height: 1.45;
-}
-.map__tooltipdesc .md p {
-  margin: 4px 0;
-}
-.map__tooltipdesc .md h2,
-.map__tooltipdesc .md h3,
-.map__tooltipdesc .md h4 {
-  font-size: 12.5px;
-  margin: 6px 0 3px;
-}
-.map__tooltipdesc .md ul,
-.map__tooltipdesc .md ol {
-  margin: 4px 0;
-  padding-left: 16px;
-}
-.map__tooltipmeta {
+.map__hovermeta {
   font-weight: 600;
   color: var(--grey-700);
 }
-.map__tooltip .map__tooltiphint {
+.map__hoverhint {
   color: var(--grey-300);
 }
 
