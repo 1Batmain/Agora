@@ -120,6 +120,56 @@ export async function fetchCitations(
   }
 }
 
+/**
+ * Feedback FLAGS — Bob signals a badly cut / mis-targeted / mis-extracted avis
+ * with a free-text comment, persisted server-side (upsert by avis_id) and editable.
+ * These are LIGHT and independent of the analysis cache, so they never go through
+ * the building/error mapping — a plain throw is enough for the UI to ignore.
+ */
+
+/** One persisted flag — free-text feedback on an avis, timestamped (UTC ISO-8601). */
+export interface AvisFlag {
+  avis_id: string;
+  text: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/** GET /flags {dataset} → all flags of a dataset (to restore state on load). */
+export async function fetchFlags(dataset: string): Promise<AvisFlag[]> {
+  if (FORCE_MOCK) return [];
+  const qs = new URLSearchParams({ dataset });
+  const { status, body } = await rawFetch(`/api/flags?${qs}`);
+  if (status === 200 && body && Array.isArray(body.flags)) return body.flags as AvisFlag[];
+  return [];
+}
+
+/** POST /flag {dataset, avis_id, text} → upsert the avis flag, returns the saved flag. */
+export async function upsertFlag(
+  dataset: string,
+  avisId: string,
+  text: string,
+): Promise<AvisFlag | null> {
+  if (FORCE_MOCK) return { avis_id: avisId, text };
+  const { status, body } = await rawFetch('/api/flag', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ dataset, avis_id: avisId, text }),
+  });
+  if (status === 200 && body && body.ok && body.flag) return body.flag as AvisFlag;
+  return null;
+}
+
+/** DELETE /flag/{avis_id} {dataset} → remove the avis flag, returns whether it existed. */
+export async function deleteFlag(dataset: string, avisId: string): Promise<boolean> {
+  if (FORCE_MOCK) return true;
+  const qs = new URLSearchParams({ dataset });
+  const { status, body } = await rawFetch(`/api/flag/${encodeURIComponent(avisId)}?${qs}`, {
+    method: 'DELETE',
+  });
+  return status === 200 && Boolean(body && body.ok && body.removed);
+}
+
 /** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */
 export async function fetchAvis(
   dataset: string,

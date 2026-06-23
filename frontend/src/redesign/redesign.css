@@ -680,6 +680,83 @@ body {
   display: flex;
   flex-direction: column;
 }
+/* Top bar of the avis view: back link on the left, the flag control pinned RIGHT. */
+.avisdetail__topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+/* ---- Feedback flag (top-right of the avis) ---- */
+.flag {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: none;
+}
+.flag__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--grey-500);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.flag__btn:hover {
+  border-color: var(--agora);
+  color: var(--agora);
+}
+.flag__btn--on {
+  background: var(--agora);
+  border-color: var(--agora);
+  color: #fff;
+}
+.flag__btn--on:hover {
+  background: var(--agora-hover);
+  border-color: var(--agora-hover);
+  color: #fff;
+}
+.flag__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 8;
+  width: min(340px, 80vw);
+  padding: 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.flag__input {
+  width: 100%;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+.flag__input:focus {
+  outline: 2px solid var(--agora-soft2);
+  border-color: var(--agora);
+}
+.flag__hint {
+  margin: 6px 2px 0;
+  font-size: 11px;
+  color: var(--grey-300);
+}
+.flag__saved {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--agora);
+}
 .avisdetail__meta {
   font-size: 12px;
   color: var(--grey-500);
