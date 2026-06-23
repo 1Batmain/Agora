@@ -698,6 +698,12 @@ body {
   position: relative;
   cursor: help;
 }
+/* The CIBLE (target) sub-range inside a claim's highlight — underlined (solid
+   cluster-coloured border, set inline) + a touch heavier so it reads as "this is
+   what the claim is about". */
+.avisdetail__hl--target {
+  font-weight: 600;
+}
 /* Inline cluster tag, revealed on hover over a highlight (the rest of the time
    the cluster is conveyed by colour + the legend above). */
 .avisdetail__hltag {
