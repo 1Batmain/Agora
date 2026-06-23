@@ -8,7 +8,10 @@
  */
 import type {
   AnalysisPayload,
+  AvisClaim,
+  AvisProvenance,
   Backend,
+  CharRange,
   Citation,
   InsightLevel,
   InsightsPayload,
@@ -278,8 +281,71 @@ export function mockCitations(dataset: string, themeId: string): Citation[] {
       `Le contributeur exprime un point de vue argumenté sur la question posée par la consultation.`,
     dist_to_centroid: i * 0.05 + r() * 0.04,
     weight: 1 + Math.floor(r() * 4),
+    // avis_id so the citation is OPENABLE → exercises the claim-v2 avis view offline.
+    avis_id: `${themeId}-a${i + 1}`,
   }));
   return out.sort((a, b) => a.dist_to_centroid - b.dist_to_centroid);
+}
+
+/**
+ * Mock `GET /avis/{id}` in the claim-v2 contract shape: a full avis text with
+ * several CLAIMS, each carrying 1..N verbatim spans (cluster-coloured) and an
+ * optional verbatim `target` sub-range. Spans/target are built BY CONSTRUCTION as
+ * exact substrings of `text` (we assemble the text and record offsets as we go),
+ * so the verbatim gate holds — and overlaps + multi-spans + null-target repli are
+ * all exercised offline. Seeded by (dataset, avisId) for stable output.
+ */
+export function mockAvis(dataset: string, avisId: string): AvisProvenance {
+  const r = rng(hash(dataset + '::' + avisId));
+
+  // Assemble the text fragment-by-fragment, recording the char range of each
+  // fragment so every span is an exact substring (no drift).
+  let text = '';
+  const at = (s: string): CharRange => {
+    const start = text.length;
+    text += s;
+    return { start, end: text.length };
+  };
+
+  const nClaims = 2 + Math.floor(r() * 3); // 2..4 claims
+  const claims: AvisClaim[] = [];
+
+  at(`En réponse à la consultation, je souhaite partager mon point de vue. `);
+  for (let i = 0; i < nClaims; i++) {
+    const topic = pick(TOPICS, r);
+    const facet = pick(FACETS, r);
+    const color = mockColor(i, nClaims);
+
+    at(`Sur le sujet, `);
+    // First span of the claim — with a TARGET sub-range inside it (the cible).
+    const head = at(`il me paraît essentiel de défendre `);
+    const targetRange = at(`${topic.toLowerCase()}`); // the verbatim target (cible)
+    const tail = at(` dans ce dossier`);
+    const span1: CharRange = { start: head.start, end: tail.end };
+    at(`. `);
+
+    // Optionally a SECOND, non-contiguous span for the same claim (multi-spans).
+    let span2: CharRange | null = null;
+    if (r() < 0.6) {
+      at(`On l'oublie trop souvent, mais `);
+      span2 = at(`la question de ${facet} reste décisive`);
+      at(`. `);
+    }
+
+    // ~1 in 5 claims has no target → exercises the null-target repli.
+    const hasTarget = r() < 0.8;
+    claims.push({
+      id: `${avisId}-c${i + 1}`,
+      cluster_id: `n${i + 1}`,
+      color,
+      spans: span2 ? [span1, span2] : [span1],
+      target: hasTarget ? targetRange : null,
+      theme_title: `${topic} — ${facet}`,
+    });
+  }
+  at(`Je vous remercie de prendre en compte cette contribution.`);
+
+  return { id: avisId, text, claims };
 }
 
 /** Macro colour for a mock theme — golden-angle hue, distinct per root (synthetic). */
