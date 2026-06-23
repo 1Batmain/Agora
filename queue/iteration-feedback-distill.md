@@ -206,3 +206,11 @@
   (position pour/contre vis-à-vis de LA cible) devient explicite. Aligne extraction → thème → stance sur la même cible.
 - Extraction : le LLM renvoie `{"claims":[{"parts":[...], "target":"vidéo"}, ...]}`. mistral-large devrait gérer ;
   **tester si un plus petit modèle tient** (fait partie de la distillation C2). Le `target` enrichit l'éval (accord sur la cible).
+
+---
+
+## GATE VERBATIM (dur, non négociable — Bob)
+- Le `text`/spans d'un claim = **TOUJOURS sous-chaîne EXACTE** de l'avis (`align_spans` valide ; non-ancré = rejeté).
+  C'est LA garantie de fidélité à l'avis du citoyen. **Métrique DURE de l'éval** : tout prompt/modèle qui paraphrase
+  ou « corrige » (fautes comprises) est **disqualifié**, quel que soit son score de découpe.
+- La **cible/aspect** (target) est la SEULE valeur dérivée/non-verbatim (une étiquette), à côté du claim — jamais dans le texte.
