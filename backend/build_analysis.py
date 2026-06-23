@@ -109,9 +109,14 @@ def build_analysis(
         #    (AnalysisState) est réservé au stream live (cf. /stream) : ordre-dépendant,
         #    il écrase la structure macro et ne convient pas à l'analyse statique.
         report("claims", f"extraction ({extract_model}) + embeddings (caché si déjà fait)")
+
+        def _extract_progress(done: int, total: int) -> None:
+            if done == total or done % 25 == 0:
+                report("claims", f"extraction LLM ({extract_model})", done, total)
+
         tree = build_theme_tree(
             ds, backend=backend, model=extract_model, embedder=embedder,
-            resolution=resolution, seed=seed,
+            resolution=resolution, seed=seed, extract_progress=_extract_progress,
         )
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
