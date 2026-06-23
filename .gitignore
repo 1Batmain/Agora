@@ -31,3 +31,6 @@ data/datasets/
 backend/cache/*/analysis/
 backend/cache/*/claims.json
 backend/cache/*/claims_emb.npz
+
+# Flags de feedback sur l'extraction (upsert par avis, éditables) — régénérables.
+backend/cache/*/flags.json
