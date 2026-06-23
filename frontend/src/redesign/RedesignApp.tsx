@@ -11,6 +11,7 @@ import type {
 } from './contract';
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
+import { LiveView } from './LiveView';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
@@ -49,6 +50,9 @@ export default function RedesignApp() {
   const [buildProgress, setBuildProgress] = useState<BuildProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // LIVE replay overlay — when on, takes over the shell to build the map in SSE.
+  const [live, setLive] = useState(false);
 
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
@@ -219,6 +223,18 @@ export default function RedesignApp() {
       }`
     : 'le backend précalcule les thèmes, les citations et les synthèses…';
 
+  // LIVE replay takes over the whole shell (its own header + canvas). Returning
+  // here keeps the static `/analysis` view completely untouched underneath.
+  if (live && dataset) {
+    return (
+      <LiveView
+        dataset={dataset}
+        datasetLabel={datasets.find((d) => d.id === dataset)?.label}
+        onClose={() => setLive(false)}
+      />
+    );
+  }
+
   return (
     <div className="agora">
       <header className="gov-header">
@@ -253,6 +269,15 @@ export default function RedesignApp() {
           {analysisSource && (
             <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
           )}
+          {/* Replay the build of the current dataset as a live SSE animation. */}
+          <button
+            className="live-btn live-btn--primary"
+            disabled={!dataset || busy}
+            onClick={() => setLive(true)}
+            title="Rejouer la construction de la carte en temps réel"
+          >
+            ▶ Rejouer en live
+          </button>
         </div>
       </header>
 

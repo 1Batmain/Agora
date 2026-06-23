@@ -37,6 +37,7 @@ const VB = 1000; // internal viewBox size (square); SVG scales to the container.
 const PAD = 80; // outer margin so rim labels stay inside the viewBox.
 const COLLIDE_PAD = 14; // gap (viewBox units) enforced between bubbles.
 const HOVER_SCALE = 1.1; // how much a hovered bubble grows (smooth zoom).
+const LIVE_DUR = 650; // d3 transition duration (ms) for live grow/split/reflow.
 
 interface Pos {
   cx: number;
@@ -59,6 +60,7 @@ export function SpatialMap({
   onDrill,
   query = '',
   minConsensus = 0,
+  live = false,
 }: {
   themes: SpatialTheme[];
   edges: SpatialEdge[];
@@ -68,6 +70,13 @@ export function SpatialMap({
   onDrill: (t: SpatialTheme) => void;
   query?: string;
   minConsensus?: number;
+  /**
+   * LIVE mode: animate incremental updates with d3 transitions — bubbles grow in
+   * from r=0 (theme_split children appear), swell smoothly as voices arrive
+   * (claim_added), reflow as the pack relaxes, and fade out on exit (a parent that
+   * just split). In the static view (`live=false`) everything is set instantly.
+   */
+  live?: boolean;
 }) {
   const q = query.trim().toLowerCase();
 
@@ -177,12 +186,30 @@ export function SpatialMap({
           ge.append('circle').attr('class', 'bubble__circle');
           ge.append('text').attr('class', 'bubble__stat').attr('y', 4);
           ge.append('text').attr('class', 'bubble__label');
+          // LIVE: a new bubble (theme_split child) pops in AT its packed spot and
+          // inflates from r=0 — so it never flies in from the origin.
+          if (live) {
+            ge.attr('transform', (t) => {
+              const p = layout.get(t.id)!;
+              return `translate(${p.cx},${p.cy})`;
+            });
+            ge.select<SVGCircleElement>('circle.bubble__circle').attr('r', 0);
+            ge.select<SVGCircleElement>('circle.bubble__ring').attr('r', 0);
+          }
           return ge;
         },
         (update) => update,
-        (exit) => exit.remove(),
+        // LIVE: a parent that just split fades out before it's removed.
+        (exit) =>
+          live
+            ? exit.transition('live').duration(LIVE_DUR).style('opacity', 0).remove()
+            : exit.remove(),
       );
 
+    const transformOf = (t: SpatialTheme) => {
+      const p = layout.get(t.id)!;
+      return `translate(${p.cx},${p.cy})`;
+    };
     nodes
       .attr(
         'class',
@@ -191,10 +218,12 @@ export function SpatialMap({
             t.has_children ? ' bubble--drill' : ' bubble--leaf'
           }${isDim(t) ? ' bubble--dim' : ''}`,
       )
-      .attr('transform', (t) => {
-        const p = layout.get(t.id)!;
-        return `translate(${p.cx},${p.cy})`;
-      })
+      // LIVE: reflow to the relaxed pack positions smoothly; static sets instantly.
+      .call((s) =>
+        live
+          ? s.transition('live').duration(LIVE_DUR).attr('transform', transformOf)
+          : s.attr('transform', transformOf),
+      )
       // Single click is the ONE navigation gesture: drill if the bubble has
       // children (hide siblings, reveal children), otherwise select → citations.
       .on('click', (event: MouseEvent, t) => {
@@ -222,17 +251,24 @@ export function SpatialMap({
           .attr('transform', `translate(${p.cx},${p.cy})`);
       });
 
-    nodes
-      .select<SVGCircleElement>('circle.bubble__circle')
-      .attr('r', (t) => layout.get(t.id)!.r)
-      .style('fill', (t) =>
-        themeColor(t.id, consensusEff.get(t.id) ?? t.consensus),
-      );
+    const circle = nodes.select<SVGCircleElement>('circle.bubble__circle');
+    const rOf = (t: SpatialTheme) => layout.get(t.id)!.r;
+    const fillOf = (t: SpatialTheme) => themeColor(t.id, consensusEff.get(t.id) ?? t.consensus);
+    // LIVE: swell/shrink the radius + ease the fill as voices arrive (claim_added).
+    if (live) {
+      circle.transition('live').duration(LIVE_DUR).attr('r', rOf).style('fill', fillOf);
+    } else {
+      circle.attr('r', rOf).style('fill', fillOf);
+    }
 
     nodes
       .select<SVGCircleElement>('circle.bubble__ring')
-      .attr('r', (t) => layout.get(t.id)!.r + 6)
-      .style('display', (t) => (t.has_children ? null : 'none'));
+      .style('display', (t) => (t.has_children ? null : 'none'))
+      .call((s) =>
+        live
+          ? s.transition('live').duration(LIVE_DUR).attr('r', (t) => rOf(t) + 6)
+          : s.attr('r', (t) => rOf(t) + 6),
+      );
 
     nodes
       .select<SVGTextElement>('text.bubble__stat')
@@ -245,7 +281,7 @@ export function SpatialMap({
       .attr('y', (t) => layout.get(t.id)!.r + 22)
       .text((t) => (layout.get(t.id)!.r >= 30 ? truncate(captionOf(t), 26) : ''));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, layout, consensusEff, selectedId, q, minConsensus]);
+  }, [visible, layout, consensusEff, selectedId, q, minConsensus, live]);
 
   return (
     <div className="map">
