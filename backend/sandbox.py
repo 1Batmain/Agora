@@ -32,7 +32,7 @@ from backend.analysis import _derive_tau, _node_stats, _subdivide, MAX_DEPTH
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from pipeline.claims.pipeline import DEFAULT_SEED, blend_embeddings
 from pipeline.cluster.adaptive import derive_defaults
-from pipeline.cluster.knn import build_knn_graph
+from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 
@@ -45,6 +45,17 @@ N_SAMPLE_CLAIMS = 4          # claims d'exemple par cluster (les plus centrales,
 # --------------------------------------------------------------------------- #
 _PREP_CACHE: dict[str, PreparedClaims] = {}
 _LAST_STATE: dict[str, "SandboxState"] = {}
+
+# Cache du GRAPHE top-level par (dataset, alpha, k) : le blend(α) + voisinage k-NN +
+# défauts dérivés + graphe d'arêtes ne dépendent QUE de (α, k) — pas de la résolution
+# Leiden ni des faders τ/coarsen. Quand l'utilisateur bouge ces faders (cas live le
+# plus fréquent), on rejoue Leiden+subdivision sur le graphe CACHÉ au lieu de
+# re-blender / re-chercher les voisins (≈ blend+knn économisés). LRU minuscule
+# (mémoire : ~30 Mo de vecteurs par α gardé). Stopwords c-TF-IDF mémoïsés par dataset
+# (dérivés des seuls textes de claims — invariants aux knobs).
+_GRAPH_CACHE: "dict[tuple[str, float, int | None], _GraphCtx]" = {}
+_GRAPH_CACHE_MAX = 3
+_STOPWORDS_CACHE: dict[str, frozenset] = {}
 
 
 def get_prepared(ds) -> PreparedClaims:
@@ -71,6 +82,9 @@ def invalidate(dataset_id: str) -> None:
     """Purge les caches mémoire d'un dataset (à appeler après un rebuild)."""
     _PREP_CACHE.pop(dataset_id, None)
     _LAST_STATE.pop(dataset_id, None)
+    _STOPWORDS_CACHE.pop(dataset_id, None)
+    for key in [k for k in _GRAPH_CACHE if k[0] == dataset_id]:
+        _GRAPH_CACHE.pop(key, None)
 
 
 # --------------------------------------------------------------------------- #
@@ -90,6 +104,14 @@ class _Node:
     children: list[str] = field(default_factory=list)
     keywords: list[str] = field(default_factory=list)
     sample_claims: list[str] = field(default_factory=list)
+
+
+@dataclass
+class _GraphCtx:
+    """Graphe top-level caché par (dataset, α, k) — invariant à résolution/τ/coarsen."""
+    vecs: np.ndarray                # blend(α), float64 contigu (sert _node_stats/_coarsen)
+    derived: object                 # DerivedDefaults (k, seuil, min_sub_size, pool…)
+    graph: object                   # KnnGraph (arêtes), pour Leiden à n'importe quelle résolution
 
 
 @dataclass
@@ -226,11 +248,10 @@ def _build(members, parent_id, depth, ctx, *, force_no_subdiv=False) -> str:
 # --------------------------------------------------------------------------- #
 # Naming c-TF-IDF + échantillons de claims
 # --------------------------------------------------------------------------- #
-def _name_and_sample(ctx: _Ctx, claim_texts: list[str]) -> None:
+def _name_and_sample(ctx: _Ctx, claim_texts: list[str], corpus_stop) -> None:
     ids = list(ctx.nodes.keys())
     idx_of = {nid: i for i, nid in enumerate(ids)}
     docs = {idx_of[nid]: [claim_texts[i] for i in ctx.nodes[nid].members] for nid in ids}
-    corpus_stop, _ = derive_corpus_stopwords(claim_texts)
     names = name_clusters(docs, corpus_stopwords=corpus_stop)
     for nid in ids:
         node = ctx.nodes[nid]
@@ -247,6 +268,39 @@ def _name_and_sample(ctx: _Ctx, claim_texts: list[str]) -> None:
             if len(reps) >= N_SAMPLE_CLAIMS:
                 break
         node.sample_claims = reps
+
+
+# --------------------------------------------------------------------------- #
+# Graphe top-level caché par (dataset, α, k) — blend + k-NN + défauts dérivés
+# --------------------------------------------------------------------------- #
+def _graph_ctx(ds, prep, alpha: float, k: int | None) -> _GraphCtx:
+    """blend(α) + voisinage k-NN + défauts + graphe d'arêtes, mémoïsés par (α, k).
+
+    Tout ici est invariant à la résolution Leiden et aux faders τ/coarsen ; seul le
+    blend (α) et le `k` du graphe changent la sortie. On la cache donc par (α, k) :
+    bouger le fader τ/coarsen/résolution réutilise ce contexte (économise blend+k-NN).
+    La clé porte `k` BRUT (None inclus) car `k=None` ⇒ k dérivé de N — même clé.
+    """
+    from pipeline.cluster.adaptive import derive_k
+    key = (ds.id, round(float(alpha), 6), k)
+    ctx = _GRAPH_CACHE.get(key)
+    if ctx is not None:
+        return ctx
+
+    vecs = blend_embeddings(prep.claim_vecs, prep.target_vecs, prep.target_mask, alpha)
+    vecs = np.ascontiguousarray(vecs, dtype=np.float64)
+    vecs32 = vecs.astype(np.float32)
+    k_eff = derive_k(vecs.shape[0]) if k is None else int(k)
+    neighbors = knn_search(vecs32, k_eff)        # 1 passe faiss → seuil + arêtes
+    derived = derive_defaults(vecs32, k=k_eff, neighbors=neighbors)
+    graph = build_knn_graph(vecs, k=k_eff, threshold=derived.threshold,
+                            neighbors=neighbors)
+    ctx = _GraphCtx(vecs=vecs, derived=derived, graph=graph)
+
+    _GRAPH_CACHE[key] = ctx
+    if len(_GRAPH_CACHE) > _GRAPH_CACHE_MAX:      # LRU minuscule : évince le plus ancien
+        _GRAPH_CACHE.pop(next(iter(_GRAPH_CACHE)))
+    return ctx
 
 
 # --------------------------------------------------------------------------- #
@@ -281,10 +335,6 @@ def recluster_payload(
     owner = prep.claim_owner
     n_claims = len(texts)
 
-    # 1) BLEND α (vectorisé) — claim↔cible sur les vecteurs cachés (aucun ré-embed).
-    vecs = blend_embeddings(prep.claim_vecs, prep.target_vecs, prep.target_mask, alpha)
-    vecs = np.ascontiguousarray(vecs, dtype=np.float64)
-
     if n_claims == 0:
         return {"params": {"alpha": alpha, "k": k, "resolution": resolution,
                            "coarsen_mult": coarsen_mult, "tau_mult": tau_mult,
@@ -292,10 +342,11 @@ def recluster_payload(
                 "n_claims": 0, "ms": round((perf_counter() - t0) * 1000),
                 "clusters": [], "trace": {"pairs": [], "nodes": []}}
 
-    # 2) Défauts dérivés du graphe (k respecté si fourni), k-NN, Leiden.
-    derived = derive_defaults(vecs.astype(np.float32), k=k)
+    # 1+2) BLEND α + graphe k-NN : ne dépendent QUE de (α, k) → caché. Quand seuls la
+    #      résolution/τ/coarsen bougent, on réutilise vecs+graphe et on rejoue Leiden.
+    gctx = _graph_ctx(ds, prep, alpha, k)
+    vecs, derived, graph = gctx.vecs, gctx.derived, gctx.graph
     k_eff = derived.k
-    graph = build_knn_graph(vecs, k=k_eff, threshold=derived.threshold)
     membership = run_leiden(graph, resolution=resolution, seed=seed).membership
     by_cluster: dict[int, list[int]] = {}
     for i, c in enumerate(membership):
@@ -319,7 +370,9 @@ def recluster_payload(
                resolution=resolution, seed=seed, counter=[0], nodes={}, order=[])
 
     def _w(members: list[int]) -> float:
-        return _node_stats(members, vecs, weights)[3]
+        # = _node_stats(...)[3], mais le tri n'a besoin QUE du poids (somme) : on évite
+        # de calculer centroïde/dispersion (O(|m|·d)) à chaque clé de tri.
+        return float(weights[members].sum())
 
     supers_sorted = sorted(
         supers, key=lambda sg: -_w([m for i in sg for m in fine_groups[i]]))
@@ -338,8 +391,13 @@ def recluster_payload(
             mid = _build(fine_groups[fi], None, 0, ctx)
             fine_node_id[fi] = mid
 
-    # 6) Naming c-TF-IDF + claims d'exemple (passif, aucun LLM).
-    _name_and_sample(ctx, texts)
+    # 6) Naming c-TF-IDF + claims d'exemple (passif, aucun LLM). Les mots-vides du
+    #    corpus ne dépendent que des textes de claims (invariants aux knobs) → mémoïsés.
+    corpus_stop = _STOPWORDS_CACHE.get(ds.id)
+    if corpus_stop is None:
+        corpus_stop, _ = derive_corpus_stopwords(texts)
+        _STOPWORDS_CACHE[ds.id] = corpus_stop
+    _name_and_sample(ctx, texts, corpus_stop)
 
     # 7) Sérialisation : clusters + trace (paires re-étiquetées en node-ids).
     clusters = [{
