@@ -26,6 +26,13 @@ import { applyAnalysis, type ApplyStatus } from './analysisApi';
 export const TOOLBOX_LEVEL = '__toolbox__';
 const DEBOUNCE_MS = 250;
 
+/**
+ * The opening state: ONLY alpha=0 is overridden. Everything else is omitted so the
+ * backend derives exactly what it served → the map is unchanged on open. `resetKnobs`
+ * returns here.
+ */
+const INITIAL_OVERRIDES: SandboxParams = { alpha: 0 };
+
 export type ToolboxSelection =
   | { kind: 'cluster'; id: string }
   | { kind: 'pair'; a: string; b: string }
@@ -38,19 +45,41 @@ interface KnobDef {
   min: number;
   max: number;
   step: number;
-  hint: string;
+  /** Concrete impact on THIS dataset's analysis — shown on hover/focus. */
+  tip: string;
   fmt: (v: number) => string;
 }
 
 // The five knobs. NO "naming" knob — structure only. Ranges bracket the derived
-// defaults so the centre is the backend's own choice.
+// defaults so the knob opens on the backend's own choice. `tip` describes the
+// CONCRETE effect on the analysis (not the algorithm), shown on hover/focus.
 const KNOBS: KnobDef[] = [
-  { key: 'resolution', label: 'Résolution', unit: 'Leiden', min: 0.3, max: 2.5, step: 0.05, hint: '↑ plus de clusters, plus fins', fmt: (v) => v.toFixed(2) },
-  { key: 'alpha', label: 'α cible', unit: 'blend', min: 0, max: 1, step: 0.02, hint: 'poids de la cible (objet de la prise de position) dans l’embedding', fmt: (v) => v.toFixed(2) },
-  { key: 'coarsen_mult', label: 'Coarsening', unit: '× seuil', min: 0.3, max: 2.5, step: 0.05, hint: '↑ fusionne plus → moins de clusters', fmt: (v) => '×' + v.toFixed(2) },
-  { key: 'tau_mult', label: 'τ subdivision', unit: '× τ', min: 0.3, max: 2.5, step: 0.05, hint: '↑ subdivise moins', fmt: (v) => '×' + v.toFixed(2) },
-  { key: 'k', label: 'k voisins', unit: 'kNN', min: 4, max: 30, step: 1, hint: 'densité du graphe kNN', fmt: (v) => String(Math.round(v)) },
+  { key: 'resolution', label: 'Résolution', unit: 'Leiden', min: 0.3, max: 2.5, step: 0.05, tip: '↑ communautés Leiden plus fines → plus de clusters, plus petits. ↓ regroupe en grandes familles.', fmt: (v) => v.toFixed(2) },
+  { key: 'alpha', label: 'α cible', unit: 'blend', min: 0, max: 1, step: 0.02, tip: 'Pondère l’objet de la prise de position dans l’embedding — ↑ regroupe par SUJET (ex. fusionne les 3 « addiction »). À 0, regroupe par formulation.', fmt: (v) => v.toFixed(2) },
+  { key: 'coarsen_mult', label: 'Coarsening', unit: '× seuil', min: 0.3, max: 2.5, step: 0.05, tip: '↑ fusionne les macros proches → moins de clusters, plus larges. ↓ garde les nuances séparées.', fmt: (v) => '×' + v.toFixed(2) },
+  { key: 'tau_mult', label: 'τ subdivision', unit: '× τ', min: 0.3, max: 2.5, step: 0.05, tip: '↑ subdivise moins → arbre plus plat. ↓ éclate les clusters diffus en sous-thèmes.', fmt: (v) => '×' + v.toFixed(2) },
+  { key: 'k', label: 'k voisins', unit: 'kNN', min: 4, max: 30, step: 1, tip: 'Voisins du graphe kNN — change la densité du graphe. Très sensible : ±1 peut réorganiser toute la carte.', fmt: (v) => String(Math.round(v)) },
 ];
+
+/** Defaults used to label a knob before the first /sandbox reply lands. */
+const KNOB_FALLBACK: Record<keyof SandboxParams, number> = SANDBOX_DEFAULTS;
+
+/**
+ * The value a knob should DISPLAY: the user override if set, otherwise the value
+ * the backend actually used (echoed in `resp.params`), otherwise a sane fallback.
+ * This is why opening the toolbox shows the served analysis rather than a reset.
+ */
+function effectiveValue(
+  key: keyof SandboxParams,
+  overrides: SandboxParams,
+  resp: SandboxResponse | null,
+): number {
+  const ov = overrides[key];
+  if (typeof ov === 'number') return ov;
+  const fromResp = resp?.params?.[key];
+  if (typeof fromResp === 'number') return fromResp;
+  return KNOB_FALLBACK[key];
+}
 
 export function Toolbox({
   dataset,
@@ -67,7 +96,11 @@ export function Toolbox({
   onPreview: (themes: SpatialTheme[] | null) => void;
   onClose: () => void;
 }) {
-  const [params, setParams] = useState<Required<SandboxParams>>(SANDBOX_DEFAULTS);
+  // OVERRIDES ONLY — never a full param set. Initial = {alpha:0}: that single
+  // override reproduces the SERVED analysis (k/resolution/coarsen/τ omitted →
+  // backend derives the same values it already served). So opening the toolbox
+  // does NOT move the map; only turning a knob (= setting an override) does.
+  const [overrides, setOverrides] = useState<SandboxParams>(INITIAL_OVERRIDES);
   const [resp, setResp] = useState<SandboxResponse | null>(null);
   const [source, setSource] = useState<SandboxSource | null>(null);
   const [busy, setBusy] = useState(false);
@@ -87,7 +120,7 @@ export function Toolbox({
     const t = setTimeout(() => {
       const id = ++runId.current;
       setBusy(true);
-      postSandbox(dataset, params)
+      postSandbox(dataset, overrides)
         .then(({ data, source }) => {
           if (id !== runId.current) return;
           setResp(data);
@@ -98,7 +131,7 @@ export function Toolbox({
         });
     }, DEBOUNCE_MS);
     return () => clearTimeout(t);
-  }, [dataset, params]);
+  }, [dataset, overrides]);
 
   // Adapt SandboxCluster[] → SpatialTheme[] so we REUSE the main d3-pack renderer
   // (area = n_avis, hue = cluster id, paleness = cohesion). Flat (no drill); pushed
@@ -158,16 +191,17 @@ export function Toolbox({
     };
   }, [dataset, selection, resp]);
 
+  // Turning a knob sets (or clears) an OVERRIDE — it does not assemble a full set.
   const setKnob = useCallback((key: keyof SandboxParams, value: number) => {
-    setParams((p) => ({ ...p, [key]: value }));
+    setOverrides((o) => ({ ...o, [key]: value }));
   }, []);
-  const resetKnobs = useCallback(() => setParams(SANDBOX_DEFAULTS), []);
+  const resetKnobs = useCallback(() => setOverrides(INITIAL_OVERRIDES), []);
 
   const onApply = useCallback(async () => {
     setApplyState({ status: 'ok', busy: true });
-    const res = await applyAnalysis(dataset, params);
+    const res = await applyAnalysis(dataset, overrides);
     setApplyState({ status: res.status, busy: false });
-  }, [dataset, params]);
+  }, [dataset, overrides]);
 
   const nClusters = resp?.clusters.length ?? 0;
   const merges = resp?.trace.pairs.filter((p) => p.merged).length ?? 0;
@@ -185,8 +219,8 @@ export function Toolbox({
           {source && <span className={`badge badge--${source === 'live' ? 'live' : 'mock'}`}>{source}</span>}
         </div>
         <div className="tbx__actions">
-          <button className="tbx__reset" onClick={resetKnobs} title="Revenir aux défauts dérivés des données">
-            ⟲ défauts
+          <button className="tbx__reset" onClick={resetKnobs} title="Revenir à l’analyse servie (réglages dérivés des données)">
+            ⟲ analyse servie
           </button>
           <ApplyButton state={applyState} onApply={onApply} />
           <button className="tbx__close" onClick={onClose} title="Fermer les réglages">
@@ -197,7 +231,13 @@ export function Toolbox({
 
       <div className="tbx__knobs">
         {KNOBS.map((k) => (
-          <Knob key={k.key} def={k} value={params[k.key] as number} onChange={(v) => setKnob(k.key, v)} />
+          <Knob
+            key={k.key}
+            def={k}
+            value={effectiveValue(k.key, overrides, resp)}
+            overridden={typeof overrides[k.key] === 'number'}
+            onChange={(v) => setKnob(k.key, v)}
+          />
         ))}
         {resp && (
           <div className="tbx__derived" title="valeurs réelles dérivées par le backend">
@@ -271,36 +311,146 @@ function ApplyButton({
   );
 }
 
-/** One horizontal knob (DSFR-style range) with its live value + label. */
+// --- Rotary potard geometry: a 270° arc from bottom-left to bottom-right. ---
+const ARC_START = -135; // degrees, 0 = top, clockwise positive
+const ARC_SWEEP = 270;
+const KNOB_R = 30; // arc radius (svg units)
+const KNOB_BOX = 78; // svg viewBox size
+const DRAG_RANGE_PX = 170; // vertical px to traverse the full range
+
+/** Polar → cartesian with 0° at the TOP and clockwise-positive angles. */
+function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
+  const rad = (deg * Math.PI) / 180;
+  return [cx + r * Math.sin(rad), cy - r * Math.cos(rad)];
+}
+
+/** SVG arc path from angle a1 → a2 (clockwise). */
+function arcPath(cx: number, cy: number, r: number, a1: number, a2: number): string {
+  const [x1, y1] = polar(cx, cy, r, a1);
+  const [x2, y2] = polar(cx, cy, r, a2);
+  const largeArc = a2 - a1 > 180 ? 1 : 0;
+  return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
+}
+
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+/** Snap to the knob's step and round float noise away. */
+function snap(v: number, def: KnobDef): number {
+  const snapped = Math.round(v / def.step) * def.step;
+  return Number(clamp(snapped, def.min, def.max).toFixed(6));
+}
+
+/**
+ * One ROTARY potard (console-style, but in the site's DSFR/orange skin): a graded
+ * arc, an orange fill up to the current angle, a pointer, the value in the centre.
+ * Drag vertically (up = ↑) to turn it; the keyboard ↑/↓/←/→/PageUp/Down/Home/End
+ * works too (role="slider"). Hover/focus reveals the concrete-impact tooltip.
+ */
 function Knob({
   def,
   value,
+  overridden,
   onChange,
 }: {
   def: KnobDef;
   value: number;
+  overridden: boolean;
   onChange: (v: number) => void;
 }) {
-  const pct = ((value - def.min) / (def.max - def.min)) * 100;
+  const drag = useRef<{ startY: number; startVal: number } | null>(null);
+
+  const norm = clamp((value - def.min) / (def.max - def.min), 0, 1);
+  const angle = ARC_START + norm * ARC_SWEEP;
+  const c = KNOB_BOX / 2;
+  const [px, py] = polar(c, c, KNOB_R, angle);
+  const [hx, hy] = polar(c, c, KNOB_R - 11, angle); // inner end of the pointer
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    drag.current = { startY: e.clientY, startVal: value };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag.current) return;
+    const dy = drag.current.startY - e.clientY; // up = positive
+    const fine = e.shiftKey ? 0.25 : 1; // Shift = fine control
+    const delta = (dy / DRAG_RANGE_PX) * (def.max - def.min) * fine;
+    onChange(snap(drag.current.startVal + delta, def));
+  };
+  const endDrag = (e: React.PointerEvent) => {
+    drag.current = null;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      /* capture may already be gone */
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const big = (def.max - def.min) / 10;
+    let next: number | null = null;
+    switch (e.key) {
+      case 'ArrowUp':
+      case 'ArrowRight':
+        next = value + def.step;
+        break;
+      case 'ArrowDown':
+      case 'ArrowLeft':
+        next = value - def.step;
+        break;
+      case 'PageUp':
+        next = value + big;
+        break;
+      case 'PageDown':
+        next = value - big;
+        break;
+      case 'Home':
+        next = def.min;
+        break;
+      case 'End':
+        next = def.max;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    onChange(snap(next, def));
+  };
+
   return (
-    <label className="knob" title={def.hint}>
-      <span className="knob__top">
-        <span className="knob__label">{def.label}</span>
-        <span className="knob__val">{def.fmt(value)}</span>
-      </span>
-      <input
-        type="range"
-        className="knob__input"
-        style={{ '--pct': `${pct}%` } as React.CSSProperties}
-        min={def.min}
-        max={def.max}
-        step={def.step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+    <div className={`pot${overridden ? ' pot--override' : ''}`}>
+      <div
+        className="pot__dial"
+        role="slider"
+        tabIndex={0}
         aria-label={`${def.label} (${def.unit})`}
-      />
-      <span className="knob__unit">{def.unit}</span>
-    </label>
+        aria-valuemin={def.min}
+        aria-valuemax={def.max}
+        aria-valuenow={value}
+        aria-valuetext={`${def.fmt(value)} ${def.unit}`}
+        aria-describedby={`pot-tip-${def.key}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onKeyDown={onKeyDown}
+      >
+        <svg viewBox={`0 0 ${KNOB_BOX} ${KNOB_BOX}`} className="pot__svg" aria-hidden>
+          <path className="pot__track" d={arcPath(c, c, KNOB_R, ARC_START, ARC_START + ARC_SWEEP)} />
+          {norm > 0 && <path className="pot__fill" d={arcPath(c, c, KNOB_R, ARC_START, angle)} />}
+          <circle className="pot__hub" cx={c} cy={c} r={KNOB_R - 12} />
+          <line className="pot__needle" x1={hx} y1={hy} x2={px} y2={py} />
+          <circle className="pot__dot" cx={px} cy={py} r={3.2} />
+        </svg>
+        <span className="pot__val">{def.fmt(value)}</span>
+      </div>
+      <span className="pot__label">
+        {def.label}
+        <span className="pot__unit">{def.unit}</span>
+      </span>
+      <span className="pot__badge" aria-hidden>{overridden ? 'réglé' : 'auto'}</span>
+      <span id={`pot-tip-${def.key}`} role="tooltip" className="pot__tip">{def.tip}</span>
+    </div>
   );
 }
 
