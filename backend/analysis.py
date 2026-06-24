@@ -245,22 +245,45 @@ def _coarsen_roots(groups: list[list[int]], vecs: np.ndarray
     pair = sim[iu]
     thr = float(pair.mean() + pair.std())          # μ+σ : un écart-type au-dessus de la moyenne
 
-    parent = list(range(n))
-    def find(x: int) -> int:
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-    for a in range(n):
-        for b in range(a + 1, n):
-            # critère relatif (queue haute) ET absolu (recoupement réel vs cohésion).
-            if sim[a, b] > thr and sim[a, b] > min(coh[a], coh[b]):
-                parent[find(a)] = find(b)
-    comps: dict[int, list[int]] = {}
-    for i in range(n):
-        comps.setdefault(find(i), []).append(i)
-    supers = list(comps.values())
-    if len(supers) < 2:                            # sur-fusion : on s'abstient
+    floor = thr  # l'UNION doit rester au moins aussi cohésive que la barre de similarité
+    # Agglomératif avec GARDE sur l'UNION (anti-chaînage). On fusionne la paire de
+    # composantes la PLUS proche au-dessus de `thr`, mais SEULEMENT si la cohésion de
+    # l'union reste ≥ `floor`. Sinon la paire est interdite. Sans cette garde, l'ancien
+    # union-find transitif chaînait A-B-C… en un macro FOURRE-TOUT (ex. « addiction »
+    # happée par « haine »). Ici, fusionner deux thèmes distincts crève la cohésion de
+    # l'union → refusé ; seuls les vrais quasi-doublons (union toujours serrée) fusionnent.
+    comp_fines: dict[int, list[int]] = {i: [i] for i in range(n)}
+    comp_members: dict[int, list[int]] = {i: list(groups[i]) for i in range(n)}
+    comp_cent: dict[int, np.ndarray] = {i: cents[i] for i in range(n)}
+    forbidden: set[frozenset[int]] = set()
+    while True:
+        ids = list(comp_fines)
+        best, best_sim = None, thr
+        for ia in range(len(ids)):
+            for ib in range(ia + 1, len(ids)):
+                x, y = ids[ia], ids[ib]
+                if frozenset((x, y)) in forbidden:
+                    continue
+                s = float(comp_cent[x] @ comp_cent[y])
+                if s > best_sim:
+                    best, best_sim = (x, y), s
+        if best is None:
+            break
+        x, y = best
+        union = comp_members[x] + comp_members[y]
+        su = vecs[union].sum(axis=0)
+        nu = float(np.linalg.norm(su))
+        hu = nu / len(union) if union else 0.0
+        if hu >= floor:                            # l'union reste cohésive → fusion
+            comp_fines[x] += comp_fines[y]
+            comp_members[x] = union
+            comp_cent[x] = su / nu if nu > 0 else su
+            del comp_fines[y], comp_members[y], comp_cent[y]
+            forbidden = {p for p in forbidden if y not in p}
+        else:                                      # fusionner crèverait la cohésion → interdit
+            forbidden.add(frozenset((x, y)))
+    supers = list(comp_fines.values())
+    if len(supers) < 2:                            # rien de fusionnable proprement → on s'abstient
         return [[i] for i in range(n)], thr
     return supers, thr
 
