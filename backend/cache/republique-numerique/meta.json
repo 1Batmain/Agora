@@ -1,0 +1,32 @@
+{
+  "id": "republique-numerique",
+  "label": "Consultation République numérique (FR)",
+  "n_nodes": 3000,
+  "languages": [
+    "fr",
+    "und",
+    "es",
+    "pt",
+    "en",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 2971,
+    "und": 10,
+    "es": 9,
+    "pt": 5,
+    "en": 4,
+    "it": 1
+  },
+  "source": "republique-numerique",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "n_loaded": 8069,
+  "built_with": {
+    "min_chars": 30,
+    "dedup_exact": true,
+    "balance": null,
+    "cap": 3000,
+    "seed": 42
+  }
+}
