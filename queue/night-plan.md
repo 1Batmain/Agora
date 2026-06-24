@@ -95,3 +95,18 @@ moins de maintenance. Prérequis pour que « Sauvegarder » (/analysis/apply) pe
   et la **source des params** (overrides pour /sandbox, dérivés/sauvegardés pour build).
 - **Test d'invariance** : pour les mêmes params, /sandbox et build produisent une structure IDENTIQUE (mêmes ids/parents/tailles).
 - **Puis** : `/analysis/apply` rebuild via ce cœur unique (+ enrichissement LLM) → persiste les params → /analysis sert ces réglages.
+
+## SUPPORT MULTILINGUE — traduire les avis en français (front) + voir l'original (Bob, 2026-06-24)
+**But** : généricité linguistique. Le front affiche les avis **en français** (traduits par LLM) par défaut, avec **« voir
+l'original »**. (xstance = DE/FR/IT ; n'importe quelle consultation à terme.)
+- **Build (nouvelle étape, cachée)** : détecter la langue de chaque avis ; si ≠ fr, **traduire en français via LLM**
+  (modèle CHEAP = mistral-small, batché, caché dans `translations.json` aligné aux avis). Idempotent, ré-utilisable.
+  (Titres/accroches/insights sont déjà générés en français par le LLM → rien à faire côté thèmes.)
+- **`/avis/{id}`** renvoie `{ text (original), text_fr, lang }` (+ les claims/cibles restent en offsets sur l'ORIGINAL).
+- **GROS POINT À TRANCHER — surlignages vs traduction** : les spans claims/cibles sont **verbatim sur l'original** → on ne
+  peut pas les poser sur la traduction. Design retenu :
+  - vue par défaut = **français lisible** (traduction) ;
+  - **toggle « original »** = texte source AVEC surlignages claims + cibles (la provenance) ;
+  - en vue française, lister les **claims traduits** (chaque span verbatim → fr) colorés par cluster (pas de surlignage inline).
+- **Front** : badge langue, toggle FR↔original, défaut FR si lang≠fr (sinon original direct, pas de toggle inutile).
+- LLM : traduction = mistral-small (cheap), cachée. À séquencer après extract-v4 (touche avis.py) ; parallélisable avec la factorisation (fichiers différents).
