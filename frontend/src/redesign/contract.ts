@@ -125,10 +125,18 @@ export interface AvisClaim {
   theme_title: string;
 }
 
-/** `GET /avis/{id}` → one avis in full, with its claims (spans + target) to render. */
+/**
+ * `GET /avis/{id}` → one avis in full, with its claims (spans + target) to render.
+ *  - `text`    : the ORIGINAL (claims' spans/target are offsets into it — verbatim gate);
+ *  - `text_fr` : French translation precomputed at build (`null` if already FR / untranslated);
+ *  - `lang`    : the avis' language code. When `lang !== 'fr'` the UI shows `text_fr` by
+ *    default with a « voir l'original » toggle (highlights render on the original `text`).
+ */
 export interface AvisProvenance {
   id: string;
   text: string;
+  text_fr?: string | null;
+  lang?: string;
   claims: AvisClaim[];
 }
 

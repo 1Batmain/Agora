@@ -761,12 +761,49 @@ body {
   font-size: 12px;
   color: var(--grey-500);
   margin: 8px 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+/* Language badge — "traduit de l'allemand" on a translated avis. */
+.avisdetail__langbadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent, #b45309);
+  background: color-mix(in srgb, var(--accent, #b45309) 12%, transparent);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+/* FR ↔ original toggle — pushed to the right of the meta line. */
+.avisdetail__toggle {
+  margin-left: auto;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent, #b45309);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+}
+.avisdetail__toggle:hover {
+  background: color-mix(in srgb, var(--accent, #b45309) 8%, transparent);
 }
 .avisdetail__text {
   font-size: 15px;
   line-height: 1.7;
   white-space: pre-wrap;
   word-break: break-word;
+}
+/* French reading view (translation) — no inline highlights; a hair softer than
+   the original to read as a rendering, not the verbatim source. */
+.avisdetail__text--fr {
+  color: var(--grey-800, #1f2937);
 }
 .avisdetail__hl {
   color: inherit;
