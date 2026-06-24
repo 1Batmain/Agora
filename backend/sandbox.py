@@ -165,28 +165,44 @@ def _coarsen(fine_groups: list[list[int]], vecs: np.ndarray, coarsen_mult: float
     base_thr = float(pair.mean() + pair.std())
     thr = base_thr * float(coarsen_mult)
 
-    parent = list(range(n))
-
-    def find(x: int) -> int:
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-
-    for a in range(n):
-        for b in range(a + 1, n):
-            if sim[a, b] > thr and sim[a, b] > min(coh[a], coh[b]):
-                parent[find(a)] = find(b)
-
-    comps: dict[int, list[int]] = {}
-    for i in range(n):
-        comps.setdefault(find(i), []).append(i)
-    supers = list(comps.values())
-    if len(supers) < 2:                         # sur-fusion → on s'abstient (chaque fin seul)
+    floor = thr  # l'UNION doit rester ≥ la barre de similarité (anti-chaînage, cf. analysis._coarsen_roots)
+    # Agglomératif avec GARDE sur l'UNION : fusionne la paire de composantes la plus proche
+    # au-dessus de thr SEULEMENT si la cohésion de l'union reste ≥ floor (sinon interdite).
+    # Casse le chaînage transitif qui fabriquait un macro fourre-tout.
+    comp_fines: dict[int, list[int]] = {i: [i] for i in range(n)}
+    comp_members: dict[int, list[int]] = {i: list(fine_groups[i]) for i in range(n)}
+    comp_cent: dict[int, np.ndarray] = {i: cents[i] for i in range(n)}
+    forbidden: set[frozenset[int]] = set()
+    while True:
+        ids = list(comp_fines)
+        best, best_sim = None, thr
+        for ia in range(len(ids)):
+            for ib in range(ia + 1, len(ids)):
+                x, y = ids[ia], ids[ib]
+                if frozenset((x, y)) in forbidden:
+                    continue
+                s = float(comp_cent[x] @ comp_cent[y])
+                if s > best_sim:
+                    best, best_sim = (x, y), s
+        if best is None:
+            break
+        x, y = best
+        union = comp_members[x] + comp_members[y]
+        cu, hu = _centroid_cohesion(union, vecs)
+        if hu >= floor:
+            comp_fines[x] += comp_fines[y]
+            comp_members[x] = union
+            comp_cent[x] = cu
+            del comp_fines[y], comp_members[y], comp_cent[y]
+            forbidden = {p for p in forbidden if y not in p}
+        else:
+            forbidden.add(frozenset((x, y)))
+    supers = list(comp_fines.values())
+    if len(supers) < 2:                         # rien de fusionnable proprement → on s'abstient
         supers = [[i] for i in range(n)]
 
-    # Trace : toutes les paires de fins, avec décision merged = même racine in fine.
-    root = {i: find(i) for i in range(n)}
+    # Trace : toutes les paires de fins, avec décision merged = même super-groupe.
+    fine_to_super = {fi: si for si, sg in enumerate(supers) for fi in sg}
     pair_records = []
     for a in range(n):
         for b in range(a + 1, n):
@@ -195,7 +211,7 @@ def _coarsen(fine_groups: list[list[int]], vecs: np.ndarray, coarsen_mult: float
                 "sim": round(float(sim[a, b]), 4),
                 "threshold": round(thr, 4),
                 "cohesion_min": round(float(min(coh[a], coh[b])), 4),
-                "merged": (root[a] == root[b]) and (len(supers) > 1),
+                "merged": (fine_to_super.get(a) == fine_to_super.get(b)) and (len(supers) > 1),
             })
     info = {"base_threshold": round(base_thr, 4), "threshold": round(thr, 4),
             "coarsen_mult": coarsen_mult, "n_fine": n, "n_macros": len(supers)}
