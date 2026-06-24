@@ -77,3 +77,10 @@ explique une fusion/non-fusion avec des chiffres ; α rapproche visiblement les 
   (clustering + enrichissement LLM titres/insights) + **persiste** → /analysis sert ensuite ces réglages.
 - Stocker les params choisis (par dataset) ; bouton « Sauvegarder » du front (console-integrate) s'y branche.
 - À FAIRE après le merge d'extract-v4 (backend, conflit sinon).
+
+## SUPPRIMER le « jouet live » — COMPLET (Bob, 2026-06-24) — après toolbox-potards + extract-v4
+Retirer entièrement la feature live (jamais aboutie, incrémental dégradé, demo = mock factice) :
+- Front : `LiveView.tsx`, `liveStream.ts`, `mock.ts` (live), boutons « Rejouer live/démo », route/état live dans `RedesignApp`.
+- Backend : endpoint SSE `/stream`, `backend/state.py` (AnalysisState incrémental), refs build-live.
+- Vérifier qu'aucune autre partie ne dépend de ces symboles ; build front + backend propres après suppression.
+- (Lane E E1-E4 reste groomée pour plus tard si on reprend le live un jour, mais le code actuel dégage.)
