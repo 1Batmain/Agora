@@ -52,49 +52,120 @@ export function AvisDetail({
           <span className="spinner" /> chargement de l'avis…
         </div>
       ) : avis ? (
-        <>
-          <p className="avisdetail__meta">
-            {avis.claims.length} claim{avis.claims.length > 1 ? 's' : ''} surligné
-            {avis.claims.length > 1 ? 's' : ''} · cible soulignée · chaque couleur = un thème
-          </p>
-          {/* Cluster legend: the distinct themes highlighted in THIS avis, each in
-              its cluster colour → every highlight below maps to a named cluster. */}
-          {clustersOf(avis.claims).length > 0 && (
-            <ul className="avisdetail__legend">
-              {clustersOf(avis.claims).map((c) => (
-                <li key={c.key} className="avisdetail__legenditem">
-                  <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
-                  {c.label}
-                </li>
-              ))}
-            </ul>
-          )}
-          <article className="avisdetail__text">
-            {segments(avis.text, avis.claims).map((seg, i) =>
-              seg.claim ? (
-                <mark
-                  key={i}
-                  className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
-                  title={`Thème : ${seg.claim.theme_title}${seg.target ? ' · cible' : ''}`}
-                  style={{
-                    backgroundColor: tint(seg.claim.color),
-                    borderBottom: seg.target
-                      ? `2px solid ${seg.claim.color}`
-                      : `2px solid ${tint(seg.claim.color)}`,
-                  }}
-                >
-                  {seg.text}
-                </mark>
-              ) : (
-                <span key={i}>{seg.text}</span>
-              ),
-            )}
-          </article>
-        </>
+        <AvisBody avis={avis} />
       ) : (
         <p className="panel__empty">Avis indisponible.</p>
       )}
     </section>
+  );
+}
+
+/** Human language names (FR) for the badge — fallback to the raw code if unknown. */
+const LANG_NAMES: Record<string, string> = {
+  de: 'allemand',
+  it: 'italien',
+  en: 'anglais',
+  es: 'espagnol',
+  pt: 'portugais',
+  nl: 'néerlandais',
+  fr: 'français',
+};
+
+function langName(code?: string): string {
+  if (!code) return '';
+  return LANG_NAMES[code.toLowerCase().split('-')[0]] ?? code.toUpperCase();
+}
+
+/**
+ * Body of one avis. Multilingual provenance:
+ *  - if `lang !== 'fr'` AND a `text_fr` exists → DEFAULT to the readable French
+ *    translation (no inline highlights — the verbatim spans index the ORIGINAL, not
+ *    the translation), with a « voir l'original » toggle that flips to the source text
+ *    WITH claim/target highlights;
+ *  - otherwise (already French, or no translation available) → the original directly,
+ *    highlighted, with no useless toggle.
+ * A language badge announces the translation (« traduit de l'allemand »).
+ */
+function AvisBody({ avis }: { avis: AvisProvenance }) {
+  const isFr = !avis.lang || avis.lang.toLowerCase().startsWith('fr');
+  const hasTranslation = !isFr && typeof avis.text_fr === 'string' && avis.text_fr.length > 0;
+  const [showOriginal, setShowOriginal] = useState(false);
+
+  // Reset the toggle whenever the open avis changes (default = French when translated).
+  useEffect(() => setShowOriginal(false), [avis.id]);
+
+  // French reading view is the default for a translated avis; the original carries highlights.
+  const original = showOriginal || !hasTranslation;
+
+  return (
+    <>
+      <p className="avisdetail__meta">
+        {!isFr && (
+          <span className="avisdetail__langbadge" title={`Langue d'origine : ${langName(avis.lang)}`}>
+            {hasTranslation ? `traduit de l'${langName(avis.lang)}` : langName(avis.lang)}
+          </span>
+        )}
+        {avis.claims.length} claim{avis.claims.length > 1 ? 's' : ''}
+        {original ? (
+          <>
+            {' '}surligné{avis.claims.length > 1 ? 's' : ''} · cible soulignée · chaque couleur = un thème
+          </>
+        ) : (
+          <> · couleurs = thèmes (surlignages sur l'original)</>
+        )}
+        {hasTranslation && (
+          <button
+            type="button"
+            className="avisdetail__toggle"
+            aria-pressed={showOriginal}
+            onClick={() => setShowOriginal((o) => !o)}
+          >
+            {showOriginal ? '← voir la traduction' : "voir l'original →"}
+          </button>
+        )}
+      </p>
+
+      {/* Cluster legend: the distinct themes present in THIS avis, each in its cluster
+          colour → ties the French reading view (no inline marks) back to the map too. */}
+      {clustersOf(avis.claims).length > 0 && (
+        <ul className="avisdetail__legend">
+          {clustersOf(avis.claims).map((c) => (
+            <li key={c.key} className="avisdetail__legenditem">
+              <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
+              {c.label}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {original ? (
+        <article className="avisdetail__text" lang={avis.lang}>
+          {segments(avis.text, avis.claims).map((seg, i) =>
+            seg.claim ? (
+              <mark
+                key={i}
+                className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
+                title={`Thème : ${seg.claim.theme_title}${seg.target ? ' · cible' : ''}`}
+                style={{
+                  backgroundColor: tint(seg.claim.color),
+                  borderBottom: seg.target
+                    ? `2px solid ${seg.claim.color}`
+                    : `2px solid ${tint(seg.claim.color)}`,
+                }}
+              >
+                {seg.text}
+              </mark>
+            ) : (
+              <span key={i}>{seg.text}</span>
+            ),
+          )}
+        </article>
+      ) : (
+        <article className="avisdetail__text avisdetail__text--fr" lang="fr">
+          {avis.text_fr}
+        </article>
+      )}
+    </>
   );
 }
 
