@@ -57,3 +57,17 @@ explique une fusion/non-fusion avec des chiffres ; α rapproche visiblement les 
 
 ## TRANSPARENCE COÛT
 - Ré-extraire granddebat+xstance via mistral-large (~6000 avis, batché) = coût API réel — assumé (claims+cible partout).
+
+---
+
+## EXTRACT v4 — cible OBLIGATOIRE (antécédent in-avis OU question), question ingérée (Bob, 2026-06-24)
+**Décision** : option 1 (durcir + question), PAS de reformulation (l'option 2 casserait le gate verbatim). Voir [[agora-claim-pipeline-v3]].
+- **Ingérer la question/consigne** de chaque consultation : tiktok + granddebat = question GLOBALE (descriptor) ;
+  xstance = question PAR LIGNE (colonne existante). La rendre dispo à l'extraction par avis.
+- **Prompt durci** : cible **obligatoire**. Ordre de résolution : (1) **antécédent DANS l'avis** (multi-span : inclure le
+  span du sujet — ex. « Les vidéos courtes … Elles doivent être interdites » → cible « Les vidéos courtes ») ; (2) sinon
+  **la question**. Few-shot pour les 2 cas. Garde sélectivité/regroupement/verbatim.
+- **`align_spans`** : valide la cible contre **(avis ∪ question)**. La cible porte sa **source** (`"avis"|"question"`) + offsets.
+  Les **parts du claim restent TOUJOURS dans l'avis** (gate verbatim dur inchangé).
+- **Provenance `/avis`** : `target:{start,end,source}`. Front : souligne si source=avis ; si source=question, afficher comme label « sujet ».
+- Ré-extraire les 3 datasets + mesurer la **chute du sans-cible**. Note `research/extract_v4_note.md`.
