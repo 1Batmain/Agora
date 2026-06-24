@@ -54,11 +54,11 @@ interface KnobDef {
 // defaults so the knob opens on the backend's own choice. `tip` describes the
 // CONCRETE effect on the analysis (not the algorithm), shown on hover/focus.
 const KNOBS: KnobDef[] = [
-  { key: 'resolution', label: 'Résolution', unit: 'Leiden', min: 0.3, max: 2.5, step: 0.05, tip: '↑ communautés Leiden plus fines → plus de clusters, plus petits. ↓ regroupe en grandes familles.', fmt: (v) => v.toFixed(2) },
-  { key: 'alpha', label: 'α cible', unit: 'blend', min: 0, max: 1, step: 0.02, tip: 'Pondère l’objet de la prise de position dans l’embedding — ↑ regroupe par SUJET (ex. fusionne les 3 « addiction »). À 0, regroupe par formulation.', fmt: (v) => v.toFixed(2) },
-  { key: 'coarsen_mult', label: 'Coarsening', unit: '× seuil', min: 0.3, max: 2.5, step: 0.05, tip: '↑ fusionne les macros proches → moins de clusters, plus larges. ↓ garde les nuances séparées.', fmt: (v) => '×' + v.toFixed(2) },
-  { key: 'tau_mult', label: 'τ subdivision', unit: '× τ', min: 0.3, max: 2.5, step: 0.05, tip: '↑ subdivise moins → arbre plus plat. ↓ éclate les clusters diffus en sous-thèmes.', fmt: (v) => '×' + v.toFixed(2) },
-  { key: 'k', label: 'k voisins', unit: 'kNN', min: 4, max: 30, step: 1, tip: 'Voisins du graphe kNN — change la densité du graphe. Très sensible : ±1 peut réorganiser toute la carte.', fmt: (v) => String(Math.round(v)) },
+  { key: 'resolution', label: 'Résolution', unit: 'Leiden', min: 0.3, max: 2.5, step: 0.05, tip: 'Résolution γ de Leiden : maximise la modularité Σ_c [e_c − γ·(K_c/2m)²]. ↑ γ déplace l’optimum vers des communautés plus petites.', fmt: (v) => v.toFixed(2) },
+  { key: 'alpha', label: 'α cible', unit: 'blend', min: 0, max: 1, step: 0.02, tip: 'Vecteur clusterisé = normalize(α·E(cible) + (1−α)·E(claim)). α=0 → embedding du claim seul ; α=1 → embedding de la cible seule.', fmt: (v) => v.toFixed(2) },
+  { key: 'coarsen_mult', label: 'Coarsening', unit: '× seuil', min: 0.3, max: 2.5, step: 0.05, tip: 'Multiplie le seuil de fusion des racines : deux macros fusionnent si cos(centroïdes) > (μ+σ des cos inter-centroïdes)·facteur ET > min(cohésions).', fmt: (v) => '×' + v.toFixed(2) },
+  { key: 'tau_mult', label: 'τ subdivision', unit: '× τ', min: 0.3, max: 2.5, step: 0.05, tip: 'Multiplie le seuil τ : un cluster est re-subdivisé (Leiden local) si sa dispersion 1−‖Σᵢuᵢ‖/n dépasse τ·facteur.', fmt: (v) => '×' + v.toFixed(2) },
+  { key: 'k', label: 'k voisins', unit: 'kNN', min: 4, max: 30, step: 1, tip: 'Nombre de plus proches voisins (similarité cosinus) du graphe kNN sur lequel Leiden détecte les communautés.', fmt: (v) => String(Math.round(v)) },
 ];
 
 /** Defaults used to label a knob before the first /sandbox reply lands. */
