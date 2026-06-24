@@ -42,6 +42,8 @@ export interface SandboxCluster {
   keywords: string[];
   sample_claims: string[];
   cohesion: number; // 0..1 internal coherence (c-TF-IDF / centroid tightness)
+  depth: number; // 0 = macro (root), 1+ = sub-cluster
+  has_children: boolean; // drillable in the hierarchy
 }
 
 /** One candidate MERGE between two clusters, with the criteria that decided it. */
