@@ -84,3 +84,14 @@ Retirer entièrement la feature live (jamais aboutie, incrémental dégradé, de
 - Backend : endpoint SSE `/stream`, `backend/state.py` (AnalysisState incrémental), refs build-live.
 - Vérifier qu'aucune autre partie ne dépend de ces symboles ; build front + backend propres après suppression.
 - (Lane E E1-E4 reste groomée pour plus tard si on reprend le live un jour, mais le code actuel dégage.)
+
+## FACTORISER le cœur de clustering — UNE seule source (Bob, 2026-06-24) — après extract-v4
+**But** : `/sandbox` (preview) et `build_analysis` (persisté) doivent partager le MÊME code de clustering → preview == persisté,
+moins de maintenance. Prérequis pour que « Sauvegarder » (/analysis/apply) persiste EXACTEMENT ce que la preview montre.
+- **Extraire** `build_theme_tree(vecs, params, *, naming) → tree` (cœur unique : blend(α) → kNN(k) → Leiden(res) →
+  subdivision variance-adaptative(τ×mult) → coarsening(×mult) → arbre + stats). Params = {alpha,k,resolution,coarsen_mult,tau_mult}.
+- **Supprimer la duplication** : `sandbox._coarsen` → utiliser `analysis._coarsen_roots` ; l'assemblage d'arbre de /sandbox →
+  le même `_build_subtree`/coarsening que le build. Seule différence autorisée = le **naming** (c-TF-IDF pour /sandbox, LLM pour build)
+  et la **source des params** (overrides pour /sandbox, dérivés/sauvegardés pour build).
+- **Test d'invariance** : pour les mêmes params, /sandbox et build produisent une structure IDENTIQUE (mêmes ids/parents/tailles).
+- **Puis** : `/analysis/apply` rebuild via ce cœur unique (+ enrichissement LLM) → persiste les params → /analysis sert ces réglages.
