@@ -8,10 +8,15 @@ une **cible** verbatim (`target`, une sous-portion ou null). Comme tout est extr
 du texte : highlight fidèle, zéro dérive.
 
     GET /avis/{id} {dataset} -> {
-      id, text,
+      id, text, text_fr|null, lang,
       claims: [ {id, cluster_id, color, spans:[{start,end}], target:{start,end}|null,
                  theme_title} ]
     }
+
+`text` = ORIGINAL (les spans/cibles des claims y pointent — gate verbatim). `text_fr` =
+traduction française (précalculée au BUILD, cf. `backend.translate`) ou `null` si l'avis
+est déjà français / non traduit. `lang` = code langue de l'avis. Le front affiche `text_fr`
+par défaut quand `lang != fr`, avec un toggle « voir l'original » (surlignages sur `text`).
 
 Construit depuis l'arbre variance-adaptatif (`backend.analysis`) — aucun recalcul.
 Précalculé au BUILD et persisté (`analysis_store`), servi tel quel (instantané).
@@ -71,17 +76,29 @@ def avis_claims(tree: ThemeTree, avis_index: int, claim_macro: dict[int, str]) -
 
 
 def avis_payload_for(tree: ThemeTree, avis_index: int,
-                     claim_macro: dict[int, str] | None = None) -> dict:
-    """`{id, text, claims}` d'un avis donné (par son index dans `prepared.avis`)."""
+                     claim_macro: dict[int, str] | None = None,
+                     translations: dict[str, dict] | None = None) -> dict:
+    """`{id, text, text_fr, lang, claims}` d'un avis (par son index dans `prepared.avis`).
+
+    `translations` (optionnel) : map `avis_id -> {lang, text_fr}` précalculée par
+    `backend.translate`. Absente → `lang="fr"`, `text_fr=None` (rétro-compat, datasets FR).
+    """
     if claim_macro is None:
         claim_macro = _claim_macro(tree)
     a = tree.prepared.avis[avis_index]
+    tr = (translations or {}).get(str(a.id)) or {}
     return {"id": a.id, "text": a.text,
+            "text_fr": tr.get("text_fr"), "lang": tr.get("lang", "fr"),
             "claims": avis_claims(tree, avis_index, claim_macro)}
 
 
-def build_avis_provenance(tree: ThemeTree) -> dict[str, dict]:
-    """Provenance de TOUS les avis → `{avis_id: {id, text, claims}}` (précalcul BUILD)."""
+def build_avis_provenance(tree: ThemeTree,
+                          translations: dict[str, dict] | None = None) -> dict[str, dict]:
+    """Provenance de TOUS les avis → `{avis_id: {id, text, text_fr, lang, claims}}` (BUILD).
+
+    `translations` : traductions FR précalculées (`backend.translate.build_translations`),
+    injectées par avis ; `None` pour un dataset entièrement français.
+    """
     claim_macro = _claim_macro(tree)
-    return {a.id: avis_payload_for(tree, i, claim_macro)
+    return {a.id: avis_payload_for(tree, i, claim_macro, translations)
             for i, a in enumerate(tree.prepared.avis)}

@@ -36,6 +36,7 @@ from backend.analysis import (
     build_theme_tree,
 )
 from backend.avis import build_avis_provenance
+from backend.translate import build_translations
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.cluster_enrich import description_for_node, hook_for_node
@@ -147,10 +148,21 @@ def build_analysis(
         payload["status"] = store.READY
         store.write_analysis(dataset, payload)
 
-        # 2b) Provenance : texte de chaque avis + ses portions verbatim colorées par
-        #     macro (pour le surlignage côté front) → avis.json.
+        # 2a-bis) Traduction des avis non-FR en français (CHEAP, batché, CACHÉE &
+        #     idempotente) → translations.json. Le front affiche le FR par défaut, avec
+        #     « voir l'original » (surlignages sur l'original). Datasets FR : rien à faire.
+        report("translate", "traduction FR des avis non-français (caché)")
+        lang_of = {str(getattr(it, "id", "")): getattr(it, "lang", None)
+                   for it in getattr(ds, "ideas", []) or []}
+        translations = build_translations(
+            dataset, tree.prepared.avis, lang_of,
+            on_progress=lambda d, t: report("translate", "traduction FR (caché)", d, t),
+        )
+
+        # 2b) Provenance : texte de chaque avis (+ traduction FR/langue) + ses portions
+        #     verbatim colorées par macro (pour le surlignage côté front) → avis.json.
         report("avis", "provenance des portions verbatim")
-        store.write_avis(dataset, build_avis_provenance(tree))
+        store.write_avis(dataset, build_avis_provenance(tree, translations))
 
         # 3) Citations triées centroïde, par nœud (B4) — aucun LLM, rapide.
         for i, nid in enumerate(node_ids, 1):
