@@ -133,6 +133,8 @@ export function mockSandbox(dataset: string, params: SandboxParams = {}): Sandbo
         `Beaucoup soulignent l'importance de ${kw[0]} dans ce dossier.`,
       ].slice(0, 2 + Math.floor(r() * 2)),
       cohesion: Number(cohesion.toFixed(3)),
+      depth: 0,
+      has_children: false,
     };
   });
 

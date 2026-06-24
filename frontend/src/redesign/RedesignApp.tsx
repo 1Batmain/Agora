@@ -12,7 +12,7 @@ import type {
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { LiveView } from './LiveView';
-import { Toolbox, TOOLBOX_LEVEL, type ToolboxSelection } from './Toolbox';
+import { Toolbox, type ToolboxSelection } from './Toolbox';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
@@ -253,10 +253,12 @@ export default function RedesignApp() {
   }
 
   // TOOLBOX preview: when réglages are open AND a recluster has landed, the MAIN
-  // map draws the reclustered bubbles (flat) instead of the persisted analysis.
+  // map draws the reclustered bubbles instead of the persisted analysis — keeping
+  // the SAME hierarchy (roots at top, drill via has_children) so opening the toolbox
+  // reproduces the served structure (no flat-vs-hierarchy jump).
   const previewing = toolboxOpen && previewThemes != null;
   const mapThemes = previewing ? (previewThemes as SpatialTheme[]) : themes;
-  const mapParentId = previewing ? TOOLBOX_LEVEL : currentParentId;
+  const mapParentId = previewing ? null : currentParentId;
   const mapSelectedId = previewing
     ? previewSel?.kind === 'cluster'
       ? previewSel.id

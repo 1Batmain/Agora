@@ -158,8 +158,8 @@ export function Toolbox({
       consensus: c.cohesion,
       convergence: c.cohesion,
       dispersion: dispByNode.get(c.id) ?? 1 - c.cohesion,
-      parent_id: TOOLBOX_LEVEL,
-      has_children: false,
+      parent_id: c.parent_id,
+      has_children: c.has_children,
       color: '#888',
       hook: `${c.n_claims} claims · cohésion ${(c.cohesion * 100).toFixed(0)}%`,
     }));
