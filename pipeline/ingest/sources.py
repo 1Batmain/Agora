@@ -27,8 +27,11 @@ Schéma du descripteur (cf. `descriptors/*.json`) :
     "author": "author",
     "lang": "language"
   },
-  "lang_keep": ["fr"]          // optionnel : KNOB explicite de sous-ensemble langue
-}                              //   (défaut absent = garder TOUTES les langues, #11)
+  "lang_keep": ["fr"],         // optionnel : KNOB explicite de sous-ensemble langue
+  "keep_where": {              // optionnel : KNOB déclaratif de filtrage par valeur
+    "Type.de.contenu": ["Proposition", "Argument", "Modification"]
+  }                            //   garde la ligne si CHAQUE colonne ∈ ensemble autorisé
+}                              //   (défaut absent = aucun filtre par valeur)
 ```
 
 Seuls `id` et `text` sont obligatoires dans `columns`. `author` non fourni →
@@ -72,6 +75,7 @@ class SourceDescriptor:
     archive: str | None = None  # "zip" ou None
     members: list[str] | None = None
     lang_keep: list[str] | None = None
+    keep_where: dict | None = None  # filtre déclaratif par valeur de colonne brute
     # Champs additionnels du JSON conservés sans être interprétés (forward-compat).
     extra: dict = field(default_factory=dict)
 
@@ -91,6 +95,7 @@ class SourceDescriptor:
         known = {
             "name", "format", "path", "columns", "url", "encoding",
             "delimiter", "has_header", "archive", "members", "lang_keep",
+            "keep_where",
         }
         kwargs = {k: v for k, v in d.items() if k in known}
         kwargs["extra"] = {k: v for k, v in d.items() if k not in known}
@@ -166,18 +171,40 @@ def _passes_lang_keep(desc: SourceDescriptor, rec: dict) -> bool:
     return rec.get("lang", "") in desc.lang_keep
 
 
+def _passes_keep_where(desc: SourceDescriptor, record) -> bool:
+    """Filtre déclaratif par VALEUR de colonne brute (knob), avant mapping canonique.
+
+    `keep_where` = {réf_colonne: [valeurs autorisées]}. La ligne passe si CHAQUE
+    colonne référencée a une valeur dans son ensemble autorisé. Réf identique au
+    mapping `columns` (nom str pour jsonl/csv-nommé, index int pour csv brut ; une
+    clé JSON numérique « 7 » est coercée en index). Absent => on garde tout.
+    """
+    if not desc.keep_where:
+        return True
+    for ref, allowed in desc.keep_where.items():
+        if isinstance(ref, str) and ref.lstrip("-").isdigit():
+            ref = int(ref)
+        val = _get(record, ref)
+        val = "" if val is None else str(val)
+        if val not in allowed:
+            return False
+    return True
+
+
 def _read_csv(desc: SourceDescriptor, path: Path) -> Iterator[dict]:
     with open(path, encoding=desc.encoding, newline="") as f:
         if _uses_names(desc.columns):
             # Colonnes nommées -> on s'appuie sur l'en-tête (DictReader).
             for row in csv.DictReader(f, delimiter=desc.delimiter):
-                yield _map_record(desc, row)
+                if _passes_keep_where(desc, row):
+                    yield _map_record(desc, row)
         else:
             rd = csv.reader(f, delimiter=desc.delimiter)
             if desc.has_header:
                 next(rd, None)
             for row in rd:
-                yield _map_record(desc, row)
+                if _passes_keep_where(desc, row):
+                    yield _map_record(desc, row)
 
 
 def _read_jsonl_lines(desc: SourceDescriptor, lines) -> Iterator[dict]:
@@ -191,7 +218,7 @@ def _read_jsonl_lines(desc: SourceDescriptor, lines) -> Iterator[dict]:
             obj = json.loads(line)
         except json.JSONDecodeError:
             continue
-        if isinstance(obj, dict):
+        if isinstance(obj, dict) and _passes_keep_where(desc, obj):
             yield _map_record(desc, obj)
 
 
