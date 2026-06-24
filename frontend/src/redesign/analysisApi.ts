@@ -121,6 +121,42 @@ export async function fetchCitations(
 }
 
 /**
+ * PERSIST the toolbox réglages onto the analysis (cf. /tmp/contract-apply.md).
+ * POST /analysis/apply rebuilds the persisted analysis WITH these params (clustering
+ * + LLM enrichment) and serves it; afterwards `/analysis` reflects the réglages.
+ *
+ * The endpoint lands AFTER the front (lane B implements it post extract-v4), so this
+ * is GRACEFUL: a 404 (or unreachable) maps to `soon` — the UI shows a discreet
+ * « bientôt » tooltip instead of crashing. The live PREVIEW keeps running on
+ * /sandbox regardless; only persistence waits on this endpoint.
+ */
+export type ApplyStatus = 'ok' | 'soon' | 'error';
+export interface ApplyResult {
+  status: ApplyStatus;
+  detail?: string;
+}
+
+/** POST /analysis/apply {dataset, params} → persist réglages. 404 → 'soon' (no crash). */
+export async function applyAnalysis(
+  dataset: string,
+  params: import('./sandboxContract').SandboxParams,
+): Promise<ApplyResult> {
+  if (FORCE_MOCK) return { status: 'soon', detail: 'mock' };
+  try {
+    const { status, body } = await rawFetch('/api/analysis/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataset, params }),
+    });
+    if (status === 200) return { status: 'ok', detail: body?.status };
+    if (status === 404) return { status: 'soon' };
+    return { status: 'error', detail: (body && body.error) || `HTTP ${status}` };
+  } catch (e) {
+    return { status: 'error', detail: String(e) };
+  }
+}
+
+/**
  * Feedback FLAGS — Bob signals a badly cut / mis-targeted / mis-extracted avis
  * with a free-text comment, persisted server-side (upsert by avis_id) and editable.
  * These are LIGHT and independent of the analysis cache, so they never go through
