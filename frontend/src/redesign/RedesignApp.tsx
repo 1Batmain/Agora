@@ -12,7 +12,7 @@ import type {
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { LiveView } from './LiveView';
-import { ConsoleView } from './ConsoleView';
+import { Toolbox, TOOLBOX_LEVEL, type ToolboxSelection } from './Toolbox';
 import { InsightsPanel } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
@@ -53,8 +53,12 @@ export default function RedesignApp() {
 
   // LIVE replay overlay — when on, takes over the shell to build the map in SSE.
   const [live, setLive] = useState(false);
-  // ANALYST CONSOLE overlay — the "console de mixage" (live recluster faders).
-  const [consoleMode, setConsoleMode] = useState(false);
+  // TOOLBOX — réglages drawer ON the main page; its knobs recluster the MAIN map
+  // live (preview) via /sandbox. `previewThemes` (when set) is what the map draws
+  // instead of the persisted analysis; `previewSel` is the inspected cluster/pair.
+  const [toolboxOpen, setToolboxOpen] = useState(false);
+  const [previewThemes, setPreviewThemes] = useState<SpatialTheme[] | null>(null);
+  const [previewSel, setPreviewSel] = useState<ToolboxSelection>(null);
 
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
@@ -248,15 +252,30 @@ export default function RedesignApp() {
     );
   }
 
-  // ANALYST CONSOLE overlay — full-screen mixing board; leaves this view intact.
-  if (consoleMode && dataset) {
-    return (
-      <ConsoleView
-        dataset={dataset}
-        datasetLabel={datasets.find((d) => d.id === dataset)?.label}
-        onClose={() => setConsoleMode(false)}
-      />
-    );
+  // TOOLBOX preview: when réglages are open AND a recluster has landed, the MAIN
+  // map draws the reclustered bubbles (flat) instead of the persisted analysis.
+  const previewing = toolboxOpen && previewThemes != null;
+  const mapThemes = previewing ? (previewThemes as SpatialTheme[]) : themes;
+  const mapParentId = previewing ? TOOLBOX_LEVEL : currentParentId;
+  const mapSelectedId = previewing
+    ? previewSel?.kind === 'cluster'
+      ? previewSel.id
+      : null
+    : selected?.id ?? null;
+  // While previewing, a bubble click INSPECTS the cluster (decision-trace) rather
+  // than drilling; outside preview it's the normal drill / select.
+  const onMapSelect = previewing
+    ? (t: SpatialTheme) =>
+        setPreviewSel((cur) =>
+          cur?.kind === 'cluster' && cur.id === t.id ? null : { kind: 'cluster', id: t.id },
+        )
+    : setSelected;
+  const onMapDrill = previewing ? onMapSelect : onDrill;
+
+  function closeToolbox() {
+    setToolboxOpen(false);
+    setPreviewThemes(null);
+    setPreviewSel(null);
   }
 
   return (
@@ -302,14 +321,15 @@ export default function RedesignApp() {
           >
             ▶ Rejouer en live
           </button>
-          {/* ANALYST mode — open the recluster mixing console (does not alter this view). */}
+          {/* TOOLBOX — affiner l'analyse: réglages qui reclusterisent la carte en live. */}
           <button
-            className="live-btn live-btn--console"
+            className={`live-btn live-btn--console${toolboxOpen ? ' is-active' : ''}`}
             disabled={!dataset || busy}
-            onClick={() => setConsoleMode(true)}
-            title="Mode analyste : console de mixage (recluster live)"
+            onClick={() => (toolboxOpen ? closeToolbox() : setToolboxOpen(true))}
+            aria-pressed={toolboxOpen}
+            title="Affiner l’analyse : régler le clustering et prévisualiser sur la carte"
           >
-            🎛 Console
+            🎛 Affiner l’analyse
           </button>
         </div>
       </header>
@@ -334,19 +354,40 @@ export default function RedesignApp() {
               into the START of the GLOBAL synthesis (right panel), so the global view
               shows a SINGLE synthesis. See `panelMarkdown` below. */}
 
+          {/* TOOLBOX — collapsible réglages drawer, in-site style. Its knobs recluster
+              the MAIN map below via /sandbox (debounced). */}
+          {toolboxOpen && dataset && (
+            <Toolbox
+              dataset={dataset}
+              selection={previewSel}
+              onSelection={setPreviewSel}
+              onPreview={(t) => {
+                setPreviewThemes(t);
+                setPreviewSel(null);
+              }}
+              onClose={closeToolbox}
+            />
+          )}
+
           <div className="agora__canvas">
+            {previewing && (
+              <span className="agora__previewbadge" title="prévisualisation des réglages — non enregistrée">
+                prévisualisation
+              </span>
+            )}
             {busy ? (
               <div className="agora__loading">
                 <span className="spinner" /> calcul de la carte…
               </div>
-            ) : themes.length ? (
+            ) : mapThemes.length ? (
               <SpatialMap
-                themes={themes}
-                edges={edges}
-                currentParentId={currentParentId}
-                selectedId={selected?.id ?? null}
-                onSelect={setSelected}
-                onDrill={onDrill}
+                themes={mapThemes}
+                edges={previewing ? [] : edges}
+                currentParentId={mapParentId}
+                selectedId={mapSelectedId}
+                onSelect={onMapSelect}
+                onDrill={onMapDrill}
+                live={previewing}
               />
             ) : analysisSource === 'building' ? (
               <div className="agora__loading agora__building">
