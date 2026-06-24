@@ -71,3 +71,9 @@ explique une fusion/non-fusion avec des chiffres ; α rapproche visiblement les 
   Les **parts du claim restent TOUJOURS dans l'avis** (gate verbatim dur inchangé).
 - **Provenance `/avis`** : `target:{start,end,source}`. Front : souligne si source=avis ; si source=question, afficher comme label « sujet ».
 - Ré-extraire les 3 datasets + mesurer la **chute du sans-cible**. Note `research/extract_v4_note.md`.
+
+## PERSISTANCE des réglages (après extract-v4) — endpoint /analysis/apply
+- `POST /analysis/apply {dataset, params:{alpha,k,resolution,coarsen_mult,tau_mult}}` → rebuild l'analyse AVEC ces params
+  (clustering + enrichissement LLM titres/insights) + **persiste** → /analysis sert ensuite ces réglages.
+- Stocker les params choisis (par dataset) ; bouton « Sauvegarder » du front (console-integrate) s'y branche.
+- À FAIRE après le merge d'extract-v4 (backend, conflit sinon).
