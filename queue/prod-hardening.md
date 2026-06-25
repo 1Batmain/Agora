@@ -13,7 +13,7 @@ déclenchent calcul lourd / écriture → DoS + abus de facture Mistral trivial.
 - **Bind** : `127.0.0.1` derrière un reverse-proxy (doc déploiement) plutôt que `0.0.0.0` exposé.
 - **Acceptance** : appels mutatifs refusés (401) sans token ; CORS limité ; rate-limit testé ; doc proxy. Lecture inchangée pour le front (token injecté).
 
-## P2 — S1+S2 (CRITIQUE, scaling) : découpler build/serve + borner la RAM
+## P2 — borner la RAM ✅ FAIT (565faba) · découpler build/serve = RESTE
 **Constat** : process unique ; tous datasets en RAM au boot (`server.py:62-69`) ; `_PREP_CACHE` (`sandbox.py:46`) + `_GRAPH_CACHE`
 jamais évincés (float64 ×2) ; build en thread daemon DANS le serve (`build_manager.py:67`) ; mono-worker (GIL).
 - **Lazy-load** des datasets (charger `_Dataset` à la 1re requête, pas au boot).
@@ -23,7 +23,7 @@ jamais évincés (float64 ×2) ; build en thread daemon DANS le serve (`build_ma
   (`gunicorn -k uvicorn.workers.UvicornWorker --workers N`) derrière proxy.
 - **Acceptance** : RAM bornée (LRU vérifié) ; un build ne bloque plus le serve ; serve multi-worker ; vecteurs float32.
 
-## P3 — SEC2 (ÉLEVÉ, RGPD) : sel d'anonymisation
+## P3 — SEC2 ✅ FAIT (ecef52c) : sel d'anonymisation
 **Constat** : `pipeline/ingest/config.py:33` `HASH_SALT` défaut committé `"agora-an-2026"` → `author_hash` réversible (force brute).
 - **Pas de défaut** : exiger `AGORA_HASH_SALT` (≥32 octets aléatoires) ; **échec au démarrage de l'ingestion** si absent.
 - **Acceptance** : ingestion refuse de tourner sans sel secret ; doc de génération du sel.
@@ -36,7 +36,7 @@ mistral-small **sérial par thème** (`build_analysis.py:129-180`). Backoff (`ba
 - **`pip-audit`** en CI + **épingler la révision** du modèle nomic (`trust_remote_code` = exécution de code distant au chargement).
 - **Acceptance** : build sensiblement plus rapide à concurrence contrôlée ; pip-audit vert ; révision nomic épinglée.
 
-## P5 — SEC3 (ÉLEVÉ, RGPD) : PII servie
+## P5 — SEC3 ✅ FAIT : PII servie (text_clean masqué, spans verbatim préservés)
 **Constat** : `text` brut (PII non masquée) servi/persisté par `/avis` (`avis.py:90`, `build.py:66`) ; `strip_pii` regex-only
 (rate noms/adresses/n° de dossier). L'extraction LLM utilise déjà `text_clean` (bon).
 - **Servir/persister `text_clean`** (ou variante masquée) dans `/avis` et `avis.json` ; spans ré-ancrés sur le texte servi.
