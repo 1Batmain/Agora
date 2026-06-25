@@ -69,6 +69,10 @@ class Embedder:
             kwargs = {"device": self.device}
             if self.spec.trust_remote_code:
                 kwargs["trust_remote_code"] = True
+            # Épingle le commit chargé (sécurité : code distant figé pour les modèles
+            # à trust_remote_code ; cf. registry). `None` ⇒ comportement par défaut (main).
+            if self.spec.revision:
+                kwargs["revision"] = self.spec.revision
             self._model = SentenceTransformer(self.model_id, **kwargs)
         return self._model
 

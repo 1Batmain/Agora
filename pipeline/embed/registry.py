@@ -22,6 +22,9 @@ class ModelSpec:
       textes selon qu'on encode un document (à indexer) ou une requête.
       Chaîne vide = aucun préfixe (ex. bge-m3).
     - `trust_remote_code` : nécessaire pour les modèles à code custom (nomic).
+    - `revision` : commit/branche HF ÉPINGLÉ. OBLIGATOIRE en pratique quand
+      `trust_remote_code=True` (sécurité : on exécute du code distant au chargement) —
+      sans pin, un push amont change le code exécuté sous nos pieds. `None` = `main`.
     - `normalize` : L2-normalisation par défaut (cosine = produit scalaire).
     """
 
@@ -29,6 +32,7 @@ class ModelSpec:
     doc_prefix: str = ""
     query_prefix: str = ""
     trust_remote_code: bool = False
+    revision: str | None = None
     normalize: bool = True
     note: str = ""
 
@@ -54,6 +58,11 @@ REGISTRY: dict[str, ModelSpec] = {
         doc_prefix="search_document: ",
         query_prefix="search_query: ",
         trust_remote_code=True,
+        # Révision ÉPINGLÉE : le modèle charge du code custom (trust_remote_code) →
+        # on fige le commit exécuté. C'est exactement le snapshot déjà en cache/prod
+        # (refs/main au moment du build), donc embeddings INCHANGÉS, mais plus aucun
+        # push amont ne peut altérer le code exécuté chez nous.
+        revision="1066b6599d099fbb93dfcb64f9c37a7c9e503e85",
         normalize=True,
         note="MoE multilingue ; requiert einops ; matryoshka (dim native gardée).",
     ),
