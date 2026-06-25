@@ -10,6 +10,7 @@ import type {
   SpatialTheme,
 } from './contract';
 import { fetchAnalysis, fetchCitations, fetchFlags, fetchInsights } from './analysisApi';
+import { Header } from './Header';
 import { SpatialMap } from './SpatialMap';
 import { InsightsPanel, type ThemeFlagState } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
@@ -259,29 +260,14 @@ export default function RedesignApp({
 
   return (
     <div className="agora">
-      <header className="gov-header">
-        <button
-          type="button"
-          className="gov-header__brand gov-header__brand--home"
-          onClick={onBack}
-          disabled={!onBack}
-          title="Retour à l’accueil"
-        >
-          <div className="gov-logo" aria-hidden>
-            <span className="gov-logo__mark">◆</span>
-          </div>
-          <div className="gov-header__title">
-            <strong>Agora</strong>
-            <span>Analyse des consultations citoyennes</span>
-          </div>
-        </button>
-        <div className="gov-header__right">
-          {/* Navigation par la landing → on affiche le NOM de la consultation, pas un sélecteur. */}
+      <Header
+        onHome={onBack}
+        right={
           <span className="header-consultation" title="Consultation en cours">
             {datasets.find((d) => d.id === dataset)?.label ?? dataset}
           </span>
-        </div>
-      </header>
+        }
+      />
 
       <div className="agora__body" style={{ '--right-w': `${rightWidth}px` } as React.CSSProperties}>
         <main className="agora__center">
