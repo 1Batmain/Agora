@@ -260,12 +260,13 @@ export default function RedesignApp({
   return (
     <div className="agora">
       <header className="gov-header">
-        <div className="gov-header__brand">
-          {onBack && (
-            <button className="gov-header__back" onClick={onBack} title="Retour aux consultations">
-              ← Consultations
-            </button>
-          )}
+        <button
+          type="button"
+          className="gov-header__brand gov-header__brand--home"
+          onClick={onBack}
+          disabled={!onBack}
+          title="Retour à l’accueil"
+        >
           <div className="gov-logo" aria-hidden>
             <span className="gov-logo__mark">◆</span>
           </div>
@@ -273,7 +274,7 @@ export default function RedesignApp({
             <strong>Agora</strong>
             <span>Analyse des consultations citoyennes</span>
           </div>
-        </div>
+        </button>
         <div className="gov-header__right">
           {/* Dataset picker moved here from the (removed) left tool column. */}
           <label className="header-dataset">
