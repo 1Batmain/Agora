@@ -1,7 +1,7 @@
 import { useCallbackRef } from '../useCallbackRef';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchDatasets } from '../api';
-import type { Dataset } from '../types';
+import type { Consultation } from '../types';
 import type {
   AnalysisPayload,
   BuildProgress,
@@ -43,7 +43,7 @@ export default function RedesignApp({
   initialDataset?: string | null;
   onBack?: () => void;
 } = {}) {
-  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [datasets, setDatasets] = useState<Consultation[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
 
   const [analysis, setAnalysis] = useState<AnalysisPayload | null>(null);
@@ -109,11 +109,15 @@ export default function RedesignApp({
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const ds = await fetchDatasets().catch(() => [] as Dataset[]);
+      const ds = await fetchDatasets().catch(() => [] as Consultation[]);
       if (cancelled) return;
       // Mock-friendly: if the backend has no datasets, offer a synthetic one so
       // the redesigned UI is navigable offline.
-      const list = ds.length ? ds : [{ id: 'demo', label: 'Consultation (démo)', n_nodes: 0, languages: [] }];
+      const list: Consultation[] = ds.length ? ds : [{
+        id: 'demo', label: 'Consultation (démo)', status: 'closed',
+        n_sample: 0, n_contributions: 0, n_nodes: 0,
+        languages: [], lang_counts: {}, source: 'demo',
+      }];
       setDatasets(list);
       // Open the consultation requested by the shell (landing card), else the first.
       const start = (initialDataset && list.some((d) => d.id === initialDataset))

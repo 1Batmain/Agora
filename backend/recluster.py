@@ -18,6 +18,7 @@ from time import perf_counter
 
 import numpy as np
 
+from backend.consultation_schema import Consultation
 from pipeline.cluster.adaptive import EDGE_SIGMA, derive_defaults
 from pipeline.cluster.build import _build_hdbscan, _build_hierarchical
 from pipeline.cluster.dedup import dedup_near
@@ -112,21 +113,25 @@ def list_open_consultations() -> list[str]:
     return found
 
 
-def open_consultation_descriptor(name: str) -> dict:
-    """Descripteur dataset-shaped d'une consultation OUVERTE (sans cache d'analyse).
+def open_consultation_descriptor(name: str) -> Consultation:
+    """Descripteur `Consultation` d'une consultation OUVERTE (sans cache d'analyse).
 
-    Même forme que `dataset_descriptor` (pour peupler `/datasets`), enrichie de
-    `question`/`context` (sujet affiché dans la vue Participer). `n_nodes` = nombre
-    de contributions déjà reçues (seed + live), pour l'affichage de la carte.
+    Même schéma que `dataset_descriptor` (pour peupler `/datasets`), enrichi de
+    `question`/`context` (sujet affiché dans la vue Participer). Pour une ouverte,
+    toutes les contributions reçues SONT l'échantillon : `n_sample == n_contributions`
+    == nombre de contributions déjà reçues (seed + live), pour l'affichage de la carte.
     """
     from backend.submissions import count_submissions  # local : évite torch au boot
 
     d = _read_descriptor_file(name) or {}
+    n = count_submissions(name)
     return {
         "id": name,
         "label": d.get("label", name),
         "status": "open",
-        "n_nodes": count_submissions(name),
+        "n_sample": n,
+        "n_contributions": n,
+        "n_nodes": n,  # rétro-compat : == n_sample
         "languages": [],
         "lang_counts": {},
         "source": name,
@@ -158,11 +163,12 @@ def load_cache(dataset: str = DEFAULT_DATASET) -> tuple[list[Idea], np.ndarray, 
     return ideas, vecs, weights
 
 
-def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> dict:
-    """Métadonnées d'un dataset pour `GET /datasets`.
+def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consultation:
+    """Constructeur UNIQUE d'une `Consultation` clôturée pour `GET /datasets`.
 
     Lit `meta.json` s'il existe (écrit par build_cache), sinon DÉRIVE tout des
     `ideas` cachés (langues, n, source). Générique : aucune valeur en dur.
+    C'est LA source de vérité du schéma servi (mirroré côté front).
     """
     _, ideas_path, meta_path = cache_paths(dataset)
     meta: dict = {}
@@ -193,21 +199,30 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> dict:
     else:
         derived = {}
 
-    return {
+    # Échantillon réellement analysé (ancien `n_nodes`).
+    n_sample = meta.get("n_nodes", derived.get("n_nodes", 0))
+    out: Consultation = {
         "id": dataset,
         "label": meta.get("label", dataset),
         # Statut de consultation : "open" | "closed". Défaut prudent "closed"
         # (les caches déjà construits sans ce champ restent en analyse seule).
         "status": meta.get("status", "closed"),
-        "n_nodes": meta.get("n_nodes", derived.get("n_nodes", 0)),
+        "n_sample": n_sample,
         # Nombre RÉEL de contributions reçues (avant le cap d'échantillonnage à
-        # n_nodes pour le build). `meta["n_loaded"]` = total chargé à l'ingestion ;
-        # repli sur n_nodes (datasets non capés, ex. tiktok).
-        "n_contributions": meta.get("n_loaded", meta.get("n_nodes", derived.get("n_nodes", 0))),
+        # n_sample pour le build). `meta["n_loaded"]` = total chargé à l'ingestion ;
+        # repli sur n_sample (datasets non capés, ex. tiktok).
+        "n_contributions": meta.get("n_loaded", n_sample),
+        "n_nodes": n_sample,  # rétro-compat : == n_sample (lu par pytest /datasets)
         "languages": meta.get("languages", derived.get("languages", [])),
         "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
         "source": meta.get("source", derived.get("source", dataset)),
     }
+    # Sujet affiché (consultations clôturées qui en exposent un dans meta.json).
+    if meta.get("question"):
+        out["question"] = meta["question"]
+    if meta.get("context"):
+        out["context"] = meta["context"]
+    return out
 
 
 def _filter_subset(ideas, vecs, weights, *, min_chars, dedup):
