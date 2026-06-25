@@ -37,10 +37,12 @@ export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () 
   return (
     <div className="agora participate">
       <header className="gov-header">
-        <div className="gov-header__brand">
-          <button className="gov-header__back" onClick={onBack} title="Retour aux consultations">
-            ← Consultations
-          </button>
+        <button
+          type="button"
+          className="gov-header__brand gov-header__brand--home"
+          onClick={onBack}
+          title="Retour à l’accueil"
+        >
           <div className="gov-logo" aria-hidden>
             <span className="gov-logo__mark">◆</span>
           </div>
@@ -48,7 +50,7 @@ export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () 
             <strong>Agora</strong>
             <span>Participer à la consultation</span>
           </div>
-        </div>
+        </button>
         <div className="gov-header__right">
           <span className="ds-card__badge ds-card__badge--open">Ouvert</span>
         </div>
@@ -62,17 +64,22 @@ export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () 
         </section>
 
         <form className="participate__form" onSubmit={onSubmit}>
-          <label htmlFor="participate-text">Donnez votre avis</label>
-          <textarea
-            id="participate-text"
-            rows={8}
-            placeholder="Exprimez votre point de vue sur le sujet de la consultation…"
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              if (status !== 'sending') setStatus('idle');
-            }}
-          />
+          <label htmlFor="participate-text" className="term__label">votre_avis</label>
+          <div className={`term${text ? ' term--typing' : ''}`}>
+            <span className="term__prompt" aria-hidden>❯</span>
+            <textarea
+              id="participate-text"
+              className="term__input"
+              rows={8}
+              placeholder="exprimez votre point de vue sur le sujet…"
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+                if (status !== 'sending') setStatus('idle');
+              }}
+            />
+            {!text && <span className="term__cursor" aria-hidden />}
+          </div>
           <div className="participate__actions">
             <button
               type="submit"
