@@ -78,7 +78,7 @@ class AnalysisState:
         self.prepared = prepared
         self.dataset = dataset
         self.macro_mode = macro_mode
-        self.mat = np.asarray(prepared.claim_vecs, dtype=np.float64)   # support des vecs
+        self.mat = np.asarray(prepared.claim_vecs, dtype=np.float32)   # support des vecs (float32 : cosinus OK, ÷2 RAM)
         self.owner = prepared.claim_owner
         self.weights = prepared.claim_weight
         self.texts = prepared.claim_texts
