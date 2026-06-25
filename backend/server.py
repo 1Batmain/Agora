@@ -63,7 +63,9 @@ class _Dataset:
         self.descriptor = dataset_descriptor(dataset_id, self.ideas)
 
 
-# Registre MULTI-DATASET chargé une fois au démarrage (process léger, pas de torch).
+# Registre MULTI-DATASET : la WHITELIST des ids est découverte au démarrage (process
+# léger), mais les `_Dataset` (vecteurs + ideas, lourds en RAM) sont LAZY-LOADÉS au
+# 1ᵉʳ `_resolve` et mémoïsés. Charger tout au boot ferait ×N la RAM dès l'amorçage.
 _ids = list_datasets()
 if not _ids:
     raise RuntimeError(
@@ -71,19 +73,29 @@ if not _ids:
         "Construis-en un : uv run --extra embed-contender "
         "python -m backend.build_cache --dataset tiktok"
     )
-DATASETS: dict[str, _Dataset] = {ds: _Dataset(ds) for ds in _ids}
+_IDSET = set(_ids)                       # whitelist O(1) (sécurité path-traversal)
+_LOADED: dict[str, _Dataset] = {}        # cache des datasets effectivement chargés
 # Défaut rétro-compat : "tiktok" s'il existe, sinon le premier découvert.
-DEFAULT = DEFAULT_DATASET if DEFAULT_DATASET in DATASETS else _ids[0]
+DEFAULT = DEFAULT_DATASET if DEFAULT_DATASET in _IDSET else _ids[0]
 
 
 def _resolve(dataset: str | None) -> _Dataset:
+    """Résout un id de dataset → `_Dataset` (lazy-load + mémoïsation).
+
+    La whitelist `_IDSET` est la garde de sécurité (path-traversal) : un id absent →
+    404, JAMAIS de construction de `_Dataset` (qui toucherait le disque). L'objet n'est
+    construit (vecteurs + ideas) qu'au 1ᵉʳ accès d'un id whitelisté, puis caché.
+    """
     ds = dataset or DEFAULT
-    if ds not in DATASETS:
+    if ds not in _IDSET:
         raise HTTPException(
             status_code=404,
-            detail=f"dataset inconnu: {ds!r} (disponibles: {list(DATASETS)})",
+            detail=f"dataset inconnu: {ds!r} (disponibles: {_ids})",
         )
-    return DATASETS[ds]
+    obj = _LOADED.get(ds)
+    if obj is None:
+        obj = _LOADED[ds] = _Dataset(ds)
+    return obj
 
 
 app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0")
@@ -106,24 +118,32 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> dict:
+    # Lazy-load : NE force PAS le chargement des vecteurs. `n_cached` vient du
+    # descripteur léger (meta.json / ideas, sans vecteurs) ; `loaded` indique si
+    # l'objet `_Dataset` (vecteurs en RAM) est effectivement chargé.
     return {
         "ok": True,
         "model_id": MODEL_ID,
         "default_dataset": DEFAULT,
         "datasets": {
-            ds.id: {"n_cached": len(ds.ideas), "dim": int(ds.vecs.shape[1])}
-            for ds in DATASETS.values()
+            ds_id: {"n_cached": dataset_descriptor(ds_id).get("n_nodes", 0),
+                    "loaded": ds_id in _LOADED}
+            for ds_id in _ids
         },
     }
 
 
 @app.get("/datasets")
 def datasets() -> list[dict]:
-    """Datasets disponibles (caches construits) → de quoi peupler le sélecteur."""
+    """Datasets disponibles (caches construits) → de quoi peupler le sélecteur.
+
+    Lazy-load : le descripteur est lu depuis `meta.json`/`ideas` (léger), SANS forcer
+    le chargement des vecteurs en RAM (qui n'a lieu qu'au 1ᵉʳ `_resolve` du dataset).
+    """
     return [
-        {**DATASETS[ds].descriptor,
+        {**dataset_descriptor(ds_id),
          "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
-        for ds in DATASETS
+        for ds_id in _ids
     ]
 
 
@@ -148,9 +168,14 @@ _AUTOBUILD_ONLY = {s.strip() for s in os.environ.get("AGORA_AUTOBUILD_DATASETS",
 def _startup_autobuild() -> None:
     if not _AUTOBUILD:
         return
-    targets = [ds for ds in DATASETS.values()
-               if not _AUTOBUILD_ONLY or ds.id in _AUTOBUILD_ONLY]
-    build_manager.ensure_all(targets)
+    # Lazy-load : ne charge en RAM (`_resolve`) QUE les datasets sans analyse prête (ceux
+    # qui doivent réellement builder) ; les datasets déjà prêts restent déchargés au boot.
+    for ds_id in _ids:
+        if _AUTOBUILD_ONLY and ds_id not in _AUTOBUILD_ONLY:
+            continue
+        if analysis_store.state(ds_id) == analysis_store.READY:
+            continue
+        build_manager.ensure_build(_resolve(ds_id))
 
 
 def _not_ready_response(ds, response: Response) -> dict:

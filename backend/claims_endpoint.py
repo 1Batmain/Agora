@@ -285,7 +285,9 @@ def prepare_claims(
     if claim_vecs is None:
         claim_vecs = embed_claim_texts(claim_texts, embedder=embedder)
         _save_emb_cache(emb_path, fingerprint, claim_vecs)
-    claim_vecs = np.asarray(claim_vecs, dtype=np.float64)
+    # float32 suffit pour le cosinus → ÷2 la RAM des vecteurs (le blend/clustering
+    # qui a besoin de float64 upcaste localement, cf. sandbox._graph_ctx).
+    claim_vecs = np.asarray(claim_vecs, dtype=np.float32)
 
     # 2b) Embeddings des CIBLES (cachés, alignés) — alimentent le knob α du bac à sable.
     #     Cible absente → vecteur nul + mask False (blend gracieux : claim inchangé).
@@ -303,7 +305,7 @@ def prepare_claims(
         claim_vecs=claim_vecs,
         claim_spans=claim_spans,
         claim_target=claim_target,
-        target_vecs=np.asarray(target_vecs, dtype=np.float64),
+        target_vecs=np.asarray(target_vecs, dtype=np.float32),  # cohérent claim_vecs, ÷2 RAM
         target_mask=np.asarray(target_mask, dtype=bool),
         backend=be,
         model=model,
