@@ -80,6 +80,23 @@ def append_submission(consultation_id: str, text: str, vec: np.ndarray, ts: str)
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+_EMBEDDER = None
+
+
+def embed_text(text: str) -> np.ndarray:
+    """Embedde un texte avec l'embedder nomic-v2 LOCAL (lazy-loadé, singleton).
+
+    Le modèle torch n'est chargé qu'au 1ᵉʳ appel (1ʳᵉ contribution reçue) — le
+    serveur démarre sans torch. Vecteur L2-normalisé (cosine = produit scalaire).
+    """
+    global _EMBEDDER
+    if _EMBEDDER is None:
+        from pipeline.embed.embedder import Embedder  # lazy : pas de torch au boot
+
+        _EMBEDDER = Embedder()
+    return _EMBEDDER.embed(text)
+
+
 def correlate(
     vec: np.ndarray,
     existing: list[dict],
