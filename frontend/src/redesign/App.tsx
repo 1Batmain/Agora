@@ -3,10 +3,11 @@ import { fetchDatasets } from '../api';
 import type { Dataset } from '../types';
 import { Landing } from './Landing';
 import { Participate } from './Participate';
+import { ConsultationOverview } from './ConsultationOverview';
 import RedesignApp from './RedesignApp';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'analysis' | 'participate';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate';
 type HistState = { route: Route; activeId: string | null };
 
 /**
@@ -54,7 +55,7 @@ export default function App() {
     const cid = new URLSearchParams(window.location.search).get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
-      const r: Route = d.status === 'open' ? 'participate' : 'analysis';
+      const r: Route = d.status === 'open' ? 'participate' : 'overview';
       setRoute(r);
       setActiveId(d.id);
       window.history.replaceState({ route: r, activeId: d.id } as HistState, '', `?c=${d.id}`);
@@ -67,10 +68,16 @@ export default function App() {
   const active = datasets.find((d) => d.id === activeId) ?? null;
 
   const openConsultation = useCallback((d: Dataset) => {
-    const r: Route = d.status === 'open' ? 'participate' : 'analysis';
+    const r: Route = d.status === 'open' ? 'participate' : 'overview';
     setActiveId(d.id);
     setRoute(r);
     window.history.pushState({ route: r, activeId: d.id } as HistState, '', `?c=${d.id}`);
+  }, []);
+
+  const viewGraph = useCallback((id: string) => {
+    setActiveId(id);
+    setRoute('analysis');
+    window.history.pushState({ route: 'analysis', activeId: id } as HistState, '', `?c=${id}&g=1`);
   }, []);
 
   const backToLanding = useCallback(() => {
@@ -79,6 +86,15 @@ export default function App() {
     window.history.pushState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
   }, []);
 
+  if (route === 'overview' && active) {
+    return (
+      <ConsultationOverview
+        dataset={active}
+        onHome={backToLanding}
+        onViewGraph={() => viewGraph(active.id)}
+      />
+    );
+  }
   if (route === 'analysis' && active) {
     return <RedesignApp initialDataset={active.id} onBack={backToLanding} />;
   }
