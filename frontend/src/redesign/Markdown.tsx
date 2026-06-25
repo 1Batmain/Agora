@@ -98,11 +98,11 @@ function renderBlocks(src: string): ReactNode[] {
   return out;
 }
 
-/** Inline: **bold**, *italic*, `code`. Processed in that precedence. */
+/** Inline: **bold**, *italic* / _italic_, `code`. Processed in that precedence. */
 function renderInline(text: string): ReactNode {
   const nodes: ReactNode[] = [];
-  // split on the three inline tokens, keeping delimiters
-  const re = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g;
+  // split on the inline tokens, keeping delimiters (italic via * OU _)
+  const re = /(\*\*[^*]+\*\*|\*[^*]+\*|_[^_]+_|`[^`]+`)/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let k = 0;
