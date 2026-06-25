@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { submitContribution } from '../api';
 import { Header } from './Header';
-import type { Dataset, SubmitResult } from '../types';
+import type { Consultation, SubmitResult } from '../types';
 
 /**
  * Vue PARTICIPER d'une consultation OUVERTE : affiche le sujet de la consultation
@@ -12,7 +12,7 @@ import type { Dataset, SubmitResult } from '../types';
  */
 type Status = 'idle' | 'sending' | 'done' | 'error';
 
-export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () => void }) {
+export function Participate({ dataset, onBack }: { dataset: Consultation; onBack: () => void }) {
   const [text, setText] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [result, setResult] = useState<SubmitResult | null>(null);

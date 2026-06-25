@@ -1,4 +1,4 @@
-import type { Dataset, SubmitResult } from './types';
+import type { Consultation, SubmitResult } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -30,9 +30,9 @@ async function jsonFetch(url: string, init?: RequestInit, timeoutMs = TIMEOUT_MS
 }
 
 /** List the datasets the backend has a cache for (populates the selector). */
-export async function fetchDatasets(): Promise<Dataset[]> {
+export async function fetchDatasets(): Promise<Consultation[]> {
   const raw = await jsonFetch('/api/datasets');
-  return Array.isArray(raw) ? (raw as Dataset[]) : [];
+  return Array.isArray(raw) ? (raw as Consultation[]) : [];
 }
 
 /**
