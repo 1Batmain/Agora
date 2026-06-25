@@ -28,10 +28,33 @@ DESCRIPTORS_DIR = Path(__file__).resolve().parent / "descriptors"
 # ---------------------------------------------------------------------------
 # Réglages génériques
 # ---------------------------------------------------------------------------
-# Sel d'anonymisation. Surchargeable via l'env pour que les hash soient stables
-# entre exécutions mais non ré-identifiables sans le sel.
-HASH_SALT = os.environ.get("AGORA_HASH_SALT", "agora-an-2026")
+# Sel d'anonymisation (RGPD). AUCUN défaut : un sel committé rendrait
+# `author_hash` réversible. Doit être fourni via l'env AGORA_HASH_SALT et
+# validé au démarrage de l'INGESTION (cf. `require_hash_salt`). Le backend
+# `serve` ne ré-ingère pas et n'est donc pas impacté.
+HASH_SALT = os.environ.get("AGORA_HASH_SALT")
+HASH_SALT_MIN_LEN = 32
 AUTHOR_HASH_LEN = 16  # caractères hex conservés du sha256
+
+
+def require_hash_salt() -> str:
+    """Exige un sel d'anonymisation valide ; à appeler au point d'entrée de
+    l'ingestion. Lève `SystemExit` avec un message clair si `AGORA_HASH_SALT`
+    est absent ou trop court (< HASH_SALT_MIN_LEN caractères).
+    """
+    salt = HASH_SALT
+    if not salt or len(salt) < HASH_SALT_MIN_LEN:
+        problem = "absent" if not salt else f"trop court ({len(salt)} < {HASH_SALT_MIN_LEN} caractères)"
+        raise SystemExit(
+            f"ERREUR : sel d'anonymisation AGORA_HASH_SALT {problem}.\n"
+            "  L'ingestion hashe les auteurs (RGPD) ; un sel absent ou faible rend "
+            "`author_hash` ré-identifiable.\n"
+            f"  Fournis un sel d'au moins {HASH_SALT_MIN_LEN} caractères, p. ex. :\n"
+            "    export AGORA_HASH_SALT=\"$(python -c 'import secrets;print(secrets.token_hex(32))')\"\n"
+            "  (les caches déjà construits ne sont PAS re-hashés ; seule une "
+            "ré-ingestion exige le sel.)"
+        )
+    return salt
 
 # Longueur max du libellé d'affichage (label).
 LABEL_MAXLEN = 80

@@ -168,6 +168,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=config.IDEAS_JSONL)
     args = ap.parse_args(argv)
 
+    # Sel d'anonymisation obligatoire (RGPD) : échoue tôt, avant toute écriture.
+    config.require_hash_salt()
+
     use_synthetic = args.synthetic
     descriptors: list[SourceDescriptor] = []
     if not use_synthetic:
