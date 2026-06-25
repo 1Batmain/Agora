@@ -25,7 +25,9 @@ contender = [
     "umap-learn>=0.5.5",
 ]
 # Embedders multilingues contenders du registre. `nomic-embed-text-v2-moe`
-# charge du code custom (trust_remote_code) qui dépend de `einops`.
+# charge du code custom (trust_remote_code) qui dépend de `einops`. Le commit
+# exécuté est ÉPINGLÉ dans pipeline/embed/registry.py (champ `revision`) pour ne
+# pas exécuter un code amont modifié au chargement (sécurité).
 # bge-m3 / e5-small ne requièrent rien de plus que sentence-transformers.
 embed-contender = [
     "einops>=0.7",

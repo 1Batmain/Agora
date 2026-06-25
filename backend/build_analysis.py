@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import argparse
 import os
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from time import perf_counter
 from types import SimpleNamespace
 from typing import Callable
@@ -54,9 +56,51 @@ ProgressFn = Callable[[str, str, int, int], None]
 EXTRACT_MODEL = os.environ.get("AGORA_EXTRACT_MODEL", "mistral-large-latest")
 ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-small-latest")
 
+# Concurrence BORNÉE des appels LLM d'enrichissement (titres/accroches/descriptions/
+# insights). Chaque thème est indépendant (effet de bord sur SON nœud, cache idempotent)
+# → on lance jusqu'à N appels en parallèle. La borne respecte le RPM (pas de tempête 429)
+# et garde le backoff existant. Résultats IDENTIQUES au chemin sériel (ordre indifférent).
+LLM_MAX_WORKERS = max(1, int(os.environ.get("AGORA_LLM_MAX_WORKERS", "4")))
+
 
 def _log(msg: str) -> None:
     print(f"[build_analysis] {msg}", flush=True)
+
+
+def _parallel_for(
+    items: list,
+    work: Callable[[object], None],
+    *,
+    on_done: Callable[[int], None] | None = None,
+    workers: int = LLM_MAX_WORKERS,
+) -> None:
+    """Exécute `work(item)` pour chaque item, jusqu'à `workers` en parallèle (borné).
+
+    `work` produit son résultat par EFFET DE BORD sur l'item (p.ex. `node.title = …`),
+    donc l'ordre d'exécution est indifférent → résultats identiques au sériel. `on_done(k)`
+    est appelé après chaque tâche terminée avec le nombre cumulé d'items finis (progression).
+    Séquentiel si `workers<=1` ou un seul item. Les exceptions sont propagées (fail-fast).
+    """
+    total = len(items)
+    if total == 0:
+        return
+    if workers <= 1 or total == 1:
+        for i, it in enumerate(items, 1):
+            work(it)
+            if on_done is not None:
+                on_done(i)
+        return
+    done = 0
+    lock = threading.Lock()
+    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="agora-llm") as ex:
+        futures = [ex.submit(work, it) for it in items]
+        for fut in as_completed(futures):
+            fut.result()  # propage toute exception du worker
+            if on_done is not None:
+                with lock:
+                    done += 1
+                    k = done
+                on_done(k)
 
 
 def load_dataset(dataset_id: str):
@@ -126,21 +170,31 @@ def build_analysis(
         #     analysis.json. Rebuild idempotent : contenu inchangé ⇒ zéro appel LLM.
         total = len(node_ids)
         report("titles", f"titres courts ({enrich}, caché)", 0, total)
-        for i, nid in enumerate(node_ids, 1):
+
+        def _title_work(nid: str) -> None:
             node = tree.nodes[nid]
             node.title = title_for_node(dataset, node, model=enrich)  # CHEAP (≠ extraction)
-            if i == total or i % 25 == 0:
-                report("titles", f"titres courts ({enrich}, caché)", i, total)
+
+        def _title_done(k: int) -> None:
+            if k == total or k % 25 == 0:
+                report("titles", f"titres courts ({enrich}, caché)", k, total)
+
+        _parallel_for(node_ids, _title_work, on_done=_title_done)
 
         # 1c) Accroche + description LLM par thème (CACHÉES par contenu) → analysis.json.
         #     Même infra que les titres : rebuild idempotent, zéro appel si inchangé.
         report("enrich", f"accroches + descriptions ({enrich}, caché)", 0, total)
-        for i, nid in enumerate(node_ids, 1):
+
+        def _enrich_work(nid: str) -> None:
             node = tree.nodes[nid]
             node.hook = hook_for_node(dataset, node, model=enrich)
             node.description = description_for_node(dataset, node, model=enrich)
-            if i == total or i % 25 == 0:
-                report("enrich", f"accroches + descriptions ({enrich}, caché)", i, total)
+
+        def _enrich_done(k: int) -> None:
+            if k == total or k % 25 == 0:
+                report("enrich", f"accroches + descriptions ({enrich}, caché)", k, total)
+
+        _parallel_for(node_ids, _enrich_work, on_done=_enrich_done)
 
         # 2) Carte : co-occurrence (B1) → analysis.json (front en d3-pack, plus d'UMAP).
         report("analysis", "co-occurrence (hiérarchie d3-pack, sans UMAP)")
@@ -174,10 +228,16 @@ def build_analysis(
         report("insights", f"synthèse globale ({enrich})", 0, total + 1)
         store.write_insights(dataset, "global", None,
                              render_insight(tree, "global", model=enrich))
-        for i, nid in enumerate(node_ids, 1):
+
+        def _insight_work(nid: str) -> None:
             store.write_insights(dataset, "theme", nid,
                                  render_insight(tree, "theme", nid, model=enrich))
-            report("insights", f"synthèses par thème ({enrich})", i, total)
+
+        def _insight_done(k: int) -> None:
+            if k == total or k % 25 == 0:
+                report("insights", f"synthèses par thème ({enrich})", k, total)
+
+        _parallel_for(node_ids, _insight_work, on_done=_insight_done)
 
         took_s = round(perf_counter() - t0, 1)
         final = store.write_status(
