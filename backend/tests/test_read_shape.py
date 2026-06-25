@@ -41,7 +41,8 @@ def test_datasets_listing(client):
     # Les 4 datasets attendus sont présents (intersection : on n'exige pas plus).
     assert set(EXPECTED_DATASETS) <= ids, f"datasets manquants: {set(EXPECTED_DATASETS) - ids}"
     for d in items:
-        assert set(d) >= {"id", "label", "n_nodes", "languages", "namings"}
+        assert set(d) >= {"id", "label", "status", "n_nodes", "languages", "namings"}
+        assert d["status"] in ("open", "closed")
         assert isinstance(d["n_nodes"], int) and d["n_nodes"] >= 0
         assert isinstance(d["languages"], list)
 
