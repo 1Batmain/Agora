@@ -1,16 +1,16 @@
 /**
- * Agora pour députés — DSFR-inspired shell, recoloured ORANGE.
- * DSFR (Système de Design de l'État) imposes "bleu France" for the primary; we
- * keep its grid / typography / component idioms but OVERRIDE the primary to
- * Agora orange (we draw on the codes, we don't claim gov conformity).
+ * Agora pour députés — DSFR-inspired shell, accent BLEU FRANCE.
+ * Accent gouvernemental « bleu France » #000091, échelle hover/clair dérivée.
+ * Palette épurée : blanc / quasi-blanc, noir-gris pour le texte, bleu pour
+ * l'accent. (On s'inspire des codes de l'État, sans revendiquer la conformité.)
  */
 :root {
-  /* Agora primary (override of DSFR's bleu-france) */
-  --agora: #ca5810;
-  --agora-hover: #b04c0c;
-  --agora-active: #97400a;
-  --agora-soft: #fbe9dd;
-  --agora-soft2: #f6d9b8;
+  /* Agora primary — Bleu France #000091 + échelle hover/focus/fonds clairs */
+  --agora: #000091;
+  --agora-hover: #1212ff;
+  --agora-active: #00006d;
+  --agora-soft: #ececfe;
+  --agora-soft2: #cacafb;
 
   /* DSFR-like greys */
   --grey-1000: #161616; /* texte principal */
@@ -24,8 +24,13 @@
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   --radius: 8px;
 
-  font-family: 'Marianne', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* Typographie machine à écrire : mono propre, lisible, partout. */
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', 'Menlo',
+    monospace;
+  font-family: var(--mono);
   color: var(--grey-1000);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 
   /* header height — used to offset the sticky right column / resizer below it. */
   --header-h: 66px;
@@ -44,6 +49,9 @@ body,
 body {
   background: var(--bg);
   color: var(--grey-1000);
+  font-family: var(--mono);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
 .agora {
@@ -436,10 +444,10 @@ body {
 }
 /* Legend swatches: same hue, low vs high population-weighted consensus. */
 .dot--pale {
-  background: hsl(28, 22%, 84%);
+  background: hsl(240, 24%, 86%);
 }
 .dot--vivid {
-  background: hsl(28, 78%, 54%);
+  background: hsl(240, 70%, 40%);
 }
 /* F3 — hover info panel: FIXED to the top-right corner of the map, always at the
    same spot (not a tooltip floating over the node). Light content only. */
@@ -792,8 +800,8 @@ body {
   align-items: center;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent, #b45309);
-  background: color-mix(in srgb, var(--accent, #b45309) 12%, transparent);
+  color: var(--accent, #000091);
+  background: color-mix(in srgb, var(--accent, #000091) 12%, transparent);
   border-radius: 999px;
   padding: 2px 8px;
   white-space: nowrap;
@@ -804,7 +812,7 @@ body {
   font: inherit;
   font-size: 12px;
   font-weight: 600;
-  color: var(--accent, #b45309);
+  color: var(--accent, #000091);
   background: none;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -812,7 +820,7 @@ body {
   cursor: pointer;
 }
 .avisdetail__toggle:hover {
-  background: color-mix(in srgb, var(--accent, #b45309) 8%, transparent);
+  background: color-mix(in srgb, var(--accent, #000091) 8%, transparent);
 }
 .avisdetail__text {
   font-size: 15px;
@@ -1048,18 +1056,18 @@ body {
   height: 12px;
   border-radius: 50%;
   background: var(--agora);
-  box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.6);
+  box-shadow: 0 0 0 0 rgba(0, 0, 145, 0.6);
   animation: live-pulse 1.4s ease-out infinite;
 }
 @keyframes live-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.55);
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0.55);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(202, 88, 16, 0);
+    box-shadow: 0 0 0 12px rgba(0, 0, 145, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0);
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0);
   }
 }
 
@@ -1577,30 +1585,107 @@ body {
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 40px 24px 64px;
+  padding: 24px 24px 96px;
 }
-.landing__hero {
-  max-width: 720px;
-  margin-bottom: 40px;
+
+/* Hero « façon framework » : eyebrow terminal + curseur, grand titre mono,
+   tagline, ligne de stats. Beaucoup de blanc, épuré. */
+.hero {
+  max-width: 760px;
+  padding: 72px 0 80px;
 }
-.landing__hero h1 {
-  font-size: 32px;
-  line-height: 1.15;
-  margin: 0 0 12px;
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 28px;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--grey-500);
+}
+.hero__prompt {
+  font-weight: 700;
+  color: var(--agora);
+  background: var(--agora-soft);
+  border: 1px solid var(--agora-soft2);
+  border-radius: 6px;
+  padding: 3px 9px;
+}
+/* curseur typewriter clignotant, sobre */
+.hero__caret {
+  width: 9px;
+  height: 17px;
+  background: var(--agora);
+  display: inline-block;
+  border-radius: 1px;
+  animation: hero-blink 1.05s step-end infinite;
+}
+@keyframes hero-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.hero__title {
+  font-size: clamp(38px, 6vw, 60px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0 0 24px;
   color: var(--grey-1000);
 }
-.landing__hero p {
-  font-size: 17px;
-  line-height: 1.5;
+.hero__accent {
+  color: var(--agora);
+}
+.hero__tagline {
+  font-size: 18px;
+  line-height: 1.65;
   color: var(--grey-700);
   margin: 0;
+  max-width: 620px;
 }
-.landing__list h2 {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+.hero__meta {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin: 40px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--border);
+}
+.hero__meta li {
+  font-size: 13px;
   color: var(--grey-500);
-  margin: 0 0 16px;
+  font-variant-numeric: tabular-nums;
+}
+.hero__meta strong {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--grey-1000);
+}
+
+.landing__list h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--grey-700);
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.landing__list-idx {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--agora);
 }
 .landing__loading,
 .landing__empty {
@@ -1618,40 +1703,50 @@ body {
   gap: 18px;
 }
 
-/* Carte consultation : cliquable, badge ouvert/clos en tête. */
+/* Carte consultation : cliquable, badge ouvert/clos en tête. Style mono plat,
+   le CTA se révèle au survol (façon doc de framework). */
 .ds-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
+  height: 100%;
   text-align: left;
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 18px;
+  padding: 20px;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.05s;
 }
 .ds-card:hover {
   border-color: var(--agora);
-  box-shadow: 0 4px 14px rgba(202, 88, 16, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 145, 0.14);
 }
 .ds-card:active {
   transform: translateY(1px);
 }
 .ds-card__badge {
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  padding: 3px 10px;
-  border-radius: 10px;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 999px;
   white-space: nowrap;
 }
+.ds-card__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
 .ds-card__badge--open {
-  background: #d7f5e3;
+  background: #e6f6ec;
   color: #18753c;
 }
 .ds-card__badge--closed {
@@ -1659,21 +1754,29 @@ body {
   color: var(--agora-active);
 }
 .ds-card__title {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
   color: var(--grey-1000);
 }
 .ds-card__meta {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--grey-500);
   font-variant-numeric: tabular-nums;
 }
 .ds-card__cta {
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--agora);
+  opacity: 0.55;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.ds-card:hover .ds-card__cta {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 /* ---------- Participer (placeholder) ---------- */

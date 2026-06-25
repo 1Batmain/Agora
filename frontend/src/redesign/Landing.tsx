@@ -1,10 +1,11 @@
 import type { Dataset } from '../types';
 
 /**
- * Vue d'accueil par défaut d'Agora : un pitch court et accrocheur, puis une
- * grille de cartes de consultations (depuis `/datasets`). Chaque carte porte un
- * badge Ouvert/Clos, son titre et son nombre de contributions. Le clic remonte
- * au shell, qui route vers l'analyse (clos) ou la participation (ouvert).
+ * Vue d'accueil d'Agora — hero « façon framework » (grand titre mono, tagline,
+ * beaucoup de blanc, curseur typewriter clignotant en déco), puis la grille de
+ * consultations (depuis `/datasets`). Chaque carte porte un badge Ouvert/Clos,
+ * son titre et son nombre de contributions. Le clic remonte au shell, qui route
+ * vers l'analyse (clos) ou la participation (ouvert).
  */
 export function Landing({
   datasets,
@@ -15,6 +16,9 @@ export function Landing({
   loading: boolean;
   onOpen: (d: Dataset) => void;
 }) {
+  const openCount = datasets.filter((d) => d.status === 'open').length;
+  const closedCount = datasets.length - openCount;
+
   return (
     <div className="agora landing">
       <header className="gov-header">
@@ -30,17 +34,39 @@ export function Landing({
       </header>
 
       <main className="landing__body">
-        <section className="landing__hero">
-          <h1>Agora — donnez du sens à la parole citoyenne</h1>
-          <p>
-            L'IA qui fait émerger les thèmes des consultations, fidèlement.
-            Explorez ce que les citoyens ont vraiment dit, ou contribuez aux
-            débats encore ouverts.
+        <section className="hero">
+          <p className="hero__eyebrow">
+            <span className="hero__prompt">~/agora</span>
+            <span>consultations citoyennes, lues par l'IA</span>
+            <span className="hero__caret" aria-hidden />
           </p>
+          <h1 className="hero__title">
+            La parole citoyenne,
+            <br />
+            <span className="hero__accent">structurée fidèlement.</span>
+          </h1>
+          <p className="hero__tagline">
+            Agora fait émerger les thèmes des grandes consultations sans trahir
+            ce qui a été dit — puis vous laisse explorer l'analyse ou contribuer
+            aux débats encore ouverts.
+          </p>
+          <ul className="hero__meta" aria-hidden={datasets.length === 0}>
+            <li>
+              <strong>{datasets.length}</strong> consultations
+            </li>
+            <li>
+              <strong>{openCount}</strong> ouvertes
+            </li>
+            <li>
+              <strong>{closedCount}</strong> analysées
+            </li>
+          </ul>
         </section>
 
         <section className="landing__list">
-          <h2>Consultations</h2>
+          <h2>
+            <span className="landing__list-idx">01</span> Consultations
+          </h2>
           {loading ? (
             <div className="landing__loading">
               <span className="spinner" /> chargement des consultations…
@@ -59,6 +85,7 @@ export function Landing({
                       aria-label={`${d.label} — ${open ? 'consultation ouverte' : 'consultation close'}`}
                     >
                       <span className={`ds-card__badge ds-card__badge--${open ? 'open' : 'closed'}`}>
+                        <span className="ds-card__dot" aria-hidden />
                         {open ? 'Ouvert' : 'Clos'}
                       </span>
                       <span className="ds-card__title">{d.label}</span>
