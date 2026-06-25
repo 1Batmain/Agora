@@ -143,12 +143,14 @@ def datasets() -> list[dict]:
     SANS cache d'analyse : elles n'ont pas de dossier cache/ mais doivent apparaître
     sur la landing (carte « Ouvert » → vue Participer).
     """
-    closed = [
-        {**dataset_descriptor(ds_id),
-         "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
-        for ds_id in _ids
-    ]
-    open_ = [open_consultation_descriptor(name) for name in list_open_consultations()]
+    # Capacités serveur (méthodes de nommage) ajoutées à CHAQUE descripteur
+    # `Consultation` — orthogonales au schéma, identiques pour tous les items.
+    def _with_capabilities(c: dict) -> dict:
+        return {**c, "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
+
+    closed = [_with_capabilities(dataset_descriptor(ds_id)) for ds_id in _ids]
+    open_ = [_with_capabilities(open_consultation_descriptor(name))
+             for name in list_open_consultations()]
     # Ouvertes en tête : ce sont celles où l'on peut encore agir.
     return open_ + closed
 
