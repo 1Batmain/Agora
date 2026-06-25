@@ -1,5 +1,6 @@
 {
   "name": "xstance",
+  "status": "closed",
   "format": "jsonl",
   "path": "data/raw/xstance-data-v1.0.zip",
   "url": "https://github.com/ZurichNLP/xstance/raw/master/data/xstance-data-v1.0.zip",

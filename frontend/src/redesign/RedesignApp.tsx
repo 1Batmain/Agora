@@ -16,14 +16,6 @@ import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
 import { themeCaption } from './labels';
 
-/** Human badge label per data source (live / build / mock / error). */
-const SOURCE_LABEL: Record<DataSource, string> = {
-  live: 'backend live',
-  building: 'analyse en cours',
-  mock: 'données mock',
-  error: 'backend indisponible',
-};
-
 // Right panel width (px) — drag-resizable, persisted, with sane bounds.
 const RIGHT_MIN = 300;
 const RIGHT_MAX = 760;
@@ -38,8 +30,18 @@ const RIGHT_KEY = 'agora.rightWidth';
  *
  * Single public view: the Députés/Analystes tabs are gone — the site is open to
  * all, with one unified view (no backend/extraction knob in the header).
+ *
+ * Embedded under the app shell: `initialDataset` selects which consultation to
+ * open (else the first discovered), and `onBack` renders a « ← Consultations »
+ * link back to the landing grid.
  */
-export default function RedesignApp() {
+export default function RedesignApp({
+  initialDataset = null,
+  onBack,
+}: {
+  initialDataset?: string | null;
+  onBack?: () => void;
+} = {}) {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
 
@@ -112,9 +114,12 @@ export default function RedesignApp() {
       // the redesigned UI is navigable offline.
       const list = ds.length ? ds : [{ id: 'demo', label: 'Consultation (démo)', n_nodes: 0, languages: [] }];
       setDatasets(list);
-      const first = list[0].id;
-      setDataset(first);
-      await loadAnalysis(first);
+      // Open the consultation requested by the shell (landing card), else the first.
+      const start = (initialDataset && list.some((d) => d.id === initialDataset))
+        ? initialDataset
+        : list[0].id;
+      setDataset(start);
+      await loadAnalysis(start);
     })();
     return () => {
       cancelled = true;
@@ -256,6 +261,11 @@ export default function RedesignApp() {
     <div className="agora">
       <header className="gov-header">
         <div className="gov-header__brand">
+          {onBack && (
+            <button className="gov-header__back" onClick={onBack} title="Retour aux consultations">
+              ← Consultations
+            </button>
+          )}
           <div className="gov-logo" aria-hidden>
             <span className="gov-logo__mark">◆</span>
           </div>
@@ -283,9 +293,6 @@ export default function RedesignApp() {
               ))}
             </select>
           </label>
-          {analysisSource && (
-            <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
-          )}
         </div>
       </header>
 

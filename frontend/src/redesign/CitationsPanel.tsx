@@ -4,14 +4,6 @@ import { fetchAvis, fetchFlags } from './analysisApi';
 import { AvisDetail } from './AvisDetail';
 import { Markdown } from './Markdown';
 
-/** Short badge text per data source. */
-const BADGE: Record<DataSource, string> = {
-  live: 'live',
-  building: 'en cours',
-  mock: 'mock',
-  error: 'erreur',
-};
-
 /**
  * F6 — leaf-level citations. When a leaf theme is selected the right column shows
  * its source claims (verbatim portions), sorted by proximity to the cluster
@@ -121,7 +113,6 @@ export function CitationsPanel({
           )}
           {themeLabel}
         </h2>
-        {source && <span className={`badge badge--${source}`}>{BADGE[source]}</span>}
       </header>
       <button className="link-back" onClick={onBack}>
         ← retour aux thèmes

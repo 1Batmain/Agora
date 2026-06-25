@@ -3,14 +3,6 @@ import { Markdown } from './Markdown';
 import { deleteThemeFlag, upsertThemeFlag } from './analysisApi';
 import type { DataSource } from './contract';
 
-/** Short badge text per data source. */
-const BADGE: Record<DataSource, string> = {
-  live: 'live',
-  building: 'en cours',
-  mock: 'mock',
-  error: 'erreur',
-};
-
 /** Categories Bob can pin on a bad theme synthesis. */
 const THEME_CATEGORIES = ['Hallucination', 'Mauvais résumé', 'Erreur de clustering'] as const;
 
@@ -55,7 +47,6 @@ export function InsightsPanel({
       <header className="panel__head">
         <h2 title={title}>{title}</h2>
         <div className="panel__head-right">
-          {source && <span className={`badge badge--${source}`}>{BADGE[source]}</span>}
           {flagTarget && <ThemeFlagControl key={flagTarget.themeId} {...flagTarget} />}
         </div>
       </header>
