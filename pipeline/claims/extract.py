@@ -15,7 +15,9 @@ ré-extraire.
 from __future__ import annotations
 
 import os
+import threading
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import TYPE_CHECKING
 
 from pipeline.claims.ollama import OllamaStats, parse_json_object
@@ -33,6 +35,12 @@ BATCH_SIZE = int(os.environ.get("AGORA_CLAIMS_BATCH", "8"))
 # du batch = BATCH_TOKENS_PER_AVIS × taille, borné, pour ne pas tronquer le JOSN.
 BATCH_TOKENS_PER_AVIS = int(os.environ.get("AGORA_CLAIMS_BATCH_TOKENS", "400"))
 BATCH_TOKENS_CAP = int(os.environ.get("AGORA_CLAIMS_BATCH_TOKENS_CAP", "8192"))
+
+# CONCURRENCE BORNÉE des lots : plusieurs appels LLM d'extraction en parallèle, jusqu'à
+# cette borne (même env que l'enrichissement). La borne respecte le RPM (pas de tempête
+# 429 ; le backoff par appel reste dans le backend). Les lots sont INDÉPENDANTS (verbatim
+# PAR AVIS, remap par avis_id) → résultats IDENTIQUES au sériel, ordre indifférent.
+LLM_MAX_WORKERS = max(1, int(os.environ.get("AGORA_LLM_MAX_WORKERS", "4")))
 
 # Prompt EXTRACTIF : on demande de RECOPIER des portions de l'avis, mot pour mot.
 # Aucune reformulation, aucune catégorie : juste sélectionner et coller des extraits.
@@ -260,10 +268,15 @@ def extract_claims(
     bs = BATCH_SIZE if batch_size is None else batch_size
     out: dict[str, list[Claim]] = {}
     n = len(avis)
-    done = 0
+    step = max(1, bs)
+    batches = [avis[start:start + step] for start in range(0, n, step)]
 
-    for start in range(0, n, max(1, bs)):
-        batch = avis[start:start + max(1, bs)]
+    def _process_batch(batch: list) -> dict[str, list[Claim]]:
+        """Extrait les claims d'UN lot → ``{avis_id: [Claim, ...]}`` (verbatim PAR AVIS).
+
+        Sans état partagé hors `stats`/`backend` (tous deux thread-safe en lecture/appel) :
+        l'ancrage `align_spans` reste par avis et le repli mono-avis est intact.
+        """
         if bs <= 1:
             specs_by_idx: list[list[dict] | None] = [None] * len(batch)
         else:
@@ -273,12 +286,38 @@ def extract_claims(
             )
             specs_by_idx = parse_batch_claims(raw, len(batch))
 
+        local: dict[str, list[Claim]] = {}
         for j, a in enumerate(batch):
             specs = specs_by_idx[j]
             # Avis absent / non parsable dans la réponse du lot → repli mono-avis robuste.
-            out[a.id] = (_anchor(a, specs) if specs is not None
-                         else _extract_single(a, backend=backend, stats=stats))
-            done += 1
+            local[a.id] = (_anchor(a, specs) if specs is not None
+                           else _extract_single(a, backend=backend, stats=stats))
+        return local
+
+    # Séquentiel si un seul worker / un seul lot : chemin historique, déterminisme garanti.
+    if LLM_MAX_WORKERS <= 1 or len(batches) <= 1:
+        done = 0
+        for batch in batches:
+            for aid, claims in _process_batch(batch).items():
+                out[aid] = claims
+            done += len(batch)
             if progress is not None:
                 progress(done, n)
+        return out
+
+    # CONCURRENCE BORNÉE : lots indépendants traités en parallèle (RPM respecté par la
+    # borne + le backoff par appel). Le remap par avis_id rend l'ordre indifférent.
+    done = 0
+    lock = threading.Lock()
+    with ThreadPoolExecutor(max_workers=LLM_MAX_WORKERS,
+                            thread_name_prefix="agora-extract") as ex:
+        futures = {ex.submit(_process_batch, b): b for b in batches}
+        for fut in as_completed(futures):
+            local = fut.result()  # propage toute exception du worker
+            with lock:
+                out.update(local)
+                done += len(futures[fut])
+                d = done
+            if progress is not None:
+                progress(d, n)
     return out
