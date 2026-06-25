@@ -9,11 +9,11 @@ import type {
   DataSource,
   SpatialTheme,
 } from './contract';
-import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
+import { fetchAnalysis, fetchCitations, fetchFlags, fetchInsights } from './analysisApi';
 import { SpatialMap } from './SpatialMap';
 import { LiveView } from './LiveView';
 import { Toolbox, type ToolboxSelection } from './Toolbox';
-import { InsightsPanel } from './InsightsPanel';
+import { InsightsPanel, type ThemeFlagState } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
 import { themeCaption } from './labels';
@@ -71,6 +71,8 @@ export default function RedesignApp() {
   const [citations, setCitations] = useState<Citation[] | null>(null);
   const [citationsSource, setCitationsSource] = useState<DataSource | null>(null);
   const [citationsLoading, setCitationsLoading] = useState(false);
+  // Theme-synthesis flags, keyed by theme id (restored from the dataset-wide /flags).
+  const [themeFlags, setThemeFlags] = useState<Record<string, ThemeFlagState>>({});
 
   // resizable right panel — width persisted in localStorage, clamped to bounds.
   const [rightWidth, setRightWidth] = useState<number>(() => {
@@ -175,6 +177,24 @@ export default function RedesignApp() {
       cancelled = true;
     };
   }, [dataset, showCitations, selected?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Restore theme-synthesis flags when the dataset changes, so the « Signaler »
+  // button reflects the persisted state at load (avis flags load in CitationsPanel).
+  useEffect(() => {
+    if (!dataset) return;
+    let cancelled = false;
+    fetchFlags(dataset).then((list) => {
+      if (cancelled) return;
+      const map: Record<string, ThemeFlagState> = {};
+      for (const f of list) {
+        if (f.target_type === 'theme') map[f.target_id] = { category: f.category, text: f.text };
+      }
+      setThemeFlags(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset]);
 
   const onDataset = useCallbackRef(async (id: string) => {
     if (id === dataset) return;
@@ -448,6 +468,25 @@ export default function RedesignApp() {
               markdown={panelMarkdown}
               loading={insightsLoading}
               source={insightsSource}
+              flagTarget={
+                dataset && !previewing && contextTheme
+                  ? {
+                      dataset,
+                      themeId: contextTheme.id,
+                      // depth of the synthesised theme: a selected bubble sits at the
+                      // current level (path.length); a drilled-into theme one above.
+                      layer: selected ? path.length : path.length - 1,
+                      flag: themeFlags[contextTheme.id],
+                      onChange: (id, flag) =>
+                        setThemeFlags((prev) => {
+                          const next = { ...prev };
+                          if (flag) next[id] = flag;
+                          else delete next[id];
+                          return next;
+                        }),
+                    }
+                  : undefined
+              }
             />
           )}
         </aside>

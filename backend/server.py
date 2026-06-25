@@ -20,8 +20,8 @@ Endpoints :
   - POST /build         → (re)déclenche le précalcul d'un dataset (non bloquant)
   - GET  /build_status  → état du build d'un dataset (polling front)
   - GET  /flags         → flags de feedback d'un dataset (réafficher l'état)
-  - POST /flag          → upsert le flag d'un avis (commentaire libre, horodaté)
-  - DELETE /flag/{id}   → retire le flag d'un avis
+  - POST /flag          → upsert le flag d'un avis OU d'une synthèse de thème (horodaté)
+  - DELETE /flag/{id}   → retire le flag d'une cible (target_type, défaut "avis")
 
 Lancer :
     uv run --extra contender uvicorn backend.server:app --host 0.0.0.0 --port 8010
@@ -454,33 +454,64 @@ def build_status(dataset: str | None = Query(None)) -> dict:
 # AUCUN calcul lourd ici.
 
 class FlagBody(BaseModel):
-    """Corps de `POST /flag` — feedback libre sur l'extraction d'un avis (upsert)."""
+    """Corps de `POST /flag` — feedback libre sur un AVIS ou une SYNTHÈSE de thème.
+
+    Modèle généralisé : `target_type` ("avis"|"theme") + `target_id` (+ `layer`,
+    `category` pour les thèmes). RÉTRO-COMPAT : si l'ancien `avis_id` est fourni
+    sans `target_type`, on le mappe en `target_type="avis"`, `target_id=avis_id`.
+    """
     dataset: str | None = None
-    avis_id: str
+    target_type: str | None = None
+    target_id: str | None = None
+    avis_id: str | None = None  # rétro-compat (ancien front avis)
+    layer: int | None = None
+    category: str | None = None
     text: str = ""
+
+
+# Cibles flaguables connues — garde-fou contre un type arbitraire.
+_FLAG_TARGETS = {"avis", "theme"}
+
+
+def _flag_target(target_type: str | None, target_id: str | None, avis_id: str | None):
+    """Résout (target_type, target_id) en honorant la rétro-compat `avis_id`."""
+    ttype = (target_type or "").strip().lower()
+    tid = (target_id or "").strip()
+    if not ttype and avis_id:  # ancien contrat : avis_id seul → avis
+        ttype, tid = "avis", str(avis_id).strip()
+    if ttype not in _FLAG_TARGETS:
+        raise HTTPException(status_code=422, detail="target_type doit valoir avis ou theme.")
+    if not tid:
+        raise HTTPException(status_code=422, detail="target_id requis.")
+    return ttype, tid
 
 
 @app.get("/flags")
 def get_flags(dataset: str | None = Query(None)) -> dict:
-    """Tous les flags d'un dataset (pour réafficher l'état au chargement)."""
+    """Tous les flags d'un dataset, tous types (pour réafficher l'état au chargement)."""
     ds = _resolve(dataset)
     return {"dataset": ds.id, "flags": flags_store.list_flags(ds.id)}
 
 
 @app.post("/flag", dependencies=PROTECTED)
 def post_flag(body: FlagBody) -> dict:
-    """UPSERT du flag d'un avis (crée ou met à jour, horodaté) → {ok, flag}."""
+    """UPSERT du flag d'une cible (avis ou thème), horodaté → {ok, flag}."""
     ds = _resolve(body.dataset)
-    avis_id = (body.avis_id or "").strip()
-    if not avis_id:
-        raise HTTPException(status_code=422, detail="avis_id requis.")
-    flag = flags_store.upsert_flag(ds.id, avis_id, body.text)
+    ttype, tid = _flag_target(body.target_type, body.target_id, body.avis_id)
+    flag = flags_store.upsert_flag(
+        ds.id, ttype, tid, body.text, layer=body.layer, category=body.category
+    )
     return {"ok": True, "flag": flag}
 
 
-@app.delete("/flag/{avis_id}", dependencies=PROTECTED)
-def remove_flag(avis_id: str, dataset: str | None = Query(None)) -> dict:
-    """Retire le flag d'un avis → {ok, removed}."""
+@app.delete("/flag/{target_id}", dependencies=PROTECTED)
+def remove_flag(
+    target_id: str,
+    dataset: str | None = Query(None),
+    target_type: str = Query("avis"),
+) -> dict:
+    """Retire le flag d'une cible → {ok, removed}. `target_type` défaut "avis" (rétro-compat)."""
     ds = _resolve(dataset)
-    removed = flags_store.delete_flag(ds.id, avis_id)
+    ttype, tid = _flag_target(target_type, target_id, None)
+    removed = flags_store.delete_flag(ds.id, ttype, tid)
     return {"ok": True, "removed": removed}
