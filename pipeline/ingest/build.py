@@ -30,7 +30,7 @@ from typing import Iterable, Iterator
 
 from . import config, download, lang, synthetic
 from .anonymize import author_hash
-from .normalize import clean_text, is_empty_like, make_label
+from .normalize import clean_text, is_empty_like, make_label, strip_pii
 from .sources import SourceDescriptor, load_descriptors, read_generic
 
 
@@ -63,7 +63,12 @@ def to_idea(rec: dict) -> dict | None:
         "type": "idea",
         "label": make_label(text_clean, config.LABEL_MAXLEN),
         "props": {
-            "text": raw_text.strip(),
+            # `text` = original PRESQUE intact (casse/ponctuation conservées pour le
+            # toggle « voir l'original ») MAIS PII évidentes masquées : on ne PERSISTE
+            # jamais d'email/tél./URL/@mention en clair (SEC3). `text_clean` masque les
+            # mêmes PII puis normalise davantage (espaces/typographie) — c'est lui qui
+            # sert de texte canonique et d'ancrage des spans des claims.
+            "text": strip_pii(raw_text.strip()),
             "text_clean": text_clean,
             "ts": (rec.get("ts") or "").strip(),
             "lang": lang_code,
