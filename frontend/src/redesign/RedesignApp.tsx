@@ -222,7 +222,10 @@ export default function RedesignApp() {
   const panelMarkdown = useMemo(() => {
     const ctx = analysis?.dataset_context?.trim();
     if (!atGlobal || !ctx || !markdown) return markdown;
-    const norm = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+    // Ignore les marqueurs d'emphase Markdown (_italique_/**gras**) en tête : le
+    // backend B2 plie le contexte EN ITALIQUE (`_ctx_`), donc sans ça la dédup ratait
+    // (`_x-stance` ne « startsWith » pas `x-stance`) → contexte affiché en double.
+    const norm = (s: string) => s.replace(/[_*]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
     return norm(markdown).startsWith(norm(ctx)) ? markdown : `${ctx}\n\n${markdown}`;
   }, [atGlobal, analysis?.dataset_context, markdown]);
 
