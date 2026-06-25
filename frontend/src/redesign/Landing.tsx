@@ -29,12 +29,12 @@ export function Landing({
           <h1 className="hero__title">
             La parole citoyenne,
             <br />
-            <span className="hero__accent">réstituée fidèlement.</span>
+            <span className="hero__accent">restituée fidèlement.</span>
           </h1>
           <p className="hero__tagline">
-            Agora fait émerger les thèmes des grandes consultations sans trahir
-            ce qui a été dit — puis vous laisse explorer l'analyse ou contribuer
-            aux débats encore ouverts.
+            Agora fait émerger les thèmes et les idées communes des questions ouvertes
+            et fournit une analyse des opinions de manière automatisée, traçable et
+            transparente.
           </p>
           <ul className="hero__meta" aria-hidden={datasets.length === 0}>
             <li>
@@ -50,9 +50,7 @@ export function Landing({
         </section>
 
         <section className="landing__list">
-          <h2>
-            <span className="landing__list-idx">01</span> Consultations
-          </h2>
+          <h2>Consultations</h2>
           {loading ? (
             <div className="landing__loading">
               <span className="spinner" /> chargement des consultations…
@@ -90,32 +88,33 @@ export function Landing({
         </section>
 
         <section className="landing__how">
-          <h2>
-            <span className="landing__list-idx">02</span> Comment ça marche
-          </h2>
+          <h2>Comment ça marche</h2>
           <p className="how__lead">
-            Agora transforme des milliers de contributions en une carte des idées —
-            fidèlement, sans grille imposée et sans reformuler la parole citoyenne.
+            Agora utilise l'IA pour identifier les différentes thématiques abordées
+            dans une contribution. Il segmente l'avis sans en modifier le contenu.
+            Chaque segment est ensuite encodé dans un espace latent pour identifier les
+            thèmes les plus proches.
           </p>
           <ol className="how__steps">
             <li className="how__step">
               <span className="how__num">1</span>
               <div>
-                <strong>Extraction fidèle</strong>
+                <strong>Extraction des thèmes abordés</strong>
                 <p>
-                  Chaque contribution est découpée en idées reprises <em>mot à mot</em>{' '}
-                  — jamais reformulées. La position du citoyen n'est pas déformée.
+                  Chaque contribution est segmentée par thématique{' '}
+                  <em>sans en modifier le contenu</em> — cette tâche est effectuée par
+                  un grand modèle de langue (Mistral).
                 </p>
               </div>
             </li>
             <li className="how__step">
               <span className="how__num">2</span>
               <div>
-                <strong>Regroupement émergent</strong>
+                <strong>Regroupement automatique</strong>
                 <p>
-                  Les idées sont placées dans un espace sémantique et regroupées par
-                  thème <em>automatiquement</em> — les sujets émergent des données,
-                  aucune catégorie n'est imposée à l'avance.
+                  Les idées sont placées dans un espace sémantique pour être regroupées
+                  par thème <em>automatiquement</em> — les sujets émergent des données,
+                  aucune catégorie n'est imposée.
                 </p>
               </div>
             </li>
