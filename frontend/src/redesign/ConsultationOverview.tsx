@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Dataset } from '../types';
+import type { Consultation } from '../types';
 import type { AnalysisPayload } from './contract';
 import { fetchAnalysis, fetchInsights } from './analysisApi';
 import { Header } from './Header';
@@ -16,7 +16,7 @@ export function ConsultationOverview({
   onHome,
   onViewGraph,
 }: {
-  dataset: Dataset;
+  dataset: Consultation;
   onHome: () => void;
   onViewGraph: () => void;
 }) {
