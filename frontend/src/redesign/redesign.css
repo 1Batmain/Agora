@@ -1941,3 +1941,11 @@ body {
   background: var(--agora, #000091); animation: term-blink 1s steps(1) infinite;
 }
 @keyframes term-blink { 50% { opacity: 0; } }
+
+/* ── Nom de la consultation dans le header (remplace le sélecteur de dataset) ── */
+.header-consultation {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .92rem; font-weight: 600; color: var(--agora, #000091);
+  padding: .3rem .55rem; border: 1px solid rgba(0,0,145,.25);
+  white-space: nowrap; max-width: 42ch; overflow: hidden; text-overflow: ellipsis;
+}

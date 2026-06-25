@@ -276,24 +276,10 @@ export default function RedesignApp({
           </div>
         </button>
         <div className="gov-header__right">
-          {/* Dataset picker moved here from the (removed) left tool column. */}
-          <label className="header-dataset">
-            <span>Consultation</span>
-            <select
-              className="header-dataset__select"
-              value={dataset ?? ''}
-              disabled={busy || datasets.length === 0}
-              onChange={(e) => onDataset(e.target.value)}
-            >
-              {datasets.length === 0 && <option value="">(aucun dataset)</option>}
-              {datasets.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.label}
-                  {d.n_nodes ? ` (${d.n_nodes})` : ''}
-                </option>
-              ))}
-            </select>
-          </label>
+          {/* Navigation par la landing → on affiche le NOM de la consultation, pas un sélecteur. */}
+          <span className="header-consultation" title="Consultation en cours">
+            {datasets.find((d) => d.id === dataset)?.label ?? dataset}
+          </span>
         </div>
       </header>
 
