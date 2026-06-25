@@ -1,5 +1,6 @@
 {
   "name": "tiktok",
+  "status": "closed",
   "format": "csv",
   "path": "data/raw/tiktok_appel_a_temoignages.csv",
   "url": "https://data.assemblee-nationale.fr/static/openData/repository/CONSULTATIONS_CITOYENNES/TIKTOK/tiktok_appel_a_temoignages.csv",

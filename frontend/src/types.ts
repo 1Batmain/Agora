@@ -84,6 +84,8 @@ export interface SynthesisResult {
 export interface Dataset {
   id: string;
   label: string;
+  /** Consultation status: 'open' (participation en cours) | 'closed' (analyse seule). */
+  status?: 'open' | 'closed';
   n_nodes: number;
   languages: string[];
   lang_counts?: Record<string, number>;

@@ -1,5 +1,6 @@
 {
   "name": "granddebat",
+  "status": "closed",
   "format": "csv",
   "path": "data/raw/granddebat_democratie_citoyennete.csv",
   "url": "https://static.data.gouv.fr/resources/donnees-ouvertes-du-grand-debat-national/20200611-221937/democratie-et-citoyennete.csv",
