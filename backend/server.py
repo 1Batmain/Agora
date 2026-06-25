@@ -32,9 +32,14 @@ from __future__ import annotations
 import json
 import os
 
-from fastapi import FastAPI, HTTPException, Query, Response
+from fastapi import Depends, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+
+from backend.auth import rate_limit, require_token
+
+# Dépendances posées sur les endpoints MUTATIFS / COÛTEUX (audit prod SEC1).
+PROTECTED = [Depends(require_token), Depends(rate_limit)]
 from pydantic import BaseModel, Field
 
 from backend.recluster import (
@@ -83,11 +88,17 @@ def _resolve(dataset: str | None) -> _Dataset:
 
 app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0")
 
-# CORS permissif en dev (le front passe par un proxy vite mais on couvre l'accès
-# direct depuis localhost/forge au cas où).
+# CORS restreint (audit prod SEC1) : origines connues seulement, JAMAIS "*".
+# Surchargeable par AGORA_ALLOWED_ORIGINS (liste séparée par des virgules).
+_origins_env = os.environ.get(
+    "AGORA_ALLOWED_ORIGINS",
+    "http://localhost:5180,http://127.0.0.1:5180",
+)
+ALLOWED_ORIGINS = [o.strip() for o in _origins_env.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -277,7 +288,7 @@ class SandboxBody(BaseModel):
     tau_mult: float | None = Field(None, gt=0.0)        # × seuil τ de subdivision
 
 
-@app.post("/sandbox")
+@app.post("/sandbox", dependencies=PROTECTED)
 def do_sandbox(body: SandboxBody, response: Response) -> dict:
     """RECLUSTER LIVE (aucun LLM) selon les knobs → clusters + decision-trace + ms.
 
@@ -301,7 +312,7 @@ def do_sandbox(body: SandboxBody, response: Response) -> dict:
         ) from exc
 
 
-@app.get("/explain")
+@app.get("/explain", dependencies=PROTECTED)
 def get_explain(
     dataset: str | None = Query(None),
     cluster: str | None = Query(None),
@@ -340,7 +351,7 @@ class BuildBody(BaseModel):
     force: bool = False
 
 
-@app.post("/build")
+@app.post("/build", dependencies=PROTECTED)
 def do_build(body: BuildBody, response: Response) -> dict:
     """Déclenche/relance le build de fond de l'analyse d'un dataset (non bloquant)."""
     ds = _resolve(body.dataset)
@@ -364,7 +375,7 @@ def _sse(event: dict) -> str:
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
 
 
-@app.get("/stream")
+@app.get("/stream", dependencies=PROTECTED)
 def stream(dataset: str | None = Query(None),
            backend: str | None = Query(None)) -> StreamingResponse:
     """SSE : rejoue les claims CACHÉS d'un dataset via une `AnalysisState` fraîche.
@@ -431,7 +442,7 @@ def get_flags(dataset: str | None = Query(None)) -> dict:
     return {"dataset": ds.id, "flags": flags_store.list_flags(ds.id)}
 
 
-@app.post("/flag")
+@app.post("/flag", dependencies=PROTECTED)
 def post_flag(body: FlagBody) -> dict:
     """UPSERT du flag d'un avis (crée ou met à jour, horodaté) → {ok, flag}."""
     ds = _resolve(body.dataset)
@@ -442,7 +453,7 @@ def post_flag(body: FlagBody) -> dict:
     return {"ok": True, "flag": flag}
 
 
-@app.delete("/flag/{avis_id}")
+@app.delete("/flag/{avis_id}", dependencies=PROTECTED)
 def remove_flag(avis_id: str, dataset: str | None = Query(None)) -> dict:
     """Retire le flag d'un avis → {ok, removed}."""
     ds = _resolve(dataset)
