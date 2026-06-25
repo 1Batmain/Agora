@@ -45,14 +45,12 @@ def test_build_accepts_bearer(client, with_token):
     assert r.status_code == 200, r.text
 
 
-def test_sandbox_requires_token(client, with_token):
-    """`/sandbox` est protégé : sans token → 401 (avant tout recluster)."""
-    assert client.post("/sandbox", json={"dataset": "tiktok", "alpha": 0}).status_code == 401
-
-
-def test_explain_requires_token(client, with_token):
-    """`/explain` (GET protégé) : sans token → 401, même avec des params valides."""
-    assert client.get("/explain", params={"dataset": "tiktok", "cluster": "n0"}).status_code == 401
+def test_flag_requires_token(client, with_token):
+    """`POST /flag` est protégé : sans token → 401 (avant tout upsert)."""
+    assert client.post("/flag", json={"dataset": "tiktok",
+                                       "target_type": "avis",
+                                       "target_id": "a1",
+                                       "text": "x"}).status_code == 401
 
 
 def test_open_endpoints_never_require_token(client, with_token):
@@ -63,8 +61,11 @@ def test_open_endpoints_never_require_token(client, with_token):
 
 
 def test_dev_mode_open_without_token(client):
-    """Sans `AGORA_API_TOKEN` (mode dev, défaut des tests), `/sandbox` n'est PAS 401."""
+    """Sans `AGORA_API_TOKEN` (mode dev, défaut des tests), `POST /flag` n'est PAS 401."""
     # API_TOKEN est None par défaut ici → require_token laisse passer. Le statut dépend
-    # ensuite de la présence des claims (200 ou 503), mais JAMAIS 401.
-    r = client.post("/sandbox", json={"dataset": "tiktok", "alpha": 0})
+    # ensuite de la validation du corps (200 ou 422), mais JAMAIS 401.
+    r = client.post("/flag", json={"dataset": "tiktok",
+                                   "target_type": "avis",
+                                   "target_id": "a1",
+                                   "text": "x"})
     assert r.status_code != 401
