@@ -34,3 +34,7 @@ backend/cache/*/claims_emb.npz
 
 # Flags de feedback sur l'extraction (upsert par avis, éditables) — régénérables.
 backend/cache/*/flags.json
+
+# Contributions citoyennes LIVE (consultations ouvertes) — runtime, mutable.
+# Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
+backend/cache/*/submissions.jsonl
