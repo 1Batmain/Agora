@@ -1,7 +1,7 @@
 """Sécurité d'exposition du backend (audit prod P1 / SEC1).
 
 Deux dépendances FastAPI à poser sur les endpoints MUTATIFS / COÛTEUX (`/build`,
-`/sandbox`, `/explain`, `/stream`, `/flag`) :
+`/flag`) :
 
   - ``require_token`` : exige le header ``X-API-Token`` (ou ``Authorization: Bearer``)
     égal à ``AGORA_API_TOKEN``. Si la variable n'est PAS définie → mode DEV ouvert,

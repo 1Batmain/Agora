@@ -13,7 +13,6 @@ Endpoints :
   - GET  /health        → {ok, datasets, default_dataset}
   - GET  /datasets      → [{id, label, n_nodes, languages, source, namings}]
   - POST /analysis      → carte précalculée (arbre incrémental + co-occurrence, d3-pack)
-  - GET  /stream        → rejoue le build EN INCRÉMENTAL (SSE, claims cachés, zéro LLM)
   - GET  /insights      → synthèse Markdown LLM précalculée (global | theme)
   - GET  /citations     → claims d'un thème, triées par proximité au centroïde
   - GET  /avis/{id}     → un avis entier + ses portions verbatim surlignables
@@ -29,12 +28,10 @@ Lancer :
 
 from __future__ import annotations
 
-import json
 import os
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
 
 from backend.auth import rate_limit, require_token
 
@@ -299,73 +296,6 @@ def get_avis(
     return data
 
 
-# ===================== Bac à sable « console de mixage » ===================== #
-# RECLUSTER LIVE sans LLM (~1 s) : knobs α/k/resolution/coarsen_mult/tau_mult sur les
-# embeddings CACHÉS (claims + cibles). + decision-trace chiffrée. Cf. /tmp/contract-sandbox.md.
-
-class SandboxBody(BaseModel):
-    """Corps de `POST /sandbox` — recluster live. Tous les knobs optionnels (défauts dérivés)."""
-    dataset: str | None = None
-    alpha: float | None = Field(None, ge=0.0, le=1.0)   # poids cible dans le blend
-    k: int | None = Field(None, ge=2)                   # voisins k-NN
-    resolution: float | None = Field(None, gt=0.0)      # résolution Leiden
-    coarsen_mult: float | None = Field(None, gt=0.0)    # × seuil μ+σ de fusion des racines
-    tau_mult: float | None = Field(None, gt=0.0)        # × seuil τ de subdivision
-
-
-@app.post("/sandbox", dependencies=PROTECTED)
-def do_sandbox(body: SandboxBody, response: Response) -> dict:
-    """RECLUSTER LIVE (aucun LLM) selon les knobs → clusters + decision-trace + ms.
-
-    Lit les claims + embeddings (claims & cibles) CACHÉS. Si les claims ne sont pas
-    encore extraits (cache absent), renvoie 503 avec un indice (lancer POST /build).
-    """
-    from backend.sandbox import recluster_payload
-    from backend.claims_endpoint import OllamaUnavailable
-    from pipeline.claims.backend import BackendUnavailable
-
-    ds = _resolve(body.dataset)
-    try:
-        return recluster_payload(
-            ds, alpha=body.alpha, k=body.k, resolution=body.resolution,
-            coarsen_mult=body.coarsen_mult, tau_mult=body.tau_mult,
-        )
-    except (OllamaUnavailable, BackendUnavailable) as exc:
-        raise HTTPException(
-            status_code=503,
-            detail=f"claims non extraits ({exc}). Lance POST /build d'abord.",
-        ) from exc
-
-
-@app.get("/explain", dependencies=PROTECTED)
-def get_explain(
-    dataset: str | None = Query(None),
-    cluster: str | None = Query(None),
-    pair: str | None = Query(None),
-) -> dict:
-    """Decision-trace d'un nœud (`cluster=nX`) ou d'une paire (`pair=nX,nY`).
-
-    S'appuie sur le DERNIER `/sandbox` du dataset (mémoïsé) ; si aucun, en relance un
-    aux knobs neutres. Renvoie voisinage (k plus proches centroïdes) + critères de
-    fusion/subdivision chiffrés (cf. contrat).
-    """
-    from backend.sandbox import explain_cluster, explain_pair
-
-    ds = _resolve(dataset)
-    if pair:
-        parts = [p.strip() for p in pair.split(",") if p.strip()]
-        if len(parts) != 2:
-            raise HTTPException(status_code=422, detail="pair attend 'nX,nY'.")
-        out = explain_pair(ds, parts[0], parts[1])
-    elif cluster:
-        out = explain_cluster(ds, cluster.strip())
-    else:
-        raise HTTPException(status_code=422, detail="fournir cluster=nX ou pair=nX,nY.")
-    if "error" in out:
-        raise HTTPException(status_code=404, detail=out["error"])
-    return out
-
-
 class BuildBody(BaseModel):
     """Corps de `POST /build` — (re)déclenche le précalcul d'un dataset.
 
@@ -388,52 +318,6 @@ def do_build(body: BuildBody, response: Response) -> dict:
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     return prog
-
-
-# ============================ Stream LIVE (SSE) ============================ #
-# Rejoue le build d'un dataset EN INCRÉMENTAL via `AnalysisState` : rattachement
-# plus-proche + maj O(1) + split local sur divergence, à partir des claims +
-# embeddings DÉJÀ CACHÉS (AUCUN LLM, pas de recompute global → rapide). Émet les
-# events du contrat figé (`/tmp/contract-live.md`) en Server-Sent Events.
-
-def _sse(event: dict) -> str:
-    return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-
-
-@app.get("/stream", dependencies=PROTECTED)
-def stream(dataset: str | None = Query(None),
-           backend: str | None = Query(None)) -> StreamingResponse:
-    """SSE : rejoue les claims CACHÉS d'un dataset via une `AnalysisState` fraîche.
-
-    Émet `snapshot` (état initial) → `claim_added`/`theme_split` (au fil de l'eau) →
-    `done`. Réutilise `claims.json` + `claims_emb.npz` : zéro appel LLM. Si les claims
-    ne sont pas encore extraits (cache absent), émet un event `error` puis se ferme.
-    """
-    from backend.analysis import _dataset_context
-    from backend.claims_endpoint import OllamaUnavailable
-    from backend.state import AnalysisState
-    from pipeline.claims.backend import BackendUnavailable
-
-    ds = _resolve(dataset)
-
-    def gen():
-        try:
-            state = AnalysisState.from_dataset(ds, backend=backend)
-        except (OllamaUnavailable, BackendUnavailable) as exc:
-            yield _sse({"type": "error", "detail": str(exc),
-                        "hint": "claims non extraits : lance POST /build d'abord."})
-            return
-        except Exception as exc:  # noqa: BLE001 — on remonte l'erreur au client SSE
-            yield _sse({"type": "error", "detail": str(exc)})
-            return
-        for event in state.stream_events(dataset_context=_dataset_context(ds.id)):
-            yield _sse(event)
-
-    return StreamingResponse(
-        gen(),
-        media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
 
 
 @app.get("/build_status")
