@@ -351,5 +351,5 @@ function tint(color: string): string {
   if (/^#[0-9a-f]{6}$/i.test(color)) return `${color}2e`;
   const m = color.match(/^hsl\(([^)]+)\)$/i);
   if (m) return `hsla(${m[1]} / 0.22)`;
-  return 'rgba(200,83,18,0.18)';
+  return 'rgba(0,0,145,0.18)';
 }
