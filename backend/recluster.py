@@ -200,6 +200,10 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> dict:
         # (les caches déjà construits sans ce champ restent en analyse seule).
         "status": meta.get("status", "closed"),
         "n_nodes": meta.get("n_nodes", derived.get("n_nodes", 0)),
+        # Nombre RÉEL de contributions reçues (avant le cap d'échantillonnage à
+        # n_nodes pour le build). `meta["n_loaded"]` = total chargé à l'ingestion ;
+        # repli sur n_nodes (datasets non capés, ex. tiktok).
+        "n_contributions": meta.get("n_loaded", meta.get("n_nodes", derived.get("n_nodes", 0))),
         "languages": meta.get("languages", derived.get("languages", [])),
         "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
         "source": meta.get("source", derived.get("source", dataset)),

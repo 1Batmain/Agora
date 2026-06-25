@@ -1961,7 +1961,7 @@ body {
 
 /* ── Landing : section « Comment ça marche » (pipeline, épuré) ── */
 .landing__how { margin-top: 4.5rem; }
-.how__lead { color: #444; line-height: 1.7; max-width: 62ch; margin: .6rem 0 2.2rem; }
+.how__lead { color: #444; line-height: 1.7; max-width: none; margin: .6rem 0 2.2rem; }
 .how__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.7rem; max-width: 760px; }
 .how__step { display: flex; gap: 1.1rem; align-items: flex-start; }
 .how__num {

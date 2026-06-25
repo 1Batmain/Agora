@@ -87,6 +87,8 @@ export interface Dataset {
   /** Consultation status: 'open' (participation en cours) | 'closed' (analyse seule). */
   status?: 'open' | 'closed';
   n_nodes: number;
+  /** Nombre RÉEL de contributions reçues (avant cap d'échantillonnage). */
+  n_contributions?: number;
   languages: string[];
   lang_counts?: Record<string, number>;
   source?: string;
