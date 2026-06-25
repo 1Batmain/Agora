@@ -1,16 +1,16 @@
 /**
- * Agora pour députés — DSFR-inspired shell, recoloured ORANGE.
- * DSFR (Système de Design de l'État) imposes "bleu France" for the primary; we
- * keep its grid / typography / component idioms but OVERRIDE the primary to
- * Agora orange (we draw on the codes, we don't claim gov conformity).
+ * Agora pour députés — DSFR-inspired shell, accent BLEU FRANCE.
+ * Accent gouvernemental « bleu France » #000091, échelle hover/clair dérivée.
+ * Palette épurée : blanc / quasi-blanc, noir-gris pour le texte, bleu pour
+ * l'accent. (On s'inspire des codes de l'État, sans revendiquer la conformité.)
  */
 :root {
-  /* Agora primary (override of DSFR's bleu-france) */
-  --agora: #ca5810;
-  --agora-hover: #b04c0c;
-  --agora-active: #97400a;
-  --agora-soft: #fbe9dd;
-  --agora-soft2: #f6d9b8;
+  /* Agora primary — Bleu France #000091 + échelle hover/focus/fonds clairs */
+  --agora: #000091;
+  --agora-hover: #1212ff;
+  --agora-active: #00006d;
+  --agora-soft: #ececfe;
+  --agora-soft2: #cacafb;
 
   /* DSFR-like greys */
   --grey-1000: #161616; /* texte principal */
@@ -444,10 +444,10 @@ body {
 }
 /* Legend swatches: same hue, low vs high population-weighted consensus. */
 .dot--pale {
-  background: hsl(28, 22%, 84%);
+  background: hsl(240, 24%, 86%);
 }
 .dot--vivid {
-  background: hsl(28, 78%, 54%);
+  background: hsl(240, 70%, 40%);
 }
 /* F3 — hover info panel: FIXED to the top-right corner of the map, always at the
    same spot (not a tooltip floating over the node). Light content only. */
@@ -800,8 +800,8 @@ body {
   align-items: center;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent, #b45309);
-  background: color-mix(in srgb, var(--accent, #b45309) 12%, transparent);
+  color: var(--accent, #000091);
+  background: color-mix(in srgb, var(--accent, #000091) 12%, transparent);
   border-radius: 999px;
   padding: 2px 8px;
   white-space: nowrap;
@@ -812,7 +812,7 @@ body {
   font: inherit;
   font-size: 12px;
   font-weight: 600;
-  color: var(--accent, #b45309);
+  color: var(--accent, #000091);
   background: none;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -820,7 +820,7 @@ body {
   cursor: pointer;
 }
 .avisdetail__toggle:hover {
-  background: color-mix(in srgb, var(--accent, #b45309) 8%, transparent);
+  background: color-mix(in srgb, var(--accent, #000091) 8%, transparent);
 }
 .avisdetail__text {
   font-size: 15px;
@@ -1056,18 +1056,18 @@ body {
   height: 12px;
   border-radius: 50%;
   background: var(--agora);
-  box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.6);
+  box-shadow: 0 0 0 0 rgba(0, 0, 145, 0.6);
   animation: live-pulse 1.4s ease-out infinite;
 }
 @keyframes live-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0.55);
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0.55);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(202, 88, 16, 0);
+    box-shadow: 0 0 0 12px rgba(0, 0, 145, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(202, 88, 16, 0);
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0);
   }
 }
 
@@ -1644,7 +1644,7 @@ body {
 }
 .ds-card:hover {
   border-color: var(--agora);
-  box-shadow: 0 4px 14px rgba(202, 88, 16, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 145, 0.14);
 }
 .ds-card:active {
   transform: translateY(1px);
