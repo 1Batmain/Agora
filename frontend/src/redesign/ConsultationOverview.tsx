@@ -43,7 +43,7 @@ export function ConsultationOverview({
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const context = analysis?.dataset_context || dataset.context || '';
-  const nReponses = totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
+  const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
 
