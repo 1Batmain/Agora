@@ -1,5 +1,5 @@
 import { Header } from './Header';
-import type { Dataset } from '../types';
+import type { Consultation } from '../types';
 
 /**
  * Vue d'accueil d'Agora — hero « façon framework » (grand titre mono, tagline,
@@ -13,9 +13,9 @@ export function Landing({
   loading,
   onOpen,
 }: {
-  datasets: Dataset[];
+  datasets: Consultation[];
   loading: boolean;
-  onOpen: (d: Dataset) => void;
+  onOpen: (d: Consultation) => void;
 }) {
   const openCount = datasets.filter((d) => d.status === 'open').length;
   const closedCount = datasets.length - openCount;

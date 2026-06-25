@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchDatasets } from '../api';
-import type { Dataset } from '../types';
+import type { Consultation } from '../types';
 import { Landing } from './Landing';
 import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
@@ -19,7 +19,7 @@ type HistState = { route: Route; activeId: string | null };
  * précédente AU LIEU de quitter le site. Deep-link `?c=<id>` au chargement.
  */
 export default function App() {
-  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [datasets, setDatasets] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
   const [route, setRoute] = useState<Route>('landing');
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function App() {
   useEffect(() => {
     let cancelled = false;
     fetchDatasets()
-      .catch(() => [] as Dataset[])
+      .catch(() => [] as Consultation[])
       .then((ds) => {
         if (cancelled) return;
         setDatasets(ds);
@@ -67,7 +67,7 @@ export default function App() {
 
   const active = datasets.find((d) => d.id === activeId) ?? null;
 
-  const openConsultation = useCallback((d: Dataset) => {
+  const openConsultation = useCallback((d: Consultation) => {
     const r: Route = d.status === 'open' ? 'participate' : 'overview';
     setActiveId(d.id);
     setRoute(r);
