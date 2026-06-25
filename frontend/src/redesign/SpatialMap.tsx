@@ -252,7 +252,10 @@ export function SpatialMap({
 
     const circle = nodes.select<SVGCircleElement>('circle.bubble__circle');
     const rOf = (t: SpatialTheme) => layout.get(t.id)!.r;
-    const fillOf = (t: SpatialTheme) => themeColor(t.id, consensusEff.get(t.id) ?? t.consensus);
+    // COULEUR = `t.color` (palette backend PAR MACRO, source unique de `_assign_colors`)
+    // → cohérente avec les surlignages d'avis et la synthèse. Fallback hash client si absent.
+    const fillOf = (t: SpatialTheme) =>
+      t.color || themeColor(t.id, consensusEff.get(t.id) ?? t.consensus);
     // LIVE: swell/shrink the radius + ease the fill as voices arrive (claim_added).
     if (live) {
       circle.transition('live').duration(LIVE_DUR).attr('r', rOf).style('fill', fillOf);
