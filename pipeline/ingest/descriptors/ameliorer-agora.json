@@ -1,0 +1,8 @@
+{
+  "name": "ameliorer-agora",
+  "status": "open",
+  "label": "Aidez-nous à améliorer Agora",
+  "question": "Vos avis, remarques et idées d'amélioration sur la plateforme Agora : ergonomie, qualité des analyses, fonctionnalités souhaitées…",
+  "context": "Consultation ouverte et méta : Agora se met à l'écoute de ses propres utilisateurs. Partagez vos avis, remarques et idées d'amélioration sur la plateforme — ergonomie et navigation, lisibilité et fidélité des analyses produites par l'IA, performances, accessibilité, fonctionnalités souhaitées (export, recherche, mobile…). Contrairement aux autres consultations (closes, déjà analysées), celle-ci est NEUVE : aucune analyse n'est encore disponible. Chaque contribution est corrélée en direct aux retours déjà reçus pour vous montrer qui partage votre point de vue.",
+  "_note": "Consultation OUVERTE (status:open) SANS données ni analyse : pas de cache embeddings.npy/ideas.jsonl, donc invisible à list_datasets(). Listée par le backend via list_open_consultations() (scan des descripteurs status:open). Les contributions arrivent en direct via POST /submit et sont stockées dans backend/cache/ameliorer-agora/submissions.jsonl (+ seed submissions.seed.jsonl committé)."
+}

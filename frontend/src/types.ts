@@ -90,6 +90,17 @@ export interface Dataset {
   languages: string[];
   lang_counts?: Record<string, number>;
   source?: string;
+  /** Consultations OUVERTES seulement : sujet affiché dans la vue Participer. */
+  question?: string;
+  context?: string;
+}
+
+/** `POST /submit` → corrélation instantanée d'une contribution citoyenne. */
+export interface SubmitResult {
+  ok: boolean;
+  n_similar: number;
+  nearest_excerpt: string | null;
+  message: string;
 }
 
 /** View mode: existing cluster views vs the emergent-claims map. */
