@@ -67,7 +67,8 @@ export function CitationsPanel({
     fetchFlags(dataset).then((list) => {
       if (cancelled) return;
       const map: Record<string, string> = {};
-      for (const f of list) map[f.avis_id] = f.text;
+      // `/flags` now returns every type; the avis view only keys by avis_id.
+      for (const f of list) if (f.avis_id) map[f.avis_id] = f.text;
       setFlags(map);
     });
     return () => {
