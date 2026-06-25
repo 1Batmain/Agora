@@ -46,7 +46,9 @@ from backend.recluster import (
     NAMINGS,
     dataset_descriptor,
     list_datasets,
+    list_open_consultations,
     load_cache,
+    open_consultation_descriptor,
 )
 from backend import analysis_store, build_manager, flags_store
 
@@ -136,12 +138,19 @@ def datasets() -> list[dict]:
 
     Lazy-load : le descripteur est lu depuis `meta.json`/`ideas` (léger), SANS forcer
     le chargement des vecteurs en RAM (qui n'a lieu qu'au 1ᵉʳ `_resolve` du dataset).
+
+    Inclut aussi les consultations OUVERTES (descripteurs `status:"open"`), même
+    SANS cache d'analyse : elles n'ont pas de dossier cache/ mais doivent apparaître
+    sur la landing (carte « Ouvert » → vue Participer).
     """
-    return [
+    closed = [
         {**dataset_descriptor(ds_id),
          "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
         for ds_id in _ids
     ]
+    open_ = [open_consultation_descriptor(name) for name in list_open_consultations()]
+    # Ouvertes en tête : ce sont celles où l'on peut encore agir.
+    return open_ + closed
 
 
 # ===================== Refonte « carte spatiale » (B1–B4) ===================== #
