@@ -76,12 +76,17 @@ class SourceDescriptor:
     members: list[str] | None = None
     lang_keep: list[str] | None = None
     keep_where: dict | None = None  # filtre déclaratif par valeur de colonne brute
+    # Statut de la consultation : "open" (participation en cours) | "closed"
+    # (close, on n'expose que l'analyse). Défaut prudent = "closed".
+    status: str = "closed"
     # Champs additionnels du JSON conservés sans être interprétés (forward-compat).
     extra: dict = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.format not in ("csv", "jsonl"):
             raise ValueError(f"{self.name}: format inconnu {self.format!r} (csv|jsonl)")
+        if self.status not in ("open", "closed"):
+            raise ValueError(f"{self.name}: status inconnu {self.status!r} (open|closed)")
         for f in _REQUIRED_FIELDS:
             if f not in self.columns:
                 raise ValueError(f"{self.name}: colonne obligatoire absente: {f!r}")
@@ -95,7 +100,7 @@ class SourceDescriptor:
         known = {
             "name", "format", "path", "columns", "url", "encoding",
             "delimiter", "has_header", "archive", "members", "lang_keep",
-            "keep_where",
+            "keep_where", "status",
         }
         kwargs = {k: v for k, v in d.items() if k in known}
         kwargs["extra"] = {k: v for k, v in d.items() if k not in known}

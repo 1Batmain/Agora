@@ -181,6 +181,7 @@ def build_cache(
     meta = {
         "id": dataset,
         "label": label or desc.extra.get("label") or dataset,
+        "status": desc.status,
         "n_nodes": len(ideas),
         "languages": [lg for lg, _ in lang_counts.most_common()],
         "lang_counts": dict(lang_counts.most_common()),
