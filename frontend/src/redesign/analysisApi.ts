@@ -163,47 +163,91 @@ export async function applyAnalysis(
  * the building/error mapping — a plain throw is enough for the UI to ignore.
  */
 
-/** One persisted flag — free-text feedback on an avis, timestamped (UTC ISO-8601). */
-export interface AvisFlag {
-  avis_id: string;
+/**
+ * One persisted flag — free-text feedback on an AVIS or a theme SYNTHESIS,
+ * timestamped (UTC ISO-8601). Themes additionally carry `layer` (depth) +
+ * `category`; avis flags keep `avis_id` (== target_id) for the existing avis UI.
+ */
+export interface Flag {
+  target_type: 'avis' | 'theme';
+  target_id: string;
+  avis_id?: string; // present on avis flags (retro-compat)
+  layer?: number | null;
+  category?: string | null;
   text: string;
   created_at?: string;
   updated_at?: string;
 }
+/** @deprecated kept as an alias — use Flag. */
+export type AvisFlag = Flag;
 
-/** GET /flags {dataset} → all flags of a dataset (to restore state on load). */
-export async function fetchFlags(dataset: string): Promise<AvisFlag[]> {
+/** GET /flags {dataset} → all flags of a dataset, every type (front filters). */
+export async function fetchFlags(dataset: string): Promise<Flag[]> {
   if (FORCE_MOCK) return [];
   const qs = new URLSearchParams({ dataset });
   const { status, body } = await rawFetch(`/api/flags?${qs}`);
-  if (status === 200 && body && Array.isArray(body.flags)) return body.flags as AvisFlag[];
+  if (status === 200 && body && Array.isArray(body.flags)) return body.flags as Flag[];
   return [];
 }
 
-/** POST /flag {dataset, avis_id, text} → upsert the avis flag, returns the saved flag. */
+/** POST /flag — generic upsert; returns the saved flag (or null on failure). */
+async function postFlag(payload: Record<string, unknown>): Promise<Flag | null> {
+  const { status, body } = await rawFetch('/api/flag', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (status === 200 && body && body.ok && body.flag) return body.flag as Flag;
+  return null;
+}
+
+/** DELETE /flag/{id} — generic remove; returns whether it existed. */
+async function deleteFlagOf(
+  dataset: string,
+  targetType: 'avis' | 'theme',
+  targetId: string,
+): Promise<boolean> {
+  const qs = new URLSearchParams({ dataset, target_type: targetType });
+  const { status, body } = await rawFetch(
+    `/api/flag/${encodeURIComponent(targetId)}?${qs}`,
+    { method: 'DELETE' },
+  );
+  return status === 200 && Boolean(body && body.ok && body.removed);
+}
+
+/** Upsert the AVIS flag (free-text), returns the saved flag. */
 export async function upsertFlag(
   dataset: string,
   avisId: string,
   text: string,
-): Promise<AvisFlag | null> {
-  if (FORCE_MOCK) return { avis_id: avisId, text };
-  const { status, body } = await rawFetch('/api/flag', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dataset, avis_id: avisId, text }),
-  });
-  if (status === 200 && body && body.ok && body.flag) return body.flag as AvisFlag;
-  return null;
+): Promise<Flag | null> {
+  if (FORCE_MOCK) return { target_type: 'avis', target_id: avisId, avis_id: avisId, text };
+  return postFlag({ dataset, target_type: 'avis', target_id: avisId, text });
 }
 
-/** DELETE /flag/{avis_id} {dataset} → remove the avis flag, returns whether it existed. */
+/** Remove the AVIS flag, returns whether it existed. */
 export async function deleteFlag(dataset: string, avisId: string): Promise<boolean> {
   if (FORCE_MOCK) return true;
-  const qs = new URLSearchParams({ dataset });
-  const { status, body } = await rawFetch(`/api/flag/${encodeURIComponent(avisId)}?${qs}`, {
-    method: 'DELETE',
-  });
-  return status === 200 && Boolean(body && body.ok && body.removed);
+  return deleteFlagOf(dataset, 'avis', avisId);
+}
+
+/** Upsert a THEME-synthesis flag (category + free-text + layer/depth). */
+export async function upsertThemeFlag(
+  dataset: string,
+  themeId: string,
+  layer: number | null,
+  category: string,
+  text: string,
+): Promise<Flag | null> {
+  if (FORCE_MOCK)
+    return { target_type: 'theme', target_id: themeId, layer, category, text };
+  return postFlag({ dataset, target_type: 'theme', target_id: themeId, layer, category, text });
+}
+
+/** Remove a theme-synthesis flag, returns whether it existed. */
+export async function deleteThemeFlag(dataset: string, themeId: string): Promise<boolean> {
+  if (FORCE_MOCK) return true;
+  return deleteFlagOf(dataset, 'theme', themeId);
 }
 
 /** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */
