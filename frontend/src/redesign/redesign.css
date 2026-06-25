@@ -1913,10 +1913,12 @@ body {
   display: flex; align-items: center; gap: .6rem;
   background: none; border: 0; padding: 0; margin: 0;
   font: inherit; color: inherit; text-align: left; cursor: pointer;
+  transition: transform .12s ease;
+  transform-origin: left center;
 }
 .gov-header__brand--home:disabled { cursor: default; }
-.gov-header__brand--home:not(:disabled):hover .gov-logo__mark { color: #1212ff; }
-.gov-header__brand--home:not(:disabled):hover .gov-header__title strong { text-decoration: underline; }
+.gov-header__brand--home:not(:disabled):hover { transform: scale(1.04); }
+.gov-header__brand--home:not(:disabled):active { transform: scale(1.0); }
 
 /* ── Input style TERMINAL (machine à écrire) — curseur carré bleu clignotant ── */
 .term__label {
