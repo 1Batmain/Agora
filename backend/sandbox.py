@@ -23,6 +23,8 @@ API :
 
 from __future__ import annotations
 
+import os
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from time import perf_counter
 
@@ -38,23 +40,26 @@ from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 
 N_SAMPLE_CLAIMS = 4          # claims d'exemple par cluster (les plus centrales, dédupées)
 
+# Taille MAX des caches mémoire (datasets servis simultanément). Au-delà, on évince
+# le moins récemment utilisé (LRU) → RAM bornée à N datasets. Surchargeable par env.
+_CACHE_MAX = max(1, int(os.environ.get("AGORA_CACHE_MAX", "4")))
+
 
 # --------------------------------------------------------------------------- #
 # Cache MÉMOIRE : PreparedClaims par dataset (lecture disque une seule fois) +
 # dernier état de recluster (pour /explain, qui ne reçoit pas les knobs).
 # --------------------------------------------------------------------------- #
-_PREP_CACHE: dict[str, PreparedClaims] = {}
+_PREP_CACHE: "OrderedDict[str, PreparedClaims]" = OrderedDict()
 _LAST_STATE: dict[str, "SandboxState"] = {}
 
 # Cache du GRAPHE top-level par (dataset, alpha, k) : le blend(α) + voisinage k-NN +
 # défauts dérivés + graphe d'arêtes ne dépendent QUE de (α, k) — pas de la résolution
 # Leiden ni des faders τ/coarsen. Quand l'utilisateur bouge ces faders (cas live le
 # plus fréquent), on rejoue Leiden+subdivision sur le graphe CACHÉ au lieu de
-# re-blender / re-chercher les voisins (≈ blend+knn économisés). LRU minuscule
-# (mémoire : ~30 Mo de vecteurs par α gardé). Stopwords c-TF-IDF mémoïsés par dataset
-# (dérivés des seuls textes de claims — invariants aux knobs).
-_GRAPH_CACHE: "dict[tuple[str, float, int | None], _GraphCtx]" = {}
-_GRAPH_CACHE_MAX = 3
+# re-blender / re-chercher les voisins (≈ blend+knn économisés). LRU bornée à
+# `_CACHE_MAX` entrées (mémoire : ~30 Mo de vecteurs par α gardé). Stopwords c-TF-IDF
+# mémoïsés par dataset (dérivés des seuls textes de claims — invariants aux knobs).
+_GRAPH_CACHE: "OrderedDict[tuple[str, float, int | None], _GraphCtx]" = OrderedDict()
 _STOPWORDS_CACHE: dict[str, frozenset] = {}
 
 
@@ -71,10 +76,14 @@ def get_prepared(ds) -> PreparedClaims:
     des cibles, CPU, aucun LLM) puis caché.
     """
     prep = _PREP_CACHE.get(ds.id)
-    if prep is None:
-        from backend.build_analysis import EXTRACT_MODEL
-        prep = prepare_claims(ds, model=EXTRACT_MODEL)
-        _PREP_CACHE[ds.id] = prep
+    if prep is not None:
+        _PREP_CACHE.move_to_end(ds.id)          # LRU : marque comme récemment utilisé
+        return prep
+    from backend.build_analysis import EXTRACT_MODEL
+    prep = prepare_claims(ds, model=EXTRACT_MODEL)
+    _PREP_CACHE[ds.id] = prep
+    while len(_PREP_CACHE) > _CACHE_MAX:         # évince le moins récemment utilisé
+        _PREP_CACHE.popitem(last=False)
     return prep
 
 
@@ -301,6 +310,7 @@ def _graph_ctx(ds, prep, alpha: float, k: int | None) -> _GraphCtx:
     key = (ds.id, round(float(alpha), 6), k)
     ctx = _GRAPH_CACHE.get(key)
     if ctx is not None:
+        _GRAPH_CACHE.move_to_end(key)            # LRU : marque comme récemment utilisé
         return ctx
 
     vecs = blend_embeddings(prep.claim_vecs, prep.target_vecs, prep.target_mask, alpha)
@@ -314,8 +324,8 @@ def _graph_ctx(ds, prep, alpha: float, k: int | None) -> _GraphCtx:
     ctx = _GraphCtx(vecs=vecs, derived=derived, graph=graph)
 
     _GRAPH_CACHE[key] = ctx
-    if len(_GRAPH_CACHE) > _GRAPH_CACHE_MAX:      # LRU minuscule : évince le plus ancien
-        _GRAPH_CACHE.pop(next(iter(_GRAPH_CACHE)))
+    while len(_GRAPH_CACHE) > _CACHE_MAX:         # LRU bornée : évince le moins récent
+        _GRAPH_CACHE.popitem(last=False)
     return ctx
 
 
