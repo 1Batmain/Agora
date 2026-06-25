@@ -49,3 +49,11 @@ mistral-small **sérial par thème** (`build_analysis.py:129-180`). Backoff (`ba
 - **Conteneurisation** : Dockerfile + compose (serve + worker + proxy) ; manifeste de déploiement.
 - **Backups** : stratégie pour les caches LLM (un rebuild perdu = re-payer mistral-large).
 - **Défense en profondeur** : durcir `recluster.dataset_dir` (rejeter `..`/`/`, ré-ancrer sous CACHE_DIR) même si `_resolve` mitige déjà.
+
+## FLAG GÉNÉRALISÉ — flaguer les synthèses + erreurs de clustering par layer (Bob)
+Étendre le système de flag (aujourd'hui : avis seulement) pour remonter **hallucinations / mauvais résumés / erreurs de
+clustering** sur les **synthèses générées**, **par layer** (macro/sous-thème).
+- Modèle généralisé : `{dataset, target_type:"avis"|"theme", target_id, layer(depth, pour theme), category?, text, ts}`.
+- Backend `/flag` : accepte target_type+target_id (rétro-compat : `avis_id` → type avis). `flags_store` clé par (type,id).
+- Front : bouton « Signaler » sur la **synthèse d'un thème** (panneau insights) → **catégorie** (hallucination | mauvais résumé
+  | erreur de clustering) + texte libre → POST /flag(type=theme, id=theme_id, layer=depth). État flaggé visible. Le flag avis reste.
