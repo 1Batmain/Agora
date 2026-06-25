@@ -74,7 +74,10 @@ export function Landing({
                       </span>
                       <span className="ds-card__title">{d.label}</span>
                       <span className="ds-card__meta">
-                        {d.n_nodes ? `${d.n_nodes.toLocaleString('fr-FR')} contributions` : '—'}
+                        {(() => {
+                          const n = d.n_contributions ?? d.n_nodes;
+                          return n ? `${n.toLocaleString('fr-FR')} contributions` : '—';
+                        })()}
                       </span>
                       <span className="ds-card__cta">
                         {open ? 'Participer →' : 'Voir l’analyse →'}
