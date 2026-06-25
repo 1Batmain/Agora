@@ -88,6 +88,53 @@ export function Landing({
             </ul>
           )}
         </section>
+
+        <section className="landing__how">
+          <h2>
+            <span className="landing__list-idx">02</span> Comment ça marche
+          </h2>
+          <p className="how__lead">
+            Agora transforme des milliers de contributions en une carte des idées —
+            fidèlement, sans grille imposée et sans reformuler la parole citoyenne.
+          </p>
+          <ol className="how__steps">
+            <li className="how__step">
+              <span className="how__num">1</span>
+              <div>
+                <strong>Extraction fidèle</strong>
+                <p>
+                  Chaque contribution est découpée en idées reprises <em>mot à mot</em>{' '}
+                  — jamais reformulées. La position du citoyen n'est pas déformée.
+                </p>
+              </div>
+            </li>
+            <li className="how__step">
+              <span className="how__num">2</span>
+              <div>
+                <strong>Regroupement émergent</strong>
+                <p>
+                  Les idées sont placées dans un espace sémantique et regroupées par
+                  thème <em>automatiquement</em> — les sujets émergent des données,
+                  aucune catégorie n'est imposée à l'avance.
+                </p>
+              </div>
+            </li>
+            <li className="how__step">
+              <span className="how__num">3</span>
+              <div>
+                <strong>Synthèse traçable</strong>
+                <p>
+                  Chaque thème reçoit une synthèse lisible, et chaque idée reste{' '}
+                  <em>traçable</em> jusqu'à la contribution d'origine — on peut
+                  toujours remonter à la source.
+                </p>
+              </div>
+            </li>
+          </ol>
+          <p className="how__footer">
+            Modèles ouverts · traitement souverain · multilingue.
+          </p>
+        </section>
       </main>
     </div>
   );
