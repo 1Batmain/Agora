@@ -64,22 +64,17 @@ export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () 
         </section>
 
         <form className="participate__form" onSubmit={onSubmit}>
-          <label htmlFor="participate-text" className="term__label">votre_avis</label>
-          <div className={`term${text ? ' term--typing' : ''}`}>
-            <span className="term__prompt" aria-hidden>❯</span>
-            <textarea
-              id="participate-text"
-              className="term__input"
-              rows={8}
-              placeholder="exprimez votre point de vue sur le sujet…"
-              value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-                if (status !== 'sending') setStatus('idle');
-              }}
-            />
-            {!text && <span className="term__cursor" aria-hidden />}
-          </div>
+          <textarea
+            id="participate-text"
+            className="participate__input"
+            rows={6}
+            placeholder="Écrivez votre avis ici…"
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (status !== 'sending') setStatus('idle');
+            }}
+          />
           <div className="participate__actions">
             <button
               type="submit"
