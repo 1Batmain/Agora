@@ -1933,3 +1933,28 @@ body {
   padding: .3rem .55rem; border: 1px solid rgba(0,0,145,.25);
   white-space: nowrap; max-width: 42ch; overflow: hidden; text-overflow: ellipsis;
 }
+
+/* ── Page d'APERÇU d'une consultation close (présentation avant le graphe) ── */
+.overview__body { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.overview__title {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 2rem; line-height: 1.2; margin: 0 0 .6rem; color: #111;
+}
+.overview__context { color: #444; line-height: 1.7; margin: 0 0 2rem; max-width: 72ch; }
+.overview__stats {
+  display: flex; gap: 2.6rem; flex-wrap: wrap;
+  padding: 1.4rem 0; margin: 0 0 2rem;
+  border-top: 1px solid #e6e6ef; border-bottom: 1px solid #e6e6ef;
+}
+.overview__stat { display: flex; flex-direction: column; }
+.overview__stat strong {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 1.55rem; color: var(--agora, #000091); line-height: 1.1;
+}
+.overview__stat span { color: #777; font-size: .85rem; margin-top: .25rem; }
+.overview__cta { margin: 0 0 2.6rem; }
+.overview__synthesis h2 {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 1.05rem; letter-spacing: .02em; margin: 0 0 1rem; color: var(--agora, #000091);
+}
+.overview__loading { color: #999; }
