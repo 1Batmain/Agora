@@ -63,6 +63,7 @@ clustering** sur les **synthèses générées**, **par layer** (macro/sous-thèm
 - **Landing** : pitch Agora court + accrocheur, puis **cartes de consultations** avec statut **Ouvert/Clos** (champ `status`
   du descripteur, exposé par `/datasets`).
 - **Clos** → la vue actuelle (carte/synthèses/avis).
+- CONSULTATION OUVERTE = « Aidez-nous à améliorer Agora » (méta : avis/remarques/idées sur la plateforme). Neuve → corrélation bâtie depuis les contributions ; seed quelques exemples.
 - **Ouvert** → page sujet de la consultation + **participer** : l'utilisateur soumet une contribution et reçoit des
   **insights de CORRÉLATION** avec les avis déjà traités. MVP : embed nomic de l'input (pas de LLM, instantané) → thème le plus
   proche → « votre contribution rejoint « X » que **N personnes** ont aussi évoqué » (+ force du lien, position vs consensus si dispo).
