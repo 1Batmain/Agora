@@ -13,10 +13,16 @@ du texte : highlight fidèle, zéro dérive.
                  theme_title} ]
     }
 
-`text` = ORIGINAL (les spans/cibles des claims y pointent — gate verbatim). `text_fr` =
-traduction française (précalculée au BUILD, cf. `backend.translate`) ou `null` si l'avis
-est déjà français / non traduit. `lang` = code langue de l'avis. Le front affiche `text_fr`
-par défaut quand `lang != fr`, avec un toggle « voir l'original » (surlignages sur `text`).
+`text` = texte CANONIQUE de l'avis = `text_clean` (`pipeline.ingest.normalize`) :
+normalisé ET **PII évidentes masquées** (emails/tél./URL/@mentions → placeholders).
+C'est ce MÊME texte qui a servi à l'extraction et sur lequel les spans/cibles des claims
+sont ancrés (cf. `claims_endpoint._avis_from_ideas`, qui privilégie `text_clean`) : le
+highlight reste donc verbatim ET on ne sert JAMAIS la PII brute (SEC3). `text_fr` =
+traduction française (précalculée au BUILD sur ce même `text_clean`, cf. `backend.translate`)
+ou `null` si l'avis est déjà français / non traduit. `lang` = code langue de l'avis. Le front
+affiche `text_fr` par défaut quand `lang != fr`, avec un toggle « voir l'original »
+(surlignages sur `text`). ⚠️ Ne JAMAIS remplacer `a.text` par le texte source brut ici :
+cela réintroduirait la PII ET décalerait les offsets des spans.
 
 Construit depuis l'arbre variance-adaptatif (`backend.analysis`) — aucun recalcul.
 Précalculé au BUILD et persisté (`analysis_store`), servi tel quel (instantané).
@@ -87,6 +93,8 @@ def avis_payload_for(tree: ThemeTree, avis_index: int,
         claim_macro = _claim_macro(tree)
     a = tree.prepared.avis[avis_index]
     tr = (translations or {}).get(str(a.id)) or {}
+    # `a.text` est le texte CANONIQUE masqué (`text_clean`) sur lequel les spans sont
+    # ancrés : on le sert TEL QUEL (cohérence offsets + zéro PII brute, cf. docstring).
     return {"id": a.id, "text": a.text,
             "text_fr": tr.get("text_fr"), "lang": tr.get("lang", "fr"),
             "claims": avis_claims(tree, avis_index, claim_macro)}
