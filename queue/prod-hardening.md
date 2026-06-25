@@ -3,7 +3,7 @@
 > **Ordre : sécurité d'abord (P1, P3, P5), puis scaling (P2, P4).** À lancer après la consolidation.
 > Garde-fous transverses : ne pas casser le verbatim-gate, /avis, le multilingue, le rendu par défaut ; zéro-hardcoding.
 
-## P1 — SEC1 (CRITIQUE, bloquant) : verrouiller l'exposition du backend
+## P1 — SEC1 ✅ FAIT (34f8e07) : verrouiller l'exposition du backend
 **Constat** : FastAPI sur `0.0.0.0:8010` sans auth, CORS `allow_origins=["*"]` (`server.py:88-93`) ; `POST /build`, `/sandbox`, `/flag`
 déclenchent calcul lourd / écriture → DoS + abus de facture Mistral trivial.
 - **Auth** : token/clé (env `AGORA_API_TOKEN`) requis au minimum sur les endpoints MUTATIFS/coûteux (`/build`, `/sandbox`, `/flag`,
