@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from backend.recluster import CACHE_DIR, list_datasets
+from backend.recluster import list_datasets
 
 # Les 4 datasets attendus dans le cache (ordre du brief). On teste l'INTERSECTION avec
 # ce qui est réellement construit : un dataset absent du cache → skip ciblé.
@@ -37,8 +37,3 @@ def require_ready(client, dataset: str) -> None:
             f"analyse {dataset!r} non précalculée (cache analysis/ absent) — "
             f"construis-la (`POST /build`) pour activer ce test"
         )
-
-
-def has_claims(dataset: str) -> bool:
-    """True si les claims extraits sont cachés (prérequis de `/sandbox`/`/explain`)."""
-    return (CACHE_DIR / dataset / "claims.json").exists()
