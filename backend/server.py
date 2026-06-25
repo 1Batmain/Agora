@@ -11,7 +11,7 @@ comporte comme sur le défaut (`tiktok`).
 
 Endpoints :
   - GET  /health        → {ok, datasets, default_dataset}
-  - GET  /datasets      → [{id, label, n_nodes, languages, source, namings}]
+  - GET  /datasets      → [{id, label, status, n_nodes, languages, source, namings}]
   - POST /analysis      → carte précalculée (arbre incrémental + co-occurrence, d3-pack)
   - GET  /insights      → synthèse Markdown LLM précalculée (global | theme)
   - GET  /citations     → claims d'un thème, triées par proximité au centroïde
