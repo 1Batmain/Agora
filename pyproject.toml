@@ -49,3 +49,13 @@ explicit = true
 
 [tool.uv.sources]
 torch = { index = "pytorch-cpu" }
+
+# Suite de régression API (FastAPI TestClient in-process, lit les vrais caches).
+# Lancer :  uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
+# Les tests dépendant d'une analyse précalculée se SKIPPENT proprement si le cache
+# `analysis/` (ou `claims.json` pour /sandbox) du dataset est absent — jamais d'échec
+# parasite ni de build LLM déclenché (cf. backend/tests/conftest.py).
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
+addopts = "-q -ra"
