@@ -499,6 +499,12 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.panel__head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
 .panel__empty {
   color: var(--grey-500);
   font-size: 14px;
@@ -734,6 +740,20 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+}
+.flag__select {
+  width: 100%;
+  font-size: 13px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  background: var(--bg-raised);
+}
+.flag__select:focus {
+  outline: 2px solid var(--agora-soft2);
+  border-color: var(--agora);
 }
 .flag__input {
   width: 100%;
