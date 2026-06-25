@@ -13,7 +13,7 @@ déclenchent calcul lourd / écriture → DoS + abus de facture Mistral trivial.
 - **Bind** : `127.0.0.1` derrière un reverse-proxy (doc déploiement) plutôt que `0.0.0.0` exposé.
 - **Acceptance** : appels mutatifs refusés (401) sans token ; CORS limité ; rate-limit testé ; doc proxy. Lecture inchangée pour le front (token injecté).
 
-## P2 — borner la RAM ✅ FAIT (565faba) · découpler build/serve = RESTE
+## P2 ✅ FAIT : borner la RAM (565faba) + découpler build/serve en subprocess (118cca1)
 **Constat** : process unique ; tous datasets en RAM au boot (`server.py:62-69`) ; `_PREP_CACHE` (`sandbox.py:46`) + `_GRAPH_CACHE`
 jamais évincés (float64 ×2) ; build en thread daemon DANS le serve (`build_manager.py:67`) ; mono-worker (GIL).
 - **Lazy-load** des datasets (charger `_Dataset` à la 1re requête, pas au boot).
@@ -28,7 +28,7 @@ jamais évincés (float64 ×2) ; build en thread daemon DANS le serve (`build_ma
 - **Pas de défaut** : exiger `AGORA_HASH_SALT` (≥32 octets aléatoires) ; **échec au démarrage de l'ingestion** si absent.
 - **Acceptance** : ingestion refuse de tourner sans sel secret ; doc de génération du sel.
 
-## P4 — S3 (ÉLEVÉ, scaling/coût) : industrialiser le coût LLM
+## P4 — S3 ✅ FAIT (f6c4eed) : LLM parallélisé (×3-5 build) + nomic épinglé
 **Constat** : extraction mistral-large (`build_analysis.py:54`) batchée 8/avis mais **boucle séquentielle** ; enrichissement
 mistral-small **sérial par thème** (`build_analysis.py:129-180`). Backoff (`backend.py:42`) sérialise sous RPM bas.
 - **Paralléliser** les lots d'extraction (asyncio + **sémaphore respectant le RPM**) et les boucles d'enrichissement (ThreadPool borné).
