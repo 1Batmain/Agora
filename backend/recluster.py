@@ -138,6 +138,9 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> dict:
     return {
         "id": dataset,
         "label": meta.get("label", dataset),
+        # Statut de consultation : "open" | "closed". Défaut prudent "closed"
+        # (les caches déjà construits sans ce champ restent en analyse seule).
+        "status": meta.get("status", "closed"),
         "n_nodes": meta.get("n_nodes", derived.get("n_nodes", 0)),
         "languages": meta.get("languages", derived.get("languages", [])),
         "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
