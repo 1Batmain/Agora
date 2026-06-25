@@ -1,4 +1,4 @@
-import type { Dataset } from './types';
+import type { Dataset, SubmitResult } from './types';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
@@ -33,4 +33,20 @@ async function jsonFetch(url: string, init?: RequestInit, timeoutMs = TIMEOUT_MS
 export async function fetchDatasets(): Promise<Dataset[]> {
   const raw = await jsonFetch('/api/datasets');
   return Array.isArray(raw) ? (raw as Dataset[]) : [];
+}
+
+/**
+ * Envoie une contribution sur une consultation OUVERTE. Le backend l'embedde
+ * (nomic local) et la corrèle aux retours déjà reçus → `{n_similar, nearest_excerpt}`.
+ * L'embedding du modèle peut prendre quelques secondes au 1ᵉʳ appel (chargement lazy).
+ */
+export async function submitContribution(
+  consultationId: string,
+  text: string,
+): Promise<SubmitResult> {
+  return (await jsonFetch('/api/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ consultation_id: consultationId, text }),
+  })) as SubmitResult;
 }

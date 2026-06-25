@@ -44,6 +44,10 @@ DEFAULT_NAMING_METHOD = DEFAULT_NAMING
 CACHE_DIR = Path(__file__).resolve().parent / "cache"
 DEFAULT_DATASET = "tiktok"
 
+# Descripteurs d'ingestion (un par consultation). Les consultations OUVERTES
+# (status:"open") n'ont pas encore de cache d'analyse : on les découvre ici.
+DESCRIPTORS_DIR = Path(__file__).resolve().parent.parent / "pipeline" / "ingest" / "descriptors"
+
 MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
 
 EMB_NAME = "embeddings.npy"
@@ -75,6 +79,60 @@ def list_datasets() -> list[str]:
     ]
     found.sort(key=lambda n: (n != DEFAULT_DATASET, n))
     return found
+
+
+def _read_descriptor_file(name: str) -> dict | None:
+    """Lit un descripteur d'ingestion `pipeline/ingest/descriptors/<name>.json`."""
+    p = DESCRIPTORS_DIR / f"{name}.json"
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def list_open_consultations() -> list[str]:
+    """Consultations OUVERTES = descripteurs `status:"open"` SANS cache d'analyse.
+
+    Découverte pure (zéro littéral de corpus) : scanne les descripteurs et garde
+    ceux marqués `status:"open"` qui ne sont PAS déjà des datasets cachés. Une
+    consultation neuve n'a ni `embeddings.npy` ni `ideas.jsonl`, donc elle échappe
+    à `list_datasets()` — on la liste ici pour que la landing affiche sa carte
+    « Ouvert » et route vers la vue Participer.
+    """
+    if not DESCRIPTORS_DIR.exists():
+        return []
+    cached = set(list_datasets())
+    found = [
+        p.stem
+        for p in sorted(DESCRIPTORS_DIR.glob("*.json"))
+        if p.stem not in cached and (_read_descriptor_file(p.stem) or {}).get("status") == "open"
+    ]
+    return found
+
+
+def open_consultation_descriptor(name: str) -> dict:
+    """Descripteur dataset-shaped d'une consultation OUVERTE (sans cache d'analyse).
+
+    Même forme que `dataset_descriptor` (pour peupler `/datasets`), enrichie de
+    `question`/`context` (sujet affiché dans la vue Participer). `n_nodes` = nombre
+    de contributions déjà reçues (seed + live), pour l'affichage de la carte.
+    """
+    from backend.submissions import count_submissions  # local : évite torch au boot
+
+    d = _read_descriptor_file(name) or {}
+    return {
+        "id": name,
+        "label": d.get("label", name),
+        "status": "open",
+        "n_nodes": count_submissions(name),
+        "languages": [],
+        "lang_counts": {},
+        "source": name,
+        "question": d.get("question", ""),
+        "context": d.get("context", ""),
+    }
 
 
 def load_cache(dataset: str = DEFAULT_DATASET) -> tuple[list[Idea], np.ndarray, np.ndarray]:

@@ -46,7 +46,9 @@ from backend.recluster import (
     NAMINGS,
     dataset_descriptor,
     list_datasets,
+    list_open_consultations,
     load_cache,
+    open_consultation_descriptor,
 )
 from backend import analysis_store, build_manager, flags_store
 
@@ -136,12 +138,87 @@ def datasets() -> list[dict]:
 
     Lazy-load : le descripteur est lu depuis `meta.json`/`ideas` (léger), SANS forcer
     le chargement des vecteurs en RAM (qui n'a lieu qu'au 1ᵉʳ `_resolve` du dataset).
+
+    Inclut aussi les consultations OUVERTES (descripteurs `status:"open"`), même
+    SANS cache d'analyse : elles n'ont pas de dossier cache/ mais doivent apparaître
+    sur la landing (carte « Ouvert » → vue Participer).
     """
-    return [
+    closed = [
         {**dataset_descriptor(ds_id),
          "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
         for ds_id in _ids
     ]
+    open_ = [open_consultation_descriptor(name) for name in list_open_consultations()]
+    # Ouvertes en tête : ce sont celles où l'on peut encore agir.
+    return open_ + closed
+
+
+# ===================== Participation (consultations OUVERTES) ===================== #
+# Une contribution citoyenne sur une consultation OUVERTE est embeddée nomic LOCAL
+# (aucun LLM/clé) et corrélée AU MOMENT MÊME aux contributions déjà reçues : on
+# renvoie combien de personnes ont déjà évoqué un sujet proche + l'extrait le plus
+# proche, puis on stocke la contribution. Voir backend/submissions.py.
+
+# Bornes de saisie (anti-abus léger) : un avis court mais réel ↔ pas un pavé.
+SUBMIT_MIN_CHARS = 3
+SUBMIT_MAX_CHARS = 5000
+
+
+class SubmitBody(BaseModel):
+    """Corps de `POST /submit` — une contribution sur une consultation ouverte."""
+    consultation_id: str
+    text: str
+
+
+@app.post("/submit", dependencies=PROTECTED)
+def submit(body: SubmitBody) -> dict:
+    """Reçoit une contribution citoyenne, la corrèle aux retours déjà reçus, la stocke.
+
+    1. valide la consultation (doit être OUVERTE) et le texte,
+    2. embedde le texte (nomic local),
+    3. corrèle au cosinus aux contributions existantes → `n_similar` + extrait proche,
+    4. stocke {text, vec, ts},
+    5. renvoie `{ok, n_similar, nearest_excerpt, message}`.
+    """
+    from datetime import datetime, timezone
+
+    from backend import submissions
+
+    if body.consultation_id not in set(list_open_consultations()):
+        raise HTTPException(
+            status_code=404,
+            detail=f"consultation ouverte inconnue: {body.consultation_id!r}",
+        )
+    text = (body.text or "").strip()
+    if len(text) < SUBMIT_MIN_CHARS:
+        raise HTTPException(status_code=422, detail="Contribution trop courte.")
+    if len(text) > SUBMIT_MAX_CHARS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Contribution trop longue (max {SUBMIT_MAX_CHARS} caractères).",
+        )
+
+    vec = submissions.embed_text(text)
+    existing = submissions.load_submissions(body.consultation_id)
+    corr = submissions.correlate(vec, existing)
+    ts = datetime.now(timezone.utc).isoformat()
+    submissions.append_submission(body.consultation_id, text, vec, ts)
+
+    n = corr["n_similar"]
+    if n > 0:
+        message = (
+            f"{n} personne{'s' if n > 1 else ''} ont déjà évoqué un sujet proche."
+            if n > 1
+            else "1 personne a déjà évoqué un sujet proche."
+        )
+    else:
+        message = "Vous êtes parmi les premiers à soulever ce point !"
+    return {
+        "ok": True,
+        "n_similar": n,
+        "nearest_excerpt": corr["nearest_excerpt"] if n > 0 else None,
+        "message": message,
+    }
 
 
 # ===================== Refonte « carte spatiale » (B1–B4) ===================== #
