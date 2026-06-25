@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { submitContribution } from '../api';
+import { Header } from './Header';
 import type { Dataset, SubmitResult } from '../types';
 
 /**
@@ -36,25 +37,10 @@ export function Participate({ dataset, onBack }: { dataset: Dataset; onBack: () 
 
   return (
     <div className="agora participate">
-      <header className="gov-header">
-        <button
-          type="button"
-          className="gov-header__brand gov-header__brand--home"
-          onClick={onBack}
-          title="Retour à l’accueil"
-        >
-          <div className="gov-logo" aria-hidden>
-            <span className="gov-logo__mark">◆</span>
-          </div>
-          <div className="gov-header__title">
-            <strong>Agora</strong>
-            <span>Participer à la consultation</span>
-          </div>
-        </button>
-        <div className="gov-header__right">
-          <span className="ds-card__badge ds-card__badge--open">Ouvert</span>
-        </div>
-      </header>
+      <Header
+        onHome={onBack}
+        right={<span className="ds-card__badge ds-card__badge--open">Ouvert</span>}
+      />
 
       <main className="participate__body">
         <section className="participate__topic">
