@@ -24,8 +24,13 @@
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   --radius: 8px;
 
-  font-family: 'Marianne', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* Typographie machine à écrire : mono propre, lisible, partout. */
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', 'Menlo',
+    monospace;
+  font-family: var(--mono);
   color: var(--grey-1000);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 
   /* header height — used to offset the sticky right column / resizer below it. */
   --header-h: 66px;
@@ -44,6 +49,9 @@ body,
 body {
   background: var(--bg);
   color: var(--grey-1000);
+  font-family: var(--mono);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
 .agora {
