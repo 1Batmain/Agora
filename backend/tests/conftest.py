@@ -9,8 +9,8 @@ sans jamais déclencher de calcul lourd.
   * **Skip propre, jamais d'échec parasite** : les tests qui exigent une analyse PRÊTE
     (`/analysis`, `/avis`, `/citations`, `/insights`) sont SKIPPÉS quand le cache
     `analysis/` du dataset n'est pas construit — au lieu d'échouer OU de déclencher un
-    build (cf. `require_ready`). Idem `/sandbox` quand `claims.json` est absent. Ils
-    s'activent automatiquement dès que le précalcul existe.
+    build (cf. `require_ready`). Ils s'activent automatiquement dès que le précalcul
+    existe.
   * **Tests toujours actifs** : lecture/shape de base (`/health`, `/datasets`,
     `/build_status`, `/flags`), whitelist sécurité (404 path-traversal), auth (401/200)
     et rate-limit (429) ne dépendent d'AUCUN précalcul et tournent inconditionnellement.
