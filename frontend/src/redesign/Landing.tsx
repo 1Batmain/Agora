@@ -1,3 +1,4 @@
+import { Header } from './Header';
 import type { Dataset } from '../types';
 
 /**
@@ -21,29 +22,14 @@ export function Landing({
 
   return (
     <div className="agora landing">
-      <header className="gov-header">
-        <div className="gov-header__brand">
-          <div className="gov-logo" aria-hidden>
-            <span className="gov-logo__mark">◆</span>
-          </div>
-          <div className="gov-header__title">
-            <strong>Agora</strong>
-            <span>Analyse des consultations citoyennes</span>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="landing__body">
         <section className="hero">
-          <p className="hero__eyebrow">
-            <span className="hero__prompt">~/agora</span>
-            <span>consultations citoyennes, lues par l'IA</span>
-            <span className="hero__caret" aria-hidden />
-          </p>
           <h1 className="hero__title">
             La parole citoyenne,
             <br />
-            <span className="hero__accent">structurée fidèlement.</span>
+            <span className="hero__accent">réstituée fidèlement.</span>
           </h1>
           <p className="hero__tagline">
             Agora fait émerger les thèmes des grandes consultations sans trahir
