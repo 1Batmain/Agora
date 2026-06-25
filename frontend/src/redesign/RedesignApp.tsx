@@ -16,14 +16,6 @@ import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
 import { themeCaption } from './labels';
 
-/** Human badge label per data source (live / build / mock / error). */
-const SOURCE_LABEL: Record<DataSource, string> = {
-  live: 'backend live',
-  building: 'analyse en cours',
-  mock: 'données mock',
-  error: 'backend indisponible',
-};
-
 // Right panel width (px) — drag-resizable, persisted, with sane bounds.
 const RIGHT_MIN = 300;
 const RIGHT_MAX = 760;
@@ -283,9 +275,6 @@ export default function RedesignApp() {
               ))}
             </select>
           </label>
-          {analysisSource && (
-            <span className={`badge badge--${analysisSource}`}>{SOURCE_LABEL[analysisSource]}</span>
-          )}
         </div>
       </header>
 
