@@ -57,3 +57,14 @@ clustering** sur les **synthèses générées**, **par layer** (macro/sous-thèm
 - Backend `/flag` : accepte target_type+target_id (rétro-compat : `avis_id` → type avis). `flags_store` clé par (type,id).
 - Front : bouton « Signaler » sur la **synthèse d'un thème** (panneau insights) → **catégorie** (hallucination | mauvais résumé
   | erreur de clustering) + texte libre → POST /flag(type=theme, id=theme_id, layer=depth). État flaggé visible. Le flag avis reste.
+
+## MVP EN LIGNE — landing + consultations ouvertes/closes + participation corrélée (Bob, 2026-06-25)
+- **Retirer les badges dev** ("live"/"backend live"/"données mock"/"backend indisponible").
+- **Landing** : pitch Agora court + accrocheur, puis **cartes de consultations** avec statut **Ouvert/Clos** (champ `status`
+  du descripteur, exposé par `/datasets`).
+- **Clos** → la vue actuelle (carte/synthèses/avis).
+- **Ouvert** → page sujet de la consultation + **participer** : l'utilisateur soumet une contribution et reçoit des
+  **insights de CORRÉLATION** avec les avis déjà traités. MVP : embed nomic de l'input (pas de LLM, instantané) → thème le plus
+  proche → « votre contribution rejoint « X » que **N personnes** ont aussi évoqué » (+ force du lien, position vs consensus si dispo).
+  Endpoint `/submit` : embed + nearest-theme + stats population ; stocke la contribution (horodatée) pour analyse ultérieure.
+  Plus tard : extraction claim+cible LLM pour une corrélation plus fine + ajout à l'analyse.
