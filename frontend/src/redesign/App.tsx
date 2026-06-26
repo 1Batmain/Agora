@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchDatasets } from '../api';
-import type { Consultation } from '../types';
+import type { Consultation } from './contract';
 import { Landing } from './Landing';
 import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';

@@ -1,7 +1,7 @@
 import { useCallbackRef } from '../useCallbackRef';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchDatasets } from '../api';
-import type { Consultation } from '../types';
+import type { Consultation } from './contract';
 import type {
   AnalysisPayload,
   BuildProgress,

@@ -1,5 +1,5 @@
 import { Header } from './Header';
-import type { Consultation } from '../types';
+import type { Consultation } from './contract';
 
 /**
  * Vue d'accueil d'Agora — hero « façon framework » (grand titre mono, tagline,

@@ -22,32 +22,14 @@ import type {
   InsightLevel,
 } from './contract';
 import { mockAnalysis, mockAvis, mockCitations, mockInsights } from './mock';
+import { rawFetch } from './http';
 
 const FORCE_MOCK = import.meta.env.VITE_FORCE_MOCK === '1';
-const TIMEOUT_MS = 180000;
 
 export interface Sourced<T> {
   data: T | null;
   source: DataSource;
   progress?: BuildProgress;
-}
-
-interface RawResult {
-  status: number;
-  body: any;
-}
-
-/** Fetch + parse JSON, returning status code and body (never throws on non-2xx). */
-async function rawFetch(url: string, init?: RequestInit): Promise<RawResult> {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-  try {
-    const r = await fetch(url, { ...init, signal: ctrl.signal });
-    const body = await r.json().catch(() => null);
-    return { status: r.status, body };
-  } finally {
-    clearTimeout(t);
-  }
 }
 
 /** Map a not-ready backend body to a building/error source (no mock fallback). */
@@ -64,7 +46,7 @@ export async function fetchAnalysis(
 ): Promise<Sourced<AnalysisPayload>> {
   if (FORCE_MOCK) return { data: mockAnalysis(dataset, backend), source: 'mock' };
   try {
-    const { status, body } = await rawFetch('/api/analysis', {
+    const { status, body } = await rawFetch('/analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dataset, backend }),
@@ -92,7 +74,7 @@ export async function fetchInsights(
   try {
     const qs = new URLSearchParams({ dataset, level });
     if (themeId) qs.set('id', themeId);
-    const { status, body } = await rawFetch(`/api/insights?${qs}`);
+    const { status, body } = await rawFetch(`/insights?${qs}`);
     if (status === 200 && body && typeof body.markdown === 'string') {
       return { data: body.markdown, source: 'live' };
     }
@@ -110,7 +92,7 @@ export async function fetchCitations(
   if (FORCE_MOCK) return { data: mockCitations(dataset, themeId), source: 'mock' };
   try {
     const qs = new URLSearchParams({ dataset, theme_id: themeId });
-    const { status, body } = await rawFetch(`/api/citations?${qs}`);
+    const { status, body } = await rawFetch(`/citations?${qs}`);
     if (status === 200 && Array.isArray(body)) {
       return { data: body as Citation[], source: 'live' };
     }
@@ -149,14 +131,14 @@ export type AvisFlag = Flag;
 export async function fetchFlags(dataset: string): Promise<Flag[]> {
   if (FORCE_MOCK) return [];
   const qs = new URLSearchParams({ dataset });
-  const { status, body } = await rawFetch(`/api/flags?${qs}`);
+  const { status, body } = await rawFetch(`/flags?${qs}`);
   if (status === 200 && body && Array.isArray(body.flags)) return body.flags as Flag[];
   return [];
 }
 
 /** POST /flag — generic upsert; returns the saved flag (or null on failure). */
 async function postFlag(payload: Record<string, unknown>): Promise<Flag | null> {
-  const { status, body } = await rawFetch('/api/flag', {
+  const { status, body } = await rawFetch('/flag', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -173,7 +155,7 @@ async function deleteFlagOf(
 ): Promise<boolean> {
   const qs = new URLSearchParams({ dataset, target_type: targetType });
   const { status, body } = await rawFetch(
-    `/api/flag/${encodeURIComponent(targetId)}?${qs}`,
+    `/flag/${encodeURIComponent(targetId)}?${qs}`,
     { method: 'DELETE' },
   );
   return status === 200 && Boolean(body && body.ok && body.removed);
@@ -222,7 +204,7 @@ export async function fetchAvis(
   if (FORCE_MOCK) return { data: mockAvis(dataset, avisId), source: 'mock' };
   try {
     const qs = new URLSearchParams({ dataset });
-    const { status, body } = await rawFetch(`/api/avis/${encodeURIComponent(avisId)}?${qs}`);
+    const { status, body } = await rawFetch(`/avis/${encodeURIComponent(avisId)}?${qs}`);
     if (status === 200 && body && typeof body.text === 'string' && Array.isArray(body.claims)) {
       return { data: body as AvisProvenance, source: 'live' };
     }

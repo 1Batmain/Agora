@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { submitContribution } from '../api';
 import { Header } from './Header';
-import type { Consultation, SubmitResult } from '../types';
+import type { Consultation, SubmitResult } from './contract';
 
 /**
  * Vue PARTICIPER d'une consultation OUVERTE : affiche le sujet de la consultation
