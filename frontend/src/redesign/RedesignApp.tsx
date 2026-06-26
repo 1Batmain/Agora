@@ -12,6 +12,7 @@ import type {
 import { fetchAnalysis, fetchCitations, fetchFlags, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { SpatialMap } from './SpatialMap';
+import { Density3D } from './Density3D';
 import { InsightsPanel, type ThemeFlagState } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
@@ -55,6 +56,9 @@ export default function RedesignApp({
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
   const [selected, setSelected] = useState<SpatialTheme | null>(null);
+
+  // central view mode: theme bubbles (« Graphe ») ⇄ density landscape (« Paysage 3D »).
+  const [viewMode, setViewMode] = useState<'graph' | 'landscape'>('graph');
 
   // right-column content state
   const [markdown, setMarkdown] = useState<string | null>(null);
@@ -293,11 +297,35 @@ export default function RedesignApp({
               into the START of the GLOBAL synthesis (right panel), so the global view
               shows a SINGLE synthesis. See `panelMarkdown` below. */}
 
+          {/* Toggle « Graphe » ⇄ « Paysage 3D » : même zone centrale, deux lectures. */}
+          {!busy && themes.length > 0 && (
+            <div className="viewtoggle" role="tablist" aria-label="Mode de visualisation">
+              <button
+                role="tab"
+                aria-selected={viewMode === 'graph'}
+                className={`viewtoggle__tab${viewMode === 'graph' ? ' viewtoggle__tab--active' : ''}`}
+                onClick={() => setViewMode('graph')}
+              >
+                Graphe
+              </button>
+              <button
+                role="tab"
+                aria-selected={viewMode === 'landscape'}
+                className={`viewtoggle__tab${viewMode === 'landscape' ? ' viewtoggle__tab--active' : ''}`}
+                onClick={() => setViewMode('landscape')}
+              >
+                Paysage 3D
+              </button>
+            </div>
+          )}
+
           <div className="agora__canvas">
             {busy ? (
               <div className="agora__loading">
                 <span className="spinner" /> calcul de la carte…
               </div>
+            ) : viewMode === 'landscape' && themes.length ? (
+              <Density3D dataset={dataset} />
             ) : themes.length ? (
               <SpatialMap
                 themes={themes}
