@@ -22,6 +22,9 @@ export interface ScatterPoint {
 /** Meta block of a `/recluster` response (only the fields the Console consumes). */
 export interface ReclusterMeta {
   dataset: string;
+  /** Nombre de voisins du graphe k-NN — LEVIER de la Console. */
+  k: number | null;
+  k_default: number | null;
   knn_threshold: number | null;
   knn_threshold_default: number | null;
   n_themes: number;
@@ -40,18 +43,18 @@ export interface ReclusterPayload {
 }
 
 /**
- * Re-cluster a dataset at the given k-NN threshold. `knn_threshold=null` asks the
- * backend for the derived default. Returns `null` when the backend can't serve the
- * map (e.g. 503: vectors not cached) so the Console can show a graceful message.
+ * Re-cluster a dataset with the given number of k-NN neighbours `k`. `k=null` asks
+ * the backend for the derived default. Returns `null` when the backend can't serve
+ * the map (e.g. 503: vectors not cached) so the Console can show a graceful message.
  */
 export async function fetchRecluster(
   dataset: string,
-  knnThreshold: number | null,
+  k: number | null,
 ): Promise<ReclusterPayload | null> {
   const { status, body } = await rawFetch('/recluster', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dataset, knn_threshold: knnThreshold }),
+    body: JSON.stringify({ dataset, k }),
   });
   if (status === 200 && body && Array.isArray(body.themes) && Array.isArray(body.points)) {
     return body as ReclusterPayload;

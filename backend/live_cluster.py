@@ -63,6 +63,7 @@ def build_live_tree(
     weights: np.ndarray,
     knn_threshold: float | None = None,
     *,
+    k: int | None = None,
     resolution: float = 1.0,
     seed: int = DEFAULT_SEED,
 ) -> SimpleNamespace:
@@ -98,7 +99,9 @@ def build_live_tree(
     thr = float(knn_threshold) if knn_threshold is not None else None
 
     if n:
-        k = derive_k(n)
+        # `k` (nombre de voisins) = LEVIER de la Console. Donné → borné [2, n−1] ;
+        # sinon dérivé de N (démarre comme `/analysis`). Le seuil suit (dérivé du k).
+        k = max(2, min(int(k), n - 1)) if k is not None else derive_k(n)
         neighbors = knn_search(v32, k)           # 1 passe k-NN → seuil dérivé + graphe
         derived = derive_defaults(v32, k=k, neighbors=neighbors)
         if thr is None:                          # défaut = seuil DÉRIVÉ (démarre comme /analysis)
@@ -196,6 +199,7 @@ def recluster_payload(
     dataset: str,
     knn_threshold: float | None = None,
     *,
+    k: int | None = None,
     resolution: float = 1.0,
     seed: int = DEFAULT_SEED,
 ) -> dict:
@@ -210,7 +214,7 @@ def recluster_payload(
     n = len(ideas)
 
     tree = build_live_tree(ideas, vecs, weights, knn_threshold,
-                           resolution=resolution, seed=seed)
+                           k=k, resolution=resolution, seed=seed)
     themes = [theme_dict(tree.nodes[i]) for i in tree.order]
     stats = _dataset_stats(SimpleNamespace(nodes=tree.nodes, macros=tree.macros))
     points = _points(tree, dataset, n)
@@ -227,6 +231,8 @@ def recluster_payload(
             "dataset": dataset,
             "knn_threshold": None if tree.knn_threshold is None else round(tree.knn_threshold, 4),
             "knn_threshold_default": default_thr,
+            "k": dg.k if dg is not None else None,
+            "k_default": derive_k(n) if n else None,
             "n_themes": len(themes),
             "n_macros": len(tree.macros),
             "n_ideas": n,
