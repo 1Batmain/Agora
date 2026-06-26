@@ -24,10 +24,10 @@ dans la langue dominante des contributions (le LLM la déduit des claims fournie
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 
 from backend import analysis_store as store
+from backend.llm_cache import cached_llm
 from pipeline.cluster import mistral_client
 
 REP_PER_THEME = 5          # claims représentatives montrées au LLM
@@ -142,45 +142,20 @@ def _field_for_node(dataset: str, node, kind: str, *, model: str | None,
     synth_model = model or mistral_client.NAMING_MODEL
     key_hash = _content_key(dataset, node, kind, synth_model)
 
-    if not refresh:
-        cached = _MEM_CACHE.get(key_hash)
-        if cached:
-            return cached
-        disk = _disk_path(dataset, kind, key_hash)
-        if disk.exists():
-            try:
-                data = json.loads(disk.read_text(encoding="utf-8"))
-                text = (data.get("text") or "").strip()
-                if text:
-                    _MEM_CACHE[key_hash] = text
-                    return text
-            except (json.JSONDecodeError, OSError):
-                pass
-
-    text = fallback(node)
-    if mistral_client.available():
-        try:
-            content = mistral_client.chat(
-                build_messages(node), model=synth_model,
-                temperature=TEMPERATURE, max_tokens=max_tokens,
-            )
-            cleaned = _strip(content)
-            if cleaned:
-                text = cleaned
-        except mistral_client.MistralError:
-            pass  # repli silencieux (champ jamais vide)
-
-    _MEM_CACHE[key_hash] = text
-    try:
-        disk = _disk_path(dataset, kind, key_hash)
-        disk.parent.mkdir(parents=True, exist_ok=True)
-        disk.write_text(
-            json.dumps({"id": node.id, "kind": kind, "text": text, "model": synth_model},
-                       ensure_ascii=False),
-            encoding="utf-8",
-        )
-    except OSError:
-        pass
+    text, _ = cached_llm(
+        mem_cache=_MEM_CACHE,
+        key=key_hash,
+        disk_path=_disk_path(dataset, kind, key_hash),
+        build_messages=lambda: build_messages(node),
+        fallback_fn=lambda *_: fallback(node),        # repli sur les mots-clés (jamais vide)
+        model=synth_model,
+        max_tokens=max_tokens,
+        temperature=TEMPERATURE,
+        decode=lambda data: (data.get("text") or "").strip(),
+        encode=lambda t: {"id": node.id, "kind": kind, "text": t, "model": synth_model},
+        postprocess=_strip,
+        refresh=refresh,
+    )
     return text
 
 
