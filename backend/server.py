@@ -404,6 +404,8 @@ class ReclusterBody(BaseModel):
     """
     dataset: str | None = None
     knn_threshold: float | None = Field(None, ge=0.0, le=1.0)
+    # `k` (nombre de voisins du graphe k-NN) = LEVIER de la Console (≥2).
+    k: int | None = Field(None, ge=2, le=200)
     resolution: float = Field(1.0, gt=0.0)
 
 
@@ -417,7 +419,7 @@ def do_recluster(body: ReclusterBody) -> dict:
     """
     ds = _resolve(body.dataset)
     return live_cluster.recluster_payload(
-        ds.id, body.knn_threshold, resolution=body.resolution
+        ds.id, body.knn_threshold, k=body.k, resolution=body.resolution
     )
 
 
