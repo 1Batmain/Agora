@@ -10,8 +10,8 @@ Deux niveaux, sans réseau :
      la garantie « zéro hallucination » mesurée sur le vrai corpus.
 
 Usage :
-    uv run python -m backend.selftest_extractive            # unitaire seul
-    uv run python -m backend.selftest_extractive --dataset tiktok   # + intégration
+    uv run python -m backend.scripts.selftest_extractive            # unitaire seul
+    uv run python -m backend.scripts.selftest_extractive --dataset tiktok   # + intégration
 """
 
 from __future__ import annotations

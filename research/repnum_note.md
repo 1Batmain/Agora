@@ -80,7 +80,7 @@ Le projet de loi s'organise en **3 axes** (= les 3 Titres ; un Titre IV techniqu
 <!-- BENCH_MACROS_START -->
 Build : `mistral-large-latest` (extraction claims+cible) + `mistral-small-latest`
 (enrichissement). **337 thèmes**, **8 macros**, 273 feuilles, profondeur 4.
-Qualité d'extraction (`backend.verify_claims_cache`) :
+Qualité d'extraction (`backend.scripts.verify_claims_cache`) :
 
 - **2 724 / 3 000** avis portent ≥ 1 claim (90,8 % — l'extracteur sélectif laisse
   le narratif sans opinion ciblée) ; **5 842 claims**.
