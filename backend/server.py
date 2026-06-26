@@ -50,7 +50,7 @@ from backend.recluster import (
     load_cache,
     open_consultation_descriptor,
 )
-from backend import analysis_store, build_manager, flags_store
+from backend import analysis_store, build_manager, density, flags_store
 
 
 class _Dataset:
@@ -373,6 +373,26 @@ def get_avis(
         raise HTTPException(status_code=404,
                             detail=f"avis inconnu: {avis_id!r} (dataset {ds.id!r}).")
     return data
+
+
+@app.get("/density")
+def get_density(
+    dataset: str | None = Query(None),
+) -> dict:
+    """Paysage de densité 3D : UMAP 2D des embeddings PRÉ-clustering + KDE sur grille.
+
+    Renvoie `{nx, nz, x_range, z_range, heights[nz][nx], zmax}` — la hauteur de chaque
+    sommet d'une grille 96×96 est la densité locale (front : surface rotatable, hauteur
+    normalisable par `zmax`). Calcul PARESSEUX au 1ᵉʳ appel puis CACHE disque
+    (`umap2d.npy` + `density.json`), INDÉPENDANT des caches d'analyse. La whitelist
+    `_resolve` garde le path-traversal. 503 si la projection UMAP est indisponible
+    (umap-learn absent ET pas de cache).
+    """
+    ds = _resolve(dataset)
+    try:
+        return density.density_payload(ds.id)
+    except density.DensityUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 class BuildBody(BaseModel):
