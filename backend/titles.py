@@ -19,11 +19,11 @@ dominante des contributions (le LLM la déduit des claims fournies).
 from __future__ import annotations
 
 import hashlib
-import json
 import re
 from pathlib import Path
 
 from backend import analysis_store as store
+from backend.llm_cache import cached_llm
 from pipeline.cluster import mistral_client
 
 TITLES_DIRNAME = "titles"
@@ -112,43 +112,18 @@ def title_for_node(dataset: str, node, *, model: str | None = None,
     synth_model = model or mistral_client.NAMING_MODEL
     key_hash = _content_key(dataset, node, synth_model)
 
-    if not refresh:
-        cached = _MEM_CACHE.get(key_hash)
-        if cached:
-            return cached
-        disk = _disk_path(dataset, key_hash)
-        if disk.exists():
-            try:
-                data = json.loads(disk.read_text(encoding="utf-8"))
-                title = (data.get("title") or "").strip()
-                if title:
-                    _MEM_CACHE[key_hash] = title
-                    return title
-            except (json.JSONDecodeError, OSError):
-                pass
-
-    title = _fallback(node)
-    if mistral_client.available():
-        try:
-            content = mistral_client.chat(
-                _title_messages(node), model=synth_model,
-                temperature=TITLE_TEMPERATURE, max_tokens=TITLE_MAX_TOKENS,
-            )
-            cleaned = _clean_title(content)
-            if cleaned:
-                title = cleaned
-        except mistral_client.MistralError:
-            pass  # repli silencieux sur le label (titre jamais vide)
-
-    _MEM_CACHE[key_hash] = title
-    try:
-        disk = _disk_path(dataset, key_hash)
-        disk.parent.mkdir(parents=True, exist_ok=True)
-        disk.write_text(
-            json.dumps({"id": node.id, "title": title, "model": synth_model},
-                       ensure_ascii=False),
-            encoding="utf-8",
-        )
-    except OSError:
-        pass
+    title, _ = cached_llm(
+        mem_cache=_MEM_CACHE,
+        key=key_hash,
+        disk_path=_disk_path(dataset, key_hash),
+        build_messages=lambda: _title_messages(node),
+        fallback_fn=lambda *_: _fallback(node),       # repli sur le label (jamais vide)
+        model=synth_model,
+        max_tokens=TITLE_MAX_TOKENS,
+        temperature=TITLE_TEMPERATURE,
+        decode=lambda data: (data.get("title") or "").strip(),
+        encode=lambda t: {"id": node.id, "title": t, "model": synth_model},
+        postprocess=_clean_title,
+        refresh=refresh,
+    )
     return title
