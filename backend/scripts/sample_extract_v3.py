@@ -6,7 +6,7 @@ Compare, sur un même échantillon réel (mistral-large par défaut), l'extracti
 N'écrit AUCUN cache (extraction isolée). Vérifie que le batching ne dégrade pas la
 qualité et chiffre la couverture cible + le gain de vitesse.
 
-Usage : uv run python -m backend.sample_extract_v3 --dataset tiktok --n 40 --batch 8
+Usage : uv run python -m backend.scripts.sample_extract_v3 --dataset tiktok --n 40 --batch 8
 """
 
 from __future__ import annotations

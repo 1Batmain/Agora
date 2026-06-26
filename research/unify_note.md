@@ -9,7 +9,7 @@
 ## Résultat par dataset — 100 % VERBATIM partout
 
 Vérifié sur le `claims.json` **réellement servi** (lecture seule, zéro ré-extraction) via
-`backend.verify_claims_cache` :
+`backend.scripts.verify_claims_cache` :
 
 | Dataset | avis | avis avec claims | claims | claims/avis | **verbatim** | **couv. cible** | cibles verbatim | multi-span | avis-entier | thèmes / macros | build (extract+enrich) |
 |---------|-----:|-----------------:|-------:|------------:|-------------:|----------------:|----------------:|-----------:|------------:|----------------:|-----------------------:|
@@ -89,7 +89,7 @@ env -u AGORA_OLLAMA_URL AGORA_CLAIMS_BACKEND=api AGORA_CLAIMS_BATCH=8 \
 
 # vérif acceptance (verbatim 100 % + couverture cible), lecture seule, exit≠0 si non-verbatim
 uv run --extra contender --extra embed-contender --extra faiss \
-  python -m backend.verify_claims_cache --dataset <ds>
+  python -m backend.scripts.verify_claims_cache --dataset <ds>
 ```
 
 > Note : `build_analysis` n'a pas de flag `--batch` ; le batching v3 (N avis/appel) est piloté
