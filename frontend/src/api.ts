@@ -1,37 +1,30 @@
 import type { Consultation, SubmitResult } from './redesign/contract';
+import { rawFetch } from './redesign/http';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
  * The redesign UI reads the precomputed spatial analysis via `redesign/analysisApi.ts`;
  * this module only exposes the dataset selector source.
+ *
+ * Shares the base / timeout / `rawFetch` primitive with `analysisApi.ts` (see
+ * `redesign/http.ts`); on top of it this client throws on a non-2xx response,
+ * surfacing the backend's `detail` when present.
  */
 
-// Généreux : la découverte de datasets est rapide, mais on garde une marge.
-const TIMEOUT_MS = 180000;
-
-async function jsonFetch(url: string, init?: RequestInit, timeoutMs = TIMEOUT_MS): Promise<any> {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const r = await fetch(url, { ...init, signal: ctrl.signal });
-    if (!r.ok) {
-      // Surface the backend's `detail` (e.g. 503 = Mac unreachable) when present.
-      const detail = await r
-        .clone()
-        .json()
-        .then((b) => (b && typeof b.detail === 'string' ? b.detail : null))
-        .catch(() => null);
-      throw new Error(detail ? `HTTP ${r.status} — ${detail}` : `HTTP ${r.status}`);
-    }
-    return await r.json();
-  } finally {
-    clearTimeout(t);
+/** rawFetch + throw on non-2xx (surfacing the backend `detail`); returns the JSON body. */
+async function jsonFetch(path: string, init?: RequestInit): Promise<any> {
+  const { status, body } = await rawFetch(path, init);
+  if (status < 200 || status >= 300) {
+    // Surface the backend's `detail` (e.g. 503 = Mac unreachable) when present.
+    const detail = body && typeof body.detail === 'string' ? body.detail : null;
+    throw new Error(detail ? `HTTP ${status} — ${detail}` : `HTTP ${status}`);
   }
+  return body;
 }
 
 /** List the datasets the backend has a cache for (populates the selector). */
 export async function fetchDatasets(): Promise<Consultation[]> {
-  const raw = await jsonFetch('/api/datasets');
+  const raw = await jsonFetch('/datasets');
   return Array.isArray(raw) ? (raw as Consultation[]) : [];
 }
 
@@ -44,7 +37,7 @@ export async function submitContribution(
   consultationId: string,
   text: string,
 ): Promise<SubmitResult> {
-  return (await jsonFetch('/api/submit', {
+  return (await jsonFetch('/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ consultation_id: consultationId, text }),
