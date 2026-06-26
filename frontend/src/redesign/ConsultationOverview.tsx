@@ -4,6 +4,7 @@ import type { AnalysisPayload } from './contract';
 import { fetchAnalysis, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
+import { LOCALE } from './strings';
 
 /**
  * Page d'APERÇU d'une consultation CLOSE (sous-page entre la landing et le graphe).
@@ -59,7 +60,7 @@ export function ConsultationOverview({
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
           <div className="overview__stat">
-            <strong>{nReponses != null ? nReponses.toLocaleString('fr-FR') : '—'}</strong>
+            <strong>{nReponses != null ? nReponses.toLocaleString(LOCALE) : '—'}</strong>
             <span>réponses</span>
           </div>
           <div className="overview__stat">
