@@ -147,8 +147,9 @@ def _build_flat(ideas, vecs, weights, knn, *, resolution, seed, with_hdbscan,
     return nodes, themes, clustering_meta
 
 
-# Label du groupe « bruit » HDBSCAN (cluster_id = -1). UI, pas un mot de corpus.
-NOISE_LABEL = "non classé"
+# Clé MACHINE stable du groupe « bruit » HDBSCAN (cluster_id = -1). PAS de copie FR
+# ici : le front la localise (cf. `frontend/src/redesign/strings.ts` → NOISE_LABEL).
+NOISE_LABEL = "__noise__"
 
 
 def _build_hdbscan(ideas, vecs, weights, *,
@@ -188,7 +189,7 @@ def _build_hdbscan(ideas, vecs, weights, *,
     scores = {cid: score_cluster(idxs, vecs, weights, dup_threshold=dup_threshold)
               for cid, idxs in members.items()}
 
-    # Naming SWITCHABLE des clusters réels (le bruit a un label fixe « non classé »).
+    # Naming SWITCHABLE des clusters réels (le bruit a une clé machine fixe `NOISE_LABEL`).
     # HDBSCAN = clusters PLATS : la méthode de nommage s'applique à TOUS les clusters.
     real_ids = [cid for cid in members if cid >= 0]
     cluster_docs = {cid: [ideas[i].text for i in members[cid]] for cid in real_ids}
