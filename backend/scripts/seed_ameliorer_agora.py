@@ -5,7 +5,7 @@ variés (ergonomie, lenteur, fiabilité des analyses, idées de features…) emb
 nomic-v2, pour que la corrélation soit NON VIDE dès la 1ʳᵉ vraie contribution.
 
 Lancer (une fois) :
-    uv run --extra embed-contender python -m backend.seed_ameliorer_agora
+    uv run --extra embed-contender python -m backend.scripts.seed_ameliorer_agora
 """
 
 from __future__ import annotations

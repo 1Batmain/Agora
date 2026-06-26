@@ -5,7 +5,7 @@ N avis/appel, écrit le cache `claims.json` (réutilisé tel quel par un futur r
 imprime les métriques corpus : couverture cible, verbatim (claims ET cibles), claims/avis,
 multi-spans, vitesse. À lancer après un changement du prompt (cache claims invalidé).
 
-Usage : uv run python -m backend.reextract_v3 --dataset tiktok --batch 8
+Usage : uv run python -m backend.scripts.reextract_v3 --dataset tiktok --batch 8
 """
 
 from __future__ import annotations
