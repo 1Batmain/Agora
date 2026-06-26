@@ -1378,3 +1378,71 @@ body {
   margin-top: 2.2rem; font-size: .82rem; letter-spacing: .04em; color: #9a9aa8;
   font-family: ui-monospace, "IBM Plex Mono", monospace;
 }
+
+/* ── Toggle « Graphe » ⇄ « Paysage 3D » + vue paysage de densité (three.js) ── */
+.viewtoggle {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 0 10px;
+  padding: 3px;
+  background: var(--agora-soft, #ececfe);
+  border-radius: var(--radius, 8px);
+  width: fit-content;
+}
+.viewtoggle__tab {
+  font-family: inherit;
+  font-size: 0.82rem;
+  border: none;
+  background: transparent;
+  color: var(--agora, #000091);
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+}
+.viewtoggle__tab--active {
+  background: var(--bg-raised, #fff);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+.density3d {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 8px);
+  background: var(--bg);
+}
+.density3d__canvas {
+  position: absolute;
+  inset: 0;
+}
+.density3d__canvas canvas {
+  display: block;
+}
+.density3d__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-500);
+  font-size: 0.9rem;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+.density3d__error {
+  color: var(--grey-700);
+}
+.density3d__legend {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  margin: 0;
+  max-width: 70%;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--grey-500);
+  pointer-events: none;
+}
