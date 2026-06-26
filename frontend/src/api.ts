@@ -1,4 +1,4 @@
-import type { Consultation, SubmitResult } from './types';
+import type { Consultation, SubmitResult } from './redesign/contract';
 
 /**
  * Backend client. Everything goes through the vite proxy at `/api/*` → :8010.
