@@ -2,7 +2,7 @@
 
 Léger : au démarrage, DÉCOUVRE tous les caches `backend/cache/<dataset>/` et les
 charge (vecteurs `.npy` + `ideas.jsonl`), PAS le modèle torch. Le pipeline lourd
-(claims→embed→cluster→UMAP→hiérarchie→insights) est PRÉCALCULÉ et PERSISTÉ par
+(claims→embed→cluster→hiérarchie→insights) est PRÉCALCULÉ et PERSISTÉ par
 `backend.build_analysis` (en tâche de fond, cf. `build_manager`) ; les endpoints
 ne font que LIRE le cache persisté — AUCUN calcul lourd à la requête.
 
@@ -224,7 +224,7 @@ def submit(body: SubmitBody) -> dict:
 
 
 # ===================== Refonte « carte spatiale » (B1–B4) ===================== #
-# SÉPARATION BUILD / SERVE. Le pipeline lourd (claims→embed→cluster→UMAP→hiérarchie→
+# SÉPARATION BUILD / SERVE. Le pipeline lourd (claims→embed→cluster→hiérarchie→
 # insights) est PRÉCALCULÉ et PERSISTÉ par `backend.build_analysis` (en tâche de fond,
 # cf. `build_manager`). Les trois endpoints du CONTRAT figé (queue/front-redesign.md)
 # ne font ici que LIRE le cache persisté — AUCUN calcul lourd à la requête. Si l'analyse
@@ -285,7 +285,7 @@ class AnalysisBody(BaseModel):
 
 @app.post("/analysis")
 def do_analysis(body: AnalysisBody, response: Response) -> dict:
-    """SERVE-only : sert la carte spatiale PRÉCALCULÉE (UMAP + arbre adaptatif + edges).
+    """SERVE-only : sert la carte des thèmes PRÉCALCULÉE (arbre variance-adaptatif + edges de co-occurrence ; sans positions x,y — front en d3-pack).
 
     Lit `backend/cache/<dataset>/analysis/analysis.json` (instantané). Si l'analyse
     n'est pas prête, déclenche un build de fond et renvoie `{status: building|absent|
