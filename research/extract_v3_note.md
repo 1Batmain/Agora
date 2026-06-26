@@ -49,7 +49,7 @@ Vérifie que le batching **ne dégrade pas** la qualité :
 → batching **non dégradant** : verbatim identique (100 %), **couverture cible même
 supérieure** (sélectivité plus nette), 8× moins d'appels.
 
-### Corpus complet — 1604 avis (`backend.reextract_v3 --dataset tiktok --batch 8`)
+### Corpus complet — 1604 avis (`backend.scripts.reextract_v3 --dataset tiktok --batch 8`)
 | Métrique | claim-v2 (avant) | **EXTRACT v3 (après)** |
 |----------|-----------------:|-----------------------:|
 | claims | 3024 (1.88/avis) | **3027 (1.89/avis)** |
@@ -93,6 +93,6 @@ Les cibles pointent désormais l'**objet d'une position** (verbatim) :
 - [x] Modèle **claim-v2 intact** (`Claim{text, spans[], target}`, selftest OK) ; `claims.json`
       tiktok ré-écrit (mistral-large) → réutilisable tel quel par un rebuild.
 ```
-uv run python -m backend.sample_extract_v3 --dataset tiktok --n 40 --batch 8   # contrôle batch/single
-uv run python -m backend.reextract_v3      --dataset tiktok --batch 8          # ré-extraction + métriques
+uv run python -m backend.scripts.sample_extract_v3 --dataset tiktok --n 40 --batch 8   # contrôle batch/single
+uv run python -m backend.scripts.reextract_v3      --dataset tiktok --batch 8          # ré-extraction + métriques
 ```

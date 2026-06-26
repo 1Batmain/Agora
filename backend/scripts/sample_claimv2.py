@@ -4,7 +4,7 @@ Vérifie l'acceptance « parts verbatim + target verbatim 100% » AVANT de ré-e
 tout le dataset. N'écrit RIEN dans les caches (extraction isolée). Affiche, par avis,
 les claims (parts + cible) et un récap verbatim.
 
-Usage : uv run python -m backend.sample_claimv2 --dataset tiktok --n 8
+Usage : uv run python -m backend.scripts.sample_claimv2 --dataset tiktok --n 8
 """
 
 from __future__ import annotations
