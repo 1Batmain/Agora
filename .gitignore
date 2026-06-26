@@ -35,6 +35,10 @@ backend/cache/*/claims_emb.npz
 # Flags de feedback sur l'extraction (upsert par avis, éditables) — régénérables.
 backend/cache/*/flags.json
 
+# Paysage de densité 3D (UMAP 2D + KDE) — dérivés régénérables de embeddings.npy.
+backend/cache/*/umap2d.npy
+backend/cache/*/density.json
+
 # Contributions citoyennes LIVE (consultations ouvertes) — runtime, mutable.
 # Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
 backend/cache/*/submissions.jsonl
