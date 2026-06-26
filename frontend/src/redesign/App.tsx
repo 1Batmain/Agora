@@ -5,9 +5,10 @@ import { Landing } from './Landing';
 import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
 import RedesignApp from './RedesignApp';
+import { Console } from './Console';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console';
 type HistState = { route: Route; activeId: string | null };
 
 /**
@@ -52,13 +53,21 @@ export default function App() {
   // Deep-link initial : `?c=<id>` ouvre la consultation (une fois les datasets chargés).
   useEffect(() => {
     if (loading) return;
-    const cid = new URLSearchParams(window.location.search).get('c');
+    const params = new URLSearchParams(window.location.search);
+    const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
-      const r: Route = d.status === 'open' ? 'participate' : 'overview';
+      // `?view=console` deep-links straight into the Console (closed datasets only).
+      const wantConsole = params.get('view') === 'console' && d.status !== 'open';
+      const r: Route = wantConsole
+        ? 'console'
+        : d.status === 'open'
+          ? 'participate'
+          : 'overview';
       setRoute(r);
       setActiveId(d.id);
-      window.history.replaceState({ route: r, activeId: d.id } as HistState, '', `?c=${d.id}`);
+      const url = wantConsole ? `?c=${d.id}&view=console` : `?c=${d.id}`;
+      window.history.replaceState({ route: r, activeId: d.id } as HistState, '', url);
     } else {
       window.history.replaceState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
     }
@@ -80,6 +89,12 @@ export default function App() {
     window.history.pushState({ route: 'analysis', activeId: id } as HistState, '', `?c=${id}&g=1`);
   }, []);
 
+  const openConsole = useCallback((id: string) => {
+    setActiveId(id);
+    setRoute('console');
+    window.history.pushState({ route: 'console', activeId: id } as HistState, '', `?c=${id}&view=console`);
+  }, []);
+
   const backToLanding = useCallback(() => {
     setRoute('landing');
     setActiveId(null);
@@ -96,7 +111,16 @@ export default function App() {
     );
   }
   if (route === 'analysis' && active) {
-    return <RedesignApp initialDataset={active.id} onBack={backToLanding} />;
+    return (
+      <RedesignApp
+        initialDataset={active.id}
+        onBack={backToLanding}
+        onConsole={() => openConsole(active.id)}
+      />
+    );
+  }
+  if (route === 'console' && active) {
+    return <Console dataset={active.id} label={active.label} onHome={backToLanding} />;
   }
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;
