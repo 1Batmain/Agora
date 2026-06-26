@@ -18,11 +18,11 @@ jamais un crash. Langue-agnostique : rédigé dans la langue dominante du corpus
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 from time import perf_counter
 
 from backend.analysis import ThemeNode, ThemeTree, _dataset_context, get_or_build_tree
+from backend.llm_cache import DISK, MEMORY, cached_llm
 from backend.recluster import dataset_dir
 from pipeline.cluster import mistral_client
 
@@ -288,73 +288,61 @@ def _insights_payload(
     synth_model = mistral_client.SYNTHESIS_MODEL
     key = _cache_key(ds.id, level, theme_id, synth_model, resolution)
 
-    # 1) Cache mémoire (sert l'acceptance « 2ᵉ appel rapide »).
-    if not refresh and key in _MEM_CACHE:
-        out = dict(_MEM_CACHE[key])
-        out["meta"] = {**out["meta"], "cache": "memory",
-                       "took_ms": round((perf_counter() - t0) * 1000)}
-        return out
+    # Arbre + résumé + libellé construits PARESSEUSEMENT : seulement sur cache miss
+    # (réutilisés depuis le cache mémoire de `get_or_build_tree`). `state` mémorise pour
+    # ne bâtir qu'une fois même si messages ET repli sont sollicités.
+    state: dict = {}
 
-    # 2) Cache disque (persistant entre redémarrages).
-    disk = _disk_path(ds.id, _key_hash(key))
-    if not refresh and disk.exists():
-        try:
-            out = json.loads(disk.read_text(encoding="utf-8"))
-            _MEM_CACHE[key] = out
-            return {**out, "meta": {**out["meta"], "cache": "disk",
-                                    "took_ms": round((perf_counter() - t0) * 1000)}}
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    # 3) Construction (arbre partagé) + appel LLM.
-    kw = {} if embedder is None else {"embedder": embedder}
-    tree = get_or_build_tree(ds, backend=backend, model=model, resolution=resolution, **kw)
-
-    if level == "global":
-        summary = _global_summary(tree)
-        messages = _global_messages(summary)
-        target_label = "global"
-    else:
-        node = tree.get(theme_id)
-        if node is None:
-            raise ValueError(f"thème inconnu: {theme_id!r} (dataset {ds.id!r}).")
-        summary = _theme_summary(tree, node)
-        messages = _theme_messages(summary)
-        target_label = node.label
+    def _prepare() -> dict:
+        if not state:
+            kw = {} if embedder is None else {"embedder": embedder}
+            tree = get_or_build_tree(ds, backend=backend, model=model,
+                                     resolution=resolution, **kw)
+            if level == "global":
+                summary = _global_summary(tree)
+                target_label = "global"
+            else:
+                node = tree.get(theme_id)
+                if node is None:
+                    raise ValueError(f"thème inconnu: {theme_id!r} (dataset {ds.id!r}).")
+                summary = _theme_summary(tree, node)
+                target_label = node.label
+            build = _global_messages if level == "global" else _theme_messages
+            state.update(messages=build(summary), target_label=target_label)
+        return state
 
     def _stamp(extra: dict) -> dict:
         return {"dataset": ds.id, "level": level, "id": theme_id,
-                "target": target_label, "model": synth_model,
+                "target": _prepare()["target_label"], "model": synth_model,
                 "took_ms": round((perf_counter() - t0) * 1000), **extra}
 
-    if not mistral_client.available():
-        out = {
-            "markdown": "_Synthèse indisponible : clé Mistral manquante "
-                        "(`MISTRAL_API_KEY` non configurée)._",
-            "meta": _stamp({"fallback": True, "reason": "no_api_key", "cache": "miss"}),
-        }
-        return out  # repli NON caché (pour réessayer dès que la clé est là)
+    def _fallback(reason: str, exc=None) -> dict:
+        if reason == "no_api_key":
+            return {"markdown": "_Synthèse indisponible : clé Mistral manquante "
+                                "(`MISTRAL_API_KEY` non configurée)._",
+                    "meta": _stamp({"fallback": True, "reason": "no_api_key",
+                                    "cache": "miss"})}
+        return {"markdown": f"_Synthèse indisponible : l'appel à Mistral a échoué "
+                            f"(statut {exc.status})._",
+                "meta": _stamp({"fallback": True, "reason": f"api_error:{exc.status}",
+                                "cache": "miss"})}
 
-    try:
-        content = mistral_client.chat(
-            messages, model=synth_model, temperature=0.3, max_tokens=INSIGHTS_MAX_TOKENS,
-        )
-    except mistral_client.MistralError as exc:
-        return {
-            "markdown": f"_Synthèse indisponible : l'appel à Mistral a échoué "
-                        f"(statut {exc.status})._",
-            "meta": _stamp({"fallback": True, "reason": f"api_error:{exc.status}",
-                            "cache": "miss"}),
-        }
-
-    out = {"markdown": _strip_code_fence(content),
-           "meta": _stamp({"fallback": False, "cache": "miss"})}
-
-    # Persiste (mémoire + disque) pour les appels suivants.
-    _MEM_CACHE[key] = out
-    try:
-        disk.parent.mkdir(parents=True, exist_ok=True)
-        disk.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
-    except OSError:
-        pass
-    return out
+    value, source = cached_llm(
+        mem_cache=_MEM_CACHE,
+        key=key,
+        disk_path=_disk_path(ds.id, _key_hash(key)),
+        build_messages=lambda: _prepare()["messages"],
+        fallback_fn=_fallback,                    # repli NON caché (réessai dès la clé revenue)
+        model=synth_model,
+        max_tokens=INSIGHTS_MAX_TOKENS,
+        temperature=0.3,
+        postprocess=lambda content: {"markdown": _strip_code_fence(content),
+                                     "meta": _stamp({"fallback": False, "cache": "miss"})},
+        cache_fallback=False,
+        refresh=refresh,
+    )
+    # Sur HIT, re-tamponne la provenance et le temps (le Markdown caché reste « pur »).
+    if source in (MEMORY, DISK):
+        return {**value, "meta": {**value["meta"], "cache": source,
+                                  "took_ms": round((perf_counter() - t0) * 1000)}}
+    return value
