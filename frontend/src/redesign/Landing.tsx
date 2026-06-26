@@ -27,9 +27,9 @@ export function Landing({
       <main className="landing__body">
         <section className="hero">
           <h1 className="hero__title">
-            La parole citoyenne,
+            <span className="hero__accent">Libérez </span>
+            la parole citoyenne
             <br />
-            <span className="hero__accent">restituée fidèlement.</span>
           </h1>
           <p className="hero__tagline">
             Agora fait émerger les thèmes et les idées communes des questions ouvertes
@@ -115,7 +115,7 @@ export function Landing({
               <div>
                 <strong>Regroupement automatique</strong>
                 <p>
-                  Les idées sont placées dans un espace sémantique pour être regroupées
+                  Les idées sont transformees en vecteur d'embedding puis sont regroupées
                   par thème <em>automatiquement</em> — les sujets émergent des données,
                   aucune catégorie n'est imposée.
                 </p>
