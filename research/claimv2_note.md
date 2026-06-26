@@ -63,9 +63,9 @@ itérer `body.claims`, surligner les `spans` de chaque claim (couleur cluster) e
 ## Validation
 - **Unitaire** (`backend/selftest_extractive.py`) : exact / espaces / rejet / répétitions
   distinctes / **multi-spans** (2 portions → 1 claim, texte joint, verbatim) / **target** /
-  round-trip cache (mono + multi). `uv run python -m backend.selftest_extractive` → OK.
+  round-trip cache (mono + multi). `uv run python -m backend.scripts.selftest_extractive` → OK.
 - **Échantillon réel** (`backend/sample_claimv2.py`, n'écrit aucun cache) :
-  `uv run python -m backend.sample_claimv2 --dataset tiktok --n 8` →
+  `uv run python -m backend.scripts.sample_claimv2 --dataset tiktok --n 8` →
   **16 claims, 100% parts verbatim, 15/15 cibles verbatim**, 0 erreur. Sélectivité OK
   (avis « Comparaison à autrui » → 0 claim = pur narratif). Cibles pertinentes
   (« boucle d'addiction », « contenus de haine… », « perte de temps »).

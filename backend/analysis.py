@@ -3,9 +3,9 @@
 Part des CLAIMS émergents (pipeline ouvert avis→claims→cluster, cf. `claims_endpoint`)
 et construit l'objet que le canvas du front affiche :
 
-  - **B1 — projection + relations** : positions **UMAP 2D** des centroïdes de thèmes
-    (seed → stables) + arêtes de **co-occurrence** (deux thèmes liés quand un même
-    avis porte des claims tombant dans les deux).
+  - **B1 — relations** : arêtes de **co-occurrence** (deux thèmes liés quand un même
+    avis porte des claims tombant dans les deux). Aucune position 2D n'est calculée —
+    UMAP a été retiré, le front fait sa propre mise en page (d3-pack).
   - **B2 — hiérarchie VARIANCE-ADAPTATIVE** : pour chaque thème on mesure la
     **dispersion interne** (distance cosinus moyenne au centroïde). Un thème ne se
     subdivise que si sa dispersion dépasse un **seuil DÉRIVÉ** des données (séparation
@@ -17,8 +17,8 @@ Tout dérive des données (généricité) : aucune liste de thèmes, aucun seuil
 codé en dur. La sortie suit le contrat figé `queue/front-redesign.md` :
 
     POST /analysis {dataset, backend?} -> {themes, edges, params, backend_used}
-    themes[i] = {id, label, x, y, n_avis, n_claims, weight, consensus, dispersion,
-                 parent_id|null, has_children}
+    themes[i] = {id, label, n_avis, n_claims, weight, consensus, dispersion,
+                 parent_id|null, has_children}   (pas de x,y : front en d3-pack)
     edges[j]  = {a, b, weight}
 """
 
@@ -486,7 +486,7 @@ def build_theme_tree(
 
     `prepared` permet de réutiliser une extraction+embed déjà faite (insights/citations
     rejouent l'arbre sans re-préparer). `extract_progress(done, total)` suit l'extraction
-    LLM (longue). Ne calcule PAS les positions UMAP (c'est le rôle de `analysis_payload`).
+    LLM (longue). Ne sérialise PAS le payload du contrat (c'est le rôle de `analysis_payload`).
     """
     if prepared is None:
         kw = {} if min_chars is None else {"min_chars": min_chars}
@@ -568,7 +568,7 @@ def build_theme_tree(
 # Cache d'arbres EN MÉMOIRE — partagé /analysis ↔ /insights ↔ /citations
 # --------------------------------------------------------------------------- #
 # L'extraction+embed sont déjà cachés sur disque (claims_endpoint) ; ce cache évite
-# en plus de RECONSTRUIRE l'arbre (clustering + UMAP) à chaque appel insights/citations
+# en plus de RECONSTRUIRE l'arbre (clustering + hiérarchie) à chaque appel insights/citations
 # sur la même vue. Clé = paramètres qui changent la forme de l'arbre.
 _TREE_CACHE: dict[tuple, ThemeTree] = {}
 

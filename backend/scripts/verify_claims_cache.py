@@ -11,7 +11,7 @@ avis :
 Lecture seule, zéro LLM, zéro écriture. Sort un code non-nul si un claim n'est pas
 verbatim (utilisable en CI/gate).
 
-Usage : uv run python -m backend.verify_claims_cache --dataset xstance
+Usage : uv run python -m backend.scripts.verify_claims_cache --dataset xstance
 """
 
 from __future__ import annotations
