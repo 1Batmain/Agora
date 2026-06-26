@@ -25,10 +25,11 @@ import { themeCaption } from './labels';
  * Nuage + Graphe + Indices ; le 3D reste fixe (densité PRÉ-clustering).
  */
 
-// Bornes du potard : seuil d'arête k-NN, pas fin. Le défaut vient du 1er /recluster.
-const THR_MIN = 0.4;
-const THR_MAX = 0.85;
-const THR_STEP = 0.01;
+// Bornes du potard : nombre de voisins k du graphe k-NN (entier). Le défaut vient
+// du 1er /recluster (k dérivé du dataset).
+const K_MIN = 2;
+const K_MAX = 50;
+const K_STEP = 1;
 const DEBOUNCE_MS = 300;
 
 type Tab = 'landscape' | 'scatter' | 'graph';
@@ -43,7 +44,7 @@ export function Console({
   onHome?: () => void;
 }) {
   const [payload, setPayload] = useState<ReclusterPayload | null>(null);
-  const [threshold, setThreshold] = useState<number | null>(null);
+  const [k, setK] = useState<number | null>(null);
   const [loading, setLoading] = useState(true); // 1er chargement (bloquant)
   const [reclustering, setReclustering] = useState(false); // re-cluster (overlay léger)
   const [error, setError] = useState<string | null>(null);
@@ -54,22 +55,22 @@ export function Console({
   const [selected, setSelected] = useState<SpatialTheme | null>(null);
 
   // Re-cluster au seuil `thr` (null au 1er appel → défaut dérivé par le backend).
-  const runRecluster = useCallbackRef(async (thr: number | null, initial = false) => {
+  const runRecluster = useCallbackRef(async (kVal: number | null, initial = false) => {
     if (initial) setLoading(true);
     else setReclustering(true);
     setError(null);
     try {
-      const data = await fetchRecluster(dataset, thr);
+      const data = await fetchRecluster(dataset, kVal);
       if (!data) {
         if (initial) setError('re-clustering indisponible pour cette consultation.');
         return;
       }
       setPayload(data);
-      // Le seuil reconstruit change la hiérarchie → on repart de la vue globale.
+      // k reconstruit change la hiérarchie → on repart de la vue globale.
       setPath([]);
       setSelected(null);
-      if (initial && data.meta.knn_threshold_default != null) {
-        setThreshold(data.meta.knn_threshold_default);
+      if (initial && data.meta.k_default != null) {
+        setK(data.meta.k_default);
       }
     } catch (e) {
       if (initial) setError(`re-clustering impossible : ${String(e)}`);
@@ -89,7 +90,7 @@ export function Console({
   // après le dernier mouvement, pour ne pas marteler le backend pendant le glissé.
   const timer = useRef<number | undefined>(undefined);
   const onSlider = (v: number) => {
-    setThreshold(v);
+    setK(v);
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => runRecluster(v), DEBOUNCE_MS);
   };
@@ -134,22 +135,22 @@ export function Console({
         }
       />
 
-      {/* Barre de contrôle : le potard seuil k-NN pilote tout le re-clustering. */}
+      {/* Barre de contrôle : le potard « voisins k » pilote tout le re-clustering. */}
       <div className="console__controls">
-        <label className="console__slider" htmlFor="knn-threshold">
-          <span className="console__slider-label">Seuil k-NN</span>
+        <label className="console__slider" htmlFor="knn-k">
+          <span className="console__slider-label">Voisins (k)</span>
           <input
-            id="knn-threshold"
+            id="knn-k"
             type="range"
-            min={THR_MIN}
-            max={THR_MAX}
-            step={THR_STEP}
-            value={threshold ?? THR_MIN}
-            disabled={loading || threshold == null}
+            min={K_MIN}
+            max={K_MAX}
+            step={K_STEP}
+            value={k ?? K_MIN}
+            disabled={loading || k == null}
             onChange={(e) => onSlider(Number(e.target.value))}
           />
           <output className="console__slider-value">
-            {threshold != null ? threshold.toFixed(2) : '—'}
+            {k != null ? k : '—'}
           </output>
         </label>
         <span className="console__meta">
