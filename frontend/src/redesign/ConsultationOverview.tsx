@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Consultation } from '../types';
+import type { Consultation } from './contract';
 import type { AnalysisPayload } from './contract';
 import { fetchAnalysis, fetchInsights } from './analysisApi';
 import { Header } from './Header';
