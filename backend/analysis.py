@@ -622,62 +622,12 @@ def _gini(values: list[float]) -> float:
     return max(0.0, min(1.0, cum / (n * total)))
 
 
-def _cumulative_convergence(prepared) -> tuple[float, dict]:
-    """Convergence CUMULÉE : alignement directionnel global du nuage d'avis [0..1].
-
-    Mesure DÉRIVÉE et INDÉPENDANTE du nombre de clusters/sujets — c'est l'intention de
-    Bob : « tout le monde tire dans la même direction » même si les sujets sont
-    éparpillés. On calcule la **longueur du vecteur résultant moyen** (mean resultant
-    length des statistiques directionnelles) : pour chaque avis on agrège ses claims en
-    une direction unitaire uᵢ (somme L2-renormalisée), puis
-
-        R = ‖ Σ wᵢ uᵢ ‖ / Σ wᵢ ∈ [0..1]
-
-    pondérée par le poids social wᵢ de l'avis. R→1 si tous les avis pointent vers un
-    MÊME axe sémantique dominant ; R→0 si les directions se compensent. Aucun cluster
-    n'intervient : c'est une propriété brute du nuage d'embeddings.
-
-    HONNÊTEMENT, ce que ça capte : la concentration DIRECTIONNELLE / THÉMATIQUE du
-    corpus, PAS la « stance » pour/contre. Les embeddings encodent surtout le SUJET
-    (de quoi on parle), pas la polarité de l'opinion. Un R élevé signifie donc « le
-    débat converge vers un même pôle thématique » (corpus mono-sujet), pas forcément
-    « les gens sont d'accord entre eux ». Sur un corpus multi-sujets bien séparé, R
-    chute mécaniquement. À lire comme un signal de direction commune, pas d'unanimité.
-    """
-    vecs = prepared.claim_vecs
-    owner = prepared.claim_owner
-    weights = prepared.claim_weight
-    if len(vecs) == 0:
-        return 0.0, {}
-    # Direction unitaire par avis = somme de ses claims, renormalisée. Le poids social
-    # est hérité (identique sur les claims d'un avis) → on prend celui du 1er claim vu.
-    avis_sum: dict[int, np.ndarray] = {}
-    avis_w: dict[int, float] = {}
-    for i, a in enumerate(owner):
-        cur = avis_sum.get(a)
-        avis_sum[a] = vecs[i].copy() if cur is None else cur + vecs[i]
-        avis_w.setdefault(a, float(weights[i]))
-    dirs, ws = [], []
-    for a, s in avis_sum.items():
-        nrm = float(np.linalg.norm(s))
-        if nrm > 0:
-            dirs.append(s / nrm)
-            ws.append(avis_w[a])
-    if not dirs:
-        return 0.0, {}
-    D = np.asarray(dirs)
-    w = np.asarray(ws)
-    resultant = float(np.linalg.norm((D * w[:, None]).sum(axis=0)) / w.sum())
-    return max(0.0, min(1.0, resultant)), {
-        "measure": "mean_resultant_length", "basis": "avis", "n_avis": len(dirs),
-    }
-
-
 def _dataset_stats(tree: ThemeTree, *, macro_ids: list[str] | None = None) -> dict:
-    """Indices globaux dérivés du dataset, prêts pour l'UI (valeur + libellé + explication).
+    """Indices globaux dérivés du dataset — DONNÉE PURE (la copie FR vit côté front).
 
-    Calculés sur les thèmes MACRO. Chaque index porte `value` ∈ [0..1], un `label`
-    court et une `explanation` d'une phrase, plus un `detail` chiffré lisible.
+    Calculés sur les thèmes MACRO. Chaque index porte `{key, value, detail}` : `value`
+    ∈ [0..1] et `detail` chiffré porte TOUS les nombres dont le front a besoin pour
+    reconstruire libellé + explication. Aucune chaîne d'UI ici.
 
     `macro_ids` permet de fixer le niveau « macro » d'affichage (utile au mode
     incrémental où la racine unique est un super-nœud : on lit alors ses enfants).
@@ -722,11 +672,6 @@ def _dataset_stats(tree: ThemeTree, *, macro_ids: list[str] | None = None) -> di
     consensus_global = sum(p * e for p, e in zip(pops, eff)) / total_avis
     consensus_global = float(max(0.0, min(1.0, consensus_global)))
 
-    # 3bis) CONVERGENCE CUMULÉE — alignement directionnel du nuage d'avis, INDÉPENDANT
-    #       du nombre de clusters (cf. `_cumulative_convergence`). Élevée = tout le débat
-    #       tire vers un même axe sémantique, même si les sujets sont éparpillés.
-    conv_cumul, conv_detail = _cumulative_convergence(tree.prepared)
-
     # 4) STRUCTURATION — part des voix dans des thèmes SUBDIVISÉS (à facettes). Lit la
     #    hiérarchie variance-adaptative : 0 = débat plat (sujets simples) ; 1 = gros
     #    thèmes tous multi-facettes. Dimension orthogonale aux tailles et à l'accord.
@@ -736,58 +681,24 @@ def _dataset_stats(tree: ThemeTree, *, macro_ids: list[str] | None = None) -> di
     indices = [
         {
             "key": "effusion",
-            "label": "Effusion (variété des avis)",
             "value": round(evenness, 4),
-            "explanation": (
-                f"Les avis se répartissent sur ~{eff_themes:.1f} sujets effectifs "
-                f"(sur {k} thèmes). Proche de 1 = parole foisonnante, voix équilibrées "
-                "entre sujets ; proche de 0 = un sujet domine tout."
-            ),
             "detail": {"effective_themes": round(eff_themes, 2), "n_themes": k},
         },
         {
-            "key": "convergence_cumulee",
-            "label": "Convergence cumulée",
-            "value": round(conv_cumul, 4),
-            "explanation": (
-                "À quel point TOUS les avis tirent dans une même direction sémantique, "
-                "indépendamment du nombre de sujets. Proche de 1 = le débat converge "
-                "vers un même pôle ; proche de 0 = directions dispersées. Mesure la "
-                "concentration thématique (de quoi on parle), pas l'accord pour/contre."
-            ),
-            "detail": conv_detail,
-        },
-        {
             "key": "concentration",
-            "label": "Concentration",
             "value": round(top_share, 4),
-            "explanation": (
-                f"Le thème dominant capte {top_share * 100:.0f} % des voix. "
-                "Proche de 1 = débat accaparé par un sujet ; proche de 0 = dispersé."
-            ),
             "detail": {"top_share": round(top_share, 4), "gini": round(_gini(pops), 4)},
         },
         {
             "key": "consensus",
-            "label": "Consensus global",
             "value": round(consensus_global, 4),
-            "explanation": (
-                "Accord moyen au sein des thèmes, pondéré par la population "
-                "(les petits thèmes pèsent moins). Proche de 1 = forte cohésion ; "
-                "proche de 0 = avis éclatés."
-            ),
             "detail": {"shrinkage_k": round(kk, 2), "prior": 0.0},
         },
         {
             "key": "structuration",
-            "label": "Structuration",
             "value": round(structuration, 4),
-            "explanation": (
-                f"{structuration * 100:.0f} % des voix relèvent de thèmes à facettes "
-                "(subdivisés en sous-thèmes). Proche de 1 = sujets riches/complexes ; "
-                "0 = débat plat."
-            ),
             "detail": {
+                "share": round(structuration, 4),   # part des voix en thèmes à facettes
                 "structured_macros": sum(1 for m in macros if m.children),
                 "n_macros": k,
             },
