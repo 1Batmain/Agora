@@ -1,5 +1,6 @@
 import { Header } from './Header';
 import type { Consultation } from './contract';
+import { LOCALE } from './strings';
 
 /**
  * Vue d'accueil d'Agora — hero « façon framework » (grand titre mono, tagline,
@@ -76,7 +77,7 @@ export function Landing({
                       <span className="ds-card__meta">
                         {(() => {
                           const n = d.n_contributions ?? d.n_nodes;
-                          return n ? `${n.toLocaleString('fr-FR')} contributions` : '—';
+                          return n ? `${n.toLocaleString(LOCALE)} contributions` : '—';
                         })()}
                       </span>
                       <span className="ds-card__cta">
