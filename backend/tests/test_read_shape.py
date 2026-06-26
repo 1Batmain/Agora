@@ -83,3 +83,14 @@ def test_analysis_shape(client, dataset):
         assert isinstance(t["has_children"], bool)
     # Au moins un macro (thème racine, parent_id None).
     assert any(t.get("parent_id") is None for t in themes), "au moins un thème racine"
+    # Indices = DONNÉE PURE : {key, value, detail} uniquement. Aucune copie FR
+    # (`label`/`explanation`) côté backend ; plus d'entrée `convergence_cumulee`.
+    indices = body["dataset_stats"]["indices"]
+    assert isinstance(indices, list)
+    keys = {ix["key"] for ix in indices}
+    assert "convergence_cumulee" not in keys, "convergence_cumulee retiré"
+    for ix in indices:
+        assert set(ix) == {"key", "value", "detail"}, ix
+        assert isinstance(ix["key"], str) and ix["key"]
+        assert isinstance(ix["value"], (int, float))
+        assert isinstance(ix["detail"], dict)
