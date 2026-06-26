@@ -50,7 +50,7 @@ from backend.recluster import (
     load_cache,
     open_consultation_descriptor,
 )
-from backend import analysis_store, build_manager, density, flags_store
+from backend import analysis_store, build_manager, density, flags_store, live_cluster
 
 
 class _Dataset:
@@ -393,6 +393,32 @@ def get_density(
         return density.density_payload(ds.id)
     except density.DensityUnavailable as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+
+class ReclusterBody(BaseModel):
+    """Corps de `POST /recluster` — re-clustering LIVE piloté par le seuil k-NN.
+
+    `knn_threshold=None` → défaut DÉRIVÉ du dataset (la Console démarre comme `/analysis`).
+    SERVE/COMPUTE léger (zéro LLM, < ~2 s) : lit les vecteurs cachés et la projection
+    UMAP cachée — NE touche AUCUN cache d'analyse.
+    """
+    dataset: str | None = None
+    knn_threshold: float | None = Field(None, ge=0.0, le=1.0)
+    resolution: float = Field(1.0, gt=0.0)
+
+
+@app.post("/recluster")
+def do_recluster(body: ReclusterBody) -> dict:
+    """Re-clustering LIVE au seuil k-NN donné → `{themes, points, indices, meta}`.
+
+    Reconstruit la carte des thèmes À LA VOLÉE (Leiden hiérarchique + variance-adaptatif
+    + coarsening, nommage c-TF-IDF, indices M5, points UMAP 2D) en faisant varier le seuil
+    d'arête k-NN, SANS aucun appel LLM. La whitelist `_resolve` garde le path-traversal.
+    """
+    ds = _resolve(body.dataset)
+    return live_cluster.recluster_payload(
+        ds.id, body.knn_threshold, resolution=body.resolution
+    )
 
 
 class BuildBody(BaseModel):
