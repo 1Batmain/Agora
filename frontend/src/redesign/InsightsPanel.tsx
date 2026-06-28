@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
+import { Poll } from './Poll';
 import { deleteThemeFlag, upsertThemeFlag } from './analysisApi';
 import type { DataSource } from './contract';
 
@@ -35,13 +36,21 @@ export function InsightsPanel({
   loading,
   source,
   flagTarget,
+  keywords,
+  breakdown,
+  breakdownTotal,
 }: {
   title: string;
   markdown: string | null;
   loading: boolean;
   source: DataSource | null;
   flagTarget?: ThemeFlagTarget;
+  keywords?: string[];
+  /** Sous-thèmes dominants du niveau courant (barres de % « façon sondage »). */
+  breakdown?: { label: string; value: number; color?: string }[];
+  breakdownTotal?: number;
 }) {
+  const total = breakdownTotal || (breakdown ?? []).reduce((s, b) => s + b.value, 0);
   return (
     <section className="panel insights">
       <header className="panel__head">
@@ -50,6 +59,14 @@ export function InsightsPanel({
           {flagTarget && <ThemeFlagControl key={flagTarget.themeId} {...flagTarget} />}
         </div>
       </header>
+      {keywords && keywords.length > 0 && (
+        <div className="kw-chips" aria-label="Mots-clés représentatifs">
+          {keywords.map((kw) => (
+            <span key={kw} className="kw-chip">{kw}</span>
+          ))}
+        </div>
+      )}
+      {breakdown && <Poll items={breakdown} total={total} />}
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> génération de la synthèse…

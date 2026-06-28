@@ -4,6 +4,7 @@ import type { AnalysisPayload } from './contract';
 import { fetchAnalysis, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
+import { Poll } from './Poll';
 import { LOCALE } from './strings';
 
 /**
@@ -48,6 +49,14 @@ export function ConsultationOverview({
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
+  // Santé générale : les 5 plus gros macro-thèmes en barres de % (part des voix).
+  const macros = (analysis?.themes ?? []).filter((t) => !t.parent_id);
+  const breakdownTotal =
+    (totals.participants ?? totals.n_avis ?? macros.reduce((s, m) => s + (m.n_avis ?? 0), 0)) || 0;
+  const breakdown = [...macros]
+    .sort((a, b) => (b.n_avis ?? 0) - (a.n_avis ?? 0))
+    .slice(0, 5)
+    .map((m) => ({ label: m.title || m.label, value: m.n_avis ?? 0, color: m.color }));
 
   return (
     <div className="agora overview">
@@ -81,12 +90,13 @@ export function ConsultationOverview({
         <section className="overview__synthesis">
           <h2>Synthèse générale</h2>
           {keywords.length > 0 && (
-            <div className="overview__keywords" aria-label="Mots-clés représentatifs">
+            <div className="kw-chips" aria-label="Mots-clés représentatifs">
               {keywords.map((kw) => (
-                <span key={kw} className="overview__kw">{kw}</span>
+                <span key={kw} className="kw-chip">{kw}</span>
               ))}
             </div>
           )}
+          <Poll items={breakdown} total={breakdownTotal} />
           {loading ? (
             <p className="overview__loading">Chargement de la synthèse…</p>
           ) : synthesis ? (
