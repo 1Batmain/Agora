@@ -43,6 +43,7 @@ export function ConsultationOverview({
   }, [dataset.id]);
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
+  const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
   const context = analysis?.dataset_context || dataset.context || '';
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   const nThemes = totals.n_themes ?? null;
@@ -79,6 +80,13 @@ export function ConsultationOverview({
 
         <section className="overview__synthesis">
           <h2>Synthèse générale</h2>
+          {keywords.length > 0 && (
+            <div className="overview__keywords" aria-label="Mots-clés représentatifs">
+              {keywords.map((kw) => (
+                <span key={kw} className="overview__kw">{kw}</span>
+              ))}
+            </div>
+          )}
           {loading ? (
             <p className="overview__loading">Chargement de la synthèse…</p>
           ) : synthesis ? (
