@@ -15,10 +15,7 @@ export function Poll({ items, total }: { items: PollItem[]; total: number }) {
           <div className="poll__row" key={b.label}>
             <span className="poll__label" title={b.label}>{b.label}</span>
             <span className="poll__track">
-              <span
-                className="poll__fill"
-                style={{ width: `${pct}%`, background: b.color || 'var(--agora, #000091)' }}
-              />
+              <span className="poll__fill" style={{ width: `${pct}%` }} />
             </span>
             <span className="poll__pct">{pct}%</span>
           </div>
