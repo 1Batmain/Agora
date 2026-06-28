@@ -1,0 +1,8780 @@
+{
+ "granddebat:1-2967": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Sortir de la monarchie élective à 2 tours où un candidat bénéficiant de 20% des suffrages au premier tour (et encore suffrages exprimés seulement.) soit en mesure de gouverner le pays",
+    "spans": [
+     [
+      0,
+      183
+     ]
+    ],
+    "target": [
+     10,
+     41
+    ]
+   },
+   {
+    "text": "le parlement actuel (AN et Sénat) n'est absolument pas en mesure de faire office de contre-pouvoir efficace, ni même de caisse de résonance efficace au service de la volonté du peuple",
+    "spans": [
+     [
+      203,
+      386
+     ]
+    ],
+    "target": [
+     203,
+     236
+    ]
+   }
+  ]
+ },
+ "granddebat:1-24638": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Il faut que les élus rendent compte de leurs activités d'élus et de leur bilan via par exemple une plateforme numérique unique",
+    "spans": [
+     [
+      0,
+      126
+     ]
+    ],
+    "target": [
+     12,
+     20
+    ]
+   },
+   {
+    "text": "Il faut supprimer le statut spécial des parlementaires, supprimer leur immunité et supprimer les avantages financiers et en nature liés à leur mandat : bref ils devraient être des citoyens normaux justiciables comme des citoyens normaux",
+    "spans": [
+     [
+      128,
+      364
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-3534": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Ecoute des citoyens plutôt que de faire du clientélisme dans les permanences parlementaires",
+    "spans": [
+     [
+      0,
+      91
+     ]
+    ],
+    "target": [
+     61,
+     91
+    ]
+   },
+   {
+    "text": "Mettre en place des référendums populaires au niveau communal, départemental, régional et national",
+    "spans": [
+     [
+      93,
+      191
+     ]
+    ],
+    "target": [
+     109,
+     135
+    ]
+   },
+   {
+    "text": "Ces référendums doivent permettre l'expression des citoyens sur les grans dossiers d'investissement, politique des transports, choix budgétaires notamment dans les domaines où les candidats élus n'avaient pas avant l'élection pris des engagements",
+    "spans": [
+     [
+      193,
+      439
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-19934": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Changer le mode de scrutin des élections législatives : proportionnelle (dans un dosage cohérent pour ne pas revenir à la 4eme république) et un renouvellement de l'Assemblée Nationale sur le modèle du Sénat (renouvellement par tiers)",
+    "spans": [
+     [
+      2,
+      236
+     ]
+    ],
+    "target": [
+     10,
+     55
+    ]
+   },
+   {
+    "text": "fusionner le Sénat et l'Assemblée Nationale en réduisant le nombre de parlementaires au passage, avec élection directe pour tous les parlementaires (plus d'élection par les Grands électeurs)",
+    "spans": [
+     [
+      241,
+      431
+     ]
+    ],
+    "target": [
+     251,
+     284
+    ]
+   },
+   {
+    "text": "Soumettre à référendum tous les traités internationaux et commerciaux ET RESPECTER son résultat : pas comme pour le traité de Lisbonne",
+    "spans": [
+     [
+      435,
+      569
+     ]
+    ],
+    "target": [
+     463,
+     504
+    ]
+   }
+  ]
+ },
+ "granddebat:1-22939": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "qu'ils pensent à long terme et non à l'échelle de leur mandat, pour le bien commun et non leur personne, leurs intérêts personnels",
+    "spans": [
+     [
+      0,
+      130
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Qu'il y ai moins de \"magouille\", arrangements et autres pressions",
+    "spans": [
+     [
+      132,
+      197
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Qu'ils écoutent tous les citoyens et pas seulement ceux qui râlent le plus",
+    "spans": [
+     [
+      199,
+      273
+     ]
+    ],
+    "target": [
+     220,
+     232
+    ]
+   },
+   {
+    "text": "Qu'ils soient présents aux réunions où ils doivent aller car ils ont un siège, sinon ils ne devraient pas être payés",
+    "spans": [
+     [
+      275,
+      391
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-32736": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Il faudrait plus de contrôle citoyen, notamment en cours de mandat",
+    "spans": [
+     [
+      0,
+      66
+     ]
+    ],
+    "target": [
+     20,
+     36
+    ]
+   },
+   {
+    "text": "les élus nationaux se croient investis d'un pouvoir total et au lieu de voter les lois en leur âme et conscience, ils se contentent de suivre les consignes de leur parti politique, ou, pire ils sont à la solde des lobbys",
+    "spans": [
+     [
+      68,
+      288
+     ]
+    ],
+    "target": [
+     68,
+     86
+    ]
+   },
+   {
+    "text": "Il faut supprimer les lobbys qui interfèrent sur la vie parlementaire dans un deni total de démocratie, ils sont à la solde de profits privés et en totale contradiction avec l'interêt général",
+    "spans": [
+     [
+      290,
+      481
+     ]
+    ],
+    "target": [
+     308,
+     318
+    ]
+   }
+  ]
+ },
+ "granddebat:1-29008": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Le système présidentiel fait qu'au lendemain de chaque élection, tous les partis qui ne sont pas aux pouvoirs sont contre telle ou telle chose. Il n'y a aucun bon sens, ils sont contre juste pour être contre … Ce qui donne le sentiment que rien de va dans ce pays depuis des années, puisque même si des décisions font consensus on va entretenir une polémique",
+    "spans": [
+     [
+      54,
+      261
+     ],
+     [
+      263,
+      411
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9584": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "limitation des mandats dans le temps ( 2 mandats maxi sauf pour petites communes < à3000hab qui pourrait avoir 3 mandats)",
+    "spans": [
+     [
+      0,
+      121
+     ]
+    ],
+    "target": [
+     15,
+     22
+    ]
+   },
+   {
+    "text": "revenir au septennat mais avec mandat unique",
+    "spans": [
+     [
+      124,
+      168
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "des réunions parlementaires déconcentrés ( 2 à 3 réunions non décisionnelles par région et publique , réunissant les parlementaires de la région)",
+    "spans": [
+     [
+      171,
+      316
+     ]
+    ],
+    "target": [
+     175,
+     198
+    ]
+   },
+   {
+    "text": "réduire nombre de parlementaires, conseillers régionaux, départementaux",
+    "spans": [
+     [
+      318,
+      389
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "fusionner communes pour limiter mille feuille local",
+    "spans": [
+     [
+      391,
+      442
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "fusionner des départements volontaire avec une prime Etat /région sur un contrat de développement économique",
+    "spans": [
+     [
+      444,
+      552
+     ]
+    ],
+    "target": [
+     458,
+     470
+    ]
+   },
+   {
+    "text": "développer référendum local",
+    "spans": [
+     [
+      554,
+      581
+     ]
+    ],
+    "target": [
+     565,
+     581
+    ]
+   }
+  ]
+ },
+ "granddebat:1-16118": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "L'élu qui devrait représenter TOUS les citoyens, c'est, en premier, le président de la République.. Renouer un lien avec \"lui\" est du domaine de l'utopique! Jamais cela ne sera possible!",
+    "spans": [
+     [
+      0,
+      186
+     ]
+    ],
+    "target": [
+     68,
+     97
+    ]
+   }
+  ]
+ },
+ "granddebat:1-28349": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "EXEMPLARITÉ : Aucun élu (y compris et surtout les parlementaires) ou haut fonctionnaire ne devrait pouvoir s'octroyer un avantage (quelque soit le domaine) qu'il interdit aux concitoyens (exemples : retraite des Sénateurs, respect des vitesses sur la route, .)",
+    "spans": [
+     [
+      129,
+      389
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ÉQUITÉ : pour tous les élus et hauts fonctionnaires : la moindre faute reconnue = exclusion à vie et interdiction à jamais de se représenter",
+    "spans": [
+     [
+      483,
+      623
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "TRANSPARENCE : frais de toute nature remboursés sur justificatif avec contrôle systématique par un organisme indépendant",
+    "spans": [
+     [
+      718,
+      838
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-3089": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Du dialogue au niveau local, aller chercher et informer les personnes dan sla precarié",
+    "spans": [
+     [
+      0,
+      86
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Faire voter une loi qui pénalise les hommes ou femmes politiques qui s'en prennent aux personnes politiques en les insultants' les politiques doivent donner l'exemple pour qu les citoyens se modélisent. On peut critiquer les idées mais pas les personnes physiques … Faire voter une loi qui punie les écarts de langages et si récidive expulsion du système politique",
+    "spans": [
+     [
+      88,
+      351
+     ],
+     [
+      353,
+      451
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'ensemble des sites internet Facebook Twitter doivent être régulé également",
+    "spans": [
+     [
+      453,
+      529
+     ]
+    ],
+    "target": [
+     468,
+     499
+    ]
+   }
+  ]
+ },
+ "granddebat:1-24135": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Quand un élu est corrompu il faut qu'il aille à coup sur prison ferme pour toute la durée de la peine sans remise possible",
+    "spans": [
+     [
+      0,
+      122
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'exemple d'une punition très sévère garantie pour celui qui serait une crapule va forcément ramener la confiance envers les autres élus",
+    "spans": [
+     [
+      124,
+      260
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "De plus les procédures de justice contre ces gens là doivent être prioritaire et avoir un maximum de moyen pour aller très vite",
+    "spans": [
+     [
+      262,
+      389
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-14230": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Que la politique ne soit plus un métier",
+    "spans": [
+     [
+      0,
+      39
+     ]
+    ],
+    "target": [
+     4,
+     16
+    ]
+   },
+   {
+    "text": "Que les élus vivent la vie de M Tout le Monde (je ne parle pas des petits maires)",
+    "spans": [
+     [
+      41,
+      122
+     ]
+    ],
+    "target": [
+     45,
+     53
+    ]
+   },
+   {
+    "text": "comment une personne n'ayant jamais gagné moins de 2500€ par mois (et encore,je suis gentil !) peut-il comprendre la vie de quelqu'un au chômage avec 900€ ?",
+    "spans": [
+     [
+      175,
+      331
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Si la politique n'était pas un \"petit monde\", l'élu comprendrait",
+    "spans": [
+     [
+      332,
+      396
+     ]
+    ],
+    "target": [
+     4,
+     16
+    ]
+   },
+   {
+    "text": "les puissants gouvernent pour eux",
+    "spans": [
+     [
+      514,
+      547
+     ]
+    ],
+    "target": [
+     514,
+     527
+    ]
+   }
+  ]
+ },
+ "granddebat:1-12860": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Divisé par 2 tous les revenus des élus : députés, ministres et président",
+    "spans": [
+     [
+      0,
+      72
+     ]
+    ],
+    "target": [
+     18,
+     38
+    ]
+   },
+   {
+    "text": "Supprimer toutes les instances inutiles comme le Sénat, le Conseil économique et social, les institutions comme le grand débat où les responsables sont payés 15000 € par mois",
+    "spans": [
+     [
+      124,
+      298
+     ]
+    ],
+    "target": [
+     141,
+     163
+    ]
+   },
+   {
+    "text": "Il faut supprimer aussi les conseils régionaux, les conseils départementaux, les communautés de communes et les députés européens",
+    "spans": [
+     [
+      375,
+      504
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Enfin, il faut supprimer tous les avantages autour des anciens présidents de la République. Une retraite leur suffit : voiture, bureaux",
+    "spans": [
+     [
+      506,
+      641
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "il faudrait une nouvelle révolution de 1789 pour supprimer tous les privilèges de l'État",
+    "spans": [
+     [
+      649,
+      737
+     ]
+    ],
+    "target": [
+     713,
+     737
+    ]
+   }
+  ]
+ },
+ "granddebat:1-17421": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Des élus qui « ressemblent » aux citoyens (représentativité societale/politique)",
+    "spans": [
+     [
+      0,
+      80
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "des élus qui ne sont pas là pour une carrière politique mais un réel projet (certes des indemnités au plus juste mais pas de sûr-avantages)",
+    "spans": [
+     [
+      82,
+      221
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ne pas banaliser ni vulgariser les institutions, le discours mais developper la proximité autrement que lors des élections , sensibiliser",
+    "spans": [
+     [
+      249,
+      386
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Des élus réellement présents et sur le terrain et dans les assemblées",
+    "spans": [
+     [
+      388,
+      457
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-1983": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Tous les élus (nationaux et locaux) devraient avoir un mandat limité dans le temps (pas plus d'un renouvellement)",
+    "spans": [
+     [
+      0,
+      113
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "On ne devrait pas passer plus de dix ans en politique, après quoi il faudrait retourner à la vie professionnelle ou accéder à la haute fonction publique, qui serait ainsi irriguée par des personnes fortes d'une expérience d'engagement civique et pas uniquement confiée à de jeunes énarques",
+    "spans": [
+     [
+      115,
+      404
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-23736": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "que lon soit considéré comme égaux face au lois",
+    "spans": [
+     [
+      17,
+      64
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "quand on voit les abus que certains font ainsi que les conflits d'intérêt mis au grand jour et qu'aujourd'hui ces elus sont a peine inquiété. je ne suis pas sûr qu'un citoyen est les mêmes chances devant la justice",
+    "spans": [
+     [
+      66,
+      280
+     ]
+    ],
+    "target": [
+     270,
+     280
+    ]
+   },
+   {
+    "text": "tout est une question d'équité. à nos élus de montrer l'exemple",
+    "spans": [
+     [
+      282,
+      345
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ceux qui mérite la prison doivent y aller ou alors interdiction à vie d'être un représentant de la république",
+    "spans": [
+     [
+      347,
+      456
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-13692": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "- arrêter de \"taper\" sur les élus et d'en faire les \"bouc émissaires\" de nos difficultés",
+    "spans": [
+     [
+      0,
+      88
+     ]
+    ],
+    "target": [
+     25,
+     33
+    ]
+   },
+   {
+    "text": "- renforcer la formation sur la citoyenneté, la philosophie et le fonctionnement de la démocratie",
+    "spans": [
+     [
+      89,
+      186
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- renforcer la formation sur la complexité grandissante et exponentielle de nos sociétés",
+    "spans": [
+     [
+      187,
+      275
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "-faciliter et inciter les citoyens à participer au fonctionnement de la démocratie (groupes consultatifs avec membres tirés au sort, consultations numériques, animer des groupes Facebook auprès des collectivités locales et des élus nationaux, budgets participatifs)",
+    "spans": [
+     [
+      277,
+      542
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- moderniser les comptes rendu (quasi permanents et compréhensibles) des mandats électifs (indicateurs de résultats et tableaux de bord contradictoires, visio-conférences intégrales et surtout synthétiques des délibérations publiques des collectivités.)",
+    "spans": [
+     [
+      543,
+      796
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-16599": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "si un citoyen est absent ou dort au travail, il n'est pas payé et finis perdre ce travail",
+    "spans": [
+     [
+      17,
+      106
+     ]
+    ],
+    "target": [
+     20,
+     30
+    ]
+   },
+   {
+    "text": "L'assemblée est quasiment vide en permanence, et le peu présent sont des pros-siestes mais il n'y a aucune sanction mise en place !",
+    "spans": [
+     [
+      108,
+      239
+     ]
+    ],
+    "target": [
+     108,
+     119
+    ]
+   },
+   {
+    "text": "ces vidéos d'élus absents et des autres plutôt ronfleurs sont en ligne à la vue du monde, ils représentent la France, c'est INADMISSIBLE, UNE HONTE !",
+    "spans": [
+     [
+      247,
+      396
+     ]
+    ],
+    "target": [
+     247,
+     303
+    ]
+   }
+  ]
+ },
+ "granddebat:1-12677": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Au lieu d'un député c'est la circonscription qui vote directement les lois et les propose … Je propose que l'ensemble de citoyens qu'il représente puisse se prononcer pour ou contre les lois présentés à l'assemblée … Que ce groupe de personnes qui ne se connaissent pas puisse également proposer des lois comme le ferai un député",
+    "spans": [
+     [
+      20,
+      109
+     ],
+     [
+      111,
+      233
+     ],
+     [
+      328,
+      440
+     ]
+    ],
+    "target": [
+     86,
+     94
+    ]
+   },
+   {
+    "text": "Grace à un vote internet et à des services communaux pour les personnes sans accès internet",
+    "spans": [
+     [
+      235,
+      326
+     ]
+    ],
+    "target": [
+     69,
+     73
+    ]
+   },
+   {
+    "text": "Un petit groupe d'aide parlementaire comme aujourd'hui pour le député aiderait , modérerait, gérer cette communauté",
+    "spans": [
+     [
+      442,
+      557
+     ]
+    ],
+    "target": [
+     451,
+     478
+    ]
+   }
+  ]
+ },
+ "granddebat:1-18734": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "avoir des élus experts dans l'animation de leur communauté. et capables d'adapter la vitesse des changements aux enjeux terrain du moment",
+    "spans": [
+     [
+      33,
+      170
+     ]
+    ],
+    "target": [
+     43,
+     47
+    ]
+   },
+   {
+    "text": "introduire non pas une dose de proportionnelle, mais bien un avis nominatif référendaire sur les projets sensibles proposés, pour éclairage de la décision publique, et une collecte des propositions constructives associées autrement que par des sondages biaisés",
+    "spans": [
+     [
+      290,
+      550
+     ]
+    ],
+    "target": [
+     351,
+     378
+    ]
+   },
+   {
+    "text": "Sortons des \"sondages\" inutiles et des anecdotes et votons",
+    "spans": [
+     [
+      974,
+      1032
+     ]
+    ],
+    "target": [
+     534,
+     542
+    ]
+   }
+  ]
+ },
+ "granddebat:1-21781": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Il faut réduire toutes les strates de politiciens dans notre pays (communauté de communes, communauté d'agglomération etc…)",
+    "spans": [
+     [
+      0,
+      123
+     ]
+    ],
+    "target": [
+     27,
+     49
+    ]
+   },
+   {
+    "text": "Il faut également interdire le cumul des mandats",
+    "spans": [
+     [
+      125,
+      173
+     ]
+    ],
+    "target": [
+     156,
+     173
+    ]
+   },
+   {
+    "text": "Il faut supprimer les droits d'un politicien ayant fraudé (inéligibilité à vie)",
+    "spans": [
+     [
+      175,
+      254
+     ]
+    ],
+    "target": [
+     197,
+     232
+    ]
+   },
+   {
+    "text": "L'interlocuteur du citoyen doit être proche de celui-ci",
+    "spans": [
+     [
+      256,
+      311
+     ]
+    ],
+    "target": [
+     256,
+     282
+    ]
+   },
+   {
+    "text": "Idéalement, je pense qu'il faut renforcer les pouvoirs des communes et des maires",
+    "spans": [
+     [
+      313,
+      394
+     ]
+    ],
+    "target": [
+     359,
+     394
+    ]
+   },
+   {
+    "text": "La création des communautés d'agglomération n'a amené aucun service supplémentaire au citoyen. Elles n'ont pas fait baisser les charges bien au contraire. Il y a double emploi avec les régions",
+    "spans": [
+     [
+      396,
+      588
+     ]
+    ],
+    "target": [
+     412,
+     439
+    ]
+   }
+  ]
+ },
+ "granddebat:1-5131": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Cela doit se jouer à l'échelle locale (communes)",
+    "spans": [
+     [
+      0,
+      48
+     ]
+    ],
+    "target": [
+     23,
+     37
+    ]
+   },
+   {
+    "text": "Cahier de doléance trimestrielle en ligne et physique (mairie)",
+    "spans": [
+     [
+      50,
+      112
+     ]
+    ],
+    "target": [
+     50,
+     68
+    ]
+   },
+   {
+    "text": "L'avis des citoyens doit être receuilli de façon régulière pour éviter de se sentir sur sollicité ou oublié",
+    "spans": [
+     [
+      114,
+      221
+     ]
+    ],
+    "target": [
+     114,
+     133
+    ]
+   },
+   {
+    "text": "Le citoyen ne doit plus avoir l'impression de pouvoir donner son avis qu'une fois tout les 5 ans",
+    "spans": [
+     [
+      223,
+      319
+     ]
+    ],
+    "target": [
+     277,
+     292
+    ]
+   },
+   {
+    "text": "Il faut apprendre à mieux COMMUNIQUER avec les citoyens à travers toutes les tranches d'âge concernant les décisions prises et les politiques entreprises",
+    "spans": [
+     [
+      321,
+      474
+     ]
+    ],
+    "target": [
+     347,
+     376
+    ]
+   },
+   {
+    "text": "L'objectif est de mettre fin au sentiment de déconnexion de la vie politique",
+    "spans": [
+     [
+      476,
+      552
+     ]
+    ],
+    "target": [
+     508,
+     552
+    ]
+   }
+  ]
+ },
+ "granddebat:1-19459": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "etablir des votes directe vers un elu",
+    "spans": [
+     [
+      0,
+      37
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "qu'il y ai moins d'elus, ils y a trop de strates, au niveau des collectivites locales ville metropole, departement region. trop de president vis presidents.et trop de responsabilités dispersées. d'ou le mille feuille entre etat (parfois plusieurs services) et les différents niveaux des collectivites",
+    "spans": [
+     [
+      41,
+      341
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "quanvant de proposer une loi un projet il y a i des votation comme cela se fait chez nos amis les helvetes",
+    "spans": [
+     [
+      346,
+      452
+     ]
+    ],
+    "target": [
+     398,
+     406
+    ]
+   }
+  ]
+ },
+ "granddebat:1-23073": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Il faut que les élus descendent de leur pied d'estale. Ils ne sont pas nos chef mais nos représentants, nos \"employés\" c'est nos impôts qui payent leur rémunération.",
+    "spans": [
+     [
+      0,
+      165
+     ]
+    ],
+    "target": [
+     12,
+     20
+    ]
+   },
+   {
+    "text": "Ils doivent être plus à l'écoute et ne pas viser la réélection.",
+    "spans": [
+     [
+      166,
+      229
+     ]
+    ],
+    "target": [
+     12,
+     20
+    ]
+   },
+   {
+    "text": "Il faut arrêter la politique politicienne (on critique, on s'oppose à tout est on fait dès qu'on arrive au pouvoir). Quand c'est bon pour le pays, on suit, quand cela n'est pas bon on s'y oppose.",
+    "spans": [
+     [
+      230,
+      425
+     ]
+    ],
+    "target": [
+     246,
+     271
+    ]
+   },
+   {
+    "text": "Les Elus devraient avoir un seul et unique objectif, faire avancer le pays, protéger les citoyens, ensemble.",
+    "spans": [
+     [
+      426,
+      534
+     ]
+    ],
+    "target": [
+     12,
+     20
+    ]
+   }
+  ]
+ },
+ "granddebat:1-25757": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Ne plus voir ce SPECTACLE PITOYABLE à L'ASSEMBLEE NATIONALE",
+    "spans": [
+     [
+      0,
+      59
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "que nos députés passent la moitié de leur temps sur le terrain, pas à couper de rubans, mais organiser des réunions débats et qu'ils remontent les informations.",
+    "spans": [
+     [
+      62,
+      222
+     ]
+    ],
+    "target": [
+     66,
+     77
+    ]
+   },
+   {
+    "text": "que nos députés oublient leur parti lorsqu'ils sont à l'assemblée , qu'ils ne votent pas NON seulement parce que c'est le parti adverse qui propose, c'est ça que nous voulons.",
+    "spans": [
+     [
+      223,
+      398
+     ]
+    ],
+    "target": [
+     66,
+     77
+    ]
+   },
+   {
+    "text": "qu'ils oublient leur carrière et défendent nos intérêts.",
+    "spans": [
+     [
+      399,
+      455
+     ]
+    ],
+    "target": [
+     66,
+     77
+    ]
+   }
+  ]
+ },
+ "granddebat:1-13750": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "les élu.es doivent en priorité êtres sincères, honnêtes, égal pour tous, non profiteurs, non recevoir leur indemnités si pas de travail, être dans la vrai vie, ne pas vouloir toujours plus, assumés leur choix d'être élu, plus près des citoyen.nes, non menteur, dire la vérité, rendre bien les compte de l'argent publique dépensé, arrêter de faire des fêtes pur un oui ou un non, et travaillés pour leur fonction et indemnités",
+    "spans": [
+     [
+      0,
+      425
+     ]
+    ],
+    "target": [
+     0,
+     10
+    ]
+   }
+  ]
+ },
+ "granddebat:1-5426": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "- Montrer leur exemplarité et leur probité. Le citoyen ne voit aujourd'hui dans la majorité de ses élus que des personnes qui s'engagent dans cette voie pour les avantages personnels qu'ils pourraient en tirer et non pour faire avancer les choses.",
+    "spans": [
+     [
+      0,
+      247
+     ]
+    ],
+    "target": [
+     575,
+     583
+    ]
+   },
+   {
+    "text": "- Cesser d'utiliser l'argent du contribuable pour des dépenses personnelles.",
+    "spans": [
+     [
+      248,
+      324
+     ]
+    ],
+    "target": [
+     268,
+     292
+    ]
+   },
+   {
+    "text": "- Respecter la loi et être puni au même titre que n'importe quel citoyen, ce qui n'est pas le cas actuellement.",
+    "spans": [
+     [
+      325,
+      436
+     ]
+    ],
+    "target": [
+     337,
+     343
+    ]
+   },
+   {
+    "text": "- Interdire l'exercice des élus condamnés.",
+    "spans": [
+     [
+      437,
+      479
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Mettre réellement fin au cumul de mandats et de retraites de différentes affectations.",
+    "spans": [
+     [
+      480,
+      568
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Que les élus locaux se montrent plus proches de leurs concitoyens et viennent régulièrement à leur rencontre plutôt que d'attendre leurs doléances.",
+    "spans": [
+     [
+      569,
+      718
+     ]
+    ],
+    "target": [
+     575,
+     590
+    ]
+   },
+   {
+    "text": "- Limiter les avantages et salaires des élus, afin que seules les personnes souhaitant réellement s'investir dans leur travail pour la Nation ne s'engagent dans cette voie.",
+    "spans": [
+     [
+      719,
+      891
+     ]
+    ],
+    "target": [
+     729,
+     763
+    ]
+   }
+  ]
+ },
+ "granddebat:1-20239": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Il serait nécessaire d'avoir des réunions de proximités avec nos élus avec de VRAIS échanges.",
+    "spans": [
+     [
+      0,
+      93
+     ]
+    ],
+    "target": [
+     33,
+     69
+    ]
+   },
+   {
+    "text": "Il serait également légitime que le salaire moyen en France soit le salaire de nos élus. Cela traduirait une volonté politique de travailler pour le peuple et non pour le poste et les avantages rattachés.",
+    "spans": [
+     [
+      94,
+      298
+     ]
+    ],
+    "target": [
+     159,
+     181
+    ]
+   },
+   {
+    "text": "Si nous sommes solidaires et sur le même pied d'égalité sur la valorisation de notre travail, nos élus auraient plus conscience de notre quotidien.",
+    "spans": [
+     [
+      299,
+      446
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-21676": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "nous ne savons même pas qui est notre député ou notre sénateur ! encore moins la tête qu'ils ont. Nous les voyons seulement au marché au moment des campagnes électorales. Ils sont trop éloignés, dans l'ensemble. Ce sont des fantômes, des entités qui décident pour nous.",
+    "spans": [
+     [
+      0,
+      269
+     ]
+    ],
+    "target": [
+     32,
+     62
+    ]
+   },
+   {
+    "text": "Pourquoi n'organisent-ils pas des débats populaires dans des salles de réunion ?",
+    "spans": [
+     [
+      270,
+      350
+     ]
+    ],
+    "target": [
+     304,
+     321
+    ]
+   },
+   {
+    "text": "On a confiance dans les gens qu'on connaît, c'est simple à comprendre, pourtant.",
+    "spans": [
+     [
+      351,
+      431
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-18769": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Les députés sont élus par des électeurs sur une pensée philosophique, un programme ou des idées. Ils doivent ensuite être suffisamment responsable pour porter ce par quoi ils se sont définis.",
+    "spans": [
+     [
+      0,
+      191
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il est nécessaire que les élus des différents partis politiques cessent de se battre pour du pouvoir, pour rejouer des élections perdues, cessent de véhiculer la haine ou le mensonge pour leur propre stabilité.",
+    "spans": [
+     [
+      192,
+      402
+     ]
+    ],
+    "target": [
+     214,
+     255
+    ]
+   },
+   {
+    "text": "Les élus doivent respecter les lois au même titre que n'importe quel individu et que ces mêmes lois leur soient appliquées de la même manière en cas de fraude ou de négligence dans leur travail.",
+    "spans": [
+     [
+      403,
+      597
+     ]
+    ],
+    "target": [
+     214,
+     222
+    ]
+   },
+   {
+    "text": "Il serait salutaire de définir statutairement les postes des élus afin qu'ils rendent compte de leur travail.",
+    "spans": [
+     [
+      598,
+      707
+     ]
+    ],
+    "target": [
+     644,
+     663
+    ]
+   },
+   {
+    "text": "Leur appartenance à un gouvernement ne doit pas être une dépendance au premier ministre ou au président de la république. Il serait juste de définir leur indépendance vis à vis du pouvoir et la dépendance de leur mandat vis avis de leurs électeurs.",
+    "spans": [
+     [
+      708,
+      956
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Ainsi, me semble t'il, toutes facilités à favoriser un véritable débat au parlement. Délibérer sur des faits, des conséquences; pas sur des idéologies. Etre plus pragmatique. Cesser le jeu des médias, parler vrai, abolir le politiquement correct qui ne mène qu'à la confusion.",
+    "spans": [
+     [
+      957,
+      1233
+     ]
+    ],
+    "target": [
+     1019,
+     1040
+    ]
+   }
+  ]
+ },
+ "granddebat:1-4924": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Devoir de présence et de participation aux débats dans les assemblées pour les élus de la république. Un citoyen lorsqu'il est absent au travail doit se justifier il en est devrait en être de même pour un élu ! Et sanction financière en cas d'absentéisme aux débats.",
+    "spans": [
+     [
+      0,
+      266
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Plus de transparence sur les dépenses des élus.",
+    "spans": [
+     [
+      267,
+      314
+     ]
+    ],
+    "target": [
+     292,
+     313
+    ]
+   },
+   {
+    "text": "L'interdiction de l'intervention des lobbies auprès des élus.",
+    "spans": [
+     [
+      315,
+      376
+     ]
+    ],
+    "target": [
+     333,
+     375
+    ]
+   },
+   {
+    "text": "Consultation plus fréquente des citoyens sur les projets de lois.",
+    "spans": [
+     [
+      377,
+      442
+     ]
+    ],
+    "target": [
+     422,
+     441
+    ]
+   },
+   {
+    "text": "Possibilité de révoqué un élu et d'organiser de nouvelles élections sur référendum.",
+    "spans": [
+     [
+      443,
+      526
+     ]
+    ],
+    "target": [
+     202,
+     208
+    ]
+   },
+   {
+    "text": "Arrêter de protéger les élus (ou leurs proches) qui sont mis en examens ou mis en cause dans diverses affaires.",
+    "spans": [
+     [
+      527,
+      638
+     ]
+    ],
+    "target": [
+     547,
+     574
+    ]
+   }
+  ]
+ },
+ "granddebat:1-18286": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Des députés, des conseillers généraux, des élus de communautés de communes qui soient plus présents et qui se fassent mieux connaître pas par de la communication mais parce qu'ils font vraiment des choses.",
+    "spans": [
+     [
+      0,
+      205
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Des bureaux mobiles, un accès facile par mail - ce n'est pas normal que les gens ne sachent pas le nom de leur député ni comment le joindre.",
+    "spans": [
+     [
+      206,
+      346
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "En Norvège, le rapport est beaucoup plus direct et les gens interpellent vraiment leurs élus, qui rendent des comptes. Il faudrait restaurer la confiance.",
+    "spans": [
+     [
+      347,
+      501
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-30061": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Une meilleure visibilité des travaux des élus",
+    "spans": [
+     [
+      73,
+      118
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "un peu d'austérité dans les petits avantages",
+    "spans": [
+     [
+      120,
+      164
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "des consultations plus fréquentes des citoyens seraient les bienvenus",
+    "spans": [
+     [
+      168,
+      237
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "il est désastreux en terme d'image de voir une assemblée vide lors du vote des lois et il me parait urgent de réactiver un quorum et de le rendre plus effectif que dans sa définition actuelle. Un seuil obligatoire raisonnable de 30 à 40% permettrait d'obliger le gouvernement à rallier sa majorité tout en évitant un blocage institutionnel par une politique de la chaise vide. Ce serait contraignant certes mais on ne donnerait plus cette image de lois votées à la sauvette par un petit cercle d'initiés.",
+    "spans": [
+     [
+      252,
+      756
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-18801": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "que les parlementaires aient plus d'autonomie par rapport à l'exécutif, aux lobbies, aux intérêts financiers",
+    "spans": [
+     [
+      0,
+      108
+     ]
+    ],
+    "target": [
+     4,
+     22
+    ]
+   },
+   {
+    "text": "bref beaucoup plus de pouvoirs au parlement, et moins à l'éxécutif",
+    "spans": [
+     [
+      111,
+      177
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il conviendrait aussi de décaler les élections à l'assemblée par rapport à l'élection présidentielle (comme au temps du septennat)",
+    "spans": [
+     [
+      179,
+      309
+     ]
+    ],
+    "target": [
+     212,
+     239
+    ]
+   },
+   {
+    "text": "des élections de mi-mandat apporteraient une respiration démocratique et obligeraient le pouvoir à davantage d'écoute et d'efficacité",
+    "spans": [
+     [
+      312,
+      445
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-23738": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Faire en sorte que les deux hémicycles ne soient pas vides, ou que des lois soient adoptées avec qq dizaines de votes.",
+    "spans": [
+     [
+      0,
+      118
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Remettre les choses dans l'ordre et éliminer une première supercherie : les députés sont les élus de la Nation et non pas d'une circonscription. Ils doivent avoir une conception nationale de leur rôle et laisser la vie locale aux élus locaux.",
+    "spans": [
+     [
+      119,
+      361
+     ]
+    ],
+    "target": [
+     191,
+     202
+    ]
+   },
+   {
+    "text": "Diminuer leur nombre.",
+    "spans": [
+     [
+      362,
+      383
+     ]
+    ],
+    "target": [
+     191,
+     202
+    ]
+   },
+   {
+    "text": "Diminuer drastiquement le nombre de sénateurs et revoir le système de leur élection. Un ou deux représentants par Région (à voir).",
+    "spans": [
+     [
+      384,
+      514
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Supprimer des étages du \"mille feuilles\". Commune, communauté d'agglo, département, Région. proposition : réduire drastiquement le nombre de commune et supprimer les département.",
+    "spans": [
+     [
+      515,
+      693
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-27147": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Des référendum fréquents (2x/an?), bien préparés et argumentés par les pour et les contre",
+    "spans": [
+     [
+      0,
+      89
+     ]
+    ],
+    "target": [
+     4,
+     14
+    ]
+   },
+   {
+    "text": "Proportionnelle à 30%",
+    "spans": [
+     [
+      144,
+      165
+     ]
+    ],
+    "target": [
+     144,
+     159
+    ]
+   },
+   {
+    "text": "Vote blanc comptabilisé et déclenchant une nouvelle élection si >25%-30% (?)",
+    "spans": [
+     [
+      166,
+      242
+     ]
+    ],
+    "target": [
+     166,
+     176
+    ]
+   },
+   {
+    "text": "Décalage vote Présidentielle et Législative pour éviter l'effet mouton",
+    "spans": [
+     [
+      243,
+      313
+     ]
+    ],
+    "target": [
+     252,
+     286
+    ]
+   },
+   {
+    "text": "PR 5 ou 6 ans ; Législatives décalé d'un an ou 2",
+    "spans": [
+     [
+      365,
+      413
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-8872": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "l'établissement de la confiance ne peut se construire que dans une relation honnête et transparente",
+    "spans": [
+     [
+      273,
+      372
+     ]
+    ],
+    "target": [
+     46,
+     55
+    ]
+   },
+   {
+    "text": "Probité et loyauté envers les électeurs",
+    "spans": [
+     [
+      451,
+      490
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "devoir d'exemplarité et respect de la dignité des fonctions électives (absence de condamnations pour crimes ou délits de droit commun)",
+    "spans": [
+     [
+      493,
+      627
+     ]
+    ],
+    "target": [
+     543,
+     562
+    ]
+   },
+   {
+    "text": "transparence sur l'utilisation des indemnités représentatives de frais de mandat",
+    "spans": [
+     [
+      630,
+      710
+     ]
+    ],
+    "target": [
+     665,
+     710
+    ]
+   },
+   {
+    "text": "rapport annuel détaillé sur les votes et interventions orales ou écrites",
+    "spans": [
+     [
+      713,
+      785
+     ]
+    ],
+    "target": [
+     745,
+     785
+    ]
+   },
+   {
+    "text": "On pourrait exiger la démission de la Fonction publique d'Etat ou territoriale des agents détenteurs de tout mandat électif (européen national, régional, départemental ou communal). La démission pourrait n'intervenir qu'après l'élection",
+    "spans": [
+     [
+      837,
+      1073
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-11825": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Mettre fin à une forme d'impunité morale et même pénale des élus : certains rodent depuis des années avec des casseroles immondes (ex : ancien ministre pédophile)",
+    "spans": [
+     [
+      0,
+      162
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il règne une omerta qui insupporte les Français, avec pour conséquence la défiance des institutions",
+    "spans": [
+     [
+      164,
+      263
+     ]
+    ],
+    "target": [
+     177,
+     183
+    ]
+   },
+   {
+    "text": "la cause n'est pas le système en lui-même, mais le comportement de certains intouchables qui le pilotent !",
+    "spans": [
+     [
+      275,
+      381
+     ]
+    ],
+    "target": [
+     297,
+     304
+    ]
+   }
+  ]
+ },
+ "granddebat:1-4630": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Aucune corruption des élus",
+    "spans": [
+     [
+      0,
+      26
+     ]
+    ],
+    "target": [
+     7,
+     26
+    ]
+   },
+   {
+    "text": "Des élus qui sont de bons penseurs et connaissent vraiment bien la société ou les sujets sur lesquels ils travaillent",
+    "spans": [
+     [
+      28,
+      145
+     ]
+    ],
+    "target": [
+     22,
+     26
+    ]
+   },
+   {
+    "text": "Des rencontres plus fréquentes entre les députés et les citoyens",
+    "spans": [
+     [
+      147,
+      211
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Ne pas réduire le nombre des députés et sénateurs",
+    "spans": [
+     [
+      213,
+      262
+     ]
+    ],
+    "target": [
+     231,
+     262
+    ]
+   },
+   {
+    "text": "Réduire fortement les salaires des élus les plus importants : le président de la république par exemple, qui dispose déjà d'un confort exceptionnel à l'Elysée",
+    "spans": [
+     [
+      264,
+      422
+     ]
+    ],
+    "target": [
+     286,
+     303
+    ]
+   },
+   {
+    "text": "Des débats organisés plus souvent par les maires ou avec eux à la demande d'associations locales ou de simples citoyens sur la base de pétitions",
+    "spans": [
+     [
+      424,
+      568
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-5585": {
+  "n_specs": 9,
+  "claims": [
+   {
+    "text": "Les efforts faits ces dernières années dans le domaine de la transparence vont dans le bon sens, dans le sens où cela tend à réinstaller un climat de confiance entre les citoyens et les élus",
+    "spans": [
+     [
+      0,
+      190
+     ]
+    ],
+    "target": [
+     61,
+     73
+    ]
+   },
+   {
+    "text": "Il faut poursuivre dans cette voie, puisque nous sommes encore une large majorité à penser (à tort ou à raison) que l'argent public a tendance à être gaspillé par nos élus",
+    "spans": [
+     [
+      192,
+      363
+     ]
+    ],
+    "target": [
+     310,
+     323
+    ]
+   },
+   {
+    "text": "Il faut donc faire tout ce qui est possible pour permettre aux citoyens de contrôler la manière dont les élus gèrent les avantages dont ils disposent",
+    "spans": [
+     [
+      512,
+      661
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "certaines choses pourraient être détaillées encore plus clairement (notamment sur les origines des financements des campagnes présidentielles quand cela concerne de gros donateurs)",
+    "spans": [
+     [
+      684,
+      864
+     ]
+    ],
+    "target": [
+     770,
+     825
+    ]
+   },
+   {
+    "text": "J'estime de plus qu'une meilleure représentation des citoyens à l'Assemblée Nationale permettrait à ces derniers de se réengager plus vigoureusement dans le débat publics puisqu'ils se sentiraient exister, contrairement à ce qui est en vigueur aujourd'hui",
+    "spans": [
+     [
+      866,
+      1121
+     ]
+    ],
+    "target": [
+     900,
+     951
+    ]
+   },
+   {
+    "text": "Il est en effet inadmissible qu'un parti crédité d'à peine 7% des voix à la dernière présidentielle obtienne plus de siège à l'Assemblée Nationale que des partis crédités de 19 et 21%, cela ne contribue pas selon moi à créer du lien entre citoyens et élus tant les premiers ne se sentent plus représentés par les seconds",
+    "spans": [
+     [
+      1123,
+      1443
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Une dose de proportionnelle (ou pourquoi pas une proportionnelle intégrale avec une prime de sièges pour la liste gagnante) me semble être nécessaire pour corriger une partie de ce problème",
+    "spans": [
+     [
+      1527,
+      1716
+     ]
+    ],
+    "target": [
+     1539,
+     1554
+    ]
+   },
+   {
+    "text": "il faut contraindre les élus à siéger plus qu'ils ne le font à l'heure actuelle à l'Assemblée (contrôle du taux de présence et révocation de l'élu s'il est trop souvent absent, pourquoi pas quand celui-ci est en dessous du taux de 50% de présence ou de participation aux votes d'amendement)",
+    "spans": [
+     [
+      1748,
+      2038
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "il est là aussi scandaleux de voir régulièrement les bancs de l'Assemblée déserts alors que nous élisons et payons des élus pour faire ce travail",
+    "spans": [
+     [
+      2050,
+      2195
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-32779": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Proposer un référendum annuel, non pas sur l'incarnation d'une fonction, mais sur un sujet de fond",
+    "spans": [
+     [
+      0,
+      98
+     ]
+    ],
+    "target": [
+     12,
+     29
+    ]
+   },
+   {
+    "text": "Depuis que j'ai ma carte d'électeur (1995), je n'ai eu à me prononcer que sur 2 sujets: le quinquennat et le projet de traité constitutionnel pour l'Europe. Aucun sujet social, fiscal, environnemental, éducatif. C'est trop peu",
+    "spans": [
+     [
+      100,
+      326
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "De nombreuses associations ont de nombreux sujets à proposer, sur lesquels des décisions collectives au terme d'un débat seraient certainement utiles",
+    "spans": [
+     [
+      328,
+      477
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-12531": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Il faut plus d'élus, notamment dans les circonscriptions urbaines.",
+    "spans": [
+     [
+      0,
+      66
+     ]
+    ],
+    "target": [
+     15,
+     19
+    ]
+   },
+   {
+    "text": "Il est ahurissant de fonctionner avec un nombre d'élus (577) peu ou prou défini au temps de la Révolution dans une France agricole.",
+    "spans": [
+     [
+      67,
+      198
+     ]
+    ],
+    "target": [
+     108,
+     121
+    ]
+   },
+   {
+    "text": "Les français urbains sont très mal représentés et n'ont pas accès à \"leur\" député, par rapport aux circonscriptions rurales.",
+    "spans": [
+     [
+      199,
+      323
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ce déséquilibre a favorisé l'opportunisme électoral, étant donné qu'il est bien plus facile de convaincre quand on a moins de personnes à convaincre.",
+    "spans": [
+     [
+      334,
+      483
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-12376": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Je suis favorable depuis longtemps à plus de proportionnelle dans la représentation des citoyens. … Je ne vois comment utiliser autre chose qu'un scrutin par liste. … Mais dans ce cas, il ne faut pas utiliser le système français de listes bloquées, surtout utilisé pour caser des individus que personne ne veut. … Le système de vote préférentiel me semble un bon compris. On vote pour une liste puis on choisit les candidats de la liste. Le premier vote détermine le nombre d'élus pour chaque liste et le deuxième le nom des élus. Soit le scrutin proportionnel plurinominal à vote préférentiel",
+    "spans": [
+     [
+      3,
+      100
+     ],
+     [
+      101,
+      165
+     ],
+     [
+      166,
+      310
+     ],
+     [
+      311,
+      590
+     ]
+    ],
+    "target": [
+     72,
+     99
+    ]
+   },
+   {
+    "text": "Trop de parachutage et de copinage déterminent les candidats et souvent les élus nationaux. … Personne ne devrait pouvoir se présenter à une élection sans avoir une récente expérience d'élu local (conseil municipal) à l'exception de l'élection présidentielle qui doit avoir 500 parrainages et bien-sûr des élections municipales. … Le candidat devant se présenter dans la zone géographique où il est élu local.",
+    "spans": [
+     [
+      594,
+      685
+     ],
+     [
+      686,
+      920
+     ],
+     [
+      921,
+      999
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Cela ne remet pas en cause le non cumul des mandats.",
+    "spans": [
+     [
+      1000,
+      1052
+     ]
+    ],
+    "target": [
+     1030,
+     1051
+    ]
+   }
+  ]
+ },
+ "granddebat:1-3146": {
+  "n_specs": 9,
+  "claims": [
+   {
+    "text": "plus de débats de rencontres de référendum",
+    "spans": [
+     [
+      0,
+      42
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "pas de politiques quand il y a un casier ou une condamnation",
+    "spans": [
+     [
+      43,
+      103
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "des suppressions de salaires pour ceux qui ne viennent pas voter des lois",
+    "spans": [
+     [
+      104,
+      177
+     ]
+    ],
+    "target": [
+     138,
+     177
+    ]
+   },
+   {
+    "text": "des lois votées avec 80% de tous les politiques concernés",
+    "spans": [
+     [
+      178,
+      235
+     ]
+    ],
+    "target": [
+     173,
+     177
+    ]
+   },
+   {
+    "text": "aucune famille de politique ne doit travailler",
+    "spans": [
+     [
+      236,
+      282
+     ]
+    ],
+    "target": [
+     243,
+     263
+    ]
+   },
+   {
+    "text": "trop d'emplois fictifs et magouille",
+    "spans": [
+     [
+      284,
+      319
+     ]
+    ],
+    "target": [
+     291,
+     319
+    ]
+   },
+   {
+    "text": "quand un politique est soupçonné ou trempe dans une affaire il doit avoir son salaire supprimé et ça doit être jugé sous 3 mois max",
+    "spans": [
+     [
+      320,
+      451
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "tout politique doit être imposable au même titre que tout citoyen sur ses revenus",
+    "spans": [
+     [
+      452,
+      533
+     ]
+    ],
+    "target": [
+     50,
+     59
+    ]
+   },
+   {
+    "text": "aucun politique en France si il n'est pas imposé en France",
+    "spans": [
+     [
+      534,
+      592
+     ]
+    ],
+    "target": [
+     540,
+     559
+    ]
+   }
+  ]
+ },
+ "granddebat:1-30747": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Le respect. … L'honnêteté. … Le fait de donner la priorité au peuple plutôt que suivre bêtement un programme.",
+    "spans": [
+     [
+      0,
+      11
+     ],
+     [
+      12,
+      24
+     ],
+     [
+      25,
+      105
+     ]
+    ],
+    "target": [
+     507,
+     511
+    ]
+   },
+   {
+    "text": "Que l'élu revienne aux choses simples. … On ne lui demande pas de se soumettre au peuple, on lui demande d'agir, de temps à autre, pour lui. … Qu'il s'inspire des élus des pays voisins, ça ne mange pas de pain.",
+    "spans": [
+     [
+      348,
+      386
+     ],
+     [
+      387,
+      486
+     ],
+     [
+      487,
+      554
+     ]
+    ],
+    "target": [
+     354,
+     357
+    ]
+   }
+  ]
+ },
+ "granddebat:1-6139": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "il faut également leur imposer de ne pas dépenser l'argent qu'ils n'ont pas (sauf engagement de campagne électorale aux termes de laquelle la majorité à laquelle ils se rattachent a été démocratiquement élue.)",
+    "spans": [
+     [
+      406,
+      615
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ouvrir aux Elus dont le mandat n'est pas renouvelé un véritable droit au chômage et à la formation professionnelle de transition, avec des modes de calcul et de durée similaires aux salariés du privé",
+    "spans": [
+     [
+      763,
+      962
+     ]
+    ],
+    "target": [
+     774,
+     813
+    ]
+   },
+   {
+    "text": "Supprimer les avantages et rémunérations versées aux anciens hauts dirigeants politiques et de la haute administration après 3 ans",
+    "spans": [
+     [
+      964,
+      1094
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-15294": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Consultations des citoyens plus fréquentes hors élections.",
+    "spans": [
+     [
+      0,
+      58
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Limiter les durées des mandats à 5 ans quelque soit le mandat (y compris pour les sénateurs) et limiter le renouvellement des mandats à une fois.",
+    "spans": [
+     [
+      59,
+      204
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Limiter et encadrer les \"rémunérations\" et \"avantages en nature\" liés aux mandats.",
+    "spans": [
+     [
+      205,
+      287
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Tout doit être fait pour éviter que l'exercice d'élu devienne un métier ou une rente de situation.",
+    "spans": [
+     [
+      342,
+      440
+     ]
+    ],
+    "target": [
+     380,
+     394
+    ]
+   },
+   {
+    "text": "L'exemple scandinave peut être une bonne inspiration.",
+    "spans": [
+     [
+      288,
+      341
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-24510": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "Education civique à tous les âges de la vie, dans tous les milieu sociaux",
+    "spans": [
+     [
+      3,
+      76
+     ]
+    ],
+    "target": [
+     3,
+     20
+    ]
+   },
+   {
+    "text": "Restaurer le prestige moral des institutions de la République qui a trop souvent été altéré depuis 30 ans (affaires, inefficience, collusion)",
+    "spans": [
+     [
+      81,
+      222
+     ]
+    ],
+    "target": [
+     94,
+     142
+    ]
+   },
+   {
+    "text": "Favoriser le désintéressement des Elus qui devraient être choisis non pour leur efficacité à conquérir le pouvoir mais pour leur abnégation, leur travail acharné, leur conduite exemplaire et leur capacité à rendre des comptes",
+    "spans": [
+     [
+      226,
+      451
+     ]
+    ],
+    "target": [
+     932,
+     940
+    ]
+   },
+   {
+    "text": "Ne pas mépriser les citoyens ( sans dents, fainéants, etc.) car ce faisant l'Elu démontre qu'il en est très loin et se déligitime lui-même",
+    "spans": [
+     [
+      456,
+      594
+     ]
+    ],
+    "target": [
+     472,
+     484
+    ]
+   },
+   {
+    "text": "il faut aussi arrêter la démagogie et savoir appeler un chat un chat (mais en des termes fermes, respectueux, républicains)",
+    "spans": [
+     [
+      607,
+      730
+     ]
+    ],
+    "target": [
+     629,
+     641
+    ]
+   },
+   {
+    "text": "Stopper la mode du jeunisme (qui rime avec maladresse et inexpérience) mais aussi celle des vieux Eléphants dont le peuple est saturé. Il faut un équilibre générationnel . Nous n'y sommes pas",
+    "spans": [
+     [
+      736,
+      927
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "les Elus devraient gérer les affaires publiques sans penser à leur réélection mais en pensant au service de l'intérêt général y compris à moyen et long terme",
+    "spans": [
+     [
+      932,
+      1089
+     ]
+    ],
+    "target": [
+     932,
+     940
+    ]
+   },
+   {
+    "text": "pas assez de débats de fonds, trop de polémiques politiciennes et de sensationnalisme médiatique nuisent à ce rapport Elu- Citoyen",
+    "spans": [
+     [
+      1094,
+      1224
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-13571": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "le lien est distendu entre les élus et les citoyens … les citoyens dont je fais parti ont le sentiment d'être entraînés vers un monde qu'il n' ont pas choisi (je pense par exemple à la destruction de notre environnement par des décisions inconsidérées, la précarités des emplois,..) et que les choix nous échappent. En final on subit mais on ne participe pas",
+    "spans": [
+     [
+      27,
+      78
+     ],
+     [
+      93,
+      397
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il faudrait à mon avis que les élus organisent régulièrement des débat citoyens",
+    "spans": [
+     [
+      414,
+      493
+     ]
+    ],
+    "target": [
+     479,
+     493
+    ]
+   },
+   {
+    "text": "Que soit organisé des référendum locaux sur des choix qui impactent la vie des habitants comme la transition énergétique",
+    "spans": [
+     [
+      495,
+      615
+     ]
+    ],
+    "target": [
+     517,
+     534
+    ]
+   },
+   {
+    "text": "Que les citoyens aient la possibilité de demander l'organisation d'un référendum sous conditions (accord du Conseil constitutionnel, nombre de signataires, ..) à définir dans le cadre d'une loi à élaborer par les citoyens et les élus",
+    "spans": [
+     [
+      617,
+      850
+     ]
+    ],
+    "target": [
+     640,
+     697
+    ]
+   }
+  ]
+ },
+ "granddebat:1-21639": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "il faudrait que les élus se consacrent pleinement à leur tâche, sans arrière pensées financières!",
+    "spans": [
+     [
+      23,
+      120
+     ]
+    ],
+    "target": [
+     39,
+     47
+    ]
+   },
+   {
+    "text": "un élu pourrait si il le souhaite et si il en a la capacité, avoir des mandats différents mais avec un SEUL salaire (le plus élevé de ses mandats par exemple).Non au cumul des salaires!",
+    "spans": [
+     [
+      121,
+      306
+     ]
+    ],
+    "target": [
+     287,
+     305
+    ]
+   },
+   {
+    "text": "s 'ils n'ont qu'une seule rémunération, il y a fort à parier, qu'ils ne se consacreraient qu'à une seule représentation publique! Cela qui aurait pour effet,mécaniquement de laisser des places, à des citoyens ayant la volonté de s'investir dans la chose publique",
+    "spans": [
+     [
+      325,
+      587
+     ]
+    ],
+    "target": [
+     430,
+     453
+    ]
+   }
+  ]
+ },
+ "granddebat:1-6913": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Responsabilité de tous les élus : Stop au \"Coupable mais pas responsable !\" Un élu, quelqu'il soit, au gouvernement ou en région, qui aura manqué à sa tâche en nuisant de près ou de loin à son peuple se verra déféré devant la justice pendant ou après son mandat",
+    "spans": [
+     [
+      0,
+      261
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Des intérêts de remboursement pourront s'appliquer à l'élu",
+    "spans": [
+     [
+      263,
+      321
+     ]
+    ],
+    "target": [
+     267,
+     292
+    ]
+   },
+   {
+    "text": "Tout contrat signé avec une entreprise privée française ou étrangère pourra être contesté à postériori et le contrat sera cassé par défaut, selon la loi de non-ingérence après du peuple français (voir + bas cette nouvelle loi importante à mettre en place), et le remboursement des frais sera exigé auprès des parties responsables",
+    "spans": [
+     [
+      333,
+      662
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "On ne peut + entendre « responsable mais non coupable » ! Cette expression indique que nos élus peuvent se permettre d'enclencher n'importe quoi et faillir à leur responsabilité de bienveillance sur le peuple. Finit les scandales comme ceux du sang empoisonné, de l'amiante, de l'utilisation du glyphosate, etc…",
+    "spans": [
+     [
+      664,
+      975
+     ]
+    ],
+    "target": [
+     827,
+     872
+    ]
+   }
+  ]
+ },
+ "granddebat:1-9009": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "transformer radicalement le CESE en un organe de représentation temporaire en fonction des sujets",
+    "spans": [
+     [
+      51,
+      148
+     ]
+    ],
+    "target": [
+     76,
+     83
+    ]
+   },
+   {
+    "text": "on pourrait envisager que les membres du CESE soient nommés pour 6 mois par différentes institutions (partis, associations, corps intermédiaires, entreprises, associations de maires, etc) pour traiter strictement d'un sujet (exemple, fiscalité environnementale). Une fois le sujet traité, on passe au sujet suivant mais avec de nouveaux membres appropriés",
+    "spans": [
+     [
+      243,
+      598
+     ]
+    ],
+    "target": [
+     269,
+     288
+    ]
+   },
+   {
+    "text": "Cela permettrait de donner au CESE plus de légitimité, de visibilité, de dynamisme qu'il n'en a aujourd'hui (tout au moins dans la perception du public), tout en répondant à l'appétit pour des « états généraux » d'une manière plus ciblée et contrôlée",
+    "spans": [
+     [
+      600,
+      850
+     ]
+    ],
+    "target": [
+     76,
+     83
+    ]
+   }
+  ]
+ },
+ "granddebat:1-27532": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Supprimer l'ENA et diversifier le profil des candidats aux élections",
+    "spans": [
+     [
+      2,
+      70
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Associer davantage les électeurs, encartés ou non, à l'élaboration des programmes, notamment via internet",
+    "spans": [
+     [
+      74,
+      179
+     ]
+    ],
+    "target": [
+     127,
+     155
+    ]
+   },
+   {
+    "text": "Limiter la communication-choc dans les médias dictée par les conseillers en communication politique : privilégier les voies d'information plus \"lentes\", comme les professions de foi et les sites internet",
+    "spans": [
+     [
+      183,
+      386
+     ]
+    ],
+    "target": [
+     191,
+     228
+    ]
+   },
+   {
+    "text": "Revoir la qualité des services publics de l'information (France info, France inter, France télé.trop superficielles et qui font la course à l'audimat dans leurs choix de sujets)",
+    "spans": [
+     [
+      388,
+      565
+     ]
+    ],
+    "target": [
+     395,
+     443
+    ]
+   },
+   {
+    "text": "Il faudrait que les candidats fassent des propositions très détaillées de la manière dont ils mettraient en oeuvre les mesures qu'ils proposent (quasiment une étude d'impact) afin que les électeurs puissent juger de leur intérêt et de leur faisabilité",
+    "spans": [
+     [
+      568,
+      819
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-19831": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Rapprocher les salaires des élus de ceux qu'ils représentent. Par exemple, rémunérer les parlementaires au niveau du revenu médian : cela peut paraître faible par rapport à leur fonction et leur rôle mais cela renforcerait considérablement leur sincérité en montrant qu'ils représentent les citoyens par conviction et non pour des raisons financières. A fortiori, cela permet probablement un renouvellement accru du personnel politique.",
+    "spans": [
+     [
+      0,
+      436
+     ]
+    ],
+    "target": [
+     11,
+     32
+    ]
+   }
+  ]
+ },
+ "granddebat:1-12202": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "si l'intégralité des décisions de l'Etat allaient vers plus de protection et de justice sociale, les citoyens auraient plus confiance en leurs élus",
+    "spans": [
+     [
+      15,
+      162
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les hautes sphères de la politique ont oublié que leur rôle était de se placer entre les forts (les riches) et les faibles",
+    "spans": [
+     [
+      164,
+      286
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Ces derniers temps, les décisions politiques favorisent la liberté d'action des riches et dans le même temps on met les faibles en face de leur supposée responsabilité dans leur situation",
+    "spans": [
+     [
+      288,
+      475
+     ]
+    ],
+    "target": [
+     308,
+     332
+    ]
+   }
+  ]
+ },
+ "granddebat:1-21321": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Écouter ce que disent les \"gens\" par le biais des associations, des sondages … Pas d'écoute sur ce sujet comme sur bien d'autres",
+    "spans": [
+     [
+      0,
+      76
+     ],
+     [
+      216,
+      265
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "90 % des Français sont pour la liberté du choix de leur mort. Or chaque gouvernement se refile le vote d'une loi comme une patate chaude",
+    "spans": [
+     [
+      78,
+      214
+     ]
+    ],
+    "target": [
+     106,
+     138
+    ]
+   },
+   {
+    "text": "On préfère écouter les minorité qui crient : Manif. pour tous, catho. intégristes etc. est ce la peur de déplaire ?",
+    "spans": [
+     [
+      267,
+      382
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-6380": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Une commission de lutte contre les violences des groupuscules d'extrême-droite a été créée ; un député mis en examen pour violences (comment peut-il être un législateur?) y siège, tout est dit de l'exemplarité de notre représentation et du système",
+    "spans": [
+     [
+      0,
+      247
+     ]
+    ],
+    "target": [
+     196,
+     247
+    ]
+   },
+   {
+    "text": "les élus avec mandat national, en général politiciens professionnels et élite auto-proclamée, n'ont d'égard pour leurs électeurs que pendant la campagne électorale. Les promesses faites dans ces moments-là n'engagent que ceux qui les entendent",
+    "spans": [
+     [
+      385,
+      628
+     ]
+    ],
+    "target": [
+     385,
+     414
+    ]
+   },
+   {
+    "text": "Ces notables sont la noblesse d'aujourd'hui avec ses privilèges et son arrogance, au service de ses intérêts bien compris",
+    "spans": [
+     [
+      630,
+      751
+     ]
+    ],
+    "target": [
+     630,
+     642
+    ]
+   }
+  ]
+ },
+ "granddebat:1-27450": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Donner aux citoyens les moyens de contrôler et d'évaluer en permanence l'action des élus censés les représenter",
+    "spans": [
+     [
+      0,
+      111
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "l'évaluation de la manière dont il remplit ses fonctions doit être permanente",
+    "spans": [
+     [
+      191,
+      268
+     ]
+    ],
+    "target": [
+     191,
+     247
+    ]
+   },
+   {
+    "text": "Introduire un Référendum d'Initiative citoyenne avec un nombre de signatures qui fasse sens ( 1 demi-million)",
+    "spans": [
+     [
+      270,
+      379
+     ]
+    ],
+    "target": [
+     281,
+     317
+    ]
+   }
+  ]
+ },
+ "granddebat:1-3583": {
+  "n_specs": 12,
+  "claims": [
+   {
+    "text": "Régime d'indemnistion chômage pour les anciens présidents ,ministres, députées, sénateurs ect..",
+    "spans": [
+     [
+      2,
+      97
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Réduction des frais de mandat, et suppression des privilèges des ministres députés et sénateurs",
+    "spans": [
+     [
+      100,
+      195
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Contrôle des frais de mandat et des frais de fonctionnement des élus par un organisme indépendant",
+    "spans": [
+     [
+      198,
+      295
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Mise en place d'un service indépendant pour la gestion des assistants (es) parlementaires",
+    "spans": [
+     [
+      298,
+      387
+     ]
+    ],
+    "target": [
+     342,
+     387
+    ]
+   },
+   {
+    "text": "Diminution de 30% du nombre d'élus (députés, sénateurs, conseillés généraux)",
+    "spans": [
+     [
+      390,
+      466
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Mise en place d'un RIC à mi mandat du président de la république pour valider la 2me partie des 5 ans",
+    "spans": [
+     [
+      469,
+      570
+     ]
+    ],
+    "target": [
+     485,
+     533
+    ]
+   },
+   {
+    "text": "Mandats uniques de 3 ans sauf le mandat présidentiel 5 ans",
+    "spans": [
+     [
+      573,
+      631
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Instauration d'un quota d'élus députés et sénateurs 30% par tirage au sort sur liste électorale",
+    "spans": [
+     [
+      634,
+      729
+     ]
+    ],
+    "target": [
+     649,
+     685
+    ]
+   },
+   {
+    "text": "Modification complète du sénat (Nombre de sénateurs ,avantages,duré de mandat)",
+    "spans": [
+     [
+      732,
+      810
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Inéligibilité à vie pour tous les élus condamnés (es) - condamnation en rapport avec leur fonction",
+    "spans": [
+     [
+      812,
+      910
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Installation du président de la république dans un nouveau bâtiment spécifique",
+    "spans": [
+     [
+      913,
+      991
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Le palais présidenciel et tous les palais ministériels transformés en musés ou autres fonctions utiles",
+    "spans": [
+     [
+      994,
+      1096
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-30054": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "stopper les promesses non tenues",
+    "spans": [
+     [
+      0,
+      32
+     ]
+    ],
+    "target": [
+     12,
+     21
+    ]
+   },
+   {
+    "text": "ne pas vendre du rêve",
+    "spans": [
+     [
+      34,
+      55
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "expliquer plus clairement les objectifs",
+    "spans": [
+     [
+      57,
+      96
+     ]
+    ],
+    "target": [
+     87,
+     96
+    ]
+   },
+   {
+    "text": "l'ISF est probablement avec les 35h l'une des mesures les plus catastrophiques qui a été mise en œuvre",
+    "spans": [
+     [
+      110,
+      212
+     ]
+    ],
+    "target": [
+     110,
+     115
+    ]
+   },
+   {
+    "text": "L'assouplir a été une bonne mesure, mais beaucoup de citoyens le vivent comme un cadeau aux riches",
+    "spans": [
+     [
+      214,
+      312
+     ]
+    ],
+    "target": [
+     110,
+     115
+    ]
+   },
+   {
+    "text": "Il aurait fallu débattre en amont, expliquer clairement le but et les résultats attendus, afin de ne pas laisser les oppositions raconter n'importe quelle stupidité par le biais des réseaux sociaux",
+    "spans": [
+     [
+      314,
+      511
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-25055": {
+  "n_specs": 20,
+  "claims": [
+   {
+    "text": "Les élus ne doivent pas avoir de casier judiciaire",
+    "spans": [
+     [
+      0,
+      50
+     ]
+    ],
+    "target": [
+     4,
+     8
+    ]
+   },
+   {
+    "text": "Mandat limité à 2 unités pour chaque élu",
+    "spans": [
+     [
+      52,
+      92
+     ]
+    ],
+    "target": [
+     436,
+     442
+    ]
+   },
+   {
+    "text": "Toutes rémunérations, indemnités, primes, etc. déclarées et imposables",
+    "spans": [
+     [
+      94,
+      164
+     ]
+    ],
+    "target": [
+     101,
+     134
+    ]
+   },
+   {
+    "text": "Pourquoi un député au bout de seulement cinq ans de cotisation retraite touche une retraite moyenne de 1 500 €/mois alors qu'un employé pour 42 années de cotisation touchera 896 € en moyenne ? … Pourquoi la retraite des élus n'est-elle pas prise en compte dans l'écrêtement (8 200 €) des indemnités d'élus ? … Pourquoi une cotisation retraite d'élu rapporte-t-elle en moyenne 6,50 € pour un euro cotisé pendant vingt ans alors qu'un salarié du régime général touche entre 0,87 et 1,57 € pour un euro cotisé pendant quarante-deux ans ? … Pourquoi un élu peut-il cumuler ses différentes retraites (jusqu'à 5 retraites) ? … Pourquoi un élu peut-il travailler en touchant sa (ses) retraite(s) d'élu complète(s) sans plafond de montant alors que le citoyen lambda ne peut le faire sans dépasser la valeur de son dernier salaire ? … Pourquoi les élus ont-ils une retraite par capitalisation et interdisent-ils résolument aux « autres » qui n'ont droit qu'à une retraite par répartition ? … Pourquoi les cotisations retraite des élus peuvent-elles être abondées par les collectivités, ce qui permet à un parlementaire de toucher sa retraite à taux plein avec moins d'annuités de cotisation ? … Pourquoi une partie de la pension de retraite des parlementaires est-elle insaisissable (même en cas de fraude ou d'amende) ? … Pourquoi la retraite d'un élu est-elle garantie et connue d'avance alors qu'un salarié du régime général n'est sûr de rien ?",
+    "spans": [
+     [
+      215,
+      407
+     ],
+     [
+      532,
+      644
+     ],
+     [
+      647,
+      871
+     ],
+     [
+      874,
+      955
+     ],
+     [
+      958,
+      1161
+     ],
+     [
+      1164,
+      1318
+     ],
+     [
+      1321,
+      1521
+     ],
+     [
+      1524,
+      1649
+     ],
+     [
+      4175,
+      4299
+     ]
+    ],
+    "target": [
+     544,
+     561
+    ]
+   },
+   {
+    "text": "Pourquoi un agent public qui voudrait se présenter à une élection législative ne devrait-il pas démissionner de la fonction publique ? Un salarié le doit, lui, s'il veut travailler ailleurs !",
+    "spans": [
+     [
+      1652,
+      1843
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi deux ans d'allocations chômage pour un salarié lambda du régime général et cinq ans pour les députés ? Ceux-ci ont-ils plus de mal à retrouver un travail ? … Pourquoi les députés qui ne se représentent pas peuvent-ils toucher l'allocation différentielle et dégressive de retour à l'emploi ? Un salarié qui démissionne n'a, lui, droit à rien !",
+    "spans": [
+     [
+      1846,
+      2010
+     ],
+     [
+      2013,
+      2197
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi faut-il avoir un casier judiciaire vierge pour entrer dans certaines professions et que ce n'est pas le cas pour être élu ?",
+    "spans": [
+     [
+      2200,
+      2332
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi la fraude dans la déclaration de patrimoine d'un élu ne vaut-elle pas la prison mais seulement 30 000 € d'amende alors que la simple fraude d'un citoyen pour faux et usage de faux d'un document délivré par l'Administration est punissable de cinq ans d'emprisonnement et de 75 000 € d'amende ?",
+    "spans": [
+     [
+      2335,
+      2636
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi un parlementaire (député ou sénateur) touche-t-il une IRFM (indemnité représentative de frais de mandat) de 5 770 € par mois pour un député et de 6 200 € par mois pour un sénateur, dont l'usage n'est pas contrôlable et pour lequel il n'a de compte à rendre à personne ? … Pourquoi, durant son mandat, un élu peut-il s'acheter un bien qu'il nomme souvent « permanence », le payer à crédit avec l'IRFM, qui est de l'argent public, et le garder ou le vendre pour son bénéfice personnel ? … Pourquoi les parlementaires cumulards peuvent-ils toucher plusieurs enveloppes de frais de représentation (frais en tant que président d'agglomération, frais en tant que maire, IRFM en tant que député…) ? … Pourquoi l'indemnité de fonction d'un député et son IRFM ne sont-elles pas imposables ? … Pourquoi un député a-t-il droit au remboursement de frais de taxis parisiens (alors qu'il touche l'IRFM pour ça) ?",
+    "spans": [
+     [
+      2639,
+      2917
+     ],
+     [
+      2920,
+      3132
+     ],
+     [
+      3135,
+      3339
+     ],
+     [
+      4417,
+      4504
+     ],
+     [
+      4507,
+      4621
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi les restaurants trois étoiles (cinq étoiles ?) de l'Assemblée nationale et du Sénat coûtent-ils si peu cher à l'élu ?",
+    "spans": [
+     [
+      3342,
+      3468
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi un élu à revenu égal de celui d'un salarié paye-t-il moins d'impôt sur le revenu ?",
+    "spans": [
+     [
+      3471,
+      3562
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi parle-t-on toujours de réduire le nombre de fonctionnaires mais jamais celui des parlementaires ?",
+    "spans": [
+     [
+      3565,
+      3671
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi les sénateurs se sont-ils versé en 2011, au titre d'un « rattrapage exceptionnel », une prime de 3 531,61 € avant les congés d'été… ?",
+    "spans": [
+     [
+      3674,
+      3816
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi aucun chiffre n'existe sur la présence ou non des sénateurs lors des séances au Sénat ?",
+    "spans": [
+     [
+      3819,
+      3915
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi la pension de réversion d'un élu décédé est-elle de 66 % sans condition de ressources du survivant alors que celle d'un salarié du privé est de 54 % sous condition de ressources du survivant (aucune réversion au-dessus de 19 614,40 brut annuel !",
+    "spans": [
+     [
+      3918,
+      4172
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi un député peut-il cumuler plusieurs « réserves parlementaires » sans que cela se sache officiellement ?",
+    "spans": [
+     [
+      4302,
+      4414
+     ]
+    ],
+    "target": [
+     4349,
+     4372
+    ]
+   },
+   {
+    "text": "Pourquoi un ancien sénateur ou un ancien député ont-ils droit à la gratuité à vie en première classe SNCF ? … Pourquoi un ancien sénateur et son conjoint ont-ils le droit du remboursement de la moitié de 12 vols Air France par an et à vie ? … Pourquoi les anciens ministres, leurs conjoints et leurs enfants ont-ils droit à la gratuité à vie des vols Air France et à la gratuité à vie des transports sur le réseau SNCF ?",
+    "spans": [
+     [
+      4624,
+      4731
+     ],
+     [
+      4734,
+      4864
+     ],
+     [
+      4951,
+      5128
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi un sénateur peut-il emprunter jusqu'à 150 000 € à un taux préférentiel ?",
+    "spans": [
+     [
+      4867,
+      4948
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi y a-t-il dans le service des fraudes un service spécial pour les élus ? … Pourquoi une fraude d'élu est-elle différente des autres pour bénéficier d'un traitement de faveur ?",
+    "spans": [
+     [
+      5131,
+      5211
+     ],
+     [
+      5214,
+      5314
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pourquoi un élu condamné définitivement ne rembourse-t-il pas les frais d'avocat dépensés pour lui par la collectivité ?",
+    "spans": [
+     [
+      5317,
+      5437
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-17541": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "des élus responsables qui pratiquent le compromis (voir + haut) et n'élude pas les questions",
+    "spans": [
+     [
+      0,
+      92
+     ]
+    ],
+    "target": [
+     4,
+     8
+    ]
+   },
+   {
+    "text": "Que les élus soient courageux et aient une vision à plus long terme que l'horizon électoral (transition climatique) même si elle est est difficilement vendable (remise en question de notre mode de vie)",
+    "spans": [
+     [
+      94,
+      295
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il faut de la pédagogie par ailleurs",
+    "spans": [
+     [
+      297,
+      333
+     ]
+    ],
+    "target": [
+     311,
+     320
+    ]
+   },
+   {
+    "text": "il faut des élus exemplaires et qui ne se laissent pas influencer par les lobbys divers",
+    "spans": [
+     [
+      458,
+      545
+     ]
+    ],
+    "target": [
+     4,
+     8
+    ]
+   }
+  ]
+ },
+ "granddebat:1-23261": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "S'écouter, se respecter et faire preuve d'empathie dans la vie de tous les jours , Montrer cet exemple chaque jour et en faire la promotion au quotidien",
+    "spans": [
+     [
+      0,
+      152
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Appliquer l'Interdiction à vie d'avoir un mandat en cas de condamnation pour prise illégale d'intérêt dans le cadre d'un mandat d'élu ou de défaut de bonne gestion",
+    "spans": [
+     [
+      387,
+      550
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'éthique des acteurs en charge de la gestion et l'administration de l'état doit être vérifiée et irréprochable",
+    "spans": [
+     [
+      552,
+      663
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'une des finalités de la réforme des usages dans la gestion et administration de l'état devrait avoir comme conséquence l'anéantissement du \"\"fond de commerce \"\" des journaux satiriques tel que le Canard enchainé grâce au comportement exemplaire des acteurs politiques",
+    "spans": [
+     [
+      665,
+      934
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Appliquer la suppression de tous \"\"privilèges\"\" quelque soit les fonctions -hors présidence de la république- et précédentes fonctions pour les élus ou autres grands fonctionnaires (Suppression des parkings réservés, des chauffeurs personnels, ,), utilisation obligatoire des transports en communs",
+    "spans": [
+     [
+      1197,
+      1494
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les élus , fonctionnaires (Grand ou pas) ne devrons pas accepter le moindre cadeau dans le cadre de leur fonction",
+    "spans": [
+     [
+      1496,
+      1609
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9110": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Faire un discours par le président de la république ou le premier ministre pour présenter chaque future loi, l'expliquer en terme clair et concis, en démontrer les avantages et les répercutions sur le peuple français, avant de la présenter à l'assemblée nationale et au vote",
+    "spans": [
+     [
+      0,
+      274
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Le président de la république et le premier ministre doivent être plus proche des citoyens pour expliquer les nouveaux projets pour la France, afin que chacun se sente investi quelque part",
+    "spans": [
+     [
+      276,
+      464
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Pas de Référendum Citoyen révocatoire ou pouvant annuler une loi ou en proposer une. Ce n'est pas au peuple de décider mais à ses représentants",
+    "spans": [
+     [
+      466,
+      609
+     ]
+    ],
+    "target": [
+     473,
+     491
+    ]
+   },
+   {
+    "text": "Éventuellement un Référendum mais à questions ouvertes sur les grands sujets de notre société, comme le climat, la transition écologique, la fiscalité, mais pas trop. A trop voter, les gens ne se déplaceront plus",
+    "spans": [
+     [
+      611,
+      823
+     ]
+    ],
+    "target": [
+     473,
+     483
+    ]
+   },
+   {
+    "text": "Ou alors plutôt des plates formes internets pour débattre sur les sujets importants et demander l'avis du peuple, avant le lancement de la loi et de son vote",
+    "spans": [
+     [
+      825,
+      982
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-8648": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "mieux payer les élus (oui, oui) mais réduire drastiquement et contrôler avec la plus stricte sévérité leurs frais de représentation et autres avantages",
+    "spans": [
+     [
+      70,
+      221
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "faciliter les allers-retours entre vie professionnelle et mandat politique. S'il était plus facile de reprendre son activité professionnelle après l'exercice d'un mandat, nous aurions des candidats plus nombreux, plus compétents et plus représentatifs de la diversité de notre pays",
+    "spans": [
+     [
+      225,
+      506
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Actuellement, les professions libérales (ou professions à clientèle : médecins, avocats)) sont sur-représentées parmi les élus locaux. Une mesure de ce type remettrait un certain équilibre, et limiterait les \"professionnels de la politique\" en qui le peuple n'a pas confiance et que les lois sur le non-cumul n'ont pas encore évincé de la vie politique",
+    "spans": [
+     [
+      508,
+      860
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-14262": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Limiter les mandats: un seul à la fois et limité dans le temps, 10 à 12 ans maximum avant de retourner dans la vie professionnelle pour une même durée … Les élus pourraient s'occuper de leur mandat plus que de leur réélection … Fin des politiciens à vie, déconnectés",
+    "spans": [
+     [
+      0,
+      150
+     ],
+     [
+      152,
+      224
+     ],
+     [
+      226,
+      264
+     ]
+    ],
+    "target": [
+     8,
+     19
+    ]
+   },
+   {
+    "text": "limiter le nombre d'enarques au gouvernement et dans les cabinets ministériels : ils ont le même logiciel et sont totalement hors sol!",
+    "spans": [
+     [
+      275,
+      409
+     ]
+    ],
+    "target": [
+     283,
+     353
+    ]
+   }
+  ]
+ },
+ "granddebat:1-20592": {
+  "n_specs": 9,
+  "claims": [
+   {
+    "text": "rendre public le nom des employeurs des personnes qui font des dons aux partis politiques ou aux campagnes d'élection",
+    "spans": [
+     [
+      2,
+      119
+     ]
+    ],
+    "target": [
+     16,
+     119
+    ]
+   },
+   {
+    "text": "un grand groupe (du cac40 par ex) peut dire à ses employés : votez pour X et si il est élu, notre groupe aura plus de réussite commerciale et je vous augmenterai votre salaire ou vos dividendes",
+    "spans": [
+     [
+      134,
+      327
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "les groupes/grosses entreprise peuvent donner des primes aux grands cadres afin que ces derniers fassent des dons élevés aux partis politiques",
+    "spans": [
+     [
+      342,
+      484
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "les financements de la campagne de En Marche étaient majoritairement étrangers , ce qui remet tout en cause dans ses actions",
+    "spans": [
+     [
+      515,
+      639
+     ]
+    ],
+    "target": [
+     515,
+     559
+    ]
+   },
+   {
+    "text": "J'aurais ainsi plus confiance en une institution politique qui ne soit pas financée par des grands groupes ou des cac40",
+    "spans": [
+     [
+      928,
+      1047
+     ]
+    ],
+    "target": [
+     961,
+     1047
+    ]
+   },
+   {
+    "text": "RIEN n'empêche un grand patron de financer indirectement une campagne politique ou un homme politique et ça c'est GRAVE !",
+    "spans": [
+     [
+      1061,
+      1182
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-20502": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Le Grand débat est incontestablement un succès … Ce peut-etre une base pour une meilleure participation citoyenne dans les projets d'avenir",
+    "spans": [
+     [
+      0,
+      46
+     ],
+     [
+      48,
+      138
+     ]
+    ],
+    "target": [
+     0,
+     14
+    ]
+   },
+   {
+    "text": "Faire des débats citoyens, surtout au niveau local, pour tout projet public afin de faire participer la population à ces projets comme l'Etat le fait dans les déclarations d'utilité publique",
+    "spans": [
+     [
+      140,
+      330
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Former aussi les élus afin qu'il arrêtent d'être parfois pour tout ce qui est contre et parfois contre tout ce qui est pour",
+    "spans": [
+     [
+      332,
+      455
+     ]
+    ],
+    "target": [
+     345,
+     353
+    ]
+   },
+   {
+    "text": "L'opposition doit exister mais de façon constructive en organisant eux-même des débats citoyens pour contredire, après synthèse, un projet ou une loi",
+    "spans": [
+     [
+      539,
+      688
+     ]
+    ],
+    "target": [
+     539,
+     551
+    ]
+   }
+  ]
+ },
+ "granddebat:1-3904": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Respecter les engagements … Il faut rende compte aux citoyens des actions conduites même s'il faut avouer l'échec",
+    "spans": [
+     [
+      0,
+      25
+     ],
+     [
+      27,
+      112
+     ]
+    ],
+    "target": [
+     10,
+     25
+    ]
+   },
+   {
+    "text": "Il faut abandonner la langue de bois",
+    "spans": [
+     [
+      114,
+      150
+     ]
+    ],
+    "target": [
+     133,
+     150
+    ]
+   },
+   {
+    "text": "mobiliser les experts sociaux (les individus dotés localement d'autorité) pour mieux cerner l'évolution du climat social et les besoins des territoires",
+    "spans": [
+     [
+      152,
+      303
+     ]
+    ],
+    "target": [
+     162,
+     181
+    ]
+   },
+   {
+    "text": "valoriser les initiatives locales : organiser à Versailles un forum national une fois par an pour mettte en valeur les gens simples produisant le bien collectif",
+    "spans": [
+     [
+      313,
+      473
+     ]
+    ],
+    "target": [
+     323,
+     346
+    ]
+   }
+  ]
+ },
+ "granddebat:1-9015": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "les élus qui nous représentent devraient avoir notre intérêt à défendre en premier objectif et non la défense de leurs propres avantages énormes compte tenu des difficultés des Francais au quotidien",
+    "spans": [
+     [
+      0,
+      198
+     ]
+    ],
+    "target": [
+     0,
+     8
+    ]
+   },
+   {
+    "text": "Ils pourraient montrer l'exemple en votant entre autres la suppression des avantages énormes dont bénéficient les anciens présidents de la république et les retraites des députés et sénateurs",
+    "spans": [
+     [
+      200,
+      391
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9302": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "Revoir les modes de financement des partis et les modalités de financement (cf. travail de Julie Cagé)",
+    "spans": [
+     [
+      0,
+      102
+     ]
+    ],
+    "target": [
+     7,
+     74
+    ]
+   },
+   {
+    "text": "financer les partis via l'impôt avec une contribution identique de chaque citoyen pour le parti de son choix",
+    "spans": [
+     [
+      104,
+      212
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Arrêter avec le suffrage majoritaire",
+    "spans": [
+     [
+      214,
+      250
+     ]
+    ],
+    "target": [
+     227,
+     250
+    ]
+   },
+   {
+    "text": "reconstruire de véritables contre-pouvoirs",
+    "spans": [
+     [
+      252,
+      294
+     ]
+    ],
+    "target": [
+     275,
+     294
+    ]
+   },
+   {
+    "text": "Casier judiciaire vierge pour les élus",
+    "spans": [
+     [
+      296,
+      334
+     ]
+    ],
+    "target": [
+     326,
+     334
+    ]
+   },
+   {
+    "text": "Compter les votes blancs",
+    "spans": [
+     [
+      336,
+      360
+     ]
+    ],
+    "target": [
+     344,
+     360
+    ]
+   },
+   {
+    "text": "annuler élections si moins de 505 de suffrages exprimés pour les candidats qui se présentent",
+    "spans": [
+     [
+      362,
+      454
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Empêcher d'avoir des personnes qui font carrière dans la politique",
+    "spans": [
+     [
+      456,
+      522
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-8527": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Déjà que les élus montrent l'exemple, qu'ils s'appliquent à eux-mêmes les mesures préconisées ! Exemple : bien joli de diminuer les retraites des retraités qui gagnent plus de 1200 €, mais d'un autre côté on dépense au minimum 10 millions d'euros par an pour 4 anciens chefs d'état, sans parler des retraites acquises avec un minimum d'activité au gouvernement et ce n'est qu'une goutte d'eau !",
+    "spans": [
+     [
+      0,
+      394
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-17405": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Eviter les parachutages de candidats au moment des élections (les élus d'une circonscriptions doivent être issus de ladite circonscription et non être parachutée de on ne sait où)",
+    "spans": [
+     [
+      0,
+      179
+     ]
+    ],
+    "target": [
+     7,
+     36
+    ]
+   },
+   {
+    "text": "Ouvrir les élections professionnelles aux non syndiqués dès les premiers tours",
+    "spans": [
+     [
+      181,
+      259
+     ]
+    ],
+    "target": [
+     188,
+     218
+    ]
+   },
+   {
+    "text": "Avoir une représentation nationale qui soit le reflet de toutes les sensibilités, y compris les extrêmes malgré tout ce qu'elles peuvent avoir de détestable",
+    "spans": [
+     [
+      297,
+      453
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-13903": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Imposer un % minimum de votants à l'assemblée Nationale lors du vote des lois car force est de constater que certaines lois sont votées avec parfois 50 députés présents dans l'hémicycle. Pour qu'une loi soit voté il faudrait qu'il y ait au minimum 70% de députés présents sans quoi la loi ne peut être soumise au vote. Ceci aurait pour avantage de minorer le taux d'absentéisme que l'on peut constater souvent et cela donnerait plus de légitimité aux textes de lois votées",
+    "spans": [
+     [
+      0,
+      472
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-28329": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Empêcher les élus carriéristes",
+    "spans": [
+     [
+      0,
+      30
+     ]
+    ],
+    "target": [
+     9,
+     30
+    ]
+   },
+   {
+    "text": "les élus doivent-être la pour le bien commun. Donc défraiement au niveau de la moyenne des français",
+    "spans": [
+     [
+      43,
+      142
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les décisions et dépenses décidées doivent toutes être rendu publiques et analysées par des associations de citoyens/journalistes",
+    "spans": [
+     [
+      144,
+      273
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Une solution serait d'utiliser que des citoyens normaux qui se mettraient (comme les experts de justice) à disposition de l'état en fonction des besoins et des compétences",
+    "spans": [
+     [
+      275,
+      446
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-33834": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "-Limiter à 2 le nombre de mandats possibles pour un élu dans une vie. Etre élu ne saurait être un métier",
+    "spans": [
+     [
+      0,
+      104
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "-Mettre en place une assemblée de citoyens auprès de chaque élu, chargée de veiller à la conformité démocratique de leurs décisions",
+    "spans": [
+     [
+      106,
+      237
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "-Rendre les élus pénalement responsables de leurs décisions si elles ne sont pas conformes à la volonté de la majorité",
+    "spans": [
+     [
+      239,
+      357
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "-Interdire toute forme de lobbying auprès des élus",
+    "spans": [
+     [
+      359,
+      409
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9230": {
+  "n_specs": 11,
+  "claims": [
+   {
+    "text": "Ce dont souffre aujourd'hui les citoyens, est certainement la sensation du manque d'équité entre les classes sociales, voire plus, entre ceux qui perçoivent peu de revenus et les autres, qui sont sensé les représenter, les élus à envergure nationale",
+    "spans": [
+     [
+      0,
+      249
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il s'agit bien du manque d'équité pas de salaire",
+    "spans": [
+     [
+      251,
+      299
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "ces mêmes citoyens savent penser, savent ce qui est bien pour eux et pensent que les décisions prises sans eux sont inéquitables par principe",
+    "spans": [
+     [
+      592,
+      733
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "la morale en politique est un principe inatteignable. Les ennemis d'hier sont les amis d'aujourd'hui si le bénéfice est trouvé, un poste promis, …",
+    "spans": [
+     [
+      787,
+      933
+     ]
+    ],
+    "target": [
+     787,
+     809
+    ]
+   },
+   {
+    "text": "La démocratie souffre d'une crise de crédibilité, donc de confiance, ce qui entraine inéluctablement une baisse de la motivation pour les électeurs à se déplacer aux urnes, car ils savent que leur parole ne sera pas écoutée ou respectée. Le vote blanc augmente et est un signe balayé de la main",
+    "spans": [
+     [
+      934,
+      1228
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- L'interdiction de se présenter devant les électeurs sans un casier judiciaire vierge. Ce qui est exigé dans beaucoup d'autres professions",
+    "spans": [
+     [
+      1430,
+      1569
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Rendre public le détail de son patrimoine en début et fin de mandat. L'élu est au service du peuple qui n'est lui, pas là pour l'enrichir",
+    "spans": [
+     [
+      1572,
+      1711
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Pour se présenter devant le peuple, avoir travaillé dans la société civile au moins cinq ans ; l'élu connaitra ainsi le quotidien du peuple pour l'avoir partagé",
+    "spans": [
+     [
+      1713,
+      1875
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Un élu national ne peut se présenter à une même élection que deux fois. Ainsi disparaît la professionnalisation du politique, considéré souvent comme une personne intelligente, mais qui profite souvent du système, est dépendant des lobbys et est éloigné des préoccupations du citoyen. Il n'est en fait pas libre de prendre ses décisions aujourd'hui puisqu'il est redevable",
+    "spans": [
+     [
+      1878,
+      2252
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- L'interdiction de cumuler les mandats. Ainsi il pourra se consacrer pleinement à ses électeurs",
+    "spans": [
+     [
+      2254,
+      2350
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Accepter que les décisions du peuple soient respectées et qu'aucun traité de remplacement ne pourra reprendre la parole de ce peuple, a contrario du résultat du référendum du 29 mai 2005 pour une Constitution européenne",
+    "spans": [
+     [
+      2353,
+      2574
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-14065": {
+  "n_specs": 15,
+  "claims": [
+   {
+    "text": "Que dois-je faire pour que, dorénavant, mes représentants ne se trompent pas sur le sens de ma participation civique ?",
+    "spans": [
+     [
+      503,
+      621
+     ]
+    ],
+    "target": [
+     543,
+     560
+    ]
+   },
+   {
+    "text": "celui de mes Concitoyens qui menace de se faire Belge pour payer moins d'impôts est un Maître Chanteur. Lui donner satisfaction redoublera ses prétentions et suscitera de nouvelles vocations.",
+    "spans": [
+     [
+      636,
+      827
+     ]
+    ],
+    "target": [
+     636,
+     715
+    ]
+   },
+   {
+    "text": "Le ministre qui dit aux chômeurs « Vous irez chercher votre emploi à 30km » puis qui double le coût des déplacements, ce ministre utilise une tactique défectueuse. … En toutes occasions j'ai constaté que ce genre de tactique entraine des réactions de colère.",
+    "spans": [
+     [
+      828,
+      991
+     ],
+     [
+      1450,
+      1542
+     ]
+    ],
+    "target": [
+     946,
+     957
+    ]
+   },
+   {
+    "text": "Montesquieu recommande 3 pouvoirs indépendants : Exécutif+Législatif+Judiciaire Pourquoi 3 pouvoirs ? Parce que Un=tyrannie ; Deux=Guerre ; Trois=Paix, paix armée, mais paix ; Quatre et plus =Carrousel diplomatique et escarmouches aux frontières qui nous ramènent à Trois ou Deux ou Un. La séparation des fonctions est à la base du contrôle. Nous devons donc revenir à 3 pouvoirs.",
+    "spans": [
+     [
+      1568,
+      1948
+     ]
+    ],
+    "target": [
+     1591,
+     1601
+    ]
+   },
+   {
+    "text": "Trois pouvoirs indépendants, chacun étant soumis au contrôle des citoyens.",
+    "spans": [
+     [
+      1954,
+      2028
+     ]
+    ],
+    "target": [
+     1954,
+     1981
+    ]
+   },
+   {
+    "text": "Un député devient ministre, puis redevient député… etc L'exécutif et le législatif ne sont plus indépendants entre eux",
+    "spans": [
+     [
+      2070,
+      2188
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Des députés enfermés jour et nuit pour examiner les textes pléthoriques soumis par l'Exécutif : le Législatif n'est pas indépendant.",
+    "spans": [
+     [
+      2190,
+      2322
+     ]
+    ],
+    "target": [
+     2286,
+     2299
+    ]
+   },
+   {
+    "text": "Des textes tellement ténus, et évoluant sans cesse, qui enferment le Juge dans un carcan de détails instables qui l'obligent à rendre des arrêts légaux sans que justice apparaisse rendue.",
+    "spans": [
+     [
+      2323,
+      2510
+     ]
+    ],
+    "target": [
+     2238,
+     2248
+    ]
+   },
+   {
+    "text": "Des moyens attribués à la Justice parcimonieusement par le Législatif et l'Exécutif. La Justice n'est pas indépendante des deux autres pouvoirs.",
+    "spans": [
+     [
+      2511,
+      2655
+     ]
+    ],
+    "target": [
+     2534,
+     2544
+    ]
+   },
+   {
+    "text": "Une justice qui instrumentalise un quatrième pouvoir (médiatique) pour atteindre ses objectifs. La Justice n'a plus l'autonomie nécessaire à sa fonction.",
+    "spans": [
+     [
+      2656,
+      2809
+     ]
+    ],
+    "target": [
+     2534,
+     2544
+    ]
+   },
+   {
+    "text": "Nous devons revenir à trois pouvoirs indépendants afin d'offrir aux citoyens le niveau de contrôle qu'ils doivent avoir sur le fonctionnement de L'Autorité Publique.",
+    "spans": [
+     [
+      2810,
+      2975
+     ]
+    ],
+    "target": [
+     2832,
+     2859
+    ]
+   },
+   {
+    "text": "le pouvoir s'est divisé en éléments relativement autonomes l'un par rapport à l'autre: : pouvoir politique (exécutif+législatif) ; pouvoir économique (grandes entreprises, syndicats, lobbys) ; pouvoir monétaire et financier (BdF, grandes banques, bourses …) ; et pouvoir médiatique (dépendant souvent du pouvoir économique). Agences Administratives Indépendantes etc… Nous nous trouvons avec 4 pouvoirs, parfois 5 ou plus : exécutif, législatif, économique-grandes entreprises, économique-salariés, médias liés aux grandes entreprises, médias indépendants des grandes entreprises mais dépendant des subventions de l'Etat, médias financièrement indépendants, pouvoir monétaire et financier (banques, bourses et Bdf)… multiplication des pouvoirs indépendants : Banque de France, CSA, AAI…",
+    "spans": [
+     [
+      3049,
+      3835
+     ]
+    ],
+    "target": [
+     3049,
+     3059
+    ]
+   },
+   {
+    "text": "La révision des méthodes de fonctionnement, éventuellement la révision constitutionnelle doivent nous ramener à 3 pouvoirs, et seulement trois, mais 3 pouvoirs indépendants sans empiètement et sans vide dans la définition de leurs pouvoirs.",
+    "spans": [
+     [
+      3836,
+      4076
+     ]
+    ],
+    "target": [
+     1591,
+     1601
+    ]
+   },
+   {
+    "text": "Alors tout citoyen pourra renoncer au droit de se rebeller et confier le monopole de l'usage légitime de la contrainte à ces pouvoirs qu'il contrôle.",
+    "spans": [
+     [
+      4077,
+      4226
+     ]
+    ],
+    "target": [
+     4198,
+     4210
+    ]
+   }
+  ]
+ },
+ "granddebat:1-16954": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Renforcer l'éducation civique et le parcours citoyen de l'enfant et du jeune à l'école et hors école",
+    "spans": [
+     [
+      0,
+      100
+     ]
+    ],
+    "target": [
+     10,
+     52
+    ]
+   },
+   {
+    "text": "former les enseignants à la connaissance fine de nos Institutions",
+    "spans": [
+     [
+      103,
+      168
+     ]
+    ],
+    "target": [
+     110,
+     125
+    ]
+   },
+   {
+    "text": "former les élus de tous niveaux sur la connaissance des grands enjeux de nos sociétés avec une vision planétaire sur les droits humains fondamentaux",
+    "spans": [
+     [
+      171,
+      319
+     ]
+    ],
+    "target": [
+     178,
+     202
+    ]
+   },
+   {
+    "text": "organiser des rencontres entre élus et têtes de réseaux associatifs",
+    "spans": [
+     [
+      322,
+      389
+     ]
+    ],
+    "target": [
+     332,
+     389
+    ]
+   },
+   {
+    "text": "organiser des rencontres intergénérationnelles avec des élus ou sans élus, dans les quartiers urbains et dans le rural",
+    "spans": [
+     [
+      392,
+      510
+     ]
+    ],
+    "target": [
+     402,
+     438
+    ]
+   },
+   {
+    "text": "organiser des rencontres dialogues interreligieux ouverts aux citoyens, citoyennes",
+    "spans": [
+     [
+      513,
+      595
+     ]
+    ],
+    "target": [
+     523,
+     562
+    ]
+   }
+  ]
+ },
+ "granddebat:1-22541": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "arrêter de payer les anciens présidents de la république 5 ans après la fin de leur mandat",
+    "spans": [
+     [
+      0,
+      90
+     ]
+    ],
+    "target": [
+     17,
+     56
+    ]
+   },
+   {
+    "text": "supprimer les frais funéraires des membres du gouvernement ainsi que de leur famille",
+    "spans": [
+     [
+      91,
+      175
+     ]
+    ],
+    "target": [
+     101,
+     175
+    ]
+   },
+   {
+    "text": "montrer l'exemple en diminuant le salaire des ministres et secrétaires d'état ainsi que leur nombre",
+    "spans": [
+     [
+      176,
+      275
+     ]
+    ],
+    "target": [
+     207,
+     275
+    ]
+   },
+   {
+    "text": "supprimer les commisiions inutiles",
+    "spans": [
+     [
+      276,
+      310
+     ]
+    ],
+    "target": [
+     286,
+     310
+    ]
+   },
+   {
+    "text": "donner + de pouvoir aux maires et ne plus diminuer leurs frais de fonctionnement",
+    "spans": [
+     [
+      311,
+      391
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-22279": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Rendre le vote obligatoire et reconnaître le vote blanc.",
+    "spans": [
+     [
+      0,
+      56
+     ]
+    ],
+    "target": [
+     7,
+     14
+    ]
+   },
+   {
+    "text": "Ce n'est pas le rejet des institutions qui met en péril la démocratie mais bien le désintérêt, le désengagement des citoyens pour la cause politique qui poussent les populismes de droite te de gauche.",
+    "spans": [
+     [
+      57,
+      257
+     ]
+    ],
+    "target": [
+     137,
+     205
+    ]
+   },
+   {
+    "text": "les brésiliens sont devenus anti-système à cause de la corruption",
+    "spans": [
+     [
+      340,
+      405
+     ]
+    ],
+    "target": [
+     340,
+     354
+    ]
+   },
+   {
+    "text": "en serions nous là si l'Europe n'avait pas frappé au coeur la fierté turque en refusant l'adhésion ?",
+    "spans": [
+     [
+      454,
+      554
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-13491": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "Réduire le nombre d'intermediare entre le maire et le Président de la République",
+    "spans": [
+     [
+      0,
+      80
+     ]
+    ],
+    "target": [
+     8,
+     80
+    ]
+   },
+   {
+    "text": "Parler simplement et vrai",
+    "spans": [
+     [
+      81,
+      106
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Réduirer le nombre de hauts fonctionnaires qui n'ont pas de bon sens et ne connaissent rien de la vie rurale et reduire leur paye de moitié",
+    "spans": [
+     [
+      107,
+      246
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Supprimer l'ENA",
+    "spans": [
+     [
+      247,
+      262
+     ]
+    ],
+    "target": [
+     257,
+     262
+    ]
+   },
+   {
+    "text": "Laisser les prefets et sous-préfets au moins 4 ans dans ma même ville",
+    "spans": [
+     [
+      263,
+      332
+     ]
+    ],
+    "target": [
+     271,
+     298
+    ]
+   },
+   {
+    "text": "Réduire au moins de 30% le nombre de députés , senateurs , conseillers généraux et régionaux",
+    "spans": [
+     [
+      333,
+      425
+     ]
+    ],
+    "target": [
+     357,
+     425
+    ]
+   },
+   {
+    "text": "Limiter le nombre de ministre à 14 et supprimer les secrétaire d'état qui ne sont ue les porte-serviettes des ministres",
+    "spans": [
+     [
+      426,
+      545
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-6303": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Plus de cours et d'intervention à propos de la citoyenneté et cela dès le collège, une demi heure par semaine d'EMC n'est pas suffisant surtout que ces heures ne sont pas consacré exclusivement à la citoyenneté.",
+    "spans": [
+     [
+      0,
+      211
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Si on sait ce qu'un(e) député(e) fait pour nous ,le lien se renouera car nous n'aurons un présupposé négatif qui empêche tout lien de proximité.",
+    "spans": [
+     [
+      212,
+      356
+     ]
+    ],
+    "target": [
+     223,
+     259
+    ]
+   },
+   {
+    "text": "Il faut être pédagogue pour apprendre le rôle de nos représentant, j'en suis convaincu.",
+    "spans": [
+     [
+      357,
+      444
+     ]
+    ],
+    "target": [
+     395,
+     422
+    ]
+   }
+  ]
+ },
+ "granddebat:1-28403": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Que les élus arrêtent de penser et de réagir en fonction du parti auquel ils appartiennent … une énorme majorité de députés sont capables de défendre une proposition que leur parti met en avant, et d'être contre cette même proposition si elle est proposée par un autre parti … Le jour ou un homme ou une femme politique sera capable de dire \"Oui, cette mesure est une bonne mesure\", même si elle a été proposé par un autre parti, et sans dire (comme actuellement) \"oui, peut-être mais en fait c'est nous qui l'avions dit avant\", ou \"peut-être mais attention, etc.. etc.\", alors cette personne deviendra crédible",
+    "spans": [
+     [
+      14,
+      104
+     ],
+     [
+      130,
+      311
+     ],
+     [
+      361,
+      695
+     ]
+    ],
+    "target": [
+     18,
+     26
+    ]
+   }
+  ]
+ },
+ "granddebat:1-16280": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Les représentants (non pas les élus) devraient être tirés au sort, du moins en parti … L'assemblée nationale pourraient être réellement représentative en étant tirée au sort … le sénat pourrait représenter une sorte de continuation et de « voie de la raison » en aillant des représentant élus, professionnels des questions techniques",
+    "spans": [
+     [
+      18,
+      102
+     ],
+     [
+      163,
+      249
+     ],
+     [
+      254,
+      411
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Cela permettrait de résoudre la question du rôle du sénat",
+    "spans": [
+     [
+      104,
+      161
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-32415": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Il est complètement inadmissible qu on puisse rembourser des frais de missions sans demander le moindre justificatif … Dans aucune entreprise qu elle soit publique ou privée on rembourse des frais de déplacement, de bouche, etc , sans présentation de factures, même pour quelques euros",
+    "spans": [
+     [
+      0,
+      116
+     ],
+     [
+      176,
+      342
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les élus doivent être irréprochables s ils veulent être respectés",
+    "spans": [
+     [
+      387,
+      452
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Prenons exemple sur les pays scandinaves",
+    "spans": [
+     [
+      344,
+      384
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-20158": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "détournement de fonds publics, ( vole)",
+    "spans": [
+     [
+      70,
+      108
+     ]
+    ],
+    "target": [
+     70,
+     99
+    ]
+   },
+   {
+    "text": "Respecter les hommes et les femmes de votre pays ( les phrases de notre président passent très mal, je n ai jamais vu un homme aussi imbu de sa personne )",
+    "spans": [
+     [
+      111,
+      265
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "stopper les impunités de certaines personnes : politiciens et hommes d'affaires puissants, voir petit truand ( Mr tapis et Mr Bénala.)",
+    "spans": [
+     [
+      268,
+      402
+     ]
+    ],
+    "target": [
+     276,
+     289
+    ]
+   },
+   {
+    "text": "mettre la proportionnelle a toutes les élections",
+    "spans": [
+     [
+      405,
+      453
+     ]
+    ],
+    "target": [
+     412,
+     430
+    ]
+   },
+   {
+    "text": "stopper l injonction 49.3",
+    "spans": [
+     [
+      456,
+      481
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "référendum : attention le respecter \" le non a Maastricht avait été voté, vous en avez pas tenu compte et après vous voulez qu on soit européens!",
+    "spans": [
+     [
+      484,
+      629
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "que les propositions électorales soient tenues et que les élus soient jugés à mi mandat sur leurs actions afin d'éviter toutes désillusion",
+    "spans": [
+     [
+      632,
+      770
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "instaurer une charte de bonnes conduites pour les députés et sénateurs : que cela est rageant de voir nos élus dormir à l hémicycle ou de se comporter comme des animaux ( cris, sarcasmes, hués, hilarité ) un peu de tenu !",
+    "spans": [
+     [
+      773,
+      994
+     ]
+    ],
+    "target": [
+     783,
+     843
+    ]
+   }
+  ]
+ },
+ "granddebat:1-9546": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Le mode de fonctionnement de nos élus devrait se rapprocher de la clarté du fonctionnement des élus des pays du nord de l'Europe : en finir une fois pour toutes avec le flou dans l'usage des indemnités et compléments divers … Des limites ont été imposées l'an passé, mais en pratique elles ont été largement édulcorées par divers amendements. La presse (sérieuse) a démontré que les limites initiales ont été bien \"adoucies\"",
+    "spans": [
+     [
+      0,
+      223
+     ],
+     [
+      225,
+      423
+     ]
+    ],
+    "target": [
+     166,
+     223
+    ]
+   },
+   {
+    "text": "Comment les élus peuvent-ils être à la fois juge et partie ? Puisqu'ils décident eux même sans contrepouvoir de leurs avantages et obligations",
+    "spans": [
+     [
+      425,
+      567
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-10056": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Il faudrait que les élus (y compris nationaux) organisent (par exemple une fois/an) des réunions publiques pour faire part aux citoyens de leurs actions et relèvent leurs observations",
+    "spans": [
+     [
+      0,
+      183
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'idée développée par M. Raffarin (dont je ne suis pas particulièrement un fan bien que lui reconnaissant un bon jugement) de disjoindre à nouveau l'élection du PR (tous les 5 ans) de celle des députés (tous les 4 ans) me semble être une solution à creuser",
+    "spans": [
+     [
+      184,
+      440
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-3523": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "ne plus chercher à infantiliser les citoyens, ni à les insulter, ni à les mépriser",
+    "spans": [
+     [
+      8,
+      90
+     ]
+    ],
+    "target": [
+     40,
+     52
+    ]
+   },
+   {
+    "text": "les français s'intéressent à leur pays, le projet d'avenir que l'on leur propose",
+    "spans": [
+     [
+      139,
+      219
+     ]
+    ],
+    "target": [
+     139,
+     151
+    ]
+   },
+   {
+    "text": "nos élus sont plus proche des lobbies et la ligne officiel de leur parti politiques que des citoyens",
+    "spans": [
+     [
+      243,
+      343
+     ]
+    ],
+    "target": [
+     243,
+     251
+    ]
+   },
+   {
+    "text": "Un simple citoyen n'a pas beaucoup de poids tout seul - il faut s'unir pour que les députés nous écoutent",
+    "spans": [
+     [
+      345,
+      450
+     ]
+    ],
+    "target": [
+     425,
+     436
+    ]
+   }
+  ]
+ },
+ "granddebat:1-23389": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "les politiques cessent de s'opposer pour s'opposer quand ils sont dans l'opposition, d'utiliser les fameux éléments de langage quand ils sont au pouvoir et soient plus sincères",
+    "spans": [
+     [
+      21,
+      197
+     ]
+    ],
+    "target": [
+     21,
+     35
+    ]
+   },
+   {
+    "text": "L'obligation de prévoir une évaluation chiffrée des mesures mises en oeuvre par des organes indépendants permettrait peut-être d'éviter les propositions démagogiques ou purement idéologiques",
+    "spans": [
+     [
+      199,
+      389
+     ]
+    ],
+    "target": [
+     227,
+     258
+    ]
+   },
+   {
+    "text": "On verrait peut-être plus alors s'instaurer un vrai dialogue constructif et les citoyens penseraient peut-être plus que les politiques travaillent plus à l'intérêt général qu'à celui de leur chapelle et de leur carrière",
+    "spans": [
+     [
+      391,
+      610
+     ]
+    ],
+    "target": [
+     21,
+     35
+    ]
+   }
+  ]
+ },
+ "granddebat:1-33670": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "responsabiliser les citoyens en mettant en place des formations civiques",
+    "spans": [
+     [
+      12,
+      84
+     ]
+    ],
+    "target": [
+     28,
+     40
+    ]
+   },
+   {
+    "text": "Comment renouer efficacement avec des citoyens qui ignorent l'essentiel du fonctionnement de l'état, de son budget",
+    "spans": [
+     [
+      86,
+      200
+     ]
+    ],
+    "target": [
+     28,
+     40
+    ]
+   },
+   {
+    "text": "Au niveau de la commune pourquoi si peu de gens se déplacent pour assister aux séances du conseil",
+    "spans": [
+     [
+      201,
+      298
+     ]
+    ],
+    "target": [
+     280,
+     298
+    ]
+   },
+   {
+    "text": "Les Maires devraient mieux les inciter afin que les citoyens expriment des points du vue différents",
+    "spans": [
+     [
+      301,
+      400
+     ]
+    ],
+    "target": [
+     301,
+     311
+    ]
+   },
+   {
+    "text": "Utilisons déjà les voies de dialogues qui existent",
+    "spans": [
+     [
+      401,
+      451
+     ]
+    ],
+    "target": [
+     420,
+     438
+    ]
+   }
+  ]
+ },
+ "granddebat:1-30274": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Il me paraît souhaitable de vérifier plus souvent que leur projet est toujours soutenu par une majorité de citoyens. Par exemple avec des élections \"mid-term\" comme aux Etats Unis qui pourraient conduire à des cohabitations",
+    "spans": [
+     [
+      168,
+      391
+     ]
+    ],
+    "target": [
+     222,
+     233
+    ]
+   },
+   {
+    "text": "Cela éviterait d'abandonner notre système électoral qui reste un modèle de stabilité sans être une dictature",
+    "spans": [
+     [
+      393,
+      501
+     ]
+    ],
+    "target": [
+     421,
+     444
+    ]
+   }
+  ]
+ },
+ "granddebat:1-18932": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "les élus doivent accepter l'augmentation du smic afin d'augmenter le pouvoir d'achat",
+    "spans": [
+     [
+      0,
+      84
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "montrer leur transparence par l'arrêt de privilège tel que le cumul de salaire, le salaire à vie, les notes de frais resto, logement de fonction, voiture de fonction, etc. et montrer qu'ils vivent comme un citoyen landa",
+    "spans": [
+     [
+      89,
+      308
+     ]
+    ],
+    "target": [
+     130,
+     139
+    ]
+   },
+   {
+    "text": "montrer leur légitimité, leur fiabilité et leur éthique en présentant un casier judiciaire vierge",
+    "spans": [
+     [
+      319,
+      416
+     ]
+    ],
+    "target": [
+     392,
+     409
+    ]
+   }
+  ]
+ },
+ "granddebat:1-29510": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Les élus pourraient être plus présents auprès des citoyens afin que ces derniers se sentent plus entendus, considérés et respectés",
+    "spans": [
+     [
+      0,
+      130
+     ]
+    ],
+    "target": [
+     0,
+     8
+    ]
+   },
+   {
+    "text": "Les élus devraient également mieux expliciter les décisions politiques qu'ils soutiennent et leurs conséquences",
+    "spans": [
+     [
+      132,
+      243
+     ]
+    ],
+    "target": [
+     0,
+     8
+    ]
+   },
+   {
+    "text": "les élus devraient faire preuve de plus d'autonomie dans leurs décisions (ne pas forcément voter en fonction des \"consignes\" de leur parti)",
+    "spans": [
+     [
+      252,
+      391
+     ]
+    ],
+    "target": [
+     252,
+     260
+    ]
+   }
+  ]
+ },
+ "granddebat:1-26937": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "contrôle renforcé de l'argent qu'ils utilisent et qu'il gagnent … casier judiciaire vierge pour se présenter à une élection (comme c'est le cas lorsque l'on se présente à un concours de la fonction publique) … limitation du nombre de mandat dans le temps (être élu n'est pas une carrière) … contrôle de leur action (présence à l'AN, au sénat .)",
+    "spans": [
+     [
+      27,
+      90
+     ],
+     [
+      92,
+      233
+     ],
+     [
+      235,
+      313
+     ],
+     [
+      315,
+      368
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Respecter les décisions prises par le peuple lors de référendum contrairement à ce qui a été fait notamment lors du référendum sur la constitution européenne",
+    "spans": [
+     [
+      369,
+      526
+     ]
+    ],
+    "target": [
+     379,
+     432
+    ]
+   }
+  ]
+ },
+ "granddebat:1-12074": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "INSTAURER UN QUORUM pour le vote d 'une loi … Actuellement 50 députés voire moins, peuvent voter une loi que l'on prétend ensuite imposer à 65 millions de Français au seul bénéfice de groupes de pression minoritaires",
+    "spans": [
+     [
+      0,
+      43
+     ],
+     [
+      45,
+      215
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "PLAFONNER le nombre de scrutins par session ( il y a saturation, les lois s'empilent )",
+    "spans": [
+     [
+      217,
+      303
+     ]
+    ],
+    "target": [
+     227,
+     260
+    ]
+   },
+   {
+    "text": "Ainsi nos députés , PLUS ASSIDUS au Palais Bourbon, nous représenteraient REELLEMENT",
+    "spans": [
+     [
+      304,
+      388
+     ]
+    ],
+    "target": [
+     310,
+     321
+    ]
+   }
+  ]
+ },
+ "tiktok:106": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "En se comparant aux physiques des personnes qui se mettent en scène, on se sent dénigré",
+    "spans": [
+     [
+      0,
+      87
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Le fait de parler de sa vie sans retenue, on se compare et on se trouve moins bien",
+    "spans": [
+     [
+      89,
+      171
+     ]
+    ],
+    "target": [
+     100,
+     129
+    ]
+   },
+   {
+    "text": "Certaines images ou l'on voit des gens se moquer d'autres ou les taper",
+    "spans": [
+     [
+      173,
+      243
+     ]
+    ],
+    "target": [
+     173,
+     189
+    ]
+   }
+  ]
+ },
+ "tiktok:17951": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "L'addiction, la culpabilité de ne pas réussir à s'arrêter de scroller pendant des heures alors même que je sais que ce n'est pas bien et que ça m'empêche de faire d'autres choses",
+    "spans": [
+     [
+      0,
+      178
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:31058": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Sentiment de décalage avec la réalité après une trop longue utilisation de Tik Tok",
+    "spans": [
+     [
+      0,
+      82
+     ]
+    ],
+    "target": [
+     44,
+     82
+    ]
+   }
+  ]
+ },
+ "tiktok:29195": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "je ressentais un vide constant pendant tous les moments où je n'utilisait pas l'application",
+    "spans": [
+     [
+      144,
+      235
+     ]
+    ],
+    "target": [
+     112,
+     125
+    ]
+   },
+   {
+    "text": "J'avais un fort sentiment de culpabilité lié au temps que je passais à rien faire, sentiment qui s'estompait quand j'étais dessus",
+    "spans": [
+     [
+      237,
+      366
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "je me sentais très seule et légèrement plus anxieuse qu'en temps normal",
+    "spans": [
+     [
+      368,
+      439
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "C'est aussi la période à laquelle j'ai commencé à me mutiler mais je n'ai pas remarqué de lien de causalité avec le contenu que je regardais",
+    "spans": [
+     [
+      441,
+      581
+     ]
+    ],
+    "target": [
+     491,
+     501
+    ]
+   }
+  ]
+ },
+ "tiktok:575": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Ma belle fille a développé une adduction à ce réseau",
+    "spans": [
+     [
+      0,
+      52
+     ]
+    ],
+    "target": [
+     43,
+     52
+    ]
+   },
+   {
+    "text": "son père lui a offert un autre téléphone",
+    "spans": [
+     [
+      116,
+      156
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:29192": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Photo montage à caractère pornographique et dégradante avec une photo de profil de mon fils",
+    "spans": [
+     [
+      0,
+      91
+     ]
+    ],
+    "target": [
+     0,
+     54
+    ]
+   },
+   {
+    "text": "chantage pour lui soutirer de l'argent",
+    "spans": [
+     [
+      96,
+      134
+     ]
+    ],
+    "target": [
+     96,
+     104
+    ]
+   },
+   {
+    "text": "aucune suite ne sera donnée car la personne vient de Côte d'Ivoire",
+    "spans": [
+     [
+      177,
+      243
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:16565": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Sur tik tok il y a toujours mieux que soit (plus belle plus intelligente plus drôle) c'est si facile de se comparer et de rentrer dans un cercle vicieux",
+    "spans": [
+     [
+      0,
+      152
+     ]
+    ],
+    "target": [
+     4,
+     11
+    ]
+   },
+   {
+    "text": "J'ai des tca et tik tok ne pas du tout aidé au contraire je pense que ça m'a conforté dans mon mal être",
+    "spans": [
+     [
+      154,
+      257
+     ]
+    ],
+    "target": [
+     4,
+     11
+    ]
+   }
+  ]
+ },
+ "tiktok:29746": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Sentiment de ne pas contrôler le temos passé sur le téléphone",
+    "spans": [
+     [
+      0,
+      61
+     ]
+    ],
+    "target": [
+     33,
+     61
+    ]
+   },
+   {
+    "text": "effet trou de lapin",
+    "spans": [
+     [
+      65,
+      84
+     ]
+    ],
+    "target": [
+     111,
+     130
+    ]
+   },
+   {
+    "text": "Journée perdue. Rien appris",
+    "spans": [
+     [
+      132,
+      159
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:27279": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "des tiktok qui nous touche donc nous font culpabiliser et nous rende plus mal",
+    "spans": [
+     [
+      0,
+      77
+     ]
+    ],
+    "target": [
+     0,
+     10
+    ]
+   }
+  ]
+ },
+ "tiktok:33324": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "sensation d'avoir perdu son temps inutilement",
+    "spans": [
+     [
+      0,
+      45
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-19407": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "un roulement plus régulier des élus, la fin des baronnies qui déracinent les élus et que ce mandat qu'ils ont soit le seul et qu'ils en profitent pour faire ce pourquoi on vote pour eux",
+    "spans": [
+     [
+      0,
+      185
+     ]
+    ],
+    "target": [
+     73,
+     81
+    ]
+   },
+   {
+    "text": "SI un seul mandat n'est pas réaliste, pourquoi ne pas imaginer plutôt une période entre chaque mandats électoraux, par exemple 5 ans d'inéligibilité après la fin d'un mandat, afin qu'un élu de la république si il veut faire carrière dans la politique revienne s'enrichir de la vie des citoyens avant d'oser imaginer rebriguer un mandat, et que la place soit laissée à d'autres regards",
+    "spans": [
+     [
+      187,
+      571
+     ]
+    ],
+    "target": [
+     282,
+     300
+    ]
+   },
+   {
+    "text": "un mandat ne doit pas être un motif d'immunité judiciaire, c'est honteux et dangereux pour la confiance en nos représentants",
+    "spans": [
+     [
+      581,
+      705
+     ]
+    ],
+    "target": [
+     619,
+     638
+    ]
+   }
+  ]
+ },
+ "granddebat:1-28088": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "le système politique Français cesse de fonctionner en terme d'opposition et d'agression et de conflit, mais en terme de coopération",
+    "spans": [
+     [
+      58,
+      189
+     ]
+    ],
+    "target": [
+     61,
+     87
+    ]
+   },
+   {
+    "text": "Vous la classe dirigeante avez réussi à faire douter le citoyen de votre probité en vous octroyant des avantages de toutes natures dans la plus complète opacité",
+    "spans": [
+     [
+      190,
+      350
+     ]
+    ],
+    "target": [
+     293,
+     320
+    ]
+   },
+   {
+    "text": "Il est tout à fait anormal que tout ce qui concerne la députation soit voté par les députés eux même (salaires, fonds spéciaux, indemnités parlementaires, retraites etc.)",
+    "spans": [
+     [
+      352,
+      522
+     ]
+    ],
+    "target": [
+     407,
+     417
+    ]
+   }
+  ]
+ },
+ "granddebat:1-9972": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Supprimer les privilèges, c'est à dire que les élus doivent eux-mêmes assumer les dépenses que les autres citoyens assument (loyer, coiffure, maquillage, frais d'obsèques.)",
+    "spans": [
+     [
+      0,
+      172
+     ]
+    ],
+    "target": [
+     14,
+     24
+    ]
+   },
+   {
+    "text": "Les élus devraient être des modèles, notamment pour les jeunes",
+    "spans": [
+     [
+      174,
+      236
+     ]
+    ],
+    "target": [
+     47,
+     51
+    ]
+   },
+   {
+    "text": "ils passent leur temps à manipuler l'information et affichent une mauvaise foi à toute épreuve (qu'il s'agisse de Jérôme Cahuzac, Thomas Thévenoud ou des membres du gouvernement actuel)",
+    "spans": [
+     [
+      255,
+      440
+     ]
+    ],
+    "target": [
+     47,
+     51
+    ]
+   },
+   {
+    "text": "Comment peut-on demander aux jeunes de respecter les figures d'autorité (professeurs, policiers.) en leur donnant de tels exemples ?",
+    "spans": [
+     [
+      442,
+      574
+     ]
+    ],
+    "target": [
+     495,
+     513
+    ]
+   },
+   {
+    "text": "Passer au moins une semaine par an comme un citoyen normal, c'est à dire sans ses assistants, pour se souvenir de la façon dont vivent les autres français (faire soi-même ses courses, son ménage, conduire soi-même sa voiture en respectant les limitations de vitesse.)",
+    "spans": [
+     [
+      575,
+      842
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-24152": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "Renouer le lien entre citoyen et élus passent par la prise en compte des lois concernant la laïcité, le pacte social et le vivre ensemble",
+    "spans": [
+     [
+      0,
+      137
+     ]
+    ],
+    "target": [
+     73,
+     137
+    ]
+   },
+   {
+    "text": "Le vivre en semble ne doit pas rester une coquille vide comme la bienséance dans les textes de Droit",
+    "spans": [
+     [
+      139,
+      239
+     ]
+    ],
+    "target": [
+     123,
+     137
+    ]
+   },
+   {
+    "text": "Les personnes étrangères, binationales, droit d'asile voire sans papiers perdront le droit de rester en France et même la nationalité française si ces personnes font trois séjours en prison pour non respect du Droit français",
+    "spans": [
+     [
+      241,
+      465
+     ]
+    ],
+    "target": [
+     245,
+     313
+    ]
+   },
+   {
+    "text": "la laïcité devra prévaloir dans l'accès aux domaines publics et espace publics de tous. Il est interdit de priver l'accès à ces espaces en désobéissant à la loi de 1975 portant sur les discriminations. Ce non respect sera sanctionné par trois mois de prison et si la ou les personnes impliquées dans le non accès aux domaines et espaces publics sont violentes, une expertise psychiatrique sera demandée pour chacune afin de les condamner à des soins ou à un an de prison",
+    "spans": [
+     [
+      476,
+      946
+     ]
+    ],
+    "target": [
+     92,
+     99
+    ]
+   },
+   {
+    "text": "La laïcité s'apprendra dès l'école en apprenant les diverses religions présentes en France afin que tout le monde se respectent et diminuent les actes discriminants voire violents",
+    "spans": [
+     [
+      948,
+      1127
+     ]
+    ],
+    "target": [
+     92,
+     99
+    ]
+   },
+   {
+    "text": "créons les classes de niveaux homogènes afin que tout le monde puisse progresser à son rythme et s'améliorer en continu",
+    "spans": [
+     [
+      1255,
+      1374
+     ]
+    ],
+    "target": [
+     1266,
+     1294
+    ]
+   },
+   {
+    "text": "Des élèves qui s'ennuient en cours, perturbent les cours sont en souffrance car la classe n'est pas adaptée à leur niveau. Cessons ainsi une des causes de la violence à l'école",
+    "spans": [
+     [
+      1376,
+      1552
+     ]
+    ],
+    "target": [
+     1266,
+     1294
+    ]
+   }
+  ]
+ },
+ "granddebat:1-11667": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Construire une société plus juste et moins basée sur l'argent",
+    "spans": [
+     [
+      0,
+      61
+     ]
+    ],
+    "target": [
+     15,
+     22
+    ]
+   },
+   {
+    "text": "Il n'est pas acceptable qu'il y ai tant d'écart entre les métiers. Pourquoi l'assistant de vie est au smic et le footballeur ne sait plus où cacher ses millions. Ou le petit retraité apres 40 ans de labeur et le gros et jeune retraité ministre ou parlementaire",
+    "spans": [
+     [
+      63,
+      323
+     ]
+    ],
+    "target": [
+     105,
+     128
+    ]
+   },
+   {
+    "text": "Nous avons besoin de tous les métiers: on ne peut pas se satisfaire de dire à chacun de se donner les moyens de gagner plus",
+    "spans": [
+     [
+      325,
+      448
+     ]
+    ],
+    "target": [
+     121,
+     128
+    ]
+   },
+   {
+    "text": "L'argent ne doit plus être l'alpha et l'omega de toute chose",
+    "spans": [
+     [
+      450,
+      510
+     ]
+    ],
+    "target": [
+     55,
+     61
+    ]
+   }
+  ]
+ },
+ "granddebat:1-22670": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Plus de démocratie directe/participative. Moins de démocratie représentative",
+    "spans": [
+     [
+      3,
+      79
+     ]
+    ],
+    "target": [
+     11,
+     21
+    ]
+   },
+   {
+    "text": "Je ne connais pas mon député et il ne me connaît pas. Comment 1000 députés et sénateurs peuvent-ils représenter convenablement 67 millions de Français ?",
+    "spans": [
+     [
+      84,
+      236
+     ]
+    ],
+    "target": [
+     151,
+     171
+    ]
+   },
+   {
+    "text": "Il faudrait voir d'autres moyens de rendre le pouvoir démocratique du peuple plus efficient",
+    "spans": [
+     [
+      237,
+      328
+     ]
+    ],
+    "target": [
+     283,
+     313
+    ]
+   },
+   {
+    "text": "L'idée du tirage au sort de nos représentants ou d'une partie de nos représentants, peut-être pour une durée limitée, dans une fonction de porte-parole, élective et/ou consultative semble intéressant et à étudier",
+    "spans": [
+     [
+      333,
+      545
+     ]
+    ],
+    "target": [
+     343,
+     378
+    ]
+   },
+   {
+    "text": "Je considère qu'un député élu de profession libéral issu d'un microcosme bourgeois parisien qui a réussi politiquement grâce à son patrimoine culturel, financier, social, grâce à ses relations, des compromis, des arrangements, des échanges de bon-procédé, n'est pas forcément plus représentatif de mes opinions que mon voisin qui serait tiré au sort",
+    "spans": [
+     [
+      547,
+      896
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:3210": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Trop de vidéos de femmes ou hommes presque dénudés ou à caractère sexuel trop flagrant",
+    "spans": [
+     [
+      0,
+      86
+     ]
+    ],
+    "target": [
+     8,
+     72
+    ]
+   }
+  ]
+ },
+ "tiktok:16525": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "passer trop de temps dessus et gacher son temps",
+    "spans": [
+     [
+      25,
+      72
+     ]
+    ],
+    "target": [
+     40,
+     45
+    ]
+   }
+  ]
+ },
+ "tiktok:2214": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "c'est frustrant",
+    "spans": [
+     [
+      71,
+      86
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:25562": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Le sentiment de mal-être vient de la masse de contenu proposée et de ce qu'elle propose",
+    "spans": [
+     [
+      0,
+      87
+     ]
+    ],
+    "target": [
+     37,
+     62
+    ]
+   },
+   {
+    "text": "Une bonne partie des vidéos disponibles provoque en moi un sentiment d'embarras et d'abrutissement",
+    "spans": [
+     [
+      89,
+      187
+     ]
+    ],
+    "target": [
+     110,
+     128
+    ]
+   },
+   {
+    "text": "le défilement sans fin de contenu me donne l'impression d'entrer dans un état de passivité extrême",
+    "spans": [
+     [
+      189,
+      287
+     ]
+    ],
+    "target": [
+     192,
+     222
+    ]
+   }
+  ]
+ },
+ "tiktok:28138": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Du rabaissement du harcèlement des choses méchantes des défis dangereux obligation demande de photos nues",
+    "spans": [
+     [
+      0,
+      105
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:19441": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Accusation d'avoir été derrière un compte qui affiche les personnes de mon collège",
+    "spans": [
+     [
+      0,
+      82
+     ]
+    ],
+    "target": [
+     35,
+     82
+    ]
+   }
+  ]
+ },
+ "tiktok:717": {
+  "n_specs": 0,
+  "claims": []
+ },
+ "tiktok:7342": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "quand je regarde trop tik tok le week end et que je me rend compte apres le temps que j ai perdu",
+    "spans": [
+     [
+      0,
+      96
+     ]
+    ],
+    "target": [
+     76,
+     96
+    ]
+   }
+  ]
+ },
+ "tiktok:30036": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "l'algorithme nous enferme dans le mal être que les gens partagent et nous fait penser qu'on est pareil et qu'on ressent la même chose alors que nos problèmes sont en réalité créés uniquement par ce qu'on voit",
+    "spans": [
+     [
+      0,
+      208
+     ]
+    ],
+    "target": [
+     0,
+     12
+    ]
+   }
+  ]
+ },
+ "tiktok:2082": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "quand nous passons trop de temps sur tiktok, cela nous coupe notre vie social",
+    "spans": [
+     [
+      0,
+      77
+     ]
+    ],
+    "target": [
+     67,
+     77
+    ]
+   },
+   {
+    "text": "c'est addictif nous pouvons rien y faire",
+    "spans": [
+     [
+      84,
+      124
+     ]
+    ],
+    "target": [
+     37,
+     43
+    ]
+   },
+   {
+    "text": "beaucoup de contenus cible l'auto mutilation/ sucide et la santé mentale d'autrui, cela peux se répercuter sur certaines personnes transfère ce mal être",
+    "spans": [
+     [
+      135,
+      287
+     ]
+    ],
+    "target": [
+     147,
+     155
+    ]
+   },
+   {
+    "text": "j'avais publier une vidéo , nous pouvons pas vraiment dire que c'est de l'harcèlement mais l'ex petite amie de mon ex petite amie m'a envoyer un message pour me dire que je cite « t'es trop moche » « j'te lave h2948 » en m'envoyant le screen de mon tiktok",
+    "spans": [
+     [
+      315,
+      570
+     ]
+    ],
+    "target": [
+     302,
+     313
+    ]
+   }
+  ]
+ },
+ "tiktok:842": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "De nombreux comptes que je ne pourrais pas citer dans les autres parties tel que Muriel PSN qui harcèle et appelle au viol contre certaines des personnes s'opposant à elle",
+    "spans": [
+     [
+      0,
+      171
+     ]
+    ],
+    "target": [
+     12,
+     19
+    ]
+   },
+   {
+    "text": "ce climat de haine qui reigne sur une bonne partie de la plateforme, nous fait aussi ressentir de la haine et peut, comme ce fut dans mon cas, nous faire devenir aussi méchant, un certain mimétisme du comportement, qui fait que la haine appelle la haine et pourrit cette plateforme",
+    "spans": [
+     [
+      173,
+      454
+     ]
+    ],
+    "target": [
+     176,
+     191
+    ]
+   },
+   {
+    "text": "qui n'agit pas alors que de nombreux signalements sont pourtant faits",
+    "spans": [
+     [
+      456,
+      525
+     ]
+    ],
+    "target": [
+     230,
+     240
+    ]
+   }
+  ]
+ },
+ "tiktok:32651": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "harcèlement d'une élève du collège à ma fille il y a 5 ans via le post d'une vidéo. Elle se moquait par imitation verbale et physique de ma fille",
+    "spans": [
+     [
+      0,
+      145
+     ]
+    ],
+    "target": [
+     0,
+     11
+    ]
+   },
+   {
+    "text": "Propagation de la vidéo",
+    "spans": [
+     [
+      147,
+      170
+     ]
+    ],
+    "target": [
+     77,
+     82
+    ]
+   },
+   {
+    "text": "Obligé d'insister auprès de la directrice du collège et menacer de porter plainte pour une action concrète et convocation dans le bureaude la directrice pour supprimer cette vidéo",
+    "spans": [
+     [
+      172,
+      351
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-11563": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Faire disparaitre les avantages à vie des anciens Présidents et anciens Premiers Ministres",
+    "spans": [
+     [
+      0,
+      90
+     ]
+    ],
+    "target": [
+     18,
+     90
+    ]
+   },
+   {
+    "text": "Diviser par deux le nombre d'élus nationaux",
+    "spans": [
+     [
+      92,
+      135
+     ]
+    ],
+    "target": [
+     109,
+     135
+    ]
+   },
+   {
+    "text": "Supprimer les scrutins par liste qui font obligatoirement élire les premiers de listes y compris ceux dont on ne veut pas",
+    "spans": [
+     [
+      137,
+      258
+     ]
+    ],
+    "target": [
+     147,
+     169
+    ]
+   },
+   {
+    "text": "(C'est la raison pour laquelle je vote rarement aux Européennes)",
+    "spans": [
+     [
+      260,
+      324
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Rendre transparentes les rémunérations et avantages de nos élus ET leur évolution",
+    "spans": [
+     [
+      326,
+      407
+     ]
+    ],
+    "target": [
+     347,
+     389
+    ]
+   }
+  ]
+ },
+ "granddebat:1-30935": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Il faut réduire le mandat des députés à 2 ou 3 ans (en supprimant parallèlement le non-cumul des mandats)",
+    "spans": [
+     [
+      0,
+      105
+     ]
+    ],
+    "target": [
+     16,
+     37
+    ]
+   },
+   {
+    "text": "Cela permettrait au peuple de se prononcer plus souvent sur la politique menée",
+    "spans": [
+     [
+      107,
+      185
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il faut que les élections présidentielles et législatives ne soient plus concomitantes",
+    "spans": [
+     [
+      187,
+      273
+     ]
+    ],
+    "target": [
+     199,
+     244
+    ]
+   },
+   {
+    "text": "L'idée est de redonner un véritable pouvoir au Premier ministre qui est le seul responsable devant les députés (comme en temps de cohabitation)",
+    "spans": [
+     [
+      275,
+      418
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "A défaut, il faut au moins inverser le calendrier électorale : les élections législatives doivent avoir lieu avant les élections présidentielles",
+    "spans": [
+     [
+      420,
+      564
+     ]
+    ],
+    "target": [
+     456,
+     479
+    ]
+   },
+   {
+    "text": "Il faut réduire les pouvoirs du Président de la République, pour lui redonner un rôle d'arbitre : un Président élu pour 6 ou 7 ans, dont le but est d'assurer l'unité de la nation et le respect de la Constitution",
+    "spans": [
+     [
+      566,
+      777
+     ]
+    ],
+    "target": [
+     582,
+     624
+    ]
+   }
+  ]
+ },
+ "granddebat:1-3851": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "mettre en place des assemblées citoyennes et des initiatives inspirées du municipalisme (budgets participatifs, etc.)favorisant la vie démocratique locale … Ces assemblées citoyennes doivent permettre au citoyen de se prononcer réellement sur des sujets précis et importants (et pas uniquement cosmétiques tels que la mise en place de jardinières sur le bord des routes)",
+    "spans": [
+     [
+      98,
+      252
+     ],
+     [
+      254,
+      467
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "transformer l'actuel CESE et ses déclinaisons régionales (dont les activités sont actuellement peu claires) en véritables assemblées citoyennes … Au niveau national, cette assemblée pourrait être composée de citoyens tirés au sort et de représentants des principaux syndicats … Cette assemblée aurait un pouvoir important : celui de révoquer et de proposer des lois (qui devraient être également validées par l'Assemblée nationale et le Sénat) … La participation des citoyens (tirés au sort) à cette Assemblée citoyenne serait obligatoire et pourrait donner lieu à une compensation financière",
+    "spans": [
+     [
+      504,
+      647
+     ],
+     [
+      649,
+      778
+     ],
+     [
+      780,
+      945
+     ],
+     [
+      947,
+      1093
+     ]
+    ],
+    "target": [
+     516,
+     560
+    ]
+   }
+  ]
+ },
+ "granddebat:1-7763": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Améliorer la communication et éviter les décisions arbitraires et maladroites comme la réduction ridicule de 5 Euros par mois des APL, ou la limitation de vitesse à 80 km/h sur toutes les routes à 2 voies sans séparation centrale",
+    "spans": [
+     [
+      0,
+      229
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Le Président se montre trop intelligent pour la majorité des Français, il doit adapter son discours au plus grand nombre peu éduqué en particulier sur le plan économique",
+    "spans": [
+     [
+      231,
+      400
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9114": {
+  "n_specs": 11,
+  "claims": [
+   {
+    "text": "Sortir de l'Europe",
+    "spans": [
+     [
+      0,
+      18
+     ]
+    ],
+    "target": [
+     10,
+     18
+    ]
+   },
+   {
+    "text": "Retrouver sa souveraineté",
+    "spans": [
+     [
+      20,
+      45
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "le concept - tout à fait symbolique - de nation a disparu",
+    "spans": [
+     [
+      204,
+      261
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Vous vous adressez à votre député, il vous répond : c'est la faute de Bruxelles !",
+    "spans": [
+     [
+      263,
+      344
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "l'assemblée européenne est purement consultative ! Ses choix ne sont pas suivis par la Commission que nous n'avons pas élue",
+    "spans": [
+     [
+      353,
+      476
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Comment a-t-on pu s'allier économiquement avec des pays qui n'avaient pas les mêmes taxes, salaires, charges, c'était mettre la charrue avant les boeufs, c'était le fruit d'une pure et dangereuse idéologie",
+    "spans": [
+     [
+      478,
+      683
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Je suis pour une Europe qui entérinerait des progrès communs, au lieu d'imposer un nivellement par le bas, par sa concurrence déloyale",
+    "spans": [
+     [
+      685,
+      819
+     ]
+    ],
+    "target": [
+     10,
+     18
+    ]
+   },
+   {
+    "text": "L'Europe des régions, c'est le retour à de prochaines guerres civiles",
+    "spans": [
+     [
+      946,
+      1015
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Je suis pour une forte recentralisation du pouvoir, puis pour une déconcentration de ce pouvoir en département, et la suppression des régions administratives",
+    "spans": [
+     [
+      1017,
+      1174
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "La nation doit rester maîtresse, et chaque région être soumise aux mêmes décisions (éducation nationale, industrie, fiscalité.)",
+    "spans": [
+     [
+      1176,
+      1303
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Autrefois, il y avait un Ministre du Plan : c'était parfait !",
+    "spans": [
+     [
+      1304,
+      1365
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-20215": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Je ne crois pas en la démocratie, on nous donne l'idéal d'une démocratie représentative où chacun aurait un réel pouvoir de \"changer les choses\" or c'est totalement faux",
+    "spans": [
+     [
+      0,
+      169
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "le seul \"pouvoir\" que l'on a, il n'arrive que tous les 5 ans car les gens ne savent pas voter, ils votent (et moi même !) de manière personnelle, au détriment du profit global",
+    "spans": [
+     [
+      171,
+      346
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "renouer le lien entre citoyens et élus serait de supprimer tous les avantages de nos élus, qu'ils soient tous payés en fonction du salaire médians des français",
+    "spans": [
+     [
+      368,
+      527
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "je suis certain qu'ils comprendraient mieux certaines craintes et agir pour l'ensemble des français",
+    "spans": [
+     [
+      529,
+      628
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:16715": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Des menaces de ban le compte ou de récupérer l'adresse IP, si on bannit certaines personnes des lives tiktok",
+    "spans": [
+     [
+      0,
+      108
+     ]
+    ],
+    "target": [
+     4,
+     57
+    ]
+   }
+  ]
+ },
+ "tiktok:17149": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Lié à une anxiété déjà présente, à cause de l'algorithme tiktok qui a proposé uniquement des contenus montrant des personnes ayant aussi de l'a citée et n'étant pas bien, a exacerbé l'anxiété et le mal être déjà présent",
+    "spans": [
+     [
+      0,
+      219
+     ]
+    ],
+    "target": [
+     44,
+     63
+    ]
+   }
+  ]
+ },
+ "tiktok:15230": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "certaines vidéos choque momentanément",
+    "spans": [
+     [
+      11,
+      48
+     ]
+    ],
+    "target": [
+     11,
+     27
+    ]
+   },
+   {
+    "text": "pour d'autres personnes beaucoup plus sensible, un traumatisme peut arriver",
+    "spans": [
+     [
+      100,
+      175
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:28396": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Depuis que j'utilise tiktok ou des réseaux sociaux plusieurs filles ou femmes montre comment sont leurs corps ect. Mais derrière tu te mais a détester ton propre corps car tu ressembles pas aux personnes sur les réseaux tu a pas le même coprs tu pense que tout le monde te critiquer même quand t maigre tu te dit que pas assez",
+    "spans": [
+     [
+      0,
+      326
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:19217": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Y font des mauvaises blagues pour brisé les couples et sait pas drôle et intelligent",
+    "spans": [
+     [
+      0,
+      84
+     ]
+    ],
+    "target": [
+     11,
+     28
+    ]
+   },
+   {
+    "text": "après y a des disputes ou des divorces",
+    "spans": [
+     [
+      88,
+      126
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:22047": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "On y passe trop de temps donc impression de perdre du temps",
+    "spans": [
+     [
+      0,
+      59
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Comparaison avec des jolies filles",
+    "spans": [
+     [
+      60,
+      94
+     ]
+    ],
+    "target": [
+     60,
+     94
+    ]
+   }
+  ]
+ },
+ "tiktok:9046": {
+  "n_specs": 0,
+  "claims": []
+ },
+ "tiktok:2639": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Le mal-être réside plus dans la gêne que peuvent provoquer les autres utilisateurs en se filmant dans l'espace public ou en écoutant du contenu à haut volume dans un espace restreint ou public",
+    "spans": [
+     [
+      0,
+      192
+     ]
+    ],
+    "target": [
+     29,
+     82
+    ]
+   }
+  ]
+ },
+ "tiktok:7785": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Commentaires mauvais d'autre camarades",
+    "spans": [
+     [
+      0,
+      38
+     ]
+    ],
+    "target": [
+     0,
+     38
+    ]
+   },
+   {
+    "text": "Algorithme négatif donc sentiments de pas être assez belle assez mince..",
+    "spans": [
+     [
+      40,
+      112
+     ]
+    ],
+    "target": [
+     40,
+     58
+    ]
+   }
+  ]
+ },
+ "tiktok:9981": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "L'addiction provoquée par Tik Tok sur mon fils génère depuis des années des conflits au sein du foyer",
+    "spans": [
+     [
+      0,
+      101
+     ]
+    ],
+    "target": [
+     0,
+     46
+    ]
+   },
+   {
+    "text": "Auparavant, il pouvait passer 10h sur son téléphone",
+    "spans": [
+     [
+      103,
+      154
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les dispositifs de contrôle parental sont insuffisants et pas standardisés (exemple: Family Link ne fonctionne pas sur iphone)",
+    "spans": [
+     [
+      156,
+      282
+     ]
+    ],
+    "target": [
+     156,
+     192
+    ]
+   }
+  ]
+ },
+ "tiktok:30117": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "plus notre fille (16 ans) est en période où elle se sent mal (mal être, depression, scarification, pleurs.), plus elle passe de temps sur tik tok",
+    "spans": [
+     [
+      25,
+      170
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "elle ne passe pas forcément plus de temps sur instagram ou snapshat. QUE sur tik tok",
+    "spans": [
+     [
+      172,
+      256
+     ]
+    ],
+    "target": [
+     163,
+     170
+    ]
+   }
+  ]
+ },
+ "tiktok:293": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "J'entends régulièrement des personnes autour de moi, extérieur à mon foyer, parler de challenge tiktok qui me mettent mal à l'aise par leur bêtise voir leur dangerosité",
+    "spans": [
+     [
+      0,
+      168
+     ]
+    ],
+    "target": [
+     86,
+     102
+    ]
+   },
+   {
+    "text": "J'ai souvent peur que min enfant sans aller sur tiktok soit tout de même victime des bêtises faites par les autres qui vont sur tiktok",
+    "spans": [
+     [
+      170,
+      304
+     ]
+    ],
+    "target": [
+     255,
+     304
+    ]
+   }
+  ]
+ },
+ "xstance:42448": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "sono contraria a un innalzamento dell'età pensionabile delle donne senza modifiche strutturali, come riforme per la tutela del lavoro di cura",
+    "spans": [
+     [
+      18,
+      159
+     ]
+    ],
+    "target": [
+     38,
+     84
+    ]
+   },
+   {
+    "text": "sono anche contraria a un aumento generale dell'età pensionabile",
+    "spans": [
+     [
+      170,
+      234
+     ]
+    ],
+    "target": [
+     196,
+     234
+    ]
+   }
+  ]
+ },
+ "xstance:71216": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Rahmenbedingungen, die einen Missbrauch oder eine kommerzielle Ausnutzung verhindern",
+    "spans": [
+     [
+      19,
+      103
+     ]
+    ],
+    "target": [
+     19,
+     36
+    ]
+   }
+  ]
+ },
+ "xstance:71555": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Kriterien - insbesondere auch zum Schutz des Arztes",
+    "spans": [
+     [
+      11,
+      62
+     ]
+    ],
+    "target": [
+     11,
+     20
+    ]
+   }
+  ]
+ },
+ "xstance:45241": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "No se non vi sono misure di compensazione adeguate",
+    "spans": [
+     [
+      0,
+      50
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:179380": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Ganz klar Nein! Wir leben in einem Land mit christlicher Kultur, wer hier leben will, soll sich unseren Gesetzen und Ordnungen anpassen",
+    "spans": [
+     [
+      0,
+      135
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:82105": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Das ist auch wirtschaftlich ineffizient",
+    "spans": [
+     [
+      0,
+      39
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "faktisch nicht möglich",
+    "spans": [
+     [
+      44,
+      66
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "tiktok:23464": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "je trouve que je passe trop de temps dessus",
+    "spans": [
+     [
+      99,
+      142
+     ]
+    ],
+    "target": [
+     130,
+     142
+    ]
+   },
+   {
+    "text": "Il m'est arrivé parfois de tombé sur des contenus à caractère sexuel, ou de désinformation qui m'ont mis mal à l'aise",
+    "spans": [
+     [
+      144,
+      261
+     ]
+    ],
+    "target": [
+     185,
+     234
+    ]
+   },
+   {
+    "text": "Notamment sur l'avortement, il y a beaucoup de fausses informations circulant à ce sujet",
+    "spans": [
+     [
+      264,
+      352
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:90967": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Il est important que toutes les familles puissent bénéficier des services sociaux en fonction des besoins et non pas en fonction du nombre de membres dans la famille",
+    "spans": [
+     [
+      0,
+      165
+     ]
+    ],
+    "target": [
+     65,
+     81
+    ]
+   }
+  ]
+ },
+ "xstance:35219": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Die Bilateralen Verträge sind mehrheitlich gut",
+    "spans": [
+     [
+      28,
+      74
+     ]
+    ],
+    "target": [
+     28,
+     52
+    ]
+   },
+   {
+    "text": "punktuelle Änderungen müssen möglich sein",
+    "spans": [
+     [
+      81,
+      122
+     ]
+    ],
+    "target": [
+     92,
+     102
+    ]
+   }
+  ]
+ },
+ "xstance:81813": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "On devrait plutôt parler de négociations pour sauver les bilatérales",
+    "spans": [
+     [
+      0,
+      68
+     ]
+    ],
+    "target": [
+     28,
+     68
+    ]
+   }
+  ]
+ },
+ "xstance:113328": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Einer Lockerung stimme ich nur zu, wenn diese auch eine grosse Energiegewinnung ermöglicht",
+    "spans": [
+     [
+      0,
+      90
+     ]
+    ],
+    "target": [
+     6,
+     15
+    ]
+   },
+   {
+    "text": "Zudem sollten solche Lockerungen punktuell konzentriert und nicht \"überall ein Bisschen\" geplant werden",
+    "spans": [
+     [
+      92,
+      195
+     ]
+    ],
+    "target": [
+     113,
+     124
+    ]
+   }
+  ]
+ },
+ "xstance:82737": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Donner la possibilité à une personne lucide de mettre un terme à sa vie si elle le veut relève de la libre disposition de soi",
+    "spans": [
+     [
+      0,
+      125
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:85368": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Uno dei punti di forza del nostro sistema economico è la flessibilità del mercato del lavoro",
+    "spans": [
+     [
+      0,
+      92
+     ]
+    ],
+    "target": [
+     54,
+     92
+    ]
+   }
+  ]
+ },
+ "xstance:146949": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Produzenten und Verarbeiter sollen sich zusammenraufen und das werden sie auch schaffen",
+    "spans": [
+     [
+      6,
+      93
+     ]
+    ],
+    "target": [
+     6,
+     33
+    ]
+   }
+  ]
+ },
+ "xstance:57244": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Die Anzahl Jahre zwischen Beginn von Altersschwäche und dem Tod bleibt unabhängig von der Lebenserwartung konstant … Wir sind also länger gesund und arbeitsfähig",
+    "spans": [
+     [
+      0,
+      114
+     ],
+     [
+      116,
+      160
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Die Angleichung des Frauenrentenalters ist einer von vielen Punkte, welcher für die Gleichberechtigung zwischen Mann und Frau erreicht werden muss; natürlich zu gleichem Lohn und mit Absicherung von Betreuungs- und Care-Arbeit",
+    "spans": [
+     [
+      162,
+      388
+     ]
+    ],
+    "target": [
+     182,
+     199
+    ]
+   },
+   {
+    "text": "Die GRÜNEN wollen eine Pensionierung 'à la carte', die unter anderem die Schwere der Arbeit berücksichtigt",
+    "spans": [
+     [
+      390,
+      496
+     ]
+    ],
+    "target": [
+     413,
+     439
+    ]
+   }
+  ]
+ },
+ "xstance:23756": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Il faudrait notamment coupler l'âge de la retraite à l'évolution de l'espérance de vie … C-à-d lorsque l'espérance de vie augmente, on augmente l'âge de la retraite et lorsqu'elle diminue, on le baisse",
+    "spans": [
+     [
+      0,
+      86
+     ],
+     [
+      88,
+      200
+     ]
+    ],
+    "target": [
+     30,
+     50
+    ]
+   }
+  ]
+ },
+ "xstance:82369": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "ce ne sont plus des étrangers à ce stade, ils sont parfois même mieux intégrés à la société que certains suisses eux-mêmes",
+    "spans": [
+     [
+      12,
+      134
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:85014": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "L'eccellenza nella medicina non significa solo alta qualità , ma anche prossimità , almeno per tutti i servizi di base",
+    "spans": [
+     [
+      0,
+      118
+     ]
+    ],
+    "target": [
+     2,
+     27
+    ]
+   },
+   {
+    "text": "Le specializzazioni , giustamente, dovrebbero essere concentrate negli ospedali principali",
+    "spans": [
+     [
+      120,
+      210
+     ]
+    ],
+    "target": [
+     120,
+     139
+    ]
+   }
+  ]
+ },
+ "xstance:84505": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Wir müssen unsere extreme Abhängigkeit in Bezug auf die Energieversorgung weiter abbauen. Dies erschliesst neue Anreize für die Wirtschaft und erschliesst durch eine dezentrale Energieversorgung allem für kleinere Unternehmen neue Chancen.",
+    "spans": [
+     [
+      0,
+      239
+     ]
+    ],
+    "target": [
+     18,
+     73
+    ]
+   }
+  ]
+ },
+ "xstance:112637": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "La Svizzera ha un numero di soldati attivi pari quasi a quelli della Germania. E' un inutile spreco di risorse",
+    "spans": [
+     [
+      19,
+      129
+     ]
+    ],
+    "target": [
+     37,
+     61
+    ]
+   },
+   {
+    "text": "possiamo diminuire rendendo il servizio militare su base volontaria",
+    "spans": [
+     [
+      134,
+      201
+     ]
+    ],
+    "target": [
+     165,
+     182
+    ]
+   }
+  ]
+ },
+ "xstance:77549": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Cette mesure serait extrêmement dangereuse pour la préservation de la dignité et de la liberté des personnes.",
+    "spans": [
+     [
+      0,
+      109
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "la légalisation de l'euthanasie active directe pourrait conduire à des euthanasies d'opportunité des personnes âgées fortement recommandées par les gestionnaire du système de santé",
+    "spans": [
+     [
+      129,
+      309
+     ]
+    ],
+    "target": [
+     132,
+     175
+    ]
+   },
+   {
+    "text": "Des ministres d'Etats démocratiques (Japon et Lituanie) ont déjà proposé d'euthanasier à vaste échelle des personnes âgées qui ont perdu leur autonomie. Evolution très préoccupante!",
+    "spans": [
+     [
+      311,
+      492
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:31420": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "la possibilità di andare prima in pensione è data … in futuro sarà opportuno aumentare le consulenze previdenziali",
+    "spans": [
+     [
+      31,
+      80
+     ],
+     [
+      82,
+      144
+     ]
+    ],
+    "target": [
+     65,
+     73
+    ]
+   }
+  ]
+ },
+ "xstance:91045": {
+  "n_specs": 0,
+  "claims": []
+ },
+ "xstance:82073": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "La réduction de l'effectif de l'armée ne peut pas être décrétée dans l'absolu à 100'000hommes. Il faut laisser au parlement et au gouvernement une marge de manœuvre.",
+    "spans": [
+     [
+      0,
+      165
+     ]
+    ],
+    "target": [
+     3,
+     37
+    ]
+   }
+  ]
+ },
+ "xstance:85572": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Esiste un'agricoltura \"ragionata\", che rispetta pratiche agricole sostenibili, spesso non usa pesticidi, ma non è propriamente a norma \"biologica\"",
+    "spans": [
+     [
+      74,
+      220
+     ]
+    ],
+    "target": [
+     84,
+     107
+    ]
+   },
+   {
+    "text": "Non trovo giusto svantaggiare l'agricoltura \"ragionata\", per promuovere un marchio biologico",
+    "spans": [
+     [
+      222,
+      314
+     ]
+    ],
+    "target": [
+     84,
+     107
+    ]
+   }
+  ]
+ },
+ "xstance:125500": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "In der relativ kleinen Schweiz braucht nicht jeder Kanton seinen eigenen Lehrplan",
+    "spans": [
+     [
+      0,
+      81
+     ]
+    ],
+    "target": [
+     73,
+     81
+    ]
+   },
+   {
+    "text": "Regionale Besonderheiten können auch so berücksichtigt werden",
+    "spans": [
+     [
+      83,
+      144
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "xstance:33785": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Es sind vor solchen Massnahmen die Kosten zu senken",
+    "spans": [
+     [
+      0,
+      51
+     ]
+    ],
+    "target": [
+     35,
+     41
+    ]
+   }
+  ]
+ },
+ "xstance:23854": {
+  "n_specs": 0,
+  "claims": []
+ },
+ "xstance:28242": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Bei der Rückerstattung der Lenkungsabgabe auf Treibstoffe an die Bevölkerung müssen Ausgleichsmassnahmen zugunsten der ländlichen Bevölkerung, welche stärker auf das Auto angewiesen ist, eingebaut werden",
+    "spans": [
+     [
+      0,
+      203
+     ]
+    ],
+    "target": [
+     84,
+     104
+    ]
+   }
+  ]
+ },
+ "xstance:78641": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Der Zivilstand geht den Staat nichts an - und schon gar nicht die Steuerbehörden",
+    "spans": [
+     [
+      0,
+      80
+     ]
+    ],
+    "target": [
+     4,
+     14
+    ]
+   }
+  ]
+ },
+ "xstance:45155": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Avec la surveillance de masse, on perdrait notre anonymat en ce qui concerne les votations/élections",
+    "spans": [
+     [
+      0,
+      100
+     ]
+    ],
+    "target": [
+     49,
+     100
+    ]
+   }
+  ]
+ },
+ "republique-numerique:2348": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "des millions d'euros de fonds publics perdus dans les frais de publication et d'accès aux revues scientifiques (sans compter que les chercheurs eux-mêmes agissent comme experts de ces articles)",
+    "spans": [
+     [
+      67,
+      260
+     ]
+    ],
+    "target": [
+     121,
+     177
+    ]
+   },
+   {
+    "text": "Il faut attaquer le système entier en proposant un service public d'édition d'articles scientifiques, à la condition qu'il soit reconnu par toutes les institutions de recherche française (CNRS, INRA, CEA, INSERM, IRD.) pour l'évaluation de leurs travaux et l'attribution de financement",
+    "spans": [
+     [
+      262,
+      547
+     ]
+    ],
+    "target": [
+     313,
+     362
+    ]
+   },
+   {
+    "text": "La difficulté majeure est que ce système de publication devrait aussi être reconnu au niveau européen et international",
+    "spans": [
+     [
+      549,
+      667
+     ]
+    ],
+    "target": [
+     582,
+     604
+    ]
+   },
+   {
+    "text": "Le CNRS, pour ne citer que lui, dispose de toutes les compétences pour mettre en place un tel service d'édition puisque les chercheurs assurent déjà eux-mêmes 90% du travail",
+    "spans": [
+     [
+      669,
+      842
+     ]
+    ],
+    "target": [
+     763,
+     780
+    ]
+   },
+   {
+    "text": "On aurait alors vraiment la possibilité de faire de l'open access gratuit et indépendant",
+    "spans": [
+     [
+      844,
+      932
+     ]
+    ],
+    "target": [
+     898,
+     909
+    ]
+   }
+  ]
+ },
+ "republique-numerique:4739": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "il s'agirait d'indiquer dans la loi un droit au pillage",
+    "spans": [
+     [
+      9,
+      64
+     ]
+    ],
+    "target": [
+     48,
+     64
+    ]
+   },
+   {
+    "text": "Ne pas protéger la propriété intellectuelle, c'est le nivellement par le bas",
+    "spans": [
+     [
+      66,
+      142
+     ]
+    ],
+    "target": [
+     85,
+     109
+    ]
+   },
+   {
+    "text": "C'est une décision de l'auteur et de l'inventeur qui doit être souveraine dans le domaine",
+    "spans": [
+     [
+      144,
+      233
+     ]
+    ],
+    "target": [
+     154,
+     192
+    ]
+   }
+  ]
+ },
+ "republique-numerique:4978": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "L'e-sport relève bien plus du sport que du jeu de hasard, en effet la connaissance du jeu, l'habileté, les réflexes priment sur le hasard",
+    "spans": [
+     [
+      0,
+      137
+     ]
+    ],
+    "target": [
+     2,
+     9
+    ]
+   }
+  ]
+ },
+ "republique-numerique:5350": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Envisagez de passer au correcteur orthographique de Word® ou Google® ça ne devrait pas être pire",
+    "spans": [
+     [
+      0,
+      96
+     ]
+    ],
+    "target": [
+     23,
+     68
+    ]
+   }
+  ]
+ },
+ "republique-numerique:3274": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "ces derniers doivent être « qualifiés et diplômés »",
+    "spans": [
+     [
+      186,
+      237
+     ]
+    ],
+    "target": [
+     152,
+     184
+    ]
+   }
+  ]
+ },
+ "republique-numerique:547": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "nous souhaitons remplacer « des personnes déficientes auditives » par « des personnes sourdes et malentendantes »",
+    "spans": [
+     [
+      382,
+      495
+     ]
+    ],
+    "target": [
+     408,
+     447
+    ]
+   }
+  ]
+ },
+ "republique-numerique:5921": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Comment vérifier que les votants par internet sont bien les votants inscrits sur les listes électorales, qu'ils votent sans aucune contrainte ? A partir du moment où ces contraintes ne sont pas satisfaites, il me semble inenvisageable de voter par internet",
+    "spans": [
+     [
+      0,
+      256
+     ]
+    ],
+    "target": [
+     238,
+     256
+    ]
+   }
+  ]
+ },
+ "republique-numerique:207": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "La production de données fiables représente un coût important. Il est normal que la réutilisation de données soit soumise à redevances (déjà rien que pour financier la mise à disposition de ces données.)",
+    "spans": [
+     [
+      0,
+      203
+     ]
+    ],
+    "target": [
+     81,
+     108
+    ]
+   }
+  ]
+ },
+ "republique-numerique:3850": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "C'est contraignent voir impossible dans certains cas.",
+    "spans": [
+     [
+      0,
+      53
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il faudra alors privilégier les acteurs européens (SAP, Thales, Stormshield.)",
+    "spans": [
+     [
+      54,
+      131
+     ]
+    ],
+    "target": [
+     82,
+     93
+    ]
+   }
+  ]
+ },
+ "republique-numerique:212": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Il est indispensable de laisser un délai d'embargo pour éviter un pillage de l'étranger.",
+    "spans": [
+     [
+      0,
+      88
+     ]
+    ],
+    "target": [
+     32,
+     50
+    ]
+   },
+   {
+    "text": "Les premiers ne se sont pas gênés de piller les données françaises et d'en récolter argent et lauriers.",
+    "spans": [
+     [
+      175,
+      278
+     ]
+    ],
+    "target": [
+     219,
+     241
+    ]
+   },
+   {
+    "text": "Liberté, oui; pas à n'importe quel prix.",
+    "spans": [
+     [
+      295,
+      335
+     ]
+    ],
+    "target": [
+     295,
+     302
+    ]
+   }
+  ]
+ },
+ "republique-numerique:1159": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "lorsque les données sont dans un format non publiable (par exemple documents papier, ou base de données dans un format propriétaire), le coût de transformation peut devenir prohibitif",
+    "spans": [
+     [
+      93,
+      276
+     ]
+    ],
+    "target": [
+     227,
+     252
+    ]
+   },
+   {
+    "text": "Un moyen terme serait de prévoir que les données historiques puissent être consultées ou accédées sur site (et encore, cela engendre un coût de logistique qu'il faut pouvoir compenser), et librement publiées (sous conditions de format permettant la réutilisabilité ultérieure, par exemple en imposant d'utiliser pour la publication l'un des format conformes au RGI) par qui veut prendre en charge cette publication",
+    "spans": [
+     [
+      278,
+      692
+     ]
+    ],
+    "target": [
+     315,
+     338
+    ]
+   }
+  ]
+ },
+ "republique-numerique:569": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "Il devrait être possible de pouvoir consulter ce document obligatoirement par internet, le lien de consultation pouvant par exemple être indiqué sur la facture de l'usager.",
+    "spans": [
+     [
+      406,
+      578
+     ]
+    ],
+    "target": [
+     452,
+     463
+    ]
+   },
+   {
+    "text": "L'observatoire de l'eau et de l'assainissement dispose d'un outil qui est malheureusement trop peu renseigné.",
+    "spans": [
+     [
+      579,
+      688
+     ]
+    ],
+    "target": [
+     636,
+     644
+    ]
+   }
+  ]
+ },
+ "republique-numerique:1940": {
+  "n_specs": 0,
+  "claims": []
+ },
+ "republique-numerique:4702": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Il ne s'agit pas de supprimer l'avis de la commission mais de systématiser sa publication, alors qu'à l'heure actuelle, il faut que le président d'une commission permanente le demande",
+    "spans": [
+     [
+      10,
+      193
+     ]
+    ],
+    "target": [
+     40,
+     63
+    ]
+   }
+  ]
+ },
+ "republique-numerique:4340": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "La saisine de la CNIL pour projet ou proposition doit être automatique (de plein droit), et l'avis nécessairement rendu public",
+    "spans": [
+     [
+      126,
+      252
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "republique-numerique:348": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Il serait souhaitable de retransmettre la journée en ligne, les conférences qui sont données gratuitement au Collège de France et dans d'autres endroits, beaucoup d'internautes à mobilité réduite seraient heureux de s'instruire et de se cultiver avec ce moyen moderne",
+    "spans": [
+     [
+      0,
+      267
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "republique-numerique:1221": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "accompagner cette modification d'une formation obligatoire des élus sur l'intérêt économique du numérique (adjoints aux finances, au numérique, à l'etat civil,..;)",
+    "spans": [
+     [
+      0,
+      163
+     ]
+    ],
+    "target": [
+     37,
+     105
+    ]
+   }
+  ]
+ },
+ "republique-numerique:196": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par de la cryptographie forte et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles utilisés et les publics visés",
+    "spans": [
+     [
+      0,
+      435
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP)",
+    "spans": [
+     [
+      437,
+      622
+     ]
+    ],
+    "target": [
+     441,
+     515
+    ]
+   },
+   {
+    "text": "Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité … Les courriers électroniques en provenance des services de l'état doivent être signés électroniquement",
+    "spans": [
+     [
+      696,
+      831
+     ],
+     [
+      833,
+      934
+     ]
+    ],
+    "target": [
+     700,
+     760
+    ]
+   },
+   {
+    "text": "les échanges de données électroniques entre les différents services et institutions publiques doivent obligatoirement et uniquement utiliser des canaux sécurisés par de la cryptographie forte et de la confidentialité persistante",
+    "spans": [
+     [
+      945,
+      1173
+     ]
+    ],
+    "target": [
+     949,
+     1038
+    ]
+   },
+   {
+    "text": "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques",
+    "spans": [
+     [
+      1175,
+      1447
+     ]
+    ],
+    "target": [
+     1179,
+     1212
+    ]
+   },
+   {
+    "text": "Le chiffrement doit obligatoirement être effectué de bout en bout",
+    "spans": [
+     [
+      1449,
+      1514
+     ]
+    ],
+    "target": [
+     1331,
+     1342
+    ]
+   },
+   {
+    "text": "Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants … Les OVI et les services \"sensibles\" devront réaliser un audit tous les 3 ans",
+    "spans": [
+     [
+      1575,
+      1687
+     ],
+     [
+      1689,
+      1765
+     ]
+    ],
+    "target": [
+     1578,
+     1595
+    ]
+   },
+   {
+    "text": "Des ammendes administratives devront être prévue pour les fautes et les manquements graves",
+    "spans": [
+     [
+      1767,
+      1857
+     ]
+    ],
+    "target": [
+     1771,
+     1795
+    ]
+   }
+  ]
+ },
+ "republique-numerique:719": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "La loi doit comporter un volet hyper ruralité avec, entre autres, un droit à la fibre !",
+    "spans": [
+     [
+      0,
+      87
+     ]
+    ],
+    "target": [
+     25,
+     45
+    ]
+   }
+  ]
+ },
+ "republique-numerique:6033": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Ce devrait être un rôle de la CADA et/ou d'Etalab",
+    "spans": [
+     [
+      0,
+      49
+     ]
+    ],
+    "target": [
+     19,
+     49
+    ]
+   },
+   {
+    "text": "ne pourrait-il être précisé par un arrêté ou un décret ?",
+    "spans": [
+     [
+      52,
+      108
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Y a-t-il besoin de la loi ?",
+    "spans": [
+     [
+      109,
+      136
+     ]
+    ],
+    "target": [
+     128,
+     134
+    ]
+   }
+  ]
+ },
+ "republique-numerique:264": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Les éditeurs de services de communication au public en ligne permettant aux utilisateurs de ces services d'échanger des correspondances sont tenus de respecter le secret de celles-ci. Le secret couvre le contenu de la correspondance en ligne, l'en-tête du message ainsi que les documents joints à la correspondance, le cas échéant. Sont assimilés à des correspondances les contenus diffusés à un groupe restreint de desinataires … Tout traitement automatisé d'analyse du contenu de la correspondance en ligne ou des documents joints à celle-ci constitue une atteinte au secret des correspondances, sauf lorsque ce traitement a pour fonction l'affichage, le tri ou l'acheminement de ces correspondances, ou la détection de contenus non sollicités ou malveillants … L'éditeur prend les mesures nécessaires pour garantir le secret et l'intégrité des correspondances échangées par l'intermédiaire de ses services",
+    "spans": [
+     [
+      213,
+      641
+     ],
+     [
+      645,
+      975
+     ],
+     [
+      979,
+      1123
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les infractions aux dispositions du présent article sont sanctionnées des peines prévues aux articles 226-1, 226-2, 226-3 et 226-15 du code pénal",
+    "spans": [
+     [
+      1134,
+      1279
+     ]
+    ],
+    "target": [
+     1138,
+     1185
+    ]
+   },
+   {
+    "text": "Les opérateurs et les éditeurs mentionnés au II sont tenus de porter à la connaissance de leur personnel les peines encourues au titre du présent article",
+    "spans": [
+     [
+      1283,
+      1436
+     ]
+    ],
+    "target": [
+     1388,
+     1436
+    ]
+   }
+  ]
+ },
+ "republique-numerique:1369": {
+  "n_specs": 2,
+  "claims": [
+   {
+    "text": "La conformité est évaluée au regard du Référentiel Général d'Accessibilité des Administrations qui prévoit et définit la manière dont peuvent être effectués les déclarations ou les vérifications par les autorités ministérielles",
+    "spans": [
+     [
+      0,
+      227
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Il n'y a aucune vocation à obliger les organismes publics à entrer dans une démarche onéreuse, d'autant que nombre de sites internet de petites communes sont conçus avec des budgets \"anecdotiques\"",
+    "spans": [
+     [
+      229,
+      425
+     ]
+    ],
+    "target": [
+     256,
+     322
+    ]
+   }
+  ]
+ },
+ "republique-numerique:802": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "A chacun de gérer le blocage de la publicité comme il le désire",
+    "spans": [
+     [
+      0,
+      63
+     ]
+    ],
+    "target": [
+     18,
+     44
+    ]
+   },
+   {
+    "text": "Un site peut afficher autant de publicité qu'il le désire pour se financer ou trouver d'autres moyens de financement",
+    "spans": [
+     [
+      65,
+      181
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Le choix incombe à l'utilisateur d'afficher ou de bloquer ces publicités par des moyens technique",
+    "spans": [
+     [
+      183,
+      280
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Personnelement j'utilise ublock origin (extension firefox) qui est le plus avancé techniquement",
+    "spans": [
+     [
+      282,
+      377
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "republique-numerique:620": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "D'accord avec Olivier Seror-Droin sauf pour les pubs de personnes fort dénudés ou à position équivoque",
+    "spans": [
+     [
+      0,
+      102
+     ]
+    ],
+    "target": [
+     44,
+     102
+    ]
+   },
+   {
+    "text": "Cela me choque de voir les ados et enfants avec ce genre de pub sur leur portable",
+    "spans": [
+     [
+      104,
+      185
+     ]
+    ],
+    "target": [
+     152,
+     185
+    ]
+   },
+   {
+    "text": "Ces publicités ne devraient pas apparaitre spontanément au seul fait que l'enfant marque \"célibataire\" sur un réseau social !",
+    "spans": [
+     [
+      187,
+      312
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "il faudrait que le CSA applique ses règles au net !",
+    "spans": [
+     [
+      318,
+      369
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "republique-numerique:3471": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "le Libre est gratuit ou dans certains cas peu onéreux (oui on peu faire du libre payant : [url] ce n'est pas sa raison première",
+    "spans": [
+     [
+      37,
+      164
+     ]
+    ],
+    "target": [
+     37,
+     45
+    ]
+   },
+   {
+    "text": "il faut aussi parlé de la démarche collective",
+    "spans": [
+     [
+      177,
+      222
+     ]
+    ],
+    "target": [
+     200,
+     222
+    ]
+   },
+   {
+    "text": "GNU/Linux regroupe moult distributions donc le choix est plus que large, il y en a au moins autant que de grandes écoles et de pays dans le monde, le tout est d'arriver à savoir laquelle adopter",
+    "spans": [
+     [
+      241,
+      435
+     ]
+    ],
+    "target": [
+     241,
+     250
+    ]
+   },
+   {
+    "text": "Souvent on conseille une distribution (système et logiciels associés) avec une forte communauté, réactive et adaptée aux besoins de l'utilisateur",
+    "spans": [
+     [
+      437,
+      582
+     ]
+    ],
+    "target": [
+     458,
+     474
+    ]
+   },
+   {
+    "text": "Les plus utilisées (et connues) sont globalement Debian, Ubuntu, Mint, CentOs, Fedora, Gentoo, Arch, Manjaro, Mageia",
+    "spans": [
+     [
+      584,
+      700
+     ]
+    ],
+    "target": null
+   }
+  ]
+ }
+}
