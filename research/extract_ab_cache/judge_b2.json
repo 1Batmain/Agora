@@ -1,0 +1,1394 @@
+{
+  "n": 40,
+  "pairs": {
+    "Bp": {
+      "pair": "Bp_vs_B",
+      "n": 40,
+      "tally": {
+        "completude": {
+          "B": 8,
+          "Bp": 1,
+          "tie": 31
+        },
+        "segmentation": {
+          "B": 15,
+          "Bp": 4,
+          "tie": 21
+        },
+        "bruit": {
+          "B": 9,
+          "Bp": 8,
+          "tie": 23
+        }
+      },
+      "verdicts": [
+        {
+          "id": "granddebat:1-3583",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 12,
+          "n_var": 12,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent l'intégralité des prises de position sans omission, séparent correctement chaque idée distincte, et ne contiennent aucun bruit ou redite."
+        },
+        {
+          "id": "granddebat:1-9114",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 14,
+          "n_var": 10,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "Bp",
+          "justif": "Le lot 1 capture plus de prises de position (ex: nostalgie des institutions, critique des députés, amour de la nation) et segmente mieux les idées, mais inclut des éléments narratifs (ex: phrases 3, 4, 5, 9) absents du lot 2, plus épuré."
+        },
+        {
+          "id": "granddebat:1-14065",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 17,
+          "n_var": 14,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "Bp",
+          "justif": "Le lot 2 capture plus de prises de position (ex. griefs initiaux sur ISF/retraites/APL/SMIC) et segmente mieux les idées, mais le lot 1 est plus propre (moins de redondances sur les 3 pouvoirs)."
+        },
+        {
+          "id": "granddebat:1-25055",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 36,
+          "n_var": 36,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, mais le lot 1 segmente mieux les idées (ex: séparation des questions sur les retraites) et évite les redondances ou ciblages imprécis (ex: IRFM)."
+        },
+        {
+          "id": "granddebat:1-13750",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 10,
+          "n_var": 10,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, segmentent correctement les idées distinctes, et contiennent un niveau de bruit équivalent (principalement des cibles redondantes)."
+        },
+        {
+          "id": "granddebat:1-9230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 12,
+          "n_var": 13,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position (y compris les explications des propositions) sans omission, segmente mieux les idées (ex: séparation des propositions et de leurs justifications) et limite le bruit en évitant la sur-fragmentation (ex: lot 2 sépare à tort le vote blanc du reste de la phrase sur la crise de confiance)."
+        },
+        {
+          "id": "granddebat:1-30747",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 10,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position (y compris les griefs détaillés comme 'deux poids deux mesures', 'affaires judiciaires', etc.) avec une segmentation précise, tandis que le lot 2 omet des éléments clés et fusionne partiellement une idée ('ça ne mange pas de pain' est un commentaire narratif)."
+        },
+        {
+          "id": "granddebat:1-5585",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées distinctes et contiennent un niveau de bruit équivalent (aucun ajout narratif ou redondance)."
+        },
+        {
+          "id": "granddebat:1-5426",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent exactement les mêmes prises de position, avec une segmentation identique et sans bruit supplémentaire."
+        },
+        {
+          "id": "granddebat:1-18769",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent l'intégralité des prises de position sans omission, segmentent les idées de manière identique et ne contiennent aucun bruit significatif."
+        },
+        {
+          "id": "granddebat:1-3146",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-12376",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, mais le lot 2 segmente mieux la proposition technique sur le vote préférentiel en évitant de tronquer la fin de la phrase."
+        },
+        {
+          "id": "granddebat:1-24510",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées distinctes et contiennent un niveau de bruit équivalent (aucun ajout narratif ou redondance)."
+        },
+        {
+          "id": "granddebat:1-20158",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, segmentent correctement les idées distinctes, et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-9302",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement chaque idée distincte et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-20592",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 4,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "Bp",
+          "justif": "Le lot 2 capture plus de prises de position distinctes (exemples concrets, griefs spécifiques) sans en omettre, tandis que le lot 1 fusionne des idées et omet des éléments clés comme les financements étrangers ou les primes aux cadres."
+        },
+        {
+          "id": "granddebat:1-24152",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent les mêmes prises de position, mais le lot 1 segmente mieux les idées sur l'éducation et évite les redondances sur la laïcité."
+        },
+        {
+          "id": "granddebat:1-9584",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-23073",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 5,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture la première prise de position manquante dans le lot 1 (« Il faut que les élus descendent de leur pied d'estale ») et sépare mieux les idées (« être plus à l'écoute » et « ne pas viser la réélection »), sans ajout de bruit."
+        },
+        {
+          "id": "granddebat:1-19459",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent exactement les mêmes prises de position, sans omission ni différence de segmentation ou de bruit."
+        },
+        {
+          "id": "granddebat:1-4924",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bp",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 fusionne partiellement deux idées distinctes (révocation et sanction financière) et inclut des cibles redondantes, tandis que le lot 2 est plus épuré mais moins précis sur la segmentation des idées liées à l'absentéisme."
+        },
+        {
+          "id": "granddebat:1-8872",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture une prise de position supplémentaire (restriction aux hauts fonctionnaires) et segmente mieux les idées sans bruit ni fusion."
+        },
+        {
+          "id": "granddebat:1-6139",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position (y compris 'du respect mutuel' et la suppression des commissions externes), segmente mieux les idées distinctes et évite les redites ou fragments inutiles."
+        },
+        {
+          "id": "granddebat:1-13491",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées distinctes et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-12860",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots sont identiques en contenu, structure et absence de bruit, couvrant toutes les prises de position sans redondance ni fragmentation."
+        },
+        {
+          "id": "granddebat:1-23736",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent exactement les mêmes prises de position sans omission, segmentation identique et absence de bruit."
+        },
+        {
+          "id": "granddebat:1-14230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent les mêmes prises de position sans omission, séparent les idées de manière identique et contiennent le même niveau de bruit (redondance des cibles [4,16] et inclusion de la question rhétorique finale)."
+        },
+        {
+          "id": "granddebat:1-17421",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées (ex: séparation de 'sensibiliser') et évite la fusion de deux thèmes dans le claim 4 du lot 2."
+        },
+        {
+          "id": "granddebat:1-5131",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-21781",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "Bp",
+          "bruit": "Bp",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 fusionne trois critiques distinctes sur les communautés d'agglomération en un seul claim, tandis que le lot 2 les segmente mieux (non montré ici, mais présumé par la rigueur attendue)."
+        },
+        {
+          "id": "granddebat:1-25757",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 sur-segmente et introduit du bruit (claim 5 isolé)."
+        },
+        {
+          "id": "granddebat:1-3089",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées distinctes (séparation de la critique des idées et de l'exemplarité politique) et évite les redondances (loi sur les insultes et écarts de langage fusionnées dans le lot 2)."
+        },
+        {
+          "id": "granddebat:1-23261",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 5,
+          "n_var": 5,
+          "completude": "Bp",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Le lot 2 capture une prise de position supplémentaire (suppression des privilèges et transports en commun) omise dans le lot 1, sans différence notable en segmentation ou bruit."
+        },
+        {
+          "id": "granddebat:1-21676",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-30054",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "Bp",
+          "bruit": "Bp",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées distinctes (ex: séparation de l'assouplissement de l'ISF et de la perception citoyenne) et évite le bruit en ne fusionnant pas des claims distincts."
+        },
+        {
+          "id": "granddebat:1-9110",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent exactement les mêmes prises de position, avec une segmentation identique et sans bruit supplémentaire."
+        },
+        {
+          "id": "granddebat:1-30061",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "Bp",
+          "bruit": "Bp",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes (ex. séparation de l'image désastreuse et de la proposition de quorum) et réduit le bruit en évitant les redondances."
+        },
+        {
+          "id": "granddebat:1-4630",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission ni ajout de bruit, et segmentent les idées de manière identique."
+        },
+        {
+          "id": "granddebat:1-16954",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "Bp",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, mais le lot 2 inclut des claims sans localisation précise (bruit structurel)."
+        },
+        {
+          "id": "granddebat:1-23738",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "Bp",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées distinctes (ex: séparation claire de la proposition sur les sénateurs et les représentants par région)."
+        }
+      ]
+    },
+    "Bs": {
+      "pair": "Bs_vs_B",
+      "n": 40,
+      "tally": {
+        "completude": {
+          "B": 15,
+          "Bs": 3,
+          "tie": 22
+        },
+        "segmentation": {
+          "B": 25,
+          "Bs": 5,
+          "tie": 10
+        },
+        "bruit": {
+          "B": 20,
+          "Bs": 10,
+          "tie": 10
+        }
+      },
+      "verdicts": [
+        {
+          "id": "granddebat:1-25055",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 36,
+          "n_var": 37,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent l'intégralité des prises de position sans omission, segmentent correctement chaque idée distincte, et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-3583",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 12,
+          "n_var": 11,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux la dernière idée en deux claims distincts, tandis que le lot 1 fusionne inutilement du bruit dans le claim 11."
+        },
+        {
+          "id": "granddebat:1-14065",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 17,
+          "n_var": 7,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture plus de prises de position (notamment les griefs initiaux sur ISF, retraites, APL, SMIC), segmente mieux les idées distinctes (ex: séparation des critiques sur la tactique ministérielle et ses conséquences), et réduit le bruit en évitant les redondances (ex: claims 4 et 7 du lot 1 fusionnent des idées distinctes)."
+        },
+        {
+          "id": "granddebat:1-9114",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 14,
+          "n_var": 10,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture plus de prises de position distinctes (ex: critiques des institutions, rôle du député) et segmente mieux les idées sans fusion ni sur-fragmentation, tandis que le lot 2 fusionne des idées distinctes (ex: concept de nation et amour du pays) et omet des claims narratifs mais porteurs de sens (ex: 'Autrefois, les gens étaient pauvres...')."
+        },
+        {
+          "id": "granddebat:1-13750",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 10,
+          "n_var": 1,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture toutes les prises de position distinctes et les segmente correctement, tandis que le lot 1 fusionne tout en un seul claim sans distinction des idées et inclut des répétitions implicites."
+        },
+        {
+          "id": "granddebat:1-9230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 12,
+          "n_var": 11,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position (y compris la proposition initiale de moralisation) et segmente mieux les idées, tandis que le lot 2 omet la phrase clé sur la moralisation de la vie politique et conserve des tirets inutiles."
+        },
+        {
+          "id": "granddebat:1-30747",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 10,
+          "n_var": 2,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans omission, les segmente correctement et évite le bruit, contrairement au lot 2 qui fusionne des idées et inclut un passage narratif ('ça ne mange pas de pain')."
+        },
+        {
+          "id": "granddebat:1-5585",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "tie",
+          "segmentation": "Bs",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux en évitant de couper des idées (ex. : la phrase sur le gaspillage de l'argent public est complète dans le lot 1, alors qu'elle est tronquée dans le lot 2)."
+        },
+        {
+          "id": "granddebat:1-5426",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "Bs",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 sépare inutilement la première idée en deux claims et le lot 1 conserve des segments plus propres et mieux segmentés."
+        },
+        {
+          "id": "granddebat:1-3146",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "B",
+          "segmentation": "tie",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position sans omission, tandis que le lot 2 contient des redondances et des cibles mal attribuées (ex. mêmes cibles pour des claims distincts). Les deux lots segmentent correctement les idées, mais le lot 1 est plus propre."
+        },
+        {
+          "id": "granddebat:1-12376",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 2,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 contient moins de sur-fragmentation et de redites."
+        },
+        {
+          "id": "granddebat:1-18769",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position sans omission, segmente mieux les idées distinctes (ex: séparation de l'indépendance des élus et de la fin du politiquement correct), et évite les fusions ou redites présentes dans le lot 2 (ex: claim 5 et 6 fusionnés)."
+        },
+        {
+          "id": "granddebat:1-24510",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position de l'avis sans omission, séparent correctement les idées distinctes, et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-20592",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 2,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture toutes les prises de position (y compris les exemples concrets et les sous-propositions) sans omission, segmente mieux les idées distinctes, et évite les redondances malgré un léger surplus de granularité."
+        },
+        {
+          "id": "granddebat:1-20158",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, segmentent correctement les idées distinctes, et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-9302",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, avec une segmentation précise et sans bruit, contrairement au lot 2 qui fusionne des idées distinctes (ex. financement + vote blanc/annulation)."
+        },
+        {
+          "id": "granddebat:1-19459",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 3,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 conserve plus de cohérence narrative avec moins de fragmentation."
+        },
+        {
+          "id": "granddebat:1-24152",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "Bs",
+          "bruit": "B",
+          "justif": "Les deux lots capturent les mêmes prises de position, mais le lot 2 fusionne mieux les idées liées à la laïcité dans l'espace public (claim 4), tandis que le lot 1 introduit du bruit en séparant artificiellement des éléments connexes (claims 4 et 5)."
+        },
+        {
+          "id": "granddebat:1-9584",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux (cibles précises) et évite le bruit des claims sans localisation."
+        },
+        {
+          "id": "granddebat:1-23073",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 4,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Le lot 2 capture toutes les prises de position sans omission et segmente mieux les idées distinctes, mais le lot 1 fusionne moins et évite la sur-fragmentation (ex. 'ne pas viser la réélection' isolé dans le lot 2)."
+        },
+        {
+          "id": "granddebat:1-8872",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "Bs",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Le lot 1 capture toutes les prises de position sans omission, tandis que le lot 2 sur-segmente la proposition sur les fonctionnaires en deux claims distincts sans gain sémantique."
+        },
+        {
+          "id": "granddebat:1-4924",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées distinctes (ex. séparation du devoir de présence et des sanctions), tandis que le lot 2 fusionne des thèmes et contient une redite (claim 1 inclut deux idées du lot 1)."
+        },
+        {
+          "id": "granddebat:1-6139",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 4,
+          "completude": "Bs",
+          "segmentation": "Bs",
+          "bruit": "B",
+          "justif": "Le lot 2 capture toutes les prises de position majeures (y compris la suppression des commissions externes absente du lot 1), segmente mieux les idées distinctes, tandis que le lot 1 contient des fragments non-opinionnels ('du temps et de la stabilité', 'des moyens pour faire leur travail')."
+        },
+        {
+          "id": "granddebat:1-14230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent les mêmes prises de position sans omission, séparent les idées de manière identique et contiennent le même niveau de bruit."
+        },
+        {
+          "id": "granddebat:1-13491",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent pas de bruit."
+        },
+        {
+          "id": "granddebat:1-12860",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "Bs",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 sur-segmente les idées (avantages des anciens présidents) et omet les cibles pour certaines claims, ce qui introduit du bruit."
+        },
+        {
+          "id": "granddebat:1-23736",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, bien qu'il introduise une légère redite en séparant 'tout est une question d'équité' et 'à nos élus de montrer l'exemple'."
+        },
+        {
+          "id": "granddebat:1-21781",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux la critique des communautés d'agglomération en évitant de fusionner trois idées distinctes."
+        },
+        {
+          "id": "granddebat:1-5131",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent pas de bruit."
+        },
+        {
+          "id": "granddebat:1-17421",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 fusionne des idées indépendantes (indemnités et projet politique) et inclut un terme vague ('sensibiliser') sans segmentation claire."
+        },
+        {
+          "id": "granddebat:1-25757",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture toutes les prises de position sans omission et segmente mieux les idées distinctes, malgré un léger bruit (claim 5 isolé)."
+        },
+        {
+          "id": "granddebat:1-3089",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 3,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 fusionne plusieurs idées en un seul claim et contient des redondances (ex: loi sur les insultes et écarts de langage)."
+        },
+        {
+          "id": "granddebat:1-21676",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 3,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 fusionne plusieurs idées en un seul claim (1) et omet la segmentation fine des griefs."
+        },
+        {
+          "id": "granddebat:1-30054",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes (3 claims au lieu d'1 pour la première phrase), tandis que le lot 1 fusionne des thèmes et contient moins de redondance."
+        },
+        {
+          "id": "granddebat:1-9110",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et contiennent un niveau de bruit équivalent."
+        },
+        {
+          "id": "granddebat:1-23261",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 5,
+          "n_var": 6,
+          "completude": "Bs",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture plus de prises de position (notamment la finalité sur le Canard enchaîné et la suppression des privilèges), le lot 1 segmente mieux les idées distinctes, et le lot 1 a moins de bruit (le lot 2 fusionne deux idées en claim 1)."
+        },
+        {
+          "id": "granddebat:1-30061",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 2,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans omission, les segmente correctement en idées unitaires, et évite le bruit en isolant chaque claim sans redondance ni narration superflue."
+        },
+        {
+          "id": "granddebat:1-4630",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-23738",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes (ex: séparation de 'Diminuer leur nombre' et des propositions sur les sénateurs), tout en introduisant une légère sur-fragmentation (claims 3-5) sans redondance majeure."
+        },
+        {
+          "id": "granddebat:1-16954",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "Bs",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, les segmentent de manière identique, mais le lot 2 contient du bruit via l'absence de cibles précises."
+        }
+      ]
+    },
+    "Bc": {
+      "pair": "Bc_vs_B",
+      "n": 40,
+      "tally": {
+        "completude": {
+          "B": 12,
+          "Bc": 3,
+          "tie": 25
+        },
+        "segmentation": {
+          "B": 24,
+          "Bc": 4,
+          "tie": 12
+        },
+        "bruit": {
+          "B": 16,
+          "Bc": 11,
+          "tie": 13
+        }
+      },
+      "verdicts": [
+        {
+          "id": "granddebat:1-3583",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 12,
+          "n_var": 12,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement chaque idée, et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-14065",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 17,
+          "n_var": 14,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture plus de prises de position (ex. griefs initiaux sur ISF/retraites/APL/SMIC), segmente mieux les idées (ex. séparation des critiques sur la tactique ministérielle) et réduit le bruit (moins de redondance sur les 3 pouvoirs)."
+        },
+        {
+          "id": "granddebat:1-25055",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 36,
+          "n_var": 20,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position sans fusion ni omission, segmente chaque idée distinctement et évite le bruit, contrairement au lot 2 qui fusionne plusieurs claims et omet des détails comme la question sur la pension de réversion (66% vs 54%)."
+        },
+        {
+          "id": "granddebat:1-9114",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 14,
+          "n_var": 11,
+          "completude": "B",
+          "segmentation": "tie",
+          "bruit": "Bc",
+          "justif": "Le lot 1 capture plus de prises de position (ex. opinions sur l'amour de la France, le détricotage culturel), tandis que le lot 2 omet des éléments narratifs mais sans avantage clair en segmentation. Le lot 1 contient cependant plus de bruit (redondances, cadrage sans position)."
+        },
+        {
+          "id": "granddebat:1-9230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 12,
+          "n_var": 11,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées (notamment la proposition centrale sur la moralisation), tandis que le lot 2 conserve des tirets inutiles et fusionne implicitement la question rhétorique avec la réponse."
+        },
+        {
+          "id": "granddebat:1-13750",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 10,
+          "n_var": 1,
+          "completude": "Bc",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture l'intégralité des prises de position en un seul claim (complétude parfaite), mais le lot 2 segmente mieux les idées distinctes et évite les redondances, malgré quelques cibles incorrectes et répétitions."
+        },
+        {
+          "id": "granddebat:1-30747",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 10,
+          "n_var": 2,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Lot 1 capture toutes les prises de position distinctes sans omission, les segmente correctement et évite le bruit, contrairement au Lot 2 qui fusionne des idées et inclut des éléments narratifs."
+        },
+        {
+          "id": "granddebat:1-5585",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent l'intégralité des prises de position sans omission, séparent correctement les idées distinctes et contiennent un niveau de bruit équivalent (aucun ajout narratif ou redondance)."
+        },
+        {
+          "id": "granddebat:1-3146",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 9,
+          "n_var": 9,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, mais le lot 1 segmente mieux les idées sans fusionner de thèmes distincts."
+        },
+        {
+          "id": "granddebat:1-5426",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 sépare mieux les idées (ex: exemplarité et critique des motivations des élus), tout en introduisant une redite (claims 1 et 2 du lot 2)."
+        },
+        {
+          "id": "granddebat:1-24510",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées distinctes et évitent le bruit de manière équivalente."
+        },
+        {
+          "id": "granddebat:1-18769",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans omission, segmente mieux les idées (ex: séparation des propositions sur l'indépendance des élus et le pragmatisme), et évite le bruit présent dans le lot 2 (fusion de plusieurs idées en claim 6)."
+        },
+        {
+          "id": "granddebat:1-12376",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 3,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 contient plus de bruit (phrases redondantes ou fusionnées)."
+        },
+        {
+          "id": "granddebat:1-20158",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, segmentent correctement les idées distinctes, et ne contiennent pas de bruit significatif."
+        },
+        {
+          "id": "granddebat:1-9302",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 8,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-24152",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 8,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "Bc",
+          "bruit": "B",
+          "justif": "Les deux lots capturent les mêmes prises de position, mais le lot 2 fusionne deux idées distinctes sur la laïcité (accès aux espaces publics + sanctions) en un seul claim, tandis que le lot 1 les sépare mieux. Le lot 1 contient cependant un claim redondant sur la laïcité (n°4 et n°6)."
+        },
+        {
+          "id": "granddebat:1-20592",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 8,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Le lot 2 capture une prise de position supplémentaire (claim 5 du lot 2) et la proposition finale (claim 8) absente du lot 1, tout en segmentant mieux les idées sans fusion ni coupure."
+        },
+        {
+          "id": "granddebat:1-19459",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 3,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 fusionne des thèmes et contient plus de bruit narratif."
+        },
+        {
+          "id": "granddebat:1-9584",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, segmentent correctement les idées, mais le lot 2 contient des claims sans cibles précises (bruit structurel)."
+        },
+        {
+          "id": "granddebat:1-23073",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 contient des redondances et des fusions d'idées."
+        },
+        {
+          "id": "granddebat:1-6139",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 3,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position (y compris le plafond de rémunération et la suppression des commissions externes), segmente mieux les idées distinctes, et évite les redondances ou fragments narratifs inutiles."
+        },
+        {
+          "id": "granddebat:1-8872",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Le lot 2 capture une prise de position supplémentaire (restriction aux hauts fonctionnaires) sans fusionner ni omettre d'idées, tout en maintenant une segmentation précise."
+        },
+        {
+          "id": "granddebat:1-4924",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 7,
+          "n_var": 6,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position sans redondance ni fusion d'idées, tandis que le lot 2 fusionne deux idées distinctes (devoir de présence + sanction) et omet la justification comparative ('Un citoyen...')."
+        },
+        {
+          "id": "granddebat:1-17421",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux les idées distinctes et évite les fusions ou redites."
+        },
+        {
+          "id": "granddebat:1-12860",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées (avantages vs. détails des avantages) et le lot 1 fusionne inutilement 'voiture, bureaux' avec la suppression des avantages."
+        },
+        {
+          "id": "granddebat:1-14230",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "Bc",
+          "segmentation": "tie",
+          "bruit": "Bc",
+          "justif": "Le lot 1 inclut une phrase non porteuse d'opinion ('Peut-être, après tout, est-ce une fatalité ?') qui ajoute du bruit, tandis que le lot 2 omet cette redondance sans perdre de prise de position."
+        },
+        {
+          "id": "granddebat:1-13491",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 7,
+          "n_var": 7,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent pas de bruit."
+        },
+        {
+          "id": "granddebat:1-21781",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux la critique des communautés d'agglomération en évitant une fusion artificielle avec les régions."
+        },
+        {
+          "id": "granddebat:1-23736",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes, tandis que le lot 1 contient un claim fusionnant deux idées et du bruit narratif."
+        },
+        {
+          "id": "granddebat:1-3089",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 3,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 fusionne plusieurs idées en un seul claim (n°2) et omet la séparation des propositions législatives."
+        },
+        {
+          "id": "granddebat:1-25757",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "tie",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente mieux les idées distinctes (ex: séparation parti/vote) au prix d'un léger bruit (claim 5 isolé et redondant)."
+        },
+        {
+          "id": "granddebat:1-21676",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 3,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 regroupe abusivement des idées séparées et perd en précision."
+        },
+        {
+          "id": "granddebat:1-5131",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent pas de bruit."
+        },
+        {
+          "id": "granddebat:1-30054",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et évitent le bruit."
+        },
+        {
+          "id": "granddebat:1-23261",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 5,
+          "n_var": 6,
+          "completude": "Bc",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 2 capture plus de prises de position (notamment la suppression des privilèges et l'anéantissement du fond de commerce des journaux satiriques), tandis que le lot 1 segmente mieux les idées et évite le bruit en ne fusionnant pas les deux premières phrases."
+        },
+        {
+          "id": "granddebat:1-9110",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "Bc",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 segmente inutilement 'A trop voter...' en claim séparé et introduit une redite mineure."
+        },
+        {
+          "id": "granddebat:1-30061",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 4,
+          "completude": "B",
+          "segmentation": "B",
+          "bruit": "B",
+          "justif": "Le lot 1 capture toutes les prises de position distinctes sans fusion ni omission, tandis que le lot 2 fusionne trois idées clés en un seul claim, réduisant la précision."
+        },
+        {
+          "id": "granddebat:1-23738",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 5,
+          "completude": "tie",
+          "segmentation": "Bc",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 2 sur-segmente (ex. séparation de la proposition sur les sénateurs et les représentants par région) et le lot 1 fusionne mieux les idées tout en évitant les redites."
+        },
+        {
+          "id": "granddebat:1-4630",
+          "ds": "granddebat",
+          "ref_is_lot1": true,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "tie",
+          "bruit": "tie",
+          "justif": "Les deux lots capturent toutes les prises de position sans omission, séparent correctement les idées et ne contiennent aucun bruit."
+        },
+        {
+          "id": "granddebat:1-16954",
+          "ds": "granddebat",
+          "ref_is_lot1": false,
+          "n_ref": 6,
+          "n_var": 6,
+          "completude": "tie",
+          "segmentation": "Bc",
+          "bruit": "Bc",
+          "justif": "Les deux lots capturent toutes les prises de position, mais le lot 1 segmente mieux (cibles précises) et évite le bruit (pas de claims sans localisation)."
+        }
+      ]
+    }
+  }
+}
