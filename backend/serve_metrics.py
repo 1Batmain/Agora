@@ -109,17 +109,16 @@ def fidelity_index(dataset: str, ideas) -> dict | None:
     return cached[1]
 
 
-def dataset_keywords(payload: dict, top_n: int = 14) -> list[str]:
+def dataset_keywords(payload: dict, top_n: int = 40) -> list[str]:
     """Mots-clés REPRÉSENTATIFS du dataset : agrège les c-TF-IDF des MACROS, pondérés par
     la taille du thème (n_avis) et le rang du mot, dédupliqués. Dérivé du payload caché —
     zéro LLM, zéro rebuild. Donne les termes saillants à afficher avec la synthèse globale.
     """
-    macros = [t for t in payload.get("themes", [])
-              if isinstance(t, dict) and not t.get("parent_id")]
+    themes = [t for t in payload.get("themes", []) if isinstance(t, dict)]
     weight: dict[str, float] = {}
-    for m in macros:
-        n = float(m.get("n_avis") or 0) or 1.0
-        for rank, kw in enumerate((m.get("keywords") or [])[:5]):
+    for t in themes:                              # TOUS les thèmes (macros + sous-thèmes)
+        n = float(t.get("n_avis") or 0) or 1.0
+        for rank, kw in enumerate(t.get("keywords") or []):
             if isinstance(kw, str) and kw:
                 weight[kw] = weight.get(kw, 0.0) + n / (rank + 1)
     return [k for k, _ in sorted(weight.items(), key=lambda x: -x[1])[:top_n]]
