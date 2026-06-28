@@ -1596,9 +1596,23 @@ body {
 }
 
 /* ── Aperçu : mots-clés représentatifs du dataset (c-TF-IDF agrégés) ── */
-.overview__keywords { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-.overview__kw {
+.kw-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
+.kw-chip {
   font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
   color: var(--agora, #000091); padding: .25rem .6rem;
   border: 1px solid rgba(0,0,145,.25); background: #f5f5fe;
+}
+
+/* ── « Sondage » : sous-thèmes dominants en barres de % (template de synthèse) ── */
+.poll { display: flex; flex-direction: column; gap: .45rem; margin: 0 0 1.4rem; }
+.poll__row { display: grid; grid-template-columns: minmax(0,14rem) 1fr 2.6rem; align-items: center; gap: .6rem; }
+.poll__label {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; color: #222;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.poll__track { height: .7rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
+.poll__fill { display: block; height: 100%; min-width: 2px; }
+.poll__pct {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
