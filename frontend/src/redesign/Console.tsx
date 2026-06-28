@@ -28,7 +28,7 @@ import { themeCaption } from './labels';
 // Bornes du potard : nombre de voisins k du graphe k-NN (entier). Le défaut vient
 // du 1er /recluster (k dérivé du dataset).
 const K_MIN = 2;
-const K_MAX = 80;
+const K_MAX = 200;          // = plafond backend (Field le=200)
 const K_STEP = 1;
 const DEBOUNCE_MS = 300;
 
