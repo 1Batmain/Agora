@@ -1,0 +1,48 @@
+{
+  "model": "mistral-large-latest",
+  "n_avis": 200,
+  "A": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.28,
+      "verbatim_pass_rate": 0.982,
+      "n_specs": 668,
+      "n_claims": 656,
+      "pct_with_target": 0.66,
+      "mean_span_chars": 121.3,
+      "pct_empty_avis": 0.04
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 4.645,
+      "verbatim_pass_rate": 0.983,
+      "n_specs": 520,
+      "n_claims": 511,
+      "pct_with_target": 0.601,
+      "mean_span_chars": 123.4,
+      "pct_empty_avis": 0.0
+    }
+  },
+  "B": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.765,
+      "verbatim_pass_rate": 0.988,
+      "n_specs": 762,
+      "n_claims": 753,
+      "pct_with_target": 0.562,
+      "mean_span_chars": 119.2,
+      "pct_empty_avis": 0.02
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 5.391,
+      "verbatim_pass_rate": 0.987,
+      "n_specs": 601,
+      "n_claims": 593,
+      "pct_with_target": 0.548,
+      "mean_span_chars": 120.1,
+      "pct_empty_avis": 0.0
+    }
+  }
+}
