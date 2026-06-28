@@ -337,7 +337,9 @@ def _name_nodes(nodes: dict[str, ThemeNode], claim_texts: list[str]) -> None:
     idx_of = {nid: i for i, nid in enumerate(ids)}
     cluster_docs = {idx_of[nid]: [claim_texts[i] for i in nodes[nid].members] for nid in ids}
     corpus_stop, _ = derive_corpus_stopwords(claim_texts)
-    names = name_clusters(cluster_docs, corpus_stopwords=corpus_stop)
+    # top_k élevé : on garde jusqu'à 25 mots-clés c-TF-IDF par nœud (le label n'en
+    # affiche que label_k ; le reste alimente le bandeau scrollable de la synthèse).
+    names = name_clusters(cluster_docs, top_k=25, corpus_stopwords=corpus_stop)
     for nid in ids:
         info = names.get(idx_of[nid], {})
         node = nodes[nid]
