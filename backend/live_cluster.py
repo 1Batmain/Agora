@@ -95,6 +95,7 @@ def build_live_tree(
     tau = float("inf")
     derived = None
     merge_thr = float("nan")
+    root_modularity = None        # Q Leiden de la partition RACINE (None si n==0)
     # Seuil EFFECTIF : donné, sinon dérivé (rempli ci-dessous quand n>0).
     thr = float(knn_threshold) if knn_threshold is not None else None
 
@@ -108,7 +109,11 @@ def build_live_tree(
             thr = float(derived.threshold)
         # Graphe RACINE au seuil EFFECTIF (le levier de la Console) ; k & voisinage réutilisés.
         graph = build_knn_graph(vecs64, k=k, threshold=thr, neighbors=neighbors)
-        membership = run_leiden(graph, resolution=resolution, seed=seed).membership
+        leiden = run_leiden(graph, resolution=resolution, seed=seed)
+        membership = leiden.membership
+        # Modularité Q de la partition RACINE = qualité de la coupe AU SEUIL/k courant
+        # (pédagogique : CHUTE quand k monte — cohérent avec le verdict k-sweep).
+        root_modularity = float(leiden.modularity)
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership):
             by_cluster.setdefault(c, []).append(i)
@@ -145,7 +150,7 @@ def build_live_tree(
     return SimpleNamespace(
         nodes=nodes, order=order, macros=macros, dataset=None,
         tau=tau, base_resolution=resolution, seed=seed,
-        derived_global=derived, knn_threshold=thr,
+        derived_global=derived, knn_threshold=thr, root_modularity=root_modularity,
         root_coarsen={
             "n_fine": len(by_cluster) if n else 0,
             "n_macros": len(macros),
@@ -231,6 +236,8 @@ def recluster_payload(
             "dataset": dataset,
             "knn_threshold": None if tree.knn_threshold is None else round(tree.knn_threshold, 4),
             "knn_threshold_default": default_thr,
+            # Modularité Q de la partition RACINE (Console : chute pédagogique quand k↑).
+            "modularity": tree.root_modularity,
             "k": dg.k if dg is not None else None,
             "k_default": derive_k(n) if n else None,
             "n_themes": len(themes),
