@@ -27,6 +27,8 @@ export interface ReclusterMeta {
   k_default: number | null;
   knn_threshold: number | null;
   knn_threshold_default: number | null;
+  /** Modularité Q de la partition Leiden RACINE (chute quand k monte). */
+  modularity: number | null;
   n_themes: number;
   n_macros: number;
   n_ideas: number;

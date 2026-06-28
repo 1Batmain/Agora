@@ -159,7 +159,10 @@ export function Console({
               <span className="spinner" /> re-clustering…
             </>
           ) : payload ? (
-            `${payload.meta.n_themes} thèmes · ${payload.meta.n_macros} macros · ${payload.meta.n_ideas} idées`
+            `${payload.meta.n_themes} thèmes · ${payload.meta.n_macros} macros · ${payload.meta.n_ideas} idées` +
+            (payload.meta.modularity != null
+              ? ` · modularité ${payload.meta.modularity.toFixed(3)}`
+              : '')
           ) : null}
         </span>
       </div>
