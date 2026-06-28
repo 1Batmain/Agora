@@ -1,0 +1,480 @@
+[
+  {
+    "dataset": "tiktok",
+    "n": 1621,
+    "k_default": 12,
+    "rows": [
+      {
+        "k": 8,
+        "is_default": false,
+        "threshold": 0.6074,
+        "avg_degree": 13.11,
+        "n_fine_root": 10,
+        "n_macros": 10,
+        "n_leaves": 69,
+        "modularity": 0.6369
+      },
+      {
+        "k": 12,
+        "is_default": true,
+        "threshold": 0.6004,
+        "avg_degree": 19.46,
+        "n_fine_root": 10,
+        "n_macros": 10,
+        "n_leaves": 47,
+        "modularity": 0.6024
+      },
+      {
+        "k": 16,
+        "is_default": false,
+        "threshold": 0.5951,
+        "avg_degree": 25.71,
+        "n_fine_root": 8,
+        "n_macros": 8,
+        "n_leaves": 65,
+        "modularity": 0.5805
+      },
+      {
+        "k": 24,
+        "is_default": false,
+        "threshold": 0.5869,
+        "avg_degree": 38.11,
+        "n_fine_root": 7,
+        "n_macros": 7,
+        "n_leaves": 74,
+        "modularity": 0.5511
+      },
+      {
+        "k": 36,
+        "is_default": false,
+        "threshold": 0.5778,
+        "avg_degree": 56.47,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 32,
+        "modularity": 0.5147
+      },
+      {
+        "k": 50,
+        "is_default": false,
+        "threshold": 0.5698,
+        "avg_degree": 77.7,
+        "n_fine_root": 5,
+        "n_macros": 5,
+        "n_leaves": 52,
+        "modularity": 0.4978
+      },
+      {
+        "k": 80,
+        "is_default": false,
+        "threshold": 0.5574,
+        "avg_degree": 121.85,
+        "n_fine_root": 4,
+        "n_macros": 4,
+        "n_leaves": 9,
+        "modularity": 0.4628
+      },
+      {
+        "k": 120,
+        "is_default": false,
+        "threshold": 0.5458,
+        "avg_degree": 178.79,
+        "n_fine_root": 3,
+        "n_macros": 3,
+        "n_leaves": 21,
+        "modularity": 0.4353
+      },
+      {
+        "k": 200,
+        "is_default": false,
+        "threshold": 0.529,
+        "avg_degree": 288.21,
+        "n_fine_root": 3,
+        "n_macros": 3,
+        "n_leaves": 25,
+        "modularity": 0.3894
+      }
+    ]
+  },
+  {
+    "dataset": "granddebat",
+    "n": 3000,
+    "k_default": 13,
+    "rows": [
+      {
+        "k": 8,
+        "is_default": false,
+        "threshold": 0.6033,
+        "avg_degree": 13.73,
+        "n_fine_root": 13,
+        "n_macros": 13,
+        "n_leaves": 18,
+        "modularity": 0.5698
+      },
+      {
+        "k": 12,
+        "is_default": false,
+        "threshold": 0.5985,
+        "avg_degree": 20.43,
+        "n_fine_root": 12,
+        "n_macros": 12,
+        "n_leaves": 104,
+        "modularity": 0.5438
+      },
+      {
+        "k": 13,
+        "is_default": true,
+        "threshold": 0.5974,
+        "avg_degree": 22.09,
+        "n_fine_root": 13,
+        "n_macros": 13,
+        "n_leaves": 19,
+        "modularity": 0.534
+      },
+      {
+        "k": 16,
+        "is_default": false,
+        "threshold": 0.5946,
+        "avg_degree": 27.02,
+        "n_fine_root": 13,
+        "n_macros": 13,
+        "n_leaves": 19,
+        "modularity": 0.5192
+      },
+      {
+        "k": 24,
+        "is_default": false,
+        "threshold": 0.5886,
+        "avg_degree": 40.18,
+        "n_fine_root": 8,
+        "n_macros": 8,
+        "n_leaves": 14,
+        "modularity": 0.4941
+      },
+      {
+        "k": 36,
+        "is_default": false,
+        "threshold": 0.582,
+        "avg_degree": 59.67,
+        "n_fine_root": 7,
+        "n_macros": 7,
+        "n_leaves": 14,
+        "modularity": 0.4671
+      },
+      {
+        "k": 50,
+        "is_default": false,
+        "threshold": 0.5761,
+        "avg_degree": 82.28,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 11,
+        "modularity": 0.4448
+      },
+      {
+        "k": 80,
+        "is_default": false,
+        "threshold": 0.5669,
+        "avg_degree": 130.19,
+        "n_fine_root": 5,
+        "n_macros": 5,
+        "n_leaves": 10,
+        "modularity": 0.4075
+      },
+      {
+        "k": 120,
+        "is_default": false,
+        "threshold": 0.5581,
+        "avg_degree": 193.05,
+        "n_fine_root": 5,
+        "n_macros": 5,
+        "n_leaves": 12,
+        "modularity": 0.3756
+      },
+      {
+        "k": 200,
+        "is_default": false,
+        "threshold": 0.5457,
+        "avg_degree": 315.92,
+        "n_fine_root": 5,
+        "n_macros": 5,
+        "n_leaves": 9,
+        "modularity": 0.3285
+      }
+    ]
+  },
+  {
+    "dataset": "xstance",
+    "n": 3000,
+    "k_default": 13,
+    "rows": [
+      {
+        "k": 8,
+        "is_default": false,
+        "threshold": 0.5373,
+        "avg_degree": 12.55,
+        "n_fine_root": 20,
+        "n_macros": 20,
+        "n_leaves": 133,
+        "modularity": 0.6666
+      },
+      {
+        "k": 12,
+        "is_default": false,
+        "threshold": 0.5271,
+        "avg_degree": 18.74,
+        "n_fine_root": 17,
+        "n_macros": 17,
+        "n_leaves": 23,
+        "modularity": 0.6201
+      },
+      {
+        "k": 13,
+        "is_default": true,
+        "threshold": 0.5249,
+        "avg_degree": 20.3,
+        "n_fine_root": 18,
+        "n_macros": 18,
+        "n_leaves": 78,
+        "modularity": 0.6093
+      },
+      {
+        "k": 16,
+        "is_default": false,
+        "threshold": 0.519,
+        "avg_degree": 24.98,
+        "n_fine_root": 17,
+        "n_macros": 17,
+        "n_leaves": 23,
+        "modularity": 0.5819
+      },
+      {
+        "k": 24,
+        "is_default": false,
+        "threshold": 0.5066,
+        "avg_degree": 37.5,
+        "n_fine_root": 13,
+        "n_macros": 13,
+        "n_leaves": 166,
+        "modularity": 0.5339
+      },
+      {
+        "k": 36,
+        "is_default": false,
+        "threshold": 0.4931,
+        "avg_degree": 56.39,
+        "n_fine_root": 11,
+        "n_macros": 11,
+        "n_leaves": 57,
+        "modularity": 0.4878
+      },
+      {
+        "k": 50,
+        "is_default": false,
+        "threshold": 0.4816,
+        "avg_degree": 78.63,
+        "n_fine_root": 10,
+        "n_macros": 10,
+        "n_leaves": 57,
+        "modularity": 0.4549
+      },
+      {
+        "k": 80,
+        "is_default": false,
+        "threshold": 0.4643,
+        "avg_degree": 126.15,
+        "n_fine_root": 8,
+        "n_macros": 8,
+        "n_leaves": 53,
+        "modularity": 0.3985
+      },
+      {
+        "k": 120,
+        "is_default": false,
+        "threshold": 0.4489,
+        "avg_degree": 189.44,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 11,
+        "modularity": 0.3486
+      },
+      {
+        "k": 200,
+        "is_default": false,
+        "threshold": 0.429,
+        "avg_degree": 314.29,
+        "n_fine_root": 5,
+        "n_macros": 5,
+        "n_leaves": 17,
+        "modularity": 0.2917
+      }
+    ]
+  },
+  {
+    "dataset": "republique-numerique",
+    "n": 3000,
+    "k_default": 13,
+    "rows": [
+      {
+        "k": 8,
+        "is_default": false,
+        "threshold": 0.4582,
+        "avg_degree": 12.94,
+        "n_fine_root": 20,
+        "n_macros": 20,
+        "n_leaves": 293,
+        "modularity": 0.6792,
+        "align": {
+          "n": 3000,
+          "ari": 0.0554,
+          "nmi": 0.1601,
+          "v": 0.1601
+        }
+      },
+      {
+        "k": 12,
+        "is_default": false,
+        "threshold": 0.4577,
+        "avg_degree": 19.33,
+        "n_fine_root": 15,
+        "n_macros": 15,
+        "n_leaves": 173,
+        "modularity": 0.6377,
+        "align": {
+          "n": 3000,
+          "ari": 0.04,
+          "nmi": 0.1442,
+          "v": 0.1442
+        }
+      },
+      {
+        "k": 13,
+        "is_default": true,
+        "threshold": 0.4578,
+        "avg_degree": 20.95,
+        "n_fine_root": 16,
+        "n_macros": 16,
+        "n_leaves": 184,
+        "modularity": 0.6284,
+        "align": {
+          "n": 3000,
+          "ari": 0.0537,
+          "nmi": 0.1681,
+          "v": 0.1681
+        }
+      },
+      {
+        "k": 16,
+        "is_default": false,
+        "threshold": 0.4573,
+        "avg_degree": 25.74,
+        "n_fine_root": 14,
+        "n_macros": 14,
+        "n_leaves": 176,
+        "modularity": 0.6096,
+        "align": {
+          "n": 3000,
+          "ari": 0.047,
+          "nmi": 0.1457,
+          "v": 0.1457
+        }
+      },
+      {
+        "k": 24,
+        "is_default": false,
+        "threshold": 0.4556,
+        "avg_degree": 38.38,
+        "n_fine_root": 13,
+        "n_macros": 13,
+        "n_leaves": 46,
+        "modularity": 0.5678,
+        "align": {
+          "n": 3000,
+          "ari": 0.04,
+          "nmi": 0.1294,
+          "v": 0.1294
+        }
+      },
+      {
+        "k": 36,
+        "is_default": false,
+        "threshold": 0.4577,
+        "avg_degree": 57.41,
+        "n_fine_root": 10,
+        "n_macros": 10,
+        "n_leaves": 20,
+        "modularity": 0.5323,
+        "align": {
+          "n": 3000,
+          "ari": 0.0532,
+          "nmi": 0.13,
+          "v": 0.13
+        }
+      },
+      {
+        "k": 50,
+        "is_default": false,
+        "threshold": 0.4575,
+        "avg_degree": 79.37,
+        "n_fine_root": 9,
+        "n_macros": 9,
+        "n_leaves": 18,
+        "modularity": 0.4989,
+        "align": {
+          "n": 3000,
+          "ari": 0.0482,
+          "nmi": 0.1268,
+          "v": 0.1268
+        }
+      },
+      {
+        "k": 80,
+        "is_default": false,
+        "threshold": 0.4536,
+        "avg_degree": 126.04,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 16,
+        "modularity": 0.454,
+        "align": {
+          "n": 3000,
+          "ari": 0.0393,
+          "nmi": 0.0921,
+          "v": 0.0921
+        }
+      },
+      {
+        "k": 120,
+        "is_default": false,
+        "threshold": 0.4471,
+        "avg_degree": 187.75,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 17,
+        "modularity": 0.4104,
+        "align": {
+          "n": 3000,
+          "ari": 0.0396,
+          "nmi": 0.0921,
+          "v": 0.0921
+        }
+      },
+      {
+        "k": 200,
+        "is_default": false,
+        "threshold": 0.4355,
+        "avg_degree": 308.6,
+        "n_fine_root": 6,
+        "n_macros": 6,
+        "n_leaves": 16,
+        "modularity": 0.346,
+        "align": {
+          "n": 3000,
+          "ari": 0.039,
+          "nmi": 0.0914,
+          "v": 0.0914
+        }
+      }
+    ]
+  }
+]
