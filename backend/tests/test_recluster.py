@@ -50,6 +50,9 @@ def test_recluster_shape(client):
     # Seuil au repos = défaut DÉRIVÉ (la Console démarre comme /analysis).
     assert meta["knn_threshold"] == meta["knn_threshold_default"]
     assert meta["took_ms"] >= 0
+    # Modularité Q de la partition racine : présente et dans [-0.5, 1] (borne théorique).
+    assert "modularity" in meta
+    assert meta["modularity"] is None or -0.5 <= meta["modularity"] <= 1.0
 
     # points : un par idée, aligné à l'ordre des ideas (ou vide si UMAP indisponible).
     points = body["points"]
