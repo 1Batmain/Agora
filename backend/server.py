@@ -50,7 +50,14 @@ from backend.recluster import (
     load_cache,
     open_consultation_descriptor,
 )
-from backend import analysis_store, build_manager, density, flags_store, live_cluster
+from backend import (
+    analysis_store,
+    build_manager,
+    density,
+    flags_store,
+    live_cluster,
+    serve_metrics,
+)
 
 
 class _Dataset:
@@ -297,7 +304,10 @@ def do_analysis(body: AnalysisBody, response: Response) -> dict:
         payload = analysis_store.read_analysis(ds.id)
         if payload is not None:
             payload.setdefault("status", "ready")
-            return payload
+            # Enrichissement SERVE-TIME (couverture + fidélité verbatim) : dérivé de
+            # l'arbre caché + claims.json, muté EN MÉMOIRE sur ce payload fraîchement
+            # parsé — ZÉRO écriture au cache, AUCUN rebuild.
+            return serve_metrics.enrich_indices(payload, ds.id, ds.ideas)
     return _not_ready_response(ds, response)
 
 
