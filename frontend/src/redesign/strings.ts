@@ -24,8 +24,11 @@ export const INDEX_LABELS: Record<string, string> = {
   // Derived indices served by /analysis (data-only: {key, value, detail}).
   effusion: 'Effusion (variété des avis)',
   concentration: 'Concentration',
-  consensus: 'Consensus global',
+  consensus: 'Cohésion sémantique',
   structuration: 'Structuration',
+  // Métriques de CONFIANCE servies au SERVE-TIME par /analysis (couverture + fidélité).
+  couverture: 'Couverture',
+  fidelite_verbatim: 'Fidélité verbatim',
   // Loose record / mock keys (permissive {key: number} shape).
   participants: 'Participants',
   n_participants: 'Participants',
@@ -64,12 +67,17 @@ const HINTS: Record<string, string> = {
     'Accord agrégé sur l’ensemble des contributions (1 = forte convergence).',
   diversity: 'Variété des thèmes exprimés (0 = unanime, 1 = très éclaté).',
   diversite: 'Variété des thèmes exprimés (0 = unanime, 1 = très éclaté).',
-  consensus: 'Degré d’accord moyen sur l’ensemble des avis.',
-  consensus_global: 'Degré d’accord moyen sur l’ensemble des avis.',
+  consensus:
+    'Proximité des contributions d’un thème dans l’espace sémantique — PAS un accord d’opinion.',
+  consensus_global:
+    'Proximité des contributions d’un thème dans l’espace sémantique — PAS un accord d’opinion.',
   concentration: 'Part des avis captée par les plus gros thèmes (1 = très concentré).',
   polarization: 'Opposition entre pôles d’opinion.',
   polarisation: 'Opposition entre pôles d’opinion.',
   coverage: 'Part des avis rattachés à un thème.',
+  couverture: 'Part des contributions rattachées à un thème (le reste = non classé).',
+  fidelite_verbatim:
+    'Part des arguments extraits qui sont des citations exactes (zéro trahison).',
   n_avis: 'Nombre total de contributions citoyennes.',
   n_themes: 'Nombre de thèmes de premier niveau.',
   n_claims: 'Nombre de prises de position verbatim.',
@@ -103,10 +111,29 @@ export function indexExplanation(key: string, detail?: IndexDetail): string | un
       break;
     case 'consensus':
       return (
-        `Accord moyen au sein des thèmes, pondéré par la population ` +
-        `(les petits thèmes pèsent moins). Proche de 1 = forte cohésion ; ` +
-        `proche de 0 = avis éclatés.`
+        `À quel point les contributions d’un thème sont PROCHES dans l’espace ` +
+        `sémantique — PAS un accord d’opinion. Pondérée par la population (les petits ` +
+        `thèmes pèsent moins). Proche de 1 = thèmes très cohésifs ; proche de 0 = épars.`
       );
+    case 'couverture':
+      if (typeof d.classes === 'number' && typeof d.total === 'number') {
+        return (
+          `${Math.round((d.classes / Math.max(d.total, 1)) * 100)} % des ` +
+          `${d.total.toLocaleString(LOCALE)} contributions sont rattachées à un thème ; ` +
+          `${(d.noise ?? d.total - d.classes).toLocaleString(LOCALE)} restent non classées. ` +
+          `Proche de 1 = la carte capte presque toute la parole.`
+        );
+      }
+      break;
+    case 'fidelite_verbatim':
+      if (typeof d.n_verbatim === 'number' && typeof d.n_claims === 'number') {
+        return (
+          `${d.n_verbatim.toLocaleString(LOCALE)} arguments sur ` +
+          `${d.n_claims.toLocaleString(LOCALE)} sont des citations EXACTES (tous les ` +
+          `extraits + la cible ancrés au texte source). Proche de 1 = zéro trahison du verbatim.`
+        );
+      }
+      break;
     case 'structuration':
       if (typeof d.share === 'number') {
         return (
