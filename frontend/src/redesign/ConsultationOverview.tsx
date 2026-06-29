@@ -93,13 +93,18 @@ export function ConsultationOverview({
               ))}
             </div>
           )}
-          <ThemeNavigator themes={themes} total={navTotal} />
           {loading ? (
             <p className="overview__loading">Chargement de la synthèse…</p>
           ) : synthesis ? (
             <Markdown source={synthesis} />
           ) : (
             <p className="overview__loading">Synthèse indisponible.</p>
+          )}
+          {themes.length > 0 && (
+            <>
+              <h3 className="synthesis__subhead">Points de convergence</h3>
+              <ThemeNavigator themes={themes} total={navTotal} />
+            </>
           )}
         </section>
       </main>
