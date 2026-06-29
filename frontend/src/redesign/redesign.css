@@ -1670,3 +1670,10 @@ body {
   font-size: .9rem; color: var(--agora, #000091);
   margin: 1.6rem 0 .7rem; letter-spacing: .02em;
 }
+
+/* ── Aperçu : avis représentatifs (centroïde) du focus sélectionné ── */
+.overview__avis { margin-top: 1.4rem; }
+.overview__avis-quote {
+  margin: 0 0 .7rem; padding: .55rem .9rem; border-left: 3px solid var(--agora, #000091);
+  background: #f5f5fe; color: #333; font-size: .9rem; line-height: 1.55;
+}
