@@ -4,12 +4,13 @@ import type { Consultation } from './contract';
 import { Landing } from './Landing';
 import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
+import { AvisExplorer } from './AvisExplorer';
 import RedesignApp from './RedesignApp';
 import { Console } from './Console';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console';
-type HistState = { route: Route; activeId: string | null };
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console' | 'avis';
+type HistState = { route: Route; activeId: string | null; focus?: string | null };
 
 /**
  * Shell d'Agora. La vue d'accueil est la LANDING (grille de consultations). Au clic
@@ -24,6 +25,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [route, setRoute] = useState<Route>('landing');
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Avis focalisé sur la page d'exploration (`view=avis&focus=`), sinon null.
+  const [focusAvis, setFocusAvis] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,6 +48,7 @@ export default function App() {
       const st = (e.state ?? null) as HistState | null;
       setRoute(st?.route ?? 'landing');
       setActiveId(st?.activeId ?? null);
+      setFocusAvis(st?.focus ?? null);
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
@@ -57,17 +61,27 @@ export default function App() {
     const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
-      // `?view=console` deep-links straight into the Console (closed datasets only).
-      const wantConsole = params.get('view') === 'console' && d.status !== 'open';
+      // `?view=console` → Console (closed datasets only) ; `?view=avis(&focus=)` → exploration des avis.
+      const view = params.get('view');
+      const wantConsole = view === 'console' && d.status !== 'open';
+      const wantAvis = view === 'avis' && d.status !== 'open';
+      const focus = wantAvis ? params.get('focus') : null;
       const r: Route = wantConsole
         ? 'console'
-        : d.status === 'open'
-          ? 'participate'
-          : 'overview';
+        : wantAvis
+          ? 'avis'
+          : d.status === 'open'
+            ? 'participate'
+            : 'overview';
       setRoute(r);
       setActiveId(d.id);
-      const url = wantConsole ? `?c=${d.id}&view=console` : `?c=${d.id}`;
-      window.history.replaceState({ route: r, activeId: d.id } as HistState, '', url);
+      setFocusAvis(focus);
+      const url = wantConsole
+        ? `?c=${d.id}&view=console`
+        : wantAvis
+          ? `?c=${d.id}&view=avis${focus ? `&focus=${encodeURIComponent(focus)}` : ''}`
+          : `?c=${d.id}`;
+      window.history.replaceState({ route: r, activeId: d.id, focus } as HistState, '', url);
     } else {
       window.history.replaceState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
     }
@@ -89,6 +103,19 @@ export default function App() {
     window.history.pushState({ route: 'analysis', activeId: id } as HistState, '', `?c=${id}&g=1`);
   }, []);
 
+  // Entrée depuis une citation de la synthèse : page d'exploration FOCALISÉE sur l'avis.
+  const exploreAvis = useCallback((datasetId: string, avisId: string | null) => {
+    setActiveId(datasetId);
+    setRoute('avis');
+    setFocusAvis(avisId);
+    const url = `?c=${datasetId}&view=avis${avisId ? `&focus=${encodeURIComponent(avisId)}` : ''}`;
+    window.history.pushState(
+      { route: 'avis', activeId: datasetId, focus: avisId } as HistState,
+      '',
+      url,
+    );
+  }, []);
+
   const openConsole = useCallback((id: string) => {
     setActiveId(id);
     setRoute('console');
@@ -107,7 +134,13 @@ export default function App() {
         dataset={active}
         onHome={backToLanding}
         onViewGraph={() => viewGraph(active.id)}
+        onExploreAvis={(avisId) => exploreAvis(active.id, avisId)}
       />
+    );
+  }
+  if (route === 'avis' && active) {
+    return (
+      <AvisExplorer dataset={active} focusAvisId={focusAvis} onHome={backToLanding} />
     );
   }
   if (route === 'analysis' && active) {
