@@ -1699,3 +1699,8 @@ body {
   margin: 0 0 .7rem; padding: .55rem .9rem; border-left: 3px solid var(--agora, #000091);
   background: #f5f5fe; color: #333; font-size: .9rem; line-height: 1.55;
 }
+
+/* ── Avis représentatifs cliquables (aperçu) → ouvrent le détail comme la feuille ── */
+.overview__avis-quote--open { cursor: pointer; transition: background .12s, border-color .12s; }
+.overview__avis-quote--open:hover { background: #ececfe; border-left-color: var(--agora-hover, #1212ff); }
+.overview__avis-quote--open:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
