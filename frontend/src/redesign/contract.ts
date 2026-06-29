@@ -142,13 +142,26 @@ export interface AvisProvenance {
   claims: AvisClaim[];
 }
 
-/** One row of the avis-exploration list (`GET /avis_list`). */
+/**
+ * One row of the avis-exploration list (`GET /avis_list`). Carries the WHOLE avis
+ * (`text`/`text_fr`/`lang`/`claims`, same shape as `AvisProvenance`) so the explorer
+ * renders each avis INLINE (full text + verbatim highlights) without a per-card
+ * `/avis/{id}` round-trip — plus a flattened `excerpt` and the distinct theme chips.
+ */
 export interface AvisListItem {
   avis_id: string;
   /** ~220-char preview of the avis text (whitespace-flattened). */
   excerpt: string;
   /** Distinct themes carried by the avis' claims (chips), in first-seen order. */
   themes: { id: string; title: string; color: string }[];
+  /** Full avis text (claims' spans/target are offsets into it — verbatim gate). */
+  text: string;
+  /** French translation precomputed at build (`null`/absent if already FR). */
+  text_fr?: string | null;
+  /** Avis language code (`'fr'` default). */
+  lang?: string;
+  /** Claims (verbatim spans + target) to render the inline highlights. */
+  claims: AvisClaim[];
 }
 
 /** `GET /avis_list` → a paginated/filtered page of avis (`total` = before paging). */
