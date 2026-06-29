@@ -39,6 +39,7 @@ from backend.analysis import (
 )
 from backend.avis import build_avis_provenance
 from backend.translate import build_translations
+from backend.keywords_fr import translate_tree_keywords
 from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.cluster_enrich import description_for_node, hook_for_node
@@ -164,6 +165,19 @@ def build_analysis(
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
 
+        # 1a-bis) Mots-clés en FRANÇAIS (datasets multilingues) : on traduit les TERMES
+        #     c-TF-IDF non-FR AU BUILD (caché, batché), AVANT que les titres/accroches/
+        #     descriptions LLM et le payload persisté ne les lisent. Mono-FR → no-op.
+        lang_of = {str(getattr(it, "id", "")): getattr(it, "lang", None)
+                   for it in getattr(ds, "ideas", []) or []}
+        report("keywords_fr", "traduction FR des mots-clés non-français (caché)")
+        kw_map = translate_tree_keywords(
+            dataset, tree, lang_of,
+            on_progress=lambda d, t: report("keywords_fr", "traduction FR des mots-clés (caché)", d, t),
+        )
+        if kw_map:
+            report("keywords_fr", f"{len(kw_map)} termes traduits en français")
+
         # 1b) Titre court LLM par thème (3-7 mots), CACHÉ par contenu → baké dans
         #     analysis.json. Rebuild idempotent : contenu inchangé ⇒ zéro appel LLM.
         total = len(node_ids)
@@ -204,9 +218,7 @@ def build_analysis(
         #     idempotente) → translations.json. Le front affiche le FR par défaut, avec
         #     « voir l'original » (surlignages sur l'original). Datasets FR : rien à faire.
         report("translate", "traduction FR des avis non-français (caché)")
-        lang_of = {str(getattr(it, "id", "")): getattr(it, "lang", None)
-                   for it in getattr(ds, "ideas", []) or []}
-        translations = build_translations(
+        translations = build_translations(  # `lang_of` calculé en 1a-bis (réutilisé)
             dataset, tree.prepared.avis, lang_of,
             on_progress=lambda d, t: report("translate", "traduction FR (caché)", d, t),
         )
