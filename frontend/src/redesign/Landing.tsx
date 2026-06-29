@@ -27,16 +27,35 @@ export function Landing({
 
       <main className="landing__body">
         <section className="hero">
+          <p className="hero__eyebrow">
+            <span className="hero__prompt">agora</span>
+            analyse de consultations citoyennes
+            <span className="hero__caret" aria-hidden />
+          </p>
           <h1 className="hero__title">
-            Analyse des consultations
-            <span className="hero__accent"> citoyennes </span>
+            Des milliers d’avis citoyens,
+            <span className="hero__accent"> les thèmes qui émergent</span>
             <br />
           </h1>
           <p className="hero__tagline">
-            Agora fait émerger les thèmes et les idées communes des questions ouvertes
-            et fournit une analyse des opinions de manière automatisée, traçable et
-            transparente.
+            Agora lit l’intégralité des réponses à une consultation et en fait émerger
+            les grands thèmes — <strong>sans jamais reformuler un mot</strong>. Chaque
+            idée reste traçable jusqu’à la phrase exacte du citoyen.
           </p>
+          <ul className="hero__diff">
+            <li>
+              <strong>Verbatim</strong>
+              <span>zéro reformulation, zéro trahison du propos</span>
+            </li>
+            <li>
+              <strong>Émergent</strong>
+              <span>les thèmes naissent des données, pas d’une grille</span>
+            </li>
+            <li>
+              <strong>Souverain</strong>
+              <span>tourne en local, sur des modèles ouverts</span>
+            </li>
+          </ul>
           <ul className="hero__meta" aria-hidden={datasets.length === 0}>
             <li>
               <strong>{datasets.length}</strong> consultations
