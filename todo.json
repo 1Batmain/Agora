@@ -59,6 +59,13 @@
       "lane": "research",
       "status": "todo",
       "note": "clf MLP/nomic 0.939 et ministral-3 0.934 battent Mistral 0.928 en local."
+    },
+    {
+      "id": "edge-weight-transform",
+      "title": "A/B : transformer le poids des arêtes kNN (cosinus² / noyau gaussien) avant Leiden",
+      "lane": "research",
+      "status": "todo",
+      "note": "Les arêtes sont déjà pondérées au cosinus brut et Leiden les utilise. Tester si accentuer les liens forts — poids = cosinus², ou un noyau gaussien sur la distance — améliore la modularité ET l'alignement à la taxo officielle (repnum), vs cosinus brut. Harnais type k-sweep (research/)."
     }
   ]
 }
