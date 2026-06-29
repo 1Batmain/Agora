@@ -1705,3 +1705,47 @@ body {
 .overview__avis-quote--open { cursor: pointer; transition: background .12s, border-color .12s; }
 .overview__avis-quote--open:hover { background: #ececfe; border-left-color: var(--agora-hover, #1212ff); }
 .overview__avis-quote--open:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
+
+/* ───────────────────────── Page d'exploration des avis ───────────────────────── */
+.overview__crumb {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .9rem; color: var(--agora, #000091);
+}
+.btn-secondary {
+  background: #fff; color: var(--agora, #000091);
+  border: 1px solid var(--agora, #000091); border-radius: 6px;
+  padding: 9px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-secondary:hover { background: #f1f1fb; }
+.btn-secondary:disabled { color: var(--grey-300, #999); border-color: var(--grey-300, #ccc); cursor: not-allowed; }
+
+.avisx__controls { display: flex; gap: .8rem; flex-wrap: wrap; margin: 0 0 1rem; }
+.avisx__search {
+  flex: 1 1 280px; min-width: 0;
+  padding: .6rem .8rem; font-size: .95rem;
+  border: 1px solid #ccccdb; border-radius: 6px; background: #fff;
+}
+.avisx__search:focus { outline: 2px solid var(--agora, #000091); outline-offset: 1px; border-color: var(--agora, #000091); }
+.avisx__filter {
+  flex: 0 1 240px;
+  padding: .6rem .7rem; font-size: .95rem;
+  border: 1px solid #ccccdb; border-radius: 6px; background: #fff; cursor: pointer;
+}
+.avisx__count { color: #777; font-size: .85rem; margin: 0 0 1rem; }
+
+.avisx__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
+.avisx__item {
+  padding: 1rem 1.1rem; border: 1px solid #e6e6ef; border-left: 3px solid #d7d7e6;
+  border-radius: 6px; background: #fff; cursor: pointer;
+  transition: border-color .12s, background .12s, box-shadow .12s;
+}
+.avisx__item:hover { background: #fafaff; border-left-color: var(--agora, #000091); box-shadow: 0 1px 6px rgba(0,0,145,.06); }
+.avisx__item:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
+.avisx__excerpt { margin: 0 0 .6rem; color: #222; line-height: 1.55; }
+.avisx__chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.avisx__chip {
+  font-size: .72rem; line-height: 1; padding: .3rem .55rem;
+  border: 1px solid currentColor; border-radius: 999px;
+  background: #fff; white-space: nowrap;
+}
+.avisx__more { margin: 1.6rem auto 0; display: block; }
