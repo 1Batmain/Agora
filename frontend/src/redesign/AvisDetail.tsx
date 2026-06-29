@@ -89,7 +89,7 @@ function langName(code?: string): string {
  *    highlighted, with no useless toggle.
  * A language badge announces the translation (« traduit de l'allemand »).
  */
-function AvisBody({ avis }: { avis: AvisProvenance }) {
+export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; highlight?: boolean }) {
   const isFr = !avis.lang || avis.lang.toLowerCase().startsWith('fr');
   const hasTranslation = !isFr && typeof avis.text_fr === 'string' && avis.text_fr.length > 0;
   const [showOriginal, setShowOriginal] = useState(false);
@@ -99,6 +99,8 @@ function AvisBody({ avis }: { avis: AvisProvenance }) {
 
   // French reading view is the default for a translated avis; the original carries highlights.
   const original = showOriginal || !hasTranslation;
+  // Verbatim marks render only on the ORIGINAL text AND when the global toggle is on.
+  const renderHighlights = original && highlight;
 
   return (
     <>
@@ -109,10 +111,12 @@ function AvisBody({ avis }: { avis: AvisProvenance }) {
           </span>
         )}
         {avis.claims.length} claim{avis.claims.length > 1 ? 's' : ''}
-        {original ? (
+        {renderHighlights ? (
           <>
             {' '}surligné{avis.claims.length > 1 ? 's' : ''} · cible soulignée · chaque couleur = un thème
           </>
+        ) : original ? (
+          <> · surlignages masqués</>
         ) : (
           <> · couleurs = thèmes (surlignages sur l'original)</>
         )}
@@ -129,8 +133,8 @@ function AvisBody({ avis }: { avis: AvisProvenance }) {
       </p>
 
       {/* Cluster legend: the distinct themes present in THIS avis, each in its cluster
-          colour → ties the French reading view (no inline marks) back to the map too. */}
-      {clustersOf(avis.claims).length > 0 && (
+          colour → ties the reading view back to the map. Hidden when highlights are off. */}
+      {highlight && clustersOf(avis.claims).length > 0 && (
         <ul className="avisdetail__legend">
           {clustersOf(avis.claims).map((c) => (
             <li key={c.key} className="avisdetail__legenditem">
@@ -143,25 +147,27 @@ function AvisBody({ avis }: { avis: AvisProvenance }) {
 
       {original ? (
         <article className="avisdetail__text" lang={avis.lang}>
-          {segments(avis.text, avis.claims).map((seg, i) =>
-            seg.claim ? (
-              <mark
-                key={i}
-                className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
-                title={`Thème : ${seg.claim.theme_title}${seg.target ? ' · cible' : ''}`}
-                style={{
-                  backgroundColor: tint(seg.claim.color),
-                  borderBottom: seg.target
-                    ? `2px solid ${seg.claim.color}`
-                    : `2px solid ${tint(seg.claim.color)}`,
-                }}
-              >
-                {seg.text}
-              </mark>
-            ) : (
-              <span key={i}>{seg.text}</span>
-            ),
-          )}
+          {renderHighlights
+            ? segments(avis.text, avis.claims).map((seg, i) =>
+                seg.claim ? (
+                  <mark
+                    key={i}
+                    className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
+                    title={`Thème : ${seg.claim.theme_title}${seg.target ? ' · cible' : ''}`}
+                    style={{
+                      backgroundColor: tint(seg.claim.color),
+                      borderBottom: seg.target
+                        ? `2px solid ${seg.claim.color}`
+                        : `2px solid ${tint(seg.claim.color)}`,
+                    }}
+                  >
+                    {seg.text}
+                  </mark>
+                ) : (
+                  <span key={i}>{seg.text}</span>
+                ),
+              )
+            : avis.text}
         </article>
       ) : (
         <article className="avisdetail__text avisdetail__text--fr" lang="fr">
@@ -179,7 +185,7 @@ function AvisBody({ avis }: { avis: AvisProvenance }) {
  * The button is MARKED when the avis already carries a flag — state visible at load
  * (the parent feeds `flagText` from the dataset-wide `/flags`). Re-openable to edit.
  */
-function FlagControl({
+export function FlagControl({
   dataset,
   avisId,
   flagText,
