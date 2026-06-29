@@ -91,54 +91,6 @@ export function Landing({
           )}
         </section>
 
-        <section className="landing__how">
-          <h2>Comment ça marche</h2>
-          <p className="how__lead">
-            Agora utilise l'IA pour identifier les différentes thématiques abordées
-            dans une contribution. Il segmente l'avis sans en modifier le contenu.
-            Chaque segment est ensuite encodé dans un espace latent pour identifier les
-            thèmes les plus proches.
-          </p>
-          <ol className="how__steps">
-            <li className="how__step">
-              <span className="how__num">1</span>
-              <div>
-                <strong>Extraction des thèmes abordés</strong>
-                <p>
-                  Chaque contribution est segmentée par thématique{' '}
-                  <em>sans en modifier le contenu</em> — cette tâche est effectuée par
-                  un grand modèle de langue (Mistral).
-                </p>
-              </div>
-            </li>
-            <li className="how__step">
-              <span className="how__num">2</span>
-              <div>
-                <strong>Regroupement automatique</strong>
-                <p>
-                  Les idées sont transformees en vecteur d'embedding puis sont regroupées
-                  par thème <em>automatiquement</em> — les sujets émergent des données,
-                  aucune catégorie n'est imposée.
-                </p>
-              </div>
-            </li>
-            <li className="how__step">
-              <span className="how__num">3</span>
-              <div>
-                <strong>Synthèse traçable</strong>
-                <p>
-                  Chaque thème reçoit une synthèse lisible, et chaque idée reste{' '}
-                  <em>traçable</em> jusqu'à la contribution d'origine — on peut
-                  toujours remonter à la source.
-                </p>
-              </div>
-            </li>
-          </ol>
-          <p className="how__footer">
-            Modèles ouverts · traitement souverain · multilingue.
-          </p>
-        </section>
-
         <section className="landing__pipeline">
           <h2>Sous le capot — le pipeline</h2>
           <p className="how__lead">
