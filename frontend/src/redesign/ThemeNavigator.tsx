@@ -5,16 +5,17 @@ import type { SpatialTheme } from './contract';
 const TOP_N = 5;
 
 /**
- * Navigateur de clusters par DRILL (un niveau à la fois) — remplace l'ancien
- * accordéon scrollable. On affiche les enfants du NIVEAU COURANT (`currentId`),
- * triés par nombre d'avis : les 5 plus gros + un bouton « Voir plus » qui déplie
- * tout le niveau (pas de scroll). Cliquer un cluster DESCEND dedans (il devient le
- * niveau courant) ; un contrôle de RETOUR au-dessus remonte d'un niveau.
+ * Navigateur de clusters FLUIDE — le cluster cliqué ne devient JAMAIS un titre :
+ * il reste un item de menu, juste MARQUÉ, ÉPINGLÉ EN HAUT, avec ses enfants
+ * déroulés/indentés juste en dessous. Le chemin racine→courant reste affiché
+ * (chaque ancêtre est un item cliquable) pour ne JAMAIS perdre la trace de où
+ * l'on est. Cliquer un enfant l'épingle à son tour + ouvre ses enfants : on
+ * descend ainsi la hiérarchie sans rechargement brutal.
  *
  * 100 % FRONT : tout vient du payload `/analysis` (liste plate de thèmes reliés
  * par `parent_id`). Le `%` d'une ligne = `n_avis / n_avis_du_parent` (ou `/total`
  * à la racine). Le composant ne garde en interne QUE l'état « Voir plus » du
- * niveau ; le niveau courant est piloté par le parent (`currentId`/`onDrill`/`onBack`).
+ * niveau ; le cluster courant est piloté par le parent (`currentId`/`onSelect`).
  */
 export function ThemeNavigator({
   themes,
@@ -28,13 +29,13 @@ export function ThemeNavigator({
   themes: SpatialTheme[];
   /** Voix du niveau racine (dénominateur des thèmes `parent_id == null`). */
   total: number;
-  /** Niveau courant : `null` = racine ; sinon on montre les enfants de ce thème. */
+  /** Cluster courant : `null` = racine ; sinon on l'épingle + montre ses enfants. */
   currentId?: string | null;
-  /** Descendre dans un cluster (il devient le niveau courant). */
+  /** Épingler/sélectionner un cluster (alias historique de `onSelect`). */
   onDrill?: (themeId: string) => void;
-  /** Remonter d'un niveau (vers le parent du parent ; depuis un macro → racine). */
+  /** Remonter d'un niveau (vers le parent du cluster courant). */
   onBack?: () => void;
-  /** Suivre la synthèse sur le cluster cliqué (peut être identique à `onDrill`). */
+  /** Suivre la synthèse sur le cluster cliqué. */
   onSelect?: (themeId: string) => void;
 }) {
   // parent_id → enfants triés par n_avis décroissant (un seul passage).
@@ -64,62 +65,88 @@ export function ThemeNavigator({
   if (!roots.length || total <= 0) return null;
 
   const current = currentId != null ? byId.get(currentId) ?? null : null;
+
+  // Chemin racine→courant (inclus) — vide à la racine. Chaque ancêtre reste un
+  // item de menu épinglé (jamais un titre).
+  const path: SpatialTheme[] = [];
+  {
+    let c: SpatialTheme | null = current;
+    let guard = 0;
+    while (c && guard++ < 64) {
+      path.unshift(c);
+      c = c.parent_id != null ? byId.get(c.parent_id) ?? null : null;
+    }
+  }
+
+  // Enfants du cluster courant (ou racines à l'accueil), denom = voix du parent.
   const kids = childrenOf.get(currentId ?? null) ?? [];
-  // Dénominateur du % : voix du parent courant (ou voix totales à la racine).
   const denom = current ? current.n_avis ?? 0 : total;
   const visible = showAll ? kids : kids.slice(0, TOP_N);
 
-  // En-tête : nom du cluster parent courant. Retour : on remonte vers son parent
-  // (le grand-parent) — affiché en libellé si connu, sinon « Vue générale ».
-  const parentName = current ? current.title || current.label : null;
+  // Dénominateur du % d'un item du chemin = voix de SON parent (ou total racine).
+  const pathDenom = (t: SpatialTheme) => {
+    const p = t.parent_id != null ? byId.get(t.parent_id) ?? null : null;
+    return p ? p.n_avis ?? 0 : total;
+  };
+
   const grandParent =
     current && current.parent_id != null ? byId.get(current.parent_id) ?? null : null;
   const backLabel = grandParent ? grandParent.title || grandParent.label : 'Vue générale';
 
+  const row = (
+    t: SpatialTheme,
+    rowDenom: number,
+    opts: { selected?: boolean; child?: boolean; open?: boolean },
+  ) => {
+    const name = t.title || t.label;
+    const pct = rowDenom > 0 ? Math.round(((t.n_avis ?? 0) / rowDenom) * 100) : 0;
+    const caret = opts.open ? '▾' : t.has_children ? '▸' : '';
+    return (
+      <button
+        type="button"
+        key={t.id}
+        className={
+          'tnav__row' +
+          (opts.selected ? ' tnav__row--selected' : '') +
+          (opts.child ? ' tnav__row--child' : '')
+        }
+        aria-current={opts.selected ? 'true' : undefined}
+        title={name}
+        onClick={() => {
+          onSelect?.(t.id);
+          onDrill?.(t.id);
+        }}
+      >
+        <span className="tnav__caret" aria-hidden>
+          {caret}
+        </span>
+        <span className="tnav__label">{name}</span>
+        <span className="tnav__track">
+          <span className="tnav__fill" style={{ width: `${pct}%` }} />
+        </span>
+        <span className="tnav__pct">{pct}%</span>
+      </button>
+    );
+  };
+
   return (
     <div className="tnav" aria-label="Navigateur de clusters">
-      {currentId != null && (
-        <div className="tnav__nav">
+      {/* Chemin épinglé en haut : ancêtres + cluster courant marqué (jamais un titre). */}
+      {path.length > 0 && (
+        <div className="tnav__path">
           <button type="button" className="tnav__back" onClick={() => onBack?.()}>
             ← {backLabel}
           </button>
-          {parentName && (
-            <span className="tnav__here" title={parentName}>
-              {parentName}
-            </span>
-          )}
+          {path.map((t) => row(t, pathDenom(t), { selected: t.id === currentId, open: true }))}
         </div>
       )}
 
+      {/* Enfants du courant (ou racines à l'accueil), indentés sous le chemin. */}
       {visible.length > 0 ? (
-        visible.map((t) => {
-          const name = t.title || t.label;
-          const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
-          return (
-            <button
-              type="button"
-              key={t.id}
-              className="tnav__row"
-              title={name}
-              onClick={() => {
-                onSelect?.(t.id);
-                onDrill?.(t.id);
-              }}
-            >
-              <span className="tnav__caret" aria-hidden>
-                {t.has_children ? '▸' : ''}
-              </span>
-              <span className="tnav__label">{name}</span>
-              <span className="tnav__track">
-                <span className="tnav__fill" style={{ width: `${pct}%` }} />
-              </span>
-              <span className="tnav__pct">{pct}%</span>
-            </button>
-          );
-        })
-      ) : (
+        visible.map((t) => row(t, denom, { child: path.length > 0 }))
+      ) : path.length > 0 ? (
         <p className="tnav__empty">Cluster terminal — aucun sous-cluster.</p>
-      )}
+      ) : null}
 
       {kids.length > TOP_N && (
         <button type="button" className="tnav__more" onClick={() => setShowAll((s) => !s)}>
