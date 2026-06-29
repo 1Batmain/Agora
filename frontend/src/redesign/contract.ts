@@ -22,6 +22,8 @@ export interface SpatialTheme {
   title?: string;
   /** Optional keyword stubs (legacy caption / hover detail). */
   keywords?: string[];
+  /** Contributions représentatives (proches du centroïde), verbatim. */
+  representative_claims?: string[];
   /**
    * Optional LLM hover fields (emitted by the backend in parallel — graceful when
    * absent). `hook` = one-line accroche; `description` = a short Markdown synthesis
