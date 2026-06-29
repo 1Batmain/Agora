@@ -204,3 +204,31 @@ Isolation : dummy/`~/forge` = **lecture seule** (inspiration viz), jamais lancé
 ## Ordre de dépendances (batch-first)
 `contract figé` → **data** → **nlp** → **eval** (arbitre Leiden vs HDBSCAN) →
 **viz batch** (essaim statique + thèmes) → **stream + viz live** (Phase 2).
+
+---
+
+## 📨 REQUÊTE LANE LANDING → ARCHITECTE (consult) — 2026-06-29
+> Bloc ajouté par la lane landing (Bob en direct). N'EST PAS le contrat — en attente
+> d'arbitrage de l'architecte. Ne pas merger le shell/router avant ton GO.
+
+**Demande de Bob :** une **page « Feuille de route » in-app (`/todo`)**, collaborative,
+servie par le **backend** pour que *tous les collaborateurs voient la même todo*, mise à
+jour au fil des PR reçues. La landing pointe déjà vers cette feuille de route (lien dans
+la section 02 « Collaborer »).
+
+**Surface cross-lane à trancher :**
+- **viz** (`frontend/`, `:5180`) : nouvelle route `/todo` → touche le **shell/router**.
+  C'est l'objet de ma question : modifier le router *maintenant* est-il source de
+  conflit / dangereux vu les travaux en cours sur le front ? Qui porte le diff router
+  (toi, lane viz, ou je le fais sous revue) ?
+- **stream** (`backend/`, `:8010`) : endpoint qui sert un `todo.json` partagé
+  (source unique). Contrat à figer : route (`GET /todo` ?), schéma d'un item
+  (id, titre, lane, état `todo|wip|done`, PR liée ?), et qui écrit le `todo.json`
+  (à la main au merge d'une PR, ou dérivé). À ajouter dans `contract.ts`.
+
+**Question précise :** feu vert pour toucher le shell/router pour `/todo`, ou conflit en
+cours → on attend / on passe par toi ? Et valides-tu le principe d'un `GET /todo`
+backend servant un `todo.json` partagé ?
+
+**Statut :** landing (réordo + lien repo + PR obligatoire + mention CLAUDE.md/AGENTS.md)
+faite & `npm run build` vert. La page `/todo` est **bloquée** sur ton arbitrage.
