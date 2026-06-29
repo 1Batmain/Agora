@@ -1810,3 +1810,11 @@ body {
   font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .85em;
   background: #ececfe; color: var(--agora, #000091); padding: .05rem .3rem;
 }
+
+/* ── Aperçu : bouton « retour vue générale » sous le titre de la synthèse focus ── */
+.overview__backgen {
+  display: inline-block; margin: 0 0 .8rem; border: 0; background: none; cursor: pointer;
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; font-weight: 600;
+  color: var(--agora, #000091); padding: 0;
+}
+.overview__backgen:hover { text-decoration: underline; }
