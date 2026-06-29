@@ -90,17 +90,13 @@ export default function RedesignApp({
   const levelKeywords = contextTheme
     ? contextTheme.keywords
     : (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords;
-  const levelBreakdown = useMemo(() => {
-    const themes = analysis?.themes ?? [];
-    const parentId = contextTheme?.id ?? null;
-    const sibs = themes.filter((t) => (t.parent_id ?? null) === parentId);
-    const items = [...sibs]
-      .sort((a, b) => (b.n_avis ?? 0) - (a.n_avis ?? 0))
-      .slice(0, 5)
-      .map((t) => ({ label: t.title || t.label, value: t.n_avis ?? 0, color: t.color }));
-    const total = contextTheme?.n_avis ?? sibs.reduce((s, t) => s + (t.n_avis ?? 0), 0);
-    return { items, total };
-  }, [analysis, contextTheme]);
+  // Dénominateur racine du navigateur : voix totales (= somme des thèmes racine).
+  const themesTotal = useMemo(() => {
+    const all = analysis?.themes ?? [];
+    const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
+    const roots = all.filter((t) => !t.parent_id);
+    return (totals.participants ?? totals.n_avis ?? roots.reduce((s, t) => s + (t.n_avis ?? 0), 0)) || 0;
+  }, [analysis]);
 
   // `poll=true` is a background re-check while the backend is still BUILDING:
   // it must not flash the busy spinner nor reset the user's drill path/selection.
@@ -396,8 +392,12 @@ export default function RedesignApp({
               loading={insightsLoading}
               source={insightsSource}
               keywords={levelKeywords}
-              breakdown={levelBreakdown.items}
-              breakdownTotal={levelBreakdown.total}
+              themes={themes}
+              themesTotal={themesTotal}
+              onSelectTheme={(id) => {
+                const t = themes.find((x) => x.id === id);
+                if (t) setSelected(t);
+              }}
               flagTarget={
                 dataset && contextTheme
                   ? {
