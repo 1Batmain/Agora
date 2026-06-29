@@ -1364,6 +1364,11 @@ body {
   font-size: 1.05rem; letter-spacing: .02em; margin: 0 0 1rem; color: var(--agora, #000091);
 }
 .overview__loading { color: #999; }
+/* Bloc de synthèse DYNAMIQUE (sous le navigateur de thèmes) — globale ou par thème. */
+.overview__dynsynth {
+  margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid #ececf4;
+}
+.overview__dynsynth .synthesis__subhead { margin-top: 0; }
 
 /* ── Landing : section « Comment ça marche » (pipeline, épuré) ── */
 .landing__how { margin-top: 4.5rem; }
@@ -1639,6 +1644,12 @@ body {
 .tnav__row:last-child { border-bottom: 0; }
 .tnav__row:hover { background: #f5f5fe; }
 .tnav__row[aria-expanded="true"] { background: #f0f0fc; }
+.tnav__row--selected,
+.tnav__row--selected:hover {
+  background: #e6e6fb;
+  box-shadow: inset 3px 0 0 var(--agora, #000091);
+}
+.tnav__row--selected .tnav__label { font-weight: 600; color: var(--agora, #000091); }
 .tnav__caret {
   font-size: .7rem; color: var(--agora, #000091); text-align: center; user-select: none;
 }
