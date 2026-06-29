@@ -1,18 +1,29 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { AnalysisPayload, AvisListItem, AvisProvenance, Consultation, SpatialTheme } from './contract';
-import { fetchAnalysis, fetchAvis, fetchAvisList } from './analysisApi';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import type {
+  AnalysisPayload,
+  AvisClaim,
+  AvisListItem,
+  AvisProvenance,
+  Consultation,
+  SpatialTheme,
+} from './contract';
+import { fetchAnalysis, fetchAvis, fetchAvisList, fetchFlags } from './analysisApi';
 import { Header } from './Header';
-import { AvisDetail } from './AvisDetail';
+import { AvisBody, FlagControl } from './AvisDetail';
 import { LOCALE } from './strings';
 
-const PAGE = 30; // taille d'une page « Voir plus »
+const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entiers inline)
 
 /**
- * Page d'EXPLORATION DES AVIS : recense TOUS les avis d'une consultation, avec
- * recherche plein-texte (debounce), filtre par cluster (macros/thèmes de `/analysis`)
- * et pagination « Voir plus ». Cliquer un avis ouvre son détail complet (`AvisDetail`,
- * surlignages verbatim) ; `focusAvisId` ouvre directement ce détail au chargement
- * (entrée depuis une citation de la synthèse), la liste restant accessible au retour.
+ * Page d'EXPLORATION DES AVIS — AUTO-SUFFISANTE : recense TOUS les avis d'une
+ * consultation et affiche CHACUN EN ENTIER, INLINE, sous forme de carte : son texte
+ * complet avec ses **surlignages** verbatim (claims, réutilise `AvisBody`), un toggle
+ * **FR / original** par avis (si traduit) et un bouton **« Signaler »** par avis. Un
+ * toggle GLOBAL « Surligner les passages retenus » (défaut ON) masque/affiche les
+ * surlignages sur toutes les cartes. Recherche plein-texte (debounce), filtre par
+ * cluster et pagination « Voir plus ». PLUS de page séparée par avis : `focusAvisId`
+ * (entrée depuis une citation) épingle la carte ciblée en tête, mise en évidence et
+ * scrollée en vue.
  */
 export function AvisExplorer({
   dataset,
@@ -20,7 +31,7 @@ export function AvisExplorer({
   onHome,
 }: {
   dataset: Consultation;
-  /** Avis à ouvrir directement au chargement (deep-link `&focus=`), sinon la liste. */
+  /** Avis à mettre en évidence au chargement (deep-link `&focus=`) : carte épinglée. */
   focusAvisId?: string | null;
   onHome: () => void;
 }) {
@@ -35,10 +46,16 @@ export function AvisExplorer({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Avis ouvert (détail). Initialisé sur le focus deep-link.
-  const [openAvisId, setOpenAvisId] = useState<string | null>(focusAvisId ?? null);
-  const [avis, setAvis] = useState<AvisProvenance | null>(null);
-  const [avisLoading, setAvisLoading] = useState(false);
+  // Toggle GLOBAL des surlignages (défaut ON) — pilote toutes les cartes.
+  const [showHighlights, setShowHighlights] = useState(true);
+
+  // Flags d'avis du dataset (avis_id → texte), chargés une fois → restauration à l'affichage.
+  const [flags, setFlags] = useState<Record<string, string>>({});
+
+  // Avis ciblé par une citation : chargé À PART (fetchAvis) et épinglé en tête, pour
+  // qu'il soit toujours présent quelle que soit la pagination.
+  const [focusAvis, setFocusAvis] = useState<AvisProvenance | null>(null);
+  const focusRef = useRef<HTMLLIElement>(null);
 
   // Debounce de la recherche : `qInput` → `q` après 300 ms d'inactivité.
   useEffect(() => {
@@ -54,6 +71,20 @@ export function AvisExplorer({
       .then((a) => {
         if (!cancelled) setThemes((a?.data as AnalysisPayload | null)?.themes ?? []);
       });
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset.id]);
+
+  // Flags du dataset (clé = avis_id) → état « Signalé » de chaque carte au chargement.
+  useEffect(() => {
+    let cancelled = false;
+    fetchFlags(dataset.id).then((list) => {
+      if (cancelled) return;
+      const map: Record<string, string> = {};
+      for (const f of list) if (f.avis_id) map[f.avis_id] = f.text;
+      setFlags(map);
+    });
     return () => {
       cancelled = true;
     };
@@ -75,22 +106,24 @@ export function AvisExplorer({
     };
   }, [dataset.id, themeId, q]);
 
-  // Avis ouvert → charge son détail complet (surlignages verbatim).
+  // Avis ciblé (citation) → chargé une fois pour l'épingler en tête.
   useEffect(() => {
-    if (!openAvisId) {
-      setAvis(null);
+    if (!focusAvisId) {
+      setFocusAvis(null);
       return;
     }
     let cancelled = false;
-    setAvisLoading(true);
-    setAvis(null);
-    fetchAvis(dataset.id, openAvisId)
-      .then(({ data }) => !cancelled && setAvis(data))
-      .finally(() => !cancelled && setAvisLoading(false));
+    setFocusAvis(null);
+    fetchAvis(dataset.id, focusAvisId).then(({ data }) => !cancelled && setFocusAvis(data));
     return () => {
       cancelled = true;
     };
-  }, [dataset.id, openAvisId]);
+  }, [dataset.id, focusAvisId]);
+
+  // Scrolle la carte épinglée en vue dès qu'elle est chargée (mise en évidence).
+  useEffect(() => {
+    if (focusAvis) focusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [focusAvis]);
 
   function loadMore() {
     setLoadingMore(true);
@@ -104,119 +137,172 @@ export function AvisExplorer({
       .finally(() => setLoadingMore(false));
   }
 
+  const onFlagChange = (id: string, text: string | null) =>
+    setFlags((prev) => {
+      const next = { ...prev };
+      if (text && text.trim()) next[id] = text;
+      else delete next[id];
+      return next;
+    });
+
   // Thèmes ordonnés hiérarchiquement (parent puis enfants) avec profondeur → <option> indentées.
   const themeOptions = useMemo(() => orderThemes(themes), [themes]);
   const hasMore = items.length < total;
+  // L'avis épinglé est retiré de la liste pour éviter un doublon avec la carte en tête.
+  const listItems = focusAvis ? items.filter((it) => it.avis_id !== focusAvis.id) : items;
 
   return (
     <div className="agora overview">
-      <Header
-        onHome={onHome}
-        right={<span className="overview__crumb">{dataset.label}</span>}
-      />
+      <Header onHome={onHome} right={<span className="overview__crumb">{dataset.label}</span>} />
 
       <main className="overview__body avisx">
-        {openAvisId ? (
-          <AvisDetail
-            avis={avis}
-            loading={avisLoading}
-            dataset={dataset.id}
-            backLabel="← retour à la liste"
-            onBack={() => setOpenAvisId(null)}
+        <section className="overview__head">
+          <h1 className="overview__title">Explorer les avis</h1>
+          <p className="overview__context">
+            Tous les avis de la consultation, en entier : chaque contribution avec ses passages
+            retenus surlignés, sa traduction si besoin, et un signalement possible.
+          </p>
+        </section>
+
+        <div className="avisx__controls">
+          <input
+            className="avisx__search"
+            type="search"
+            value={qInput}
+            placeholder="Rechercher dans les avis…"
+            aria-label="Rechercher dans les avis"
+            onChange={(e) => setQInput(e.target.value)}
           />
-        ) : (
-          <>
-            <section className="overview__head">
-              <h1 className="overview__title">Explorer les avis</h1>
-              <p className="overview__context">
-                Tous les avis de la consultation : recherche plein-texte, filtre par
-                thème, et accès au texte complet de chaque contribution.
-              </p>
-            </section>
+          <select
+            className="avisx__filter"
+            value={themeId ?? ''}
+            aria-label="Filtrer par thème"
+            onChange={(e) => setThemeId(e.target.value || null)}
+          >
+            <option value="">Tous les thèmes</option>
+            {themeOptions.map(({ theme, depth }) => (
+              <option key={theme.id} value={theme.id}>
+                {'  '.repeat(depth)}
+                {theme.title || theme.label}
+              </option>
+            ))}
+          </select>
+          <label className="avisx__hltoggle" title="Afficher ou masquer les passages retenus">
+            <input
+              type="checkbox"
+              checked={showHighlights}
+              onChange={(e) => setShowHighlights(e.target.checked)}
+            />
+            Surligner les passages retenus
+          </label>
+        </div>
 
-            <div className="avisx__controls">
-              <input
-                className="avisx__search"
-                type="search"
-                value={qInput}
-                placeholder="Rechercher dans les avis…"
-                aria-label="Rechercher dans les avis"
-                onChange={(e) => setQInput(e.target.value)}
+        <p className="avisx__count" aria-live="polite">
+          {loading
+            ? 'Chargement…'
+            : `${total.toLocaleString(LOCALE)} avis${q || themeId ? ' (filtrés)' : ''}`}
+        </p>
+
+        <ul className="avisx__list">
+          {/* Carte épinglée : l'avis ciblé par une citation, mis en évidence + scrollé. */}
+          {focusAvis && (
+            <AvisCard
+              ref={focusRef}
+              avis={focusAvis}
+              themes={themesOf(focusAvis.claims)}
+              dataset={dataset.id}
+              highlight={showHighlights}
+              flagText={flags[focusAvis.id]}
+              onFlagChange={onFlagChange}
+              focused
+            />
+          )}
+
+          {!loading &&
+            listItems.map((it) => (
+              <AvisCard
+                key={it.avis_id}
+                avis={toProvenance(it)}
+                themes={it.themes}
+                dataset={dataset.id}
+                highlight={showHighlights}
+                flagText={flags[it.avis_id]}
+                onFlagChange={onFlagChange}
               />
-              <select
-                className="avisx__filter"
-                value={themeId ?? ''}
-                aria-label="Filtrer par thème"
-                onChange={(e) => setThemeId(e.target.value || null)}
-              >
-                <option value="">Tous les thèmes</option>
-                {themeOptions.map(({ theme, depth }) => (
-                  <option key={theme.id} value={theme.id}>
-                    {'  '.repeat(depth)}
-                    {theme.title || theme.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            ))}
+        </ul>
 
-            <p className="avisx__count" aria-live="polite">
-              {loading
-                ? 'Chargement…'
-                : `${total.toLocaleString(LOCALE)} avis${q || themeId ? ' (filtrés)' : ''}`}
-            </p>
+        {!loading && listItems.length === 0 && !focusAvis && (
+          <p className="overview__loading">Aucun avis ne correspond.</p>
+        )}
 
-            {!loading && items.length === 0 ? (
-              <p className="overview__loading">Aucun avis ne correspond.</p>
-            ) : (
-              <ul className="avisx__list">
-                {items.map((it) => (
-                  <li
-                    key={it.avis_id}
-                    className="avisx__item"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setOpenAvisId(it.avis_id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setOpenAvisId(it.avis_id);
-                      }
-                    }}
-                  >
-                    <p className="avisx__excerpt">{it.excerpt}</p>
-                    {it.themes.length > 0 && (
-                      <div className="avisx__chips">
-                        {it.themes.map((th) => (
-                          <span
-                            key={th.id}
-                            className="avisx__chip"
-                            style={{ borderColor: th.color, color: th.color }}
-                          >
-                            {th.title}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {hasMore && (
-              <button
-                type="button"
-                className="btn-secondary avisx__more"
-                disabled={loadingMore}
-                onClick={loadMore}
-              >
-                {loadingMore ? 'Chargement…' : `Voir plus (${items.length}/${total})`}
-              </button>
-            )}
-          </>
+        {hasMore && (
+          <button
+            type="button"
+            className="btn-secondary avisx__more"
+            disabled={loadingMore}
+            onClick={loadMore}
+          >
+            {loadingMore ? 'Chargement…' : `Voir plus (${items.length}/${total})`}
+          </button>
         )}
       </main>
     </div>
   );
+}
+
+/** Une carte d'avis INLINE : en-tête (thèmes + Signaler) puis le texte complet surlignable. */
+const AvisCard = forwardRef<
+  HTMLLIElement,
+  {
+    avis: AvisProvenance;
+    themes: { id: string; title: string; color: string }[];
+    dataset: string;
+    highlight: boolean;
+    flagText?: string;
+    onFlagChange: (id: string, text: string | null) => void;
+    focused?: boolean;
+  }
+>(({ avis, themes, dataset, highlight, flagText, onFlagChange, focused = false }, ref) => (
+  <li ref={ref} className={`avisx__card${focused ? ' avisx__card--focus' : ''}`}>
+    <div className="avisx__cardhead">
+      {themes.length > 0 && (
+        <div className="avisx__chips">
+          {themes.map((th) => (
+            <span
+              key={th.id}
+              className="avisx__chip"
+              style={{ borderColor: th.color, color: th.color }}
+            >
+              {th.title}
+            </span>
+          ))}
+        </div>
+      )}
+      <FlagControl
+        dataset={dataset}
+        avisId={avis.id}
+        flagText={flagText}
+        onFlagChange={onFlagChange}
+      />
+    </div>
+    <AvisBody avis={avis} highlight={highlight} />
+  </li>
+));
+
+/** Vue `AvisProvenance` d'un item de liste (qui porte déjà l'avis entier). */
+function toProvenance(it: AvisListItem): AvisProvenance {
+  return { id: it.avis_id, text: it.text, text_fr: it.text_fr, lang: it.lang, claims: it.claims };
+}
+
+/** Thèmes UNIQUES (id/title/color) portés par des claims, dans l'ordre vu (carte épinglée). */
+function themesOf(claims: AvisClaim[]): { id: string; title: string; color: string }[] {
+  const seen = new Map<string, { id: string; title: string; color: string }>();
+  for (const c of claims) {
+    const id = c.cluster_id ?? c.theme_title;
+    if (id && !seen.has(id)) seen.set(id, { id, title: c.theme_title, color: c.color });
+  }
+  return [...seen.values()];
 }
 
 /** DFS hiérarchique : chaque thème suivi de ses enfants, avec profondeur (indentation). */
