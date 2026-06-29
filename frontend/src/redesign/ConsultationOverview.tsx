@@ -4,7 +4,7 @@ import type { AnalysisPayload } from './contract';
 import { fetchAnalysis, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
-import { Poll } from './Poll';
+import { ThemeNavigator } from './ThemeNavigator';
 import { LOCALE } from './strings';
 
 /**
@@ -49,14 +49,11 @@ export function ConsultationOverview({
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
-  // Santé générale : les 5 plus gros macro-thèmes en barres de % (part des voix).
-  const macros = (analysis?.themes ?? []).filter((t) => !t.parent_id);
-  const breakdownTotal =
+  // Arbre navigable : tous les thèmes du payload, dénominateur racine = voix totales.
+  const themes = analysis?.themes ?? [];
+  const macros = themes.filter((t) => !t.parent_id);
+  const navTotal =
     (totals.participants ?? totals.n_avis ?? macros.reduce((s, m) => s + (m.n_avis ?? 0), 0)) || 0;
-  const breakdown = [...macros]
-    .sort((a, b) => (b.n_avis ?? 0) - (a.n_avis ?? 0))
-    .slice(0, 5)
-    .map((m) => ({ label: m.title || m.label, value: m.n_avis ?? 0, color: m.color }));
 
   return (
     <div className="agora overview">
@@ -96,7 +93,7 @@ export function ConsultationOverview({
               ))}
             </div>
           )}
-          <Poll items={breakdown} total={breakdownTotal} />
+          <ThemeNavigator themes={themes} total={navTotal} />
           {loading ? (
             <p className="overview__loading">Chargement de la synthèse…</p>
           ) : synthesis ? (
