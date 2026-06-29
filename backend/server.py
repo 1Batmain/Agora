@@ -59,6 +59,7 @@ from backend import (
     flags_store,
     live_cluster,
     serve_metrics,
+    todo_store,
 )
 
 
@@ -162,6 +163,18 @@ def datasets() -> list[dict]:
              for name in list_open_consultations()]
     # Ouvertes en tête : ce sont celles où l'on peut encore agir.
     return open_ + closed
+
+
+# ===================== Feuille de route collaborative (/todo) ===================== #
+@app.get("/todo")
+def get_todo() -> dict:
+    """Feuille de route in-app : LIT `todo.json` à la racine du repo (instantané, pas de dataset).
+
+    Renvoie `{items: TodoItem[], updated_at?}` où `TodoItem` = `{id, title, lane,
+    status: 'todo'|'wip'|'done', pr?, note?}`. Lecture tolérante (fichier absent →
+    liste vide). Endpoint de LECTURE pur, cohérent avec les autres GET (non protégé).
+    """
+    return todo_store.read_todo()
 
 
 # ===================== Participation (consultations OUVERTES) ===================== #
