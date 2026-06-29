@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { Consultation } from './contract';
-import type { AnalysisPayload } from './contract';
-import { fetchAnalysis, fetchInsights } from './analysisApi';
+import type { AnalysisPayload, AvisProvenance, Citation, Consultation } from './contract';
+import { fetchAnalysis, fetchAvis, fetchCitations, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
 import { ThemeNavigator } from './ThemeNavigator';
+import { AvisDetail } from './AvisDetail';
 import { LOCALE } from './strings';
 
 /**
@@ -29,6 +29,11 @@ export function ConsultationOverview({
   const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
   const [themeSynthesis, setThemeSynthesis] = useState<string | null>(null);
   const [themeLoading, setThemeLoading] = useState(false);
+  // Avis représentatifs du focus = citations triées centroïde (cliquables → AvisDetail).
+  const [citations, setCitations] = useState<Citation[] | null>(null);
+  const [openAvisId, setOpenAvisId] = useState<string | null>(null);
+  const [avis, setAvis] = useState<AvisProvenance | null>(null);
+  const [avisLoading, setAvisLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,10 +57,15 @@ export function ConsultationOverview({
   // au changement de sélection. null = vue globale (déjà chargée), pas de fetch.
   const selectedTheme = analysis?.themes?.find((t) => t.id === selectedThemeId) ?? null;
   useEffect(() => {
-    if (selectedThemeId == null) return;
+    setOpenAvisId(null);                              // change de focus → ferme l'avis ouvert
+    if (selectedThemeId == null) {
+      setCitations(null);
+      return;
+    }
     let cancelled = false;
     setThemeLoading(true);
     setThemeSynthesis(null);
+    setCitations(null);
     fetchInsights(dataset.id, 'theme', selectedThemeId, selectedTheme ?? undefined)
       .catch(() => null)
       .then((s) => {
@@ -63,12 +73,31 @@ export function ConsultationOverview({
         setThemeSynthesis(s?.data ?? null);
         setThemeLoading(false);
       });
+    fetchCitations(dataset.id, selectedThemeId)
+      .catch(() => null)
+      .then((r) => {
+        if (!cancelled) setCitations(r?.data ?? null);
+      });
     return () => {
       cancelled = true;
     };
     // selectedTheme dérive de selectedThemeId — pas besoin de le suivre.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataset.id, selectedThemeId]);
+
+  // Avis ouvert (clic sur une citation représentative) → détail complet, comme la feuille.
+  useEffect(() => {
+    if (!openAvisId) return;
+    let cancelled = false;
+    setAvisLoading(true);
+    setAvis(null);
+    fetchAvis(dataset.id, openAvisId)
+      .then(({ data }) => !cancelled && setAvis(data))
+      .finally(() => !cancelled && setAvisLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset.id, openAvisId]);
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
@@ -129,8 +158,15 @@ export function ConsultationOverview({
             </>
           )}
 
-          {/* Synthèse DYNAMIQUE : globale si rien de sélectionné, sinon celle du thème. */}
-          {(() => {
+          {/* Avis ouvert → détail complet (comme la feuille) ; sinon synthèse dynamique. */}
+          {openAvisId ? (
+            <AvisDetail
+              avis={avis}
+              loading={avisLoading}
+              dataset={dataset.id}
+              onBack={() => setOpenAvisId(null)}
+            />
+          ) : (() => {
             const dynLoading = selectedThemeId == null ? loading : themeLoading;
             const dynSource = selectedThemeId == null ? synthesis : themeSynthesis;
             const dynTitle = selectedTheme
@@ -138,8 +174,8 @@ export function ConsultationOverview({
               : "Vue d'ensemble";
             // Mots-clés DU FOCUS : globaux si rien de sélectionné, sinon ceux du thème.
             const focusKeywords = selectedTheme ? (selectedTheme.keywords ?? []) : keywords;
-            // Avis représentatifs (centroïde) du focus — à TOUS les niveaux (macro inclus).
-            const avis = selectedTheme?.representative_claims ?? [];
+            // Avis représentatifs = citations triées centroïde du focus (top 5), cliquables.
+            const repAvis = (citations ?? []).slice(0, 5);
             return (
               <div className="overview__dynsynth" aria-live="polite">
                 <h3 className="synthesis__subhead">{dynTitle}</h3>
@@ -157,12 +193,24 @@ export function ConsultationOverview({
                 ) : (
                   <p className="overview__loading">Synthèse indisponible.</p>
                 )}
-                {avis.length > 0 && (
+                {selectedTheme && repAvis.length > 0 && (
                   <div className="overview__avis">
                     <h4 className="synthesis__subhead">Avis représentatifs</h4>
-                    {avis.map((a, i) => (
-                      <blockquote key={i} className="overview__avis-quote">« {a} »</blockquote>
-                    ))}
+                    {repAvis.map((c, i) => {
+                      const id = c.avis_id;
+                      return (
+                        <blockquote
+                          key={id ?? i}
+                          className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
+                          role={id ? 'button' : undefined}
+                          tabIndex={id ? 0 : undefined}
+                          onClick={id ? () => setOpenAvisId(id) : undefined}
+                          onKeyDown={id ? (e) => { if (e.key === 'Enter') setOpenAvisId(id); } : undefined}
+                        >
+                          « {c.text} »
+                        </blockquote>
+                      );
+                    })}
                   </div>
                 )}
               </div>
