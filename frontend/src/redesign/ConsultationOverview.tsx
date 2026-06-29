@@ -155,7 +155,16 @@ export function ConsultationOverview({
             return (
               <div className="overview__dynsynth" aria-live="polite">
                 <h3 className="synthesis__subhead">{dynTitle}</h3>
-                {focusKeywords.length > 0 && (
+                {selectedTheme && (
+                  <button
+                    type="button"
+                    className="overview__backgen"
+                    onClick={() => setSelectedThemeId(null)}
+                  >
+                    ← Vue générale
+                  </button>
+                )}
+                {selectedTheme && focusKeywords.length > 0 && (
                   <div className="kw-chips" aria-label="Mots-clés du focus">
                     {focusKeywords.map((kw) => (
                       <span key={kw} className="kw-chip">{kw}</span>
