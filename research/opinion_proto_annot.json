@@ -1,0 +1,407 @@
+[
+  {
+    "node": "n15",
+    "avis_id": "granddebat:1-1529",
+    "cible": "instaurer une transparence totale des comptes et actions des élus",
+    "claim": "Toutes les dépenses doivent être justifiées par des factures vérifiées",
+    "llm_stance": "favorable",
+    "llm_justif": "Exige justificatifs vérifiés",
+    "gold": "favorable"
+  },
+  {
+    "node": "n3",
+    "avis_id": "granddebat:1-24152",
+    "cible": "réduire le nombre de députés et de sénateurs",
+    "claim": "Il est interdit de priver l'accès à ces espaces en désobéissant à la loi de 1975 portant sur les discriminations",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet (discriminations)",
+    "gold": "nuance"
+  },
+  {
+    "node": "n11",
+    "avis_id": "granddebat:1-2682",
+    "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+    "claim": "Pédagogie, mieux expliquer ce qui est fait et décidé",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet",
+    "gold": "nuance"
+  },
+  {
+    "node": "n11",
+    "avis_id": "granddebat:1-26425",
+    "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+    "claim": "casier judiciaire vierge",
+    "llm_stance": "nuance",
+    "llm_justif": "Condition casier judiciaire",
+    "gold": "nuance"
+  },
+  {
+    "node": "n12",
+    "avis_id": "granddebat:1-28131",
+    "cible": "tirer au sort des citoyens pour participer aux décisions législatives",
+    "claim": "qu'ils fassent appliquer les lois pour les francais et les étrangers",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet",
+    "gold": "nuance"
+  },
+  {
+    "node": "n1",
+    "avis_id": "granddebat:1-3089",
+    "cible": "organiser des réunions locales trimestrielles avec les députés",
+    "claim": "L'ensemble des sites internet Facebook Twitter doivent être régulé également",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet (réseaux sociaux)",
+    "gold": "nuance"
+  },
+  {
+    "node": "n2",
+    "avis_id": "granddebat:1-19617",
+    "cible": "parler vrai et arrêter la langue de bois",
+    "claim": "Expliquer la situation de la Nation en abandonnant la \"langue de bois\" et les phrases alambiquées",
+    "llm_stance": "favorable",
+    "llm_justif": "critique langue de bois et phrases alambiquées",
+    "gold": "favorable"
+  },
+  {
+    "node": "n11",
+    "avis_id": "granddebat:1-16553",
+    "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+    "claim": "un Referendum révocatoire",
+    "llm_stance": "favorable",
+    "llm_justif": "propose un référendum révocatoire",
+    "gold": "favorable"
+  },
+  {
+    "node": "n15",
+    "avis_id": "granddebat:1-21246",
+    "cible": "instaurer une transparence totale des comptes et actions des élus",
+    "claim": "Plus de transparence",
+    "llm_stance": "favorable",
+    "llm_justif": "Demande directe de transparence",
+    "gold": "favorable"
+  },
+  {
+    "node": "n12",
+    "avis_id": "granddebat:1-28208",
+    "cible": "tirer au sort des citoyens pour participer aux décisions législatives",
+    "claim": "Co-préparation des lois (citoyens + élus)",
+    "llm_stance": "favorable",
+    "llm_justif": "co-préparation lois",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-16092",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "La valeur de l'exemple, l'honnêteté et le souci de l'intérêt général",
+    "llm_stance": "nuance",
+    "llm_justif": "valeurs générales, pas cible précise",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-30029",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "Que les élus soient contraints de respecter le programme pour lequel, ils ont été élus",
+    "llm_stance": "nuance",
+    "llm_justif": "parle du respect du programme",
+    "gold": "nuance"
+  },
+  {
+    "node": "n16",
+    "avis_id": "granddebat:1-2084",
+    "cible": "organiser des débats publics réguliers sur le terrain",
+    "claim": "Est ce que les gilets jaunes seraient en train de découvrir ce qu'est la participation, eux qui, pour la grande majorité, ne votent même pas !?",
+    "llm_stance": "nuance",
+    "llm_justif": "Questionnement politique, pas de cible claire",
+    "gold": "nuance"
+  },
+  {
+    "node": "n1",
+    "avis_id": "granddebat:1-22161",
+    "cible": "organiser des réunions locales trimestrielles avec les députés",
+    "claim": "revoir complètement la loi NOTRE qui a ce jour transfert un nombre considérable de compétences des mairies vers les communautés de commune",
+    "llm_stance": "nuance",
+    "llm_justif": "critique loi NOTRE",
+    "gold": "nuance"
+  },
+  {
+    "node": "n16",
+    "avis_id": "granddebat:1-32723",
+    "cible": "organiser des débats publics réguliers sur le terrain",
+    "claim": "sur le terrain voir et discuter",
+    "llm_stance": "favorable",
+    "llm_justif": "valorise contact sur le terrain",
+    "gold": "favorable"
+  },
+  {
+    "node": "n1",
+    "avis_id": "granddebat:1-15403",
+    "cible": "organiser des réunions locales trimestrielles avec les députés",
+    "claim": "surveiller l'argent public distribué aux grandes entreprises",
+    "llm_stance": "nuance",
+    "llm_justif": "parle de surveillance de l'argent public",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-34207",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "Que les élus soient accessibles",
+    "llm_stance": "favorable",
+    "llm_justif": "proposition d'accessibilité des élus",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-11825",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "la cause n'est pas le système en lui-même, mais le comportement de certains intouchables qui le pilotent",
+    "llm_stance": "nuance",
+    "llm_justif": "critique du système, pas de cible précise",
+    "gold": "nuance"
+  },
+  {
+    "node": "n13",
+    "avis_id": "granddebat:1-30935",
+    "cible": "limiter le cumul des mandats politiques",
+    "claim": "A défaut, il faut au moins inverser le calendrier électorale : les élections législatives doivent avoir lieu avant les élections présidentielles",
+    "llm_stance": "nuance",
+    "llm_justif": "Propose calendrier électoral, pas cumul",
+    "gold": "nuance"
+  },
+  {
+    "node": "n2",
+    "avis_id": "granddebat:1-24198",
+    "cible": "parler vrai et arrêter la langue de bois",
+    "claim": "arrêter de prendre des décisions en étant déconnecté du terrain",
+    "llm_stance": "favorable",
+    "llm_justif": "critique déconnexion du terrain",
+    "gold": "favorable"
+  },
+  {
+    "node": "n2",
+    "avis_id": "granddebat:1-28725",
+    "cible": "parler vrai et arrêter la langue de bois",
+    "claim": "Consulter le peuple plus souvent",
+    "llm_stance": "favorable",
+    "llm_justif": "consulter le peuple = valoriser transparence",
+    "gold": "nuance"
+  },
+  {
+    "node": "n15",
+    "avis_id": "granddebat:1-30033",
+    "cible": "instaurer une transparence totale des comptes et actions des élus",
+    "claim": "Rendre les décisions de justice plus rapides et plus exemplaires, surtout quand elle concernent les élus",
+    "llm_stance": "nuance",
+    "llm_justif": "Parle de justice, pas de transparence",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-109",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "la suppression du sénat",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-6957",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "Qu'ils puissent être demis par leurs electeurs",
+    "llm_stance": "nuance",
+    "llm_justif": "démission par électeurs",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-18932",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "montrer leur transparence par l'arrêt de privilège tel que le cumul de salaire, le salaire à vie, les notes de frais resto, logement de fonction, voiture de fonction, etc.",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet (privilèges)",
+    "gold": "nuance"
+  },
+  {
+    "node": "n3",
+    "avis_id": "granddebat:1-1311",
+    "cible": "réduire le nombre de députés et de sénateurs",
+    "claim": "Les députés et sénateurs doivent également faire preuve de plus de proximité",
+    "llm_stance": "nuance",
+    "llm_justif": "parle de proximité, pas du nombre",
+    "gold": "nuance"
+  },
+  {
+    "node": "n11",
+    "avis_id": "granddebat:1-11656",
+    "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+    "claim": "Vote Obligatoire",
+    "llm_stance": "nuance",
+    "llm_justif": "Vote obligatoire hors cible",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-22822",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "Obliger les élus à être totalement exemplaires par des règles draconiennes, des contrôles beaucoup plus fréquents (X 100) et une exigence sans faille",
+    "llm_stance": "favorable",
+    "llm_justif": "exige règles draconiennes",
+    "gold": "favorable"
+  },
+  {
+    "node": "n11",
+    "avis_id": "granddebat:1-14922",
+    "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+    "claim": "Aucun cumule de mandats",
+    "llm_stance": "nuance",
+    "llm_justif": "parle du cumul des mandats",
+    "gold": "nuance"
+  },
+  {
+    "node": "n13",
+    "avis_id": "granddebat:1-9483",
+    "cible": "limiter le cumul des mandats politiques",
+    "claim": "suppression du Sénat",
+    "llm_stance": "defavorable",
+    "llm_justif": "Suppression du Sénat",
+    "gold": "nuance"
+  },
+  {
+    "node": "n3",
+    "avis_id": "granddebat:1-18713",
+    "cible": "réduire le nombre de députés et de sénateurs",
+    "claim": "Honteux de voir nos députes et sénateurs , dormir , voir abs",
+    "llm_stance": "defavorable",
+    "llm_justif": "critique députés/sénateurs",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-14649",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "que les remontées des citoyens soient clairement traduites en actes",
+    "llm_stance": "nuance",
+    "llm_justif": "demande traduction en actes",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-29834",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "les élus sont indépendants de toute consigne de partie et hors influence des lobbys",
+    "llm_stance": "nuance",
+    "llm_justif": "parle d'indépendance des élus",
+    "gold": "nuance"
+  },
+  {
+    "node": "n12",
+    "avis_id": "granddebat:1-34154",
+    "cible": "tirer au sort des citoyens pour participer aux décisions législatives",
+    "claim": "Il me parait trop facile de tout contester sans donner son avis quand on nous le propose",
+    "llm_stance": "nuance",
+    "llm_justif": "Parle de contestation sans cible",
+    "gold": "nuance"
+  },
+  {
+    "node": "n16",
+    "avis_id": "granddebat:1-7488",
+    "cible": "organiser des débats publics réguliers sur le terrain",
+    "claim": "PLUS DE REUNIONS AVEC LES DEPUTES SUR LE TERRAIN",
+    "llm_stance": "favorable",
+    "llm_justif": "demande réunions députés sur le terrain",
+    "gold": "favorable"
+  },
+  {
+    "node": "n13",
+    "avis_id": "granddebat:1-30832",
+    "cible": "limiter le cumul des mandats politiques",
+    "claim": "limiter tous les mandats à 2 dans le temps",
+    "llm_stance": "favorable",
+    "llm_justif": "propose limite 2 mandats",
+    "gold": "favorable"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-4403",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "Il faut des élus honnêtes",
+    "llm_stance": "favorable",
+    "llm_justif": "soutient élus honnêtes",
+    "gold": "favorable"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-20660",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "Que les idées des citoyens soient portées par leurs élus",
+    "llm_stance": "nuance",
+    "llm_justif": "Portage idées citoyennes, pas cible",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-32030",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "Qu'ils s'entourent de gens différents que les Benalla et consorts",
+    "llm_stance": "nuance",
+    "llm_justif": "hors-sujet",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-6802",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "qu'il y ait un minimum d'honnêteté et de sincérité de la part des représentants politiques",
+    "llm_stance": "nuance",
+    "llm_justif": "demande d'honnêteté, pas sur la cible",
+    "gold": "nuance"
+  },
+  {
+    "node": "n14",
+    "avis_id": "granddebat:1-2716",
+    "cible": "exiger un casier judiciaire vierge pour les élus",
+    "claim": "le programme et leur partie ne doit pas leur faire oublier qu'ils représentent tous les citoyens de leur circonscription",
+    "llm_stance": "nuance",
+    "llm_justif": "Représentation citoyenne, pas cible",
+    "gold": "nuance"
+  },
+  {
+    "node": "n0",
+    "avis_id": "granddebat:1-27648",
+    "cible": "réduire le cumul des mandats des élus",
+    "claim": "Ras le bol des partis politiques",
+    "llm_stance": "nuance",
+    "llm_justif": "critique partis, pas cumul",
+    "gold": "nuance"
+  },
+  {
+    "node": "n13",
+    "avis_id": "granddebat:1-25940",
+    "cible": "limiter le cumul des mandats politiques",
+    "claim": "Un seul mandat doit être autorisé par citoyen",
+    "llm_stance": "favorable",
+    "llm_justif": "Un mandat autorisé par citoyen",
+    "gold": "favorable"
+  },
+  {
+    "node": "n12",
+    "avis_id": "granddebat:1-17974",
+    "cible": "tirer au sort des citoyens pour participer aux décisions législatives",
+    "claim": "peut être un panel de citoyens tires au sort comme pour les jures d assises pour débattre sur les actions a mener",
+    "llm_stance": "favorable",
+    "llm_justif": "propose tirage au sort pour débats",
+    "gold": "favorable"
+  },
+  {
+    "node": "n2",
+    "avis_id": "granddebat:1-311",
+    "cible": "parler vrai et arrêter la langue de bois",
+    "claim": "que nos propos ne soient pas déformés entre ce que nous disons et ce qui est transmis",
+    "llm_stance": "favorable",
+    "llm_justif": "veut éviter déformation des propos (transparence)",
+    "gold": "favorable"
+  }
+]
