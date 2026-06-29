@@ -1423,6 +1423,14 @@ body {
   margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid #ececf4;
 }
 .overview__dynsynth .synthesis__subhead { margin-top: 0; }
+.overview__synthbody { transition: opacity .2s ease; }
+.overview__synthesis { scroll-margin-top: 1.2rem; }
+/* Pendant le re-fetch : on estompe l'ancien contenu (pas de zone vidée). */
+.overview__dynsynth.is-loading .overview__synthbody { opacity: .45; }
+.overview__synthloading {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .78rem; color: var(--agora, #000091); margin: .6rem 0 0; opacity: .8;
+}
 
 /* ── Landing : section « Comment ça marche » (pipeline, épuré) ── */
 .landing__how { margin-top: 4.5rem; }
@@ -1685,7 +1693,15 @@ body {
   display: flex; flex-direction: column; margin: 0 0 1.4rem;
   border-top: 1px solid #ececf4; border-bottom: 1px solid #ececf4;
 }
-/* En-tête de niveau : retour (← grand-parent) + nom du cluster parent courant. */
+/* Chemin ÉPINGLÉ en haut : ancêtres + cluster courant marqué (jamais un titre).
+   Les items restent des lignes de menu ; un liseré + fond léger les distingue. */
+.tnav__path {
+  display: flex; flex-direction: column;
+  padding: .35rem 0 .15rem; margin-bottom: .25rem;
+  border-bottom: 1px solid #ececf4; background: #fafaff;
+}
+.tnav__path .tnav__back { padding-left: .25rem; margin-bottom: .15rem; }
+/* En-tête de niveau (legacy) : retour + nom du cluster parent courant. */
 .tnav__nav {
   display: flex; flex-direction: column; align-items: flex-start; gap: .3rem;
   padding: .4rem .25rem .55rem; border-bottom: 1px solid #ececf4; margin-bottom: .25rem;
@@ -1717,9 +1733,12 @@ body {
   align-items: center; gap: .5rem; width: 100%;
   padding: .35rem .25rem; border: 0; border-bottom: 1px solid #f4f4fb;
   background: none; text-align: left; cursor: pointer; font: inherit;
+  transition: background .15s ease, padding-left .18s ease;
 }
 .tnav__row:last-child { border-bottom: 0; }
 .tnav__row:hover { background: #f5f5fe; }
+/* Enfants du cluster courant : indentés sous le chemin épinglé. */
+.tnav__row--child { padding-left: 1.4rem; }
 .tnav__row[aria-expanded="true"] { background: #f0f0fc; }
 .tnav__row--selected,
 .tnav__row--selected:hover {
