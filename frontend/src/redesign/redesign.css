@@ -1792,3 +1792,21 @@ body {
   border-left-color: var(--agora, #000091);
   box-shadow: 0 0 0 2px rgba(0,0,145,.25);
 }
+
+/* ── Landing : section « Collaborer » (onboarding hackathon) ── */
+.landing__collab { margin-top: 4.5rem; }
+.collab__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem; margin-top: 1.6rem;
+}
+.collab__card { padding: 1rem 1.1rem; border: 1px solid #e6e6ef; background: #fcfcff; }
+.collab__card strong {
+  display: block; margin-bottom: .4rem; color: #111;
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+}
+.collab__card p { margin: 0; color: #555; line-height: 1.6; font-size: .9rem; }
+.collab__card em { font-style: normal; color: var(--agora, #000091); }
+.collab__card code, .pipe__step code {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .85em;
+  background: #ececfe; color: var(--agora, #000091); padding: .05rem .3rem;
+}
