@@ -376,6 +376,23 @@ def get_citations(
     return data
 
 
+@app.get("/opinion")
+def get_opinion(dataset: str | None = Query(None)) -> dict:
+    """SERVE-only : répartition d'opinion PRÉCALCULÉE par thème feuille.
+
+    Lit `analysis/opinion.json` (baké par `backend.build_opinion`, instantané) →
+    `{dataset, model, themes:[{theme_id, proposition, fav, def, nuance, pct_favorable,
+    opposition, profil}]}`. Artefact À PART, INDÉPENDANT du build d'analyse : s'il n'a
+    pas (encore) été baké, on renvoie une liste VIDE (200) — le front dégrade
+    gracieusement (pas de barre d'opinion) sans jamais bloquer la synthèse.
+    """
+    ds = _resolve(dataset)
+    data = analysis_store.read_opinion(ds.id)
+    if data is None:
+        return {"dataset": ds.id, "themes": [], "status": "absent"}
+    return data
+
+
 @app.get("/avis/{avis_id}")
 def get_avis(
     avis_id: str,

@@ -105,6 +105,28 @@ export async function fetchCitations(
 }
 
 /**
+ * GET /opinion {dataset} → répartition d'opinion par thème feuille (objet de clivage +
+ * stance agrégée). Artefact À PART, indépendant de l'analyse : chargé UNE fois puis
+ * lookup par theme_id côté front. Léger comme les flags — pas de mapping building/error :
+ * une liste vide (non bakée / réseau indispo) fait simplement disparaître la barre.
+ */
+export async function fetchOpinion(
+  dataset: string,
+): Promise<import('./contract').ThemeOpinion[]> {
+  if (FORCE_MOCK) return [];
+  try {
+    const qs = new URLSearchParams({ dataset });
+    const { status, body } = await rawFetch(`/opinion?${qs}`);
+    if (status === 200 && body && Array.isArray(body.themes)) {
+      return body.themes as import('./contract').ThemeOpinion[];
+    }
+  } catch {
+    /* réseau indisponible → pas de répartition d'opinion */
+  }
+  return [];
+}
+
+/**
  * Feedback FLAGS — Bob signals a badly cut / mis-targeted / mis-extracted avis
  * with a free-text comment, persisted server-side (upsert by avis_id) and editable.
  * These are LIGHT and independent of the analysis cache, so they never go through
