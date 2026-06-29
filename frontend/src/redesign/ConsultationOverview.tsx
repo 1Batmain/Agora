@@ -112,16 +112,19 @@ export function ConsultationOverview({
         </button>
 
         <section className="overview__synthesis">
-          <h2>Synthèse générale</h2>
-
           {themes.length > 0 && (
             <>
-              <h3 className="synthesis__subhead">Points de convergence</h3>
+              <h3 className="synthesis__subhead">Clusters identifiés</h3>
               <ThemeNavigator
                 themes={themes}
                 total={navTotal}
-                selectedId={selectedThemeId}
+                currentId={selectedThemeId}
+                onDrill={setSelectedThemeId}
                 onSelect={setSelectedThemeId}
+                onBack={() => {
+                  const cur = themes.find((t) => t.id === selectedThemeId);
+                  setSelectedThemeId(cur?.parent_id ?? null);
+                }}
               />
             </>
           )}
