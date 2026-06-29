@@ -1872,3 +1872,15 @@ body {
   color: var(--agora, #000091); padding: 0;
 }
 .overview__backgen:hover { text-decoration: underline; }
+
+/* ── Mots-clés CLIQUABLES (filtrent les avis du focus) ── */
+.kw-chips--clickable { margin-top: 1.2rem; }
+.kw-chip--btn { border: 1px solid rgba(0,0,145,.28); cursor: pointer; font: inherit; line-height: 1.4; }
+.kw-chip--btn:hover { background: #e0e0fb; }
+.kw-chip--on { background: var(--agora, #000091); color: #fff; border-color: var(--agora, #000091); }
+.overview__kwclear {
+  margin-left: .6rem; border: 0; background: none; cursor: pointer;
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .72rem;
+  font-weight: 600; color: var(--agora, #000091);
+}
+.overview__kwclear:hover { text-decoration: underline; }
