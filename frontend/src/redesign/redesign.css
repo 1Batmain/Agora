@@ -1118,7 +1118,7 @@ body {
 .sec-head__num {
   font-size: 12px;
   font-weight: 700;
-  color: var(--agora);
+  color: #111;
   font-variant-numeric: tabular-nums;
 }
 .sec-head h2 {
@@ -1824,22 +1824,26 @@ body {
 .avisx__more { margin: 1.6rem auto 0; display: block; }
 
 /* ── Landing : pipeline technique (onboarding hackathon) ── */
+.landing__problem, .landing__insp { margin-top: 88px; }
+.section-prose { max-width: 780px; margin-top: 1.6rem; }
+.section-prose p { color: #444; line-height: 1.7; margin: 0 0 1.1rem; }
+.section-prose p:last-child { margin-bottom: 0; }
+.section-prose strong { font-weight: 700; color: #111; }
 .landing__pipeline { margin-top: 88px; }
-.pipe { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1rem; max-width: 780px; }
+.pipe { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1.8rem; max-width: 780px; }
 .pipe__step {
-  padding: .9rem 1.1rem; border: 1px solid #e6e6ef; border-left: 3px solid var(--agora, #000091);
-  background: #fcfcff;
+  padding: 0; border: 0; background: none;
 }
 .pipe__step strong {
   display: block; margin-bottom: .35rem; color: #111;
   font-family: ui-monospace, "IBM Plex Mono", monospace;
 }
 .pipe__step p { margin: 0; color: #555; line-height: 1.6; font-size: .92rem; }
-.pipe__step em { font-style: normal; color: var(--agora, #000091); }
+.pipe__step em { font-style: normal; font-weight: 700; color: #111; }
 .pipe__tag {
-  float: right; margin-left: .6rem; font-size: .72rem; color: var(--agora, #000091);
+  float: right; margin-left: .6rem; font-size: .72rem; color: #555;
   font-family: ui-monospace, "IBM Plex Mono", monospace;
-  background: #ececfe; padding: .15rem .5rem;
+  background: #f0f0f4; padding: .15rem .5rem;
 }
 /* Toggle GLOBAL des surlignages (en-tête des contrôles). */
 .avisx__hltoggle {
@@ -1868,21 +1872,27 @@ body {
 
 /* ── Landing : section « Collaborer » (onboarding hackathon) ── */
 .landing__collab { margin-top: 88px; }
-.collab__grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem; margin-top: 1.6rem;
+.collab__actions {
+  display: flex; flex-wrap: wrap; gap: 1rem; margin: 0 0 1.8rem;
 }
-.collab__card { padding: 1rem 1.1rem; border: 1px solid #e6e6ef; background: #fcfcff; }
-.collab__card strong {
-  display: block; margin-bottom: .4rem; color: #111;
+.collab__link {
+  display: grid; grid-template-columns: auto 1fr; align-items: baseline;
+  column-gap: .6rem; row-gap: .15rem;
+  padding: .85rem 1.1rem; min-width: 240px; flex: 1 1 240px;
+  border: 1px solid #d7d7e6; background: #fcfcff;
+  text-decoration: none; transition: background .12s ease, transform .12s ease;
+}
+.collab__link:hover { background: #f4f4f8; }
+.collab__link-arrow {
+  grid-row: 1 / span 2; align-self: center;
   font-family: ui-monospace, "IBM Plex Mono", monospace;
+  color: #111; font-size: 1.2rem; font-weight: 700;
 }
-.collab__card p { margin: 0; color: #555; line-height: 1.6; font-size: .9rem; }
-.collab__card em { font-style: normal; color: var(--agora, #000091); }
-.collab__card code, .pipe__step code {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .85em;
-  background: #ececfe; color: var(--agora, #000091); padding: .05rem .3rem;
+.collab__link-label {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-weight: 700;
+  color: #111;
 }
+.collab__link-sub { color: #555; font-size: .82rem; }
 
 /* ── Aperçu : bouton « retour vue générale » sous le titre de la synthèse focus ── */
 .overview__backgen {
