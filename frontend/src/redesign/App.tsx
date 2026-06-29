@@ -7,9 +7,10 @@ import { ConsultationOverview } from './ConsultationOverview';
 import { AvisExplorer } from './AvisExplorer';
 import RedesignApp from './RedesignApp';
 import { Console } from './Console';
+import { TodoPage } from './TodoPage';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console' | 'avis';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console' | 'avis' | 'todo';
 type HistState = { route: Route; activeId: string | null; focus?: string | null };
 
 /**
@@ -58,6 +59,14 @@ export default function App() {
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(window.location.search);
+    // Feuille de route : `?view=todo` (sans dataset) → page /todo directe.
+    if (params.get('view') === 'todo' && !params.get('c')) {
+      setRoute('todo');
+      setActiveId(null);
+      setFocusAvis(null);
+      window.history.replaceState({ route: 'todo', activeId: null } as HistState, '', '?view=todo');
+      return;
+    }
     const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
@@ -157,6 +166,9 @@ export default function App() {
   }
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;
+  }
+  if (route === 'todo') {
+    return <TodoPage onHome={backToLanding} />;
   }
   return <Landing datasets={datasets} loading={loading} onOpen={openConsultation} />;
 }
