@@ -114,9 +114,96 @@ export function Landing({
           )}
         </section>
 
-        <section className="landing__pipeline">
+        <section className="landing__collab">
           <header className="sec-head">
             <span className="sec-head__num">02</span>
+            <h2>Collaborer — hackathon</h2>
+            <span className="sec-head__hint">repo ouvert · PR obligatoire</span>
+          </header>
+          <p className="how__lead">
+            Le projet est ouvert : code à la main ou avec des agents, comme tu préfères.
+            Quelques repères pour démarrer vite et travailler en parallèle sans se marcher
+            dessus.
+          </p>
+          <div className="collab__actions">
+            <a
+              className="collab__link"
+              href="https://github.com/1Batmain/Analyse-des-consultations-citoyennes"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="collab__link-arrow" aria-hidden>→</span>
+              <span className="collab__link-label">Repo GitHub</span>
+              <span className="collab__link-sub">cloner · forker · ouvrir une PR</span>
+            </a>
+            <a
+              className="collab__link"
+              href="https://github.com/1Batmain/Analyse-des-consultations-citoyennes/blob/main/TODO.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="collab__link-arrow" aria-hidden>→</span>
+              <span className="collab__link-label">Feuille de route</span>
+              <span className="collab__link-sub">todo.json — prochaines features à prendre</span>
+            </a>
+          </div>
+          <div className="collab__grid">
+            <div className="collab__card">
+              <strong>🛣️ Choisis ta lane</strong>
+              <p>
+                Quatre couloirs : <em>pipeline/ML</em> (extraction, clustering) ·{' '}
+                <em>backend/API</em> · <em>frontend</em> · <em>research/éval</em>. Les{' '}
+                <em>contrats</em> (<code>contract.ts</code>, schéma Consultation) sont
+                l'interface entre lanes — on travaille en parallèle sans collision.
+              </p>
+            </div>
+            <div className="collab__card">
+              <strong>🌿 Branche + pull request</strong>
+              <p>
+                Une branche par feature (jamais sur <code>main</code>). Chaque
+                contribution passe par une <em>pull request</em> : gate <em>pytest</em>{' '}
+                vert + <em>npm run build</em> propre, un mainteneur relit et merge.
+              </p>
+            </div>
+            <div className="collab__card">
+              <strong>🧱 Invariants à ne jamais casser</strong>
+              <p>
+                <em>Fidélité verbatim</em> (les claims = mot pour mot) ·{' '}
+                <em>zéro hardcoding</em> (tout dérivé des données, marche sur n'importe quelle
+                consultation) · <em>build/serve séparés</em> (le serveur ne fait que lire des
+                caches).
+              </p>
+            </div>
+            <div className="collab__card">
+              <strong>🔬 Le verdict d'abord</strong>
+              <p>
+                Tout changement d'algo (clustering, extraction…) se valide par un{' '}
+                <em>A/B sur échantillon</em> + une note dans <code>research/</code> avant de
+                toucher le chemin servi. On mesure, on ne devine pas.
+              </p>
+            </div>
+            <div className="collab__card">
+              <strong>🚀 Setup en 5 min</strong>
+              <p>
+                Clé Mistral dans <code>var/mistral.key</code> · backend <code>:8010</code>{' '}
+                (FastAPI) · front <code>:5180</code> (Vite). Les contrats back↔front vivent
+                dans <code>contract.ts</code>.
+              </p>
+            </div>
+            <div className="collab__card">
+              <strong>🤖 À la main ou en agents</strong>
+              <p>
+                Code classiquement, ou orchestre des agents dans ta lane — au choix. Un{' '}
+                <code>CLAUDE.md</code> / <code>AGENTS.md</code> à la racine onboarde les
+                agents (DA, invariants, contrats, lanes) pour qu'ils démarrent justes.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="landing__pipeline">
+          <header className="sec-head">
+            <span className="sec-head__num">03</span>
             <h2>Sous le capot — le pipeline</h2>
             <span className="sec-head__hint">5 étapes, des avis aux thèmes</span>
           </header>
@@ -181,70 +268,6 @@ export function Landing({
             Stack : Python · FastAPI · nomic-embed-v2 · Mistral · Leiden/igraph ·
             React + Vite + D3 — souverain &amp; local, modèles ouverts.
           </p>
-        </section>
-
-        <section className="landing__collab">
-          <header className="sec-head">
-            <span className="sec-head__num">03</span>
-            <h2>Collaborer — hackathon</h2>
-            <span className="sec-head__hint">à la main ou en agents</span>
-          </header>
-          <p className="how__lead">
-            Le projet est ouvert : code à la main ou avec des agents, comme tu préfères.
-            Quelques repères pour démarrer vite et travailler en parallèle sans se marcher
-            dessus.
-          </p>
-          <div className="collab__grid">
-            <div className="collab__card">
-              <strong>🛣️ Choisis ta lane</strong>
-              <p>
-                Quatre couloirs : <em>pipeline/ML</em> (extraction, clustering) ·{' '}
-                <em>backend/API</em> · <em>frontend</em> · <em>research/éval</em>. Les{' '}
-                <em>contrats</em> (<code>contract.ts</code>, schéma Consultation) sont
-                l'interface entre lanes — on travaille en parallèle sans collision.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🌿 Branche + gate</strong>
-              <p>
-                Une branche par feature (jamais sur <code>main</code>). Avant de merger :{' '}
-                <em>pytest</em> vert + <em>npm run build</em> propre. Un mainteneur relit et
-                intègre.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🧱 Invariants à ne jamais casser</strong>
-              <p>
-                <em>Fidélité verbatim</em> (les claims = mot pour mot) ·{' '}
-                <em>zéro hardcoding</em> (tout dérivé des données, marche sur n'importe quelle
-                consultation) · <em>build/serve séparés</em> (le serveur ne fait que lire des
-                caches).
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🔬 Le verdict d'abord</strong>
-              <p>
-                Tout changement d'algo (clustering, extraction…) se valide par un{' '}
-                <em>A/B sur échantillon</em> + une note dans <code>research/</code> avant de
-                toucher le chemin servi. On mesure, on ne devine pas.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🚀 Setup en 5 min</strong>
-              <p>
-                Clé Mistral dans <code>var/mistral.key</code> · backend <code>:8010</code>{' '}
-                (FastAPI) · front <code>:5180</code> (Vite). Les contrats back↔front vivent
-                dans <code>contract.ts</code>.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🤖 À la main ou en agents</strong>
-              <p>
-                Code classiquement, ou orchestre des agents dans ta lane — au choix. Le
-                workflow lanes + contrats + gate marche pour les deux.
-              </p>
-            </div>
-          </div>
         </section>
       </main>
     </div>
