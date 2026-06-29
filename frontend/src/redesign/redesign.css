@@ -1749,3 +1749,28 @@ body {
   background: #fff; white-space: nowrap;
 }
 .avisx__more { margin: 1.6rem auto 0; display: block; }
+
+/* Toggle GLOBAL des surlignages (en-tête des contrôles). */
+.avisx__hltoggle {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-size: .85rem; color: #333; cursor: pointer; user-select: none;
+  margin-left: auto; padding: 0 .2rem;
+}
+.avisx__hltoggle input { accent-color: var(--agora, #000091); cursor: pointer; }
+
+/* Carte d'avis INLINE : texte complet + surlignages + Signaler, plus de page séparée. */
+.avisx__card {
+  padding: 1.1rem 1.2rem; border: 1px solid #e6e6ef; border-left: 3px solid #d7d7e6;
+  border-radius: 6px; background: #fff;
+  transition: border-color .12s, box-shadow .15s;
+}
+.avisx__cardhead {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: .8rem; margin: 0 0 .35rem;
+}
+.avisx__cardhead .avisx__chips { flex: 1 1 auto; }
+/* Carte ciblée par une citation : mise en évidence (anneau + accent). */
+.avisx__card--focus {
+  border-left-color: var(--agora, #000091);
+  box-shadow: 0 0 0 2px rgba(0,0,145,.25);
+}
