@@ -31,6 +31,7 @@ ANALYSIS_DIRNAME = "analysis"
 STATUS_NAME = "status.json"
 ANALYSIS_NAME = "analysis.json"
 AVIS_NAME = "avis.json"
+OPINION_NAME = "opinion.json"
 CITATIONS_DIRNAME = "citations"
 INSIGHTS_DIRNAME = "insights"
 
@@ -58,6 +59,16 @@ def analysis_path(dataset: str) -> Path:
 
 def avis_path(dataset: str) -> Path:
     return analysis_dir(dataset) / AVIS_NAME
+
+
+def opinion_path(dataset: str) -> Path:
+    """Répartition d'opinion par thème feuille (objet de clivage T2 + stance agrégée).
+
+    Artefact À PART, baké par `backend.build_opinion` — indépendant du build d'analyse
+    (il ne touche jamais `analysis.json` ni les caches existants). Absent tant qu'on n'a
+    pas baké l'opinion : les endpoints/serve dégradent gracieusement.
+    """
+    return analysis_dir(dataset) / OPINION_NAME
 
 
 def _safe(name: str) -> str:
@@ -193,6 +204,12 @@ def read_insights(dataset: str, level: str, theme_id: str | None) -> dict | None
     return data if isinstance(data, dict) else None
 
 
+def read_opinion(dataset: str) -> dict | None:
+    """Répartition d'opinion bakée (`{dataset, model, themes:[…]}`) ou None si absente."""
+    data = _read_json(opinion_path(dataset))
+    return data if isinstance(data, dict) else None
+
+
 # --------------------------------------------------------------------------- #
 # Écriture des artefacts (BUILD)
 # --------------------------------------------------------------------------- #
@@ -212,6 +229,11 @@ def write_citations(dataset: str, theme_id: str, citations: list) -> None:
 
 def write_insights(dataset: str, level: str, theme_id: str | None, payload: dict) -> None:
     write_json(insights_path(dataset, level, theme_id), payload)
+
+
+def write_opinion(dataset: str, payload: dict) -> None:
+    """Persiste la répartition d'opinion (fichier À PART, n'efface aucun cache d'analyse)."""
+    write_json(opinion_path(dataset), payload)
 
 
 def clear(dataset: str) -> None:

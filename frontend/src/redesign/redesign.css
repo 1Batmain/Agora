@@ -1432,6 +1432,42 @@ body {
   font-size: .78rem; color: var(--agora, #000091); margin: .6rem 0 0; opacity: .8;
 }
 
+/* ── Répartition d'opinion d'un thème (objet de clivage + barre fav/déf/nuance) ── */
+.opinion {
+  margin: 1.1rem 0 1.3rem; padding: 1rem 1.1rem; border: 1px solid #ececf4;
+  border-radius: 8px; background: #fbfbfe;
+}
+.opinion__head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.opinion__label {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .7rem;
+  letter-spacing: .04em; text-transform: uppercase; color: #66667a;
+}
+.opinion__badge {
+  font-size: .72rem; font-weight: 600; padding: .12rem .5rem; border-radius: 999px;
+  white-space: nowrap;
+}
+.opinion__badge--clivant { background: #ffe9e9; color: #b81b1b; }
+.opinion__badge--consensuel { background: #d6f3e0; color: #18753c; }
+.opinion__proposition { margin: .5rem 0 .8rem; font-size: 1rem; font-weight: 600; color: #1a1a2e; }
+.opinion__bar {
+  display: flex; height: 14px; border-radius: 7px; overflow: hidden;
+  background: #ececf4;
+}
+.opinion__seg { display: block; height: 100%; }
+.opinion__seg--fav { background: #18753c; }
+.opinion__seg--def { background: #ce0500; }
+.opinion__seg--nu  { background: #c9c9d6; }
+.opinion__legend { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .5rem; }
+.opinion__key {
+  font-size: .76rem; color: #444; display: inline-flex; align-items: center; gap: .35rem;
+}
+.opinion__key::before { content: ""; width: .7rem; height: .7rem; border-radius: 2px; }
+.opinion__key--fav::before { background: #18753c; }
+.opinion__key--def::before { background: #ce0500; }
+.opinion__key--nu::before  { background: #c9c9d6; }
+.opinion__pct { margin: .6rem 0 0; font-size: .82rem; color: #444; line-height: 1.5; }
+.opinion__pct strong { color: #1a1a2e; }
+
 /* ── Landing : section « Comment ça marche » (pipeline, épuré) ── */
 .landing__how { margin-top: 4.5rem; }
 .how__lead { color: #444; line-height: 1.7; max-width: none; margin: .6rem 0 2.2rem; }

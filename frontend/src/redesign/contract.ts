@@ -96,6 +96,36 @@ export interface InsightsPayload {
 
 export type InsightLevel = 'global' | 'theme';
 
+/**
+ * Répartition d'opinion d'un thème FEUILLE — bakée par `backend.build_opinion`.
+ * La `proposition` est l'objet de clivage T2 (proposition polaire débattable) ; les
+ * citoyens engagés se répartissent en `fav`/`def`, le reste en `nuance`. `profil` dit
+ * si le thème est `clivant` (opposition réelle), `consensuel` (large adhésion, minorité
+ * de sceptiques), ou `impur` (signal trop diffus → pas de barre affichée).
+ */
+export interface ThemeOpinion {
+  theme_id: string;
+  proposition: string;
+  fav: number;
+  def: number;
+  nuance: number;
+  n: number;
+  engagement: number; // (fav+def)/n — 1 − %nuance
+  opposition: number; // min(fav,def)/(fav+def) — clivage
+  pct_favorable: number; // fav/(fav+def) — part favorable PARMI LES ENGAGÉS
+  profil: 'clivant' | 'consensuel' | 'impur';
+  title?: string;
+  cleavage_justif?: string;
+}
+
+/** Payload de `GET /opinion` : la répartition par thème (vide si non bakée). */
+export interface OpinionPayload {
+  dataset: string;
+  model?: string;
+  themes: ThemeOpinion[];
+  status?: string;
+}
+
 /** One citation (verbatim claim) at a leaf theme, sorted by centroid proximity. */
 export interface Citation {
   text: string;
