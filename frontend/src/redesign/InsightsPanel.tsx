@@ -39,7 +39,10 @@ export function InsightsPanel({
   keywords,
   themes,
   themesTotal,
+  navCurrentId,
   onSelectTheme,
+  onDrillTheme,
+  onBackTheme,
 }: {
   title: string;
   markdown: string | null;
@@ -47,12 +50,18 @@ export function InsightsPanel({
   source: DataSource | null;
   flagTarget?: ThemeFlagTarget;
   keywords?: string[];
-  /** Arbre COMPLET des thèmes du payload (navigateur accordéon). */
+  /** Arbre COMPLET des thèmes du payload (navigateur de clusters par drill). */
   themes?: SpatialTheme[];
   /** Voix du niveau racine (dénominateur des thèmes racine). */
   themesTotal?: number;
-  /** Optionnel : drill la vue d'analyse sur le thème cliqué dans le navigateur. */
+  /** Niveau courant du drill (`null` = racine). */
+  navCurrentId?: string | null;
+  /** Sélectionner un thème (synthèse/citations suivent). */
   onSelectTheme?: (themeId: string) => void;
+  /** Descendre dans un cluster (devient le niveau courant). */
+  onDrillTheme?: (themeId: string) => void;
+  /** Remonter d'un niveau dans le drill. */
+  onBackTheme?: () => void;
 }) {
   return (
     <section className="panel insights">
@@ -86,8 +95,15 @@ export function InsightsPanel({
       )}
       {themes && themes.length > 0 && (
         <>
-          <h3 className="synthesis__subhead">Points de convergence</h3>
-          <ThemeNavigator themes={themes} total={themesTotal ?? 0} onSelect={onSelectTheme} />
+          <h3 className="synthesis__subhead">Clusters identifiés</h3>
+          <ThemeNavigator
+            themes={themes}
+            total={themesTotal ?? 0}
+            currentId={navCurrentId ?? null}
+            onSelect={onSelectTheme}
+            onDrill={onDrillTheme}
+            onBack={onBackTheme}
+          />
         </>
       )}
     </section>
