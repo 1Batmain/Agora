@@ -15,6 +15,7 @@ Endpoints :
   - POST /analysis      → carte précalculée (arbre incrémental + co-occurrence, d3-pack)
   - GET  /insights      → synthèse Markdown LLM précalculée (global | theme)
   - GET  /citations     → claims d'un thème, triées par proximité au centroïde
+  - GET  /avis_list     → liste paginée/filtrée des avis (cluster + recherche)
   - GET  /avis/{id}     → un avis entier + ses portions verbatim surlignables
   - POST /build         → (re)déclenche le précalcul d'un dataset (non bloquant)
   - GET  /build_status  → état du build d'un dataset (polling front)
@@ -52,6 +53,7 @@ from backend.recluster import (
 )
 from backend import (
     analysis_store,
+    avis,
     build_manager,
     density,
     flags_store,
@@ -383,6 +385,35 @@ def get_avis(
         raise HTTPException(status_code=404,
                             detail=f"avis inconnu: {avis_id!r} (dataset {ds.id!r}).")
     return data
+
+
+@app.get("/avis_list")
+def get_avis_list(
+    response: Response,
+    dataset: str | None = Query(None),
+    theme_id: str | None = Query(None),
+    q: str | None = Query(None),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+) -> dict:
+    """SERVE-only : liste paginée/filtrée de TOUS les avis (page d'exploration).
+
+    Lit `analysis/avis.json` (précalculé) → `{total, items:[{avis_id, excerpt,
+    themes:[{id,title,color}]}]}`. `theme_id` filtre les avis ayant ≥1 claim dans le
+    sous-arbre du thème (un macro filtre ses sous-thèmes, hiérarchie de `/analysis`) ;
+    `q` est une recherche sous-chaîne insensible casse/accents sur le texte ;
+    `limit`/`offset` paginent. Si l'analyse n'est pas prête → 202 `building`.
+    """
+    ds = _resolve(dataset)
+    if analysis_store.state(ds.id) != analysis_store.READY:
+        return _not_ready_response(ds, response)
+    avis_data = analysis_store.read_avis_all(ds.id)
+    if avis_data is None:
+        return _not_ready_response(ds, response)
+    payload = analysis_store.read_analysis(ds.id)
+    themes = (payload or {}).get("themes", [])
+    return avis.avis_list(avis_data, themes,
+                          theme_id=theme_id, q=q, limit=limit, offset=offset)
 
 
 @app.get("/density")

@@ -159,8 +159,12 @@ def read_citations(dataset: str, theme_id: str) -> list | None:
 _AVIS_CACHE: dict[str, tuple[float, dict]] = {}
 
 
-def read_avis(dataset: str, avis_id: str) -> dict | None:
-    """Provenance d'UN avis `{id,text,claims}` depuis `avis.json` (caché par mtime)."""
+def read_avis_all(dataset: str) -> dict | None:
+    """Provenance de TOUS les avis `{avis_id: {id,text,claims}}` (caché par mtime).
+
+    Source unique pour `/avis` (un avis) ET `/avis_list` (liste/recherche) : on ne
+    relit le gros JSON qu'au changement de `mtime`, puis on sert depuis la RAM.
+    """
     path = avis_path(dataset)
     if not path.exists():
         return None
@@ -172,7 +176,15 @@ def read_avis(dataset: str, avis_id: str) -> dict | None:
             return None
         _AVIS_CACHE[dataset] = (mtime, data)
         cached = _AVIS_CACHE[dataset]
-    entry = cached[1].get(str(avis_id))
+    return cached[1]
+
+
+def read_avis(dataset: str, avis_id: str) -> dict | None:
+    """Provenance d'UN avis `{id,text,claims}` depuis `avis.json` (caché par mtime)."""
+    data = read_avis_all(dataset)
+    if data is None:
+        return None
+    entry = data.get(str(avis_id))
     return entry if isinstance(entry, dict) else None
 
 
