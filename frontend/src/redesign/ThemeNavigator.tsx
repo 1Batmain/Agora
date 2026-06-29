@@ -15,6 +15,7 @@ export function ThemeNavigator({
   themes,
   total,
   onSelect,
+  selectedId,
 }: {
   /** Liste COMPLÈTE des thèmes du payload (tous niveaux confondus). */
   themes: SpatialTheme[];
@@ -22,6 +23,8 @@ export function ThemeNavigator({
   total: number;
   /** Optionnel : drill la vue d'analyse sur le thème cliqué (l'accordéon marche seul). */
   onSelect?: (themeId: string) => void;
+  /** Optionnel : id du thème sélectionné — sa ligne est mise en évidence. */
+  selectedId?: string | null;
 }) {
   // parent_id → enfants triés par n_avis décroissant (un seul passage).
   const childrenOf = useMemo(() => {
@@ -65,13 +68,15 @@ export function ThemeNavigator({
       {rows.map(({ theme: t, depth, pct }) => {
         const name = t.title || t.label;
         const open = expanded.has(t.id);
+        const isSelected = selectedId === t.id;
         return (
           <button
             type="button"
             key={t.id}
-            className="tnav__row"
+            className={`tnav__row${isSelected ? ' tnav__row--selected' : ''}`}
             style={{ paddingLeft: `${depth * 1.1}rem` }}
             aria-expanded={t.has_children ? open : undefined}
+            aria-current={isSelected ? 'true' : undefined}
             title={name}
             onClick={() => {
               if (t.has_children) toggle(t.id);
