@@ -1620,3 +1620,35 @@ body {
   font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
   color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
+
+/* ── Navigateur de thèmes : arbre en accordéon récursif (barres de % bleues) ── */
+.tnav {
+  display: flex; flex-direction: column; margin: 0 0 1.4rem;
+  /* ~5 lignes visibles (≈2rem chacune) puis scroll vers les moins représentés. */
+  max-height: 10.5rem; overflow-y: auto; scrollbar-width: thin;
+  border-top: 1px solid #ececf4; border-bottom: 1px solid #ececf4;
+}
+.tnav::-webkit-scrollbar { width: 6px; }
+.tnav::-webkit-scrollbar-thumb { background: rgba(0,0,145,.25); border-radius: 3px; }
+.tnav__row {
+  display: grid; grid-template-columns: 1rem minmax(0,12rem) 1fr 2.6rem;
+  align-items: center; gap: .5rem; width: 100%;
+  padding: .35rem .25rem; border: 0; border-bottom: 1px solid #f4f4fb;
+  background: none; text-align: left; cursor: pointer; font: inherit;
+}
+.tnav__row:last-child { border-bottom: 0; }
+.tnav__row:hover { background: #f5f5fe; }
+.tnav__row[aria-expanded="true"] { background: #f0f0fc; }
+.tnav__caret {
+  font-size: .7rem; color: var(--agora, #000091); text-align: center; user-select: none;
+}
+.tnav__label {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; color: #222;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tnav__track { height: .7rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
+.tnav__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); }
+.tnav__pct {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  color: var(--agora, #000091); text-align: right; font-weight: 600;
+}
