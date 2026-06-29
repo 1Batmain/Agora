@@ -1048,8 +1048,7 @@ body {
 }
 .hero__tagline strong {
   font-weight: 700;
-  color: var(--grey-1000);
-  box-shadow: inset 0 -0.42em 0 var(--agora-soft);
+  color: var(--agora);
 }
 /* Différenciateurs : 3 colonnes scannables, accent Bleu France. */
 .hero__diff {
