@@ -25,10 +25,15 @@ export function ConsultationOverview({
   const [analysis, setAnalysis] = useState<AnalysisPayload | null>(null);
   const [synthesis, setSynthesis] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // Synthèse DYNAMIQUE : null = vue globale ; sinon synthèse du thème sélectionné.
+  const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
+  const [themeSynthesis, setThemeSynthesis] = useState<string | null>(null);
+  const [themeLoading, setThemeLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
+    setSelectedThemeId(null);
     Promise.all([
       fetchAnalysis(dataset.id).catch(() => null),
       fetchInsights(dataset.id, 'global').catch(() => null),
@@ -42,6 +47,28 @@ export function ConsultationOverview({
       cancelled = true;
     };
   }, [dataset.id]);
+
+  // Fetch PARESSEUX de la synthèse du thème sélectionné ; annule le fetch précédent
+  // au changement de sélection. null = vue globale (déjà chargée), pas de fetch.
+  const selectedTheme = analysis?.themes?.find((t) => t.id === selectedThemeId) ?? null;
+  useEffect(() => {
+    if (selectedThemeId == null) return;
+    let cancelled = false;
+    setThemeLoading(true);
+    setThemeSynthesis(null);
+    fetchInsights(dataset.id, 'theme', selectedThemeId, selectedTheme ?? undefined)
+      .catch(() => null)
+      .then((s) => {
+        if (cancelled) return;
+        setThemeSynthesis(s?.data ?? null);
+        setThemeLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // selectedTheme dérive de selectedThemeId — pas besoin de le suivre.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataset.id, selectedThemeId]);
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
@@ -93,19 +120,47 @@ export function ConsultationOverview({
               ))}
             </div>
           )}
-          {loading ? (
-            <p className="overview__loading">Chargement de la synthèse…</p>
-          ) : synthesis ? (
-            <Markdown source={synthesis} />
-          ) : (
-            <p className="overview__loading">Synthèse indisponible.</p>
-          )}
+
           {themes.length > 0 && (
             <>
               <h3 className="synthesis__subhead">Points de convergence</h3>
-              <ThemeNavigator themes={themes} total={navTotal} />
+              <ThemeNavigator
+                themes={themes}
+                total={navTotal}
+                selectedId={selectedThemeId}
+                onSelect={setSelectedThemeId}
+              />
             </>
           )}
+
+          {/* Synthèse DYNAMIQUE : globale si rien de sélectionné, sinon celle du thème. */}
+          {(() => {
+            const dynLoading = selectedThemeId == null ? loading : themeLoading;
+            const dynSource = selectedThemeId == null ? synthesis : themeSynthesis;
+            const dynTitle = selectedTheme
+              ? selectedTheme.title || selectedTheme.label
+              : "Vue d'ensemble";
+            const themeKeywords = selectedTheme?.keywords ?? [];
+            return (
+              <div className="overview__dynsynth" aria-live="polite">
+                <h3 className="synthesis__subhead">{dynTitle}</h3>
+                {selectedTheme && themeKeywords.length > 0 && (
+                  <div className="kw-chips" aria-label="Mots-clés du thème">
+                    {themeKeywords.map((kw) => (
+                      <span key={kw} className="kw-chip">{kw}</span>
+                    ))}
+                  </div>
+                )}
+                {dynLoading ? (
+                  <p className="overview__loading">Chargement de la synthèse…</p>
+                ) : dynSource ? (
+                  <Markdown source={dynSource} />
+                ) : (
+                  <p className="overview__loading">Synthèse indisponible.</p>
+                )}
+              </div>
+            );
+          })()}
         </section>
       </main>
     </div>
