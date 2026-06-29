@@ -33,6 +33,8 @@ export function ConsultationOverview({
   const [themeLoading, setThemeLoading] = useState(false);
   // Avis représentatifs du focus = citations triées centroïde (cliquables → exploration).
   const [citations, setCitations] = useState<Citation[] | null>(null);
+  // Mot-clé cliqué → on ne montre que les avis qui le mentionnent (les plus proches).
+  const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -150,8 +152,13 @@ export function ConsultationOverview({
               : "Vue d'ensemble";
             // Mots-clés DU FOCUS : globaux si rien de sélectionné, sinon ceux du thème.
             const focusKeywords = selectedTheme ? (selectedTheme.keywords ?? []) : keywords;
-            // Avis représentatifs = citations triées centroïde du focus (top 5), cliquables.
-            const repAvis = (citations ?? []).slice(0, 5);
+            // Avis du focus : si un mot-clé est cliqué, on ne garde que ceux qui le
+            // mentionnent (les plus proches) ; sinon les représentatifs (centroïde).
+            const allAvis = citations ?? [];
+            const repAvis = (selectedKeyword
+              ? allAvis.filter((c) => (c.text || '').toLowerCase().includes(selectedKeyword.toLowerCase()))
+              : allAvis
+            ).slice(0, selectedKeyword ? 8 : 5);
             return (
               <div className="overview__dynsynth" aria-live="polite">
                 <h3 className="synthesis__subhead">{dynTitle}</h3>
@@ -164,13 +171,6 @@ export function ConsultationOverview({
                     ← Vue générale
                   </button>
                 )}
-                {selectedTheme && focusKeywords.length > 0 && (
-                  <div className="kw-chips" aria-label="Mots-clés du focus">
-                    {focusKeywords.map((kw) => (
-                      <span key={kw} className="kw-chip">{kw}</span>
-                    ))}
-                  </div>
-                )}
                 {dynLoading ? (
                   <p className="overview__loading">Chargement de la synthèse…</p>
                 ) : dynSource ? (
@@ -178,24 +178,60 @@ export function ConsultationOverview({
                 ) : (
                   <p className="overview__loading">Synthèse indisponible.</p>
                 )}
-                {selectedTheme && repAvis.length > 0 && (
-                  <div className="overview__avis">
-                    <h4 className="synthesis__subhead">Avis représentatifs</h4>
-                    {repAvis.map((c, i) => {
-                      const id = c.avis_id;
+                {/* Mots-clés CLIQUABLES, juste au-dessus des avis : un clic filtre les avis
+                    sur ceux qui mentionnent ce mot-clé (les plus proches). */}
+                {selectedTheme && focusKeywords.length > 0 && (
+                  <div className="kw-chips kw-chips--clickable" aria-label="Mots-clés — cliquer pour filtrer les avis">
+                    {focusKeywords.map((kw) => {
+                      const on = selectedKeyword === kw;
                       return (
-                        <blockquote
-                          key={id ?? i}
-                          className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
-                          role={id ? 'button' : undefined}
-                          tabIndex={id ? 0 : undefined}
-                          onClick={id ? () => onExploreAvis(id) : undefined}
-                          onKeyDown={id ? (e) => { if (e.key === 'Enter') onExploreAvis(id); } : undefined}
+                        <button
+                          key={kw}
+                          type="button"
+                          className={`kw-chip kw-chip--btn${on ? ' kw-chip--on' : ''}`}
+                          aria-pressed={on}
+                          title={on ? 'Retirer le filtre' : `Avis mentionnant « ${kw} »`}
+                          onClick={() => setSelectedKeyword(on ? null : kw)}
                         >
-                          « {c.text} »
-                        </blockquote>
+                          {kw}
+                        </button>
                       );
                     })}
+                  </div>
+                )}
+                {selectedTheme && allAvis.length > 0 && (
+                  <div className="overview__avis">
+                    <h4 className="synthesis__subhead">
+                      {selectedKeyword ? `Avis mentionnant « ${selectedKeyword} »` : 'Avis représentatifs'}
+                      {selectedKeyword && (
+                        <button
+                          type="button"
+                          className="overview__kwclear"
+                          onClick={() => setSelectedKeyword(null)}
+                        >
+                          × tous
+                        </button>
+                      )}
+                    </h4>
+                    {repAvis.length > 0 ? (
+                      repAvis.map((c, i) => {
+                        const id = c.avis_id;
+                        return (
+                          <blockquote
+                            key={id ?? i}
+                            className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
+                            role={id ? 'button' : undefined}
+                            tabIndex={id ? 0 : undefined}
+                            onClick={id ? () => onExploreAvis(id) : undefined}
+                            onKeyDown={id ? (e) => { if (e.key === 'Enter') onExploreAvis(id); } : undefined}
+                          >
+                            « {c.text} »
+                          </blockquote>
+                        );
+                      })
+                    ) : (
+                      <p className="overview__loading">Aucun avis ne mentionne « {selectedKeyword} ».</p>
+                    )}
                   </div>
                 )}
               </div>
