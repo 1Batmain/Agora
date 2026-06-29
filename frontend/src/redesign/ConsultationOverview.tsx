@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { AnalysisPayload, Citation, Consultation } from './contract';
 import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { Header } from './Header';
@@ -35,6 +35,17 @@ export function ConsultationOverview({
   const [citations, setCitations] = useState<Citation[] | null>(null);
   // Mot-clé cliqué → on ne montre que les avis qui le mentionnent (les plus proches).
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
+  // Ancre du navigateur : on y ramène doucement la vue à chaque (dé)sélection.
+  const synthRef = useRef<HTMLElement>(null);
+
+  // Sélectionner un cluster (ou null = vue générale) SANS rechargement brutal :
+  // on met à jour l'état puis on ramène doucement le navigateur en haut.
+  const selectTheme = (id: string | null) => {
+    setSelectedThemeId(id);
+    requestAnimationFrame(() => {
+      synthRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -64,7 +75,8 @@ export function ConsultationOverview({
     }
     let cancelled = false;
     setThemeLoading(true);
-    setThemeSynthesis(null);
+    // On NE vide PAS `themeSynthesis` : on garde l'ancien contenu (estompé) pendant
+    // le re-fetch pour éviter tout flash « tout disparaît / réapparaît ».
     setCitations(null);
     fetchInsights(dataset.id, 'theme', selectedThemeId, selectedTheme ?? undefined)
       .catch(() => null)
@@ -126,7 +138,7 @@ export function ConsultationOverview({
           Voir le graphe →
         </button>
 
-        <section className="overview__synthesis">
+        <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (
             <>
               <h3 className="synthesis__subhead">Clusters identifiés</h3>
@@ -134,11 +146,10 @@ export function ConsultationOverview({
                 themes={themes}
                 total={navTotal}
                 currentId={selectedThemeId}
-                onDrill={setSelectedThemeId}
-                onSelect={setSelectedThemeId}
+                onSelect={selectTheme}
                 onBack={() => {
                   const cur = themes.find((t) => t.id === selectedThemeId);
-                  setSelectedThemeId(cur?.parent_id ?? null);
+                  selectTheme(cur?.parent_id ?? null);
                 }}
               />
             </>
@@ -160,21 +171,30 @@ export function ConsultationOverview({
               : allAvis
             ).slice(0, selectedKeyword ? 8 : 5);
             return (
-              <div className="overview__dynsynth" aria-live="polite">
+              <div
+                className={`overview__dynsynth${dynLoading ? ' is-loading' : ''}`}
+                aria-live="polite"
+                aria-busy={dynLoading}
+              >
                 <h3 className="synthesis__subhead">{dynTitle}</h3>
                 {selectedTheme && (
                   <button
                     type="button"
                     className="overview__backgen"
-                    onClick={() => setSelectedThemeId(null)}
+                    onClick={() => selectTheme(null)}
                   >
                     ← Vue générale
                   </button>
                 )}
-                {dynLoading ? (
+                {/* Pas de flash : si une synthèse est déjà là, on la garde (estompée)
+                    pendant le re-fetch plutôt que de vider la zone. */}
+                {dynSource ? (
+                  <div className="overview__synthbody">
+                    <Markdown source={dynSource} />
+                    {dynLoading && <p className="overview__synthloading">Actualisation…</p>}
+                  </div>
+                ) : dynLoading ? (
                   <p className="overview__loading">Chargement de la synthèse…</p>
-                ) : dynSource ? (
-                  <Markdown source={dynSource} />
                 ) : (
                   <p className="overview__loading">Synthèse indisponible.</p>
                 )}
