@@ -14,6 +14,7 @@
  */
 import type {
   AnalysisPayload,
+  AvisListResponse,
   AvisProvenance,
   Backend,
   BuildProgress,
@@ -194,6 +195,30 @@ export async function upsertThemeFlag(
 export async function deleteThemeFlag(dataset: string, themeId: string): Promise<boolean> {
   if (FORCE_MOCK) return true;
   return deleteFlagOf(dataset, 'theme', themeId);
+}
+
+/**
+ * GET /avis_list {dataset, theme_id?, q?, limit, offset} → a paginated/filtered
+ * page of avis for the exploration page, or building/error while the analysis cooks.
+ */
+export async function fetchAvisList(
+  dataset: string,
+  opts: { themeId?: string | null; q?: string; limit?: number; offset?: number } = {},
+): Promise<Sourced<AvisListResponse>> {
+  const { themeId, q, limit = 50, offset = 0 } = opts;
+  if (FORCE_MOCK) return { data: { total: 0, items: [] }, source: 'mock' };
+  try {
+    const qs = new URLSearchParams({ dataset, limit: String(limit), offset: String(offset) });
+    if (themeId) qs.set('theme_id', themeId);
+    if (q && q.trim()) qs.set('q', q.trim());
+    const { status, body } = await rawFetch(`/avis_list?${qs}`);
+    if (status === 200 && body && Array.isArray(body.items) && typeof body.total === 'number') {
+      return { data: body as AvisListResponse, source: 'live' };
+    }
+    return notReady<AvisListResponse>(body);
+  } catch (e) {
+    return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
+  }
 }
 
 /** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */
