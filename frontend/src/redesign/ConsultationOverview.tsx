@@ -113,13 +113,6 @@ export function ConsultationOverview({
 
         <section className="overview__synthesis">
           <h2>Synthèse générale</h2>
-          {keywords.length > 0 && (
-            <div className="kw-chips" aria-label="Mots-clés représentatifs">
-              {keywords.map((kw) => (
-                <span key={kw} className="kw-chip">{kw}</span>
-              ))}
-            </div>
-          )}
 
           {themes.length > 0 && (
             <>
@@ -140,13 +133,16 @@ export function ConsultationOverview({
             const dynTitle = selectedTheme
               ? selectedTheme.title || selectedTheme.label
               : "Vue d'ensemble";
-            const themeKeywords = selectedTheme?.keywords ?? [];
+            // Mots-clés DU FOCUS : globaux si rien de sélectionné, sinon ceux du thème.
+            const focusKeywords = selectedTheme ? (selectedTheme.keywords ?? []) : keywords;
+            // Avis représentatifs (centroïde) du focus — à TOUS les niveaux (macro inclus).
+            const avis = selectedTheme?.representative_claims ?? [];
             return (
               <div className="overview__dynsynth" aria-live="polite">
                 <h3 className="synthesis__subhead">{dynTitle}</h3>
-                {selectedTheme && themeKeywords.length > 0 && (
-                  <div className="kw-chips" aria-label="Mots-clés du thème">
-                    {themeKeywords.map((kw) => (
+                {focusKeywords.length > 0 && (
+                  <div className="kw-chips" aria-label="Mots-clés du focus">
+                    {focusKeywords.map((kw) => (
                       <span key={kw} className="kw-chip">{kw}</span>
                     ))}
                   </div>
@@ -157,6 +153,14 @@ export function ConsultationOverview({
                   <Markdown source={dynSource} />
                 ) : (
                   <p className="overview__loading">Synthèse indisponible.</p>
+                )}
+                {avis.length > 0 && (
+                  <div className="overview__avis">
+                    <h4 className="synthesis__subhead">Avis représentatifs</h4>
+                    {avis.map((a, i) => (
+                      <blockquote key={i} className="overview__avis-quote">« {a} »</blockquote>
+                    ))}
+                  </div>
                 )}
               </div>
             );
