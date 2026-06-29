@@ -160,8 +160,13 @@ def _avis_themes(claims: list[dict]) -> list[dict]:
 
 def avis_list(avis_data: dict, themes: list[dict], *,
               theme_id: str | None = None, q: str | None = None,
-              limit: int = 50, offset: int = 0) -> dict:
+              limit: int = 15, offset: int = 0) -> dict:
     """Liste paginée/filtrée des avis depuis `avis.json` → `{total, items}`.
+
+    Chaque item porte l'avis ENTIER (`text`, `text_fr`, `lang`, `claims` — déjà dans
+    `avis.json`, aucun recalcul) EN PLUS de l'aperçu (`excerpt`) et des thèmes uniques
+    (`themes`), pour un rendu INLINE complet (texte + surlignages verbatim) côté front,
+    sans appel `/avis/{id}` par carte. Items lourds → `limit` par défaut bas (~15).
 
     `theme_id` : ne garde que les avis ayant ≥1 claim dont le `cluster_id` est dans le
     sous-arbre de `theme_id` (un macro filtre tous ses sous-thèmes). `q` : sous-chaîne
@@ -182,10 +187,16 @@ def avis_list(avis_data: dict, themes: list[dict], *,
         text = entry.get("text") or ""
         if needle is not None and needle not in _fold(text):
             continue
+        # Avis ENTIER (text/text_fr/lang/claims) servi tel quel depuis `avis.json` —
+        # spans des claims ancrés sur `text` (text_clean masqué, cf. docstring module).
         matched.append({
             "avis_id": entry.get("id", key),
             "excerpt": _excerpt(text),
             "themes": _avis_themes(claims),
+            "text": text,
+            "text_fr": entry.get("text_fr"),
+            "lang": entry.get("lang", "fr"),
+            "claims": claims,
         })
 
     total = len(matched)

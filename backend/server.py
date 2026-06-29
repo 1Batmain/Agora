@@ -393,14 +393,17 @@ def get_avis_list(
     dataset: str | None = Query(None),
     theme_id: str | None = Query(None),
     q: str | None = Query(None),
-    limit: int = Query(50, ge=1, le=200),
+    limit: int = Query(15, ge=1, le=200),
     offset: int = Query(0, ge=0),
 ) -> dict:
     """SERVE-only : liste paginée/filtrée de TOUS les avis (page d'exploration).
 
-    Lit `analysis/avis.json` (précalculé) → `{total, items:[{avis_id, excerpt,
-    themes:[{id,title,color}]}]}`. `theme_id` filtre les avis ayant ≥1 claim dans le
-    sous-arbre du thème (un macro filtre ses sous-thèmes, hiérarchie de `/analysis`) ;
+    Lit `analysis/avis.json` (précalculé) → `{total, items:[…]}` où chaque item porte
+    l'avis ENTIER (`text`, `text_fr`, `lang`, `claims:[{spans,target,color,theme_title,
+    cluster_id}]`) en plus de `excerpt` + `themes:[{id,title,color}]` : l'explorateur
+    rend chaque avis INLINE (texte + surlignages) sans `/avis/{id}` par carte. Items
+    lourds → `limit` par défaut bas (15). `theme_id` filtre les avis ayant ≥1 claim dans
+    le sous-arbre du thème (un macro filtre ses sous-thèmes, hiérarchie de `/analysis`) ;
     `q` est une recherche sous-chaîne insensible casse/accents sur le texte ;
     `limit`/`offset` paginent. Si l'analyse n'est pas prête → 202 `building`.
     """
