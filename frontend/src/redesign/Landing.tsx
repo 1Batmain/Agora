@@ -27,33 +27,28 @@ export function Landing({
 
       <main className="landing__body">
         <section className="hero">
-          <p className="hero__eyebrow">
-            <span className="hero__prompt">agora</span>
-            analyse de consultations citoyennes
-            <span className="hero__caret" aria-hidden />
-          </p>
           <h1 className="hero__title">
-            Des milliers d’avis citoyens,
-            <span className="hero__accent"> les thèmes qui émergent</span>
+            Analyse des consultations
+            <span className="hero__accent"> citoyennes </span>
             <br />
           </h1>
           <p className="hero__tagline">
-            Agora lit l’intégralité des réponses à une consultation et en fait émerger
-            les grands thèmes — <strong>sans jamais reformuler un mot</strong>. Chaque
-            idée reste traçable jusqu’à la phrase exacte du citoyen.
+            Agora analyse l’intégralité des réponses à une consultation et en fait émerger
+            les grands thèmes — de manière <strong>automatisée, transparente, rapide et
+            économique</strong>.
           </p>
           <ul className="hero__diff">
             <li>
-              <strong>Verbatim</strong>
-              <span>zéro reformulation, zéro trahison du propos</span>
+              <strong>Intelligible</strong>
+              <span>restitue fidèlement les divergences et les consensus</span>
             </li>
             <li>
-              <strong>Émergent</strong>
-              <span>les thèmes naissent des données, pas d’une grille</span>
+              <strong>Modulaire</strong>
+              <span>les thèmes naissent des données, pas d’une grille — le modèle s’adapte à la donnée</span>
             </li>
             <li>
               <strong>Souverain</strong>
-              <span>tourne en local, sur des modèles ouverts</span>
+              <span>tourne sur des modèles ouverts, et peut être porté en local</span>
             </li>
           </ul>
           <ul className="hero__meta" aria-hidden={datasets.length === 0}>
@@ -121,9 +116,7 @@ export function Landing({
             <span className="sec-head__hint">repo ouvert · PR obligatoire</span>
           </header>
           <p className="how__lead">
-            Le projet est ouvert : code à la main ou avec des agents, comme tu préfères.
-            Quelques repères pour démarrer vite et travailler en parallèle sans se marcher
-            dessus.
+            Tu es le bienvenu pour collaborer sur Agora.
           </p>
           <div className="collab__actions">
             <a
@@ -134,7 +127,7 @@ export function Landing({
             >
               <span className="collab__link-arrow" aria-hidden>→</span>
               <span className="collab__link-label">Repo GitHub</span>
-              <span className="collab__link-sub">cloner · forker · ouvrir une PR</span>
+              <span className="collab__link-sub">clone · crée ta branche · ouvre une PR</span>
             </a>
             <a
               className="collab__link"
@@ -144,84 +137,69 @@ export function Landing({
             >
               <span className="collab__link-arrow" aria-hidden>→</span>
               <span className="collab__link-label">Feuille de route</span>
-              <span className="collab__link-sub">todo.json — prochaines features à prendre</span>
+              <span className="collab__link-sub">choisis une tâche · propose une amélioration</span>
             </a>
           </div>
-          <div className="collab__grid">
-            <div className="collab__card">
-              <strong>🛣️ Choisis ta lane</strong>
-              <p>
-                Quatre couloirs : <em>pipeline/ML</em> (extraction, clustering) ·{' '}
-                <em>backend/API</em> · <em>frontend</em> · <em>research/éval</em>. Les{' '}
-                <em>contrats</em> (<code>contract.ts</code>, schéma Consultation) sont
-                l'interface entre lanes — on travaille en parallèle sans collision.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🌿 Branche + pull request</strong>
-              <p>
-                Une branche par feature (jamais sur <code>main</code>). Chaque
-                contribution passe par une <em>pull request</em> : gate <em>pytest</em>{' '}
-                vert + <em>npm run build</em> propre, un mainteneur relit et merge.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🧱 Invariants à ne jamais casser</strong>
-              <p>
-                <em>Fidélité verbatim</em> (les claims = mot pour mot) ·{' '}
-                <em>zéro hardcoding</em> (tout dérivé des données, marche sur n'importe quelle
-                consultation) · <em>build/serve séparés</em> (le serveur ne fait que lire des
-                caches).
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🔬 Le verdict d'abord</strong>
-              <p>
-                Tout changement d'algo (clustering, extraction…) se valide par un{' '}
-                <em>A/B sur échantillon</em> + une note dans <code>research/</code> avant de
-                toucher le chemin servi. On mesure, on ne devine pas.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🚀 Setup en 5 min</strong>
-              <p>
-                Clé Mistral dans <code>var/mistral.key</code> · backend <code>:8010</code>{' '}
-                (FastAPI) · front <code>:5180</code> (Vite). Les contrats back↔front vivent
-                dans <code>contract.ts</code>.
-              </p>
-            </div>
-            <div className="collab__card">
-              <strong>🤖 À la main ou en agents</strong>
-              <p>
-                Code classiquement, ou orchestre des agents dans ta lane — au choix. Un{' '}
-                <code>CLAUDE.md</code> / <code>AGENTS.md</code> à la racine onboarde les
-                agents (DA, invariants, contrats, lanes) pour qu'ils démarrent justes.
-              </p>
-            </div>
+        </section>
+
+        <section className="landing__problem">
+          <header className="sec-head">
+            <span className="sec-head__num">03</span>
+            <h2>Le problème à résoudre</h2>
+            <span className="sec-head__hint">pourquoi Agora existe</span>
+          </header>
+          <div className="section-prose">
+            <p>
+              Une consultation publique, c'est des milliers — parfois des millions — de
+              réponses en texte libre. Les analyser une par une est <strong>extrêmement long
+              et coûteux</strong>.
+            </p>
+            <p>
+              Agora est un outil qui analyse de larges volumes de données de manière{' '}
+              <strong>rapide et économique</strong> — ce qui ouvre la porte à des consultations
+              plus régulières et à une meilleure retranscription de la parole citoyenne.
+            </p>
+          </div>
+        </section>
+
+        <section className="landing__insp">
+          <header className="sec-head">
+            <span className="sec-head__num">04</span>
+            <h2>Inspirations</h2>
+            <span className="sec-head__hint">d'où l'on part</span>
+          </header>
+          <div className="section-prose">
+            <p>
+              Agora s'inscrit dans la lignée d'outils qui ont déjà fait leurs preuves.{' '}
+              <strong>Pol.is</strong> a dégagé des consensus citoyens sur des sujets clivants —
+              jusqu'à désamorcer le conflit Uber / taxis à Taïwan : la preuve qu'une
+              consultation de masse peut éclairer une vraie décision.
+            </p>
+            <p>
+              Agora reprend ces acquis mais part de <strong>l'expression même de chaque
+              avis</strong>, pas de votes : plus souple, il s'applique à n'importe quelle
+              consultation en texte libre.
+            </p>
           </div>
         </section>
 
         <section className="landing__pipeline">
           <header className="sec-head">
-            <span className="sec-head__num">03</span>
+            <span className="sec-head__num">05</span>
             <h2>Sous le capot — le pipeline</h2>
             <span className="sec-head__hint">5 étapes, des avis aux thèmes</span>
           </header>
           <p className="how__lead">
-            Page d'onboarding pour le hackathon. Voici comment Agora transforme des
-            milliers de contributions en une carte de thèmes navigable. Le pipeline
-            s'enrichit au fil des itérations — viens en construire la suite.
+            Pour commencer, voilà une overview de l'état actuel du pipeline de traitement
+            des consultations.
           </p>
           <ol className="pipe">
             <li className="pipe__step">
               <span className="pipe__tag">Mistral&nbsp;large</span>
               <strong>1 · Découper chaque avis en idées</strong>
               <p>
-                Une contribution mélange souvent plusieurs idées. On la découpe donc en{' '}
-                <em>claims</em> — une idée = une prise de position. Les phrases sont{' '}
-                <em>recopiées telles quelles</em> (comme surligner dans une copie), jamais
-                reformulées : ce qu'affiche Agora est toujours exactement ce qu'a écrit le
-                citoyen. Un grand modèle de langue (IA) fait ce découpage.
+                Lorsqu'une contribution traite de différents sujets, on la segmente par sujet
+                à l'aide du LLM.
               </p>
             </li>
             <li className="pipe__step">
@@ -251,7 +229,9 @@ export function Landing({
                 Dans ce réseau, un algorithme (<em>Leiden</em>) repère les « paquets » d'idées
                 très reliées entre elles : chaque paquet devient un <em>thème</em>. Les
                 thèmes <em>émergent des données</em> — personne ne les a définis à l'avance.
-                Les gros thèmes se subdivisent en sous-thèmes.
+                Les gros thèmes se subdivisent en sous-thèmes. <em>Leiden</em> nous a donné les
+                meilleurs résultats jusqu'ici ; d'autres méthodes comme <em>HDBSCAN</em> ont
+                aussi été testées.
               </p>
             </li>
             <li className="pipe__step">
