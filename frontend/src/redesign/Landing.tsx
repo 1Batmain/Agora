@@ -70,7 +70,11 @@ export function Landing({
         </section>
 
         <section className="landing__list">
-          <h2>Consultations</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">01</span>
+            <h2>Consultations</h2>
+            <span className="sec-head__hint">ouvertes à participer · closes analysées</span>
+          </header>
           {loading ? (
             <div className="landing__loading">
               <span className="spinner" /> chargement des consultations…
@@ -111,7 +115,11 @@ export function Landing({
         </section>
 
         <section className="landing__pipeline">
-          <h2>Sous le capot — le pipeline</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">02</span>
+            <h2>Sous le capot — le pipeline</h2>
+            <span className="sec-head__hint">5 étapes, des avis aux thèmes</span>
+          </header>
           <p className="how__lead">
             Page d'onboarding pour le hackathon. Voici comment Agora transforme des
             milliers de contributions en une carte de thèmes navigable. Le pipeline
@@ -176,7 +184,11 @@ export function Landing({
         </section>
 
         <section className="landing__collab">
-          <h2>Collaborer — hackathon</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">03</span>
+            <h2>Collaborer — hackathon</h2>
+            <span className="sec-head__hint">à la main ou en agents</span>
+          </header>
           <p className="how__lead">
             Le projet est ouvert : code à la main ou avec des agents, comme tu préfères.
             Quelques repères pour démarrer vite et travailler en parallèle sans se marcher
