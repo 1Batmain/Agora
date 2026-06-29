@@ -394,9 +394,18 @@ export default function RedesignApp({
               keywords={levelKeywords}
               themes={themes}
               themesTotal={themesTotal}
+              navCurrentId={contextTheme?.id ?? null}
               onSelectTheme={(id) => {
                 const t = themes.find((x) => x.id === id);
                 if (t) setSelected(t);
+              }}
+              onDrillTheme={(id) => {
+                const t = themes.find((x) => x.id === id);
+                if (t) onDrill(t);
+              }}
+              onBackTheme={() => {
+                setSelected(null);
+                setPath((p) => p.slice(0, -1));
               }}
               flagTarget={
                 dataset && contextTheme
