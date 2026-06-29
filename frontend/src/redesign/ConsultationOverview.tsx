@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { AnalysisPayload, AvisProvenance, Citation, Consultation } from './contract';
-import { fetchAnalysis, fetchAvis, fetchCitations, fetchInsights } from './analysisApi';
+import type { AnalysisPayload, Citation, Consultation } from './contract';
+import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
 import { ThemeNavigator } from './ThemeNavigator';
-import { AvisDetail } from './AvisDetail';
 import { LOCALE } from './strings';
 
 /**
@@ -17,10 +16,13 @@ export function ConsultationOverview({
   dataset,
   onHome,
   onViewGraph,
+  onExploreAvis,
 }: {
   dataset: Consultation;
   onHome: () => void;
   onViewGraph: () => void;
+  /** Clic sur une citation représentative → page d'exploration FOCALISÉE sur l'avis. */
+  onExploreAvis: (avisId: string) => void;
 }) {
   const [analysis, setAnalysis] = useState<AnalysisPayload | null>(null);
   const [synthesis, setSynthesis] = useState<string | null>(null);
@@ -29,11 +31,8 @@ export function ConsultationOverview({
   const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
   const [themeSynthesis, setThemeSynthesis] = useState<string | null>(null);
   const [themeLoading, setThemeLoading] = useState(false);
-  // Avis représentatifs du focus = citations triées centroïde (cliquables → AvisDetail).
+  // Avis représentatifs du focus = citations triées centroïde (cliquables → exploration).
   const [citations, setCitations] = useState<Citation[] | null>(null);
-  const [openAvisId, setOpenAvisId] = useState<string | null>(null);
-  const [avis, setAvis] = useState<AvisProvenance | null>(null);
-  const [avisLoading, setAvisLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -57,7 +56,6 @@ export function ConsultationOverview({
   // au changement de sélection. null = vue globale (déjà chargée), pas de fetch.
   const selectedTheme = analysis?.themes?.find((t) => t.id === selectedThemeId) ?? null;
   useEffect(() => {
-    setOpenAvisId(null);                              // change de focus → ferme l'avis ouvert
     if (selectedThemeId == null) {
       setCitations(null);
       return;
@@ -84,20 +82,6 @@ export function ConsultationOverview({
     // selectedTheme dérive de selectedThemeId — pas besoin de le suivre.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataset.id, selectedThemeId]);
-
-  // Avis ouvert (clic sur une citation représentative) → détail complet, comme la feuille.
-  useEffect(() => {
-    if (!openAvisId) return;
-    let cancelled = false;
-    setAvisLoading(true);
-    setAvis(null);
-    fetchAvis(dataset.id, openAvisId)
-      .then(({ data }) => !cancelled && setAvis(data))
-      .finally(() => !cancelled && setAvisLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [dataset.id, openAvisId]);
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
@@ -158,15 +142,7 @@ export function ConsultationOverview({
             </>
           )}
 
-          {/* Avis ouvert → détail complet (comme la feuille) ; sinon synthèse dynamique. */}
-          {openAvisId ? (
-            <AvisDetail
-              avis={avis}
-              loading={avisLoading}
-              dataset={dataset.id}
-              onBack={() => setOpenAvisId(null)}
-            />
-          ) : (() => {
+          {(() => {
             const dynLoading = selectedThemeId == null ? loading : themeLoading;
             const dynSource = selectedThemeId == null ? synthesis : themeSynthesis;
             const dynTitle = selectedTheme
@@ -204,8 +180,8 @@ export function ConsultationOverview({
                           className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
                           role={id ? 'button' : undefined}
                           tabIndex={id ? 0 : undefined}
-                          onClick={id ? () => setOpenAvisId(id) : undefined}
-                          onKeyDown={id ? (e) => { if (e.key === 'Enter') setOpenAvisId(id); } : undefined}
+                          onClick={id ? () => onExploreAvis(id) : undefined}
+                          onKeyDown={id ? (e) => { if (e.key === 'Enter') onExploreAvis(id); } : undefined}
                         >
                           « {c.text} »
                         </blockquote>

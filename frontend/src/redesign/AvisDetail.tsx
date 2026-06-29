@@ -21,6 +21,7 @@ export function AvisDetail({
   flagText,
   onFlagChange,
   onBack,
+  backLabel = '← retour aux citations',
 }: {
   avis: AvisProvenance | null;
   loading: boolean;
@@ -31,12 +32,14 @@ export function AvisDetail({
   /** Notifies the parent after a flag is saved/removed so the loaded state stays fresh. */
   onFlagChange?: (avisId: string, text: string | null) => void;
   onBack: () => void;
+  /** Label of the back button — defaults to citations; the explorer overrides it. */
+  backLabel?: string;
 }) {
   return (
     <section className="panel avisdetail">
       <div className="avisdetail__topbar">
         <button className="link-back" onClick={onBack}>
-          ← retour aux citations
+          {backLabel}
         </button>
         {avis && dataset && (
           <FlagControl
