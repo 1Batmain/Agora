@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
-import { Poll } from './Poll';
+import { ThemeNavigator } from './ThemeNavigator';
 import { deleteThemeFlag, upsertThemeFlag } from './analysisApi';
-import type { DataSource } from './contract';
+import type { DataSource, SpatialTheme } from './contract';
 
 /** Categories Bob can pin on a bad theme synthesis. */
 const THEME_CATEGORIES = ['Hallucination', 'Mauvais résumé', 'Erreur de clustering'] as const;
@@ -37,8 +37,9 @@ export function InsightsPanel({
   source,
   flagTarget,
   keywords,
-  breakdown,
-  breakdownTotal,
+  themes,
+  themesTotal,
+  onSelectTheme,
 }: {
   title: string;
   markdown: string | null;
@@ -46,11 +47,13 @@ export function InsightsPanel({
   source: DataSource | null;
   flagTarget?: ThemeFlagTarget;
   keywords?: string[];
-  /** Sous-thèmes dominants du niveau courant (barres de % « façon sondage »). */
-  breakdown?: { label: string; value: number; color?: string }[];
-  breakdownTotal?: number;
+  /** Arbre COMPLET des thèmes du payload (navigateur accordéon). */
+  themes?: SpatialTheme[];
+  /** Voix du niveau racine (dénominateur des thèmes racine). */
+  themesTotal?: number;
+  /** Optionnel : drill la vue d'analyse sur le thème cliqué dans le navigateur. */
+  onSelectTheme?: (themeId: string) => void;
 }) {
-  const total = breakdownTotal || (breakdown ?? []).reduce((s, b) => s + b.value, 0);
   return (
     <section className="panel insights">
       <header className="panel__head">
@@ -66,7 +69,9 @@ export function InsightsPanel({
           ))}
         </div>
       )}
-      {breakdown && <Poll items={breakdown} total={total} />}
+      {themes && themes.length > 0 && (
+        <ThemeNavigator themes={themes} total={themesTotal ?? 0} onSelect={onSelectTheme} />
+      )}
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> génération de la synthèse…
