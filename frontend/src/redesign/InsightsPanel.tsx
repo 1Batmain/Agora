@@ -69,9 +69,6 @@ export function InsightsPanel({
           ))}
         </div>
       )}
-      {themes && themes.length > 0 && (
-        <ThemeNavigator themes={themes} total={themesTotal ?? 0} onSelect={onSelectTheme} />
-      )}
       {loading ? (
         <div className="insights__loading">
           <span className="spinner" /> génération de la synthèse…
@@ -86,6 +83,12 @@ export function InsightsPanel({
         <p className="panel__empty">Synthèse indisponible (backend).</p>
       ) : (
         <p className="panel__empty">Aucune synthèse pour ce niveau.</p>
+      )}
+      {themes && themes.length > 0 && (
+        <>
+          <h3 className="synthesis__subhead">Points de convergence</h3>
+          <ThemeNavigator themes={themes} total={themesTotal ?? 0} onSelect={onSelectTheme} />
+        </>
       )}
     </section>
   );

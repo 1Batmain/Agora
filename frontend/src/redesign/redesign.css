@@ -1631,7 +1631,7 @@ body {
 .tnav::-webkit-scrollbar { width: 6px; }
 .tnav::-webkit-scrollbar-thumb { background: rgba(0,0,145,.25); border-radius: 3px; }
 .tnav__row {
-  display: grid; grid-template-columns: 1rem minmax(0,12rem) 1fr 2.6rem;
+  display: grid; grid-template-columns: 1rem minmax(0,1fr) 3rem 2.4rem;
   align-items: center; gap: .5rem; width: 100%;
   padding: .35rem .25rem; border: 0; border-bottom: 1px solid #f4f4fb;
   background: none; text-align: left; cursor: pointer; font: inherit;
@@ -1651,4 +1651,11 @@ body {
 .tnav__pct {
   font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
   color: var(--agora, #000091); text-align: right; font-weight: 600;
+}
+
+/* ── Sous-titre « Points de convergence » (au-dessus du navigateur de thèmes) ── */
+.synthesis__subhead {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .9rem; color: var(--agora, #000091);
+  margin: 1.6rem 0 .7rem; letter-spacing: .02em;
 }
