@@ -1046,6 +1046,43 @@ body {
   margin: 0;
   max-width: 620px;
 }
+.hero__tagline strong {
+  font-weight: 700;
+  color: var(--agora);
+}
+/* Différenciateurs : 3 colonnes scannables, accent Bleu France. */
+.hero__diff {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin: 36px 0 0;
+  padding: 0;
+}
+.hero__diff li {
+  padding-left: 14px;
+  border-left: 2px solid var(--agora);
+}
+.hero__diff strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--grey-1000);
+  margin-bottom: 4px;
+}
+.hero__diff span {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--grey-500);
+}
+@media (max-width: 620px) {
+  .hero__diff {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
 .hero__meta {
   list-style: none;
   display: flex;
@@ -1068,23 +1105,40 @@ body {
   color: var(--grey-1000);
 }
 
-.landing__list h2 {
+/* En-tête de section partagé (Consultations · pipeline · Collaborer) :
+   numéro Bleu France, titre mono capitales, indice discret à droite. */
+.sec-head {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 12px;
+  margin: 0 0 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sec-head__num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--agora);
+  font-variant-numeric: tabular-nums;
+}
+.sec-head h2 {
+  margin: 0;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--grey-700);
-  margin: 0 0 20px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
 }
-.landing__list-idx {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--agora);
+.sec-head__hint {
+  margin-left: auto;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--grey-300);
+}
+@media (max-width: 560px) {
+  .sec-head__hint {
+    display: none;
+  }
 }
 .landing__loading,
 .landing__empty {
@@ -1751,7 +1805,7 @@ body {
 .avisx__more { margin: 1.6rem auto 0; display: block; }
 
 /* ── Landing : pipeline technique (onboarding hackathon) ── */
-.landing__pipeline { margin-top: 4.5rem; }
+.landing__pipeline { margin-top: 88px; }
 .pipe { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1rem; max-width: 780px; }
 .pipe__step {
   padding: .9rem 1.1rem; border: 1px solid #e6e6ef; border-left: 3px solid var(--agora, #000091);
@@ -1794,7 +1848,7 @@ body {
 }
 
 /* ── Landing : section « Collaborer » (onboarding hackathon) ── */
-.landing__collab { margin-top: 4.5rem; }
+.landing__collab { margin-top: 88px; }
 .collab__grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem; margin-top: 1.6rem;
