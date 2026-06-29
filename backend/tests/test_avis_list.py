@@ -70,10 +70,17 @@ def test_pagination_slices_filtered_total():
 def test_item_shape_unique_themes_and_excerpt():
     out = avis_list(AVIS, THEMES, theme_id="c2")
     item = out["items"][0]
-    assert set(item) == {"avis_id", "excerpt", "themes"}
+    # Item enrichi : aperçu + thèmes + avis ENTIER (text/text_fr/lang/claims) pour le
+    # rendu inline côté front (plus d'appel `/avis/{id}` par carte).
+    assert set(item) == {"avis_id", "excerpt", "themes",
+                         "text", "text_fr", "lang", "claims"}
     # a2 porte 2 claims du même cluster → un seul thème listé.
     assert item["themes"] == [{"id": "c2", "title": "Données", "color": "#0f0"}]
     assert isinstance(item["excerpt"], str) and item["excerpt"]
+    # Avis complet servi tel quel depuis `avis.json` (claims + défauts FR).
+    assert item["text"] == AVIS["a2"]["text"]
+    assert item["claims"] == AVIS["a2"]["claims"]
+    assert item["text_fr"] is None and item["lang"] == "fr"
 
 
 def test_avis_list_server_shape(client):
@@ -85,6 +92,8 @@ def test_avis_list_server_shape(client):
     assert isinstance(body["total"], int)
     assert isinstance(body["items"], list) and len(body["items"]) <= 5
     for it in body["items"]:
-        assert set(it) >= {"avis_id", "excerpt", "themes"}
+        assert set(it) >= {"avis_id", "excerpt", "themes",
+                           "text", "lang", "claims"}
+        assert isinstance(it["text"], str) and isinstance(it["claims"], list)
         for th in it["themes"]:
             assert set(th) == {"id", "title", "color"}
