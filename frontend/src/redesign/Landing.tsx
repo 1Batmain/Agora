@@ -27,16 +27,35 @@ export function Landing({
 
       <main className="landing__body">
         <section className="hero">
+          <p className="hero__eyebrow">
+            <span className="hero__prompt">agora</span>
+            analyse de consultations citoyennes
+            <span className="hero__caret" aria-hidden />
+          </p>
           <h1 className="hero__title">
-            Analyse des consultations
-            <span className="hero__accent"> citoyennes </span>
+            Des milliers d’avis citoyens,
+            <span className="hero__accent"> les thèmes qui émergent</span>
             <br />
           </h1>
           <p className="hero__tagline">
-            Agora fait émerger les thèmes et les idées communes des questions ouvertes
-            et fournit une analyse des opinions de manière automatisée, traçable et
-            transparente.
+            Agora lit l’intégralité des réponses à une consultation et en fait émerger
+            les grands thèmes — <strong>sans jamais reformuler un mot</strong>. Chaque
+            idée reste traçable jusqu’à la phrase exacte du citoyen.
           </p>
+          <ul className="hero__diff">
+            <li>
+              <strong>Verbatim</strong>
+              <span>zéro reformulation, zéro trahison du propos</span>
+            </li>
+            <li>
+              <strong>Émergent</strong>
+              <span>les thèmes naissent des données, pas d’une grille</span>
+            </li>
+            <li>
+              <strong>Souverain</strong>
+              <span>tourne en local, sur des modèles ouverts</span>
+            </li>
+          </ul>
           <ul className="hero__meta" aria-hidden={datasets.length === 0}>
             <li>
               <strong>{datasets.length}</strong> consultations
@@ -51,7 +70,11 @@ export function Landing({
         </section>
 
         <section className="landing__list">
-          <h2>Consultations</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">01</span>
+            <h2>Consultations</h2>
+            <span className="sec-head__hint">ouvertes à participer · closes analysées</span>
+          </header>
           {loading ? (
             <div className="landing__loading">
               <span className="spinner" /> chargement des consultations…
@@ -92,7 +115,11 @@ export function Landing({
         </section>
 
         <section className="landing__pipeline">
-          <h2>Sous le capot — le pipeline</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">02</span>
+            <h2>Sous le capot — le pipeline</h2>
+            <span className="sec-head__hint">5 étapes, des avis aux thèmes</span>
+          </header>
           <p className="how__lead">
             Page d'onboarding pour le hackathon. Voici comment Agora transforme des
             milliers de contributions en une carte de thèmes navigable. Le pipeline
@@ -157,7 +184,11 @@ export function Landing({
         </section>
 
         <section className="landing__collab">
-          <h2>Collaborer — hackathon</h2>
+          <header className="sec-head">
+            <span className="sec-head__num">03</span>
+            <h2>Collaborer — hackathon</h2>
+            <span className="sec-head__hint">à la main ou en agents</span>
+          </header>
           <p className="how__lead">
             Le projet est ouvert : code à la main ou avec des agents, comme tu préfères.
             Quelques repères pour démarrer vite et travailler en parallèle sans se marcher
