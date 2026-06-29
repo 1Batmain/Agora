@@ -21,6 +21,7 @@ import type {
   Citation,
   DataSource,
   InsightLevel,
+  TodoPayload,
 } from './contract';
 import { mockAnalysis, mockAvis, mockCitations, mockInsights } from './mock';
 import { rawFetch } from './http';
@@ -219,6 +220,23 @@ export async function fetchAvisList(
   } catch (e) {
     return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
   }
+}
+
+/**
+ * GET /todo → la feuille de route collaborative (`{items, updated_at}`). Lecture
+ * pure, indépendante de l'analyse : pas de building/error, juste une liste vide en
+ * cas de souci réseau.
+ */
+export async function fetchTodo(): Promise<TodoPayload> {
+  try {
+    const { status, body } = await rawFetch('/todo');
+    if (status === 200 && body && Array.isArray(body.items)) {
+      return body as TodoPayload;
+    }
+  } catch {
+    /* réseau indisponible → feuille de route vide */
+  }
+  return { items: [] };
 }
 
 /** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */
