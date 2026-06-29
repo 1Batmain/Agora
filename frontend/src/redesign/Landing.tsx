@@ -28,8 +28,8 @@ export function Landing({
       <main className="landing__body">
         <section className="hero">
           <h1 className="hero__title">
-            <span className="hero__accent">Libérez </span>
-            la parole citoyenne
+            Analyse des consultations
+            <span className="hero__accent"> citoyennes </span>
             <br />
           </h1>
           <p className="hero__tagline">
@@ -136,6 +136,63 @@ export function Landing({
           </ol>
           <p className="how__footer">
             Modèles ouverts · traitement souverain · multilingue.
+          </p>
+        </section>
+
+        <section className="landing__pipeline">
+          <h2>Sous le capot — le pipeline</h2>
+          <p className="how__lead">
+            Page d'onboarding pour le hackathon. Voici comment Agora transforme des
+            milliers de contributions en une carte de thèmes navigable. Le pipeline
+            s'enrichit au fil des itérations — viens en construire la suite.
+          </p>
+          <ol className="pipe">
+            <li className="pipe__step">
+              <span className="pipe__tag">Mistral&nbsp;large</span>
+              <strong>1 · Découpage en claims</strong>
+              <p>
+                Chaque contribution est segmentée en <em>claims</em> — des prises de
+                position recopiées <em>verbatim</em> (multi-segments + cible), validées
+                par un gate d'ancrage exact : zéro hallucination, 100&nbsp;% fidèle à l'avis.
+              </p>
+            </li>
+            <li className="pipe__step">
+              <span className="pipe__tag">nomic-embed-v2</span>
+              <strong>2 · Embeddings</strong>
+              <p>
+                Chaque claim est projeté dans un espace vectoriel sémantique par un
+                encodeur local et multilingue.
+              </p>
+            </li>
+            <li className="pipe__step">
+              <span className="pipe__tag">k-NN · faiss</span>
+              <strong>3 · Graphe de proximité</strong>
+              <p>
+                On relie chaque claim à ses <em>k</em> plus proches voisins (similarité
+                cosinus) → un graphe où les idées sémantiquement proches sont connectées.
+              </p>
+            </li>
+            <li className="pipe__step">
+              <span className="pipe__tag">Leiden · igraph</span>
+              <strong>4 · Clusters (Leiden)</strong>
+              <p>
+                Détection de communautés sur le graphe → les <em>thèmes</em> émergent
+                des données. Hiérarchique (macro → sous-thèmes), avec subdivision
+                variance-adaptative et coarsening pour éviter les fourre-tout.
+              </p>
+            </li>
+            <li className="pipe__step">
+              <span className="pipe__tag">LLM · caché</span>
+              <strong>5 · Enrichissement</strong>
+              <p>
+                Titre + synthèse par thème, citations représentatives (proches du
+                centroïde), indices honnêtes (couverture, fidélité verbatim, modularité…).
+              </p>
+            </li>
+          </ol>
+          <p className="how__footer">
+            Stack : Python · FastAPI · nomic-embed-v2 · Mistral · Leiden/igraph ·
+            React + Vite + D3 — souverain &amp; local, modèles ouverts.
           </p>
         </section>
       </main>
