@@ -142,6 +142,21 @@ export interface AvisProvenance {
   claims: AvisClaim[];
 }
 
+/** One row of the avis-exploration list (`GET /avis_list`). */
+export interface AvisListItem {
+  avis_id: string;
+  /** ~220-char preview of the avis text (whitespace-flattened). */
+  excerpt: string;
+  /** Distinct themes carried by the avis' claims (chips), in first-seen order. */
+  themes: { id: string; title: string; color: string }[];
+}
+
+/** `GET /avis_list` → a paginated/filtered page of avis (`total` = before paging). */
+export interface AvisListResponse {
+  total: number;
+  items: AvisListItem[];
+}
+
 /**
  * Where the data came from — surfaced in the UI so it's clear what's on screen:
  *  - `live`     : real precomputed analysis served from the backend cache;
