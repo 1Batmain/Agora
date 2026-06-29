@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AnalysisPayload, Citation, Consultation } from './contract';
-import { fetchAnalysis, fetchCitations, fetchInsights } from './analysisApi';
+import type { AnalysisPayload, Citation, Consultation, ThemeOpinion } from './contract';
+import { fetchAnalysis, fetchCitations, fetchInsights, fetchOpinion } from './analysisApi';
+import { OpinionBar } from './OpinionBar';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
 import { ThemeNavigator } from './ThemeNavigator';
@@ -33,6 +34,8 @@ export function ConsultationOverview({
   const [themeLoading, setThemeLoading] = useState(false);
   // Avis représentatifs du focus = citations triées centroïde (cliquables → exploration).
   const [citations, setCitations] = useState<Citation[] | null>(null);
+  // Répartition d'opinion : chargée UNE fois par dataset, lookup par theme_id (gracieux si absent).
+  const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
   // Mot-clé cliqué → on ne montre que les avis qui le mentionnent (les plus proches).
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   // Ancre du navigateur : on y ramène doucement la vue à chaque (dé)sélection.
@@ -51,13 +54,16 @@ export function ConsultationOverview({
     let cancelled = false;
     setLoading(true);
     setSelectedThemeId(null);
+    setOpinions([]);
     Promise.all([
       fetchAnalysis(dataset.id).catch(() => null),
       fetchInsights(dataset.id, 'global').catch(() => null),
-    ]).then(([a, s]) => {
+      fetchOpinion(dataset.id).catch(() => []),
+    ]).then(([a, s, op]) => {
       if (cancelled) return;
       setAnalysis(a?.data ?? null);
       setSynthesis(s?.data ?? null);
+      setOpinions(op ?? []);
       setLoading(false);
     });
     return () => {
@@ -165,6 +171,10 @@ export function ConsultationOverview({
             const focusKeywords = selectedTheme ? (selectedTheme.keywords ?? []) : keywords;
             // Avis du focus : si un mot-clé est cliqué, on ne garde que ceux qui le
             // mentionnent (les plus proches) ; sinon les représentatifs (centroïde).
+            // Répartition d'opinion du thème focalisé (objet de clivage + barre fav/def).
+            const focusOpinion = selectedThemeId
+              ? opinions.find((o) => o.theme_id === selectedThemeId) ?? null
+              : null;
             const allAvis = citations ?? [];
             const repAvis = (selectedKeyword
               ? allAvis.filter((c) => (c.text || '').toLowerCase().includes(selectedKeyword.toLowerCase()))
@@ -186,6 +196,10 @@ export function ConsultationOverview({
                     ← Vue générale
                   </button>
                 )}
+                {/* Répartition d'opinion du thème (si bakée) : objet de clivage en
+                    proposition polaire + barre fav/déf/nuance + badge clivant/consensuel.
+                    Honnête : on n'affiche RIEN si le thème est 'impur' (signal trop diffus). */}
+                {selectedTheme && focusOpinion && <OpinionBar opinion={focusOpinion} />}
                 {/* Pas de flash : si une synthèse est déjà là, on la garde (estompée)
                     pendant le re-fetch plutôt que de vider la zone. */}
                 {dynSource ? (
