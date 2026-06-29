@@ -109,6 +109,43 @@ def fidelity_index(dataset: str, ideas) -> dict | None:
     return cached[1]
 
 
+def filter_generic_keywords(payload: dict, macro_frac: float = 0.25) -> dict:
+    """Retire des `keywords` de chaque thème ceux trop COMMUNS entre macros (génériques).
+
+    Un mot-clé présent dans plus de `macro_frac` des MACROS distincts (≥2) n'est pas
+    distinctif (« contenu », « voir », « vie »…) → on le retire de TOUS les thèmes. Le
+    comptage par MACRO (et non par cluster) préserve les termes de fond qui reviennent
+    dans les sous-clusters d'un même thème (« harcèlement »). Serve-time, zéro rebuild.
+    """
+    themes = [t for t in payload.get("themes", []) if isinstance(t, dict)]
+    if not themes:
+        return payload
+    by_id = {t["id"]: t for t in themes}
+
+    def macro_of(t: dict) -> str:
+        while t.get("parent_id"):
+            t = by_id.get(t["parent_id"], t)
+            if t.get("parent_id") is None:
+                break
+        return t["id"]
+
+    n_macros = sum(1 for t in themes if not t.get("parent_id")) or 1
+    kw_macros: dict[str, set] = {}
+    for t in themes:
+        m = macro_of(t)
+        for kw in set(t.get("keywords") or []):
+            kw_macros.setdefault(kw, set()).add(m)
+    import math
+    thr = max(2, math.ceil(macro_frac * n_macros))
+    generic = {kw for kw, ms in kw_macros.items() if len(ms) > thr}
+    if generic:
+        for t in themes:
+            kws = t.get("keywords")
+            if kws:
+                t["keywords"] = [k for k in kws if k not in generic]
+    return payload
+
+
 def dataset_keywords(payload: dict, top_n: int = 40) -> list[str]:
     """Mots-clés REPRÉSENTATIFS du dataset : agrège les c-TF-IDF des MACROS, pondérés par
     la taille du thème (n_avis) et le rang du mot, dédupliqués. Dérivé du payload caché —
@@ -131,6 +168,7 @@ def enrich_indices(payload: dict, dataset: str, ideas) -> dict:
     cette écriture ne RETOURNE JAMAIS au cache disque). Idempotent : remplace toute entrée
     de même clé. No-op si la forme attendue est absente (robustesse).
     """
+    filter_generic_keywords(payload)            # retire les mots-clés génériques (cross-macro)
     stats = payload.get("dataset_stats")
     if not isinstance(stats, dict):
         return payload
