@@ -30,6 +30,8 @@ Précalculé au BUILD et persisté (`analysis_store`), servi tel quel (instantan
 
 from __future__ import annotations
 
+import unicodedata
+
 from backend.analysis import ThemeTree, macro_of
 
 
@@ -98,6 +100,98 @@ def avis_payload_for(tree: ThemeTree, avis_index: int,
     return {"id": a.id, "text": a.text,
             "text_fr": tr.get("text_fr"), "lang": tr.get("lang", "fr"),
             "claims": avis_claims(tree, avis_index, claim_macro)}
+
+
+# --------------------------------------------------------------------------- #
+# Liste / recherche d'avis (endpoint `/avis_list`, SERVE depuis `avis.json`)
+# --------------------------------------------------------------------------- #
+def _fold(s: str) -> str:
+    """Normalise pour une comparaison insensible à la casse ET aux accents.
+
+    NFD + suppression des diacritiques (catégorie `Mn`) + casefold : « Réglementé »
+    matche « reglemente ». Générique (aucune table de corpus), suffisant pour une
+    recherche sous-chaîne plein-texte.
+    """
+    decomposed = unicodedata.normalize("NFD", s)
+    no_marks = "".join(c for c in decomposed if unicodedata.category(c) != "Mn")
+    return no_marks.casefold()
+
+
+def _descendants_of(themes: list[dict], theme_id: str) -> set[str]:
+    """Sous-arbre fermé `{theme_id} ∪ descendants` d'après les `parent_id` des thèmes.
+
+    Filtrer un macro doit ramener TOUS ses sous-thèmes : on dérive l'ensemble fermé du
+    sous-arbre depuis la hiérarchie de `/analysis` (générique, aucune profondeur en dur).
+    """
+    children: dict[str, list[str]] = {}
+    for t in themes:
+        children.setdefault(t.get("parent_id"), []).append(t["id"])
+    keep: set[str] = set()
+    stack = [theme_id]
+    while stack:
+        cur = stack.pop()
+        if cur in keep:
+            continue
+        keep.add(cur)
+        stack.extend(children.get(cur, []))
+    return keep
+
+
+def _excerpt(text: str, n: int = 220) -> str:
+    """Aperçu ~`n` caractères, coupé sur un mot, avec ellipse si tronqué."""
+    text = " ".join(text.split())        # aplatit les blancs pour un aperçu compact
+    if len(text) <= n:
+        return text
+    cut = text[:n].rsplit(" ", 1)[0].rstrip()
+    return (cut or text[:n].rstrip()) + "…"
+
+
+def _avis_themes(claims: list[dict]) -> list[dict]:
+    """Thèmes UNIQUES (id/title/color) portés par les claims d'un avis, dans l'ordre vu."""
+    seen: dict[str, dict] = {}
+    for c in claims:
+        cid = c.get("cluster_id")
+        if cid and cid not in seen:
+            seen[cid] = {"id": cid,
+                         "title": c.get("theme_title", ""),
+                         "color": c.get("color", "")}
+    return list(seen.values())
+
+
+def avis_list(avis_data: dict, themes: list[dict], *,
+              theme_id: str | None = None, q: str | None = None,
+              limit: int = 50, offset: int = 0) -> dict:
+    """Liste paginée/filtrée des avis depuis `avis.json` → `{total, items}`.
+
+    `theme_id` : ne garde que les avis ayant ≥1 claim dont le `cluster_id` est dans le
+    sous-arbre de `theme_id` (un macro filtre tous ses sous-thèmes). `q` : sous-chaîne
+    insensible casse/accents sur le `text`. `limit`/`offset` paginent le résultat filtré
+    (l'ordre suit `avis.json`, stable d'une requête à l'autre).
+    """
+    keep_ids = _descendants_of(themes, theme_id) if theme_id else None
+    needle = _fold(q.strip()) if q and q.strip() else None
+
+    matched: list[dict] = []
+    for key, entry in avis_data.items():
+        if not isinstance(entry, dict):
+            continue
+        claims = entry.get("claims") or []
+        if keep_ids is not None and not any(c.get("cluster_id") in keep_ids
+                                            for c in claims):
+            continue
+        text = entry.get("text") or ""
+        if needle is not None and needle not in _fold(text):
+            continue
+        matched.append({
+            "avis_id": entry.get("id", key),
+            "excerpt": _excerpt(text),
+            "themes": _avis_themes(claims),
+        })
+
+    total = len(matched)
+    start = max(0, offset)
+    page = matched[start:start + limit] if limit >= 0 else matched[start:]
+    return {"total": total, "items": page}
 
 
 def build_avis_provenance(tree: ThemeTree,
