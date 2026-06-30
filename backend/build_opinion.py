@@ -196,19 +196,31 @@ def aggregate(theme_id: str, proposition: str, counts: Counter, n: int) -> dict:
     }
 
 
-def _leaf_claims(node: ThemeNode, prepared) -> list[tuple[str, str]]:
-    """(avis_id, claim_text) verbatim pour les claims du nœud feuille (text_clean ancré)."""
-    out: list[tuple[str, str]] = []
+def _leaf_claims(node: ThemeNode, prepared) -> list[tuple[int, str, str]]:
+    """(claim_index, avis_id, claim_text) verbatim pour les claims du nœud feuille.
+
+    `claim_index` est l'index GLOBAL du claim (même clé que `/avis` : le claim servi a
+    pour id `f"{avis_id}#{claim_index}"`), conservé pour ancrer la stance par claim.
+    Le texte est `text_clean` (PII masquée, mêmes offsets que les spans servis).
+    """
+    out: list[tuple[int, str, str]] = []
     for i in node.members:
         t = (prepared.claim_texts[i] or "").strip()
         if len(t) >= 12:
             aid = prepared.avis[prepared.claim_owner[i]].id
-            out.append((aid, t))
+            out.append((i, aid, t))
     return out
 
 
-def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random, *, model: str) -> dict:
-    """Dérive la cible T2 d'une feuille, classe les claims, agrège la répartition."""
+def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random,
+                 *, model: str) -> tuple[dict, dict[str, dict]]:
+    """Dérive la cible T2 d'une feuille, classe les claims, agrège la répartition.
+
+    Renvoie `(opinion, claim_stance)` où `claim_stance` mappe le claim_id servi par
+    `/avis` (`f"{avis_id}#{index}"`) → `{stance, justif, proposition, theme_id}`. Par
+    cohérence avec le garde-fou de pureté (on ne montre une répartition que sur les
+    thèmes assez purs), un thème `impur` n'émet AUCUNE stance par claim (map vide).
+    """
     if not node.title:  # repli si le build d'analyse n'a pas (encore) titré ce nœud
         reps = [tree.prepared.claim_texts[i] for i in node.members[:REP_FOR_TITLE]]
         node.representative_claims = node.representative_claims or [r[:240] for r in reps]
@@ -216,7 +228,7 @@ def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random, *, model:
     cl = _leaf_claims(node, tree.prepared)
     if len(cl) > CAP:
         cl = [cl[i] for i in sorted(rng.sample(range(len(cl)), CAP))]
-    sample = [(j, txt) for j, (_aid, txt) in enumerate(cl)]
+    sample = [(j, txt) for j, (_gi, _aid, txt) in enumerate(cl)]
 
     cleavage = derive_cleavage(node, [t for _, t in sample], model=model)
     proposition = cleavage["objet"]
@@ -226,7 +238,22 @@ def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random, *, model:
     opinion = aggregate(node.id, proposition, counts, len(sample))
     opinion["title"] = node.title or node.label
     opinion["cleavage_justif"] = cleavage.get("justif", "")
-    return opinion
+
+    # Stance PAR CLAIM — clé = id servi par `/avis`. Émise seulement si le thème est pur
+    # (sinon le signal est trop diffus pour être affiché/audité par claim).
+    claim_stance: dict[str, dict] = {}
+    if opinion["profil"] != "impur":
+        for j, (gi, aid, _txt) in enumerate(cl):
+            rec = st.get(j)
+            if not rec:
+                continue
+            claim_stance[f"{aid}#{gi}"] = {
+                "stance": rec["stance"],
+                "justif": rec.get("justif", ""),
+                "proposition": proposition,
+                "theme_id": node.id,
+            }
+    return opinion, claim_stance
 
 
 # --------------------------------------------------------------------------- #
@@ -262,9 +289,9 @@ def build_opinion(
 
     done = 0
     lock = threading.Lock()
-    opinions: list[dict] = []
+    results: list[tuple[dict, dict[str, dict]]] = []
 
-    def _work(node: ThemeNode) -> dict:
+    def _work(node: ThemeNode) -> tuple[dict, dict[str, dict]]:
         return analyse_leaf(node, tree, rng, model=model)
 
     def _record(_k: int) -> None:
@@ -275,7 +302,7 @@ def build_opinion(
 
     if LLM_MAX_WORKERS <= 1 or total <= 1:
         for node in leaves:
-            opinions.append(_work(node))
+            results.append(_work(node))
             done += 1
             _record(done)
     else:
@@ -283,11 +310,17 @@ def build_opinion(
                                 thread_name_prefix="agora-opinion") as ex:
             futures = [ex.submit(_work, node) for node in leaves]
             for fut in as_completed(futures):
-                opinions.append(fut.result())
+                results.append(fut.result())
                 with lock:
                     done += 1
                     k = done
                 _record(k)
+
+    opinions = [o for o, _cs in results]
+    # Stance PAR CLAIM agrégée sur toutes les feuilles (claim_id → record), persistée à part.
+    claim_stance: dict[str, dict] = {}
+    for _o, cs in results:
+        claim_stance.update(cs)
 
     # Ordre STABLE (par theme_id dans l'ordre de l'arbre) — indépendant de l'ordonnancement.
     rank = {nid: i for i, nid in enumerate(tree.order)}
@@ -316,8 +349,11 @@ def build_opinion(
         "themes": opinions,
     }
     store.write_opinion(dataset, payload)
+    store.write_claim_stance(dataset, claim_stance)
     _log(f"{dataset} · ✓ opinion.json écrit · {total} feuilles "
          f"({n_clivant} clivant / {n_consensuel} consensuel / {n_impur} impur) · {took_s}s")
+    _log(f"{dataset} · ✓ claim_stance.json écrit · {len(claim_stance)} claims classés "
+         f"(thèmes purs uniquement)")
     return payload
 
 

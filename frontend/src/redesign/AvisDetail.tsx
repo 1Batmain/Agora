@@ -153,7 +153,7 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
                   <mark
                     key={i}
                     className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
-                    title={`Thème : ${seg.claim.theme_title}${seg.target ? ' · cible' : ''}`}
+                    title={claimTitle(seg.claim, seg.target)}
                     style={{
                       backgroundColor: tint(seg.claim.color),
                       borderBottom: seg.target
@@ -161,6 +161,7 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
                         : `2px solid ${tint(seg.claim.color)}`,
                     }}
                   >
+                    {seg.stanceAnchor && <StanceMark claim={seg.claim} />}
                     {seg.text}
                   </mark>
                 ) : (
@@ -282,6 +283,55 @@ interface Seg {
   text: string;
   claim: AvisClaim | null;
   target: boolean;
+  /** This slice begins the claim's first span → anchor its stance glyph here (once). */
+  stanceAnchor?: boolean;
+}
+
+/**
+ * Stance presentation — same transparency as the verbatim highlight: we SHOW the
+ * opinion classification (favorable / défavorable / nuancé) so it can be audited
+ * against the text. ↑ vert = pour, ↓ rouge = contre, ~ gris = nuancé.
+ */
+const STANCE_META: Record<string, { glyph: string; color: string; label: string }> = {
+  favorable: { glyph: '↑', color: '#1a7f37', label: 'favorable' },
+  defavorable: { glyph: '↓', color: '#c1121f', label: 'défavorable' },
+  nuance: { glyph: '~', color: '#6b7280', label: 'nuancé' },
+};
+
+/** Tooltip for a highlighted claim — theme, cible flag, and (if known) its stance. */
+function claimTitle(claim: AvisClaim, target: boolean): string {
+  let t = `Thème : ${claim.theme_title}${target ? ' · cible' : ''}`;
+  const meta = claim.stance ? STANCE_META[claim.stance] : undefined;
+  if (meta) {
+    t += `\nAvis : ${meta.label}`;
+    if (claim.proposition) t += ` envers « ${claim.proposition} »`;
+    if (claim.stance_justif) t += `\n« ${claim.stance_justif} »`;
+  }
+  return t;
+}
+
+/**
+ * Discrete stance glyph rendered at the start of a claim's highlight (↑/↓/~), coloured
+ * by stance. The proposition + justification surface on hover (title). Renders nothing
+ * when the claim carries no stance (graceful — pure themes only get classified).
+ */
+function StanceMark({ claim }: { claim: AvisClaim }) {
+  const meta = claim.stance ? STANCE_META[claim.stance] : undefined;
+  if (!meta) return null;
+  const title =
+    `Avis : ${meta.label}` +
+    (claim.proposition ? ` envers « ${claim.proposition} »` : '') +
+    (claim.stance_justif ? `\n« ${claim.stance_justif} »` : '');
+  return (
+    <sup
+      className="avisdetail__stance"
+      style={{ color: meta.color }}
+      title={title}
+      aria-label={`prise de position : ${meta.label}`}
+    >
+      {meta.glyph}
+    </sup>
+  );
 }
 
 interface ClusterRef {
@@ -329,6 +379,13 @@ function segments(text: string, claims: AvisClaim[]): Seg[] {
   }
   const cuts = [...bounds].sort((a, b) => a - b);
 
+  // Earliest span start per claim → anchor its stance glyph at its FIRST highlight only.
+  const firstStart = new Map<AvisClaim, number>();
+  for (const c of claims) {
+    if (!c.stance || c.spans.length === 0) continue;
+    firstStart.set(c, Math.min(...c.spans.map((s) => clamp(s.start, len))));
+  }
+
   const out: Seg[] = [];
   for (let i = 0; i < cuts.length - 1; i++) {
     const a = cuts[i];
@@ -342,10 +399,14 @@ function segments(text: string, claims: AvisClaim[]): Seg[] {
       claims.some(
         (c) => c.target != null && covers(c.target, a, b) && c.spans.some((s) => covers(s, a, b)),
       );
-    const seg: Seg = { text: text.slice(a, b), claim, target };
-    // Merge with the previous segment when nothing changed (fewer DOM nodes).
+    // Show the stance glyph once, at the slice that begins the owning claim's first span.
+    const stanceAnchor = claim != null && firstStart.get(claim) === a;
+    const seg: Seg = { text: text.slice(a, b), claim, target, stanceAnchor };
+    // Merge with the previous segment when nothing changed (fewer DOM nodes). Never merge
+    // onto a stance-anchor slice (it carries a leading glyph that must stay put).
     const prev = out[out.length - 1];
-    if (prev && prev.claim === claim && prev.target === target) prev.text += seg.text;
+    if (prev && prev.claim === claim && prev.target === target && !stanceAnchor)
+      prev.text += seg.text;
     else out.push(seg);
   }
   return out;

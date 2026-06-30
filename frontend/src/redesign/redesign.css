@@ -807,6 +807,18 @@ body {
 .avisdetail__hl--target {
   font-weight: 600;
 }
+/* Discrete per-claim stance glyph (↑ favorable / ↓ défavorable / ~ nuancé) at the
+   start of a claim's highlight — colour set inline by stance. Same transparency as the
+   verbatim highlight: the opinion classification is VISIBLE and auditable (proposition +
+   justif on hover). Absent when the claim has no stance (graceful). */
+.avisdetail__stance {
+  font-weight: 800;
+  font-size: 0.72em;
+  line-height: 0;
+  margin-right: 1px;
+  cursor: help;
+  vertical-align: super;
+}
 /* Inline cluster tag, revealed on hover over a highlight (the rest of the time
    the cluster is conveyed by colour + the legend above). */
 .avisdetail__hltag {

@@ -32,6 +32,7 @@ STATUS_NAME = "status.json"
 ANALYSIS_NAME = "analysis.json"
 AVIS_NAME = "avis.json"
 OPINION_NAME = "opinion.json"
+CLAIM_STANCE_NAME = "claim_stance.json"
 CITATIONS_DIRNAME = "citations"
 INSIGHTS_DIRNAME = "insights"
 
@@ -69,6 +70,16 @@ def opinion_path(dataset: str) -> Path:
     pas baké l'opinion : les endpoints/serve dégradent gracieusement.
     """
     return analysis_dir(dataset) / OPINION_NAME
+
+
+def claim_stance_path(dataset: str) -> Path:
+    """Stance PAR CLAIM (`{claim_id: {stance, justif, proposition, theme_id}}`).
+
+    Artefact À PART baké par `backend.build_opinion`, à côté d'`opinion.json` : la clé
+    est l'id de claim servi par `/avis` (`f"{avis_id}#{index}"`). N'est émis que sur les
+    thèmes assez purs ; les endpoints joignent gracieusement (absent → pas de stance).
+    """
+    return analysis_dir(dataset) / CLAIM_STANCE_NAME
 
 
 def _safe(name: str) -> str:
@@ -210,6 +221,31 @@ def read_opinion(dataset: str) -> dict | None:
     return data if isinstance(data, dict) else None
 
 
+# Stance par claim : un seul fichier `{claim_id: {…}}` par dataset, caché par mtime
+# (joint à chaque requête `/avis`/`/avis_list`, comme la provenance avis).
+_CLAIM_STANCE_CACHE: dict[str, tuple[float, dict]] = {}
+
+
+def read_claim_stance(dataset: str) -> dict | None:
+    """Stance par claim `{claim_id: {stance, justif, proposition, theme_id}}` (caché mtime).
+
+    `None` si l'opinion n'a pas (encore) été bakée → les endpoints `/avis` dégradent
+    gracieusement (claims servis sans stance).
+    """
+    path = claim_stance_path(dataset)
+    if not path.exists():
+        return None
+    mtime = path.stat().st_mtime
+    cached = _CLAIM_STANCE_CACHE.get(dataset)
+    if cached is None or cached[0] != mtime:
+        data = _read_json(path)
+        if not isinstance(data, dict):
+            return None
+        _CLAIM_STANCE_CACHE[dataset] = (mtime, data)
+        cached = _CLAIM_STANCE_CACHE[dataset]
+    return cached[1]
+
+
 # --------------------------------------------------------------------------- #
 # Écriture des artefacts (BUILD)
 # --------------------------------------------------------------------------- #
@@ -234,6 +270,12 @@ def write_insights(dataset: str, level: str, theme_id: str | None, payload: dict
 def write_opinion(dataset: str, payload: dict) -> None:
     """Persiste la répartition d'opinion (fichier À PART, n'efface aucun cache d'analyse)."""
     write_json(opinion_path(dataset), payload)
+
+
+def write_claim_stance(dataset: str, claim_stance: dict) -> None:
+    """Persiste la stance par claim (`{claim_id: {…}}`, fichier À PART, voisin d'opinion.json)."""
+    write_json(claim_stance_path(dataset), claim_stance)
+    _CLAIM_STANCE_CACHE.pop(dataset, None)
 
 
 def clear(dataset: str) -> None:

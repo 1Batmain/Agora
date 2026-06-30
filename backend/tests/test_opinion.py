@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections import Counter
 
 from backend import analysis_store
+from backend.avis import join_claim_stance
 from backend.build_opinion import aggregate
 from backend.recluster import DEFAULT_DATASET
 
@@ -99,3 +100,67 @@ def test_opinion_unknown_dataset(client):
     """Id non whitelisté → 404 (garde path-traversal partagée avec les autres endpoints)."""
     r = client.get("/opinion", params={"dataset": "../etc"})
     assert r.status_code == 404, r.text
+
+
+# --------------------------------------------------------------------------- #
+# Stance PAR CLAIM — join gracieux dans /avis (transparence par claim)
+# --------------------------------------------------------------------------- #
+STANCE_MAP = {
+    "a1#0": {"stance": "favorable", "justif": "soutient la mesure",
+             "proposition": "instaurer le RIC", "theme_id": "n1"},
+    "a1#2": {"stance": "defavorable", "justif": "rejette la mesure",
+             "proposition": "instaurer le RIC", "theme_id": "n1"},
+}
+
+
+def test_join_claim_stance_enriches_matching_claims():
+    """Les claims dont l'id est dans la map reçoivent stance/proposition/justif."""
+    claims = [{"id": "a1#0", "spans": [{"start": 0, "end": 5}], "target": None},
+              {"id": "a1#1", "spans": [{"start": 6, "end": 9}], "target": None},
+              {"id": "a1#2", "spans": [{"start": 10, "end": 15}], "target": None}]
+    out = join_claim_stance(claims, STANCE_MAP)
+    assert out[0]["stance"] == "favorable"
+    assert out[0]["proposition"] == "instaurer le RIC"
+    assert out[0]["stance_justif"] == "soutient la mesure"
+    assert out[2]["stance"] == "defavorable"
+    # Claim sans entrée : inchangé, pas de clés de stance ajoutées (gracieux).
+    assert "stance" not in out[1]
+    # L'ancrage verbatim (spans/target) est intact sur tous les claims.
+    assert all(c["spans"] == claims[i]["spans"] for i, c in enumerate(out))
+
+
+def test_join_claim_stance_graceful_without_map():
+    """Map absente (opinion non bakée) → claims renvoyés tels quels."""
+    claims = [{"id": "a1#0", "spans": []}]
+    assert join_claim_stance(claims, None) is claims
+    assert join_claim_stance(claims, {}) is claims
+
+
+def test_claim_stance_store_round_trip(tmp_path, monkeypatch):
+    """write_claim_stance → read_claim_stance restitue la map (et le cache s'invalide)."""
+    monkeypatch.setattr(analysis_store, "claim_stance_path",
+                        lambda _ds: tmp_path / "claim_stance.json")
+    analysis_store._CLAIM_STANCE_CACHE.clear()
+    assert analysis_store.read_claim_stance("ds") is None      # absent → None gracieux
+    analysis_store.write_claim_stance("ds", STANCE_MAP)
+    got = analysis_store.read_claim_stance("ds")
+    assert got == STANCE_MAP
+
+
+def test_avis_endpoint_joins_stance(client, monkeypatch):
+    """`/avis` joint la stance par claim quand l'artefact existe (gracieux sinon)."""
+    avis_fixture = {
+        "id": "a1", "text": "Texte de l'avis.", "text_fr": None, "lang": "fr",
+        "claims": [{"id": "a1#0", "cluster_id": "n1", "color": "#f00",
+                    "spans": [{"start": 0, "end": 5}], "target": None,
+                    "theme_title": "Démocratie"}],
+    }
+    monkeypatch.setattr(analysis_store, "state", lambda _ds: analysis_store.READY)
+    monkeypatch.setattr(analysis_store, "read_avis", lambda _ds, _id: avis_fixture)
+    monkeypatch.setattr(analysis_store, "read_claim_stance", lambda _ds: STANCE_MAP)
+    r = client.get("/avis/a1", params={"dataset": DEFAULT_DATASET})
+    assert r.status_code == 200, r.text
+    claim = r.json()["claims"][0]
+    assert claim["stance"] == "favorable"
+    assert claim["proposition"] == "instaurer le RIC"
+    assert claim["spans"] == [{"start": 0, "end": 5}]   # ancrage verbatim intact
