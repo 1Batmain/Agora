@@ -137,6 +137,13 @@ export default function App() {
     window.history.pushState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
   }, []);
 
+  // Feuille de route IN-APP (`?view=todo`) : ouverte depuis la landing (« Collaborer »).
+  const openTodo = useCallback(() => {
+    setRoute('todo');
+    setActiveId(null);
+    window.history.pushState({ route: 'todo', activeId: null } as HistState, '', '?view=todo');
+  }, []);
+
   if (route === 'overview' && active) {
     return (
       <ConsultationOverview
@@ -170,5 +177,7 @@ export default function App() {
   if (route === 'todo') {
     return <TodoPage onHome={backToLanding} />;
   }
-  return <Landing datasets={datasets} loading={loading} onOpen={openConsultation} />;
+  return (
+    <Landing datasets={datasets} loading={loading} onOpen={openConsultation} onTodo={openTodo} />
+  );
 }

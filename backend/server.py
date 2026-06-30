@@ -177,6 +177,49 @@ def get_todo() -> dict:
     return todo_store.read_todo()
 
 
+class TodoCreateBody(BaseModel):
+    """Corps de `POST /todo` — ajoute une tâche à la feuille de route collaborative."""
+    title: str
+    lane: str
+    note: str | None = None
+
+
+@app.post("/todo", dependencies=[Depends(rate_limit)])
+def create_todo(body: TodoCreateBody) -> dict:
+    """Ajoute une tâche (`status='todo'`, id dérivé du titre) et persiste `todo.json`.
+
+    OUVERT (outil collaboratif) mais RATE-LIMITÉ comme `/submit`. Validation : titre
+    non vide, lane dans le set connu (sinon 422). Renvoie `{ok, item}`.
+    """
+    try:
+        item = todo_store.add_todo(body.title, body.lane, body.note)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    return {"ok": True, "item": item}
+
+
+class TodoPatchBody(BaseModel):
+    """Corps de `PATCH /todo/{id}` — réclame/assigne et/ou change le statut."""
+    status: str | None = None
+    assignee: str | None = None
+
+
+@app.patch("/todo/{item_id}", dependencies=[Depends(rate_limit)])
+def update_todo(item_id: str, body: TodoPatchBody) -> dict:
+    """Réclame (`assignee`) et/ou change le statut (`todo→wip→done`) d'une tâche.
+
+    Read-modify-write atomique de `todo.json`. OUVERT + rate-limité. 404 si l'id est
+    inconnu, 422 si le statut est hors `{todo, wip, done}`. Renvoie `{ok, item}`.
+    """
+    try:
+        item = todo_store.patch_todo(item_id, status=body.status, assignee=body.assignee)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    if item is None:
+        raise HTTPException(status_code=404, detail=f"Tâche inconnue : {item_id!r}")
+    return {"ok": True, "item": item}
+
+
 # ===================== Participation (consultations OUVERTES) ===================== #
 # Une contribution citoyenne sur une consultation OUVERTE est embeddée nomic LOCAL
 # (aucun LLM/clé) et corrélée AU MOMENT MÊME aux contributions déjà reçues : on
