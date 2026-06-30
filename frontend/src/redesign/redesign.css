@@ -2011,3 +2011,16 @@ body {
 .opinion__txt--fav { color: #1a7f37; }
 .opinion__txt--def { color: #c1121f; }
 .opinion__note { font-size: 0.78rem; color: #777; font-style: italic; margin: 0.35rem 0 0; }
+
+/* ── Dashboard de VOLUME par niveau de synthèse (témoignages réels du cluster) ── */
+.overview__dash {
+  display: flex; flex-wrap: wrap; gap: 1.6rem; align-items: baseline;
+  margin: 0.7rem 0 1.1rem; padding: 0.7rem 0;
+  border-top: 1px solid #ececf3; border-bottom: 1px solid #ececf3;
+}
+.overview__dash-item { font-size: 0.82rem; color: #555; }
+.overview__dash-item strong {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 1.25rem; color: #111; margin-right: 0.25rem;
+}
+.overview__dash-pct strong, .overview__dash-pct { color: var(--agora, #000091); }

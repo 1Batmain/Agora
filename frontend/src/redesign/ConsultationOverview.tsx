@@ -199,6 +199,30 @@ export function ConsultationOverview({
                     ← Vue générale
                   </button>
                 )}
+                {/* Dashboard de VOLUME à CE niveau de synthèse : nombre RÉEL de témoignages
+                    (avis distincts) du cluster, sa part du panel, et le nombre d'idées (claims). */}
+                {(() => {
+                  const avisN = selectedTheme ? (selectedTheme.n_avis ?? 0) : navTotal;
+                  const claimsN = selectedTheme ? (selectedTheme.n_claims ?? 0) : null;
+                  const pct = selectedTheme && navTotal > 0
+                    ? Math.round((avisN / navTotal) * 100) : null;
+                  if (!avisN) return null;
+                  return (
+                    <div className="overview__dash" aria-label="Volume de ce niveau de synthèse">
+                      <span className="overview__dash-item">
+                        <strong>{avisN.toLocaleString(LOCALE)}</strong> témoignages
+                      </span>
+                      {pct != null && (
+                        <span className="overview__dash-item overview__dash-pct">{pct}% du panel</span>
+                      )}
+                      {claimsN != null && (
+                        <span className="overview__dash-item">
+                          <strong>{claimsN.toLocaleString(LOCALE)}</strong> idées
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
                 {/* Répartition d'opinion du thème (si bakée) : objet de clivage en
                     proposition polaire + barre fav/déf/nuance + badge clivant/consensuel.
                     Honnête : on n'affiche RIEN si le thème est 'impur' (signal trop diffus). */}
