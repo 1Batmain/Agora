@@ -12,7 +12,7 @@ from collections import Counter
 
 from backend import analysis_store
 from backend.avis import join_claim_stance
-from backend.build_opinion import aggregate
+from backend.build_opinion import _norm_confidence, aggregate
 from backend.recluster import DEFAULT_DATASET
 
 
@@ -106,11 +106,23 @@ def test_opinion_unknown_dataset(client):
 # Stance PAR CLAIM — join gracieux dans /avis (transparence par claim)
 # --------------------------------------------------------------------------- #
 STANCE_MAP = {
-    "a1#0": {"stance": "favorable", "justif": "soutient la mesure",
+    "a1#0": {"stance": "favorable", "stance_confidence": "high",
+             "justif": "soutient la mesure",
              "proposition": "instaurer le RIC", "theme_id": "n1"},
-    "a1#2": {"stance": "defavorable", "justif": "rejette la mesure",
+    "a1#2": {"stance": "defavorable", "stance_confidence": "low",
+             "justif": "rejette la mesure",
              "proposition": "instaurer le RIC", "theme_id": "n1"},
 }
+
+
+def test_norm_confidence_validates_like_stance():
+    """high|medium|low passent ; tout le reste (absent, inconnu) → repli prudent 'low'."""
+    assert _norm_confidence("high") == "high"
+    assert _norm_confidence(" Medium ") == "medium"
+    assert _norm_confidence("LOW") == "low"
+    assert _norm_confidence("très sûr") == "low"
+    assert _norm_confidence(None) == "low"
+    assert _norm_confidence("") == "low"
 
 
 def test_join_claim_stance_enriches_matching_claims():
@@ -120,9 +132,11 @@ def test_join_claim_stance_enriches_matching_claims():
               {"id": "a1#2", "spans": [{"start": 10, "end": 15}], "target": None}]
     out = join_claim_stance(claims, STANCE_MAP)
     assert out[0]["stance"] == "favorable"
+    assert out[0]["stance_confidence"] == "high"
     assert out[0]["proposition"] == "instaurer le RIC"
     assert out[0]["stance_justif"] == "soutient la mesure"
     assert out[2]["stance"] == "defavorable"
+    assert out[2]["stance_confidence"] == "low"
     # Claim sans entrée : inchangé, pas de clés de stance ajoutées (gracieux).
     assert "stance" not in out[1]
     # L'ancrage verbatim (spans/target) est intact sur tous les claims.

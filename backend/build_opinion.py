@@ -46,8 +46,10 @@ MODEL = os.environ.get(
     "AGORA_OPINION_MODEL", os.environ.get("AGORA_ENRICH_MODEL", "mistral-small-latest")
 )
 BATCH = 10                       # claims par appel de stance
-# Plafond de claims classés par feuille (borne le coût ; échantillon déterministe par seed).
-CAP = max(1, int(os.environ.get("AGORA_OPINION_CAP", "150")))
+# Plafond de claims classés par feuille. Par défaut quasi-illimité : on classe la stance
+# de TOUS les claims des thèmes émis (le garde-fou de pureté écarte déjà les feuilles
+# diffuses). Reste surchargeable (AGORA_OPINION_CAP) pour borner le coût si besoin.
+CAP = max(1, int(os.environ.get("AGORA_OPINION_CAP", "100000")))
 MIN_CLAIMS = 8                   # sous ce seuil, signal trop faible → impur
 MIN_ENGAGEMENT = 0.35            # garde-fou pureté : (fav+def)/n ≥ ce seuil sinon impur
 OPPOSITION_CLIVANT = 0.15        # opposition ≥ ce seuil → 'clivant', sinon 'consensuel'
@@ -87,10 +89,23 @@ STANCE_SYSTEM = (
     "  - \"nuance\"      : position ambivalente, conditionnelle, hors-sujet, ou aucune "
     "position claire ENVERS LA CIBLE précise.\n"
     "Juge la position envers la CIBLE, pas la qualité de l'écriture. Si la contribution "
-    "ne parle pas de la cible, c'est \"nuance\". Réponds en JSON strict : "
-    "{\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|nuance\",\"justif\":"
-    "\"<≤14 mots>\"}]}. Une entrée par contribution, dans l'ordre, rien d'autre."
+    "ne parle pas de la cible, c'est \"nuance\". Pour CHAQUE contribution, indique aussi "
+    "ta CONFIANCE dans le classement (auto-évaluation) en exactement une étiquette : "
+    "\"high\" (position explicite et nette), \"medium\" (position probable mais indirecte), "
+    "\"low\" (texte ambigu, allusif ou hors-sujet — tu hésites). Réponds en JSON strict : "
+    "{\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|nuance\",\"confidence\":"
+    "\"high|medium|low\",\"justif\":\"<≤14 mots>\"}]}. Une entrée par contribution, dans "
+    "l'ordre, rien d'autre."
 )
+
+# Niveaux de confiance valides (auto-évaluation du modèle). Toute valeur absente/inconnue
+# est normalisée en repli prudent `low` (on n'invente pas de certitude).
+CONFIDENCE_LEVELS = {"high", "medium", "low"}
+
+
+def _norm_confidence(value) -> str:
+    c = str(value or "").strip().lower()
+    return c if c in CONFIDENCE_LEVELS else "low"
 
 
 # --------------------------------------------------------------------------- #
@@ -135,7 +150,9 @@ def stance_batch(cible: str, items: list[tuple[int, str]], *, model: str) -> dic
         stance = str(rec.get("stance", "")).strip().lower()
         if stance not in {"favorable", "defavorable", "nuance"}:
             stance = "nuance"
-        out[idx] = {"stance": stance, "justif": str(rec.get("justif", "")).strip()}
+        out[idx] = {"stance": stance,
+                    "confidence": _norm_confidence(rec.get("confidence")),
+                    "justif": str(rec.get("justif", "")).strip()}
     return out
 
 
@@ -152,7 +169,8 @@ def run_stance(cible: str, items: list[tuple[int, str]], *, model: str) -> dict[
                 try:
                     got.update(stance_batch(cible, [(i, text)], model=model))
                 except (mistral_client.MistralError, json.JSONDecodeError):
-                    got[i] = {"stance": "nuance", "justif": "(échec LLM)"}
+                    got[i] = {"stance": "nuance", "confidence": "low",
+                              "justif": "(échec LLM)"}
         results.update(got)
         time.sleep(0.02)
     return results
@@ -249,6 +267,7 @@ def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random,
                 continue
             claim_stance[f"{aid}#{gi}"] = {
                 "stance": rec["stance"],
+                "stance_confidence": _norm_confidence(rec.get("confidence")),
                 "justif": rec.get("justif", ""),
                 "proposition": proposition,
                 "theme_id": node.id,
