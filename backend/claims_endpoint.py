@@ -257,6 +257,15 @@ def prepare_claims(
     ddir = dataset_dir(ds.id)
     emb_path = ddir / CLAIMS_EMB_NAME
 
+    # Question globale de la consultation (meta.json) → CADRE la granularité d'extraction
+    # (v2 anti-sur-segmentation : des sous-points d'une même facette = 1 claim). Optionnelle :
+    # un dataset sans `question` retombe sur le prompt nu (généricité préservée).
+    try:
+        _meta = json.loads((ddir / "meta.json").read_text(encoding="utf-8"))
+        question = (_meta.get("question") or "").strip() or None
+    except (OSError, ValueError):
+        question = None
+
     # 1) Extraction (cachée). On résout le backend pour connaître le MODÈLE (clé de cache)
     #    et n'extraire que les avis manquants. La résolution est paresseuse côté réseau :
     #    `api` ne valide que la présence de la clé, `mac`/`auto` ne sondent qu'à l'usage.
@@ -270,7 +279,7 @@ def prepare_claims(
     if missing:
         stats = OllamaStats()
         try:
-            new = extract_claims(missing, backend=be, stats=stats, progress=progress)
+            new = extract_claims(missing, backend=be, stats=stats, progress=progress, question=question)
         except BackendUnavailable as exc:
             raise OllamaUnavailable(str(exc)) from exc
         claims_by_id.update(new)
