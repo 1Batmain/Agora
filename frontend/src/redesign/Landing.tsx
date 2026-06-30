@@ -85,13 +85,15 @@ export function Landing({
                     <button
                       className="ds-card"
                       onClick={() => onOpen(d)}
-                      aria-label={`${d.label} — ${open ? 'consultation ouverte' : 'consultation close'}`}
+                      aria-label={`${d.question || d.label} — ${open ? 'consultation ouverte' : 'consultation close'}`}
                     >
                       <span className={`ds-card__badge ds-card__badge--${open ? 'open' : 'closed'}`}>
                         <span className="ds-card__dot" aria-hidden />
                         {open ? 'Ouvert' : 'Clos'}
                       </span>
-                      <span className="ds-card__title">{d.label}</span>
+                      {/* Titre = la QUESTION posée à l'audience (recentre sur le débat),
+                          repli sur le label si la consultation n'expose pas de question. */}
+                      <span className="ds-card__title">{d.question || d.label}</span>
                       <span className="ds-card__meta">
                         {(() => {
                           const n = d.n_contributions ?? d.n_nodes;
