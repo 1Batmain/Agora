@@ -162,6 +162,13 @@ export interface AvisClaim {
    * on claims of PURE themes that were classified; absent otherwise (degrade gracefully).
    */
   stance?: 'favorable' | 'defavorable' | 'nuance';
+  /**
+   * The model's OWN confidence in its stance call — an honest self-assessment, NOT a
+   * ground truth. `high` = explicit position, `medium` = likely/indirect, `low` =
+   * ambiguous/allusive. Shown as a discreet indicator next to the stance. Absent on
+   * un-baked datasets (degrade gracefully).
+   */
+  stance_confidence?: 'high' | 'medium' | 'low';
   /** The polar cleavage proposition the stance is measured against (the T2 target). */
   proposition?: string;
   /** Short (≤14-word) LLM justification for the stance, shown on hover. */
