@@ -155,6 +155,17 @@ export interface AvisClaim {
   spans: CharRange[];
   target: CharRange | null;
   theme_title: string;
+  /**
+   * Stance of this claim TOWARDS its theme's cleavage proposition, joined from
+   * `backend.build_opinion` (`claim_stance.json`) — same transparency as the verbatim
+   * highlight: you SEE the classification and can audit it against the text. Only present
+   * on claims of PURE themes that were classified; absent otherwise (degrade gracefully).
+   */
+  stance?: 'favorable' | 'defavorable' | 'nuance';
+  /** The polar cleavage proposition the stance is measured against (the T2 target). */
+  proposition?: string;
+  /** Short (≤14-word) LLM justification for the stance, shown on hover. */
+  stance_justif?: string;
 }
 
 /**
