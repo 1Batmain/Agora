@@ -105,7 +105,6 @@ export function ConsultationOverview({
 
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
-  const context = analysis?.dataset_context || dataset.context || '';
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
@@ -121,9 +120,9 @@ export function ConsultationOverview({
 
       <main className="overview__body">
         <section className="overview__head">
-          {/* Titre de la consultation = la QUESTION posée (recentre le débat), repli label. */}
-          <h1 className="overview__title">{dataset.question || dataset.label}</h1>
-          {context && <p className="overview__context">{context}</p>}
+          {/* Plus de grand titre ni de description : la QUESTION posée EST l'accroche —
+              en sous-titre, italique, entre guillemets, centrée. Repli label. */}
+          <h1 className="overview__question">« {dataset.question || dataset.label} »</h1>
         </section>
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
