@@ -66,6 +66,8 @@ const FACETS = [
   'concertation',
 ];
 
+const STANCES: AvisClaim['stance'][] = ['favorable', 'defavorable', 'nuance'];
+
 function pick<T>(arr: T[], r: () => number): T {
   return arr[Math.floor(r() * arr.length)];
 }
@@ -334,6 +336,8 @@ export function mockAvis(dataset: string, avisId: string): AvisProvenance {
 
     // ~1 in 5 claims has no target → exercises the null-target repli.
     const hasTarget = r() < 0.8;
+    // ~3 in 4 claims carry a stance (the rest exercise the graceful no-stance path).
+    const stance = r() < 0.75 ? pick(STANCES, r) : undefined;
     claims.push({
       id: `${avisId}-c${i + 1}`,
       cluster_id: `n${i + 1}`,
@@ -341,6 +345,9 @@ export function mockAvis(dataset: string, avisId: string): AvisProvenance {
       spans: span2 ? [span1, span2] : [span1],
       target: hasTarget ? targetRange : null,
       theme_title: `${topic} — ${facet}`,
+      stance,
+      proposition: stance ? `réformer ${topic.toLowerCase()}` : undefined,
+      stance_justif: stance ? `position ${stance} sur ${facet}` : undefined,
     });
   }
   at(`Je vous remercie de prendre en compte cette contribution.`);
