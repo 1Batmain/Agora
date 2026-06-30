@@ -1,23 +1,35 @@
 import { useEffect, useRef } from 'react';
-import type { ScatterPoint } from './reclusterApi';
+
+/** One UMAP-2D point (one idea / one contribution), coloured by its cluster. */
+export interface ScatterPoint {
+  x: number;
+  z: number;
+  cluster_id: string | null;
+  color: string;
+}
 
 /**
- * « Nuage UMAP 2D » — a flat scatter of the consultation's ideas. Each `point`
- * is one idea at its UMAP-2D position `(x, z)`, painted in `point.color` (its
- * macro-cluster colour, same palette as the bubbles and the 3D landscape). Unlike
- * the bubble graph, position HERE is semantic (UMAP proximity = similar ideas), so
- * clusters read as visual clouds.
+ * « Nuage UMAP 2D » — a flat scatter of the consultation. Each `point` sits at its
+ * UMAP-2D position `(x, z)`, painted in `point.color`. Position HERE is semantic
+ * (UMAP proximity = similar contributions), so dense regions read as visual clouds.
  *
- * Rendered on a `<canvas>` (cheap for a few thousand dots, redraws on every
- * re-cluster without churning the DOM). Data bounds are computed from the points
- * and mapped to the device-pixel canvas with a small margin; a `ResizeObserver`
- * keeps the drawing crisp as the container resizes. The slider drives the colours
- * (cluster membership) — the dots themselves stay put (UMAP is fixed).
+ * Pure renderer: the caller supplies the `points` (and an optional `legend`) from a
+ * PRECOMPUTED source — e.g. the cached density grid sampled into a cloud. Rendered on
+ * a `<canvas>` (cheap for a few thousand dots). Data bounds are computed from the
+ * points and mapped to the device-pixel canvas with a small margin; a `ResizeObserver`
+ * keeps the drawing crisp as the container resizes.
  */
 const MARGIN = 18; // px gap between the cloud and the canvas edge.
 const DOT_R = 2.6; // dot radius in CSS px.
 
-export function Scatter2D({ points }: { points: ScatterPoint[] }) {
+export function Scatter2D({
+  points,
+  legend = 'Nuage UMAP 2D des contributions · couleur = cluster (mise à jour au re-clustering)',
+}: {
+  points: ScatterPoint[];
+  /** Légende personnalisable (la source des couleurs varie selon l'appelant). */
+  legend?: string;
+}) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -85,9 +97,7 @@ export function Scatter2D({ points }: { points: ScatterPoint[] }) {
       {!points.length && (
         <div className="scatter2d__overlay">nuage indisponible pour cette consultation.</div>
       )}
-      <p className="scatter2d__legend">
-        Nuage UMAP 2D des contributions · couleur = cluster (mise à jour au re-clustering)
-      </p>
+      <p className="scatter2d__legend">{legend}</p>
     </div>
   );
 }
