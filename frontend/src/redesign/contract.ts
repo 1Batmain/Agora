@@ -290,6 +290,15 @@ export interface Consultation {
   /** Consultations OUVERTES (et clôturées qui en exposent un) : sujet affiché. */
   question?: string;
   context?: string;
+  /**
+   * Hiérarchie MÈRE→ENFANTS (cf. backend/build_children.py).
+   * - `parent_id` présent ⟹ c'est un ENFANT (sous-consultation, ex. un topic).
+   * - `children` présent ⟹ c'est une MÈRE (drillable vers ses enfants).
+   * - ni l'un ni l'autre ⟹ consultation SIMPLE. Les enfants sont servis par id
+   *   comme des datasets normaux mais EXCLUS de la liste top-level de /datasets.
+   */
+  parent_id?: string;
+  children?: string[];
   /** Capacités serveur (méthodes de nommage) — ajoutées par le endpoint /datasets. */
   namings?: NamingMethod[];
   default_naming?: NamingMethod;
