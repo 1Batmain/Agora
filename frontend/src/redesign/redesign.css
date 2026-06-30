@@ -2038,3 +2038,16 @@ body {
 }
 .avisx__stanceconf--low { opacity: 0.4; }
 .avisx__stanceconf--high { opacity: 0.7; }
+
+/* ── Page consultation : la QUESTION en accroche (italique, centrée, format sous-titre) ── */
+.overview__head { text-align: center; }
+.overview__question {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #444;
+  max-width: 64ch;
+  margin: 1.6rem auto 2rem;
+}
