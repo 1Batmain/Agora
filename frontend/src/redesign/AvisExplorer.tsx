@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   AnalysisPayload,
-  AvisClaim,
   AvisListItem,
   AvisProvenance,
   Consultation,
@@ -9,7 +8,7 @@ import type {
 } from './contract';
 import { fetchAnalysis, fetchAvis, fetchAvisList, fetchFlags } from './analysisApi';
 import { Header } from './Header';
-import { AvisBody, FlagControl } from './AvisDetail';
+import { AvisAnalysis, AvisBody, FlagControl } from './AvisDetail';
 import { LOCALE } from './strings';
 
 const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entiers inline)
@@ -209,7 +208,6 @@ export function AvisExplorer({
             <AvisCard
               ref={focusRef}
               avis={focusAvis}
-              themes={themesOf(focusAvis.claims)}
               dataset={dataset.id}
               highlight={showHighlights}
               flagText={flags[focusAvis.id]}
@@ -223,7 +221,6 @@ export function AvisExplorer({
               <AvisCard
                 key={it.avis_id}
                 avis={toProvenance(it)}
-                themes={it.themes}
                 dataset={dataset.id}
                 highlight={showHighlights}
                 flagText={flags[it.avis_id]}
@@ -251,58 +248,70 @@ export function AvisExplorer({
   );
 }
 
-/** Une carte d'avis INLINE : en-tête (thèmes + Signaler) puis le texte complet surlignable. */
+/**
+ * Une carte d'avis INLINE : par DÉFAUT le contenu seul (texte + surlignages), sans aucune
+ * titraille de thèmes redondante (le survol d'un surlignage donne déjà le cluster). CLIQUER
+ * sur le corps de la carte ouvre/ferme une LÉGENDE D'ANALYSE sous l'avis (état local par
+ * carte) : clusters + répartition de stance, façon fiche extensible. Le clic sur « Signaler »
+ * (FlagControl) ne doit PAS ouvrir la légende → la propagation y est stoppée.
+ */
 const AvisCard = forwardRef<
   HTMLLIElement,
   {
     avis: AvisProvenance;
-    themes: { id: string; title: string; color: string }[];
     dataset: string;
     highlight: boolean;
     flagText?: string;
     onFlagChange: (id: string, text: string | null) => void;
     focused?: boolean;
   }
->(({ avis, themes, dataset, highlight, flagText, onFlagChange, focused = false }, ref) => (
-  <li ref={ref} className={`avisx__card${focused ? ' avisx__card--focus' : ''}`}>
-    <div className="avisx__cardhead">
-      {themes.length > 0 && (
-        <div className="avisx__chips">
-          {themes.map((th) => (
-            <span
-              key={th.id}
-              className="avisx__chip"
-              style={{ borderColor: th.color, color: th.color }}
-            >
-              {th.title}
-            </span>
-          ))}
-        </div>
-      )}
-      <FlagControl
-        dataset={dataset}
-        avisId={avis.id}
-        flagText={flagText}
-        onFlagChange={onFlagChange}
-      />
-    </div>
-    <AvisBody avis={avis} highlight={highlight} />
-  </li>
-));
+>(({ avis, dataset, highlight, flagText, onFlagChange, focused = false }, ref) => {
+  const [analysisOpen, setAnalysisOpen] = useState(false);
+  const toggle = () => setAnalysisOpen((o) => !o);
+  return (
+    <li
+      ref={ref}
+      className={`avisx__card${focused ? ' avisx__card--focus' : ''}${
+        analysisOpen ? ' avisx__card--open' : ''
+      }`}
+    >
+      <div className="avisx__cardhead">
+        {/* Le head ne porte plus de chips de thèmes : seulement le bouton Signaler.
+            Son clic stoppe la propagation (FlagControl) → n'ouvre pas la légende. */}
+        <FlagControl
+          dataset={dataset}
+          avisId={avis.id}
+          flagText={flagText}
+          onFlagChange={onFlagChange}
+        />
+      </div>
+      <div
+        className="avisx__cardbody"
+        role="button"
+        tabIndex={0}
+        aria-expanded={analysisOpen}
+        aria-label="Cliquer pour analyser cet avis"
+        onClick={toggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        }}
+      >
+        <AvisBody avis={avis} highlight={highlight} />
+      </div>
+      <p className="avisx__analyzehint" aria-hidden>
+        {analysisOpen ? '▾ analyse de l’avis' : '▸ cliquer pour analyser'}
+      </p>
+      {analysisOpen && <AvisAnalysis claims={avis.claims} />}
+    </li>
+  );
+});
 
 /** Vue `AvisProvenance` d'un item de liste (qui porte déjà l'avis entier). */
 function toProvenance(it: AvisListItem): AvisProvenance {
   return { id: it.avis_id, text: it.text, text_fr: it.text_fr, lang: it.lang, claims: it.claims };
-}
-
-/** Thèmes UNIQUES (id/title/color) portés par des claims, dans l'ordre vu (carte épinglée). */
-function themesOf(claims: AvisClaim[]): { id: string; title: string; color: string }[] {
-  const seen = new Map<string, { id: string; title: string; color: string }>();
-  for (const c of claims) {
-    const id = c.cluster_id ?? c.theme_title;
-    if (id && !seen.has(id)) seen.set(id, { id, title: c.theme_title, color: c.color });
-  }
-  return [...seen.values()];
 }
 
 /** DFS hiérarchique : chaque thème suivi de ses enfants, avec profondeur (indentation). */
