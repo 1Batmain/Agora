@@ -125,25 +125,16 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
             type="button"
             className="avisdetail__toggle"
             aria-pressed={showOriginal}
-            onClick={() => setShowOriginal((o) => !o)}
+            onClick={(e) => {
+              // Ne pas remonter au corps cliquable de la carte (qui ouvre la légende d'analyse).
+              e.stopPropagation();
+              setShowOriginal((o) => !o);
+            }}
           >
             {showOriginal ? '← voir la traduction' : "voir l'original →"}
           </button>
         )}
       </p>
-
-      {/* Cluster legend: the distinct themes present in THIS avis, each in its cluster
-          colour → ties the reading view back to the map. Hidden when highlights are off. */}
-      {highlight && clustersOf(avis.claims).length > 0 && (
-        <ul className="avisdetail__legend">
-          {clustersOf(avis.claims).map((c) => (
-            <li key={c.key} className="avisdetail__legenditem">
-              <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
-              {c.label}
-            </li>
-          ))}
-        </ul>
-      )}
 
       {original ? (
         <article className="avisdetail__text" lang={avis.lang}>
@@ -323,6 +314,64 @@ function clustersOf(claims: AvisClaim[]): ClusterRef[] {
     seen.set(key, { key, label: c.theme_title, color: c.color });
   }
   return [...seen.values()];
+}
+
+/** Stance tallies for a set of claims, in fixed order (favorable, défavorable, nuancé),
+ *  skipping stances with no claim. Empty when none of the claims carry a stance. */
+function stanceCounts(claims: AvisClaim[]): { key: string; glyph: string; color: string; label: string; count: number }[] {
+  const tally = new Map<string, number>();
+  for (const c of claims) {
+    if (!c.stance) continue;
+    tally.set(c.stance, (tally.get(c.stance) ?? 0) + 1);
+  }
+  return ['favorable', 'defavorable', 'nuance']
+    .filter((k) => tally.has(k))
+    .map((k) => ({ key: k, ...STANCE_META[k], count: tally.get(k)! }));
+}
+
+/**
+ * Légende d'ANALYSE d'un avis — révélée au clic (état porté par la carte). Une « fiche »
+ * extensible : une ligne par cluster présent dans l'avis (pastille + nom), puis une liste
+ * de FACTEURS d'analyse. La STANCE est le 1er facteur (répartition favorable/défavorable/
+ * nuancé des claims de CET avis dans ce cluster) ; d'autres facteurs viendront s'ajouter.
+ * Gracieux : si aucun claim n'a de stance (datasets non bakés), on montre juste les clusters.
+ */
+export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
+  const clusters = clustersOf(claims);
+  if (clusters.length === 0) {
+    return <p className="avisx__analysisempty">Aucun thème extrait pour cet avis.</p>;
+  }
+  return (
+    <div className="avisx__analysis">
+      {clusters.map((c) => {
+        const own = claims.filter((cl) => (cl.cluster_id ?? cl.theme_title) === c.key);
+        const stance = stanceCounts(own);
+        return (
+          <div key={c.key} className="avisx__analysisrow">
+            <div className="avisx__analysiscluster">
+              <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
+              <span className="avisx__analysisname">{c.label}</span>
+            </div>
+            <dl className="avisx__factors">
+              {stance.length > 0 && (
+                <div className="avisx__factor">
+                  <dt className="avisx__factorlabel">Opinion</dt>
+                  <dd className="avisx__factorvalue">
+                    {stance.map((s, i) => (
+                      <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
+                        {s.glyph} {s.count} {s.label}
+                        {i < stance.length - 1 ? <span className="avisx__factorsep"> · </span> : null}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 /** Does range `r` cover the whole interval `[a, b)` ? */
