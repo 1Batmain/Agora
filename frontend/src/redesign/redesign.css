@@ -807,24 +807,6 @@ body {
 .avisdetail__hl--target {
   font-weight: 600;
 }
-/* Discrete per-claim stance glyph (↑ favorable / ↓ défavorable / ~ nuancé) at the
-   start of a claim's highlight — colour set inline by stance. Same transparency as the
-   verbatim highlight: the opinion classification is VISIBLE and auditable (proposition +
-   justif on hover). Absent when the claim has no stance (graceful). */
-.avisdetail__stance {
-  display: inline-block;
-  font-weight: 700;
-  font-size: 0.7em;
-  line-height: 1.4;
-  color: #fff;
-  padding: 0 6px;
-  margin: 0 4px;
-  border-radius: 10px;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: help;
-}
 /* Inline cluster tag, revealed on hover over a highlight (the rest of the time
    the cluster is conveyed by colour + the legend above). */
 .avisdetail__hltag {
@@ -847,25 +829,7 @@ body {
 .avisdetail__hl:hover .avisdetail__hltag {
   display: inline-block;
 }
-/* per-avis cluster legend */
-.avisdetail__legend {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  margin: 0 0 14px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
-}
-.avisdetail__legenditem {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--grey-700);
-}
+/* Pastille de couleur d'un cluster (légende d'analyse au clic). */
 .avisdetail__chip {
   width: 12px;
   height: 12px;
@@ -1869,12 +1833,6 @@ body {
 .avisx__item:hover { background: #fafaff; border-left-color: var(--agora, #000091); box-shadow: 0 1px 6px rgba(0,0,145,.06); }
 .avisx__item:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
 .avisx__excerpt { margin: 0 0 .6rem; color: #222; line-height: 1.55; }
-.avisx__chips { display: flex; flex-wrap: wrap; gap: .4rem; }
-.avisx__chip {
-  font-size: .72rem; line-height: 1; padding: .3rem .55rem;
-  border: 1px solid currentColor; border-radius: 999px;
-  background: #fff; white-space: nowrap;
-}
 .avisx__more { margin: 1.6rem auto 0; display: block; }
 
 /* ── Landing : pipeline technique (onboarding hackathon) ── */
@@ -1914,15 +1872,49 @@ body {
   transition: border-color .12s, box-shadow .15s;
 }
 .avisx__cardhead {
-  display: flex; align-items: flex-start; justify-content: space-between;
+  display: flex; align-items: flex-start; justify-content: flex-end;
   gap: .8rem; margin: 0 0 .35rem;
 }
-.avisx__cardhead .avisx__chips { flex: 1 1 auto; }
 /* Carte ciblée par une citation : mise en évidence (anneau + accent). */
 .avisx__card--focus {
   border-left-color: var(--agora, #000091);
   box-shadow: 0 0 0 2px rgba(0,0,145,.25);
 }
+/* Carte ouverte (légende d'analyse dépliée) : léger accent. */
+.avisx__card--open { border-left-color: var(--agora, #000091); }
+
+/* Corps cliquable : un clic ouvre/ferme la légende d'analyse sous l'avis. */
+.avisx__cardbody { cursor: pointer; }
+.avisx__cardbody:focus-visible {
+  outline: 2px solid var(--agora, #000091); outline-offset: 3px; border-radius: 4px;
+}
+/* Indice discret « cliquer pour analyser » / « analyse ». */
+.avisx__analyzehint {
+  margin: .5rem 0 0; font-size: .74rem; color: #8a8aa0; user-select: none;
+  letter-spacing: .01em;
+}
+.avisx__card--open .avisx__analyzehint { color: var(--agora, #000091); }
+
+/* ── Légende d'ANALYSE (au clic) : fiche extensible, 1 ligne par cluster + facteurs ── */
+.avisx__analysis {
+  margin: .7rem 0 .1rem; padding: .8rem .9rem;
+  border: 1px solid #e6e6ef; border-radius: 6px; background: #fafafe;
+  display: grid; gap: .7rem;
+}
+.avisx__analysisempty { margin: .7rem 0 .1rem; font-size: .82rem; color: #8a8aa0; }
+.avisx__analysisrow { display: grid; gap: .3rem; }
+.avisx__analysiscluster { display: inline-flex; align-items: center; gap: .45rem; }
+.avisx__analysisname { font-size: .85rem; font-weight: 600; color: #1f2937; }
+/* Liste de facteurs d'analyse (la stance est le 1er ; extensible). */
+.avisx__factors { margin: 0; padding-left: 1.35rem; display: grid; gap: .25rem; }
+.avisx__factor { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; }
+.avisx__factorlabel {
+  margin: 0; font-size: .68rem; text-transform: uppercase; letter-spacing: .04em;
+  color: #8a8aa0; min-width: 4.2rem;
+}
+.avisx__factorvalue { margin: 0; font-size: .82rem; }
+.avisx__stancetag { font-weight: 600; white-space: nowrap; }
+.avisx__factorsep { color: #c4c4d4; font-weight: 400; }
 
 /* ── Landing : section « Collaborer » (onboarding hackathon) ── */
 .landing__collab { margin-top: 88px; }

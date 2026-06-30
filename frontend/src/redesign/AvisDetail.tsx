@@ -125,43 +125,34 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
             type="button"
             className="avisdetail__toggle"
             aria-pressed={showOriginal}
-            onClick={() => setShowOriginal((o) => !o)}
+            onClick={(e) => {
+              // Ne pas remonter au corps cliquable de la carte (qui ouvre la légende d'analyse).
+              e.stopPropagation();
+              setShowOriginal((o) => !o);
+            }}
           >
             {showOriginal ? '← voir la traduction' : "voir l'original →"}
           </button>
         )}
       </p>
 
-      {/* Cluster legend: the distinct themes present in THIS avis, each in its cluster
-          colour → ties the reading view back to the map. Hidden when highlights are off. */}
-      {highlight && clustersOf(avis.claims).length > 0 && (
-        <ul className="avisdetail__legend">
-          {clustersOf(avis.claims).map((c) => (
-            <li key={c.key} className="avisdetail__legenditem">
-              <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
-              {c.label}
-            </li>
-          ))}
-        </ul>
-      )}
-
       {original ? (
         <article className="avisdetail__text" lang={avis.lang}>
           {renderHighlights
             ? segments(avis.text, avis.claims).map((seg, i) => {
                 if (!seg.claim) return <span key={i}>{seg.text}</span>;
-                // Fond du surlignage = STANCE quand connue (vert/rouge/gris), sinon la
-                // couleur du thème (repli gracieux pour les datasets sans bake d'opinion).
-                const sm = seg.claim.stance ? STANCE_META[seg.claim.stance] : undefined;
-                const hue = sm ? sm.color : seg.claim.color;
+                // Fond du surlignage = couleur du THÈME (cluster) ; la cible (target) porte
+                // une bordure pleine de cette même couleur. La stance n'entre PAS dans le
+                // surlignage — elle vit dans la légende d'analyse (clic sur l'avis).
+                const color = seg.claim.color;
                 return (
                   <mark
                     key={i}
                     className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
                     title={claimTitle(seg.claim, seg.target)}
                     style={{
-                      backgroundColor: tint(hue),
-                      borderBottom: `2px solid ${seg.target ? hue : tint(hue)}`,
+                      backgroundColor: tint(color),
+                      borderBottom: `2px solid ${seg.target ? color : tint(color)}`,
                     }}
                   >
                     {seg.text}
@@ -283,8 +274,6 @@ interface Seg {
   text: string;
   claim: AvisClaim | null;
   target: boolean;
-  /** This slice begins the claim's first span → anchor its stance glyph here (once). */
-  stanceAnchor?: boolean;
 }
 
 /**
@@ -310,30 +299,6 @@ function claimTitle(claim: AvisClaim, target: boolean): string {
   return t;
 }
 
-/**
- * Discrete stance glyph rendered at the start of a claim's highlight (↑/↓/~), coloured
- * by stance. The proposition + justification surface on hover (title). Renders nothing
- * when the claim carries no stance (graceful — pure themes only get classified).
- */
-function StanceMark({ claim }: { claim: AvisClaim }) {
-  const meta = claim.stance ? STANCE_META[claim.stance] : undefined;
-  if (!meta) return null;
-  const title =
-    `Avis : ${meta.label}` +
-    (claim.proposition ? ` envers « ${claim.proposition} »` : '') +
-    (claim.stance_justif ? `\n« ${claim.stance_justif} »` : '');
-  return (
-    <span
-      className="avisdetail__stance"
-      style={{ backgroundColor: meta.color }}
-      title={title}
-      aria-label={`prise de position : ${meta.label}`}
-    >
-      {meta.glyph} {meta.label}
-    </span>
-  );
-}
-
 interface ClusterRef {
   key: string;
   label: string;
@@ -349,6 +314,64 @@ function clustersOf(claims: AvisClaim[]): ClusterRef[] {
     seen.set(key, { key, label: c.theme_title, color: c.color });
   }
   return [...seen.values()];
+}
+
+/** Stance tallies for a set of claims, in fixed order (favorable, défavorable, nuancé),
+ *  skipping stances with no claim. Empty when none of the claims carry a stance. */
+function stanceCounts(claims: AvisClaim[]): { key: string; glyph: string; color: string; label: string; count: number }[] {
+  const tally = new Map<string, number>();
+  for (const c of claims) {
+    if (!c.stance) continue;
+    tally.set(c.stance, (tally.get(c.stance) ?? 0) + 1);
+  }
+  return ['favorable', 'defavorable', 'nuance']
+    .filter((k) => tally.has(k))
+    .map((k) => ({ key: k, ...STANCE_META[k], count: tally.get(k)! }));
+}
+
+/**
+ * Légende d'ANALYSE d'un avis — révélée au clic (état porté par la carte). Une « fiche »
+ * extensible : une ligne par cluster présent dans l'avis (pastille + nom), puis une liste
+ * de FACTEURS d'analyse. La STANCE est le 1er facteur (répartition favorable/défavorable/
+ * nuancé des claims de CET avis dans ce cluster) ; d'autres facteurs viendront s'ajouter.
+ * Gracieux : si aucun claim n'a de stance (datasets non bakés), on montre juste les clusters.
+ */
+export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
+  const clusters = clustersOf(claims);
+  if (clusters.length === 0) {
+    return <p className="avisx__analysisempty">Aucun thème extrait pour cet avis.</p>;
+  }
+  return (
+    <div className="avisx__analysis">
+      {clusters.map((c) => {
+        const own = claims.filter((cl) => (cl.cluster_id ?? cl.theme_title) === c.key);
+        const stance = stanceCounts(own);
+        return (
+          <div key={c.key} className="avisx__analysisrow">
+            <div className="avisx__analysiscluster">
+              <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
+              <span className="avisx__analysisname">{c.label}</span>
+            </div>
+            <dl className="avisx__factors">
+              {stance.length > 0 && (
+                <div className="avisx__factor">
+                  <dt className="avisx__factorlabel">Opinion</dt>
+                  <dd className="avisx__factorvalue">
+                    {stance.map((s, i) => (
+                      <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
+                        {s.glyph} {s.count} {s.label}
+                        {i < stance.length - 1 ? <span className="avisx__factorsep"> · </span> : null}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 /** Does range `r` cover the whole interval `[a, b)` ? */
@@ -379,13 +402,6 @@ function segments(text: string, claims: AvisClaim[]): Seg[] {
   }
   const cuts = [...bounds].sort((a, b) => a - b);
 
-  // Earliest span start per claim → anchor its stance glyph at its FIRST highlight only.
-  const firstStart = new Map<AvisClaim, number>();
-  for (const c of claims) {
-    if (!c.stance || c.spans.length === 0) continue;
-    firstStart.set(c, Math.min(...c.spans.map((s) => clamp(s.start, len))));
-  }
-
   const out: Seg[] = [];
   for (let i = 0; i < cuts.length - 1; i++) {
     const a = cuts[i];
@@ -399,14 +415,10 @@ function segments(text: string, claims: AvisClaim[]): Seg[] {
       claims.some(
         (c) => c.target != null && covers(c.target, a, b) && c.spans.some((s) => covers(s, a, b)),
       );
-    // Show the stance glyph once, at the slice that begins the owning claim's first span.
-    const stanceAnchor = claim != null && firstStart.get(claim) === a;
-    const seg: Seg = { text: text.slice(a, b), claim, target, stanceAnchor };
-    // Merge with the previous segment when nothing changed (fewer DOM nodes). Never merge
-    // onto a stance-anchor slice (it carries a leading glyph that must stay put).
+    const seg: Seg = { text: text.slice(a, b), claim, target };
+    // Merge with the previous segment when nothing changed (fewer DOM nodes).
     const prev = out[out.length - 1];
-    if (prev && prev.claim === claim && prev.target === target && !stanceAnchor)
-      prev.text += seg.text;
+    if (prev && prev.claim === claim && prev.target === target) prev.text += seg.text;
     else out.push(seg);
   }
   return out;
