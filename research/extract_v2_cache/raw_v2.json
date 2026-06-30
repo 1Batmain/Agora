@@ -1,0 +1,784 @@
+{
+ "granddebat:1-11830": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Que les élus se préoccupent plus de leurs administrés que de leur situation personnelle (réélection) : le mandat unique est une réponse",
+    "spans": [
+     [
+      0,
+      135
+     ]
+    ],
+    "target": [
+     4,
+     12
+    ]
+   }
+  ]
+ },
+ "granddebat:1-4924": {
+  "n_specs": 6,
+  "claims": [
+   {
+    "text": "Devoir de présence et de participation aux débats dans les assemblées pour les élus de la république. Un citoyen lorsqu'il est absent au travail doit se justifier il en est devrait en être de même pour un élu ! Et sanction financière en cas d'absentéisme aux débats.",
+    "spans": [
+     [
+      0,
+      266
+     ]
+    ],
+    "target": [
+     75,
+     83
+    ]
+   },
+   {
+    "text": "Plus de transparence sur les dépenses des élus.",
+    "spans": [
+     [
+      267,
+      314
+     ]
+    ],
+    "target": [
+     292,
+     313
+    ]
+   },
+   {
+    "text": "L'interdiction de l'intervention des lobbies auprès des élus.",
+    "spans": [
+     [
+      315,
+      376
+     ]
+    ],
+    "target": [
+     333,
+     375
+    ]
+   },
+   {
+    "text": "Consultation plus fréquente des citoyens sur les projets de lois.",
+    "spans": [
+     [
+      377,
+      442
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Possibilité de révoqué un élu et d'organiser de nouvelles élections sur référendum.",
+    "spans": [
+     [
+      443,
+      526
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Arrêter de protéger les élus (ou leurs proches) qui sont mis en examens ou mis en cause dans diverses affaires.",
+    "spans": [
+     [
+      527,
+      638
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-15353": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "ces comportements sont hypocrites et c est insupportable ! c est du carriérisme pur",
+    "spans": [
+     [
+      204,
+      287
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "des élus qui insultent les concitoyens ne méritent pas leur mandat … des élus qui ont des casseroles voir des marmites avec des emplois fictifs ne méritent pas les indemnités qu on leur donne ! Ds une entreprise qd on fait des grosses bêtises, on est virés sans indemnités ! Chez vous on appel ça le jeu politique, sauf que vous jouez avec nos vies, celles de nos enfants et notre argent !!",
+    "spans": [
+     [
+      303,
+      369
+     ],
+     [
+      371,
+      692
+     ]
+    ],
+    "target": [
+     307,
+     311
+    ]
+   },
+   {
+    "text": "REFERUDUM REVOCATOIRE pour qu on puisse nous citoyens jouer un peu aussi avec vous",
+    "spans": [
+     [
+      693,
+      775
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Fin des immunités parlementaires, elus justiciables comme nous citoyens lambdas et que la justice fasse le travail avec de vraies condamnations",
+    "spans": [
+     [
+      778,
+      921
+     ]
+    ],
+    "target": [
+     786,
+     810
+    ]
+   },
+   {
+    "text": "Au niveau local, il faut demander aux concitoyens leur avis sur les projets , les dépenses, les investissements, avec des référendums locaux",
+    "spans": [
+     [
+      923,
+      1063
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Au niveau national, là aussi, demandez aux citoyens leur avis sur certains sujets (immigrations, dépenses de l état, traités européens )et surtout tenez compte de leur vote !",
+    "spans": [
+     [
+      1065,
+      1239
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "l affaire BENALLA excusez moi, mais c es juste scandaleux de nous prendre pour des cluches !! comment pouvez vous prétendre renouer avec vos citoyens avec cette mascarade ? encore une fois soit c est du grand amateurisme et c est inquiétant pour ce pays d etre gouverné comme cela, soit on nous baratine et cet individu est un \"mercenaire\"",
+    "spans": [
+     [
+      1254,
+      1593
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-10652": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "Nos députés sont élus pour représenter le citoyen. Il se trouve qu'un fossé s'est creusé et que aujourd'hui les députés ont plutôt tendance à représenter leur parti que le citoyen … Peut être que nos députés devraient instaurer dans leur circonscription des réunions d'information et de débats avant et pendant chaque session parlementaire … On ne peut plus imaginer avec les moyens de communication actuels que les députés n'aient pas de plateforme internet permettant d'exposer les sujets qu'ils doivent débattre. Cela permettrait les réaction et propositions des citoyens. Les députés auraient un autre avis que celui de son parti … Un autre avantage, nos territoires sont remplis de compétences et de savoirs faire et le fait de consulter régulièrement les citoyens permettrait à nos députés d'avoir un autre avis que celui des lobying",
+    "spans": [
+     [
+      0,
+      179
+     ],
+     [
+      281,
+      438
+     ],
+     [
+      440,
+      731
+     ],
+     [
+      733,
+      936
+     ]
+    ],
+    "target": [
+     108,
+     119
+    ]
+   },
+   {
+    "text": "dernier point, il serait intéressant que les politiques reprennent le pouvoir sur les fonctionnaires. Je vote pour mon député pas pour les fonctionnaires qui ont parfois le pouvoir de prendre des décisions fortement impactantes sur les citoyens",
+    "spans": [
+     [
+      1338,
+      1582
+     ]
+    ],
+    "target": [
+     1420,
+     1438
+    ]
+   }
+  ]
+ },
+ "granddebat:1-24152": {
+  "n_specs": 5,
+  "claims": [
+   {
+    "text": "Renouer le lien entre citoyen et élus passent par la prise en compte des lois concernant la laïcité, le pacte social et le vivre ensemble … Le vivre en semble ne doit pas rester une coquille vide comme la bienséance dans les textes de Droit",
+    "spans": [
+     [
+      0,
+      137
+     ],
+     [
+      139,
+      239
+     ]
+    ],
+    "target": [
+     92,
+     137
+    ]
+   },
+   {
+    "text": "Les personnes étrangères, binationales, droit d'asile voire sans papiers perdront le droit de rester en France et même la nationalité française si ces personnes font trois séjours en prison pour non respect du Droit français",
+    "spans": [
+     [
+      241,
+      465
+     ]
+    ],
+    "target": [
+     245,
+     313
+    ]
+   },
+   {
+    "text": "la laïcité devra prévaloir dans l'accès aux domaines publics et espace publics de tous … Il est interdit de priver l'accès à ces espaces en désobéissant à la loi de 1975 portant sur les discriminations … Ce non respect sera sanctionné par trois mois de prison et si la ou les personnes impliquées dans le non accès aux domaines et espaces publics sont violentes, une expertise psychiatrique sera demandée pour chacune afin de les condamner à des soins ou à un an de prison",
+    "spans": [
+     [
+      476,
+      562
+     ],
+     [
+      564,
+      676
+     ],
+     [
+      678,
+      946
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "La laïcité s'apprendra dès l'école en apprenant les diverses religions présentes en France afin que tout le monde se respectent et diminuent les actes discriminants voire violents",
+    "spans": [
+     [
+      948,
+      1127
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Vous parlez également du pacte social. Pour moi, il est intimement lié à l'éducation … Nous faisons des tests de niveaux alors créons les classes de niveaux homogènes afin que tout le monde puisse progresser à son rythme et s'améliorer en continu … Des élèves qui s'ennuient en cours, perturbent les cours sont en souffrance car la classe n'est pas adaptée à leur niveau. Cessons ainsi une des causes de la violence à l'école",
+    "spans": [
+     [
+      1129,
+      1213
+     ],
+     [
+      1215,
+      1374
+     ],
+     [
+      1376,
+      1552
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-6202": {
+  "n_specs": 1,
+  "claims": [
+   {
+    "text": "Les GJ font actuellement beaucoup référence aux revenus excessifs de nos parlementaires, de nos hauts fonctionnaires, de nos anciens Présidents, etc… Il faut donc aborder ce sujet sans faux fuyant … Emmanuel MACRON s'était, me semble-t-il, engagé à réduire les privilèges consentis aux élus, aux membres du gouvernement, à certains personnels des ministères, ainsi que leur nombre. Pour l'instant les Français considèrent que cet engagement n'a pas été tenu car effectivement très peu de ces structures et avantages ont été modifiés … Je pense qu'il est grand temps que l'exécutif et les élus prennent conscience que ce point est extrêmement important pour la très grande majorité des Français … Ce sont pléthore d'informations (vraies ou fausses d'ailleurs) qui circulent sur les réseaux sociaux et qui, aux yeux des Français, décrédibilisent totalement les élus en les rendant soupçonnables de mercantilisme, et d'iniquité … Les Français attendent de leurs élus une exemplarité totale, en particulier, comme c'est le cas aujourd'hui, lorsque des efforts sont demandés à tous les Français … Seule une restriction significative et une grande clarté sur les rémunérations et surtout sur les privilèges consentis (dont les frais de mandat sans justificatifs !) seront de nature à restaurer un lien de confiance … Il me semble grand temps de remettre en cause ces privilèges d'un autre âge, souvent à caractère monarchique. Le traitement réservé aux anciens Présidents de la république en est un bon exemple",
+    "spans": [
+     [
+      42,
+      238
+     ],
+     [
+      240,
+      573
+     ],
+     [
+      575,
+      733
+     ],
+     [
+      735,
+      963
+     ],
+     [
+      965,
+      1127
+     ],
+     [
+      1129,
+      1345
+     ],
+     [
+      1347,
+      1540
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-2582": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "Mise en place du Référendum d'Initiative Citoyenne en toute matière comme demandé par les gilets jaunes. Toute personne peut faire une proposition de loi via une plateforme sur internet ou par papier, si cette proposition atteint 1 million d'adhérent (par exemple) la loi est retravaillée par le parlement et soumise au vote du peuple dans un délai de 6 à 18 mois suivant les cas (pour éviter de légiférer sur le coup de l'émotion ou de la colère par exemple)",
+    "spans": [
+     [
+      2,
+      461
+     ]
+    ],
+    "target": [
+     19,
+     52
+    ]
+   },
+   {
+    "text": "Suppression du sénat et remplacement de celui-ci par une assemblée citoyenne tirée au sort (personnes tirées au sort payées par l'état et rémunération à définir). Ces parlementaires/citoyens seront tirés au sort et mandatés pour siéger 1 à 2 années sans reconduction de mandat et ceux-ci auraient la possibilité de reprendre leurs activités salariées par la suite (obligation pour l'employeur de conserver le poste)",
+    "spans": [
+     [
+      466,
+      881
+     ]
+    ],
+    "target": [
+     481,
+     486
+    ]
+   },
+   {
+    "text": "Mise en place de la proportionnelle à l'assemblée nationale (totale ou aux 2/3) et limitation du nombre de députés",
+    "spans": [
+     [
+      886,
+      1000
+     ]
+    ],
+    "target": [
+     926,
+     945
+    ]
+   },
+   {
+    "text": "Impossibilité de siéger au parlement et/ou d'accéder à un poste de ministre dans le cas ou notre casier judiciaire n'est pas vierge",
+    "spans": [
+     [
+      1005,
+      1136
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Suppression de l'immunité diplomatique dans un soucis d'égalité",
+    "spans": [
+     [
+      1141,
+      1204
+     ]
+    ],
+    "target": [
+     1158,
+     1179
+    ]
+   },
+   {
+    "text": "Prise en compte du vote blanc (qui a ce jour est toujours majoritaire…)",
+    "spans": [
+     [
+      1209,
+      1280
+     ]
+    ],
+    "target": [
+     1228,
+     1238
+    ]
+   },
+   {
+    "text": "Rendre le vote obligatoire et pénaliser financièrement celui qui ne vote pas",
+    "spans": [
+     [
+      1285,
+      1361
+     ]
+    ],
+    "target": [
+     322,
+     326
+    ]
+   },
+   {
+    "text": "Réfléchir à mettre en place des élections en 1 tour et définir le nouveau seuil pour de vainqueur peut-être 33% des suffrages (les gens font leur choix un point c'est tout)",
+    "spans": [
+     [
+      1366,
+      1538
+     ]
+    ],
+    "target": [
+     1398,
+     1407
+    ]
+   }
+  ]
+ },
+ "granddebat:1-9802": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "Ne pas reconnaître les violences, minimiser le nombres de personnes en colère et/ou dans le désespoir",
+    "spans": [
+     [
+      112,
+      213
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "il serait temps que la classe politique nous montre ce qu'est le sens de l'effort et arrêtes leurs privilèges et se reconnecte avec les vraies gens de la vraie vie",
+    "spans": [
+     [
+      227,
+      390
+     ]
+    ],
+    "target": [
+     247,
+     266
+    ]
+   },
+   {
+    "text": "Il faudrait redonner le pouvoir de décision au peuple, mettre en place le RIC et demander son avis au peuple pour des choses importantes c'est lui qui vit en France, travaille et se déplace !!",
+    "spans": [
+     [
+      392,
+      584
+     ]
+    ],
+    "target": [
+     413,
+     435
+    ]
+   },
+   {
+    "text": "On nous a imposé le 80km/h soit disant pour lutter contre la mortalité sur les routes de France mais quand on sait qu'on a en France 37 fois plus de chances de mourir d'un cancer que sur la route comment voulez-vous que les Français entendent ces reformes routières, vous ne mettez pas pour autant les moyens dans la santé alors qu'il y a plus de monde à sauver dans les hôpitaux que sur les routes … tout cela n'a fait que rapporter de l'argent à l'Etat et allongée le temps de trajets (perso et professionnelle) du peuple Français",
+    "spans": [
+     [
+      585,
+      983
+     ],
+     [
+      1009,
+      1140
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Si vous voulez renouer le lien entre les citoyens et les élus commencez par les écouter et arrêtez d'écouter les banques et les lobbys",
+    "spans": [
+     [
+      1142,
+      1276
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Quand on sait qu'aujourd'hui tous les Français sont contaminé au glyphosate qu'est ce qu'on attends pour stopper tout ça !!",
+    "spans": [
+     [
+      1278,
+      1401
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Ou est donc la bienveillance à l'encontre votre peuple",
+    "spans": [
+     [
+      1439,
+      1493
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-9114": {
+  "n_specs": 8,
+  "claims": [
+   {
+    "text": "Sortir de l'Europe. Retrouver sa souveraineté.",
+    "spans": [
+     [
+      0,
+      46
+     ]
+    ],
+    "target": [
+     10,
+     18
+    ]
+   },
+   {
+    "text": "Autrefois, les gens étaient pauvres, mais ils aimaient la France et ses institutions. S'ils remettent en cause aujourd'hui ces institutions, c'est parce que le concept - tout à fait symbolique - de nation a disparu.",
+    "spans": [
+     [
+      47,
+      262
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Vous vous adressez à votre député, il vous répond : c'est la faute de Bruxelles ! Et pis, l'assemblée européenne est purement consultative ! Ses choix ne sont pas suivis par la Commission que nous n'avons pas élue.",
+    "spans": [
+     [
+      263,
+      477
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Comment a-t-on pu s'allier économiquement avec des pays qui n'avaient pas les mêmes taxes, salaires, charges, c'était mettre la charrue avant les boeufs, c'était le fruit d'une pure et dangereuse idéologie.",
+    "spans": [
+     [
+      478,
+      684
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Je suis pour une Europe qui entérinerait des progrès communs, au lieu d'imposer un nivellement par le bas, par sa concurrence déloyale.",
+    "spans": [
+     [
+      685,
+      820
+     ]
+    ],
+    "target": [
+     10,
+     18
+    ]
+   },
+   {
+    "text": "L'amour de son pays, ce n'est pas un acquis naturel, c'est le fruit de siècles de culture, et ça se détricote si facilement.",
+    "spans": [
+     [
+      821,
+      945
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "L'Europe des régions, c'est le retour à de prochaines guerres civiles.",
+    "spans": [
+     [
+      946,
+      1016
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Je suis pour une forte recentralisation du pouvoir, puis pour une déconcentration de ce pouvoir en département, et la suppression des régions administratives. La nation doit rester maîtresse, et chaque région être soumise aux mêmes décisions (éducation nationale, industrie, fiscalité.) Autrefois, il y avait un Ministre du Plan : c'était parfait ! Ensuite les petites décisions sont prises en régions par des délégués du pouvoir central, soumis à une même règle nationale.",
+    "spans": [
+     [
+      1017,
+      1490
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-20463": {
+  "n_specs": 3,
+  "claims": [
+   {
+    "text": "- Dans notre quotidien local, c'est l'intercommunalité qui est la plus adaptée pour porter et défendre les intérêts des citoyens, dans le sens que c'est la collectivité dont la définition géographique correspond le mieux à notre périmètre de vie quotidienne. Et pourtant, beaucoup croient que les communes tiennent encore ce rôle. Commencons par un élection directe des élus des intercommunalités, ce qui permettra un affichage CLAIR des compétences de ces structures.",
+    "spans": [
+     [
+      29,
+      497
+     ]
+    ],
+    "target": [
+     65,
+     83
+    ]
+   },
+   {
+    "text": "- Depuis la loi NOTRE, les Départements n'ont presque plus de capacité de prise de décision, l'immense majorité de leur budget partant dans des politiques obligatoires dépendant soit de décisions de l'Etat (toutes les aides sociales dont il n'est qu'un gestionnaire local), de la démographie (les collèges), etc. Et pourtant, nous élisons au suffrage direct des Conseillers Départementaux qui n'ont quasiment aucun pouvoir ! On donne ainsi au citoyen une illusion d'influence. En résumé, faire plus lisible, simple (les Départements n'ayant plus d'autonomie, pourquoi existent-ils encore ?) et faire en sorte que le pouvoir des Elus ait un rapport avec le mode de scrutin.",
+    "spans": [
+     [
+      498,
+      1170
+     ]
+    ],
+    "target": [
+     521,
+     537
+    ]
+   },
+   {
+    "text": "B. Revoir le mode de scrutin pour parvenir à un résultat plus largement partagé par les citoyens : en ce sens la méthode du \"Jugement majoritaire\", dans laquelle l'électeur évalue chacun des candidats au lieu de déterminer son candidat préféré, parait être bien meilleure que le mode de scrutin actuel.",
+    "spans": [
+     [
+      1171,
+      1473
+     ]
+    ],
+    "target": [
+     1151,
+     1169
+    ]
+   }
+  ]
+ },
+ "granddebat:1-6257": {
+  "n_specs": 7,
+  "claims": [
+   {
+    "text": "- Réduction de plus de la moitié des députés ainsi que certains élus des collectivités territoriales et des conseillers régionaux, car on ne peut pas dire que leur nombre ai apporté une amélioration soit en emplois ou confort de vie au peuple, la preuve G.J.. . On prend souvent l'Allemagne comme modèle économique, et bien on devrait aussi le prendre comme modèle pour diriger le pays ainsi que les USA qui ont un nombre d'élus beaucoup moins important que la France en rapport au nombre d'habitants",
+    "spans": [
+     [
+      0,
+      500
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Pointeuse à l'assemblée nationale afin que chaque député soit payé en fonction de sa présence !",
+    "spans": [
+     [
+      503,
+      600
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Interdiction réelle et effective du cumul des mandats et du cumul des retraites des dits mandats sauf le dernier exercé.",
+    "spans": [
+     [
+      603,
+      725
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Retraite indexée au résultat de la gestion du pays durant leur mandat et selon le redressement ou le déficit creusé, avec fin des privilèges d'assistance, voitures , chauffeurs et secrétariat pour certaines classes (présidents, premier ministre.. ) On réforme sans aucunes arrière pensée les retraites du régime général mais il ne faudrait pas toucher à celle des ex élus ?",
+    "spans": [
+     [
+      728,
+      1103
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Réduction du nombre des ministres et des secrétaires d'état.",
+    "spans": [
+     [
+      1104,
+      1166
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "- Réduction des parlementaires et des fonctionnaires ainsi que de tous les technocrates et conseillers en tout genre qui ne font que mettre la pagaille dans les services avec leur inexpérience du travail souvent en surnombre et qui ne servent à rien.",
+    "spans": [
+     [
+      1167,
+      1417
+     ]
+    ],
+    "target": null
+   }
+  ]
+ },
+ "granddebat:1-1311": {
+  "n_specs": 4,
+  "claims": [
+   {
+    "text": "Pour mieux représenter les citoyens, les élus doivent faire preuve de transparence, d'intégrité/morale, d'exemplarité. Ces derniers doivent se concentrer uniquement sur leur mandat et ne doivent pas assurer d'autres fonctions privées ou publiques (pas de conflit d'intérêt!)",
+    "spans": [
+     [
+      0,
+      274
+     ]
+    ],
+    "target": [
+     37,
+     45
+    ]
+   },
+   {
+    "text": "les élus se doivent également d'être transparent: les exemples, récents et anciens, sont nombreux d'élus ayant construit et oeuvré cette défiance entre les citoyens et leurs représentants (LISTE NON EXHAUSTIVE: Mr. Thévenoud; Mr Cahuzac; Mr Gaymard; Mr Guéant; Mr Fillon..etc)",
+    "spans": [
+     [
+      298,
+      574
+     ]
+    ],
+    "target": [
+     37,
+     45
+    ]
+   },
+   {
+    "text": "un contrôle et une justification des dépenses des élus doit être appliqué. Le système existe mais sans réelles contraintes",
+    "spans": [
+     [
+      654,
+      776
+     ]
+    ],
+    "target": null
+   },
+   {
+    "text": "Les députés et sénateurs doivent également faire preuve de plus de proximité. L'une des excuses des parlementaires pour justifier ce manque est l'obligation de la présence à Paris pour proposer les lois, examiner les textes en commission et/ou en séance publique. A l'heure de la révolution du numérique, n'est-il pas possible de développer une alternative en privilégiant un modèle numérique lorsque cela est possible ? De nombreux bénéfices s'en dégageraient (économiques, écologiques..) De plus, le parlementaire pourra assurer une proximité dans sa circonscription avec la possibilité de consulter régulièrement ses citoyens.et ce notamment en matière de proposition de loi",
+    "spans": [
+     [
+      778,
+      1455
+     ]
+    ],
+    "target": null
+   }
+  ]
+ }
+}

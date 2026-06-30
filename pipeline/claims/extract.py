@@ -77,10 +77,15 @@ CLAIM_SYS = (
     "proposition). Laisse de côté le pur cadrage, le narratif et les annonces qui ne "
     "portent aucune position par eux-mêmes (« pour illustrer… », « mes doléances sont "
     "triples : », politesses, anecdote de contexte). Pas de bruit, pas de redite.\n"
-    "3. REGROUPEMENT — ne FRAGMENTE pas une même idée. Restent DANS UN SEUL claim : un "
-    "contraste (« X et non Y »), une justification (« … parce que … »), une condition "
-    "(« si …, alors … ») et une énumération qui DÉTAILLE une seule idée. Sépare les idées "
-    "distinctes, mais ne coupe pas une idée unique en morceaux.\n"
+    "3. REGROUPEMENT (anti-fragmentation, PRIORITAIRE) — ne FRAGMENTE pas une même prise "
+    "de position. Restent DANS UN SEUL claim : un contraste (« X et non Y »), une "
+    "justification (« … parce que … »), une condition (« si …, alors … »), une énumération "
+    "qui DÉTAILLE une seule idée, ET SURTOUT :\n"
+    "   – l'ÉNONCÉ D'UN PROBLÈME ET LA SOLUTION proposée pour le résoudre = UN SEUL claim "
+    "(ne sépare JAMAIS le constat de la mesure qui y répond) ;\n"
+    "   – PLUSIEURS phrases qui visent le MÊME sujet (p.ex. plusieurs mesures contre un même "
+    "travers) = UN SEUL claim. Ne multiplie pas les claims sur une même prise de position.\n"
+    "Sépare uniquement les sujets RÉELLEMENT distincts ; en cas de doute, REGROUPE.\n"
     "4. VERBATIM — chaque part ET la target sont des sous-chaînes EXACTES de l'avis. En "
     "cas de doute, recopie un peu plus de contexte plutôt que d'altérer le texte.\n"
     "\n"
@@ -90,6 +95,12 @@ CLAIM_SYS = (
     "• « Avoir des élus qui représentent l'intérêt des citoyens et non l'intérêt de ceux "
     "qui ont financé leur campagne » → UN claim (le contraste « … et non … » est UNE idée), "
     "target=« les élus ».\n"
+    "• « Que les élus se préoccupent plus de leurs administrés que de leur situation "
+    "personnelle : le mandat unique est une réponse » → UN SEUL claim (problème + solution = "
+    "une seule prise de position), JAMAIS deux.\n"
+    "• « Devoir de présence aux débats pour les élus. […] Et sanction financière en cas "
+    "d'absentéisme aux débats. » → UN SEUL claim (plusieurs phrases visent le MÊME sujet : "
+    "l'absentéisme des élus), pas une par phrase.\n"
     "• Avis multi-thèmes « Il faut baisser les impôts. Par ailleurs trop d'élus, supprimons "
     "le Sénat. Et les services publics ruraux disparaissent. » → TROIS claims distincts "
     "(fiscalité / nombre d'élus / services publics ruraux), un par thème.\n"
@@ -103,8 +114,30 @@ CLAIM_SYS = (
 )
 
 
-def claim_prompt(text: str) -> list[dict]:
-    return [{"role": "system", "content": CLAIM_SYS},
+def _question_frame(question: str | None) -> str:
+    """Bloc CONTEXTE injectant la question globale de la consultation (cadre la granularité).
+
+    Vide si pas de question (généricité : un dataset sans `question` retombe sur le prompt
+    nu). La question dit au LLM ce que TOUS les avis tentent de répondre → des sous-points
+    qui répondent à la MÊME facette de la question = UN claim (anti-sur-segmentation)."""
+    q = (question or "").strip()
+    if not q:
+        return ""
+    return (
+        "\n\nCONTEXTE DE LA CONSULTATION — tous les avis répondent à UNE même question : "
+        f"« {q} ». Cette question CADRE la granularité attendue : des sous-points qui "
+        "répondent tous à la MÊME facette de cette question forment UN SEUL claim. N'ouvre "
+        "un claim distinct que pour une facette RÉELLEMENT différente de la question."
+    )
+
+
+def claim_sys(question: str | None = None) -> str:
+    """Prompt système d'extraction, éventuellement cadré par la question de consultation."""
+    return CLAIM_SYS + _question_frame(question)
+
+
+def claim_prompt(text: str, question: str | None = None) -> list[dict]:
+    return [{"role": "system", "content": claim_sys(question)},
             {"role": "user", "content": "Avis :\n" + text}]
 
 
@@ -123,14 +156,14 @@ BATCH_SYS_SUFFIX = (
 )
 
 
-def batch_claim_prompt(texts: list[str]) -> list[dict]:
+def batch_claim_prompt(texts: list[str], question: str | None = None) -> list[dict]:
     """Prompt pour un LOT d'avis : avis numérotés, réponse JSON clée par numéro (#1..#N)."""
     blocks = [f"=== AVIS #{i} ===\n{t}" for i, t in enumerate(texts, 1)]
     user = (
         f"Voici {len(texts)} avis numérotés. Extrais les claims de CHAQUE avis "
         "séparément, et réponds avec un objet clé par numéro.\n\n" + "\n\n".join(blocks)
     )
-    return [{"role": "system", "content": CLAIM_SYS + BATCH_SYS_SUFFIX},
+    return [{"role": "system", "content": claim_sys(question) + BATCH_SYS_SUFFIX},
             {"role": "user", "content": user}]
 
 
@@ -230,9 +263,10 @@ def _anchor(a, specs: list[dict]) -> list[Claim]:
     return claims or [whole_avis_claim(a.text)]
 
 
-def _extract_single(a, *, backend: "ClaimBackend", stats: OllamaStats) -> list[Claim]:
+def _extract_single(a, *, backend: "ClaimBackend", stats: OllamaStats,
+                    question: str | None = None) -> list[Claim]:
     """Extraction MONO-AVIS (chemin historique + repli d'un avis raté en lot)."""
-    raw = backend.complete(claim_prompt(a.text), stats=stats)
+    raw = backend.complete(claim_prompt(a.text, question), stats=stats)
     return _anchor(a, parse_claims(raw))
 
 
@@ -243,6 +277,7 @@ def extract_claims(
     stats: OllamaStats | None = None,
     progress: Callable[[int, int], None] | None = None,
     batch_size: int | None = None,
+    question: str | None = None,
 ) -> dict[str, list[Claim]]:
     """Extrait les claims VERBATIM de chaque avis → ``{avis_id: [Claim, ...]}``.
 
@@ -277,7 +312,7 @@ def extract_claims(
             specs_by_idx: list[list[dict] | None] = [None] * len(batch)
         else:
             raw = backend.complete(
-                batch_claim_prompt([a.text for a in batch]), stats=stats,
+                batch_claim_prompt([a.text for a in batch], question), stats=stats,
                 max_tokens=min(BATCH_TOKENS_CAP, BATCH_TOKENS_PER_AVIS * len(batch)),
             )
             specs_by_idx = parse_batch_claims(raw, len(batch))
@@ -287,7 +322,8 @@ def extract_claims(
             specs = specs_by_idx[j]
             # Avis absent / non parsable dans la réponse du lot → repli mono-avis robuste.
             local[a.id] = (_anchor(a, specs) if specs is not None
-                           else _extract_single(a, backend=backend, stats=stats))
+                           else _extract_single(a, backend=backend, stats=stats,
+                                                 question=question))
         return local
 
     # Séquentiel si un seul worker / un seul lot : chemin historique, déterminisme garanti.
