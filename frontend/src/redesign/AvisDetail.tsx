@@ -148,26 +148,26 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
       {original ? (
         <article className="avisdetail__text" lang={avis.lang}>
           {renderHighlights
-            ? segments(avis.text, avis.claims).map((seg, i) =>
-                seg.claim ? (
+            ? segments(avis.text, avis.claims).map((seg, i) => {
+                if (!seg.claim) return <span key={i}>{seg.text}</span>;
+                // Fond du surlignage = STANCE quand connue (vert/rouge/gris), sinon la
+                // couleur du thème (repli gracieux pour les datasets sans bake d'opinion).
+                const sm = seg.claim.stance ? STANCE_META[seg.claim.stance] : undefined;
+                const hue = sm ? sm.color : seg.claim.color;
+                return (
                   <mark
                     key={i}
                     className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
                     title={claimTitle(seg.claim, seg.target)}
                     style={{
-                      backgroundColor: tint(seg.claim.color),
-                      borderBottom: seg.target
-                        ? `2px solid ${seg.claim.color}`
-                        : `2px solid ${tint(seg.claim.color)}`,
+                      backgroundColor: tint(hue),
+                      borderBottom: `2px solid ${seg.target ? hue : tint(hue)}`,
                     }}
                   >
-                    {seg.stanceAnchor && <StanceMark claim={seg.claim} />}
                     {seg.text}
                   </mark>
-                ) : (
-                  <span key={i}>{seg.text}</span>
-                ),
-              )
+                );
+              })
             : avis.text}
         </article>
       ) : (
