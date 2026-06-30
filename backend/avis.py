@@ -119,6 +119,7 @@ def join_claim_stance(claims: list[dict], stance_map: dict | None) -> list[dict]
         if rec:
             c = {**c,
                  "stance": rec.get("stance"),
+                 "stance_confidence": rec.get("stance_confidence"),
                  "proposition": rec.get("proposition"),
                  "stance_justif": rec.get("justif")}
         out.append(c)
