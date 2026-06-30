@@ -4,7 +4,7 @@ par thème FEUILLE et la persiste dans `analysis/opinion.json`.
 Productionise l'archi VALIDÉE par le proto (`research/opinion_proto.py`,
 [[agora-opinion-target-verdict]]) : mesurer l'opinion citoyenne, ce n'est pas servir
 un seul côté — c'est, pour chaque thème, dériver l'OBJET DE CLIVAGE (T2, une
-proposition polaire débattable, `CLEAVAGE_SYSTEM`) puis classer la stance de chaque
+proposition polaire débattable, `cleavage_system` conditionné sur le titre) puis classer la stance de chaque
 claim ENVERS cette proposition (`STANCE_SYSTEM`) et agréger une répartition honnête.
 
 Garde-fous d'honnêteté :
@@ -39,6 +39,7 @@ from typing import Callable
 from backend import analysis_store as store
 from backend.analysis import DEFAULT_EMBEDDER, DEFAULT_SEED, ThemeNode, ThemeTree, build_theme_tree
 from backend.build_analysis import load_dataset
+from backend.titles import title_for_node
 from pipeline.cluster import mistral_client
 
 # Modèle CHEAP (cleavage + stance, ~1 + claims/BATCH appels par feuille) — surchargeable.
@@ -55,6 +56,10 @@ MIN_ENGAGEMENT = 0.35            # garde-fou pureté : (fav+def)/n ≥ ce seuil 
 OPPOSITION_CLIVANT = 0.15        # opposition ≥ ce seuil → 'clivant', sinon 'consensuel'
 REP_FOR_TITLE = 8                # claims représentatifs pour le repli de titre
 LLM_MAX_WORKERS = max(1, int(os.environ.get("AGORA_LLM_MAX_WORKERS", "4")))
+# Seuil de FIT cible↔titre sous lequel on MARQUE la cible « peu représentative »
+# (`cleavage_fit_low`). Le fit est cos(emb(proposition), emb(titre)) — voir build_opinion.
+# NB : c'est un MARQUEUR (audit/affichage prudent), pas un filtre dur — on n'efface rien.
+CLEAVAGE_FIT_LOW = float(os.environ.get("AGORA_CLEAVAGE_FIT_LOW", "0.75"))
 
 ProgressFn = Callable[[str, int, int], None]
 
@@ -66,17 +71,28 @@ def _log(msg: str) -> None:
 # --------------------------------------------------------------------------- #
 # Prompts — REPRIS TELS QUELS du proto validé (research/opinion_proto.py).
 # --------------------------------------------------------------------------- #
-CLEAVAGE_SYSTEM = (
-    "Tu es analyste de consultations citoyennes. On te donne les MOTS-CLÉS et des "
-    "CONTRIBUTIONS verbatim d'un THÈME. Identifie l'OBJET DE CLIVAGE central : la "
-    "proposition ou mesure PRÉCISE sur laquelle des citoyens peuvent être POUR ou "
-    "CONTRE. Formule-la comme une proposition polaire COURTE (≤12 mots), neutre et "
-    "débattable, à l'infinitif ou nominale — ex. « instaurer le référendum d'initiative "
-    "citoyenne », « rendre le vote obligatoire », « réduire le nombre d'élus », "
-    "« tirer au sort des citoyens pour légiférer ». Si le thème mêle plusieurs "
-    "propositions, choisis LA PLUS SAILLANTE. Réponds en JSON strict : "
-    "{\"objet\":\"<proposition>\",\"justif\":\"<≤14 mots>\"}."
-)
+def cleavage_system(title: str) -> str:
+    """Prompt cleavage CONDITIONNÉ sur le TITRE du thème (v2, [[agora-opinion-target-verdict]]).
+
+    v1 (sans titre, « la PLUS SAILLANTE ») faisait dériver la cible vers une FACETTE
+    bruyante au lieu du centre du thème (ex. « Restaurer la confiance par l'écoute » →
+    « cesser de mentir »). v2 = deux leviers validés (research/cleavage_v2_note.md) :
+      1. CONDITIONNER sur le titre — la proposition doit capturer le sujet de CE thème ;
+      2. « CENTRAL » > « saillant » — résumer le débat du thème, pas le détail le plus bruyant.
+    Le titre est injecté tel quel (déjà court, neutre, dérivé des claims représentatives).
+    """
+    return (
+        "Tu es analyste de consultations citoyennes. On te donne le TITRE d'un THÈME, ses "
+        "MOTS-CLÉS et des CONTRIBUTIONS verbatim. Identifie l'OBJET DE CLIVAGE qui RÉSUME "
+        f"le débat CENTRAL de CE thème, intitulé « {title} » : la proposition ou mesure "
+        "PRÉCISE, au cœur du thème, sur laquelle des citoyens peuvent être POUR ou CONTRE. "
+        "Elle doit capturer le SUJET CENTRAL du thème (ce dont parle le titre), PAS une "
+        "facette secondaire ni le détail le plus bruyant. Formule-la comme une proposition "
+        "polaire COURTE (≤12 mots), neutre et débattable, à l'infinitif ou nominale — ex. "
+        "« instaurer le référendum d'initiative citoyenne », « rendre le vote obligatoire », "
+        "« réduire le nombre d'élus », « tirer au sort des citoyens pour légiférer ». "
+        "Réponds en JSON strict : {\"objet\":\"<proposition>\",\"justif\":\"<≤14 mots>\"}."
+    )
 
 STANCE_SYSTEM = (
     "Tu es analyste de consultations citoyennes. On te donne UNE CIBLE (un objet de "
@@ -111,13 +127,14 @@ def _norm_confidence(value) -> str:
 # --------------------------------------------------------------------------- #
 # Cleavage T2 — objet de clivage dérivé (1 appel LLM par feuille).
 # --------------------------------------------------------------------------- #
-def derive_cleavage(node: ThemeNode, sample_texts: list[str], *, model: str) -> dict:
+def derive_cleavage(node: ThemeNode, sample_texts: list[str], title: str,
+                    *, model: str) -> dict:
     kw = ", ".join((node.keywords or [])[:10])
     contribs = "\n".join(f"- {t[:160]}" for t in sample_texts[:14])
     user = f"MOTS-CLÉS : {kw}\n\nCONTRIBUTIONS :\n{contribs}"
-    messages = [{"role": "system", "content": CLEAVAGE_SYSTEM},
+    messages = [{"role": "system", "content": cleavage_system(title)},
                 {"role": "user", "content": user}]
-    fallback = node.title or node.label
+    fallback = title or node.title or node.label
     try:
         raw = mistral_client.chat(messages, model=model, temperature=0.0,
                                   max_tokens=200, json_mode=True)
@@ -214,6 +231,35 @@ def aggregate(theme_id: str, proposition: str, counts: Counter, n: int) -> dict:
     }
 
 
+def _attach_cleavage_fit(opinions: list[dict], *, embedder: str = DEFAULT_EMBEDDER) -> None:
+    """Ajoute `cleavage_fit` (cos cible↔titre) + `cleavage_fit_low` à chaque opinion, EN PLACE.
+
+    Mesure de représentativité de la cible : embedde proposition ET titre avec l'encodeur
+    PROD (nomic-v2, même espace que les claims), puis cosinus. Un fit bas = la proposition
+    dérivée s'écarte du sujet déclaré du thème (cible peu représentative). Validé contre le
+    cos-vs-centroïde, trompeur (research/cleavage_v2_note.md). Repli gracieux : si l'embed
+    échoue (pas d'extra embed), on laisse `cleavage_fit=None` sans marquer (ne lève jamais).
+    """
+    if not opinions:
+        return
+    try:
+        from pipeline.claims.pipeline import embed_claim_texts
+        import numpy as np
+        props = [o.get("proposition", "") or "" for o in opinions]
+        titles = [o.get("title", "") or "" for o in opinions]
+        pv = embed_claim_texts(props, embedder=embedder)
+        tv = embed_claim_texts(titles, embedder=embedder)
+        for o, p, t in zip(opinions, pv, tv):
+            fit = max(0.0, float(np.dot(p, t)))   # vecteurs déjà L2-normalisés
+            o["cleavage_fit"] = round(fit, 4)
+            o["cleavage_fit_low"] = bool(fit < CLEAVAGE_FIT_LOW)
+    except Exception as exc:  # embed indisponible / erreur torch — diagnostic facultatif
+        _log(f"cleavage_fit indisponible ({type(exc).__name__}) — fit non calculé")
+        for o in opinions:
+            o.setdefault("cleavage_fit", None)
+            o.setdefault("cleavage_fit_low", False)
+
+
 def _leaf_claims(node: ThemeNode, prepared) -> list[tuple[int, str, str]]:
     """(claim_index, avis_id, claim_text) verbatim pour les claims du nœud feuille.
 
@@ -230,7 +276,7 @@ def _leaf_claims(node: ThemeNode, prepared) -> list[tuple[int, str, str]]:
     return out
 
 
-def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random,
+def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random, dataset: str,
                  *, model: str) -> tuple[dict, dict[str, dict]]:
     """Dérive la cible T2 d'une feuille, classe les claims, agrège la répartition.
 
@@ -239,22 +285,25 @@ def analyse_leaf(node: ThemeNode, tree: ThemeTree, rng: random.Random,
     cohérence avec le garde-fou de pureté (on ne montre une répartition que sur les
     thèmes assez purs), un thème `impur` n'émet AUCUNE stance par claim (map vide).
     """
-    if not node.title:  # repli si le build d'analyse n'a pas (encore) titré ce nœud
+    if not node.representative_claims:  # repli si le build d'analyse n'a pas titré ce nœud
         reps = [tree.prepared.claim_texts[i] for i in node.members[:REP_FOR_TITLE]]
-        node.representative_claims = node.representative_claims or [r[:240] for r in reps]
+        node.representative_claims = [r[:240] for r in reps]
+    # TITRE court du thème — CONDITIONNE le cleavage v2. Caché par contenu (titres/) : si
+    # le build d'analyse l'a déjà nommé, c'est un cache HIT (zéro LLM) ; sinon repli label.
+    title = title_for_node(dataset, node) or node.title or node.label
 
     cl = _leaf_claims(node, tree.prepared)
     if len(cl) > CAP:
         cl = [cl[i] for i in sorted(rng.sample(range(len(cl)), CAP))]
     sample = [(j, txt) for j, (_gi, _aid, txt) in enumerate(cl)]
 
-    cleavage = derive_cleavage(node, [t for _, t in sample], model=model)
+    cleavage = derive_cleavage(node, [t for _, t in sample], title, model=model)
     proposition = cleavage["objet"]
 
     st = run_stance(proposition, sample, model=model)
     counts = Counter(st[j]["stance"] for j, _ in sample if j in st)
     opinion = aggregate(node.id, proposition, counts, len(sample))
-    opinion["title"] = node.title or node.label
+    opinion["title"] = title
     opinion["cleavage_justif"] = cleavage.get("justif", "")
 
     # Stance PAR CLAIM — clé = id servi par `/avis`. Émise seulement si le thème est pur
@@ -311,7 +360,7 @@ def build_opinion(
     results: list[tuple[dict, dict[str, dict]]] = []
 
     def _work(node: ThemeNode) -> tuple[dict, dict[str, dict]]:
-        return analyse_leaf(node, tree, rng, model=model)
+        return analyse_leaf(node, tree, rng, dataset, model=model)
 
     def _record(_k: int) -> None:
         if on_progress:
@@ -341,6 +390,13 @@ def build_opinion(
     for _o, cs in results:
         claim_stance.update(cs)
 
+    # FIT cible↔titre — la cible RÉSUME-t-elle le thème ? cos(emb(proposition), emb(titre)),
+    # MÊME encodeur que les claims. On a écarté le cos vs CENTROÏDE (research/cleavage_v2_note.md) :
+    # le centroïde est dominé par la facette la PLUS BRUYANTE → il récompense le biais « saillant »
+    # qu'on combat (sur le cas-test il classait la PIRE cible plus haut). Un seul batch d'embed,
+    # hors thread (torch). Marque `cleavage_fit_low` si fit < seuil — MARQUEUR, pas filtre.
+    _attach_cleavage_fit(opinions)
+
     # Ordre STABLE (par theme_id dans l'ordre de l'arbre) — indépendant de l'ordonnancement.
     rank = {nid: i for i, nid in enumerate(tree.order)}
     opinions.sort(key=lambda o: rank.get(o["theme_id"], 1 << 30))
@@ -360,9 +416,11 @@ def build_opinion(
             "min_claims": MIN_CLAIMS,
             "opposition_clivant": OPPOSITION_CLIVANT,
         },
-        "cleavage_prompt_system": CLEAVAGE_SYSTEM,
+        "cleavage_prompt_system": cleavage_system("<TITRE>"),
         "stance_prompt_system": STANCE_SYSTEM,
-        "counts": {"clivant": n_clivant, "consensuel": n_consensuel, "impur": n_impur},
+        "cleavage_fit_low_threshold": CLEAVAGE_FIT_LOW,
+        "counts": {"clivant": n_clivant, "consensuel": n_consensuel, "impur": n_impur,
+                   "fit_low": sum(1 for o in opinions if o.get("cleavage_fit_low"))},
         "n_leaves": total,
         "took_seconds": took_s,
         "themes": opinions,
