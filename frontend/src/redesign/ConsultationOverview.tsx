@@ -120,9 +120,12 @@ export function ConsultationOverview({
 
       <main className="overview__body">
         <section className="overview__head">
-          {/* Plus de grand titre ni de description : la QUESTION posée EST l'accroche —
-              en sous-titre, italique, entre guillemets, centrée. Repli label. */}
-          <h1 className="overview__question">« {dataset.question || dataset.label} »</h1>
+          {/* Nom de la consultation en titre MODESTE, puis la question posée en
+              sous-titre italique entre guillemets (centrés). */}
+          <h1 className="overview__name">{dataset.label}</h1>
+          {dataset.question && (
+            <p className="overview__question">« {dataset.question} »</p>
+          )}
         </section>
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
