@@ -1,0 +1,26 @@
+{
+  "id": "xstance__security",
+  "label": "Security",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 258,
+  "n_loaded": 258,
+  "languages": [
+    "fr",
+    "de",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 89,
+    "de": 86,
+    "it": 83
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Security"
+  }
+}

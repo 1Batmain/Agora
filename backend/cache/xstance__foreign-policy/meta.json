@@ -1,0 +1,26 @@
+{
+  "id": "xstance__foreign-policy",
+  "label": "Foreign Policy",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 178,
+  "n_loaded": 178,
+  "languages": [
+    "fr",
+    "de",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 72,
+    "de": 57,
+    "it": 49
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Foreign Policy"
+  }
+}
