@@ -33,7 +33,7 @@ export function Landing({
             <br />
           </h1>
           <p className="hero__tagline">
-            Agora analyse l’intégralité des réponses à une consultation et en fait émerger
+            Agora analyse l’intégralité des réponses à une consultation pour en faire émerger
             les grands thèmes — de manière <strong>automatisée, transparente, rapide et
             économique</strong>.
           </p>
