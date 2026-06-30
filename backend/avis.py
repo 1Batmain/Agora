@@ -102,6 +102,29 @@ def avis_payload_for(tree: ThemeTree, avis_index: int,
             "claims": avis_claims(tree, avis_index, claim_macro)}
 
 
+def join_claim_stance(claims: list[dict], stance_map: dict | None) -> list[dict]:
+    """Enrichit chaque claim d'une `stance` (+`proposition`/`stance_justif`) si connue.
+
+    Transparence par claim, à l'image du surlignage verbatim : la stance bakée par
+    `backend.build_opinion` (`{claim_id: {stance, justif, proposition, theme_id}}`) est
+    JOINTE par l'id de claim servi (`f"{avis_id}#{index}"`). Gracieux : `stance_map`
+    absente, ou claim sans entrée (thème impur / non classé), → claim inchangé. Ne touche
+    NI les spans NI la cible (l'ancrage verbatim reste intact).
+    """
+    if not stance_map:
+        return claims
+    out: list[dict] = []
+    for c in claims:
+        rec = stance_map.get(c.get("id"))
+        if rec:
+            c = {**c,
+                 "stance": rec.get("stance"),
+                 "proposition": rec.get("proposition"),
+                 "stance_justif": rec.get("justif")}
+        out.append(c)
+    return out
+
+
 # --------------------------------------------------------------------------- #
 # Liste / recherche d'avis (endpoint `/avis_list`, SERVE depuis `avis.json`)
 # --------------------------------------------------------------------------- #
