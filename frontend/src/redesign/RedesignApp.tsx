@@ -10,12 +10,28 @@ import type {
   SpatialTheme,
 } from './contract';
 import { fetchAnalysis, fetchCitations, fetchFlags, fetchInsights } from './analysisApi';
+import { fetchDensity, type DensityPayload } from './densityApi';
+import { densityScatterPoints } from './densityScatter';
 import { Header } from './Header';
 import { SpatialMap } from './SpatialMap';
+import { Density3D } from './Density3D';
+import { Scatter2D } from './Scatter2D';
 import { InsightsPanel, type ThemeFlagState } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
 import { themeCaption } from './labels';
+
+/** Mode de visualisation de la carte d'analyse. */
+type VizMode = 'graph' | 'density' | 'scatter';
+/** État du cache de densité (UMAP+KDE précalculé) servant les vues 3D / 2D. */
+type DensityStatus = 'idle' | 'loading' | 'ready' | 'unavailable';
+
+/** Onglets du toggle de visualisation (ordre d'affichage). */
+const VIZ_TABS: { id: VizMode; label: string }[] = [
+  { id: 'graph', label: 'Graphe' },
+  { id: 'density', label: 'Densité 3D' },
+  { id: 'scatter', label: 'Nuage 2D' },
+];
 
 // Right panel width (px) — drag-resizable, persisted, with sane bounds.
 const RIGHT_MIN = 300;
@@ -55,6 +71,13 @@ export default function RedesignApp({
   // navigation: drill path (themes we've descended into) + selected bubble
   const [path, setPath] = useState<SpatialTheme[]>([]);
   const [selected, setSelected] = useState<SpatialTheme | null>(null);
+
+  // Mode de visualisation de la carte (graphe à bulles · paysage 3D · nuage 2D). Les
+  // vues 3D/2D lisent le MÊME cache de densité PRÉCALCULÉ (`/density` → umap2d.npy),
+  // chargé paresseusement à la 1ʳᵉ sélection ; aucun calcul/recluster à la requête.
+  const [vizMode, setVizMode] = useState<VizMode>('graph');
+  const [densityPayload, setDensityPayload] = useState<DensityPayload | null>(null);
+  const [densityStatus, setDensityStatus] = useState<DensityStatus>('idle');
 
   // right-column content state
   const [markdown, setMarkdown] = useState<string | null>(null);
@@ -208,6 +231,48 @@ export default function RedesignApp({
     };
   }, [dataset]);
 
+  // Changement de dataset → on repart sur le graphe et on invalide le cache densité
+  // (la 3D/2D rechargeront paresseusement la nouvelle grille à la prochaine sélection).
+  useEffect(() => {
+    setVizMode('graph');
+    setDensityPayload(null);
+    setDensityStatus('idle');
+  }, [dataset]);
+
+  // Chargement PARESSEUX de la densité PRÉCALCULÉE : déclenché seulement quand l'utilisateur
+  // bascule sur « Densité 3D » ou « Nuage 2D » (jamais au chargement de la page). On lit le
+  // cache `/density` (umap2d.npy + KDE) — aucun `/recluster`, aucun re-clustering live. En cas
+  // d'indisponibilité (503 / pas de cache), on grise les deux options et on revient au graphe.
+  useEffect(() => {
+    if (!dataset) return;
+    if (vizMode === 'graph' || densityStatus !== 'idle') return;
+    let cancelled = false;
+    setDensityStatus('loading');
+    fetchDensity(dataset)
+      .then((data) => {
+        if (cancelled) return;
+        if (data) {
+          setDensityPayload(data);
+          setDensityStatus('ready');
+        } else {
+          setDensityStatus('unavailable');
+          setVizMode('graph');
+        }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setDensityStatus('unavailable');
+        setVizMode('graph');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset, vizMode, densityStatus]);
+
+  // Nuage 2D dérivé de la grille de densité (vue UMAP de dessus). Mémoïsé : recalculé
+  // seulement quand la grille change, pas à chaque rendu.
+  const scatterPoints = useMemo(() => densityScatterPoints(densityPayload), [densityPayload]);
+
   const onDataset = useCallbackRef(async (id: string) => {
     if (id === dataset) return;
     setDataset(id);
@@ -288,40 +353,84 @@ export default function RedesignApp({
 
       <div className="agora__body" style={{ '--right-w': `${rightWidth}px` } as React.CSSProperties}>
         <main className="agora__center">
-          <nav className="breadcrumb">
-            {crumbs.map((c, i) => (
-              <span key={c.idx}>
-                {i > 0 && <span className="breadcrumb__sep">›</span>}
-                <button
-                  className={`breadcrumb__item${i === crumbs.length - 1 ? ' breadcrumb__item--active' : ''}`}
-                  onClick={() => gotoCrumb(c.idx)}
-                >
-                  {c.label}
-                </button>
-              </span>
-            ))}
-          </nav>
+          {/* Toggle de mode de visualisation (intègre les vues de l'ancienne Console).
+              Les vues Densité 3D / Nuage 2D lisent le cache de densité PRÉCALCULÉ —
+              grisées tant qu'il est indisponible (chargement paresseux, pas de calcul). */}
+          {!busy && themes.length > 0 && (
+            <div className="viewtoggle" role="tablist" aria-label="Mode de visualisation">
+              {VIZ_TABS.map((t) => {
+                const disabled = t.id !== 'graph' && densityStatus === 'unavailable';
+                return (
+                  <button
+                    key={t.id}
+                    role="tab"
+                    aria-selected={vizMode === t.id}
+                    disabled={disabled}
+                    title={disabled ? 'donnée de densité indisponible pour cette consultation' : undefined}
+                    className={`viewtoggle__tab${vizMode === t.id ? ' viewtoggle__tab--active' : ''}`}
+                    onClick={() => setVizMode(t.id)}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Fil d'Ariane = navigation du GRAPHE uniquement (le drill n'a pas de sens
+              sur les vues densité/nuage, qui montrent la consultation entière). */}
+          {vizMode === 'graph' && (
+            <nav className="breadcrumb">
+              {crumbs.map((c, i) => (
+                <span key={c.idx}>
+                  {i > 0 && <span className="breadcrumb__sep">›</span>}
+                  <button
+                    className={`breadcrumb__item${i === crumbs.length - 1 ? ' breadcrumb__item--active' : ''}`}
+                    onClick={() => gotoCrumb(c.idx)}
+                  >
+                    {c.label}
+                  </button>
+                </span>
+              ))}
+            </nav>
+          )}
 
           {/* F2 — no separate intro block anymore. The collection context is folded
               into the START of the GLOBAL synthesis (right panel), so the global view
               shows a SINGLE synthesis. See `panelMarkdown` below. */}
 
-          {/* La carte d'analyse n'affiche QUE le graphe à bulles. Le « Paysage 3D »
-              densité a déménagé dans la PAGE Console (re-clustering live). */}
           <div className="agora__canvas">
             {busy ? (
               <div className="agora__loading">
                 <span className="spinner" /> calcul de la carte…
               </div>
             ) : themes.length ? (
-              <SpatialMap
-                themes={themes}
-                edges={edges}
-                currentParentId={currentParentId}
-                selectedId={selected?.id ?? null}
-                onSelect={setSelected}
-                onDrill={onDrill}
-              />
+              vizMode === 'graph' ? (
+                <SpatialMap
+                  themes={themes}
+                  edges={edges}
+                  currentParentId={currentParentId}
+                  selectedId={selected?.id ?? null}
+                  onSelect={setSelected}
+                  onDrill={onDrill}
+                />
+              ) : densityStatus === 'loading' || densityStatus === 'idle' ? (
+                <div className="agora__loading">
+                  <span className="spinner" /> chargement du paysage…
+                </div>
+              ) : densityStatus === 'unavailable' || !densityPayload ? (
+                <div className="agora__loading agora__build-error">
+                  <strong>Vue indisponible</strong>
+                  <p>le paysage de densité n'est pas précalculé pour cette consultation.</p>
+                </div>
+              ) : vizMode === 'density' ? (
+                <Density3D payload={densityPayload} />
+              ) : (
+                <Scatter2D
+                  points={scatterPoints}
+                  legend="Nuage UMAP 2D des contributions · couleur = densité locale (amas = thèmes denses)"
+                />
+              )
             ) : analysisSource === 'building' ? (
               <div className="agora__loading agora__building">
                 <span className="spinner" />
