@@ -1,0 +1,26 @@
+{
+  "id": "xstance__welfare",
+  "label": "Welfare",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 397,
+  "n_loaded": 397,
+  "languages": [
+    "it",
+    "fr",
+    "de"
+  ],
+  "lang_counts": {
+    "it": 140,
+    "fr": 132,
+    "de": 125
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Welfare"
+  }
+}

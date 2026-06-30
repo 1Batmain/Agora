@@ -22,5 +22,19 @@
     "balance": "lang",
     "cap": 3000,
     "seed": 42
-  }
+  },
+  "children": [
+    "xstance__digitisation",
+    "xstance__economy",
+    "xstance__education",
+    "xstance__finances",
+    "xstance__foreign-policy",
+    "xstance__healthcare",
+    "xstance__immigration",
+    "xstance__infrastructure-environment",
+    "xstance__political-system",
+    "xstance__security",
+    "xstance__society",
+    "xstance__welfare"
+  ]
 }

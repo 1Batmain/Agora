@@ -38,7 +38,7 @@ from typing import Callable
 
 from backend import analysis_store as store
 from backend.analysis import DEFAULT_EMBEDDER, DEFAULT_SEED, ThemeNode, ThemeTree, build_theme_tree
-from backend.build_analysis import load_dataset
+from backend.build_analysis import EXTRACT_MODEL, load_dataset
 from backend.titles import title_for_node
 from pipeline.cluster import mistral_client
 
@@ -330,6 +330,7 @@ def build_opinion(
     *,
     backend: str | None = None,
     model: str | None = None,
+    extract_model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
     resolution: float = 1.0,
     seed: int = DEFAULT_SEED,
@@ -341,14 +342,20 @@ def build_opinion(
     L'arbre est rebâti en mémoire à partir des caches claims/embeddings existants (zéro
     ré-extraction si déjà fait). On ne traite QUE les feuilles (1 feuille ≈ 1 proposition) ;
     une feuille avec trop peu de claims sort en 'impur' sans répartition.
+
+    `model` = modèle CLEAVAGE+STANCE (cheap, défaut `MODEL`). `extract_model` = modèle
+    d'EXTRACTION de l'arbre : il doit matcher celui de `build_analysis` (`EXTRACT_MODEL`
+    par défaut) sinon la clé de cache claims diffère et l'arbre RÉ-EXTRAIT. On le forwarde
+    donc explicitement à `build_theme_tree` → réutilise l'extraction déjà cachée.
     """
     t0 = perf_counter()
     dataset = ds.id
     model = model or MODEL
+    extract_model = extract_model or EXTRACT_MODEL
     rng = random.Random(seed)
 
     _log(f"{dataset} · construction de l'arbre (caché si déjà extrait)…")
-    tree = build_theme_tree(ds, backend=backend, embedder=embedder,
+    tree = build_theme_tree(ds, backend=backend, model=extract_model, embedder=embedder,
                             resolution=resolution, seed=seed)
 
     leaves = [tree.nodes[nid] for nid in tree.order if not tree.nodes[nid].children]
@@ -440,6 +447,9 @@ def main() -> None:
     ap.add_argument("--dataset", required=True, help="id du dataset (sous backend/cache/)")
     ap.add_argument("--backend", default=None, help="api (défaut) | mac | auto")
     ap.add_argument("--model", default=None, help=f"modèle cleavage+stance (défaut {MODEL})")
+    ap.add_argument("--extract-model", default=None,
+                    help=f"modèle d'extraction de l'arbre (défaut {EXTRACT_MODEL} — doit "
+                         f"matcher build_analysis pour réutiliser le cache claims)")
     ap.add_argument("--embedder", default=DEFAULT_EMBEDDER)
     ap.add_argument("--resolution", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
@@ -449,7 +459,8 @@ def main() -> None:
         raise SystemExit("Pas de clé Mistral (MISTRAL_API_KEY). Abandon.")
 
     ds = load_dataset(args.dataset)
-    build_opinion(ds, backend=args.backend, model=args.model, embedder=args.embedder,
+    build_opinion(ds, backend=args.backend, model=args.model,
+                  extract_model=args.extract_model, embedder=args.embedder,
                   resolution=args.resolution, seed=args.seed)
 
 
