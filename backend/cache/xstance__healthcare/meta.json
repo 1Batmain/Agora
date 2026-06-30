@@ -1,0 +1,26 @@
+{
+  "id": "xstance__healthcare",
+  "label": "Healthcare",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 218,
+  "n_loaded": 218,
+  "languages": [
+    "it",
+    "de",
+    "fr"
+  ],
+  "lang_counts": {
+    "it": 86,
+    "de": 67,
+    "fr": 65
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Healthcare"
+  }
+}
