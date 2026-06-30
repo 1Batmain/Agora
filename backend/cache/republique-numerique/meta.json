@@ -19,6 +19,7 @@
     "it": 1
   },
   "source": "republique-numerique",
+  "question": "Que pensez-vous du projet de loi « Pour une République numérique » et quelles améliorations proposez-vous (circulation des données et du savoir, protection des droits dans la société numérique, accès au numérique) ?",
   "model_id": "nomic-ai/nomic-embed-text-v2-moe",
   "dim": 768,
   "n_loaded": 8069,

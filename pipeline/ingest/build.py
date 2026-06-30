@@ -58,7 +58,7 @@ def to_idea(rec: dict) -> dict | None:
         weight = float(rec.get("weight", 1.0))
     except (TypeError, ValueError):
         weight = 1.0
-    return {
+    idea = {
         "id": idea_id,
         "type": "idea",
         "label": make_label(text_clean, config.LABEL_MAXLEN),
@@ -77,6 +77,12 @@ def to_idea(rec: dict) -> dict | None:
             "weight": weight,
         },
     }
+    # Métadonnées de source préservées (déclaratif, cf. descripteur `props`) :
+    # ajoutées SANS jamais écraser une prop canonique. Sert le modèle mère→enfants
+    # (ex. xstance : question/topic/label par item).
+    for k, v in (rec.get("props") or {}).items():
+        idea["props"].setdefault(k, v)
+    return idea
 
 
 def assert_no_pii(idea: dict) -> None:
