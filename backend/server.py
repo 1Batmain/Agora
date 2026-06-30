@@ -158,7 +158,11 @@ def datasets() -> list[dict]:
     def _with_capabilities(c: dict) -> dict:
         return {**c, "namings": list(NAMINGS), "default_naming": DEFAULT_NAMING_METHOD}
 
-    closed = [_with_capabilities(dataset_descriptor(ds_id)) for ds_id in _ids]
+    # Hiérarchie mère→enfants : la liste top-level montre les MÈRES + les
+    # consultations SIMPLES, PAS les enfants (qui restent servis par id sur tous
+    # les autres endpoints via `_resolve`). Un enfant = descripteur avec `parent_id`.
+    closed = [_with_capabilities(d) for ds_id in _ids
+              if not (d := dataset_descriptor(ds_id)).get("parent_id")]
     open_ = [_with_capabilities(open_consultation_descriptor(name))
              for name in list_open_consultations()]
     # Ouvertes en tête : ce sont celles où l'on peut encore agir.
