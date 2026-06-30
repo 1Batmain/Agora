@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "items": [
     {
       "id": "back-spatial",
@@ -66,6 +66,13 @@
       "lane": "research",
       "status": "todo",
       "note": "Les arêtes sont déjà pondérées au cosinus brut et Leiden les utilise. Tester si accentuer les liens forts — poids = cosinus², ou un noyau gaussien sur la distance — améliore la modularité ET l'alignement à la taxo officielle (repnum), vs cosinus brut. Harnais type k-sweep (research/)."
+    },
+    {
+      "id": "claim-def-for-stance",
+      "title": "A/B : définition du claim optimisée pour la stance (atomicité + objet net + flag stance-bearing)",
+      "lane": "research",
+      "status": "todo",
+      "note": "Les 11% d'erreur stance sont des sur-attributions dues à des claims qui débordent sur une mesure adjacente. Tester B' (1 position atomique / 1 objet net / marquer stance-bearing) vs B actuel, évalué sur la PRÉCISION de stance (gold annoté main), pas juste le rappel. Si gain → ré-extraire. Levier identifié par Bob."
     }
   ]
 }
