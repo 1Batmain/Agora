@@ -1,18 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { fetchDensity, type DensityPayload } from './densityApi';
+import type { DensityPayload } from './densityApi';
 
 /**
  * « Paysage de densité 3D » — une SURFACE, pas un nuage de points. Le plan (x, z)
  * est la projection UMAP 2D des embeddings PRÉ-clustering ; la hauteur y est la
- * densité locale (KDE) servie par `GET /density` sur une grille nx×nz. Pics = zones
- * denses (futurs thèmes), vallées = clairsemé.
+ * densité locale (KDE) sur une grille nx×nz. Pics = zones denses (futurs thèmes),
+ * vallées = clairsemé.
  *
+ * Composant de RENDU PUR : il reçoit le `payload` de densité PRÉCALCULÉ (chargé en
+ * amont depuis le cache `GET /density`, jamais recalculé à la requête) et le dessine.
  * Rendu three.js : une `PlaneGeometry(nx-1, nz-1)` dont chaque sommet prend
  * `y = heights[iz][ix]` (normalisé par `zmax`), coloré par un dégradé de hauteur
  * (rampe Bleu France clair→foncé), éclairage doux, `OrbitControls` (rotation/zoom
- * souris). Fond clair épuré. Loading + resize gérés, nettoyage three au démontage.
+ * souris). Fond clair épuré. Resize géré, nettoyage three au démontage.
  */
 
 // Rampe Bleu France : vallées en bleu pâle (#ececfe) → pics en bleu profond (#000091).
@@ -23,33 +25,10 @@ const HIGH = new THREE.Color('#000091');
 const PLANE_SIZE = 10;
 const HEIGHT_SCALE = 3.2;
 
-export function Density3D({ dataset }: { dataset: string | null }) {
+export function Density3D({ payload }: { payload: DensityPayload }) {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [payload, setPayload] = useState<DensityPayload | null>(null);
 
-  // --- 1. Charge la grille de densité quand le dataset change. ---
-  useEffect(() => {
-    if (!dataset) return;
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    setPayload(null);
-    fetchDensity(dataset)
-      .then((data) => {
-        if (cancelled) return;
-        if (!data) setError('paysage de densité indisponible pour cette consultation.');
-        else setPayload(data);
-      })
-      .catch((e) => !cancelled && setError(String(e)))
-      .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [dataset]);
-
-  // --- 2. Construit/anime la scène three quand la grille est prête. ---
+  // Construit/anime la scène three quand la grille (précalculée) est prête.
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount || !payload) return;
@@ -150,18 +129,10 @@ export function Density3D({ dataset }: { dataset: string | null }) {
   return (
     <div className="density3d">
       <div ref={mountRef} className="density3d__canvas" />
-      {loading && (
-        <div className="density3d__overlay">
-          <span className="spinner" /> calcul du paysage…
-        </div>
-      )}
-      {!loading && error && <div className="density3d__overlay density3d__error">{error}</div>}
-      {!loading && !error && (
-        <p className="density3d__legend">
-          Surface = projection UMAP 2D des contributions · hauteur = densité (pics = thèmes
-          denses)
-        </p>
-      )}
+      <p className="density3d__legend">
+        Surface = projection UMAP 2D des contributions · hauteur = densité (pics = thèmes
+        denses)
+      </p>
     </div>
   );
 }
