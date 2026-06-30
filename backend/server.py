@@ -110,7 +110,62 @@ def _resolve(dataset: str | None) -> _Dataset:
     return obj
 
 
-app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0")
+# /docs, /redoc & /openapi.json DÉSACTIVÉS en mode public (pas de divulgation du schéma
+# d'API à un anonyme — audit privacy #9). Conservés en dev pour le confort.
+_DOCS = dict(docs_url=None, redoc_url=None, openapi_url=None) if auth.PUBLIC_MODE else {}
+app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0", **_DOCS)
+
+
+# Limite de taille de corps : 413 au-delà de 64 Ko (anti-DoS mémoire — audit input #2).
+# Le check Content-Length rejette AVANT de bufferiser le corps. Le reverse-proxy
+# (nginx `client_max_body_size`) reste une défense en profondeur recommandée.
+MAX_BODY_BYTES = 64 * 1024
+
+
+class _BodySizeLimitMiddleware:
+    """Rejette (413) toute requête HTTP dont le corps annoncé dépasse `max_bytes`."""
+
+    def __init__(self, app, max_bytes: int) -> None:
+        self.app = app
+        self.max_bytes = max_bytes
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            for name, value in scope.get("headers") or []:
+                if name == b"content-length":
+                    try:
+                        too_big = int(value) > self.max_bytes
+                    except ValueError:
+                        too_big = False
+                    if too_big:
+                        await send({
+                            "type": "http.response.start",
+                            "status": 413,
+                            "headers": [(b"content-type", b"application/json; charset=utf-8")],
+                        })
+                        await send({
+                            "type": "http.response.body",
+                            "body": b'{"detail":"Corps de requete trop volumineux (max 64 Ko)."}',
+                        })
+                        return
+                    break
+        await self.app(scope, receive, send)
+
+
+@app.middleware("http")
+async def _security_headers(request, call_next):
+    """En-têtes de sécurité de base sur chaque réponse (audit privacy #6)."""
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    # Anti-clickjacking sans casser /docs (ne restreint pas le chargement de ressources).
+    response.headers.setdefault("Content-Security-Policy", "frame-ancestors 'none'")
+    response.headers.setdefault(
+        "Strict-Transport-Security", "max-age=31536000; includeSubDomains"
+    )
+    return response
+
 
 # CORS restreint (audit prod SEC1) : origines connues seulement, JAMAIS "*".
 # Surchargeable par AGORA_ALLOWED_ORIGINS (liste séparée par des virgules).
@@ -126,6 +181,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Outermost : la borne de taille s'applique AVANT tout parsing (anti-DoS mémoire).
+app.add_middleware(_BodySizeLimitMiddleware, max_bytes=MAX_BODY_BYTES)
 
 
 @app.get("/health")
