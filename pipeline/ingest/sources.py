@@ -30,9 +30,14 @@ Schéma du descripteur (cf. `descriptors/*.json`) :
   "lang_keep": ["fr"],         // optionnel : KNOB explicite de sous-ensemble langue
   "keep_where": {              // optionnel : KNOB déclaratif de filtrage par valeur
     "Type.de.contenu": ["Proposition", "Argument", "Modification"]
-  }                            //   garde la ligne si CHAQUE colonne ∈ ensemble autorisé
-}                              //   (défaut absent = aucun filtre par valeur)
-```
+  },                           //   garde la ligne si CHAQUE colonne ∈ ensemble autorisé
+                               //   (défaut absent = aucun filtre par valeur)
+  "props": {                   // optionnel : MÉTADONNÉES de source à PRÉSERVER dans
+    "question": "question",    //   `props` de chaque idée (nom_prop -> réf colonne).
+    "topic": "topic",          //   Générique : aucun champ corpus en dur. Sert au
+    "label": "label"           //   modèle mère→enfants (ex. xstance : question/topic/
+  }                            //   label par item). N'écrase jamais les props canoniques.
+}
 
 Seuls `id` et `text` sont obligatoires dans `columns`. `author` non fourni →
 on retombe sur la valeur d'`id` (1 réponse = 1 répondant). `lang` fourni par la
@@ -76,6 +81,9 @@ class SourceDescriptor:
     members: list[str] | None = None
     lang_keep: list[str] | None = None
     keep_where: dict | None = None  # filtre déclaratif par valeur de colonne brute
+    # Métadonnées de source à conserver dans `props` (nom_prop -> réf colonne).
+    # Déclaratif et générique : sert le modèle mère→enfants (question/topic/label…).
+    props: dict | None = None
     # Statut de la consultation : "open" (participation en cours) | "closed"
     # (close, on n'expose que l'analyse). Défaut prudent = "closed".
     status: str = "closed"
@@ -100,7 +108,7 @@ class SourceDescriptor:
         known = {
             "name", "format", "path", "columns", "url", "encoding",
             "delimiter", "has_header", "archive", "members", "lang_keep",
-            "keep_where", "status",
+            "keep_where", "status", "props",
         }
         kwargs = {k: v for k, v in d.items() if k in known}
         kwargs["extra"] = {k: v for k, v in d.items() if k not in known}
@@ -166,6 +174,19 @@ def _map_record(desc: SourceDescriptor, record) -> dict:
             rec["weight"] = float(w)
         except (TypeError, ValueError):
             rec["weight"] = 1.0
+    # Métadonnées de source à préserver (déclaratif). On garde la valeur brute
+    # (chaîne non vide après strip) ; les manquantes sont simplement omises.
+    if desc.props:
+        extra: dict = {}
+        for prop_name, ref in desc.props.items():
+            val = _get(record, ref)
+            if val is None:
+                continue
+            sval = str(val).strip()
+            if sval:
+                extra[prop_name] = sval
+        if extra:
+            rec["props"] = extra
     return rec
 
 
