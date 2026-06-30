@@ -1927,6 +1927,8 @@ body {
   padding: .85rem 1.1rem; min-width: 240px; flex: 1 1 240px;
   border: 1px solid #d7d7e6; background: #fcfcff;
   text-decoration: none; transition: background .12s ease, transform .12s ease;
+  /* reset bouton (la « Feuille de route » est un déclencheur in-app, pas un lien) */
+  font: inherit; text-align: left; cursor: pointer;
 }
 .collab__link:hover { background: #f4f4f8; }
 .collab__link-arrow {
