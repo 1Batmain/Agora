@@ -34,10 +34,13 @@ import os
 from fastapi import Depends, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.auth import rate_limit, require_token
+from backend import auth
+from backend.auth import forbid_in_public, rate_limit, require_token
 
 # Dépendances posées sur les endpoints MUTATIFS / COÛTEUX (audit prod SEC1).
 PROTECTED = [Depends(require_token), Depends(rate_limit)]
+# Endpoints de COMPUTE/BUILD : désactivés en mode public + rate-limités hors public.
+COMPUTE = [Depends(forbid_in_public), Depends(rate_limit)]
 from pydantic import BaseModel, Field
 
 from backend.recluster import (
@@ -307,7 +310,9 @@ _AUTOBUILD_ONLY = {s.strip() for s in os.environ.get("AGORA_AUTOBUILD_DATASETS",
 
 @app.on_event("startup")
 def _startup_autobuild() -> None:
-    if not _AUTOBUILD:
+    # Mode public : un nœud exposé ne build JAMAIS (extraction LLM faite hors-ligne par
+    # l'opérateur, cf. AGORA_PUBLIC). Aucune extraction mistral-large sur un nœud public.
+    if auth.PUBLIC_MODE or not _AUTOBUILD:
         return
     # Lazy-load : ne charge en RAM (`_resolve`) QUE les datasets sans analyse prête (ceux
     # qui doivent réellement builder) ; les datasets déjà prêts restent déchargés au boot.
@@ -319,18 +324,34 @@ def _startup_autobuild() -> None:
         build_manager.ensure_build(_resolve(ds_id))
 
 
-def _not_ready_response(ds, response: Response) -> dict:
-    """Réponse SERVE quand l'analyse n'est pas prête : (re)lance le build, renvoie l'état.
+def _sanitize_progress(prog: dict) -> dict:
+    """Masque les détails d'exception internes (str(exc)) avant envoi au client.
 
-    Ne calcule JAMAIS à la requête — délègue au build de fond (`ensure_build`) et renvoie
-    la progression. 202 si ça construit/va construire, 503 si le dernier build a échoué.
+    Le détail complet reste persisté dans `status.json` (côté serveur, pour l'opérateur) ;
+    le client ne reçoit qu'un message générique — pas de chemin disque / trace / détail API.
     """
+    if prog.get("error"):
+        prog = {**prog, "error": "échec du build (voir logs serveur)"}
+    return prog
+
+
+def _not_ready_response(ds, response: Response) -> dict:
+    """Réponse SERVE quand l'analyse n'est pas prête.
+
+    Hors public : (re)lance le build de fond (`ensure_build`) et renvoie la progression —
+    202 si ça construit, 503 si le dernier build a échoué. JAMAIS de calcul lourd ici.
+
+    En MODE PUBLIC : ne déclenche AUCUN build (zéro extraction LLM pilotée par un
+    visiteur) — un dataset non pré-construit renvoie 404.
+    """
+    if auth.PUBLIC_MODE:
+        raise HTTPException(status_code=404, detail="Analyse non disponible pour ce dataset.")
     build_manager.ensure_build(ds)
     prog = analysis_store.progress(ds.id)
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     response.status_code = 503 if prog["status"] == analysis_store.ERROR else 202
-    return prog
+    return _sanitize_progress(prog)
 
 
 class AnalysisBody(BaseModel):
@@ -502,7 +523,7 @@ def get_avis_list(
     return result
 
 
-@app.get("/density")
+@app.get("/density", dependencies=COMPUTE)
 def get_density(
     dataset: str | None = Query(None),
 ) -> dict:
@@ -519,7 +540,8 @@ def get_density(
     try:
         return density.density_payload(ds.id)
     except density.DensityUnavailable as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+        # Message générique au client (pas de détail interne) ; cause loggée côté serveur.
+        raise HTTPException(status_code=503, detail="Projection de densité indisponible.") from exc
 
 
 class ReclusterBody(BaseModel):
@@ -533,10 +555,11 @@ class ReclusterBody(BaseModel):
     knn_threshold: float | None = Field(None, ge=0.0, le=1.0)
     # `k` (nombre de voisins du graphe k-NN) = LEVIER de la Console (≥2).
     k: int | None = Field(None, ge=2, le=200)
-    resolution: float = Field(1.0, gt=0.0)
+    # Bornée HAUT (audit) : une `resolution` énorme alourdit Leiden gratuitement.
+    resolution: float = Field(1.0, gt=0.0, le=10.0)
 
 
-@app.post("/recluster")
+@app.post("/recluster", dependencies=COMPUTE)
 def do_recluster(body: ReclusterBody) -> dict:
     """Re-clustering LIVE au seuil k-NN donné → `{themes, points, indices, meta}`.
 
@@ -560,9 +583,13 @@ class BuildBody(BaseModel):
     force: bool = False
 
 
-@app.post("/build", dependencies=PROTECTED)
+@app.post("/build", dependencies=[Depends(forbid_in_public), *PROTECTED])
 def do_build(body: BuildBody, response: Response) -> dict:
-    """Déclenche/relance le build de fond de l'analyse d'un dataset (non bloquant)."""
+    """Déclenche/relance le build de fond de l'analyse d'un dataset (non bloquant).
+
+    DÉSACTIVÉ en mode public (`forbid_in_public`) : aucun build pilotable à distance —
+    l'opérateur pré-construit hors-ligne (CLI) puis sert le cache.
+    """
     ds = _resolve(body.dataset)
     if body.force:
         analysis_store.clear(ds.id)
@@ -571,7 +598,7 @@ def do_build(body: BuildBody, response: Response) -> dict:
     prog = analysis_store.progress(ds.id)
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
-    return prog
+    return _sanitize_progress(prog)
 
 
 @app.get("/build_status")
@@ -582,7 +609,7 @@ def build_status(dataset: str | None = Query(None)) -> dict:
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     prog["building"] = build_manager.is_building(ds.id)
-    return prog
+    return _sanitize_progress(prog)
 
 
 # ============================ Flags de feedback ============================ #
