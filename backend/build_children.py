@@ -39,6 +39,7 @@ from types import SimpleNamespace
 import numpy as np
 
 from backend import build_analysis as ba
+from backend import build_opinion as bo
 from backend.claims_endpoint import (
     CLAIMS_EMB_NAME,
     CLAIMS_NAME,
@@ -143,11 +144,17 @@ def build_children(parent: str, by: str, *, backend: str | None = None,
         )
     parent_meta = _read_meta(parent)
 
+    # Le cache claims est clé par MODÈLE : l'extraction du PARENT et l'analyse de
+    # CHAQUE enfant doivent utiliser le MÊME modèle, sinon les enfants ratent le
+    # cache et RÉ-EXTRAIENT. On fige donc le modèle d'extraction de build_analysis
+    # (`EXTRACT_MODEL`, surchargé par --model) pour les DEUX.
+    extract_model = model or ba.EXTRACT_MODEL
+
     # 1) Extraction + embeddings du PARENT (cachés). C'est l'UNIQUE passe LLM/torch :
     #    les enfants RÉUTILISENT ces claims/vecteurs (tranchés), sans rien ré-extraire.
-    _log(f"{parent} · préparation des claims (extraction + embed, cachés)")
+    _log(f"{parent} · préparation des claims (extraction {extract_model} + embed, cachés)")
     parent_ds = SimpleNamespace(id=parent, ideas=load_cache(parent)[0])
-    prep = prepare_claims(parent_ds, backend=backend, model=model)
+    prep = prepare_claims(parent_ds, backend=backend, model=extract_model)
     _log(f"{parent} · {len(prep.claim_texts)} claims sur {len(prep.avis)} avis "
          f"(ré-extraits: {prep.extracted}, embeddings recalculés: {prep.embedded})")
 
@@ -232,10 +239,14 @@ def build_children(parent: str, by: str, *, backend: str | None = None,
         _log(f"{child_id} · {len(child_rows)} avis · {len(child_claim_rows)} claims tranchés "
              f"· analyse…")
 
-        # 2e) ANALYSE de l'enfant (clustering + naming + enrich + opinion), SANS --force.
+        # 2e) ANALYSE de l'enfant (clustering + naming + enrich), SANS --force.
         #     claims/embeddings cachés & tranchés ⇒ zéro ré-extraction, zéro ré-embed.
         child_ds = ba.load_dataset(child_id)
-        ba.build_analysis(child_ds, backend=backend, model=model)
+        ba.build_analysis(child_ds, backend=backend, model=extract_model)
+        # 2f) OPINION de l'enfant (objet de clivage + stance par feuille). On forwarde
+        #     `extract_model` pour que l'arbre RÉUTILISE le cache claims tranché (sinon il
+        #     ré-extrairait sous un autre modèle par défaut). Cleavage/stance = cheap.
+        bo.build_opinion(child_ds, backend=backend, extract_model=extract_model)
         child_ids.append(child_id)
 
     # 3) `children` dans le meta du PARENT (le parent reste un conteneur).
