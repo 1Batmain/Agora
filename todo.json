@@ -80,6 +80,13 @@
       "lane": "research",
       "status": "todo",
       "note": "Idée de Bob : un claim très liké doit peser plus dans l'espace sémantique qu'un claim sans like. Donner plus de 'masse'/gravité au point (déformation locale de l'espace) → il attire davantage le clustering. Pistes à tester : pondérer la contribution du point au centroïde/modularité par f(likes) ; ou dupliquer/scaler le vecteur ; mesurer l'effet sur les thèmes + l'alignement gold. Générique (facteur = n'importe quel signal d'engagement, pas que likes)."
+    },
+    {
+      "id": "argument-mining",
+      "title": "Argument mining : ressortir les arguments les plus mis en avant POUR et CONTRE par thème",
+      "lane": "research",
+      "status": "todo",
+      "note": "3e niveau de l'insight d'opinion (après engagement + répartition). Extraire/regrouper les arguments saillants du côté favorable et du côté défavorable d'un thème clivant (sur les claims engagés), et les surfacer dans la synthèse. Idée de Bob."
     }
   ]
 }
