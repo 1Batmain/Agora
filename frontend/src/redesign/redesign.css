@@ -2030,3 +2030,11 @@ body {
 .avisx__analysiscluster { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
 .avisx__stancetag { font-size: 0.78em; font-weight: 600; white-space: nowrap; }
 .avisx__stancetag + .avisx__stancetag { margin-left: 2px; }
+/* Indicateur de confiance discret (auto-évaluation du modèle) : 3 points muets,
+   posés après la stance. Hérite de la couleur de la stance mais dégradé/atténué. */
+.avisx__stanceconf {
+  margin-left: 4px; font-size: 0.82em; letter-spacing: 0.5px;
+  opacity: 0.55; cursor: help; vertical-align: 0.04em;
+}
+.avisx__stanceconf--low { opacity: 0.4; }
+.avisx__stanceconf--high { opacity: 0.7; }
