@@ -1,0 +1,30 @@
+[validate] 3000 commentaires, 505 questions, 573 batches, modèle=mistral-small-latest
+[validate] 20/573 batches
+[validate] 40/573 batches
+[validate] 60/573 batches
+[validate] 80/573 batches
+[validate] 100/573 batches
+[validate] 120/573 batches
+[validate] 140/573 batches
+[validate] 160/573 batches
+[validate] 180/573 batches
+[validate] 200/573 batches
+[validate] 220/573 batches
+[validate] 240/573 batches
+[validate] 260/573 batches
+[validate] 280/573 batches
+[validate] 300/573 batches
+[validate] 320/573 batches
+[validate] 340/573 batches
+[validate] 360/573 batches
+[validate] 380/573 batches
+[validate] 400/573 batches
+[validate] 420/573 batches
+[validate] 440/573 batches
+[validate] 460/573 batches
+[validate] 480/573 batches
+[validate] 500/573 batches
+[validate] 520/573 batches
+[validate] 540/573 batches
+[validate] 560/573 batches
+[validate] écrit research/stance_validation_raw.jsonl (3000 lignes)
