@@ -121,7 +121,8 @@ export function ConsultationOverview({
 
       <main className="overview__body">
         <section className="overview__head">
-          <h1 className="overview__title">{dataset.label}</h1>
+          {/* Titre de la consultation = la QUESTION posée (recentre le débat), repli label. */}
+          <h1 className="overview__title">{dataset.question || dataset.label}</h1>
           {context && <p className="overview__context">{context}</p>}
         </section>
 
