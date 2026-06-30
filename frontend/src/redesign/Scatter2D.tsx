@@ -1,5 +1,12 @@
 import { useEffect, useRef } from 'react';
-import type { ScatterPoint } from './reclusterApi';
+
+/** One UMAP-2D point (one idea / one contribution), coloured by its cluster. */
+export interface ScatterPoint {
+  x: number;
+  z: number;
+  cluster_id: string | null;
+  color: string;
+}
 
 /**
  * « Nuage UMAP 2D » — a flat scatter of the consultation's ideas. Each `point`
@@ -17,7 +24,14 @@ import type { ScatterPoint } from './reclusterApi';
 const MARGIN = 18; // px gap between the cloud and the canvas edge.
 const DOT_R = 2.6; // dot radius in CSS px.
 
-export function Scatter2D({ points }: { points: ScatterPoint[] }) {
+export function Scatter2D({
+  points,
+  legend = 'Nuage UMAP 2D des contributions · couleur = cluster (mise à jour au re-clustering)',
+}: {
+  points: ScatterPoint[];
+  /** Légende personnalisable (la source des couleurs varie selon l'appelant). */
+  legend?: string;
+}) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -85,9 +99,7 @@ export function Scatter2D({ points }: { points: ScatterPoint[] }) {
       {!points.length && (
         <div className="scatter2d__overlay">nuage indisponible pour cette consultation.</div>
       )}
-      <p className="scatter2d__legend">
-        Nuage UMAP 2D des contributions · couleur = cluster (mise à jour au re-clustering)
-      </p>
+      <p className="scatter2d__legend">{legend}</p>
     </div>
   );
 }

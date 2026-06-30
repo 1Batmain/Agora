@@ -39,12 +39,9 @@ const RIGHT_KEY = 'agora.rightWidth';
 export default function RedesignApp({
   initialDataset = null,
   onBack,
-  onConsole,
 }: {
   initialDataset?: string | null;
   onBack?: () => void;
-  /** Ouvre la PAGE Console (re-clustering live) pour le dataset courant. */
-  onConsole?: () => void;
 } = {}) {
   const [datasets, setDatasets] = useState<Consultation[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
@@ -283,21 +280,9 @@ export default function RedesignApp({
       <Header
         onHome={onBack}
         right={
-          <>
-            <span className="header-consultation" title="Consultation en cours">
-              {datasets.find((d) => d.id === dataset)?.label ?? dataset}
-            </span>
-            {onConsole && (
-              <button
-                type="button"
-                className="header-console-btn"
-                onClick={onConsole}
-                title="Ouvrir la Console (re-clustering live)"
-              >
-                ⚙ Console
-              </button>
-            )}
-          </>
+          <span className="header-consultation" title="Consultation en cours">
+            {datasets.find((d) => d.id === dataset)?.label ?? dataset}
+          </span>
         }
       />
 

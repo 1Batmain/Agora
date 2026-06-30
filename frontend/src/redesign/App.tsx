@@ -6,11 +6,10 @@ import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
 import { AvisExplorer } from './AvisExplorer';
 import RedesignApp from './RedesignApp';
-import { Console } from './Console';
 import { TodoPage } from './TodoPage';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'console' | 'avis' | 'todo';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'todo';
 type HistState = { route: Route; activeId: string | null; focus?: string | null };
 
 /**
@@ -70,26 +69,21 @@ export default function App() {
     const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
-      // `?view=console` → Console (closed datasets only) ; `?view=avis(&focus=)` → exploration des avis.
+      // `?view=avis(&focus=)` → exploration des avis (consultations closes uniquement).
       const view = params.get('view');
-      const wantConsole = view === 'console' && d.status !== 'open';
       const wantAvis = view === 'avis' && d.status !== 'open';
       const focus = wantAvis ? params.get('focus') : null;
-      const r: Route = wantConsole
-        ? 'console'
-        : wantAvis
-          ? 'avis'
-          : d.status === 'open'
-            ? 'participate'
-            : 'overview';
+      const r: Route = wantAvis
+        ? 'avis'
+        : d.status === 'open'
+          ? 'participate'
+          : 'overview';
       setRoute(r);
       setActiveId(d.id);
       setFocusAvis(focus);
-      const url = wantConsole
-        ? `?c=${d.id}&view=console`
-        : wantAvis
-          ? `?c=${d.id}&view=avis${focus ? `&focus=${encodeURIComponent(focus)}` : ''}`
-          : `?c=${d.id}`;
+      const url = wantAvis
+        ? `?c=${d.id}&view=avis${focus ? `&focus=${encodeURIComponent(focus)}` : ''}`
+        : `?c=${d.id}`;
       window.history.replaceState({ route: r, activeId: d.id, focus } as HistState, '', url);
     } else {
       window.history.replaceState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
@@ -125,12 +119,6 @@ export default function App() {
     );
   }, []);
 
-  const openConsole = useCallback((id: string) => {
-    setActiveId(id);
-    setRoute('console');
-    window.history.pushState({ route: 'console', activeId: id } as HistState, '', `?c=${id}&view=console`);
-  }, []);
-
   const backToLanding = useCallback(() => {
     setRoute('landing');
     setActiveId(null);
@@ -160,16 +148,7 @@ export default function App() {
     );
   }
   if (route === 'analysis' && active) {
-    return (
-      <RedesignApp
-        initialDataset={active.id}
-        onBack={backToLanding}
-        onConsole={() => openConsole(active.id)}
-      />
-    );
-  }
-  if (route === 'console' && active) {
-    return <Console dataset={active.id} label={active.label} onHome={backToLanding} />;
+    return <RedesignApp initialDataset={active.id} onBack={backToLanding} />;
   }
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;
