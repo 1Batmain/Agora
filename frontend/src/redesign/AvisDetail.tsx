@@ -287,6 +287,30 @@ const STANCE_META: Record<string, { glyph: string; color: string; label: string 
   nuance: { glyph: '~', color: '#6b7280', label: 'nuancé' },
 };
 
+/**
+ * Confidence presentation — the model's OWN self-assessment of its stance call, shown
+ * HONESTLY as such (a discreet 3-dot meter, never as a ground truth). high ●●● /
+ * medium ●●○ / low ●○○. The tooltip spells out that it is an auto-évaluation du modèle.
+ */
+const CONFIDENCE_META: Record<string, { dots: string; label: string }> = {
+  high: { dots: '●●●', label: 'élevée' },
+  medium: { dots: '●●○', label: 'moyenne' },
+  low: { dots: '●○○', label: 'faible' },
+};
+const CONFIDENCE_RANK: Record<string, number> = { low: 0, medium: 1, high: 2 };
+
+/** Aggregate confidence over claims — the MIN (most honest: a tally is no surer than its
+ *  weakest classified claim). Returns undefined when no claim carries a confidence. */
+function aggConfidence(claims: AvisClaim[]): 'high' | 'medium' | 'low' | undefined {
+  let min: 'high' | 'medium' | 'low' | undefined;
+  for (const c of claims) {
+    const lvl = c.stance_confidence;
+    if (!lvl || !(lvl in CONFIDENCE_RANK)) continue;
+    if (min === undefined || CONFIDENCE_RANK[lvl] < CONFIDENCE_RANK[min]) min = lvl;
+  }
+  return min;
+}
+
 /** Tooltip for a highlighted claim — theme, cible flag, and (if known) its stance. */
 function claimTitle(claim: AvisClaim, target: boolean): string {
   let t = `Thème : ${claim.theme_title}${target ? ' · cible' : ''}`;
@@ -318,15 +342,22 @@ function clustersOf(claims: AvisClaim[]): ClusterRef[] {
 
 /** Stance tallies for a set of claims, in fixed order (favorable, défavorable, nuancé),
  *  skipping stances with no claim. Empty when none of the claims carry a stance. */
-function stanceCounts(claims: AvisClaim[]): { key: string; glyph: string; color: string; label: string; count: number }[] {
-  const tally = new Map<string, number>();
+function stanceCounts(
+  claims: AvisClaim[],
+): { key: string; glyph: string; color: string; label: string; count: number; confidence?: 'high' | 'medium' | 'low' }[] {
+  const byStance = new Map<string, AvisClaim[]>();
   for (const c of claims) {
     if (!c.stance) continue;
-    tally.set(c.stance, (tally.get(c.stance) ?? 0) + 1);
+    (byStance.get(c.stance) ?? byStance.set(c.stance, []).get(c.stance)!).push(c);
   }
   return ['favorable', 'defavorable', 'nuance']
-    .filter((k) => tally.has(k))
-    .map((k) => ({ key: k, ...STANCE_META[k], count: tally.get(k)! }));
+    .filter((k) => byStance.has(k))
+    .map((k) => ({
+      key: k,
+      ...STANCE_META[k],
+      count: byStance.get(k)!.length,
+      confidence: aggConfidence(byStance.get(k)!),
+    }));
 }
 
 /**
@@ -352,11 +383,23 @@ export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
               <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
               <span className="avisx__analysisname">{c.label}</span>
               {/* Stance EN LIGNE, à la suite du nom (pas de ligne « Opinion » séparée). */}
-              {stance.map((s) => (
-                <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
-                  {s.glyph} {s.count > 1 ? `${s.count} ` : ''}{s.label}
-                </span>
-              ))}
+              {stance.map((s) => {
+                const conf = s.confidence ? CONFIDENCE_META[s.confidence] : undefined;
+                return (
+                  <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
+                    {s.glyph} {s.count > 1 ? `${s.count} ` : ''}{s.label}
+                    {conf && (
+                      <span
+                        className={`avisx__stanceconf avisx__stanceconf--${s.confidence}`}
+                        title={`Confiance du modèle : ${conf.label} — auto-évaluation, pas une vérité`}
+                        aria-label={`confiance ${conf.label}`}
+                      >
+                        {conf.dots}
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
             </div>
           </div>
         );
