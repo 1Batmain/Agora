@@ -104,19 +104,18 @@ def correlate(
 ) -> dict:
     """Corrèle un vecteur aux contributions existantes (cosinus).
 
-    Vecteurs supposés L2-normalisés (cosine = produit scalaire). Renvoie le nombre
-    de contributions au-dessus du seuil (`n_similar`), l'extrait le plus proche et
-    sa similarité. Sans existant → tout à zéro / None.
+    Vecteurs supposés L2-normalisés (cosine = produit scalaire). Renvoie un AGRÉGAT
+    non-PII : le nombre de contributions au-dessus du seuil (`n_similar`) et la
+    similarité la plus haute (`nearest_cos`). Vie privée (audit privacy #1) : NE
+    renvoie JAMAIS le verbatim d'une autre contribution. Sans existant → zéro / None.
     """
     q = np.asarray(vec, dtype=np.float32).ravel()
     mat = np.array([e["vec"] for e in existing if e.get("vec")], dtype=np.float32)
     if mat.size == 0:
-        return {"n_similar": 0, "nearest_excerpt": None, "nearest_cos": None}
+        return {"n_similar": 0, "nearest_cos": None}
     sims = mat @ q
     n_similar = int((sims >= threshold).sum())
-    best = int(np.argmax(sims))
     return {
         "n_similar": n_similar,
-        "nearest_excerpt": existing[best].get("text"),
-        "nearest_cos": round(float(sims[best]), 4),
+        "nearest_cos": round(float(np.max(sims)), 4),
     }
