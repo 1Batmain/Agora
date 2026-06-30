@@ -414,6 +414,10 @@ def get_avis(
     if data is None:
         raise HTTPException(status_code=404,
                             detail=f"avis inconnu: {avis_id!r} (dataset {ds.id!r}).")
+    # Join gracieux de la stance par claim (artefact à part, absent → claims inchangés).
+    stance_map = analysis_store.read_claim_stance(ds.id)
+    if stance_map:
+        data = {**data, "claims": avis.join_claim_stance(data.get("claims", []), stance_map)}
     return data
 
 
@@ -445,8 +449,14 @@ def get_avis_list(
         return _not_ready_response(ds, response)
     payload = analysis_store.read_analysis(ds.id)
     themes = (payload or {}).get("themes", [])
-    return avis.avis_list(avis_data, themes,
-                          theme_id=theme_id, q=q, limit=limit, offset=offset)
+    result = avis.avis_list(avis_data, themes,
+                            theme_id=theme_id, q=q, limit=limit, offset=offset)
+    # Join gracieux de la stance par claim sur les avis de la page (absent → inchangé).
+    stance_map = analysis_store.read_claim_stance(ds.id)
+    if stance_map:
+        for item in result.get("items", []):
+            item["claims"] = avis.join_claim_stance(item.get("claims", []), stance_map)
+    return result
 
 
 @app.get("/density")
