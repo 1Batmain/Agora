@@ -29,8 +29,9 @@ export async function fetchDatasets(): Promise<Consultation[]> {
 }
 
 /**
- * Envoie une contribution sur une consultation OUVERTE. Le backend l'embedde
- * (nomic local) et la corrèle aux retours déjà reçus → `{n_similar, nearest_excerpt}`.
+ * Envoie une contribution sur une consultation OUVERTE. Le backend MASQUE le texte
+ * (PII), l'embedde (nomic local) et le corrèle aux retours déjà reçus → un AGRÉGAT
+ * non-PII `{n_similar, pct_panel}` (jamais le verbatim d'autrui).
  * L'embedding du modèle peut prendre quelques secondes au 1ᵉʳ appel (chargement lazy).
  */
 export async function submitContribution(

@@ -330,10 +330,15 @@ export interface TodoPayload {
   updated_at?: string | null;
 }
 
-/** `POST /submit` → corrélation instantanée d'une contribution citoyenne. */
+/**
+ * `POST /submit` → corrélation instantanée d'une contribution citoyenne.
+ *
+ * AGRÉGAT non-PII uniquement (vie privée) : `n_similar` (nb d'avis proches) et
+ * `pct_panel` (% du panel ayant évoqué un sujet proche). JAMAIS le verbatim d'autrui.
+ */
 export interface SubmitResult {
   ok: boolean;
   n_similar: number;
-  nearest_excerpt: string | null;
+  pct_panel: number;
   message: string;
 }
