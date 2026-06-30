@@ -323,14 +323,14 @@ function StanceMark({ claim }: { claim: AvisClaim }) {
     (claim.proposition ? ` envers « ${claim.proposition} »` : '') +
     (claim.stance_justif ? `\n« ${claim.stance_justif} »` : '');
   return (
-    <sup
+    <span
       className="avisdetail__stance"
-      style={{ color: meta.color }}
+      style={{ backgroundColor: meta.color }}
       title={title}
       aria-label={`prise de position : ${meta.label}`}
     >
-      {meta.glyph}
-    </sup>
+      {meta.glyph} {meta.label}
+    </span>
   );
 }
 

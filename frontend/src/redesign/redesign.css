@@ -812,12 +812,18 @@ body {
    verbatim highlight: the opinion classification is VISIBLE and auditable (proposition +
    justif on hover). Absent when the claim has no stance (graceful). */
 .avisdetail__stance {
-  font-weight: 800;
-  font-size: 0.72em;
-  line-height: 0;
-  margin-right: 1px;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.7em;
+  line-height: 1.4;
+  color: #fff;
+  padding: 0 6px;
+  margin: 0 4px;
+  border-radius: 10px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: middle;
   cursor: help;
-  vertical-align: super;
 }
 /* Inline cluster tag, revealed on hover over a highlight (the rest of the time
    the cluster is conveyed by colour + the legend above). */
