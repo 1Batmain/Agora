@@ -351,22 +351,13 @@ export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
             <div className="avisx__analysiscluster">
               <span className="avisdetail__chip" style={{ background: c.color }} aria-hidden />
               <span className="avisx__analysisname">{c.label}</span>
+              {/* Stance EN LIGNE, à la suite du nom (pas de ligne « Opinion » séparée). */}
+              {stance.map((s) => (
+                <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
+                  {s.glyph} {s.count > 1 ? `${s.count} ` : ''}{s.label}
+                </span>
+              ))}
             </div>
-            <dl className="avisx__factors">
-              {stance.length > 0 && (
-                <div className="avisx__factor">
-                  <dt className="avisx__factorlabel">Opinion</dt>
-                  <dd className="avisx__factorvalue">
-                    {stance.map((s, i) => (
-                      <span key={s.key} className="avisx__stancetag" style={{ color: s.color }}>
-                        {s.glyph} {s.count} {s.label}
-                        {i < stance.length - 1 ? <span className="avisx__factorsep"> · </span> : null}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              )}
-            </dl>
           </div>
         );
       })}
