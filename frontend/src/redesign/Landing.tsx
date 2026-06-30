@@ -13,10 +13,13 @@ export function Landing({
   datasets,
   loading,
   onOpen,
+  onTodo,
 }: {
   datasets: Consultation[];
   loading: boolean;
   onOpen: (d: Consultation) => void;
+  /** Ouvre la feuille de route IN-APP (route `?view=todo`) — câblé par le shell (`App`). */
+  onTodo?: () => void;
 }) {
   const openCount = datasets.filter((d) => d.status === 'open').length;
   const closedCount = datasets.length - openCount;
@@ -131,16 +134,11 @@ export function Landing({
               <span className="collab__link-label">Repo GitHub</span>
               <span className="collab__link-sub">clone · crée ta branche · ouvre une PR</span>
             </a>
-            <a
-              className="collab__link"
-              href="https://github.com/1Batmain/Analyse-des-consultations-citoyennes/blob/main/TODO.md"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <button type="button" className="collab__link" onClick={onTodo}>
               <span className="collab__link-arrow" aria-hidden>→</span>
               <span className="collab__link-label">Feuille de route</span>
               <span className="collab__link-sub">choisis une tâche · propose une amélioration</span>
-            </a>
+            </button>
           </div>
         </section>
 
