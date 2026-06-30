@@ -9,17 +9,15 @@ export interface ScatterPoint {
 }
 
 /**
- * « Nuage UMAP 2D » — a flat scatter of the consultation's ideas. Each `point`
- * is one idea at its UMAP-2D position `(x, z)`, painted in `point.color` (its
- * macro-cluster colour, same palette as the bubbles and the 3D landscape). Unlike
- * the bubble graph, position HERE is semantic (UMAP proximity = similar ideas), so
- * clusters read as visual clouds.
+ * « Nuage UMAP 2D » — a flat scatter of the consultation. Each `point` sits at its
+ * UMAP-2D position `(x, z)`, painted in `point.color`. Position HERE is semantic
+ * (UMAP proximity = similar contributions), so dense regions read as visual clouds.
  *
- * Rendered on a `<canvas>` (cheap for a few thousand dots, redraws on every
- * re-cluster without churning the DOM). Data bounds are computed from the points
- * and mapped to the device-pixel canvas with a small margin; a `ResizeObserver`
- * keeps the drawing crisp as the container resizes. The slider drives the colours
- * (cluster membership) — the dots themselves stay put (UMAP is fixed).
+ * Pure renderer: the caller supplies the `points` (and an optional `legend`) from a
+ * PRECOMPUTED source — e.g. the cached density grid sampled into a cloud. Rendered on
+ * a `<canvas>` (cheap for a few thousand dots). Data bounds are computed from the
+ * points and mapped to the device-pixel canvas with a small margin; a `ResizeObserver`
+ * keeps the drawing crisp as the container resizes.
  */
 const MARGIN = 18; // px gap between the cloud and the canvas edge.
 const DOT_R = 2.6; // dot radius in CSS px.
