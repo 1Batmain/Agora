@@ -34,10 +34,13 @@ import os
 from fastapi import Depends, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.auth import rate_limit, require_token
+from backend import auth
+from backend.auth import forbid_in_public, rate_limit, require_token
 
 # Dépendances posées sur les endpoints MUTATIFS / COÛTEUX (audit prod SEC1).
 PROTECTED = [Depends(require_token), Depends(rate_limit)]
+# Endpoints de COMPUTE/BUILD : désactivés en mode public + rate-limités hors public.
+COMPUTE = [Depends(forbid_in_public), Depends(rate_limit)]
 from pydantic import BaseModel, Field
 
 from backend.recluster import (
@@ -107,7 +110,62 @@ def _resolve(dataset: str | None) -> _Dataset:
     return obj
 
 
-app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0")
+# /docs, /redoc & /openapi.json DÉSACTIVÉS en mode public (pas de divulgation du schéma
+# d'API à un anonyme — audit privacy #9). Conservés en dev pour le confort.
+_DOCS = dict(docs_url=None, redoc_url=None, openapi_url=None) if auth.PUBLIC_MODE else {}
+app = FastAPI(title="Agora — carte spatiale précalculée (multi-dataset)", version="2.0", **_DOCS)
+
+
+# Limite de taille de corps : 413 au-delà de 64 Ko (anti-DoS mémoire — audit input #2).
+# Le check Content-Length rejette AVANT de bufferiser le corps. Le reverse-proxy
+# (nginx `client_max_body_size`) reste une défense en profondeur recommandée.
+MAX_BODY_BYTES = 64 * 1024
+
+
+class _BodySizeLimitMiddleware:
+    """Rejette (413) toute requête HTTP dont le corps annoncé dépasse `max_bytes`."""
+
+    def __init__(self, app, max_bytes: int) -> None:
+        self.app = app
+        self.max_bytes = max_bytes
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            for name, value in scope.get("headers") or []:
+                if name == b"content-length":
+                    try:
+                        too_big = int(value) > self.max_bytes
+                    except ValueError:
+                        too_big = False
+                    if too_big:
+                        await send({
+                            "type": "http.response.start",
+                            "status": 413,
+                            "headers": [(b"content-type", b"application/json; charset=utf-8")],
+                        })
+                        await send({
+                            "type": "http.response.body",
+                            "body": b'{"detail":"Corps de requete trop volumineux (max 64 Ko)."}',
+                        })
+                        return
+                    break
+        await self.app(scope, receive, send)
+
+
+@app.middleware("http")
+async def _security_headers(request, call_next):
+    """En-têtes de sécurité de base sur chaque réponse (audit privacy #6)."""
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    # Anti-clickjacking sans casser /docs (ne restreint pas le chargement de ressources).
+    response.headers.setdefault("Content-Security-Policy", "frame-ancestors 'none'")
+    response.headers.setdefault(
+        "Strict-Transport-Security", "max-age=31536000; includeSubDomains"
+    )
+    return response
+
 
 # CORS restreint (audit prod SEC1) : origines connues seulement, JAMAIS "*".
 # Surchargeable par AGORA_ALLOWED_ORIGINS (liste séparée par des virgules).
@@ -123,6 +181,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Outermost : la borne de taille s'applique AVANT tout parsing (anti-DoS mémoire).
+app.add_middleware(_BodySizeLimitMiddleware, max_bytes=MAX_BODY_BYTES)
 
 
 @app.get("/health")
@@ -245,15 +305,20 @@ class SubmitBody(BaseModel):
 def submit(body: SubmitBody) -> dict:
     """Reçoit une contribution citoyenne, la corrèle aux retours déjà reçus, la stocke.
 
-    1. valide la consultation (doit être OUVERTE) et le texte,
-    2. embedde le texte (nomic local),
-    3. corrèle au cosinus aux contributions existantes → `n_similar` + extrait proche,
-    4. stocke {text, vec, ts},
-    5. renvoie `{ok, n_similar, nearest_excerpt, message}`.
+    Vie privée (SEC3, audit privacy #1) : le texte est MASQUÉ (`clean_text` : PII +
+    normalisation) AVANT tout embedding/stockage, et la réponse ne renvoie JAMAIS le
+    verbatim d'un autre citoyen — seulement un AGRÉGAT non-PII.
+
+    1. valide la consultation (doit être OUVERTE) et le texte (longueur brute),
+    2. masque le texte (PII) puis l'embedde (nomic local),
+    3. corrèle au cosinus aux contributions existantes → `n_similar`,
+    4. stocke {text_clean, vec, ts},
+    5. renvoie `{ok, n_similar, pct_panel, message}` (zéro verbatim d'autrui).
     """
     from datetime import datetime, timezone
 
     from backend import submissions
+    from pipeline.ingest import normalize
 
     if body.consultation_id not in set(list_open_consultations()):
         raise HTTPException(
@@ -269,16 +334,24 @@ def submit(body: SubmitBody) -> dict:
             detail=f"Contribution trop longue (max {SUBMIT_MAX_CHARS} caractères).",
         )
 
-    vec = submissions.embed_text(text)
+    # MASQUAGE PII avant tout traitement : rien de brut n'est embeddé ni persisté.
+    clean = normalize.clean_text(text)
+    if not clean:
+        raise HTTPException(status_code=422, detail="Contribution vide après nettoyage.")
+
+    vec = submissions.embed_text(clean)
     existing = submissions.load_submissions(body.consultation_id)
     corr = submissions.correlate(vec, existing)
     ts = datetime.now(timezone.utc).isoformat()
-    submissions.append_submission(body.consultation_id, text, vec, ts)
+    submissions.append_submission(body.consultation_id, clean, vec, ts)
 
     n = corr["n_similar"]
+    # `pct_panel` : part du panel (contributions déjà reçues) ayant évoqué un sujet proche.
+    panel = len(existing)
+    pct_panel = round(100 * n / panel) if panel else 0
     if n > 0:
         message = (
-            f"{n} personne{'s' if n > 1 else ''} ont déjà évoqué un sujet proche."
+            f"{n} personnes ont déjà évoqué un sujet proche."
             if n > 1
             else "1 personne a déjà évoqué un sujet proche."
         )
@@ -287,7 +360,7 @@ def submit(body: SubmitBody) -> dict:
     return {
         "ok": True,
         "n_similar": n,
-        "nearest_excerpt": corr["nearest_excerpt"] if n > 0 else None,
+        "pct_panel": pct_panel,
         "message": message,
     }
 
@@ -311,7 +384,9 @@ _AUTOBUILD_ONLY = {s.strip() for s in os.environ.get("AGORA_AUTOBUILD_DATASETS",
 
 @app.on_event("startup")
 def _startup_autobuild() -> None:
-    if not _AUTOBUILD:
+    # Mode public : un nœud exposé ne build JAMAIS (extraction LLM faite hors-ligne par
+    # l'opérateur, cf. AGORA_PUBLIC). Aucune extraction mistral-large sur un nœud public.
+    if auth.PUBLIC_MODE or not _AUTOBUILD:
         return
     # Lazy-load : ne charge en RAM (`_resolve`) QUE les datasets sans analyse prête (ceux
     # qui doivent réellement builder) ; les datasets déjà prêts restent déchargés au boot.
@@ -323,18 +398,34 @@ def _startup_autobuild() -> None:
         build_manager.ensure_build(_resolve(ds_id))
 
 
-def _not_ready_response(ds, response: Response) -> dict:
-    """Réponse SERVE quand l'analyse n'est pas prête : (re)lance le build, renvoie l'état.
+def _sanitize_progress(prog: dict) -> dict:
+    """Masque les détails d'exception internes (str(exc)) avant envoi au client.
 
-    Ne calcule JAMAIS à la requête — délègue au build de fond (`ensure_build`) et renvoie
-    la progression. 202 si ça construit/va construire, 503 si le dernier build a échoué.
+    Le détail complet reste persisté dans `status.json` (côté serveur, pour l'opérateur) ;
+    le client ne reçoit qu'un message générique — pas de chemin disque / trace / détail API.
     """
+    if prog.get("error"):
+        prog = {**prog, "error": "échec du build (voir logs serveur)"}
+    return prog
+
+
+def _not_ready_response(ds, response: Response) -> dict:
+    """Réponse SERVE quand l'analyse n'est pas prête.
+
+    Hors public : (re)lance le build de fond (`ensure_build`) et renvoie la progression —
+    202 si ça construit, 503 si le dernier build a échoué. JAMAIS de calcul lourd ici.
+
+    En MODE PUBLIC : ne déclenche AUCUN build (zéro extraction LLM pilotée par un
+    visiteur) — un dataset non pré-construit renvoie 404.
+    """
+    if auth.PUBLIC_MODE:
+        raise HTTPException(status_code=404, detail="Analyse non disponible pour ce dataset.")
     build_manager.ensure_build(ds)
     prog = analysis_store.progress(ds.id)
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     response.status_code = 503 if prog["status"] == analysis_store.ERROR else 202
-    return prog
+    return _sanitize_progress(prog)
 
 
 class AnalysisBody(BaseModel):
@@ -506,7 +597,7 @@ def get_avis_list(
     return result
 
 
-@app.get("/density")
+@app.get("/density", dependencies=COMPUTE)
 def get_density(
     dataset: str | None = Query(None),
 ) -> dict:
@@ -523,7 +614,8 @@ def get_density(
     try:
         return density.density_payload(ds.id)
     except density.DensityUnavailable as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+        # Message générique au client (pas de détail interne) ; cause loggée côté serveur.
+        raise HTTPException(status_code=503, detail="Projection de densité indisponible.") from exc
 
 
 class ReclusterBody(BaseModel):
@@ -537,10 +629,11 @@ class ReclusterBody(BaseModel):
     knn_threshold: float | None = Field(None, ge=0.0, le=1.0)
     # `k` (nombre de voisins du graphe k-NN) = LEVIER de la Console (≥2).
     k: int | None = Field(None, ge=2, le=200)
-    resolution: float = Field(1.0, gt=0.0)
+    # Bornée HAUT (audit) : une `resolution` énorme alourdit Leiden gratuitement.
+    resolution: float = Field(1.0, gt=0.0, le=10.0)
 
 
-@app.post("/recluster")
+@app.post("/recluster", dependencies=COMPUTE)
 def do_recluster(body: ReclusterBody) -> dict:
     """Re-clustering LIVE au seuil k-NN donné → `{themes, points, indices, meta}`.
 
@@ -564,9 +657,13 @@ class BuildBody(BaseModel):
     force: bool = False
 
 
-@app.post("/build", dependencies=PROTECTED)
+@app.post("/build", dependencies=[Depends(forbid_in_public), *PROTECTED])
 def do_build(body: BuildBody, response: Response) -> dict:
-    """Déclenche/relance le build de fond de l'analyse d'un dataset (non bloquant)."""
+    """Déclenche/relance le build de fond de l'analyse d'un dataset (non bloquant).
+
+    DÉSACTIVÉ en mode public (`forbid_in_public`) : aucun build pilotable à distance —
+    l'opérateur pré-construit hors-ligne (CLI) puis sert le cache.
+    """
     ds = _resolve(body.dataset)
     if body.force:
         analysis_store.clear(ds.id)
@@ -575,7 +672,7 @@ def do_build(body: BuildBody, response: Response) -> dict:
     prog = analysis_store.progress(ds.id)
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
-    return prog
+    return _sanitize_progress(prog)
 
 
 @app.get("/build_status")
@@ -586,7 +683,7 @@ def build_status(dataset: str | None = Query(None)) -> dict:
     prog["status"] = analysis_store.state(ds.id)
     prog["dataset"] = ds.id
     prog["building"] = build_manager.is_building(ds.id)
-    return prog
+    return _sanitize_progress(prog)
 
 
 # ============================ Flags de feedback ============================ #
