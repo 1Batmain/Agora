@@ -1368,14 +1368,6 @@ body {
   padding: .3rem .55rem; border: 1px solid rgba(0,0,145,.25);
   white-space: nowrap; max-width: 42ch; overflow: hidden; text-overflow: ellipsis;
 }
-.header-console-btn {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
-  font-size: .82rem; font-weight: 600; color: #fff;
-  background: var(--agora, #000091); border: 1px solid var(--agora, #000091);
-  padding: .35rem .7rem; border-radius: 6px; cursor: pointer; white-space: nowrap;
-}
-.header-console-btn:hover { background: #1212a8; }
-
 /* ── Page d'APERÇU d'une consultation close (présentation avant le graphe) ── */
 .overview__body { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .overview__title {
@@ -1471,7 +1463,7 @@ body {
   font-family: ui-monospace, "IBM Plex Mono", monospace;
 }
 
-/* ── Toggle « Graphe » ⇄ « Paysage 3D » + vue paysage de densité (three.js) ── */
+/* ── Toggle de visualisation « Graphe · Densité 3D · Nuage 2D » (page d'analyse) ── */
 .viewtoggle {
   display: inline-flex;
   gap: 2px;
@@ -1496,6 +1488,10 @@ body {
   background: var(--bg-raised, #fff);
   font-weight: 600;
   box-shadow: var(--shadow);
+}
+.viewtoggle__tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .density3d {
@@ -1572,112 +1568,6 @@ body {
   line-height: 1.5;
   color: var(--grey-500);
   pointer-events: none;
-}
-
-/* ---------- Page Console (atelier de re-clustering) ---------- */
-.console__controls {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-raised);
-}
-.console__slider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.console__slider-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--agora);
-  white-space: nowrap;
-}
-.console__slider input[type='range'] {
-  width: clamp(160px, 28vw, 320px);
-  accent-color: var(--agora);
-  cursor: pointer;
-}
-.console__slider-value {
-  font-variant-numeric: tabular-nums;
-  font-size: 0.82rem;
-  color: var(--grey-700, #3a3a3a);
-  min-width: 3ch;
-}
-.console__meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.78rem;
-  color: var(--grey-500);
-}
-
-.console__body {
-  display: flex;
-  align-items: flex-start;
-  flex: 1;
-  min-height: 0;
-  gap: 0;
-}
-.console__main {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  padding: 16px 24px;
-  background: var(--bg);
-}
-.console__canvas {
-  position: relative;
-  flex: 1;
-  min-height: 420px;
-  height: 64vh;
-}
-.console__pane {
-  position: absolute;
-  inset: 0;
-}
-.console__pane[hidden] {
-  display: none;
-}
-.console__reclustering {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, var(--bg) 45%, transparent);
-  pointer-events: none;
-}
-.console__indices {
-  flex: 0 0 340px;
-  width: 340px;
-  align-self: stretch;
-  border-left: 1px solid var(--border);
-  padding: 16px;
-  overflow-y: auto;
-  background: var(--bg-raised);
-}
-.console__indices .dashboard__grid {
-  grid-template-columns: 1fr;
-}
-.console__hint {
-  font-size: 0.82rem;
-  color: var(--grey-500);
-}
-
-@media (max-width: 980px) {
-  .console__body {
-    flex-direction: column;
-  }
-  .console__indices {
-    flex-basis: auto;
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--border);
-  }
 }
 
 /* ── Aperçu : mots-clés représentatifs du dataset (c-TF-IDF agrégés) ── */
