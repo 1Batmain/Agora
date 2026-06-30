@@ -309,7 +309,11 @@ export interface Consultation {
 /** État d'une tâche : à faire | en cours | fait. */
 export type TodoStatus = 'todo' | 'wip' | 'done';
 
-/** Une tâche de la feuille de route. `pr` = numéro/réf de PR ; `note` = détail libre. */
+/**
+ * Une tâche de la feuille de route. `pr` = numéro/réf de PR ; `note` = détail libre ;
+ * `assignee` = nom court de qui a RÉCLAMÉ la tâche (« Je prends »), absent tant que
+ * personne ne l'a prise.
+ */
 export interface TodoItem {
   id: string;
   title: string;
@@ -317,6 +321,7 @@ export interface TodoItem {
   status: TodoStatus;
   pr?: string | number;
   note?: string;
+  assignee?: string;
 }
 
 /** `GET /todo` → la feuille de route entière. */
