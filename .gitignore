@@ -31,6 +31,10 @@ data/datasets/
 backend/cache/*/analysis/
 backend/cache/*/claims.json
 backend/cache/*/claims_emb.npz
+backend/cache/*/target_emb.npz
+# Traductions FR (avis + mots-clés) bakées par build_analysis — sortie LLM régénérable.
+backend/cache/*/translations.json
+backend/cache/*/keywords_fr.json
 
 # Flags de feedback sur l'extraction (upsert par avis, éditables) — régénérables.
 backend/cache/*/flags.json
