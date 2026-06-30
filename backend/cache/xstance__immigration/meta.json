@@ -1,0 +1,26 @@
+{
+  "id": "xstance__immigration",
+  "label": "Immigration",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 282,
+  "n_loaded": 282,
+  "languages": [
+    "fr",
+    "de",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 102,
+    "de": 98,
+    "it": 82
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Immigration"
+  }
+}

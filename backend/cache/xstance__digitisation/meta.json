@@ -1,0 +1,26 @@
+{
+  "id": "xstance__digitisation",
+  "label": "Digitisation",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 36,
+  "n_loaded": 36,
+  "languages": [
+    "fr",
+    "de",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 15,
+    "de": 12,
+    "it": 9
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Digitisation"
+  }
+}
