@@ -2112,3 +2112,12 @@ body {
   font-size: 1.35rem; font-weight: 600; line-height: 1.3;
   color: #111; margin: 0 0 .2rem;
 }
+
+/* ── OpinionBar à 2 niveaux : engagement puis répartition ── */
+.opinion__metric { margin: 0.9rem 0 0; }
+.opinion__lead { font-size: 0.9rem; line-height: 1.5; color: #333; margin: 0 0 0.4rem; }
+.opinion__sub { color: #999; font-weight: 400; }
+.opinion__seg--engaged { background: var(--agora, #000091); }
+.opinion__txt--fav { color: #1a7f37; }
+.opinion__txt--def { color: #c1121f; }
+.opinion__note { font-size: 0.78rem; color: #777; font-style: italic; margin: 0.35rem 0 0; }
