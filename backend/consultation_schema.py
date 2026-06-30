@@ -24,6 +24,10 @@ class Consultation(TypedDict):
       pytest /datasets et par d'anciens consommateurs front). Toujours == `n_sample`.
     - `question`/`context` : présents pour les consultations OUVERTES (sujet affiché
       dans la vue Participer) ; optionnels pour les clôturées.
+    - `parent_id`/`children` : hiérarchie MÈRE→ENFANTS (cf. `backend.build_children`).
+      Une MÈRE porte `children=[ids d'enfants]` ; un ENFANT porte `parent_id=<mère>`.
+      Une consultation SIMPLE (ni mère ni enfant) n'a ni l'un ni l'autre. Les enfants
+      sont servis comme des datasets normaux (par id) mais EXCLUS de la liste top-level.
     """
 
     id: str
@@ -37,3 +41,5 @@ class Consultation(TypedDict):
     source: str
     question: NotRequired[str]
     context: NotRequired[str]
+    parent_id: NotRequired[str]
+    children: NotRequired[list[str]]
