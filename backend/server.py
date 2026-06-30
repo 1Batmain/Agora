@@ -244,15 +244,20 @@ class SubmitBody(BaseModel):
 def submit(body: SubmitBody) -> dict:
     """Reçoit une contribution citoyenne, la corrèle aux retours déjà reçus, la stocke.
 
-    1. valide la consultation (doit être OUVERTE) et le texte,
-    2. embedde le texte (nomic local),
-    3. corrèle au cosinus aux contributions existantes → `n_similar` + extrait proche,
-    4. stocke {text, vec, ts},
-    5. renvoie `{ok, n_similar, nearest_excerpt, message}`.
+    Vie privée (SEC3, audit privacy #1) : le texte est MASQUÉ (`clean_text` : PII +
+    normalisation) AVANT tout embedding/stockage, et la réponse ne renvoie JAMAIS le
+    verbatim d'un autre citoyen — seulement un AGRÉGAT non-PII.
+
+    1. valide la consultation (doit être OUVERTE) et le texte (longueur brute),
+    2. masque le texte (PII) puis l'embedde (nomic local),
+    3. corrèle au cosinus aux contributions existantes → `n_similar`,
+    4. stocke {text_clean, vec, ts},
+    5. renvoie `{ok, n_similar, pct_panel, message}` (zéro verbatim d'autrui).
     """
     from datetime import datetime, timezone
 
     from backend import submissions
+    from pipeline.ingest import normalize
 
     if body.consultation_id not in set(list_open_consultations()):
         raise HTTPException(
@@ -268,16 +273,24 @@ def submit(body: SubmitBody) -> dict:
             detail=f"Contribution trop longue (max {SUBMIT_MAX_CHARS} caractères).",
         )
 
-    vec = submissions.embed_text(text)
+    # MASQUAGE PII avant tout traitement : rien de brut n'est embeddé ni persisté.
+    clean = normalize.clean_text(text)
+    if not clean:
+        raise HTTPException(status_code=422, detail="Contribution vide après nettoyage.")
+
+    vec = submissions.embed_text(clean)
     existing = submissions.load_submissions(body.consultation_id)
     corr = submissions.correlate(vec, existing)
     ts = datetime.now(timezone.utc).isoformat()
-    submissions.append_submission(body.consultation_id, text, vec, ts)
+    submissions.append_submission(body.consultation_id, clean, vec, ts)
 
     n = corr["n_similar"]
+    # `pct_panel` : part du panel (contributions déjà reçues) ayant évoqué un sujet proche.
+    panel = len(existing)
+    pct_panel = round(100 * n / panel) if panel else 0
     if n > 0:
         message = (
-            f"{n} personne{'s' if n > 1 else ''} ont déjà évoqué un sujet proche."
+            f"{n} personnes ont déjà évoqué un sujet proche."
             if n > 1
             else "1 personne a déjà évoqué un sujet proche."
         )
@@ -286,7 +299,7 @@ def submit(body: SubmitBody) -> dict:
     return {
         "ok": True,
         "n_similar": n,
-        "nearest_excerpt": corr["nearest_excerpt"] if n > 0 else None,
+        "pct_panel": pct_panel,
         "message": message,
     }
 
