@@ -1,0 +1,84 @@
+{
+  "model": "mistral-large-latest",
+  "n_avis": 12,
+  "claims_v1": 100,
+  "claims_v2": 58,
+  "claims_per_avis_v1": 8.33,
+  "claims_per_avis_v2": 4.83,
+  "verbatim_pass_v1": 0.99,
+  "verbatim_pass_v2": 0.967,
+  "rows": [
+    {
+      "id": "granddebat:1-11830",
+      "chars": 136,
+      "v1": 2,
+      "v2": 1
+    },
+    {
+      "id": "granddebat:1-4924",
+      "chars": 638,
+      "v1": 8,
+      "v2": 6
+    },
+    {
+      "id": "granddebat:1-15353",
+      "chars": 1594,
+      "v1": 10,
+      "v2": 7
+    },
+    {
+      "id": "granddebat:1-10652",
+      "chars": 1583,
+      "v1": 9,
+      "v2": 2
+    },
+    {
+      "id": "granddebat:1-24152",
+      "chars": 1553,
+      "v1": 8,
+      "v2": 5
+    },
+    {
+      "id": "granddebat:1-6202",
+      "chars": 1541,
+      "v1": 9,
+      "v2": 1
+    },
+    {
+      "id": "granddebat:1-2582",
+      "chars": 1539,
+      "v1": 8,
+      "v2": 8
+    },
+    {
+      "id": "granddebat:1-9802",
+      "chars": 1494,
+      "v1": 8,
+      "v2": 7
+    },
+    {
+      "id": "granddebat:1-9114",
+      "chars": 1490,
+      "v1": 13,
+      "v2": 8
+    },
+    {
+      "id": "granddebat:1-20463",
+      "chars": 1473,
+      "v1": 9,
+      "v2": 3
+    },
+    {
+      "id": "granddebat:1-6257",
+      "chars": 1467,
+      "v1": 7,
+      "v2": 6
+    },
+    {
+      "id": "granddebat:1-1311",
+      "chars": 1456,
+      "v1": 9,
+      "v2": 4
+    }
+  ]
+}
