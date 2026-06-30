@@ -1463,7 +1463,7 @@ body {
   font-family: ui-monospace, "IBM Plex Mono", monospace;
 }
 
-/* ── Toggle « Graphe » ⇄ « Paysage 3D » + vue paysage de densité (three.js) ── */
+/* ── Toggle de visualisation « Graphe · Densité 3D · Nuage 2D » (page d'analyse) ── */
 .viewtoggle {
   display: inline-flex;
   gap: 2px;
@@ -1488,6 +1488,10 @@ body {
   background: var(--bg-raised, #fff);
   font-weight: 600;
   box-shadow: var(--shadow);
+}
+.viewtoggle__tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .density3d {
