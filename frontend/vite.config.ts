@@ -12,26 +12,34 @@ import react from '@vitejs/plugin-react';
 // spare port) via VITE_API_TARGET, without touching this committed default.
 const API_TARGET = process.env.VITE_API_TARGET || 'http://localhost:8010';
 
+// Proxy `/api/*` → backend (:8010), préfixe `/api` retiré. MÊME config en dev (`server`)
+// ET en preview (build servi en prod) : sans ça, l'app publique ne joindrait pas l'API.
+const apiProxy = {
+  '/api': {
+    target: API_TARGET,
+    changeOrigin: true,
+    rewrite: (p: string) => p.replace(/^\/api/, ''),
+  },
+};
+
+// Hôtes autorisés : localhost, la machine `forge`, et le hostname public Tailscale Funnel
+// (Vite bloque les Host inconnus par défaut → « Blocked request »).
+const allowedHosts = ['forge', 'localhost', 'forge.tail0b8aa8.ts.net'];
+
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 5180,
     strictPort: true,
     host: true,
-    // Allow reaching the dev server by the tailnet hostname `forge` (Vite blocks
-    // unknown Host headers by default → "Blocked request. This host ... not allowed").
-    allowedHosts: ['forge', 'localhost'],
-    proxy: {
-      '/api': {
-        target: API_TARGET,
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/api/, ''),
-      },
-    },
+    allowedHosts,
+    proxy: apiProxy,
   },
   preview: {
     port: 5180,
     strictPort: true,
-    allowedHosts: ['forge', 'localhost'],
+    host: true,
+    allowedHosts,
+    proxy: apiProxy,
   },
 });
