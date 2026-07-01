@@ -46,3 +46,4 @@ backend/cache/*/density.json
 # Contributions citoyennes LIVE (consultations ouvertes) — runtime, mutable.
 # Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
 backend/cache/*/submissions.jsonl
+eval/
