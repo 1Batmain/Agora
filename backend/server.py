@@ -245,7 +245,7 @@ class SubmitBody(BaseModel):
     text: str
 
 
-@app.post("/submit", dependencies=PROTECTED)
+@app.post("/submit", dependencies=[Depends(rate_limit)])
 def submit(body: SubmitBody) -> dict:
     """Reçoit une contribution citoyenne, la corrèle aux retours déjà reçus, la stocke.
 
@@ -283,10 +283,29 @@ def submit(body: SubmitBody) -> dict:
     if not clean:
         raise HTTPException(status_code=422, detail="Contribution vide après nettoyage.")
 
-    vec = submissions.embed_text(clean)
-    existing = submissions.load_submissions(body.consultation_id)
-    corr = submissions.correlate(vec, existing)
     ts = datetime.now(timezone.utc).isoformat()
+    existing = submissions.load_submissions(body.consultation_id)
+
+    # MODE PUBLIC (prod serve-only, SANS torch/clé) : on COLLECTE seulement — le texte
+    # (PII masquée) est stocké SANS embedding ni corrélation live. L'analyse est construite
+    # plus tard en DEV quand la consultation a réuni assez de contributions, puis promue.
+    # Prod reste léger (aucun modèle lourd chargé) et n'a besoin d'AUCUNE clé.
+    if auth.PUBLIC_MODE:
+        submissions.append_submission(body.consultation_id, clean, None, ts)
+        return {
+            "ok": True,
+            "n_similar": 0,
+            "pct_panel": 0,
+            "message": (
+                "Merci, votre contribution est enregistrée. "
+                f"{len(existing) + 1} contributions collectées jusqu'ici — l'analyse sera "
+                "publiée quand la consultation en aura réuni assez."
+            ),
+        }
+
+    # DEV (embedder local disponible) : embedding + corrélation → feedback riche live.
+    vec = submissions.embed_text(clean)
+    corr = submissions.correlate(vec, existing)
     submissions.append_submission(body.consultation_id, clean, vec, ts)
 
     n = corr["n_similar"]
