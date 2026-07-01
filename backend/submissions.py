@@ -71,11 +71,18 @@ def count_submissions(consultation_id: str) -> int:
     return len(load_submissions(consultation_id))
 
 
-def append_submission(consultation_id: str, text: str, vec: np.ndarray, ts: str) -> None:
-    """Ajoute une contribution au store LIVE (jamais au seed)."""
+def append_submission(consultation_id: str, text: str, vec, ts: str) -> None:
+    """Ajoute une contribution au store LIVE (jamais au seed).
+
+    `vec` peut être `None` : COLLECTE DIFFÉRÉE (prod publique serve-only, sans torch) — le
+    texte est stocké seul, le vecteur sera calculé plus tard au build de l'analyse (en dev).
+    `correlate` ignore déjà les lignes sans `vec`.
+    """
     path = live_path(consultation_id)
     path.parent.mkdir(parents=True, exist_ok=True)
-    row = {"text": text, "vec": [float(x) for x in np.asarray(vec).ravel()], "ts": ts}
+    row: dict = {"text": text, "ts": ts}
+    if vec is not None:
+        row["vec"] = [float(x) for x in np.asarray(vec).ravel()]
     with open(path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 

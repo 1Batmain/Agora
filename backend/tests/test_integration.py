@@ -184,8 +184,10 @@ def test_public_mode_locks_down_end_to_end(client, public, monkeypatch):
     # Endpoints PROTÉGÉS (mutations citoyennes) : fail-CLOSED → 403.
     assert client.post("/flag", json={"dataset": "tiktok", "target_type": "avis",
                                       "target_id": "a1", "text": "x"}).status_code == 403
-    assert client.post("/submit", json={"consultation_id": "x",
-                                        "text": "bonjour"}).status_code == 403
+    # /submit reste OUVERT en public (participation citoyenne aux consultations OUVERTES) :
+    # rate-limité + collecte seule (pas d'embedding/clé). Consultation inconnue → 404, PAS 403.
+    assert client.post("/submit", json={"consultation_id": "inconnue",
+                                        "text": "bonjour le monde"}).status_code == 404
 
     # Endpoints de COMPUTE/BUILD : désactivés → 403 (aucun calcul lourd exposé).
     assert client.post("/recluster", json={"dataset": "tiktok"}).status_code == 403
