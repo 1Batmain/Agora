@@ -54,9 +54,12 @@ const RIGHT_KEY = 'agora.rightWidth';
  */
 export default function RedesignApp({
   initialDataset = null,
+  initialThemeId = null,
   onBack,
 }: {
   initialDataset?: string | null;
+  /** Thème sur lequel OUVRIR le graphe (bouton « Voir le graphe du thème ») : on pré-drill. */
+  initialThemeId?: string | null;
   onBack?: () => void;
 } = {}) {
   const [datasets, setDatasets] = useState<Consultation[]>([]);
@@ -104,6 +107,35 @@ export default function RedesignApp({
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
   const showCitations = selected != null && !selected.has_children;
   const atGlobal = path.length === 0 && !selected;
+
+  // Pré-drill sur `initialThemeId` (bouton « Voir le graphe du thème ») : dès que
+  // l'analyse est chargée, on reconstruit le chemin racine→thème. Un thème à enfants →
+  // on DESCEND dedans (ses enfants s'affichent) ; une feuille → on la SÉLECTIONNE à son
+  // niveau parent (ses citations s'ouvrent). Appliqué UNE seule fois.
+  const focusApplied = useRef(false);
+  useEffect(() => {
+    if (focusApplied.current || !initialThemeId) return;
+    const nodes = analysis?.themes;
+    if (!nodes || !nodes.length) return;
+    const byId = new Map(nodes.map((t) => [t.id, t]));
+    const target = byId.get(initialThemeId);
+    if (!target) return;
+    const chain: SpatialTheme[] = [];
+    let cur: SpatialTheme | undefined = target;
+    let guard = 0;
+    while (cur && guard++ < 64) {
+      chain.unshift(cur);
+      cur = cur.parent_id ? byId.get(cur.parent_id) : undefined;
+    }
+    if (target.has_children) {
+      setPath(chain);
+      setSelected(null);
+    } else {
+      setPath(chain.slice(0, -1));
+      setSelected(target);
+    }
+    focusApplied.current = true;
+  }, [initialThemeId, analysis]);
 
   // Template de synthèse unifié : mots-clés représentatifs + « sondage » des sous-thèmes
   // dominants (barres de %) du niveau courant. Global → macros ; thème → ses enfants.
