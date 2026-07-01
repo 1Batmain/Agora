@@ -4,6 +4,8 @@
 set -euo pipefail
 REPO=~/projects/Analyse-des-consultations-citoyennes
 cd "$REPO"
+export PATH="~/.local/bin:~/.nvm/versions/node/v24.16.0/bin:$PATH"
+export XDG_RUNTIME_DIR=/run/user/1000
 
 echo "[deploy] fetch + reset main"
 git fetch origin main
