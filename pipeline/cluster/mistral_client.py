@@ -28,6 +28,43 @@ SYNTHESIS_MODEL = os.environ.get("AGORA_MISTRAL_SYNTH_MODEL", NAMING_MODEL)
 # Timeout réseau par appel (s). La synthèse peut être plus lente qu'un naming.
 TIMEOUT = float(os.environ.get("AGORA_MISTRAL_TIMEOUT", "60"))
 
+# ── Suivi d'usage (tokens) ──────────────────────────────────────────────────
+# Accumulateur PROCESS-level : TOUT passe par `chat()` (extraction via ApiBackend,
+# nommage, enrichissement, insights, opinion) → une seule instrumentation couvre le
+# coût Mistral d'un build. `reset_usage()` au début d'un build, `get_usage()` à la fin.
+import threading as _threading
+
+_USAGE_LOCK = _threading.Lock()
+_USAGE: dict = {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "by_model": {}}
+
+
+def reset_usage() -> None:
+    """Remet à zéro l'accumulateur de tokens (à appeler au début d'un build)."""
+    with _USAGE_LOCK:
+        _USAGE.update(calls=0, prompt_tokens=0, completion_tokens=0)
+        _USAGE["by_model"] = {}
+
+
+def get_usage() -> dict:
+    """Instantané de l'usage accumulé : `{calls, prompt_tokens, completion_tokens, by_model}`."""
+    import copy
+    with _USAGE_LOCK:
+        return copy.deepcopy(_USAGE)
+
+
+def _record_usage(model: str, usage: dict) -> None:
+    pt = int(usage.get("prompt_tokens") or 0)
+    ct = int(usage.get("completion_tokens") or 0)
+    with _USAGE_LOCK:
+        _USAGE["calls"] += 1
+        _USAGE["prompt_tokens"] += pt
+        _USAGE["completion_tokens"] += ct
+        m = _USAGE["by_model"].setdefault(
+            model, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0})
+        m["calls"] += 1
+        m["prompt_tokens"] += pt
+        m["completion_tokens"] += ct
+
 _KEY_ENV = "MISTRAL_API_KEY"
 # Nom du fichier secret racine (cf. mémoire projet : `var/mistral.key`).
 _KEY_FILE_REL = ("var", "mistral.key")
@@ -157,6 +194,9 @@ def chat(
 
     try:
         data = resp.json()
+        _record_usage(model, data.get("usage") or {})
         return data["choices"][0]["message"]["content"] or ""
+    except MistralError:
+        raise
     except Exception:
         raise MistralError(0, "malformed_response")
