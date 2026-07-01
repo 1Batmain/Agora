@@ -235,13 +235,20 @@ def build_analysis(
                 report("citations", "tri par proximité au centroïde", i, total)
 
         # 4) Insights LLM par niveau (B3) : global + un par thème, persistés.
+        # Garde-fou : on N'ÉCRIT PAS un insight de REPLI (Mistral indispo/erreur) → le `.json`
+        # reste absent (`/insights` → 404 gracieux) et un re-bake ultérieur le régénère, au lieu
+        # de FIGER un message d'erreur en cache et de le servir.
+        def _write_insight(level: str, nid: str | None) -> None:
+            payload = render_insight(tree, level, nid, model=enrich)
+            if (payload.get("meta") or {}).get("fallback"):
+                return
+            store.write_insights(dataset, level, nid, payload)
+
         report("insights", f"synthèse globale ({enrich})", 0, total + 1)
-        store.write_insights(dataset, "global", None,
-                             render_insight(tree, "global", model=enrich))
+        _write_insight("global", None)
 
         def _insight_work(nid: str) -> None:
-            store.write_insights(dataset, "theme", nid,
-                                 render_insight(tree, "theme", nid, model=enrich))
+            _write_insight("theme", nid)
 
         def _insight_done(k: int) -> None:
             if k == total or k % 25 == 0:

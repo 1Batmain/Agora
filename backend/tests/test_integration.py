@@ -5,7 +5,7 @@ PARCOURS complets, tels qu'un client réel les enchaîne, SERVIS UNIQUEMENT DEPU
 CACHE (aucun build LLM, `AGORA_AUTOBUILD=0` posé par `conftest`) :
 
   1. **Landing** — `/datasets` peuple le sélecteur (≥5 consultations, hiérarchie
-     mère→enfants pour x-stance) ; `/todo` sert la feuille de route.
+     mère→enfants pour x-stance).
   2. **Exploration d'une consultation PRÊTE** — `/analysis` → on récolte un thème réel,
      puis on frappe `/insights`, `/citations`, `/opinion`, `/avis_list` AVEC CET id :
      c'est le vrai chaînage front (le thème vient de l'analyse, pas d'une constante).
@@ -56,9 +56,9 @@ def _first_ready_dataset(client) -> str:
 
 
 # ============================ 1. Landing (toujours actif) ==================== #
-def test_landing_datasets_and_todo(client):
+def test_landing_datasets(client):
     """`/datasets` peuple le sélecteur (≥5, 4 fermées attendues, x-stance a des enfants)
-    et `/todo` sert la feuille de route — les deux SANS aucun précalcul d'analyse."""
+    — SANS aucun précalcul d'analyse."""
     r = client.get("/datasets")
     assert r.status_code == 200, r.text
     items = r.json()
@@ -76,15 +76,6 @@ def test_landing_datasets_and_todo(client):
     # Un enfant n'apparaît PAS dans la liste top-level (servi par id ailleurs).
     assert not (set(xstance["children"]) & set(by_id)), \
         "les enfants de x-stance ne doivent pas remonter en top-level"
-
-    # `/todo` : enveloppe {items:[…]} tolérante (liste vide si aucune tâche).
-    r = client.get("/todo")
-    assert r.status_code == 200, r.text
-    todo = r.json()
-    assert isinstance(todo.get("items"), list)
-    for it in todo["items"]:
-        assert {"id", "title", "lane", "status"} <= set(it)
-        assert it["status"] in ("todo", "wip", "done")
 
 
 # =============== 2. Parcours d'exploration d'une consultation PRÊTE ========== #
@@ -189,7 +180,6 @@ def test_public_mode_locks_down_end_to_end(client, public, monkeypatch):
     # Lectures de méta : restent servies (la landing publique fonctionne).
     assert client.get("/health").status_code == 200
     assert client.get("/datasets").status_code == 200
-    assert client.get("/todo").status_code == 200
 
     # Endpoints PROTÉGÉS (mutations citoyennes) : fail-CLOSED → 403.
     assert client.post("/flag", json={"dataset": "tiktok", "target_type": "avis",

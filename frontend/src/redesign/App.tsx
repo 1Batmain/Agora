@@ -6,10 +6,9 @@ import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
 import { AvisExplorer } from './AvisExplorer';
 import RedesignApp from './RedesignApp';
-import { TodoPage } from './TodoPage';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'todo';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis';
 type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null };
 
 /**
@@ -61,14 +60,6 @@ export default function App() {
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(window.location.search);
-    // Feuille de route : `?view=todo` (sans dataset) → page /todo directe.
-    if (params.get('view') === 'todo' && !params.get('c')) {
-      setRoute('todo');
-      setActiveId(null);
-      setFocusAvis(null);
-      window.history.replaceState({ route: 'todo', activeId: null } as HistState, '', '?view=todo');
-      return;
-    }
     const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
@@ -145,13 +136,6 @@ export default function App() {
     window.history.pushState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
   }, []);
 
-  // Feuille de route IN-APP (`?view=todo`) : ouverte depuis la landing (« Collaborer »).
-  const openTodo = useCallback(() => {
-    setRoute('todo');
-    setActiveId(null);
-    window.history.pushState({ route: 'todo', activeId: null } as HistState, '', '?view=todo');
-  }, []);
-
   if (route === 'overview' && active) {
     return (
       <ConsultationOverview
@@ -179,10 +163,7 @@ export default function App() {
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;
   }
-  if (route === 'todo') {
-    return <TodoPage onHome={backToLanding} />;
-  }
   return (
-    <Landing datasets={datasets} loading={loading} onOpen={openConsultation} onTodo={openTodo} />
+    <Landing datasets={datasets} loading={loading} onOpen={openConsultation} />
   );
 }
