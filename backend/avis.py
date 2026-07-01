@@ -48,7 +48,24 @@ def _claim_macro(tree: ThemeTree) -> dict[int, str]:
     return out
 
 
-def avis_claims(tree: ThemeTree, avis_index: int, claim_macro: dict[int, str]) -> list[dict]:
+def _claim_leaf(tree: ThemeTree) -> dict[int, str]:
+    """Map claim (index global) → id de la FEUILLE (nœud sans enfant) qui le porte.
+
+    Les feuilles partitionnent les claims → chaque claim reçoit exactement une feuille.
+    Le `cluster_id` d'un claim = son MACRO (pour la couleur des surlignages) ; ce `leaf_id`
+    permet de FILTRER l'explorateur par n'importe quel niveau de thème (feuille/sous-thème),
+    via le sous-arbre — sinon un filtre non-macro ne matche jamais (claims tous au macro).
+    """
+    out: dict[int, str] = {}
+    for nid, node in tree.nodes.items():
+        if not getattr(node, "children", None):          # feuille (robuste aux mocks de test)
+            for ci in getattr(node, "members", []) or []:
+                out[ci] = nid
+    return out
+
+
+def avis_claims(tree: ThemeTree, avis_index: int, claim_macro: dict[int, str],
+                claim_leaf: dict[int, str] | None = None) -> list[dict]:
     """Claims verbatim d'un avis — spans + target, colorés par macro-thème, triés par position.
 
     Chaque claim : `spans` (1..N portions verbatim non-contiguës), `target` (cible
@@ -74,6 +91,9 @@ def avis_claims(tree: ThemeTree, avis_index: int, claim_macro: dict[int, str]) -
         claims.append({
             "id": f"{avis_id}#{ci}",
             "cluster_id": mid,
+            # Feuille réelle du claim (pour le filtre par sous-thème de l'explorateur) ;
+            # `cluster_id`=macro reste la couleur. Repli sur le macro si absent.
+            "leaf_id": (claim_leaf.get(ci) if claim_leaf else None) or mid,
             "color": node.color if node else "",
             "spans": spans,
             "target": target,
@@ -85,7 +105,8 @@ def avis_claims(tree: ThemeTree, avis_index: int, claim_macro: dict[int, str]) -
 
 def avis_payload_for(tree: ThemeTree, avis_index: int,
                      claim_macro: dict[int, str] | None = None,
-                     translations: dict[str, dict] | None = None) -> dict:
+                     translations: dict[str, dict] | None = None,
+                     claim_leaf: dict[int, str] | None = None) -> dict:
     """`{id, text, text_fr, lang, claims}` d'un avis (par son index dans `prepared.avis`).
 
     `translations` (optionnel) : map `avis_id -> {lang, text_fr}` précalculée par
@@ -93,13 +114,15 @@ def avis_payload_for(tree: ThemeTree, avis_index: int,
     """
     if claim_macro is None:
         claim_macro = _claim_macro(tree)
+    if claim_leaf is None:
+        claim_leaf = _claim_leaf(tree)
     a = tree.prepared.avis[avis_index]
     tr = (translations or {}).get(str(a.id)) or {}
     # `a.text` est le texte CANONIQUE masqué (`text_clean`) sur lequel les spans sont
     # ancrés : on le sert TEL QUEL (cohérence offsets + zéro PII brute, cf. docstring).
     return {"id": a.id, "text": a.text,
             "text_fr": tr.get("text_fr"), "lang": tr.get("lang", "fr"),
-            "claims": avis_claims(tree, avis_index, claim_macro)}
+            "claims": avis_claims(tree, avis_index, claim_macro, claim_leaf)}
 
 
 def join_claim_stance(claims: list[dict], stance_map: dict | None) -> list[dict]:
@@ -205,8 +228,12 @@ def avis_list(avis_data: dict, themes: list[dict], *,
         if not isinstance(entry, dict):
             continue
         claims = entry.get("claims") or []
-        if keep_ids is not None and not any(c.get("cluster_id") in keep_ids
-                                            for c in claims):
+        # Filtre par sous-arbre : on teste la FEUILLE du claim (`leaf_id`), pas son macro
+        # (`cluster_id`), sinon un filtre feuille/sous-thème ne matcherait jamais. Repli
+        # sur `cluster_id` pour les avis.json anciens (sans `leaf_id`).
+        if keep_ids is not None and not any(
+            (c.get("leaf_id") or c.get("cluster_id")) in keep_ids for c in claims
+        ):
             continue
         text = entry.get("text") or ""
         if needle is not None and needle not in _fold(text):
@@ -237,5 +264,6 @@ def build_avis_provenance(tree: ThemeTree,
     injectées par avis ; `None` pour un dataset entièrement français.
     """
     claim_macro = _claim_macro(tree)
-    return {a.id: avis_payload_for(tree, i, claim_macro, translations)
+    claim_leaf = _claim_leaf(tree)
+    return {a.id: avis_payload_for(tree, i, claim_macro, translations, claim_leaf)
             for i, a in enumerate(tree.prepared.avis)}
