@@ -1,0 +1,26 @@
+{
+  "id": "xstance__finances",
+  "label": "Finances",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 164,
+  "n_loaded": 164,
+  "languages": [
+    "it",
+    "de",
+    "fr"
+  ],
+  "lang_counts": {
+    "it": 60,
+    "de": 52,
+    "fr": 52
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Finances"
+  }
+}

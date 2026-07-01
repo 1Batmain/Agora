@@ -1,0 +1,28 @@
+{
+  "name": "xstance",
+  "status": "closed",
+  "format": "jsonl",
+  "path": "data/raw/xstance-data-v1.0.zip",
+  "url": "https://github.com/ZurichNLP/xstance/raw/master/data/xstance-data-v1.0.zip",
+  "encoding": "utf-8",
+  "archive": "zip",
+  "members": [
+    "train.jsonl",
+    "valid.jsonl",
+    "test.jsonl"
+  ],
+  "columns": {
+    "id": "id",
+    "text": "comment",
+    "author": "author",
+    "lang": "language"
+  },
+  "props": {
+    "question": "question",
+    "question_id": "question_id",
+    "topic": "topic",
+    "label": "label"
+  },
+  "_note": "x-stance (ZurichNLP) : commentaires politiques labellises FAVOR/AGAINST, MULTILINGUE de/fr/it. Pas de 'lang_keep' => on garde TOUTES les langues par defaut (#11). Pour ne garder que le FR (demo), ajouter \"lang_keep\": [\"fr\"]. Pas d'horodatage dans la source. MULTI-QUESTIONS (patron mere->enfants) : le knob 'props' PRESERVE question/question_id/topic/label dans props de chaque idee (sans ecraser les props canoniques). 194 questions distinctes (par question_id ; 517 textes = variantes DE/FR/IT du meme question_id), 12 topics. Granularite enfant recommandee = TOPIC (12), PAS question (194 >> 30) — voir research/xstance_multiq_note.md (chiffres + reco).",
+  "context": "x-stance — corpus multilingue (DE/FR/IT) de prises de position sur des questions politiques suisses. Chaque contribution exprime une position argumentée, pour ou contre."
+}

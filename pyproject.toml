@@ -1,0 +1,61 @@
+[project]
+name = "agora-pipeline"
+version = "0.0.0"
+description = "Agora — pipeline batch NLP (embeddings, graphe k-NN, Leiden, scoring, naming)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
+    "sentence-transformers>=3.0",
+    "torch>=2.2",
+    "igraph>=0.11",
+    "leidenalg>=0.10",
+    # Stopwords multilingues standard (50+ langues) — linguistique, chargé
+    # dynamiquement par le naming. AUCUN mot de domaine ; repli statistique si absent.
+    "stopwordsiso>=0.7",
+    # Client HTTP pour l'API Mistral (nommage `llm` + /synthesize). Repli gracieux
+    # si la clé manque ; aucun appel réseau sans clé.
+    "httpx>=0.27",
+]
+
+# Contender pour le banc d'éval + accélérateur k-NN (optionnels, CPU).
+[project.optional-dependencies]
+contender = [
+    "hdbscan>=0.8.33",
+    "umap-learn>=0.5.5",
+]
+# Embedders multilingues contenders du registre. `nomic-embed-text-v2-moe`
+# charge du code custom (trust_remote_code) qui dépend de `einops`. Le commit
+# exécuté est ÉPINGLÉ dans pipeline/embed/registry.py (champ `revision`) pour ne
+# pas exécuter un code amont modifié au chargement (sécurité).
+# bge-m3 / e5-small ne requièrent rien de plus que sentence-transformers.
+embed-contender = [
+    "einops>=0.7",
+]
+faiss = [
+    "faiss-cpu>=1.8",
+]
+
+[tool.uv]
+# Projet "virtuel" : on ne build/installe pas le paquet, juste l'env + deps.
+# Le code est importé depuis la racine repo (namespace package `pipeline`).
+package = false
+
+# Torch CPU-only (box partagée, pas de GPU) — évite le wheel CUDA volumineux.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+# Suite de régression API (FastAPI TestClient in-process, lit les vrais caches).
+# Lancer :  uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
+# Les tests dépendant d'une analyse précalculée se SKIPPENT proprement si le cache
+# `analysis/` (ou `claims.json` pour /sandbox) du dataset est absent — jamais d'échec
+# parasite ni de build LLM déclenché (cf. backend/tests/conftest.py).
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
+addopts = "-q -ra"

@@ -1,0 +1,26 @@
+{
+  "id": "xstance__political-system",
+  "label": "Political System",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 110,
+  "n_loaded": 110,
+  "languages": [
+    "fr",
+    "de",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 42,
+    "de": 35,
+    "it": 33
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Political System"
+  }
+}

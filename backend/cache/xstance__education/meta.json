@@ -1,0 +1,26 @@
+{
+  "id": "xstance__education",
+  "label": "Education",
+  "parent_id": "xstance",
+  "status": "closed",
+  "n_nodes": 326,
+  "n_loaded": 326,
+  "languages": [
+    "de",
+    "it",
+    "fr"
+  ],
+  "lang_counts": {
+    "de": 135,
+    "it": 98,
+    "fr": 93
+  },
+  "source": "xstance",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "split": {
+    "by_parent": "xstance",
+    "field": "topic",
+    "value": "Education"
+  }
+}
