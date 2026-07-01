@@ -14,7 +14,7 @@ et construit l'objet que le canvas du front affiche :
     Profondeur variable : thèmes homogènes = feuilles, thèmes hétérogènes = subdivisés.
 
 Tout dérive des données (généricité) : aucune liste de thèmes, aucun seuil de corpus
-codé en dur. La sortie suit le contrat figé `queue/front-redesign.md` :
+codé en dur. La sortie suit le contrat figé `.agent/queue/front-redesign.md` :
 
     POST /analysis {dataset, backend?} -> {themes, edges, params, backend_used}
     themes[i] = {id, label, n_avis, n_claims, weight, consensus, dispersion,

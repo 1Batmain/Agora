@@ -1,5 +1,5 @@
 """Lane DATA — ingestion, prétraitement et anonymisation des avis citoyens.
 
 Produit le JSONL canonique `data/processed/ideas.jsonl` consommé par la lane nlp.
-Schéma canonique : voir `queue/cross-lane.md` (Idea -> GraphNode).
+Schéma canonique : voir `.agent/queue/cross-lane.md` (Idea -> GraphNode).
 """

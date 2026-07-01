@@ -1,7 +1,7 @@
 """Construit le JSONL canonique `data/processed/ideas.jsonl`.
 
 Pipeline : sources brutes -> nettoyage (T-D2) -> anonymisation + langue (T-D4)
--> objet Idea canonique (cf. queue/cross-lane.md). Régénère tout from scratch et
+-> objet Idea canonique (cf. `.agent/queue/cross-lane.md`). Régénère tout from scratch et
 imprime des compteurs (total, par source, par langue, % vides retirés).
 
 Les sources sont **déclaratives** : chaque consultation est décrite par un

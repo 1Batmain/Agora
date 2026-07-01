@@ -29,7 +29,7 @@ import numpy as np
 
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
-# Défaut = le WINNER multilingue validé (banc qualité, cf. queue/cross-lane.md).
+# Défaut = le WINNER multilingue validé (banc qualité, cf. `.agent/queue/cross-lane.md`).
 # nomic-v2 mixe les langues PAR THÈME (NMI cluster↔langue=0.008) ; e5-small
 # clusterise PAR LANGUE (NMI=0.81) → inutilisable en multilingue. Le défaut batch
 # doit être COHÉRENT avec le backend live (qui embedde déjà en nomic-v2 / cache).

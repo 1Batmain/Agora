@@ -312,7 +312,7 @@ def submit(body: SubmitBody) -> dict:
 # ===================== Refonte « carte spatiale » (B1–B4) ===================== #
 # SÉPARATION BUILD / SERVE. Le pipeline lourd (claims→embed→cluster→hiérarchie→
 # insights) est PRÉCALCULÉ et PERSISTÉ par `backend.build_analysis` (en tâche de fond,
-# cf. `build_manager`). Les trois endpoints du CONTRAT figé (queue/front-redesign.md)
+# cf. `build_manager`). Les trois endpoints du CONTRAT figé (`.agent/queue/front-redesign.md`)
 # ne font ici que LIRE le cache persisté — AUCUN calcul lourd à la requête. Si l'analyse
 # n'est pas prête, ils déclenchent/poursuivent le build de fond et renvoient un état
 # clair `{status: building|absent|error}` (HTTP 202 en cours, 503 en échec).
