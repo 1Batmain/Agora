@@ -1817,7 +1817,7 @@ body {
   padding: .85rem 1.1rem; min-width: 240px; flex: 1 1 240px;
   border: 1px solid #d7d7e6; background: #fcfcff;
   text-decoration: none; transition: background .12s ease, transform .12s ease;
-  /* reset bouton (la « Feuille de route » est un déclencheur in-app, pas un lien) */
+  /* le lien collab est une ancre <a> (repo GitHub) */
   font: inherit; text-align: left; cursor: pointer;
 }
 .collab__link:hover { background: #f4f4f8; }
@@ -1851,124 +1851,6 @@ body {
   font-weight: 600; color: var(--agora, #000091);
 }
 .overview__kwclear:hover { text-decoration: underline; }
-
-/* ═══════════════════════════════════════════════════════════════════════════
- * Page /todo — feuille de route collaborative (DA mono / Bleu France)
- * (append dédié — lane todo-page ; ne pas entremêler avec le reste)
- * ═════════════════════════════════════════════════════════════════════════ */
-.todo { min-height: 100vh; background: #f6f6fb; }
-.todo__crumb {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
-  font-weight: 600; color: var(--agora, #000091);
-}
-.todo__main { max-width: 1100px; margin: 0 auto; padding: 2.4rem 1.5rem 4rem; }
-.todo__intro { margin-bottom: 2rem; }
-.todo__h1 {
-  margin: 0 0 .4rem; font-size: 1.9rem; color: #111;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
-}
-.todo__lede { margin: 0; color: #555; line-height: 1.6; }
-.todo__updated {
-  margin: .5rem 0 0; font-size: .78rem; color: #888;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
-}
-.todo__empty { color: #777; font-style: italic; }
-
-.todo__board {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;
-}
-@media (max-width: 860px) { .todo__board { grid-template-columns: 1fr; } }
-
-.todo__col { display: flex; flex-direction: column; gap: .8rem; }
-.todo__coltitle {
-  margin: 0; padding-bottom: .5rem; border-bottom: 2px solid var(--agora, #000091);
-  font-size: 1rem; color: #111;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
-  display: flex; align-items: center; gap: .5rem;
-}
-.todo__count {
-  font-size: .72rem; font-weight: 700; color: #fff; background: var(--agora, #000091);
-  border-radius: 999px; padding: .05rem .5rem; min-width: 1.4rem; text-align: center;
-}
-.todo__colempty { color: #bbb; margin: .3rem 0 0; }
-
-.todo__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .8rem; }
-.todo__card {
-  background: #fff; border: 1px solid #e3e3f0; border-radius: 6px;
-  padding: .9rem 1rem; box-shadow: 0 1px 2px rgba(0,0,30,.04);
-}
-.todo__cardhead { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .5rem; }
-.todo__badge {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .04em; padding: .12rem .45rem; border-radius: 3px;
-}
-.todo__badge--todo { background: #ececfe; color: var(--agora, #000091); }
-.todo__badge--wip  { background: #fff1d6; color: #8a5a00; }
-.todo__badge--done { background: #d6f3e0; color: #18753c; }
-.todo__lane {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .72rem;
-  color: #777; background: #f2f2f9; padding: .12rem .45rem; border-radius: 3px;
-}
-.todo__pr {
-  margin-left: auto; font-family: ui-monospace, "IBM Plex Mono", monospace;
-  font-size: .74rem; font-weight: 600; color: var(--agora, #000091); text-decoration: none;
-  white-space: nowrap;
-}
-.todo__pr:hover { text-decoration: underline; }
-.todo__title { display: block; color: #111; line-height: 1.4; font-size: .95rem; }
-.todo__note { margin: .45rem 0 0; color: #666; font-size: .82rem; line-height: 1.55; }
-
-/* ── Formulaire d'AJOUT (en tête de la feuille de route) ── */
-.todo__add {
-  display: flex; flex-wrap: wrap; gap: .6rem; align-items: stretch;
-  margin: 0 0 2rem; padding: 1rem; background: #fff;
-  border: 1px solid #e3e3f0; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,30,.04);
-}
-.todo__add input, .todo__add select {
-  font: inherit; font-size: .88rem; padding: .5rem .6rem;
-  border: 1px solid #d3d3e6; border-radius: 4px; background: #fbfbff; color: #111;
-}
-.todo__add input:focus, .todo__add select:focus {
-  outline: none; border-color: var(--agora, #000091);
-}
-.todo__add-title { flex: 2 1 16rem; min-width: 12rem; }
-.todo__add-lane { flex: 0 1 9rem; }
-.todo__add-note { flex: 1 1 12rem; min-width: 10rem; }
-.todo__add-btn {
-  flex: 0 0 auto; font: inherit; font-weight: 600; font-size: .85rem;
-  padding: .5rem 1.1rem; border: none; border-radius: 4px; cursor: pointer;
-  background: var(--agora, #000091); color: #fff;
-}
-.todo__add-btn:disabled { opacity: .5; cursor: not-allowed; }
-.todo__add-btn:not(:disabled):hover { background: #000077; }
-
-/* ── Actions par carte : « Je prends » / assignee / changer le statut ── */
-.todo__cardactions {
-  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
-  margin-top: .7rem; padding-top: .6rem; border-top: 1px dashed #ececf4;
-}
-.todo__claim {
-  font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer;
-  padding: .28rem .7rem; border-radius: 4px;
-  border: 1px solid var(--agora, #000091); background: #fff; color: var(--agora, #000091);
-}
-.todo__claim:hover { background: #ececfe; }
-.todo__assignee {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .78rem; font-weight: 600;
-  color: #18753c; background: #d6f3e0; padding: .22rem .55rem; border-radius: 4px;
-}
-.todo__statussel {
-  margin-left: auto; display: flex; align-items: center; gap: .35rem;
-  font-size: .72rem; color: #888;
-}
-.todo__statussel-lbl {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; text-transform: uppercase;
-  letter-spacing: .04em;
-}
-.todo__statussel select {
-  font: inherit; font-size: .78rem; padding: .25rem .4rem;
-  border: 1px solid #d3d3e6; border-radius: 4px; background: #fbfbff; color: #111; cursor: pointer;
-}
 
 /* ── Stance EN LIGNE après le nom du cluster (fiche d'analyse au clic) ── */
 .avisx__analysiscluster { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
