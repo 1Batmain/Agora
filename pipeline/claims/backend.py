@@ -69,6 +69,14 @@ class ClaimBackend:
                  max_tokens: int | None = None) -> str | None:
         raise NotImplementedError
 
+    def preflight(self) -> None:
+        """Vérifie la disponibilité (clé/endpoint) SANS appel LLM, AVANT toute extraction.
+
+        Lève `BackendUnavailable` si le backend est inutilisable → l'appelant échoue
+        IMMÉDIATEMENT et proprement (pas de boucle sur des milliers de lots qui échouent).
+        Défaut : no-op (backend supposé prêt)."""
+        return None
+
 
 class ApiBackend(ClaimBackend):
     """API Mistral (EU) via `mistral_client` — backend PRIMAIRE par défaut."""
@@ -81,6 +89,13 @@ class ApiBackend(ClaimBackend):
         # Pas d'I/O ni de validation ici : construire un backend ne doit pas échouer
         # quand les claims sont déjà en cache (la clé n'est requise qu'à l'extraction).
         self.model = model or API_MODEL
+
+    def preflight(self) -> None:
+        if not mistral_client.available():
+            raise BackendUnavailable(
+                "clé API Mistral absente — fournir MISTRAL_API_KEY ou var/mistral.key "
+                "(ou passer AGORA_CLAIMS_BACKEND=mac pour l'extraction locale)."
+            )
 
     def complete(self, messages: list[dict], *, stats: OllamaStats,
                  max_tokens: int | None = None) -> str | None:

@@ -24,12 +24,20 @@ mkdir -p var
 say "Caches d'analyse (~250 Mo, release GitHub 'caches')"
 if ls backend/cache/*/analysis/analysis.json >/dev/null 2>&1; then
   echo "  déjà présents — ok"
-elif command -v gh >/dev/null; then
-  gh release download caches -R "$REPO" -p 'agora-caches.tar.gz' -O /tmp/agora-caches.tar.gz --clobber \
-    && tar xzf /tmp/agora-caches.tar.gz -C "$ROOT" && echo "  caches installés" \
-    || echo "  (release 'caches' indispo — l'app marche, mais sans données tant que non construites)"
 else
-  echo "  gh absent → récupère l'asset 'agora-caches.tar.gz' de la release 'caches' puis : tar xzf agora-caches.tar.gz"
+  URL="https://github.com/$REPO/releases/download/caches/agora-caches.tar.gz"
+  ok=0
+  if command -v gh >/dev/null 2>&1; then
+    gh release download caches -R "$REPO" -p 'agora-caches.tar.gz' -O /tmp/agora-caches.tar.gz --clobber 2>/dev/null && ok=1
+  fi
+  if [ "$ok" = 0 ]; then curl -fSL "$URL" -o /tmp/agora-caches.tar.gz 2>/dev/null && ok=1; fi
+  if [ "$ok" = 1 ]; then
+    tar xzf /tmp/agora-caches.tar.gz -C "$ROOT" && echo "  caches installes"
+  else
+    echo "  ⚠️  caches NON recuperes (release privee ? hors-ligne ?). L'app demarre mais les"
+    echo "      consultations renverront 404 tant que les caches ne sont pas presents."
+    echo "      → recupere-les : $URL"
+  fi
 fi
 
 say "✓ Prêt.  Lance :  make dev   (backend :8010 + front :5180 → http://localhost:5180)"

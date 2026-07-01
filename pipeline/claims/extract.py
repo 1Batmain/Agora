@@ -296,6 +296,10 @@ def extract_claims(
     portion ne s'ancre devient 1 claim = son texte entier. `progress(i, n)` suit l'avancée.
     """
     stats = stats if stats is not None else OllamaStats()
+    # Pré-vol : vérifie la disponibilité du backend (clé/endpoint) AVANT de soumettre le
+    # moindre lot. Sans clé → BackendUnavailable ici, tout de suite, une seule fois — au lieu
+    # de churner des milliers de lots qui échouent (boucle ininterruptible au Ctrl-C).
+    backend.preflight()
     bs = BATCH_SIZE if batch_size is None else batch_size
     out: dict[str, list[Claim]] = {}
     n = len(avis)
