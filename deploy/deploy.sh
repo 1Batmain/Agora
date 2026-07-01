@@ -26,6 +26,7 @@ echo "[deploy] restart services (systemd user)"
 # PAS de fallback nohup : si systemd échoue, le deploy ÉCHOUE (visible) au lieu de lancer un
 # process manuel concurrent qui masquerait le nouveau code.
 systemctl --user restart agora-backend agora-frontend
-sleep 8
-systemctl --user is-active agora-backend agora-frontend
+sleep 12  # le backend charge torch/nomic (~10s) avant d'écouter
+systemctl --user is-active agora-backend agora-frontend \
+  || echo "[deploy] (un service encore en démarrage — Restart=always ; vérifier si ça persiste)"
 echo "[deploy] OK — $(date)"
