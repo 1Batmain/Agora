@@ -10,7 +10,7 @@ import { TodoPage } from './TodoPage';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
 type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'todo';
-type HistState = { route: Route; activeId: string | null; focus?: string | null };
+type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null };
 
 /**
  * Shell d'Agora. La vue d'accueil est la LANDING (grille de consultations). Au clic
@@ -51,6 +51,7 @@ export default function App() {
       setRoute(st?.route ?? 'landing');
       setActiveId(st?.activeId ?? null);
       setFocusAvis(st?.focus ?? null);
+      setFocusTheme(st?.focusTheme ?? null);
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
