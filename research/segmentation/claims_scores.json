@@ -1,0 +1,171 @@
+{
+  "gold": "gold_large.json",
+  "n_avis": 305,
+  "n_mono": 104,
+  "n_multi": 201,
+  "n_labels": 8,
+  "model": "ministral-3:latest",
+  "embedder": "nomic-v2",
+  "limited": false,
+  "seed": 42,
+  "n_claims": 968,
+  "claims_per_avis": 3.174,
+  "derived_defaults": {
+    "k": 11,
+    "threshold": 0.6009,
+    "pool_mean": 0.7573,
+    "pool_std": 0.0489
+  },
+  "main_resolution": 1.0,
+  "main": {
+    "n_clusters": 8,
+    "modularity": 0.6346,
+    "homogeneity": 0.493,
+    "completeness": 0.5015,
+    "v_measure": 0.4972,
+    "micro_F1": 0.784,
+    "macro_F1": 0.7622,
+    "exact_set": 0.4557,
+    "per_theme": {
+      "harcelement": {
+        "p": 0.8933,
+        "r": 0.9178,
+        "f1": 0.9054,
+        "tp": 67,
+        "fp": 8,
+        "fn": 6
+      },
+      "addiction": {
+        "p": 0.7342,
+        "r": 0.8169,
+        "f1": 0.7733,
+        "tp": 58,
+        "fp": 21,
+        "fn": 13
+      },
+      "image_corps": {
+        "p": 0.8833,
+        "r": 0.7681,
+        "f1": 0.8217,
+        "tp": 53,
+        "fp": 7,
+        "fn": 16
+      },
+      "algorithme": {
+        "p": 0.6854,
+        "r": 0.8592,
+        "f1": 0.7625,
+        "tp": 61,
+        "fp": 28,
+        "fn": 10
+      },
+      "contenus_choquants": {
+        "p": 0.5,
+        "r": 0.2154,
+        "f1": 0.3011,
+        "tp": 14,
+        "fp": 14,
+        "fn": 51
+      },
+      "enfants": {
+        "p": 0.8026,
+        "r": 0.9104,
+        "f1": 0.8531,
+        "tp": 61,
+        "fp": 15,
+        "fn": 6
+      },
+      "desinformation": {
+        "p": 0.791,
+        "r": 0.9298,
+        "f1": 0.8548,
+        "tp": 53,
+        "fp": 14,
+        "fn": 4
+      },
+      "sante_mentale": {
+        "p": 0.8137,
+        "r": 0.8384,
+        "f1": 0.8259,
+        "tp": 83,
+        "fp": 19,
+        "fn": 16
+      }
+    }
+  },
+  "sweep": [
+    {
+      "resolution": 0.5,
+      "n_clusters": 5,
+      "modularity": 0.5827,
+      "homogeneity": 0.3741,
+      "completeness": 0.5273,
+      "v_measure": 0.4377,
+      "micro_F1": 0.62,
+      "macro_F1": 0.484,
+      "exact_set": 0.2787
+    },
+    {
+      "resolution": 0.8,
+      "n_clusters": 7,
+      "modularity": 0.6363,
+      "homogeneity": 0.5024,
+      "completeness": 0.5374,
+      "v_measure": 0.5193,
+      "micro_F1": 0.7937,
+      "macro_F1": 0.7391,
+      "exact_set": 0.4918
+    },
+    {
+      "resolution": 1.0,
+      "n_clusters": 8,
+      "modularity": 0.6346,
+      "homogeneity": 0.493,
+      "completeness": 0.5015,
+      "v_measure": 0.4972,
+      "micro_F1": 0.784,
+      "macro_F1": 0.7622,
+      "exact_set": 0.4557
+    },
+    {
+      "resolution": 1.4,
+      "n_clusters": 11,
+      "modularity": 0.6294,
+      "homogeneity": 0.5268,
+      "completeness": 0.4689,
+      "v_measure": 0.4962,
+      "micro_F1": 0.8106,
+      "macro_F1": 0.8171,
+      "exact_set": 0.4918
+    },
+    {
+      "resolution": 2.0,
+      "n_clusters": 15,
+      "modularity": 0.6065,
+      "homogeneity": 0.5555,
+      "completeness": 0.4408,
+      "v_measure": 0.4916,
+      "micro_F1": 0.8179,
+      "macro_F1": 0.8206,
+      "exact_set": 0.5082
+    }
+  ],
+  "novelty": {
+    "cutoff_cos": 0.6301,
+    "n_hits": 0,
+    "hits": []
+  },
+  "cost": {
+    "ollama_calls": 0,
+    "cache_hits": 305,
+    "errors": 0,
+    "cold_seconds": 635.08,
+    "ms_per_avis": 2082.2,
+    "eval_tokens": 25231,
+    "endpoint": "http://macbat.tail0b8aa8.ts.net:11434"
+  },
+  "baselines": {
+    "mistral_micro_F1": 0.928,
+    "classifier_micro_F1": 0.939
+  }
+}

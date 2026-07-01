@@ -1,0 +1,1931 @@
+{
+  "model": "mistral-large-latest",
+  "n_avis": 42,
+  "n_panel": 3,
+  "judge_temp": 0.5,
+  "dims": [
+    "sur_segmentation",
+    "completude",
+    "fidelite"
+  ],
+  "agg": {
+    "sur_segmentation": {
+      "v2_wins": 18,
+      "v1_wins": 6,
+      "ties": 18,
+      "n": 42,
+      "v2_win_rate": 0.429,
+      "v1_win_rate": 0.143,
+      "v2_rate_decided": 0.75
+    },
+    "completude": {
+      "v2_wins": 2,
+      "v1_wins": 3,
+      "ties": 37,
+      "n": 42,
+      "v2_win_rate": 0.048,
+      "v1_win_rate": 0.071,
+      "v2_rate_decided": 0.4
+    },
+    "fidelite": {
+      "v2_wins": 5,
+      "v1_wins": 3,
+      "ties": 34,
+      "n": 42,
+      "v2_win_rate": 0.119,
+      "v1_win_rate": 0.071,
+      "v2_rate_decided": 0.625
+    }
+  },
+  "per_avis": [
+    {
+      "id": "granddebat:1-11830",
+      "chars": 136,
+      "n_v1": 2,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 évite de couper l'idée liant le problème et sa solution, tandis que le lot 1 sur-segmente en séparant la critique et la proposition."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve l'idée complète (problème + solution) en un seul claim, évitant la sur-segmentation, tandis que le lot 2 sépare artificiellement le problème de sa solution."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 évite de couper le problème et sa solution en deux claims distincts, tandis que le lot 1 sur-segmente en séparant artificiellement la critique et la proposition."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "v2",
+      "fidelite_tally": {
+        "v2": 2,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-4924",
+      "chars": 638,
+      "n_v1": 7,
+      "n_v2": 6,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve les idées entières (ex: devoir de présence + sanction financière en un seul claim), tandis que le lot 2 les découpe inutilement (ex: les 3 premiers claims du lot 2 forment une seule idée cohérente). Les deux lots capturent tous les thèmes, mais le lot 2 reformule légèrement moins (fidélité légèrement meilleure, mais le lot 1 reste très fidèle)."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sur-segmente l'idée initiale sur le devoir de présence et les sanctions en 3 claims distincts, tandis que le lot 1 la conserve intacte. Les deux lots capturent toutes les prises de position, et le lot 1 est plus fidèle en recopiant des segments entiers sans découpage."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente l'idée de devoir de présence et sanctions en 3 claims distincts, tandis que le lot 2 la conserve entière. Le lot 1 capture la proposition de révocation absente du lot 2, mais les deux lots sont équivalents en fidélité verbatim."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 2,
+        "v1": 1
+      },
+      "fidelite": "v2",
+      "fidelite_tally": {
+        "v2": 2,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-12876",
+      "chars": 31,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-13573",
+      "chars": 84,
+      "n_v1": 2,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et traitent correctement les deux idées distinctes sans sur-segmentation ni omission."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et traitent correctement les deux idées distinctes sans sur-segmentation ni perte de fidélité."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et traitent correctement les deux idées distinctes sans sur-segmentation ni omission."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-28366",
+      "chars": 36,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et traitent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent l'unique prise de position sans sur-segmentation, omission ou reformulation."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-14703",
+      "chars": 117,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis sans sur-segmentation, omission ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent l'unique prise de position de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent l'unique idée de l'avis sans découpage ni omission, et de manière strictement verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-8445",
+      "chars": 82,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, omission ou reformulation."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-8650",
+      "chars": 54,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, omission ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, omission ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique idée de l'avis sans sur-segmentation, perte ou reformulation."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-850",
+      "chars": 30,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis sans sur-segmentation, omission ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis sans sur-segmentation, omission ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent parfaitement l'unique prise de position de l'avis sans sur-segmentation, omission ou reformulation."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-34746",
+      "chars": 50,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et traitent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et traitent l'unique idée de l'avis sans sur-segmentation, perte ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et traitent l'avis de manière optimale sur toutes les dimensions."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-11656",
+      "chars": 47,
+      "n_v1": 3,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent les mêmes thèmes sans sur-segmentation, mais le lot 2 est plus fidèle en précisant la cible de l'obligation de se syndiquer."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent les trois thèmes distincts de l'avis sans sur-segmentation ni reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent les trois prises de position sans sur-segmentation ni omission, et sont strictement verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v2": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-12634",
+      "chars": 54,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique prise de position sans sur-segmentation, perte ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et capturent l'unique idée de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-10510",
+      "chars": 185,
+      "n_v1": 3,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent les trois idées distinctes de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent les trois idées distinctes de l'avis sans sur-segmentation ni omission, et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent les trois idées distinctes de l'avis sans sur-segmentation ni omission, et sont strictement verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-2317",
+      "chars": 225,
+      "n_v1": 3,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "v1",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots évitent de couper les idées, mais le lot 2 omet partiellement la cible 'les règles de fonctionnement de l'état et de la société' dans son premier claim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "v1",
+          "fidelite": "v1",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots évitent de couper les idées, mais le lot 1 capture mieux la cible complète de la première prise de position (éducation civique + règles de fonctionnement)."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "v1",
+          "fidelite": "v1",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots évitent de couper les idées en morceaux, mais le lot 1 capture mieux la cible complète de la première prise de position (éducation civique + règles de fonctionnement)."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "v1",
+      "completude_tally": {
+        "v1": 3
+      },
+      "fidelite": "v1",
+      "fidelite_tally": {
+        "v1": 3
+      }
+    },
+    {
+      "id": "granddebat:1-8668",
+      "chars": 263,
+      "n_v1": 4,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Lot 1 évite de couper l'idée sur l'arrogance en deux claims distincts, contrairement au lot 2 qui sur-segmente, mais les deux lots capturent toutes les prises de position et sont verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper 'moins d'arrogance et ne pas croire que l'on sait tout' en deux claims distincts, contrairement au lot 2 qui sur-segmente cette idée."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper l'idée 'moins d'arrogance et ne pas croire que l'on sait tout' en deux claims, contrairement au lot 2, tout en capturant toutes les prises de position sans perte de complétude ni reformulation."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v2": 1
+      }
+    },
+    {
+      "id": "granddebat:1-1849",
+      "chars": 187,
+      "n_v1": 2,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et respectent les critères sans sur-segmentation, perte de complétude ou reformulation."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots sont identiques et respectent parfaitement les critères : pas de sur-segmentation, capture de toutes les prises de position, et fidélité verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques et respectent parfaitement les critères : pas de sur-segmentation, capture de toutes les prises de position, et fidélité verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-5360",
+      "chars": 183,
+      "n_v1": 2,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en séparant une idée unique (rééquilibrage élus centraux vs locaux) en deux claims, tandis que le lot 2 la conserve intacte."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve l'idée unique en un seul claim, évitant la sur-segmentation, tandis que le lot 2 sépare artificiellement le problème et la solution, bien que les deux lots capturent tous les thèmes et restent verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve l'idée unique sans la couper, tandis que le lot 2 sépare artificiellement une prise de position cohérente en deux claims."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v2": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-29333",
+      "chars": 247,
+      "n_v1": 4,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Lot 2 sépare le contrôle des fonds et le remboursement des frais, qui forment une seule idée cohérente dans l'avis, tandis que le lot 1 les conserve ensemble."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sépare le contrôle des fonds et le remboursement des frais, qui forment une seule idée cohérente dans l'avis, tandis que le lot 1 les conserve ensemble."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant 'contrôle accru des fonds' et 'remboursement des frais', qui forment une seule idée liée aux fonds des élus, tandis que Lot 2 les fusionne correctement."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-2950",
+      "chars": 327,
+      "n_v1": 4,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées (notamment la proposition des référendums et l'expression citoyenne), tandis que le lot 2 fusionne sans perte mais ne gagne pas en complétude. Les deux lots sont fidèles, mais le lot 1 l'est strictement."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées (notamment la proposition des référendums et le besoin d'expression citoyenne restent liés), tandis que les deux lots capturent toutes les prises de position sans en oublier, et le lot 1 est plus strictement verbatim."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 évite de fusionner le problème (manque de proportionnelle) et la solution (référendums), mais le lot 1 coupe l'idée des référendums en deux (claims 1 et 2), sur-segmentant ainsi une proposition unique."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 2,
+        "v1": 1
+      },
+      "fidelite": "v1",
+      "fidelite_tally": {
+        "v1": 2,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-14678",
+      "chars": 177,
+      "n_v1": 1,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 et le lot 2 sont identiques, mais aucun ne capture la première partie de l'avis ('Nous savons que depuis l'europe les élus ont beaucoup moins de marge de manœuvre'), qui est une prise de position réelle."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 omet la première partie de l'avis ('Nous savons que depuis l'europe les élus ont beaucoup moins de marge de manœuvre'), qui constitue une prise de position distincte, tandis que le lot 2 ne l'inclut pas non plus, mais aucun des deux ne sur-segmente l'idée restante."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 ne capture pas la première partie de l'avis ('depuis l'europe les élus ont beaucoup moins de marge de manœuvre'), ce qui réduit sa complétude."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "v1",
+      "completude_tally": {
+        "v1": 2,
+        "v2": 1
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-7120",
+      "chars": 125,
+      "n_v1": 2,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent exactement les mêmes prises de position sans sur-segmentation ni omission, et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent les deux idées distinctes de l'avis sans sur-segmentation, sans omission et de manière verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent exactement les mêmes prises de position sans sur-segmentation, omission ou reformulation."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-16202",
+      "chars": 165,
+      "n_v1": 3,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant 'Présence aux assemblées' et 'proscrire la sieste devant les caméras', qui forment une seule idée liée à la présence publique. Les deux lots capturent toutes les prises de position, mais le lot 1 est plus fidèle au verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper l'idée 'Présence aux assemblées et proscrire la sieste' en deux, tandis que le lot 2 la sur-segmente. Les deux lots capturent toutes les prises de position sans en oublier. Le lot 1 est plus fidèle car il recopie exactement les phrases de l'avis."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en séparant 'Présence aux assemblées' et 'proscrire la sieste devant les caméras', qui forment une seule idée liée, tandis que le lot 2 les fusionne correctement sans perte de thèmes."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v1": 1,
+        "v2": 1,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-6096",
+      "chars": 377,
+      "n_v1": 5,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées liées (ex: conditions de vie des élus en un seul claim), tandis que le lot 2 sur-segmente sans justification thématique claire. Les deux lots capturent toutes les prises de position, mais le lot 2 reformule partiellement via les cibles ajoutées."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées liées (ex. conditions de vie des élus regroupées), tandis que le lot 2 sur-segmente en isolant chaque sous-thème (frais, billets, salaire). Les deux lots capturent toutes les prises de position, mais le lot 2 reformule partiellement ('qu'il est' vs 'qu'il y ait' absent) et ajoute des cibles non verbatim."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "v1",
+          "fidelite": "v1",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées (pas de sur-segmentation), capture toutes les prises de position sans en oublier, et reste strictement verbatim, tandis que le lot 2 fusionne abusivement des thèmes distincts (perte de granularité) et reformule légèrement."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 2,
+        "v1": 1
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 2,
+        "v1": 1
+      },
+      "fidelite": "v2",
+      "fidelite_tally": {
+        "v2": 2,
+        "v1": 1
+      }
+    },
+    {
+      "id": "granddebat:1-3358",
+      "chars": 764,
+      "n_v1": 2,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques, segmentant l'avis en deux idées complètes sans sur-segmentation ni omission, et recopiant le texte verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques, préservant les idées sans sur-segmentation, capturant toutes les prises de position et restant verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots sont identiques, préservant les idées sans sur-segmentation, capturant toutes les prises de position et restant verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-21639",
+      "chars": 588,
+      "n_v1": 4,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "v1",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite la sur-segmentation en isolant des idées distinctes sans les couper artificiellement, capture toutes les prises de position sans en omettre, et reste strictement verbatim, tandis que le lot 2 fusionne abusivement des thèmes hétérogènes en un seul claim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper une idée cohérente en plusieurs claims, tandis que le lot 2 sur-segmente en séparant des éléments liés (problème, solution, conséquence). Les deux lots capturent toutes les prises de position sans omission, et les deux sont verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper une idée en morceaux (pas de sur-segmentation), tandis que le lot 2 sépare artificiellement des éléments liés (problème et solution du cumul des salaires). Les deux lots capturent toutes les prises de position sans en omettre, et restent verbatim."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v1": 1,
+        "v2": 2
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "v1": 1,
+        "tie": 2
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v1": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-4754",
+      "chars": 636,
+      "n_v1": 7,
+      "n_v2": 4,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Lot 1 évite de couper les idées liées (ex: inéligibilité et respect des lois regroupés), tandis que Lot 2 sur-segmente (ex: phrases 2-3 et 6-7 devraient rester unies). Les deux lots capturent tous les thèmes sans omission, et collent au texte à l'identique."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper des idées liées (ex: inéligibilité et respect des lois dans un seul claim), tandis que le lot 2 sur-segmente sans justification (ex: séparation des propositions sur l'inéligibilité). Les deux lots capturent toutes les prises de position et restent verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 fusionne des idées liées (respect des lois + inéligibilité, travail des élus + Assemblée vide) sans les couper, tandis que le lot 1 sur-segmente en séparant des éléments logiquement connectés (ex: inéligibilité et respect des lois). Les deux lots capturent tous les thèmes, mais le lot 1 reformule moins."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v1": 1
+      }
+    },
+    {
+      "id": "granddebat:1-34569",
+      "chars": 562,
+      "n_v1": 2,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 évite de couper l'idée 'prendre les français pour des idiots' et 'mettre les pieds dans le même monde qu'eux', tandis que le lot 1 sur-segmente cette prise de position. Les deux lots capturent les mêmes thèmes, mais le lot 1 en rate un fragment (la mise en pratique concrète). La fidélité est équivalente."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper l'idée principale (critique des élus + proposition de changement) en deux claims distincts, contrairement au lot 2 qui sépare la critique en deux parties. Les deux lots capturent les mêmes thèmes, mais le lot 1 est plus fidèle à la structure originale. La fidélité est équivalente car les deux recopient verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sépare artificiellement la critique des élus en deux claims (prise pour des idiots + déconnexion du monde réel), tandis que le lot 2 conserve l'idée unifiée. Les deux lots capturent les mêmes thèmes sans omission, et les deux recopient le texte verbatim."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "v1": 1,
+        "v2": 1,
+        "tie": 1
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-5131",
+      "chars": 553,
+      "n_v1": 6,
+      "n_v2": 5,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 évite de fusionner des idées distinctes (ex: séparation de la régularité et de l'impression des 5 ans) et capture toutes les prises de position sans perte, tandis que le lot 1 sur-segmente en regroupant des éléments disjoints (ex: phrase 3 du lot 1)."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 fusionne mieux les idées liées à la régularité de la collecte d'avis (évitant la sur-segmentation), mais les deux lots capturent tous les thèmes sans perte ; le lot 1 est plus strictement verbatim."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 évite de fusionner des idées distinctes (ex: la régularité du recueil d'avis et l'impression de donner son avis tous les 5 ans sont séparés), tout en capturant l'intégralité des prises de position sans sur-segmentation excessive, contrairement au lot 1 qui regroupe abusivement deux idées dans le claim 3."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 2,
+        "v2": 1
+      },
+      "completude": "v1",
+      "completude_tally": {
+        "v1": 2,
+        "tie": 1
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v1": 1
+      }
+    },
+    {
+      "id": "granddebat:1-11667",
+      "chars": 511,
+      "n_v1": 6,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées (ex: énumération des écarts métiers reste groupée), tandis que le lot 2 fusionne tout sans distinction, perdant la granularité des thèmes sans en omettre."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (ex: énumération des écarts maintenue en claims séparés mais cohérents), tandis que le lot 2 fusionne tout sans perte de thèmes mais au prix d'une surcharge."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (ex: problème et exemples restent liés), tandis que le lot 2 fusionne tout sans distinction, perdant la granularité des prises de position individuelles."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "v1",
+      "fidelite_tally": {
+        "v1": 3
+      }
+    },
+    {
+      "id": "granddebat:1-3389",
+      "chars": 390,
+      "n_v1": 7,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (notamment la première phrase qui forme un tout cohérent), tandis que le lot 2 sur-segmente en séparant chaque élément d'une énumération. Les deux lots capturent toutes les prises de position, et le lot 1 est plus fidèle au verbatim original."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "v1",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en découpant des idées liées (réduction des députés/sénateurs, limitation des mandats, proportionnelle, rémunération) alors que Lot 2 les fusionne correctement, mais Lot 1 capture toutes les prises de position sans en omettre."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de découper une même idée en morceaux (ex: propositions institutionnelles regroupées), tandis que le lot 2 sur-segmente sans justification thématique claire. Les deux lots capturent toutes les prises de position, mais le lot 1 est plus fidèle au texte original."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 2,
+        "v1": 1
+      },
+      "fidelite": "v2",
+      "fidelite_tally": {
+        "v2": 2,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-27061",
+      "chars": 576,
+      "n_v1": 4,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve les idées complètes sans les fragmenter (évite de séparer le diagnostic des causes), tandis que le lot 2 sur-segmente en isolant des éléments liés (ex: 'ne sont pas parfaits' est une nuance de 'pas dû uniquement aux élus'). Les deux lots capturent toutes les prises de position, mais le lot 2 en perd une (la remise en question globale des citoyens) en la fusionnant partiellement avec d'autres thèmes."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve les idées intactes (pas de découpage artificiel), capture toutes les prises de position sans en omettre, et reste fidèle au texte, tandis que le lot 2 sur-segmente en isolant des fragments d'une même idée."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant des idées liées (critique des élus et des citoyens), tandis que Lot 2 fusionne correctement les griefs sans couper les énumérations. Les deux lots capturent tous les thèmes, mais Lot 1 reformule moins."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "v2",
+      "completude_tally": {
+        "v2": 2,
+        "tie": 1
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v1": 1
+      }
+    },
+    {
+      "id": "granddebat:1-32301",
+      "chars": 450,
+      "n_v1": 5,
+      "n_v2": 4,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant les thèmes d'équité et de transparence des rémunérations, tandis que Lot 2 les fusionne naturellement sans perte de sens."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant les thèmes d'équité et de transparence des rémunérations, tandis que Lot 2 les fusionne naturellement sans perte de complétude ni reformulation."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sépare artificiellement 'Équité devant...' et 'Échelle des rémunérations...' qui forment une seule idée d'équité globale, tandis que le lot 1 conserve cette unité."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 1,
+        "v1": 1,
+        "v2": 1
+      }
+    },
+    {
+      "id": "granddebat:1-22842",
+      "chars": 970,
+      "n_v1": 7,
+      "n_v2": 3,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en séparant des idées liées (ex: avantages vs reconnaissance des efforts, ou les multiples aspects de la proximité des élus), tandis que le lot 2 les fusionne de manière cohérente sans perte de thèmes."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sur-segmente en découpant une idée cohérente (train de vie des élus) en trois claims distincts (2, 3) et sépare artificiellement des éléments liés (4, 5, 6), tandis que le lot 1 préserve l'intégrité des idées. Les deux lots capturent toutes les prises de position sans omission. Le lot 1 est plus fidèle car il recopie des segments entiers sans fragmentation."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en découpant une même idée (réduction des avantages des élus et reconnaissance de leurs efforts) en deux claims distincts, tandis que le lot 2 préserve cette unité. Les deux lots couvrent les mêmes thèmes sans omission, et la fidélité verbatim est équivalente."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 2,
+        "v2": 1
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v2": 1
+      }
+    },
+    {
+      "id": "granddebat:1-9840",
+      "chars": 1060,
+      "n_v1": 4,
+      "n_v2": 1,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (notamment en séparant le portail web du reporting), tandis que le lot 2 fusionne tout en un seul claim, ce qui nuit à la clarté des prises de position distinctes."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (ex: reporting et exemples liés), tandis que le lot 2 fusionne tout en un seul claim, ce qui ne sur-segmente pas mais perd en granularité pour d'autres dimensions."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 conserve l'intégralité des idées en un seul bloc sans les couper, tandis que le lot 2 les segmente en sous-thèmes cohérents mais distincts, sans perte ni fusion abusive."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 2,
+        "v2": 1
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v1": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-4507",
+      "chars": 951,
+      "n_v1": 10,
+      "n_v2": 5,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente les idées (ex. émoluments découpés en 3 claims, bureau et obligations séparés), tandis que le lot 2 les regroupe logiquement sans perte de thèmes."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente les idées (ex. émoluments découpés en 3 claims, présence/sanction séparées), tandis que le lot 2 les fusionne naturellement sans perte de thèmes."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente les idées (ex. émoluments découpés en 3 claims, présence/sanction séparées), tandis que le lot 2 les fusionne logiquement sans perte de thèmes."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-15931",
+      "chars": 1940,
+      "n_v1": 7,
+      "n_v2": 2,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (notamment les avantages du scrutin et la proposition exécutive), tandis que le lot 2 sur-segmente en éclatant les arguments et les détails du directoire. Les deux lots capturent toutes les prises de position, mais le lot 2 reformule légèrement moins (fidélité légèrement meilleure, mais le lot 1 reste très fidèle)."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (ex: avantages du scrutin regroupés), tandis que le lot 2 sur-segmente les arguments et propositions sans perte de thèmes mais avec une fragmentation excessive."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en découpant une même proposition (scrutin par notation) et ses avantages en 5 claims distincts, tandis que Lot 2 conserve l'unité des idées."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v2": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-29620",
+      "chars": 1449,
+      "n_v1": 11,
+      "n_v2": 7,
+      "votes": [
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en éclatant des idées liées (ex: consultations bidons et pouvoir de la rue), tandis que le lot 2 fusionne mieux les thèmes cohérents sans perdre de prises de position."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Lot 1 sur-segmente en séparant des idées liées (ex: consultations bidons et leurs pouvoirs, ou rue/pouvoir), tandis que Lot 2 fusionne mieux les thèmes cohérents sans perte de complétude."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper des idées liées (ex: consultations bidons + pouvoirs réels, ou respiration démocratique + élaboration des lois), tandis que le lot 2 sur-segmente ces éléments. Les deux lots capturent tous les thèmes, mais le lot 2 reformule moins."
+        }
+      ],
+      "sur_segmentation": "v1",
+      "sur_segmentation_tally": {
+        "v1": 2,
+        "v2": 1
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v2": 1
+      }
+    },
+    {
+      "id": "granddebat:1-25773",
+      "chars": 2137,
+      "n_v1": 13,
+      "n_v2": 8,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Lot 1 évite de couper les idées en morceaux (ex: immigration et aides sociales regroupées), tandis que Lot 2 sur-segmente (ex: points 3/4, 5/6, 10/11). Les deux capturent toutes les prises de position, mais Lot 2 en ajoute des fragments non autonomes. Fidélité équivalente, les deux recopient verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "v2",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées en morceaux (ex. immigration et aides sociales regroupées, députés et honoraires fusionnés), tandis que le lot 2 sur-segmente (ex. immigration/aides séparées, députés/honoraires/règles d'entreprise éclatés) et perd en complétude en omettant des détails (ex. 'projets des citoyens' tronqué, 'travail dissimulé' absent). Les deux lots sont verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 évite mieux la sur-segmentation en fusionnant des idées liées (ex. étrangers + règles d'aides, députés + honoraires), mais les deux lots capturent toutes les prises de position. Le lot 2 est plus fidèle car il recopie des segments plus longs sans découpage artificiel."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "v2",
+      "completude_tally": {
+        "v2": 2,
+        "tie": 1
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 2,
+        "v2": 1
+      }
+    },
+    {
+      "id": "granddebat:1-19958",
+      "chars": 875,
+      "n_v1": 8,
+      "n_v2": 5,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sur-segmente en découpant artificiellement des idées liées (ex: 'lois non appliquées' et ses causes), tandis que le lot 1 préserve mieux l'unité des prises de position sans omettre de thèmes."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sur-segmente en découpant une même interrogation (« lois non appliquées ») en trois claims distincts (2, 3, 4), tandis que le lot 1 conserve l'idée intacte. Les deux lots capturent toutes les prises de position sans omission, et les deux recopient le texte verbatim."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 2 sur-segmente en séparant les causes du non-respect des lois (claims 2, 3, 4) et en dupliquant la question sur les décisions du Conseil Constitutionnel (claims 7, 8), tandis que le lot 1 conserve les idées intactes sans découpage artificiel."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    },
+    {
+      "id": "granddebat:1-3583",
+      "chars": 1096,
+      "n_v1": 12,
+      "n_v2": 12,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots évitent la sur-segmentation et capturent toutes les prises de position, mais le lot 2 est plus fidèle car il ne tronque pas les cibles (ex: 'nombre d'élus' vs 'nombre d'élus (députés, sénateurs, conseillés généraux)')."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": false,
+          "justif": "Les deux lots capturent toutes les prises de position sans sur-segmentation ni fusion abusive, et recopient le texte verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "v2",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots évitent la sur-segmentation et capturent toutes les prises de position, mais le lot 2 est plus fidèle car il ne tronque pas les cibles entre crochets."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "v2",
+      "fidelite_tally": {
+        "v2": 2,
+        "tie": 1
+      }
+    },
+    {
+      "id": "granddebat:1-11486",
+      "chars": 977,
+      "n_v1": 11,
+      "n_v2": 11,
+      "votes": [
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "v1",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent les mêmes idées sans sur-segmentation ni omission, mais le lot 1 est légèrement plus fidèle en conservant les articles initiaux (ex: 'les indemnités' vs 'indemnités')."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent toutes les prises de position sans sur-segmentation ni fusion abusive, et sont strictement verbatim."
+        },
+        {
+          "sur_segmentation": "tie",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": true,
+          "justif": "Les deux lots capturent toutes les prises de position sans sur-segmentation ni fusion abusive, et sont strictement verbatim."
+        }
+      ],
+      "sur_segmentation": "tie",
+      "sur_segmentation_tally": {
+        "tie": 3
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "v1": 1,
+        "tie": 2
+      }
+    },
+    {
+      "id": "granddebat:1-16018",
+      "chars": 1429,
+      "n_v1": 10,
+      "n_v2": 6,
+      "votes": [
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 0,
+          "v1_is_lot1": true,
+          "justif": "Le lot 2 évite de couper les idées liées (ex: problème et solution sur la diversité sociale, ou émissions pédagogiques et critique des séries), tandis que le lot 1 sur-segmente sans perte de complétude ni fidélité."
+        },
+        {
+          "sur_segmentation": "v1",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 1,
+          "v1_is_lot1": true,
+          "justif": "Le lot 1 sur-segmente en séparant les propositions liées (aides, formations, moyens) et les exemples de programmes TV, tandis que le lot 2 conserve les idées intactes sans les découper artificiellement."
+        },
+        {
+          "sur_segmentation": "v2",
+          "completude": "tie",
+          "fidelite": "tie",
+          "judge": 2,
+          "v1_is_lot1": false,
+          "justif": "Le lot 1 évite de couper les idées liées (ex: problème et solution sur la diversité sociale restent groupés), tandis que le lot 2 sur-segmente en séparant systématiquement diagnostics et propositions, ou en éclatant des énumérations cohérentes (ex: émissions pédagogiques vs. critique des séries). Les deux lots capturent toutes les prises de position sans omission, et sont également verbatim."
+        }
+      ],
+      "sur_segmentation": "v2",
+      "sur_segmentation_tally": {
+        "v2": 2,
+        "v1": 1
+      },
+      "completude": "tie",
+      "completude_tally": {
+        "tie": 3
+      },
+      "fidelite": "tie",
+      "fidelite_tally": {
+        "tie": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "model": "mistral-large-latest",
+  "n_avis": 200,
+  "A": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.28,
+      "verbatim_pass_rate": 0.982,
+      "n_specs": 668,
+      "n_claims": 656,
+      "pct_with_target": 0.66,
+      "mean_span_chars": 121.3,
+      "pct_empty_avis": 0.04
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 4.645,
+      "verbatim_pass_rate": 0.983,
+      "n_specs": 520,
+      "n_claims": 511,
+      "pct_with_target": 0.601,
+      "mean_span_chars": 123.4,
+      "pct_empty_avis": 0.0
+    }
+  },
+  "B": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.765,
+      "verbatim_pass_rate": 0.988,
+      "n_specs": 762,
+      "n_claims": 753,
+      "pct_with_target": 0.562,
+      "mean_span_chars": 119.2,
+      "pct_empty_avis": 0.02
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 5.391,
+      "verbatim_pass_rate": 0.987,
+      "n_specs": 601,
+      "n_claims": 593,
+      "pct_with_target": 0.548,
+      "mean_span_chars": 120.1,
+      "pct_empty_avis": 0.0
+    }
+  },
+  "Bp": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.66,
+      "verbatim_pass_rate": 0.983,
+      "n_specs": 745,
+      "n_claims": 732,
+      "pct_with_target": 0.548,
+      "mean_span_chars": 117.3,
+      "pct_empty_avis": 0.025
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 5.118,
+      "verbatim_pass_rate": 0.981,
+      "n_specs": 574,
+      "n_claims": 563,
+      "pct_with_target": 0.515,
+      "mean_span_chars": 120.4,
+      "pct_empty_avis": 0.0
+    }
+  },
+  "Bs": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 2.91,
+      "verbatim_pass_rate": 0.986,
+      "n_specs": 590,
+      "n_claims": 582,
+      "pct_with_target": 0.615,
+      "mean_span_chars": 138.9,
+      "pct_empty_avis": 0.065
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 4.091,
+      "verbatim_pass_rate": 0.991,
+      "n_specs": 454,
+      "n_claims": 450,
+      "pct_with_target": 0.582,
+      "mean_span_chars": 145.8,
+      "pct_empty_avis": 0.0
+    }
+  },
+  "Bc": {
+    "ALL": {
+      "n_avis": 200,
+      "claims_per_avis": 3.185,
+      "verbatim_pass_rate": 0.982,
+      "n_specs": 649,
+      "n_claims": 637,
+      "pct_with_target": 0.62,
+      "mean_span_chars": 131.2,
+      "pct_empty_avis": 0.025
+    },
+    "granddebat": {
+      "n_avis": 110,
+      "claims_per_avis": 4.336,
+      "verbatim_pass_rate": 0.979,
+      "n_specs": 487,
+      "n_claims": 477,
+      "pct_with_target": 0.579,
+      "mean_span_chars": 135.6,
+      "pct_empty_avis": 0.0
+    }
+  }
+}

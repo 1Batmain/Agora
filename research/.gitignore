@@ -1,0 +1,4 @@
+# Cache local du ré-embed masqué (diagnostic tiktok) — non versionné.
+.cache/
+# Checkpoint ctx du décodage adaptatif (lourd, reproductible) — non versionné.
+.adaptive_ctx.pkl

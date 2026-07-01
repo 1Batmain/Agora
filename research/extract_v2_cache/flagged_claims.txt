@@ -1,0 +1,33 @@
+
+======================================================================
+granddebat:1-11830  (136 chars)
+Que les élus se préoccupent plus de leurs administrés que de leur situation personnelle (réélection) : le mandat unique est une réponse.
+
+--- V1 : 2 claims ---
+  [1] 'Que les élus se préoccupent plus de leurs administrés que de leur situation personnelle (réélection)'  (target='les élus')
+  [2] 'le mandat unique est une réponse'  (target='le mandat unique')
+
+--- V2 : 1 claims ---
+  [1] 'Que les élus se préoccupent plus de leurs administrés que de leur situation personnelle (réélection) : le mandat unique est une réponse'  (target='les élus')
+
+======================================================================
+granddebat:1-4924  (638 chars)
+Devoir de présence et de participation aux débats dans les assemblées pour les élus de la république. Un citoyen lorsqu'il est absent au travail doit se justifier il en est devrait en être de même pour un élu ! Et sanction financière en cas d'absentéisme aux débats. Plus de transparence sur les dépenses des élus. L'interdiction de l'intervention des lobbies auprès des élus. Consultation plus fréquente des citoyens sur les projets de lois. Possibilité de révoqué un élu et d'organiser de nouvelles élections sur référendum. Arrêter de protéger les élus (ou leurs proches) qui sont mis en examens ou mis en cause dans diverses affaires.
+
+--- V1 : 8 claims ---
+  [1] 'Devoir de présence et de participation aux débats dans les assemblées pour les élus de la république'  (target='présence et de participation aux débats dans les assemblées pour les élus')
+  [2] "Un citoyen lorsqu'il est absent au travail doit se justifier il en est devrait en être de même pour un élu"  (target='un élu')
+  [3] "sanction financière en cas d'absentéisme aux débats"  (target='absentéisme aux débats')
+  [4] 'Plus de transparence sur les dépenses des élus'  (target='dépenses des élus')
+  [5] "L'interdiction de l'intervention des lobbies auprès des élus"  (target='intervention des lobbies auprès des élus')
+  [6] 'Consultation plus fréquente des citoyens sur les projets de lois'  (target=None)
+  [7] "Possibilité de révoqué un élu et d'organiser de nouvelles élections sur référendum"  (target=None)
+  [8] 'Arrêter de protéger les élus (ou leurs proches) qui sont mis en examens ou mis en cause dans diverses affaires'  (target=None)
+
+--- V2 : 6 claims ---
+  [1] "Devoir de présence et de participation aux débats dans les assemblées pour les élus de la république. Un citoyen lorsqu'il est absent au travail doit se justifier il en est devrait en être de même pour un élu ! Et sanction financière en cas d'absentéisme aux débats."  (target='les élus')
+  [2] 'Plus de transparence sur les dépenses des élus.'  (target='les dépenses des élus')
+  [3] "L'interdiction de l'intervention des lobbies auprès des élus."  (target="l'intervention des lobbies auprès des élus")
+  [4] 'Consultation plus fréquente des citoyens sur les projets de lois.'  (target=None)
+  [5] "Possibilité de révoqué un élu et d'organiser de nouvelles élections sur référendum."  (target=None)
+  [6] 'Arrêter de protéger les élus (ou leurs proches) qui sont mis en examens ou mis en cause dans diverses affaires.'  (target=None)

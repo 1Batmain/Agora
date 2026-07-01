@@ -1,6 +1,8 @@
 # Données (téléchargées, non versionnées — peuvent contenir des données personnelles)
 data/
 *.csv
+# Exception : fixtures synthétiques/anonymes committées (démo d'ingestion générique).
+!pipeline/ingest/fixtures/*.csv
 
 # Python
 __pycache__/
@@ -9,8 +11,38 @@ __pycache__/
 venv/
 .env
 
+# Secrets (clé API Mistral — JAMAIS commit). Cf. backend/MISTRAL_NOTE.md.
+var/
+*.key
+
 # OS / IDE / outils
 .DS_Store
 .idea/
 .vscode/
 .claude/
+
+# datasets externes téléchargés (volumineux, non versionnés)
+data/datasets/
+
+# Artefacts de PRÉCALCUL (BUILD/SERVE) régénérés par backend.build_analysis :
+# analyse persistée + caches claims/embeddings de claims (volumineux, contiennent
+# de la sortie LLM). Les caches d'ENTRÉE (embeddings.npy/ideas.jsonl/meta.json)
+# restent versionnés pour la démo.
+backend/cache/*/analysis/
+backend/cache/*/claims.json
+backend/cache/*/claims_emb.npz
+backend/cache/*/target_emb.npz
+# Traductions FR (avis + mots-clés) bakées par build_analysis — sortie LLM régénérable.
+backend/cache/*/translations.json
+backend/cache/*/keywords_fr.json
+
+# Flags de feedback sur l'extraction (upsert par avis, éditables) — régénérables.
+backend/cache/*/flags.json
+
+# Paysage de densité 3D (UMAP 2D + KDE) — dérivés régénérables de embeddings.npy.
+backend/cache/*/umap2d.npy
+backend/cache/*/density.json
+
+# Contributions citoyennes LIVE (consultations ouvertes) — runtime, mutable.
+# Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
+backend/cache/*/submissions.jsonl

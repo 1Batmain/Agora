@@ -1,0 +1,1812 @@
+{
+  "dataset": "granddebat",
+  "seed": 42,
+  "model": "mistral-small-latest",
+  "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+  "cap_claims_per_cluster": 60,
+  "stance_prompt_system": "Tu es analyste de consultations citoyennes. On te donne UNE CIBLE (un objet de débat) et des CONTRIBUTIONS citoyennes verbatim. Pour chaque contribution, classe la PRISE DE POSITION de l'auteur ENVERS LA CIBLE en exactement une étiquette :\n  - \"favorable\"   : la contribution soutient, défend, réclame ou valorise la cible (elle est POUR) ;\n  - \"defavorable\" : la contribution rejette, critique, conteste ou veut empêcher la cible (elle est CONTRE) ;\n  - \"nuance\"      : position ambivalente, conditionnelle, hors-sujet, ou aucune position claire ENVERS LA CIBLE précise.\nJuge la position envers la CIBLE, pas la qualité de l'écriture. Si la contribution ne parle pas de la cible, c'est \"nuance\". Réponds en JSON strict : {\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|nuance\",\"justif\":\"<≤14 mots>\"}]}. Une entrée par contribution, dans l'ordre, rien d'autre.",
+  "cleavage_prompt_system": "Tu es analyste de consultations citoyennes. On te donne les MOTS-CLÉS et des CONTRIBUTIONS verbatim d'un THÈME. Identifie l'OBJET DE CLIVAGE central : la proposition ou mesure PRÉCISE sur laquelle des citoyens peuvent être POUR ou CONTRE. Formule-la comme une proposition polaire COURTE (≤12 mots), neutre et débattable, à l'infinitif ou nominale — ex. « instaurer le référendum d'initiative citoyenne », « rendre le vote obligatoire », « réduire le nombre d'élus », « tirer au sort des citoyens pour légiférer ». Si le thème mêle plusieurs propositions, choisis LA PLUS SAILLANTE. Réponds en JSON strict : {\"objet\":\"<proposition>\",\"justif\":\"<≤14 mots>\"}.",
+  "n_ideas": 3000,
+  "n_macros_analyzed": 10,
+  "summary_discrimination": {
+    "title": {
+      "mean_engagement": 0.762,
+      "mean_opposition": 0.214,
+      "fav_share_std": 0.115,
+      "fav_share_range": [
+        0.417,
+        0.767
+      ]
+    },
+    "cleavage": {
+      "mean_engagement": 0.48,
+      "mean_opposition": 0.14,
+      "fav_share_std": 0.2,
+      "fav_share_range": [
+        0.083,
+        0.7
+      ]
+    },
+    "question": {
+      "mean_engagement": 0.875,
+      "mean_opposition": 0.261,
+      "fav_share_std": 0.116,
+      "fav_share_range": [
+        0.45,
+        0.817
+      ]
+    }
+  },
+  "clusters": [
+    {
+      "node_id": "n0",
+      "n_members": 524,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "faudrait",
+        "politiques",
+        "faut",
+        "peuple",
+        "politique",
+        "faire",
+        "vie",
+        "lien"
+      ],
+      "title": "Réformer le lien entre citoyens et politiques",
+      "cleavage_object": {
+        "objet": "réduire le cumul des mandats des élus",
+        "justif": "critique récurrente sur l'absentéisme et l'éloignement des élus"
+      },
+      "targets": {
+        "title": {
+          "cible": "Réformer le lien entre citoyens et politiques",
+          "favorable": 29,
+          "defavorable": 28,
+          "nuance": 3,
+          "n": 60,
+          "engagement": 0.95,
+          "opposition": 0.491,
+          "fav_share": 0.483,
+          "def_share": 0.467
+        },
+        "cleavage": {
+          "cible": "réduire le cumul des mandats des élus",
+          "favorable": 5,
+          "defavorable": 14,
+          "nuance": 41,
+          "n": 60,
+          "engagement": 0.317,
+          "opposition": 0.263,
+          "fav_share": 0.083,
+          "def_share": 0.233
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 29,
+          "defavorable": 25,
+          "nuance": 6,
+          "n": 60,
+          "engagement": 0.9,
+          "opposition": 0.463,
+          "fav_share": 0.483,
+          "def_share": 0.417
+        }
+      },
+      "examples": [
+        {
+          "claim": "que les élus représentent des courants d'idées, un groupe de réflexion et pas un parti politique",
+          "title": {
+            "stance": "favorable",
+            "justif": "soutient une représentation par idées"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors sujet cumul mandats"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "soutient représentation par idées"
+          }
+        },
+        {
+          "claim": "Avoir à faire à des élus politiques plus dignes et moins corrompus",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique la corruption des élus"
+          },
+          "cleavage": {
+            "stance": "defavorable",
+            "justif": "critique corruption élus"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique corruption et indignité"
+          }
+        },
+        {
+          "claim": "Ras le bol des partis politiques",
+          "title": {
+            "stance": "defavorable",
+            "justif": "rejette les partis politiques"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "critique partis, pas cumul"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "rejette partis politiques"
+          }
+        },
+        {
+          "claim": "Trop d'élus cumul pour les indemnités et les plus cumulards ne peuvent assister aux réunions. ils ne vont qu'aux inauguration pour faire semblant de travailler!",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique le cumul des mandats"
+          },
+          "cleavage": {
+            "stance": "defavorable",
+            "justif": "contre cumul mandats"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique cumul des mandats"
+          }
+        },
+        {
+          "claim": "soient à l'écoute des citoyens",
+          "title": {
+            "stance": "favorable",
+            "justif": "demande écoute des citoyens"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "attente générale, pas cible précise"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "valorise écoute citoyenne"
+          }
+        },
+        {
+          "claim": "Les élus au parlement et au sénat, et le président lui-même, sont trop éloignés de la réalité de la vie quotidienne des Français",
+          "title": {
+            "stance": "defavorable",
+            "justif": "éloignement des élus de la réalité"
+          },
+          "cleavage": {
+            "stance": "defavorable",
+            "justif": "éloignement élus, critique cumul"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "éloignement des élus"
+          }
+        },
+        {
+          "claim": "les politiques de tous étages et de tous bords pour la majorite on oubliés qu' ils sont élus pour servir et représenter les citoyens",
+          "title": {
+            "stance": "defavorable",
+            "justif": "oublient leur rôle de représentation"
+          },
+          "cleavage": {
+            "stance": "defavorable",
+            "justif": "critique élus, pas cumul"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique oubli du service"
+          }
+        },
+        {
+          "claim": "Que les hommes politiques descendent de temps en temps de leur piédestal et qu'ils écoutent les citoyens",
+          "title": {
+            "stance": "favorable",
+            "justif": "demande écoute des citoyens"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "attente écoute, pas cible précise"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "demande écoute et proximité"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n1",
+      "n_members": 443,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "députés",
+        "réunions",
+        "député",
+        "communes",
+        "faire",
+        "internet",
+        "organiser",
+        "niveau"
+      ],
+      "title": "Réforme de la représentation locale",
+      "cleavage_object": {
+        "objet": "organiser des réunions locales trimestrielles avec les députés",
+        "justif": "proposition la plus citée et concrète"
+      },
+      "targets": {
+        "title": {
+          "cible": "Réforme de la représentation locale",
+          "favorable": 34,
+          "defavorable": 4,
+          "nuance": 22,
+          "n": 60,
+          "engagement": 0.633,
+          "opposition": 0.105,
+          "fav_share": 0.567,
+          "def_share": 0.067
+        },
+        "cleavage": {
+          "cible": "organiser des réunions locales trimestrielles avec les députés",
+          "favorable": 27,
+          "defavorable": 4,
+          "nuance": 29,
+          "n": 60,
+          "engagement": 0.517,
+          "opposition": 0.129,
+          "fav_share": 0.45,
+          "def_share": 0.067
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 43,
+          "defavorable": 10,
+          "nuance": 7,
+          "n": 60,
+          "engagement": 0.883,
+          "opposition": 0.189,
+          "fav_share": 0.717,
+          "def_share": 0.167
+        }
+      },
+      "examples": [
+        {
+          "claim": "Il faut tout simplement réduire la distance ou plutôt la hauteur, pour renouer le lien",
+          "title": {
+            "stance": "nuance",
+            "justif": "hors-sujet (lien social)"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "pas de position claire envers la cible"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose solution pour lien élus-citoyens"
+          }
+        },
+        {
+          "claim": "renforcer le pouvoir des parlementaires : les gvts les ont transformés en chambres d'enregistrement",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique des parlementaires"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle des parlementaires, pas des réunions"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique rôle des parlementaires"
+          }
+        },
+        {
+          "claim": "que je veux être fier et heureux d'appartenir à un Etat Nation : la France :  dont je partage la langue, les valeurs démocratiques (liberté, égalité fraternité, laïcité), l'histoire …  qui me garant",
+          "title": {
+            "stance": "nuance",
+            "justif": "sécurité nationale, pas réforme locale"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "évoque l'État, pas les réunions locales"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "parle de valeurs nationales"
+          }
+        },
+        {
+          "claim": "Réunions trimestrielles locales publiques donnant la liste de l'ordre du jour des projets de lois aux parlements, avec les parlementaires (nationaux et européens) et communiquant les résultats des vot",
+          "title": {
+            "stance": "favorable",
+            "justif": "propose transparence locale"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "propose des réunions trimestrielles locales"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose mécanisme de transparence"
+          }
+        },
+        {
+          "claim": "centre d'info adminstratif dans les petites communes pour les seniors qui n'ont pas accée a internet, centre d'aide pour les tpe et pme",
+          "title": {
+            "stance": "nuance",
+            "justif": "accès info, pas réforme"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle de centres d'info, pas des réunions"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose accès info pour citoyens"
+          }
+        },
+        {
+          "claim": "reconnecter les elus locaux avec un role national (soit depute, soit senateur)",
+          "title": {
+            "stance": "favorable",
+            "justif": "renforce rôle élus locaux"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "évoque le rôle des élus, pas les réunions"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "veut reconnecter élus locaux"
+          }
+        },
+        {
+          "claim": "surveiller l'argent public distribué aux grandes entreprises",
+          "title": {
+            "stance": "nuance",
+            "justif": "surveillance argent public"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle de surveillance de l'argent public"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique gestion argent public"
+          }
+        },
+        {
+          "claim": "se protéger juridiquement.( voir General Electric)",
+          "title": {
+            "stance": "nuance",
+            "justif": "protection juridique"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "évoque la protection juridique"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "parle de protection juridique"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n2",
+      "n_members": 392,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "confiance",
+        "écoute",
+        "écouter",
+        "arrêter",
+        "faire",
+        "mentir",
+        "langue bois",
+        "proximité"
+      ],
+      "title": "Écouter et rétablir la confiance",
+      "cleavage_object": {
+        "objet": "parler vrai et arrêter la langue de bois",
+        "justif": "mentionné 4 fois comme clé de perte de confiance"
+      },
+      "targets": {
+        "title": {
+          "cible": "Écouter et rétablir la confiance",
+          "favorable": 38,
+          "defavorable": 12,
+          "nuance": 10,
+          "n": 60,
+          "engagement": 0.833,
+          "opposition": 0.24,
+          "fav_share": 0.633,
+          "def_share": 0.2
+        },
+        "cleavage": {
+          "cible": "parler vrai et arrêter la langue de bois",
+          "favorable": 34,
+          "defavorable": 3,
+          "nuance": 23,
+          "n": 60,
+          "engagement": 0.617,
+          "opposition": 0.081,
+          "fav_share": 0.567,
+          "def_share": 0.05
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 34,
+          "defavorable": 17,
+          "nuance": 9,
+          "n": 60,
+          "engagement": 0.85,
+          "opposition": 0.333,
+          "fav_share": 0.567,
+          "def_share": 0.283
+        }
+      },
+      "examples": [
+        {
+          "claim": "CONSULTATION",
+          "title": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          }
+        },
+        {
+          "claim": "Abandonner la langue de bois et les discours \"vides\"",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique discours politiques"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "contre langue de bois"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique discours élus"
+          }
+        },
+        {
+          "claim": "Plus d'écoute",
+          "title": {
+            "stance": "favorable",
+            "justif": "demande plus d'écoute"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "écoute, pas cible"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "demande écoute"
+          }
+        },
+        {
+          "claim": "Qu il gagne le smic",
+          "title": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique salaire élus"
+          }
+        },
+        {
+          "claim": "Un peu plus d'accessibilité",
+          "title": {
+            "stance": "favorable",
+            "justif": "demande accessibilité"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "veut accessibilité"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "demande accessibilité"
+          }
+        },
+        {
+          "claim": "La confiance est perdue depuis longtemps",
+          "title": {
+            "stance": "defavorable",
+            "justif": "confiance perdue"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "perte confiance = critique"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "confiance perdue"
+          }
+        },
+        {
+          "claim": "Faire en sorte que nous vivions tous dans le même monde avec quelques différences mais pas avec des ruptures",
+          "title": {
+            "stance": "favorable",
+            "justif": "veut cohésion sociale"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "cohésion sociale"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "demande cohésion sociale"
+          }
+        },
+        {
+          "claim": "la fin des privilèges !",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique privilèges"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "contre privilèges"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "critique privilèges"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n3",
+      "n_members": 362,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "avantages",
+        "supprimer",
+        "faire",
+        "vie",
+        "nombre",
+        "frais",
+        "politique",
+        "pouvoir"
+      ],
+      "title": "Réformer le statut des élus",
+      "cleavage_object": {
+        "objet": "réduire le nombre de députés et de sénateurs",
+        "justif": "proposition la plus citée et polaire"
+      },
+      "targets": {
+        "title": {
+          "cible": "Réformer le statut des élus",
+          "favorable": 26,
+          "defavorable": 15,
+          "nuance": 19,
+          "n": 60,
+          "engagement": 0.683,
+          "opposition": 0.366,
+          "fav_share": 0.433,
+          "def_share": 0.25
+        },
+        "cleavage": {
+          "cible": "réduire le nombre de députés et de sénateurs",
+          "favorable": 10,
+          "defavorable": 3,
+          "nuance": 47,
+          "n": 60,
+          "engagement": 0.217,
+          "opposition": 0.231,
+          "fav_share": 0.167,
+          "def_share": 0.05
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 27,
+          "defavorable": 19,
+          "nuance": 14,
+          "n": 60,
+          "engagement": 0.767,
+          "opposition": 0.413,
+          "fav_share": 0.45,
+          "def_share": 0.317
+        }
+      },
+      "examples": [
+        {
+          "claim": "mandats limités en nombre dans le temps (2 ou 3 successifs)",
+          "title": {
+            "stance": "favorable",
+            "justif": "Soutient limitation des mandats"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (mandats limités)"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Proposition pour limiter mandats"
+          }
+        },
+        {
+          "claim": "plus de transparence financière",
+          "title": {
+            "stance": "favorable",
+            "justif": "Demande transparence financière"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (transparence financière)"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande de transparence financière"
+          }
+        },
+        {
+          "claim": "Ouvrir les élections professionnelles aux non syndiqués dès les premiers tours",
+          "title": {
+            "stance": "nuance",
+            "justif": "Élections professionnelles hors cible"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (élections professionnelles)"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "Élections professionnelles hors cible"
+          }
+        },
+        {
+          "claim": "Il est interdit de priver l'accès à ces espaces en désobéissant à la loi de 1975 portant sur les discriminations",
+          "title": {
+            "stance": "nuance",
+            "justif": "Discriminations hors cible"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (discriminations)"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "Discrimination, pas lien élus-citoyens"
+          }
+        },
+        {
+          "claim": "Briser la \"Tour de cristal\". L'élite politique est un monde à part, il est temps de la rendre plus proche, notamment sur internet",
+          "title": {
+            "stance": "favorable",
+            "justif": "Veut élites politiques plus proches"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "réduire élite politique (proche)"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Veut rapprocher élite politique"
+          }
+        },
+        {
+          "claim": "Changer le mode de scrutin +++",
+          "title": {
+            "stance": "favorable",
+            "justif": "Propose changement scrutin"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (mode scrutin)"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Changer mode scrutin pour lien"
+          }
+        },
+        {
+          "claim": "Un rapport de fin d'année doit être rédigé et présenté aux citoyens au plus proche soit dans les mairies",
+          "title": {
+            "stance": "favorable",
+            "justif": "Exige rapport annuel citoyen"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (rapport annuel)"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Rapport annuel aux citoyens"
+          }
+        },
+        {
+          "claim": "Retraite au prorata du temps de travail et à un âge donné et non à la fin d'un mandat",
+          "title": {
+            "stance": "nuance",
+            "justif": "Retraite hors cible"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet (retraite)"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "Retraite, pas lien élus-citoyens"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n11",
+      "n_members": 340,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "vote",
+        "référendum",
+        "blanc",
+        "proportionnelle",
+        "élections",
+        "ric",
+        "obligatoire",
+        "élection"
+      ],
+      "title": "Réforme électorale et démocratie participative",
+      "cleavage_object": {
+        "objet": "instaurer le référendum d'initiative citoyenne (RIC)",
+        "justif": "mentionné 3 fois, central dans les contributions"
+      },
+      "targets": {
+        "title": {
+          "cible": "Réforme électorale et démocratie participative",
+          "favorable": 45,
+          "defavorable": 5,
+          "nuance": 10,
+          "n": 60,
+          "engagement": 0.833,
+          "opposition": 0.1,
+          "fav_share": 0.75,
+          "def_share": 0.083
+        },
+        "cleavage": {
+          "cible": "instaurer le référendum d'initiative citoyenne (RIC)",
+          "favorable": 14,
+          "defavorable": 1,
+          "nuance": 45,
+          "n": 60,
+          "engagement": 0.25,
+          "opposition": 0.067,
+          "fav_share": 0.233,
+          "def_share": 0.017
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 49,
+          "defavorable": 3,
+          "nuance": 8,
+          "n": 60,
+          "engagement": 0.867,
+          "opposition": 0.058,
+          "fav_share": 0.817,
+          "def_share": 0.05
+        }
+      },
+      "examples": [
+        {
+          "claim": "Revenir à une présidence de 7 aans non renouvelable",
+          "title": {
+            "stance": "defavorable",
+            "justif": "contre présidence longue et non renouvelable"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "proposition hors cible"
+          }
+        },
+        {
+          "claim": "Suivre les avis de la Cour des Comptes (et des Cours régionales)",
+          "title": {
+            "stance": "nuance",
+            "justif": "parle de Cour des Comptes, pas réforme"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "proposition hors cible"
+          }
+        },
+        {
+          "claim": "Qu'ils soient élus à la proportionnelle",
+          "title": {
+            "stance": "favorable",
+            "justif": "soutient proportionnelle pour élections"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "renforce représentation citoyenne"
+          }
+        },
+        {
+          "claim": "COMPTABILISER les votes blancs",
+          "title": {
+            "stance": "favorable",
+            "justif": "valorise comptage votes blancs"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "valorise participation citoyenne"
+          }
+        },
+        {
+          "claim": "permettre aux citoyens de \"destituer\" un élu par référendum",
+          "title": {
+            "stance": "favorable",
+            "justif": "propose référendum de destitution"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "propose référendum"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "renforce contrôle citoyen"
+          }
+        },
+        {
+          "claim": "Droit de vote obligatoire",
+          "title": {
+            "stance": "defavorable",
+            "justif": "contre droit de vote obligatoire"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "proposition hors cible"
+          }
+        },
+        {
+          "claim": "Pédagogie, mieux expliquer ce qui est fait et décidé",
+          "title": {
+            "stance": "nuance",
+            "justif": "parle de pédagogie, pas réforme"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "améliore lien élus-citoyens"
+          }
+        },
+        {
+          "claim": "Repenser notre système démocratique qui n'est plus adapté à la vie moderne",
+          "title": {
+            "stance": "favorable",
+            "justif": "critique système démocratique actuel"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "réforme démocratique"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "critique système actuel"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n12",
+      "n_members": 275,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "décisions",
+        "faire",
+        "tirés",
+        "participer",
+        "représentants",
+        "citoyen",
+        "avis",
+        "donner"
+      ],
+      "title": "Citoyens tirés au sort",
+      "cleavage_object": {
+        "objet": "tirer au sort des citoyens pour participer aux décisions législatives",
+        "justif": "proposition récurrente dans les contributions"
+      },
+      "targets": {
+        "title": {
+          "cible": "Citoyens tirés au sort",
+          "favorable": 25,
+          "defavorable": 3,
+          "nuance": 32,
+          "n": 60,
+          "engagement": 0.467,
+          "opposition": 0.107,
+          "fav_share": 0.417,
+          "def_share": 0.05
+        },
+        "cleavage": {
+          "cible": "tirer au sort des citoyens pour participer aux décisions législatives",
+          "favorable": 21,
+          "defavorable": 4,
+          "nuance": 35,
+          "n": 60,
+          "engagement": 0.417,
+          "opposition": 0.16,
+          "fav_share": 0.35,
+          "def_share": 0.067
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 41,
+          "defavorable": 9,
+          "nuance": 10,
+          "n": 60,
+          "engagement": 0.833,
+          "opposition": 0.18,
+          "fav_share": 0.683,
+          "def_share": 0.15
+        }
+      },
+      "examples": [
+        {
+          "claim": "faire rentrer des citoyens tirés au sort dans les deux chambres",
+          "title": {
+            "stance": "favorable",
+            "justif": "propose des citoyens tirés au sort"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "soutient citoyens tirés au sort"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une solution favorable"
+          }
+        },
+        {
+          "claim": "consulter les citoyens plus souvent",
+          "title": {
+            "stance": "nuance",
+            "justif": "consulter citoyens sans cible précise"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "consultation citoyenne sans cible précise"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une solution favorable"
+          }
+        },
+        {
+          "claim": "Etre plus proches des gens qui vivent et travaillent dans le pays",
+          "title": {
+            "stance": "nuance",
+            "justif": "proximité sans cible précise"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "proximité sans mention tirage au sort"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une solution favorable"
+          }
+        },
+        {
+          "claim": "Leur donner un rôle pragmatique de contrôle des actions et lois",
+          "title": {
+            "stance": "favorable",
+            "justif": "rôle de contrôle pour citoyens"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "rôle de contrôle des lois"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose un rôle favorable"
+          }
+        },
+        {
+          "claim": "l'opposition devient plus constructive",
+          "title": {
+            "stance": "nuance",
+            "justif": "opposition constructive sans cible"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "opposition constructive liée tirage au sort"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une opposition constructive"
+          }
+        },
+        {
+          "claim": "La nature du représentant (roi, président, dictateur.) importe peu du moment qu'il prend les bonnes décisions pour son peuple",
+          "title": {
+            "stance": "nuance",
+            "justif": "rôle du représentant sans cible"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "critère de décision sans cible précise"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "hors-sujet sur la cible"
+          }
+        },
+        {
+          "claim": "implication plus forte des citoyens sur des problématiques qui les concernent directement",
+          "title": {
+            "stance": "nuance",
+            "justif": "implication sans cible précise"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "implication sans mention tirage au sort"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une implication favorable"
+          }
+        },
+        {
+          "claim": "Créer des instances citoyennes auprès de chaque assemblée d'élus, désignées par tirage au sort",
+          "title": {
+            "stance": "favorable",
+            "justif": "instances citoyennes par tirage"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "instances citoyennes par tirage au sort"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose une solution favorable"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n13",
+      "n_members": 176,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "mandats",
+        "mandat",
+        "limiter",
+        "cumul",
+        "élu",
+        "politique",
+        "président",
+        "nombre"
+      ],
+      "title": "Limitation des mandats politiques",
+      "cleavage_object": {
+        "objet": "limiter le cumul des mandats politiques",
+        "justif": "proposition récurrente et clivante sur le cumul"
+      },
+      "targets": {
+        "title": {
+          "cible": "Limitation des mandats politiques",
+          "favorable": 33,
+          "defavorable": 5,
+          "nuance": 22,
+          "n": 60,
+          "engagement": 0.633,
+          "opposition": 0.132,
+          "fav_share": 0.55,
+          "def_share": 0.083
+        },
+        "cleavage": {
+          "cible": "limiter le cumul des mandats politiques",
+          "favorable": 36,
+          "defavorable": 3,
+          "nuance": 21,
+          "n": 60,
+          "engagement": 0.65,
+          "opposition": 0.077,
+          "fav_share": 0.6,
+          "def_share": 0.05
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 41,
+          "defavorable": 11,
+          "nuance": 8,
+          "n": 60,
+          "engagement": 0.867,
+          "opposition": 0.212,
+          "fav_share": 0.683,
+          "def_share": 0.183
+        }
+      },
+      "examples": [
+        {
+          "claim": "le mandat unique est une réponse",
+          "title": {
+            "stance": "favorable",
+            "justif": "soutient mandat unique"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "propose mandat unique comme solution"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Propose une solution pour améliorer la représentation"
+          }
+        },
+        {
+          "claim": "un \"service obligatoire\" pour les politiques à la manière d'un apprenti ou d'un stagiaire afin qu'ils retrouvent le sens des réalités",
+          "title": {
+            "stance": "nuance",
+            "justif": "propose service obligatoire"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "soutient service obligatoire pour politiques"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Suggère une mesure pour rapprocher élus et citoyens"
+          }
+        },
+        {
+          "claim": "Il faut aussi arrêter le jeu des copinages entre politiques et entreprises",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique copinages politiques"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "critique copinages, pas cible directe"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique les copinages entre politiques et entreprises"
+          }
+        },
+        {
+          "claim": "Possibilitè d'exercer un mandat local",
+          "title": {
+            "stance": "favorable",
+            "justif": "soutient mandat local"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "autorise mandat local comme limite"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Propose une solution pour renforcer le lien local"
+          }
+        },
+        {
+          "claim": "Cela évitera la concordance avec le président",
+          "title": {
+            "stance": "favorable",
+            "justif": "évite concordance présidentielle"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "évite concordance avec président"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "Commentaire hors cible sur la concordance présidentielle"
+          }
+        },
+        {
+          "claim": "Accéder plus facilement à nos élus",
+          "title": {
+            "stance": "favorable",
+            "justif": "veut accès aux élus"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle d'accès aux élus, pas cible"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande un accès facilité aux élus"
+          }
+        },
+        {
+          "claim": "Aller plus loin dans les histoires de non cumul",
+          "title": {
+            "stance": "favorable",
+            "justif": "veut limiter cumul"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "veut approfondir non-cumul"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Soutient la limitation des mandats"
+          }
+        },
+        {
+          "claim": "Des politiciens non corrompus",
+          "title": {
+            "stance": "favorable",
+            "justif": "veut politiciens honnêtes"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "soutient politiciens non corrompus"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Exige des politiciens intègres"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n14",
+      "n_members": 175,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "élu",
+        "judiciaire",
+        "mandat",
+        "casier",
+        "vierge",
+        "vie",
+        "justice",
+        "électeurs"
+      ],
+      "title": "Responsabilité et contrôle des élus",
+      "cleavage_object": {
+        "objet": "exiger un casier judiciaire vierge pour les élus",
+        "justif": "proposition saillante sur l'intégrité des élus"
+      },
+      "targets": {
+        "title": {
+          "cible": "Responsabilité et contrôle des élus",
+          "favorable": 39,
+          "defavorable": 19,
+          "nuance": 2,
+          "n": 60,
+          "engagement": 0.967,
+          "opposition": 0.328,
+          "fav_share": 0.65,
+          "def_share": 0.317
+        },
+        "cleavage": {
+          "cible": "exiger un casier judiciaire vierge pour les élus",
+          "favorable": 17,
+          "defavorable": 3,
+          "nuance": 40,
+          "n": 60,
+          "engagement": 0.333,
+          "opposition": 0.15,
+          "fav_share": 0.283,
+          "def_share": 0.05
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 36,
+          "defavorable": 21,
+          "nuance": 3,
+          "n": 60,
+          "engagement": 0.95,
+          "opposition": 0.368,
+          "fav_share": 0.6,
+          "def_share": 0.35
+        }
+      },
+      "examples": [
+        {
+          "claim": "les lois concernant les élus devraient être votés par une autre assemblée que par eux même … pourquoi est ce le cas pour eux ?",
+          "title": {
+            "stance": "favorable",
+            "justif": "Critique du contrôle des élus par eux-mêmes"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle de l'auto-vote des lois"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique des élus et de leurs privilèges"
+          }
+        },
+        {
+          "claim": "quand je les entends critiquer notre justice je me dis que décidément ils ne pensent qu'à eux",
+          "title": {
+            "stance": "defavorable",
+            "justif": "Critique des élus et de leur justice"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "critique générale des élus"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique des élus et de leur égoïsme"
+          }
+        },
+        {
+          "claim": "Un casier judiciaire vierge doit être exigé",
+          "title": {
+            "stance": "favorable",
+            "justif": "Exige casier judiciaire vierge pour élus"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "exige casier vierge"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Exige casier judiciaire vierge pour les élus"
+          }
+        },
+        {
+          "claim": "Que les élus soient contraints de respecter le programme pour lequel, ils ont été élus",
+          "title": {
+            "stance": "favorable",
+            "justif": "Veut contrainte sur programme électoral"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle du respect du programme"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Veut contraindre élus à respecter programme"
+          }
+        },
+        {
+          "claim": "rendre les recommandations de la Cour des Comptes exécutoires",
+          "title": {
+            "stance": "favorable",
+            "justif": "Veut rendre exécutoires les recommandations"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle des recommandations de la Cour"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Veut rendre exécutoires les recommandations"
+          }
+        },
+        {
+          "claim": "empêcher un élus avec un casier judiciaire de se présenter à une élection",
+          "title": {
+            "stance": "favorable",
+            "justif": "Veut interdire élus avec casier judiciaire"
+          },
+          "cleavage": {
+            "stance": "defavorable",
+            "justif": "veut empêcher élus avec casier"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Veut empêcher élus avec casier de se présenter"
+          }
+        },
+        {
+          "claim": "Obliger les élus à être totalement exemplaires par des règles draconiennes, des contrôles beaucoup plus fréquents (X 100) et une exigence sans faille",
+          "title": {
+            "stance": "favorable",
+            "justif": "Veut règles strictes et contrôles renforcés"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "exige règles draconiennes"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Veut règles draconiennes pour les élus"
+          }
+        },
+        {
+          "claim": "Aux citoyens de prendre leur part en acceptant ou pas la réalité et d'assumer certains choix difficiles",
+          "title": {
+            "stance": "nuance",
+            "justif": "Parle des citoyens, pas des élus"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle de responsabilité citoyenne"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "Parle des citoyens, pas des élus"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n15",
+      "n_members": 168,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "transparence",
+        "dépenses",
+        "totale",
+        "actions",
+        "comptes",
+        "bienveillant",
+        "contrôle",
+        "bienveillance"
+      ],
+      "title": "Transparence des dépenses publiques",
+      "cleavage_object": {
+        "objet": "instaurer une transparence totale des comptes et actions des élus",
+        "justif": "demande récurrente de contrôle et d'exemplarité des institutions"
+      },
+      "targets": {
+        "title": {
+          "cible": "Transparence des dépenses publiques",
+          "favorable": 38,
+          "defavorable": 9,
+          "nuance": 13,
+          "n": 60,
+          "engagement": 0.783,
+          "opposition": 0.191,
+          "fav_share": 0.633,
+          "def_share": 0.15
+        },
+        "cleavage": {
+          "cible": "instaurer une transparence totale des comptes et actions des élus",
+          "favorable": 36,
+          "defavorable": 9,
+          "nuance": 15,
+          "n": 60,
+          "engagement": 0.75,
+          "opposition": 0.2,
+          "fav_share": 0.6,
+          "def_share": 0.15
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 39,
+          "defavorable": 20,
+          "nuance": 1,
+          "n": 60,
+          "engagement": 0.983,
+          "opposition": 0.339,
+          "fav_share": 0.65,
+          "def_share": 0.333
+        }
+      },
+      "examples": [
+        {
+          "claim": "Un retour de leur travail d'élus",
+          "title": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "pas de position claire sur la cible"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande de retour sur travail élus"
+          }
+        },
+        {
+          "claim": "il faut que toutes les personnes représentant l'état doivent être irréprochable",
+          "title": {
+            "stance": "favorable",
+            "justif": "irréprochabilité des élus"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "exige irréprochabilité des élus"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique exigence irréprochabilité élus"
+          }
+        },
+        {
+          "claim": "plus de réunions publiques (peut être une fois par an en débat ouvert)",
+          "title": {
+            "stance": "nuance",
+            "justif": "méthode, pas cible"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "propose plus de réunions, pas de transparence"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Proposition réunions publiques"
+          }
+        },
+        {
+          "claim": "Des comportements exemplaires",
+          "title": {
+            "stance": "favorable",
+            "justif": "comportements exemplaires"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "comportements exemplaires = transparence"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande comportements exemplaires"
+          }
+        },
+        {
+          "claim": "ils faut qu'ils puissent tous répondre à des questions simples comme le montant du smic ou le prix d un tickets de métro",
+          "title": {
+            "stance": "favorable",
+            "justif": "transparence sur salaires"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "demande réponses simples = transparence"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique manque connaissances élus"
+          }
+        },
+        {
+          "claim": "lui demander son avis sur des engagements nationaux sur le sol national, et sur l'international",
+          "title": {
+            "stance": "nuance",
+            "justif": "hors-sujet"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "demande avis, pas de transparence claire"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande consultation citoyens élus"
+          }
+        },
+        {
+          "claim": "une meilleure transparence dans la gestion des affaires",
+          "title": {
+            "stance": "favorable",
+            "justif": "transparence gestion affaires"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "transparence dans gestion des affaires"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "Demande transparence gestion affaires"
+          }
+        },
+        {
+          "claim": "faire juger les élus (tous, qu'ils soient maire député ou autre) par la même justice que n'importe quel citoyen",
+          "title": {
+            "stance": "favorable",
+            "justif": "égalité justice élus"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "justice égale = transparence renforcée"
+          },
+          "question": {
+            "stance": "defavorable",
+            "justif": "Critique justice inégale élus"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "n16",
+      "n_members": 142,
+      "n_claims_sampled": 60,
+      "keywords": [
+        "débats",
+        "débat",
+        "réunions",
+        "grand",
+        "terrain",
+        "organiser",
+        "rencontres",
+        "publiques"
+      ],
+      "title": "Grand débat public",
+      "cleavage_object": {
+        "objet": "organiser des débats publics réguliers sur le terrain",
+        "justif": "proposition récurrente dans les contributions"
+      },
+      "targets": {
+        "title": {
+          "cible": "Grand débat public",
+          "favorable": 46,
+          "defavorable": 4,
+          "nuance": 10,
+          "n": 60,
+          "engagement": 0.833,
+          "opposition": 0.08,
+          "fav_share": 0.767,
+          "def_share": 0.067
+        },
+        "cleavage": {
+          "cible": "organiser des débats publics réguliers sur le terrain",
+          "favorable": 42,
+          "defavorable": 2,
+          "nuance": 16,
+          "n": 60,
+          "engagement": 0.733,
+          "opposition": 0.045,
+          "fav_share": 0.7,
+          "def_share": 0.033
+        },
+        "question": {
+          "cible": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+          "favorable": 48,
+          "defavorable": 3,
+          "nuance": 9,
+          "n": 60,
+          "engagement": 0.85,
+          "opposition": 0.059,
+          "fav_share": 0.8,
+          "def_share": 0.05
+        }
+      },
+      "examples": [
+        {
+          "claim": "les médias devrait donner plus la parole à une minorité silencieuse qui n'est pas dans la rue",
+          "title": {
+            "stance": "nuance",
+            "justif": "parle des médias, pas du débat"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "parle de minorités, pas de débats publics"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "parle des médias, pas des élus"
+          }
+        },
+        {
+          "claim": "ils ne doivent pas tout gérer dans des beaux bureaux mais descendre sur le terrain",
+          "title": {
+            "stance": "nuance",
+            "justif": "parle de gestion, pas du débat"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "défend débats sur le terrain"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "critique élus absents du terrain"
+          }
+        },
+        {
+          "claim": "le dialogue, des rencontres sur le terrain et pour toutes les couches sociales",
+          "title": {
+            "stance": "favorable",
+            "justif": "valorise rencontres et dialogue"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "valorise rencontres citoyennes"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "prône dialogue et rencontres"
+          }
+        },
+        {
+          "claim": "Plus de débats publiques",
+          "title": {
+            "stance": "favorable",
+            "justif": "réclame plus de débats publics"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "réclame plus de débats publics"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "demande plus de débats publics"
+          }
+        },
+        {
+          "claim": "Si ce grand débat porte ses fruits, pourquoi pas réitérer ceci tous les ans avec les thématiques les plus importantes du moment",
+          "title": {
+            "stance": "favorable",
+            "justif": "soutient réitération du débat"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "soutient réitération des débats"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "soutient réitération des débats"
+          }
+        },
+        {
+          "claim": "PLUS DE REUNIONS AVEC LES DEPUTES SUR LE TERRAIN",
+          "title": {
+            "stance": "favorable",
+            "justif": "demande réunions sur le terrain"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "demande réunions députés sur le terrain"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "exige réunions sur le terrain"
+          }
+        },
+        {
+          "claim": "L abêtissement généralisé organisée par les médias très Grand public conduit à un comportement irresponsable",
+          "title": {
+            "stance": "defavorable",
+            "justif": "critique médias, pas le débat"
+          },
+          "cleavage": {
+            "stance": "nuance",
+            "justif": "critique médias, pas la cible"
+          },
+          "question": {
+            "stance": "nuance",
+            "justif": "critique médias, pas les élus"
+          }
+        },
+        {
+          "claim": "Organiser de vrais débats citoyens réguliers par themes",
+          "title": {
+            "stance": "favorable",
+            "justif": "propose débats citoyens réguliers"
+          },
+          "cleavage": {
+            "stance": "favorable",
+            "justif": "propose débats citoyens réguliers"
+          },
+          "question": {
+            "stance": "favorable",
+            "justif": "propose débats citoyens réguliers"
+          }
+        }
+      ]
+    }
+  ]
+}
