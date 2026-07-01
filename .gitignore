@@ -19,7 +19,8 @@ var/
 .DS_Store
 .idea/
 .vscode/
-.claude/
+.claude/*
+!.claude/CLAUDE.md
 
 # datasets externes téléchargés (volumineux, non versionnés)
 data/datasets/
