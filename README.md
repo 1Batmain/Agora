@@ -88,25 +88,33 @@ plusieurs consultations de référence, servies depuis leur cache précalculé :
 
 ---
 
-## Lancer en local
+## Installation & lancement en local
 
-### Prérequis
-- [`uv`](https://docs.astral.sh/uv/) (Python 3.11) pour le backend
-- Node 18+ pour le front
-
-### Backend — API FastAPI sur `:8010`
+**En une commande** (recommandé) :
 ```bash
-uv run --extra contender uvicorn backend.server:app --host 0.0.0.0 --port 8010
+git clone git@github.com:1Batmain/Analyse-des-consultations-citoyennes.git
+cd Analyse-des-consultations-citoyennes
+./scripts/setup.sh     # deps back+front · caches d'analyse (release GitHub) · secrets locaux
+make dev               # backend :8010 + front :5180 → http://localhost:5180
 ```
-Les endpoints de **lecture** (`/datasets`, `/analysis`, `/insights`, `/citations`,
-`/opinion`, `/avis_list`, `/todo`) servent **uniquement le cache précalculé** — aucun
-calcul lourd à la requête.
+Prérequis : [`uv`](https://docs.astral.sh/uv/) (Python 3.11) et Node 18+. La clé Mistral est
+**optionnelle** — le front et la **lecture des caches** marchent sans ; elle ne sert qu'à
+*construire* de nouvelles analyses. Workflow de contribution : [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-### Frontend — Vite sur `:5180`
+<details><summary><b>Lancement manuel</b> (sans <code>make</code>)</summary>
+
+Backend — API FastAPI sur `:8010`, sert **uniquement le cache précalculé** (`/datasets`,
+`/analysis`, `/insights`, `/citations`, `/opinion`, `/avis_list`, `/cost`) — aucun calcul
+lourd à la requête :
+```bash
+uv run --extra contender --extra embed-contender --extra faiss --with fastapi \
+  uvicorn backend.server:app --host 0.0.0.0 --port 8010
+```
+Frontend — Vite sur `:5180` (proxifie `/api/*` vers `:8010`) :
 ```bash
 cd frontend && npm install && npm run dev
 ```
-Le front proxifie `/api/*` vers le backend `:8010`.
+</details>
 
 ### Mode public (exposition Internet) — *fail-closed*
 Avant d'exposer le serveur, activez le durcissement via **trois variables d'env** :
@@ -131,11 +139,11 @@ build LLM). Les tests qui exigent une analyse précalculée **se skippent propre
 cache d'un dataset est absent — jamais d'échec parasite, jamais de build déclenché.
 
 ```bash
-uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
+make test    # ou : uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
 ```
 
-`backend/tests/test_integration.py` suit les vrais parcours : landing (`/datasets` +
-`/todo`), exploration d'une consultation prête (`/analysis` → thème réel → `/insights` /
+`backend/tests/test_integration.py` suit les vrais parcours : landing (`/datasets`),
+exploration d'une consultation prête (`/analysis` → thème réel → `/insights` /
 `/citations` / `/avis_list` / `/opinion`), et la posture **mode public fail-closed**.
 
 ---
@@ -149,8 +157,8 @@ uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest
   - **verbatim** : les extraits restent des sous-chaînes exactes du texte citoyen (pas de paraphrase) ;
   - **souverain** : les embeddings restent locaux, aucun texte citoyen vers un cloud tiers ;
   - **générique** : rien de spécifique à un corpus en dur — tout dérivé des données.
-- **Lanes** de travail parallèles (backend / front / recherche), coordonnées via la
-  feuille de route servie par `/todo`.
+- **Contexte agent centralisé** dans [`.agent/`](.agent/README.md) : onboarding, conventions,
+  notes de R&D et ledger des tâches — tout agent (ou humain) y trouve ses repères d'emblée.
 
 ---
 
