@@ -317,11 +317,12 @@ def submit(body: SubmitBody) -> dict:
 # n'est pas prête, ils déclenchent/poursuivent le build de fond et renvoient un état
 # clair `{status: building|absent|error}` (HTTP 202 en cours, 503 en échec).
 
-# Build au démarrage : pour chaque dataset SANS analyse prête, on lance un build de
-# fond (non bloquant). Désactivable (tests/dev) via AGORA_AUTOBUILD=0 ; restreignable à
-# une liste via AGORA_AUTOBUILD_DATASETS="a,b" (sinon tous).
-_AUTOBUILD = (os.environ.get("AGORA_AUTOBUILD", "1").strip().lower()
-              not in ("0", "false", "no", ""))
+# Build au démarrage : pour chaque dataset SANS analyse prête, on lance un build de fond.
+# OFF PAR DÉFAUT (serve-only) : un clone frais SANS clé Mistral ne doit JAMAIS partir en
+# extraction en boucle. On l'OPT-IN explicitement (AGORA_AUTOBUILD=1) là où c'est voulu ;
+# restreignable à une liste via AGORA_AUTOBUILD_DATASETS="a,b" (sinon tous).
+_AUTOBUILD = (os.environ.get("AGORA_AUTOBUILD", "0").strip().lower()
+              in ("1", "true", "yes", "on"))
 _AUTOBUILD_ONLY = {s.strip() for s in os.environ.get("AGORA_AUTOBUILD_DATASETS", "").split(",")
                    if s.strip()}
 
@@ -356,14 +357,19 @@ def _sanitize_progress(prog: dict) -> dict:
 def _not_ready_response(ds, response: Response) -> dict:
     """Réponse SERVE quand l'analyse n'est pas prête.
 
-    Hors public : (re)lance le build de fond (`ensure_build`) et renvoie la progression —
-    202 si ça construit, 503 si le dernier build a échoué. JAMAIS de calcul lourd ici.
+    MODE PUBLIC **ou AUTOBUILD OFF (défaut)** : ne déclenche AUCUN build — dataset non
+    pré-construit → 404. C'est ce qui empêche un clone SANS clé Mistral de partir en boucle
+    d'extraction pilotée par les lectures/polling du front (bug corrigé).
 
-    En MODE PUBLIC : ne déclenche AUCUN build (zéro extraction LLM pilotée par un
-    visiteur) — un dataset non pré-construit renvoie 404.
+    AUTOBUILD ON (opt-in explicite `AGORA_AUTOBUILD=1`, hors public) : (re)lance le build de
+    fond et renvoie la progression — 202 si ça construit, 503 si le dernier build a échoué.
     """
-    if auth.PUBLIC_MODE:
-        raise HTTPException(status_code=404, detail="Analyse non disponible pour ce dataset.")
+    if auth.PUBLIC_MODE or not _AUTOBUILD:
+        raise HTTPException(
+            status_code=404,
+            detail="Analyse non disponible pour ce dataset (cache absent). Récupère les "
+                   "caches via scripts/setup.sh, ou construis avec AGORA_AUTOBUILD=1 + clé Mistral.",
+        )
     build_manager.ensure_build(ds)
     prog = analysis_store.progress(ds.id)
     prog["status"] = analysis_store.state(ds.id)
