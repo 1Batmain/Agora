@@ -45,6 +45,8 @@ from backend.insights import render_insight
 from backend.cluster_enrich import description_for_node, hook_for_node
 from backend.recluster import CACHE_DIR, load_cache
 from backend.titles import title_for_node
+from backend import cost
+from pipeline.cluster import mistral_client
 
 ProgressFn = Callable[[str, str, int, int], None]
 
@@ -149,6 +151,7 @@ def build_analysis(
             on_progress(phase, detail, done, total)
 
     try:
+        mistral_client.reset_usage()  # suivi tokens/coût Mistral de CE build (tout passe par chat())
         # 1) Claims (extraction LLM + embed, cachés) + arbre variance-adaptatif (B1+B2).
         #    L'analyse PERSISTÉE/servie utilise le Leiden BATCH (global + coarsening de
         #    racines), dont la qualité macro est non-négociable.
@@ -255,6 +258,12 @@ def build_analysis(
                 report("insights", f"synthèses par thème ({enrich})", k, total)
 
         _parallel_for(node_ids, _insight_work, on_done=_insight_done)
+
+        # Coût LLM de ce build (extraction + nommage + enrichissement + insights).
+        try:
+            cost.record_phase(dataset, "analysis", mistral_client.get_usage())
+        except Exception as _e:  # le coût est un bonus, jamais bloquant
+            _log(f"{dataset} · (coût non enregistré: {_e})")
 
         took_s = round(perf_counter() - t0, 1)
         final = store.write_status(
