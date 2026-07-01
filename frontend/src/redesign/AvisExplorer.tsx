@@ -27,17 +27,26 @@ const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entie
 export function AvisExplorer({
   dataset,
   focusAvisId,
+  focusThemeId,
   onHome,
 }: {
   dataset: Consultation;
   /** Avis à mettre en évidence au chargement (deep-link `&focus=`) : carte épinglée. */
   focusAvisId?: string | null;
+  /** Thème sur lequel PRÉ-FILTRER l'explorateur (bouton « Consulter les témoignages du thème »). */
+  focusThemeId?: string | null;
   onHome: () => void;
 }) {
-  // Filtres : saisie immédiate `qInput` → `q` debouncé (300 ms) ; thème sélectionné.
+  // Filtres : saisie immédiate `qInput` → `q` debouncé (300 ms) ; thème sélectionné
+  // (initialisé sur le thème de focus quand on arrive depuis un sous-thème).
   const [qInput, setQInput] = useState('');
   const [q, setQ] = useState('');
-  const [themeId, setThemeId] = useState<string | null>(null);
+  const [themeId, setThemeId] = useState<string | null>(focusThemeId ?? null);
+
+  // Synchronise le filtre si le thème de focus change (navigation depuis un autre sous-thème).
+  useEffect(() => {
+    setThemeId(focusThemeId ?? null);
+  }, [focusThemeId]);
 
   const [themes, setThemes] = useState<SpatialTheme[]>([]);
   const [items, setItems] = useState<AvisListItem[]>([]);

@@ -17,11 +17,15 @@ export function ConsultationOverview({
   dataset,
   onHome,
   onViewGraph,
+  onExploreTheme,
   onExploreAvis,
 }: {
   dataset: Consultation;
   onHome: () => void;
-  onViewGraph: () => void;
+  /** Ouvre le graphe, focalisé sur le thème courant (null = graphe complet). */
+  onViewGraph: (themeId: string | null) => void;
+  /** Ouvre l'explorateur d'avis, filtré sur le thème courant (null = tous les avis). */
+  onExploreTheme: (themeId: string | null) => void;
   /** Clic sur une citation représentative → page d'exploration FOCALISÉE sur l'avis. */
   onExploreAvis: (avisId: string) => void;
 }) {
@@ -143,10 +147,6 @@ export function ConsultationOverview({
           </div>
         </section>
 
-        <button type="button" className="btn-primary overview__cta" onClick={onViewGraph}>
-          Voir le graphe →
-        </button>
-
         <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (
             <>
@@ -161,6 +161,24 @@ export function ConsultationOverview({
                   selectTheme(cur?.parent_id ?? null);
                 }}
               />
+              {/* Accès graphe + explorateur SOUS le sélecteur, SCOPÉS au thème courant :
+                  vue générale → graphe/explorateur complet ; sous-thème → celui du thème. */}
+              <div className="overview__actions">
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => onViewGraph(selectedThemeId)}
+                >
+                  {selectedTheme ? 'Voir le graphe du thème →' : 'Voir le graphe →'}
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => onExploreTheme(selectedThemeId)}
+                >
+                  {selectedTheme ? 'Consulter les témoignages du thème →' : 'Consulter les témoignages →'}
+                </button>
+              </div>
             </>
           )}
 
