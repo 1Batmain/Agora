@@ -1386,6 +1386,19 @@ body {
   font-size: 1.55rem; color: var(--agora, #000091); line-height: 1.1;
 }
 .overview__stat span { color: #777; font-size: .85rem; margin-top: .25rem; }
+/* Note d'ÉCHANTILLON — transparence : l'analyse ne porte pas sur tout le corpus. */
+.overview__sample {
+  display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+  margin: -1rem 0 2rem; padding: .7rem 1rem;
+  background: #fff8e8; border: 1px solid #f0dca8; border-radius: 6px;
+  color: #6b5a22; font-size: .9rem; line-height: 1.55;
+}
+.overview__sample strong { color: #5a4a12; font-weight: 700; }
+.overview__sample-tag {
+  flex: none; font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: .12rem .5rem; border-radius: 999px; background: #f0dca8; color: #6b5a22;
+}
 .overview__cta { margin: 0 0 2.6rem; }
 .overview__synthesis h2 {
   font-family: ui-monospace, "IBM Plex Mono", monospace;

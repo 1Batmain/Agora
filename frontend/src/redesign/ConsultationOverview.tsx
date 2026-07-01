@@ -161,6 +161,21 @@ export function ConsultationOverview({
           </div>
         </section>
 
+        {/* Transparence : quand l'analyse porte sur un ÉCHANTILLON (coût), on le dit
+            clairement — pas de faux « tout est analysé ». Masqué si couverture 100 %. */}
+        {dataset.n_sample != null &&
+          dataset.n_contributions != null &&
+          dataset.n_sample < dataset.n_contributions && (
+            <p className="overview__sample" role="note">
+              <span className="overview__sample-tag">Échantillon</span>
+              L'analyse porte sur un échantillon représentatif de{' '}
+              <strong>{dataset.n_sample.toLocaleString(LOCALE)}</strong> réponses —{' '}
+              <strong>{Math.round((dataset.n_sample / dataset.n_contributions) * 100)}&nbsp;%</strong>{' '}
+              des {dataset.n_contributions.toLocaleString(LOCALE)} au total. Les proportions
+              par thème sont celles de cet échantillon.
+            </p>
+          )}
+
         <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (
             <>
