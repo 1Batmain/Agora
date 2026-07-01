@@ -436,6 +436,20 @@ def get_insights(
     return data
 
 
+@app.get("/cost")
+def get_cost(dataset: str | None = Query(None)) -> dict:
+    """SERVE-only : coût LLM PRÉCALCULÉ du build (`analysis/cost.json`) — tokens + $ estimé.
+
+    Transparence des coûts d'analyse (tout le trafic Mistral est compté à `chat()`).
+    404 si non mesuré (dataset construit avant l'instrumentation)."""
+    ds = _resolve(dataset)
+    from backend import cost as _cost
+    data = _cost.read_cost(ds.id)
+    if data is None:
+        raise HTTPException(status_code=404, detail="coût non mesuré pour ce dataset.")
+    return data
+
+
 @app.get("/citations")
 def get_citations(
     response: Response,
