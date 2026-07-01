@@ -127,6 +127,10 @@ export function ConsultationOverview({
   const macros = themes.filter((t) => !t.parent_id);
   const navTotal =
     (totals.participants ?? totals.n_avis ?? macros.reduce((s, m) => s + (m.n_avis ?? 0), 0)) || 0;
+  // Témoignages RÉELLEMENT analysés = avis DISTINCTS (`n_sample`). `navTotal` (somme des
+  // `n_avis` par thème) DOUBLE-COMPTE les avis présents dans plusieurs thèmes → ne JAMAIS
+  // l'afficher comme total honnête (c'est le bug des « 4377 » vs 3000 analysés / 28384 total).
+  const nAnalyzed = dataset.n_sample ?? navTotal;
 
   return (
     <div className="agora overview">
@@ -230,7 +234,7 @@ export function ConsultationOverview({
                 {/* Dashboard de VOLUME à CE niveau de synthèse : nombre RÉEL de témoignages
                     (avis distincts) du cluster, sa part du panel, et le nombre d'idées (claims). */}
                 {(() => {
-                  const avisN = selectedTheme ? (selectedTheme.n_avis ?? 0) : navTotal;
+                  const avisN = selectedTheme ? (selectedTheme.n_avis ?? 0) : nAnalyzed;
                   const claimsN = selectedTheme ? (selectedTheme.n_claims ?? 0) : null;
                   const pct = selectedTheme && navTotal > 0
                     ? Math.round((avisN / navTotal) * 100) : null;
@@ -238,10 +242,16 @@ export function ConsultationOverview({
                   return (
                     <div className="overview__dash" aria-label="Volume de ce niveau de synthèse">
                       <span className="overview__dash-item">
-                        <strong>{avisN.toLocaleString(LOCALE)}</strong> témoignages
+                        <strong>{avisN.toLocaleString(LOCALE)}</strong> témoignages{!selectedTheme && ' analysés'}
                       </span>
                       {pct != null && (
                         <span className="overview__dash-item overview__dash-pct">{pct}% du panel</span>
+                      )}
+                      {!selectedTheme && nReponses != null && nReponses > avisN && (
+                        <span className="overview__dash-item overview__dash-pct">
+                          sur {nReponses.toLocaleString(LOCALE)} réponses (
+                          {Math.round((avisN / nReponses) * 100)}%)
+                        </span>
                       )}
                       {claimsN != null && (
                         <span className="overview__dash-item">
