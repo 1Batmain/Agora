@@ -1,5 +1,5 @@
 /**
- * FROZEN cross-lane contract (queue/front-redesign.md). The redesigned "Agora pour
+ * FROZEN cross-lane contract (`.agent/queue/front-redesign.md`). The redesigned "Agora pour
  * députés" front codes EXACTLY against these shapes. The backend computes the
  * variance-driven hierarchy; the front only navigates it.
  *

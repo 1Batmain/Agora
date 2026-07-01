@@ -42,7 +42,7 @@ class Idea:
             "author_hash", "source", "weight",
         }
         # Le JSONL canonique de la lane data niche les champs sous `props`
-        # (cf. queue/cross-lane.md). Le fixture de dev cluster est plat. On
+        # (cf. `.agent/queue/cross-lane.md`). Le fixture de dev cluster est plat. On
         # supporte les deux : `props` a la priorité, repli sur le top-level.
         props = row.get("props") or {}
 
