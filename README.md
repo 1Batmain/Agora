@@ -1,4 +1,4 @@
-# Agora — l'analyse fidèle des consultations citoyennes
+# Agora — outil d'analyse fidèle des consultations citoyennes
 
 [![Démo live](https://img.shields.io/badge/D%C3%A9mo_live-forge.tail0b8aa8.ts.net-2ea44f?style=for-the-badge)](https://forge.tail0b8aa8.ts.net)
 &nbsp;
