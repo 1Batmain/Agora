@@ -1,0 +1,21 @@
+name: Deploy
+# Auto-déploiement du VPS quand main change (donc après merge d'une PR validée).
+# Tourne sur un RUNNER SELF-HOSTED installé sur le VPS (labels self-hosted + agora-vps).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, agora-vps]
+    steps:
+      - name: Déploiement (pull + build + restart services)
+        run: /home/bat/projects/Analyse-des-consultations-citoyennes/deploy/deploy.sh
+        env:
+          AGORA_API_TOKEN: ${{ secrets.AGORA_API_TOKEN }}
+          AGORA_HASH_SALT: ${{ secrets.AGORA_HASH_SALT }}
