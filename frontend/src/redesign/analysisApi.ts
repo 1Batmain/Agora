@@ -21,9 +21,6 @@ import type {
   Citation,
   DataSource,
   InsightLevel,
-  TodoItem,
-  TodoPayload,
-  TodoStatus,
 } from './contract';
 import { mockAnalysis, mockAvis, mockCitations, mockInsights } from './mock';
 import { rawFetch } from './http';
@@ -244,66 +241,6 @@ export async function fetchAvisList(
   } catch (e) {
     return { data: null, source: 'error', progress: { status: 'error', error: String(e) } };
   }
-}
-
-/**
- * GET /todo → la feuille de route collaborative (`{items, updated_at}`). Lecture
- * pure, indépendante de l'analyse : pas de building/error, juste une liste vide en
- * cas de souci réseau.
- */
-export async function fetchTodo(): Promise<TodoPayload> {
-  try {
-    const { status, body } = await rawFetch('/todo');
-    if (status === 200 && body && Array.isArray(body.items)) {
-      return body as TodoPayload;
-    }
-  } catch {
-    /* réseau indisponible → feuille de route vide */
-  }
-  return { items: [] };
-}
-
-/**
- * POST /todo — ajoute une tâche (outil collaboratif, ouvert + rate-limité). Renvoie
- * la tâche créée, ou `null` si le backend a refusé (titre vide / lane inconnue / réseau).
- */
-export async function postTodo(input: {
-  title: string;
-  lane: string;
-  note?: string;
-}): Promise<TodoItem | null> {
-  try {
-    const { status, body } = await rawFetch('/todo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(input),
-    });
-    if (status === 200 && body && body.ok && body.item) return body.item as TodoItem;
-  } catch {
-    /* réseau indisponible */
-  }
-  return null;
-}
-
-/**
- * PATCH /todo/{id} — réclame (`assignee`) et/ou change le statut. Renvoie la tâche
- * modifiée, ou `null` (id inconnu / statut invalide / réseau).
- */
-export async function patchTodo(
-  id: string,
-  patch: { status?: TodoStatus; assignee?: string },
-): Promise<TodoItem | null> {
-  try {
-    const { status, body } = await rawFetch(`/todo/${encodeURIComponent(id)}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
-    });
-    if (status === 200 && body && body.ok && body.item) return body.item as TodoItem;
-  } catch {
-    /* réseau indisponible */
-  }
-  return null;
 }
 
 /** GET /avis/{id} {dataset} → full avis text + claims (spans + target), or building/error. */

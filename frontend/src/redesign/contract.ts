@@ -304,41 +304,6 @@ export interface Consultation {
   default_naming?: NamingMethod;
 }
 
-/*
- * ───────────────────────────────────────────────────────────────────────────
- * Feuille de route collaborative in-app
- *
- *   GET /todo -> { items: TodoItem[], updated_at?: string }
- *
- * Source unique = `todo.json` à la racine du repo, éditée à la main au merge des
- * PR. Lecture pure côté backend (pas de dataset, pas de calcul).
- * ───────────────────────────────────────────────────────────────────────────
- */
-
-/** État d'une tâche : à faire | en cours | fait. */
-export type TodoStatus = 'todo' | 'wip' | 'done';
-
-/**
- * Une tâche de la feuille de route. `pr` = numéro/réf de PR ; `note` = détail libre ;
- * `assignee` = nom court de qui a RÉCLAMÉ la tâche (« Je prends »), absent tant que
- * personne ne l'a prise.
- */
-export interface TodoItem {
-  id: string;
-  title: string;
-  lane: string;
-  status: TodoStatus;
-  pr?: string | number;
-  note?: string;
-  assignee?: string;
-}
-
-/** `GET /todo` → la feuille de route entière. */
-export interface TodoPayload {
-  items: TodoItem[];
-  updated_at?: string | null;
-}
-
 /**
  * `POST /submit` → corrélation instantanée d'une contribution citoyenne.
  *

@@ -62,7 +62,6 @@ from backend import (
     flags_store,
     live_cluster,
     serve_metrics,
-    todo_store,
 )
 
 
@@ -227,61 +226,6 @@ def datasets() -> list[dict]:
              for name in list_open_consultations()]
     # Ouvertes en tête : ce sont celles où l'on peut encore agir.
     return open_ + closed
-
-
-# ===================== Feuille de route collaborative (/todo) ===================== #
-@app.get("/todo")
-def get_todo() -> dict:
-    """Feuille de route in-app : LIT `todo.json` à la racine du repo (instantané, pas de dataset).
-
-    Renvoie `{items: TodoItem[], updated_at?}` où `TodoItem` = `{id, title, lane,
-    status: 'todo'|'wip'|'done', pr?, note?}`. Lecture tolérante (fichier absent →
-    liste vide). Endpoint de LECTURE pur, cohérent avec les autres GET (non protégé).
-    """
-    return todo_store.read_todo()
-
-
-class TodoCreateBody(BaseModel):
-    """Corps de `POST /todo` — ajoute une tâche à la feuille de route collaborative."""
-    title: str
-    lane: str
-    note: str | None = None
-
-
-@app.post("/todo", dependencies=[Depends(rate_limit)])
-def create_todo(body: TodoCreateBody) -> dict:
-    """Ajoute une tâche (`status='todo'`, id dérivé du titre) et persiste `todo.json`.
-
-    OUVERT (outil collaboratif) mais RATE-LIMITÉ comme `/submit`. Validation : titre
-    non vide, lane dans le set connu (sinon 422). Renvoie `{ok, item}`.
-    """
-    try:
-        item = todo_store.add_todo(body.title, body.lane, body.note)
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
-    return {"ok": True, "item": item}
-
-
-class TodoPatchBody(BaseModel):
-    """Corps de `PATCH /todo/{id}` — réclame/assigne et/ou change le statut."""
-    status: str | None = None
-    assignee: str | None = None
-
-
-@app.patch("/todo/{item_id}", dependencies=[Depends(rate_limit)])
-def update_todo(item_id: str, body: TodoPatchBody) -> dict:
-    """Réclame (`assignee`) et/ou change le statut (`todo→wip→done`) d'une tâche.
-
-    Read-modify-write atomique de `todo.json`. OUVERT + rate-limité. 404 si l'id est
-    inconnu, 422 si le statut est hors `{todo, wip, done}`. Renvoie `{ok, item}`.
-    """
-    try:
-        item = todo_store.patch_todo(item_id, status=body.status, assignee=body.assignee)
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
-    if item is None:
-        raise HTTPException(status_code=404, detail=f"Tâche inconnue : {item_id!r}")
-    return {"ok": True, "item": item}
 
 
 # ===================== Participation (consultations OUVERTES) ===================== #
