@@ -2024,3 +2024,7 @@ body {
   font-size: 1.25rem; color: #111; margin-right: 0.25rem;
 }
 .overview__dash-pct strong, .overview__dash-pct { color: var(--agora, #000091); }
+
+/* ── Boutons d'accès (graphe · témoignages) sous le sélecteur de thème ── */
+.overview__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1rem 0 0.4rem; }
+.overview__actions .btn-primary, .overview__actions .btn-secondary { white-space: nowrap; }

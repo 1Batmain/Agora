@@ -27,6 +27,8 @@ export default function App() {
   const [activeId, setActiveId] = useState<string | null>(null);
   // Avis focalisé sur la page d'exploration (`view=avis&focus=`), sinon null.
   const [focusAvis, setFocusAvis] = useState<string | null>(null);
+  // Thème courant à focaliser dans le graphe / l'explorateur (null = complet).
+  const [focusTheme, setFocusTheme] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -100,10 +102,12 @@ export default function App() {
     window.history.pushState({ route: r, activeId: d.id } as HistState, '', `?c=${d.id}`);
   }, []);
 
-  const viewGraph = useCallback((id: string) => {
+  const viewGraph = useCallback((id: string, themeId: string | null = null) => {
     setActiveId(id);
+    setFocusTheme(themeId);
     setRoute('analysis');
-    window.history.pushState({ route: 'analysis', activeId: id } as HistState, '', `?c=${id}&g=1`);
+    const url = `?c=${id}&g=1${themeId ? `&t=${encodeURIComponent(themeId)}` : ''}`;
+    window.history.pushState({ route: 'analysis', activeId: id, focusTheme: themeId } as HistState, '', url);
   }, []);
 
   // Entrée depuis une citation de la synthèse : page d'exploration FOCALISÉE sur l'avis.
@@ -111,9 +115,24 @@ export default function App() {
     setActiveId(datasetId);
     setRoute('avis');
     setFocusAvis(avisId);
+    setFocusTheme(null);
     const url = `?c=${datasetId}&view=avis${avisId ? `&focus=${encodeURIComponent(avisId)}` : ''}`;
     window.history.pushState(
       { route: 'avis', activeId: datasetId, focus: avisId } as HistState,
+      '',
+      url,
+    );
+  }, []);
+
+  // Bouton « Consulter les témoignages » : explorateur FILTRÉ sur le thème courant.
+  const exploreTheme = useCallback((datasetId: string, themeId: string | null) => {
+    setActiveId(datasetId);
+    setRoute('avis');
+    setFocusAvis(null);
+    setFocusTheme(themeId);
+    const url = `?c=${datasetId}&view=avis${themeId ? `&t=${encodeURIComponent(themeId)}` : ''}`;
+    window.history.pushState(
+      { route: 'avis', activeId: datasetId, focusTheme: themeId } as HistState,
       '',
       url,
     );
@@ -137,18 +156,24 @@ export default function App() {
       <ConsultationOverview
         dataset={active}
         onHome={backToLanding}
-        onViewGraph={() => viewGraph(active.id)}
+        onViewGraph={(themeId) => viewGraph(active.id, themeId)}
+        onExploreTheme={(themeId) => exploreTheme(active.id, themeId)}
         onExploreAvis={(avisId) => exploreAvis(active.id, avisId)}
       />
     );
   }
   if (route === 'avis' && active) {
     return (
-      <AvisExplorer dataset={active} focusAvisId={focusAvis} onHome={backToLanding} />
+      <AvisExplorer
+        dataset={active}
+        focusAvisId={focusAvis}
+        focusThemeId={focusTheme}
+        onHome={backToLanding}
+      />
     );
   }
   if (route === 'analysis' && active) {
-    return <RedesignApp initialDataset={active.id} onBack={backToLanding} />;
+    return <RedesignApp initialDataset={active.id} initialThemeId={focusTheme} onBack={backToLanding} />;
   }
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;
