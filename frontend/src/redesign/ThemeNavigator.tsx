@@ -1,8 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { SpatialTheme } from './contract';
-
-/** Combien d'enfants on montre avant le bouton « Voir plus ». */
-const TOP_N = 5;
 
 /**
  * Navigateur de clusters FLUIDE — le cluster cliqué ne devient JAMAIS un titre :
@@ -57,17 +54,12 @@ export function ThemeNavigator({
     return m;
   }, [themes]);
 
-  // Seul état interne : « Voir plus » du niveau. On replie quand le niveau change.
-  const [showAll, setShowAll] = useState(false);
-  useEffect(() => setShowAll(false), [currentId]);
-
   const roots = childrenOf.get(null) ?? [];
   if (!roots.length || total <= 0) return null;
 
   const current = currentId != null ? byId.get(currentId) ?? null : null;
 
-  // Chemin racine→courant (inclus) — vide à la racine. Chaque ancêtre reste un
-  // item de menu épinglé (jamais un titre).
+  // Chemin racine→courant (pour le fil d'Ariane / retour).
   const path: SpatialTheme[] = [];
   {
     let c: SpatialTheme | null = current;
@@ -78,81 +70,68 @@ export function ThemeNavigator({
     }
   }
 
-  // Enfants du cluster courant (ou racines à l'accueil), denom = voix du parent.
+  // Enfants du cluster courant (ou racines à l'accueil), triés par voix décroissantes
+  // (les 3 plus gros arrivent donc en tête). Dénominateur du % = voix du parent.
   const kids = childrenOf.get(currentId ?? null) ?? [];
   const denom = current ? current.n_avis ?? 0 : total;
-  const visible = showAll ? kids : kids.slice(0, TOP_N);
-
-  // Dénominateur du % d'un item du chemin = voix de SON parent (ou total racine).
-  const pathDenom = (t: SpatialTheme) => {
-    const p = t.parent_id != null ? byId.get(t.parent_id) ?? null : null;
-    return p ? p.n_avis ?? 0 : total;
-  };
 
   const grandParent =
     current && current.parent_id != null ? byId.get(current.parent_id) ?? null : null;
   const backLabel = grandParent ? grandParent.title || grandParent.label : 'Vue générale';
 
-  const row = (
-    t: SpatialTheme,
-    rowDenom: number,
-    opts: { selected?: boolean; child?: boolean; open?: boolean },
-  ) => {
+  // Une CARTE de cluster : nom · % du parent · nombre de voix · cohésion (0-100).
+  const card = (t: SpatialTheme) => {
     const name = t.title || t.label;
-    const pct = rowDenom > 0 ? Math.round(((t.n_avis ?? 0) / rowDenom) * 100) : 0;
-    const caret = opts.open ? '▾' : t.has_children ? '▸' : '';
+    const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
+    const coh = Math.round((t.consensus ?? 0) * 100);
+    const selected = t.id === currentId;
     return (
       <button
         type="button"
         key={t.id}
-        className={
-          'tnav__row' +
-          (opts.selected ? ' tnav__row--selected' : '') +
-          (opts.child ? ' tnav__row--child' : '')
-        }
-        aria-current={opts.selected ? 'true' : undefined}
+        role="listitem"
+        className={`tnav-card${selected ? ' tnav-card--selected' : ''}`}
+        aria-current={selected ? 'true' : undefined}
         title={name}
         onClick={() => {
           onSelect?.(t.id);
           onDrill?.(t.id);
         }}
       >
-        <span className="tnav__caret" aria-hidden>
-          {caret}
+        <span className="tnav-card__name">{name}</span>
+        <div className="tnav-card__figs">
+          <span className="tnav-card__pct">{pct}%</span>
+          <span className="tnav-card__voix">{(t.n_avis ?? 0).toLocaleString('fr-FR')} voix</span>
+        </div>
+        <span className="tnav-card__track" aria-hidden>
+          <span className="tnav-card__fill" style={{ width: `${pct}%` }} />
         </span>
-        <span className="tnav__label">{name}</span>
-        <span className="tnav__track">
-          <span className="tnav__fill" style={{ width: `${pct}%` }} />
-        </span>
-        <span className="tnav__pct">{pct}%</span>
+        <span className="tnav-card__coh">cohésion {coh}%</span>
+        {t.has_children && <span className="tnav-card__drill" aria-hidden>▸ sous-thèmes</span>}
       </button>
     );
   };
 
   return (
     <div className="tnav" aria-label="Navigateur de clusters">
-      {/* Chemin épinglé en haut : ancêtres + cluster courant marqué (jamais un titre). */}
+      {/* Fil d'Ariane / retour quand on est descendu dans un cluster. */}
       {path.length > 0 && (
-        <div className="tnav__path">
+        <div className="tnav__crumb">
           <button type="button" className="tnav__back" onClick={() => onBack?.()}>
             ← {backLabel}
           </button>
-          {path.map((t) => row(t, pathDenom(t), { selected: t.id === currentId, open: true }))}
+          {current && <span className="tnav__here">{current.title || current.label}</span>}
         </div>
       )}
 
-      {/* Enfants du courant (ou racines à l'accueil), indentés sous le chemin. */}
-      {visible.length > 0 ? (
-        visible.map((t) => row(t, denom, { child: path.length > 0 }))
+      {/* Cartes côte à côte : les 3 plus gros en tête, DÉFILEMENT HORIZONTAL pour tous. */}
+      {kids.length > 0 ? (
+        <div className="tnav-cards" role="list" aria-label="Clusters (défilement horizontal)">
+          {kids.map(card)}
+        </div>
       ) : path.length > 0 ? (
         <p className="tnav__empty">Cluster terminal — aucun sous-cluster.</p>
       ) : null}
-
-      {kids.length > TOP_N && (
-        <button type="button" className="tnav__more" onClick={() => setShowAll((s) => !s)}>
-          {showAll ? 'Voir moins' : `Voir plus (${kids.length - TOP_N})`}
-        </button>
-      )}
     </div>
   );
 }

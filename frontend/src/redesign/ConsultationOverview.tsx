@@ -7,6 +7,16 @@ import { Markdown } from './Markdown';
 import { ThemeNavigator } from './ThemeNavigator';
 import { LOCALE } from './strings';
 
+/** Retire la section « ## Points saillants » de la synthèse LLM (choix produit : on ne
+ * l'affiche plus). De la ligne de titre jusqu'au prochain « ## » (ou la fin). */
+function stripSaillants(md: string | null): string | null {
+  if (!md) return md;
+  return md
+    .replace(/(^|\n)#{1,3}\s*Points?\s+saillants[^\n]*\n[\s\S]*?(?=\n#{1,3}\s|$)/i, '$1')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 /**
  * Page d'APERÇU d'une consultation CLOSE (sous-page entre la landing et le graphe).
  * Présente la consultation — questions/contexte, panel (langues), nombre de réponses,
@@ -184,7 +194,7 @@ export function ConsultationOverview({
 
           {(() => {
             const dynLoading = selectedThemeId == null ? loading : themeLoading;
-            const dynSource = selectedThemeId == null ? synthesis : themeSynthesis;
+            const dynSource = stripSaillants(selectedThemeId == null ? synthesis : themeSynthesis);
             const dynTitle = selectedTheme
               ? selectedTheme.title || selectedTheme.label
               : "Vue d'ensemble";
