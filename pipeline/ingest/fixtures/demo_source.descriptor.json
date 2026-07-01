@@ -1,0 +1,16 @@
+{
+  "name": "demo_sante",
+  "format": "csv",
+  "path": "pipeline/ingest/fixtures/demo_source.csv",
+  "encoding": "utf-8",
+  "delimiter": "|",
+  "has_header": true,
+  "columns": {
+    "id": "reponse_id",
+    "ts": "horodatage",
+    "lang": "langue",
+    "text": "avis_citoyen",
+    "weight": "poids"
+  },
+  "_note": "Source FACTICE de demonstration (acceptation) : autre sujet (sante/ruralite), autres colonnes NOMMEES, delimiteur '|', colonne poids + langue fournies. Ingere par read_generic via ce SEUL descripteur, sans toucher au code. Vit dans fixtures/ (hors descriptors/) => non auto-decouvert par le build reel."
+}

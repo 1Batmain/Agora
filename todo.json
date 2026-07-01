@@ -1,0 +1,92 @@
+{
+  "updated_at": "2026-06-30",
+  "items": [
+    {
+      "id": "back-spatial",
+      "title": "Refonte backend — endpoints carte spatiale (/analysis, /insights, /citations)",
+      "lane": "backend",
+      "status": "done",
+      "pr": 41,
+      "note": "UMAP + hiérarchie variance-adaptative, SERVE-only depuis le cache précalculé."
+    },
+    {
+      "id": "pipe-extract-b",
+      "title": "Adopter le prompt d'extraction relâché B + re-extraction des 3 datasets",
+      "lane": "pipeline",
+      "status": "done",
+      "pr": 53,
+      "note": "+15 % de rappel, verbatim tenu à 98.8 % ; bruit filtré en aval."
+    },
+    {
+      "id": "pipe-stance",
+      "title": "Passe stance sur le sujet-de-cluster (agrégation pour/contre)",
+      "lane": "pipeline",
+      "status": "wip",
+      "note": "S'agrège net sur le titre du cluster (98 %/90 %) ; cible per-claim rétrogradée à signal de clustering."
+    },
+    {
+      "id": "front-nav",
+      "title": "Navigation cluster fluide (chemin épinglé, enfants déroulés, scroll doux)",
+      "lane": "frontend",
+      "status": "done",
+      "pr": 67,
+      "note": "Zéro flash de synthèse au changement de cluster."
+    },
+    {
+      "id": "front-todo",
+      "title": "Page /todo — feuille de route collaborative in-app",
+      "lane": "frontend",
+      "status": "wip",
+      "note": "GET /todo sert todo.json ; route + TodoPage groupés par statut, badges, liens PR."
+    },
+    {
+      "id": "front-landing",
+      "title": "Refonte de la landing (grille de consultations + section Collaborer)",
+      "lane": "frontend",
+      "status": "wip",
+      "note": "DA Bleu France ; lien vers la feuille de route depuis « Collaborer »."
+    },
+    {
+      "id": "research-repnum",
+      "title": "Benchmark République numérique (alignement axes officiels)",
+      "lane": "research",
+      "status": "todo",
+      "note": "Ingéré via le knob keep_where ; sur-concentration macro au niveau 1 à creuser."
+    },
+    {
+      "id": "research-souverain",
+      "title": "Valider la chaîne souveraine (ministral-3 Mac zéro-shot vs Mistral API)",
+      "lane": "research",
+      "status": "todo",
+      "note": "clf MLP/nomic 0.939 et ministral-3 0.934 battent Mistral 0.928 en local."
+    },
+    {
+      "id": "edge-weight-transform",
+      "title": "A/B : transformer le poids des arêtes kNN (cosinus² / noyau gaussien) avant Leiden",
+      "lane": "research",
+      "status": "todo",
+      "note": "Les arêtes sont déjà pondérées au cosinus brut et Leiden les utilise. Tester si accentuer les liens forts — poids = cosinus², ou un noyau gaussien sur la distance — améliore la modularité ET l'alignement à la taxo officielle (repnum), vs cosinus brut. Harnais type k-sweep (research/)."
+    },
+    {
+      "id": "claim-def-for-stance",
+      "title": "A/B : définition du claim optimisée pour la stance (atomicité + objet net + flag stance-bearing)",
+      "lane": "research",
+      "status": "todo",
+      "note": "Les 11% d'erreur stance sont des sur-attributions dues à des claims qui débordent sur une mesure adjacente. Tester B' (1 position atomique / 1 objet net / marquer stance-bearing) vs B actuel, évalué sur la PRÉCISION de stance (gold annoté main), pas juste le rappel. Si gain → ré-extraire. Levier identifié par Bob."
+    },
+    {
+      "id": "like-weighted-embeddings",
+      "title": "R&D : pondérer les embeddings par un facteur (ex. likes) — déformer l'espace = gravité/masse",
+      "lane": "research",
+      "status": "todo",
+      "note": "Idée de Bob : un claim très liké doit peser plus dans l'espace sémantique qu'un claim sans like. Donner plus de 'masse'/gravité au point (déformation locale de l'espace) → il attire davantage le clustering. Pistes à tester : pondérer la contribution du point au centroïde/modularité par f(likes) ; ou dupliquer/scaler le vecteur ; mesurer l'effet sur les thèmes + l'alignement gold. Générique (facteur = n'importe quel signal d'engagement, pas que likes)."
+    },
+    {
+      "id": "argument-mining",
+      "title": "Argument mining : ressortir les arguments les plus mis en avant POUR et CONTRE par thème",
+      "lane": "research",
+      "status": "todo",
+      "note": "3e niveau de l'insight d'opinion (après engagement + répartition). Extraire/regrouper les arguments saillants du côté favorable et du côté défavorable d'un thème clivant (sur les claims engagés), et les surfacer dans la synthèse. Idée de Bob."
+    }
+  ]
+}

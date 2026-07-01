@@ -1,0 +1,30 @@
+{
+  "id": "granddebat",
+  "label": "Grand Débat National (FR)",
+  "n_nodes": 3000,
+  "languages": [
+    "fr",
+    "und",
+    "es",
+    "pt",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 2916,
+    "und": 66,
+    "es": 15,
+    "pt": 2,
+    "it": 1
+  },
+  "source": "granddebat",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "n_loaded": 28384,
+  "built_with": {
+    "min_chars": 12,
+    "dedup_exact": true,
+    "balance": null,
+    "cap": 3000,
+    "seed": 42
+  }
+}

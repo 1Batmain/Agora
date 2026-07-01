@@ -1,0 +1,99 @@
+{
+  "_doc": "Vérité terrain de SEGMENTATION SÉMANTIQUE, labellisée par l'architecte. Registre = consultation TikTok (bien-être des jeunes en ligne, FR). mono = 1 thème (aucune frontière interne attendue → teste les faux positifs). multi = avis construit par segments à thème connu ; le TEXTE COMPLET = jointure des segment.text avec UN espace ; les FRONTIÈRES gold tombent aux jointures (offsets cumulés). Certaines transitions sont sans ponctuation nette pour exiger une détection sémantique, pas lexicale.",
+  "join": " ",
+  "taxonomy": {
+    "harcelement": "cyberharcèlement, insultes, moqueries, haine en ligne",
+    "addiction": "temps perdu, scroll compulsif, dépendance à l'appli",
+    "image_corps": "comparaison physique, complexes, pression esthétique, TCA",
+    "algorithme": "contenu anxiogène poussé/amplifié, enfermement algorithmique",
+    "contenus_choquants": "vidéos violentes, dégradantes, défis dangereux",
+    "enfants": "exposition des jeunes/enfants, âge, contrôle parental",
+    "desinformation": "fausses informations, complotisme, propagande",
+    "sante_mentale": "mal-être, dépression, anxiété, estime de soi"
+  },
+  "items": [
+    {"id": "mono-01", "type": "mono", "theme": "harcelement", "text": "Ma fille de 13 ans reçoit des commentaires odieux dès qu'elle poste une vidéo, des insultes sur son physique et des menaces, c'est du harcèlement pur et simple et personne ne modère rien."},
+    {"id": "mono-02", "type": "mono", "theme": "harcelement", "text": "On s'est moqué de moi en classe à cause d'un montage humiliant qui a tourné sur l'appli, les moqueries ne s'arrêtent jamais parce que tout le monde le revoit en boucle."},
+    {"id": "mono-03", "type": "mono", "theme": "addiction", "text": "Je passe des heures à scroller sans m'en rendre compte, je prends mon téléphone pour deux minutes et je le repose une heure après, je n'arrive plus à m'arrêter."},
+    {"id": "mono-04", "type": "mono", "theme": "addiction", "text": "Le format des vidéos courtes est conçu pour qu'on enchaîne sans fin, j'ouvre l'application machinalement même quand je n'en ai pas envie, c'est devenu un réflexe compulsif."},
+    {"id": "mono-05", "type": "mono", "theme": "image_corps", "text": "À force de voir des corps parfaits et retouchés à longueur de journée je me trouve moche, je me compare en permanence et ça a complètement détruit la confiance que j'avais en mon apparence."},
+    {"id": "mono-06", "type": "mono", "theme": "image_corps", "text": "Les vidéos sur les régimes et la maigreur sont partout, ma sœur a commencé à sauter des repas en suivant des comptes qui glorifient le fait d'être très mince."},
+    {"id": "mono-07", "type": "mono", "theme": "algorithme", "text": "Dès qu'on regarde une vidéo un peu triste l'algorithme nous en propose dix autres encore plus sombres, on se retrouve enfermé dans une spirale de contenu négatif sans l'avoir cherché."},
+    {"id": "mono-08", "type": "mono", "theme": "algorithme", "text": "Le système de recommandation amplifie tout ce qui choque ou angoisse parce que ça retient l'attention, il décide à notre place ce qu'on voit et c'est toujours le plus anxiogène."},
+    {"id": "mono-09", "type": "mono", "theme": "contenus_choquants", "text": "On tombe sans prévenir sur des vidéos extrêmement violentes, des images dégradantes voire des scènes insoutenables, et rien n'avertit avant que ça s'affiche."},
+    {"id": "mono-10", "type": "mono", "theme": "contenus_choquants", "text": "Des défis dangereux circulent et poussent les jeunes à se mettre en danger pour quelques vues, certains se sont blessés en reproduisant ce qu'ils ont vu."},
+    {"id": "mono-11", "type": "mono", "theme": "enfants", "text": "Des enfants de huit ou neuf ans ont déjà un compte alors que c'est interdit, il n'y a aucun vrai contrôle de l'âge et les parents n'ont pas les outils pour les protéger."},
+    {"id": "mono-12", "type": "mono", "theme": "enfants", "text": "Il faudrait un vrai contrôle parental et une vérification d'âge sérieuse, mon fils au collège est exposé à des contenus qui ne sont pas du tout de son âge."},
+    {"id": "mono-13", "type": "mono", "theme": "desinformation", "text": "On voit passer énormément de fausses informations présentées comme des vérités, des théories complotistes qui se propagent et que les jeunes croient sans vérifier."},
+    {"id": "mono-14", "type": "mono", "theme": "desinformation", "text": "Des comptes diffusent de la propagande déguisée en témoignages, c'est de la manipulation et beaucoup d'ados répètent ces idées fausses comme si c'était prouvé."},
+    {"id": "mono-15", "type": "mono", "theme": "sante_mentale", "text": "Depuis que j'utilise beaucoup l'application je me sens plus déprimée, plus anxieuse, mon estime de moi s'est effondrée et je n'ai plus goût à grand-chose."},
+    {"id": "mono-16", "type": "mono", "theme": "sante_mentale", "text": "Mon moral a vraiment baissé cette année, je ressens une tristesse permanente et une grosse fatigue mentale dont je n'arrive pas à sortir."},
+
+    {"id": "multi-01", "type": "multi", "segments": [
+      {"theme": "addiction", "text": "Je passe beaucoup trop de temps à scroller le soir et je n'arrive pas à lâcher mon téléphone."},
+      {"theme": "sante_mentale", "text": "Du coup je dors mal, je suis épuisé et je me sens de plus en plus déprimé au quotidien."}
+    ]},
+    {"id": "multi-02", "type": "multi", "segments": [
+      {"theme": "harcelement", "text": "Ma fille subit des moqueries et des commentaires méchants à chaque publication."},
+      {"theme": "image_corps", "text": "Résultat elle complexe énormément sur son corps et se compare sans arrêt aux filles parfaites qu'elle voit."}
+    ]},
+    {"id": "multi-03", "type": "multi", "segments": [
+      {"theme": "algorithme", "text": "L'algorithme pousse en boucle des vidéos de plus en plus sombres dès qu'on en regarde une."},
+      {"theme": "sante_mentale", "text": "À la longue ça entretient le mal-être et ça plonge vraiment dans l'anxiété."}
+    ]},
+    {"id": "multi-04", "type": "multi", "segments": [
+      {"theme": "enfants", "text": "Des enfants beaucoup trop jeunes ont accès à la plateforme sans aucun contrôle."},
+      {"theme": "contenus_choquants", "text": "Et ils tombent sur des vidéos violentes et des défis dangereux totalement inadaptés à leur âge."}
+    ]},
+    {"id": "multi-05", "type": "multi", "segments": [
+      {"theme": "addiction", "text": "Le scroll est sans fin et j'y laisse des heures chaque jour."},
+      {"theme": "image_corps", "text": "Et plus je regarde plus je me trouve moche à côté de tous ces corps retouchés."},
+      {"theme": "sante_mentale", "text": "Forcément je me sens nulle et ça m'a fait sombrer dans une vraie déprime."}
+    ]},
+    {"id": "multi-06", "type": "multi", "segments": [
+      {"theme": "desinformation", "text": "On y voit énormément de fausses informations relayées comme des évidences."},
+      {"theme": "algorithme", "text": "Et l'algorithme amplifie justement ces contenus complotistes parce qu'ils font réagir."}
+    ]},
+    {"id": "multi-07", "type": "multi", "segments": [
+      {"theme": "harcelement", "text": "J'ai été harcelé pendant des mois avec des insultes en commentaire."},
+      {"theme": "sante_mentale", "text": "Ça m'a détruit moralement, j'ai fait une dépression et j'ai eu des pensées très noires."}
+    ]},
+    {"id": "multi-08", "type": "multi", "segments": [
+      {"theme": "enfants", "text": "Mon fils de onze ans est déjà accro à l'appli alors qu'il est bien trop jeune."},
+      {"theme": "addiction", "text": "Il enchaîne les vidéos pendant des heures et c'est impossible de lui faire lâcher l'écran."}
+    ]},
+    {"id": "multi-09", "type": "multi", "segments": [
+      {"theme": "image_corps", "text": "Je passe mon temps à me comparer aux influenceuses au corps parfait."},
+      {"theme": "addiction", "text": "Et je n'arrive même pas à arrêter de regarder, je scrolle ces vidéos pendant des heures."}
+    ]},
+    {"id": "multi-10", "type": "multi", "segments": [
+      {"theme": "contenus_choquants", "text": "On voit passer des images vraiment choquantes et dégradantes sans aucun avertissement."},
+      {"theme": "sante_mentale", "text": "Ça hante l'esprit, j'en fais des angoisses et je dors beaucoup moins bien depuis."}
+    ]},
+    {"id": "multi-11", "type": "multi", "segments": [
+      {"theme": "harcelement", "text": "Un faux compte a été créé pour se moquer de moi et diffuser des insultes."},
+      {"theme": "desinformation", "text": "En plus on y racontait des mensonges sur moi que tout le monde a cru sans vérifier."}
+    ]},
+    {"id": "multi-12", "type": "multi", "segments": [
+      {"theme": "algorithme", "text": "Le fil te sert exactement ce qui te fragilise parce que ça te garde scotché."},
+      {"theme": "image_corps", "text": "Pour moi c'était des vidéos sur la minceur qui m'ont poussée à détester mon corps."},
+      {"theme": "addiction", "text": "Et impossible de décrocher, je revenais sans arrêt enchaîner ces contenus."}
+    ]},
+    {"id": "multi-13", "type": "multi", "segments": [
+      {"theme": "enfants", "text": "Les plus jeunes n'ont rien pour les protéger sur cette plateforme."},
+      {"theme": "harcelement", "text": "Et au collège ça tourne vite au harcèlement de groupe avec des vidéos humiliantes."}
+    ]},
+    {"id": "multi-14", "type": "multi", "segments": [
+      {"theme": "addiction", "text": "Je perds un temps fou à scroller au lieu de dormir ou de réviser."},
+      {"theme": "algorithme", "text": "L'appli est faite pour ça, elle relance sans cesse une nouvelle vidéo pile au bon moment."}
+    ]},
+    {"id": "multi-15", "type": "multi", "segments": [
+      {"theme": "sante_mentale", "text": "Je traverse une période de grosse déprime et de fatigue mentale."},
+      {"theme": "image_corps", "text": "Voir tous ces physiques parfaits ne fait qu'empirer le dégoût que j'ai de moi-même."}
+    ]},
+    {"id": "multi-16", "type": "multi", "segments": [
+      {"theme": "contenus_choquants", "text": "Mon ado est tombé sur des défis dangereux qui poussent à se faire mal."},
+      {"theme": "enfants", "text": "À son âge il ne devrait jamais avoir accès à ce genre de choses sans surveillance."}
+    ]}
+  ]
+}

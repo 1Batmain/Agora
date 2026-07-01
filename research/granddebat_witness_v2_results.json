@@ -1,0 +1,498 @@
+{
+  "summary": {
+    "n_macros": 19,
+    "n_macros_scored": 13,
+    "n_singletons_ignored": 5,
+    "official_subthemes_total": 14,
+    "official_subthemes_covered": 14,
+    "coverage_pct": 100.0,
+    "covered": [
+      "casier_probite",
+      "cumul_limitation_mandats",
+      "debats_concertation",
+      "decentralisation_territoriale",
+      "lien_proximite_confiance",
+      "nombre_elus",
+      "participation_consultation",
+      "privileges_remunerations",
+      "reddition_comptes",
+      "renouvellement_classe_politique",
+      "ric_referendum",
+      "scrutin_proportionnelle",
+      "tirage_au_sort",
+      "transparence_depenses"
+    ],
+    "missing": [],
+    "out_of_scope_expected_absent": [
+      "immigration_laicite",
+      "civisme_engagement"
+    ],
+    "additions": [
+      {
+        "id": "n347",
+        "title": "Limitation à 80 km/h imposée",
+        "n_avis": 14
+      }
+    ],
+    "singletons_ignored": [
+      {
+        "id": "n350",
+        "title": "Financement des partis politiques"
+      },
+      {
+        "id": "n351",
+        "title": "Structure bicamérale sous Napoléon"
+      },
+      {
+        "id": "n352",
+        "title": "Tactique des blousons noirs"
+      },
+      {
+        "id": "n353",
+        "title": "Cursus des énarques en dernière année"
+      },
+      {
+        "id": "n354",
+        "title": "Tradition judéo-chrétienne et lois récentes"
+      }
+    ],
+    "mean_alignment_all_pairs": 4.5,
+    "mean_alignment_coverage": 4.57,
+    "n_pairs_judged": 16,
+    "faithful": 10,
+    "finer_split": 3,
+    "partial": 3,
+    "mismatch": 0,
+    "best_by_official": {
+      "participation_consultation": {
+        "alignment": 5,
+        "macro": "n32",
+        "verdict": "faithful"
+      },
+      "debats_concertation": {
+        "alignment": 5,
+        "macro": "n32",
+        "verdict": "faithful"
+      },
+      "lien_proximite_confiance": {
+        "alignment": 5,
+        "macro": "n0",
+        "verdict": "faithful"
+      },
+      "privileges_remunerations": {
+        "alignment": 5,
+        "macro": "n136",
+        "verdict": "faithful"
+      },
+      "transparence_depenses": {
+        "alignment": 5,
+        "macro": "n182",
+        "verdict": "faithful"
+      },
+      "reddition_comptes": {
+        "alignment": 4,
+        "macro": "n182",
+        "verdict": "finer_split"
+      },
+      "nombre_elus": {
+        "alignment": 3,
+        "macro": "n232",
+        "verdict": "partial"
+      },
+      "renouvellement_classe_politique": {
+        "alignment": 4,
+        "macro": "n199",
+        "verdict": "partial"
+      },
+      "scrutin_proportionnelle": {
+        "alignment": 4,
+        "macro": "n254",
+        "verdict": "finer_split"
+      },
+      "tirage_au_sort": {
+        "alignment": 4,
+        "macro": "n254",
+        "verdict": "finer_split"
+      },
+      "casier_probite": {
+        "alignment": 5,
+        "macro": "n270",
+        "verdict": "faithful"
+      },
+      "cumul_limitation_mandats": {
+        "alignment": 5,
+        "macro": "n293",
+        "verdict": "faithful"
+      },
+      "ric_referendum": {
+        "alignment": 5,
+        "macro": "n313",
+        "verdict": "faithful"
+      },
+      "decentralisation_territoriale": {
+        "alignment": 5,
+        "macro": "n322",
+        "verdict": "faithful"
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "n32",
+      "title": "Participation citoyenne et organisation des débats",
+      "n_avis": 702,
+      "n_claims": 770,
+      "official": [
+        "participation_consultation",
+        "debats_concertation"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les mécanismes concrets (consultations, plateformes, budgets participatifs) et en y ajoutant des modalités d'application (éducation civique, projets locaux, transparence).",
+          "official": "participation_consultation"
+        },
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les modalités de participation citoyenne, les formats de débats et les instances de dialogue, avec une correspondance directe sur les attentes de concertation de proximité.",
+          "official": "debats_concertation"
+        }
+      ]
+    },
+    {
+      "id": "n0",
+      "title": "Réformer le lien entre élus et citoyens",
+      "n_avis": 699,
+      "n_claims": 778,
+      "official": [
+        "lien_proximite_confiance"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant ses dimensions (proximité, exemplarité, écoute, responsabilité) sans divergence.",
+          "official": "lien_proximite_confiance"
+        }
+      ]
+    },
+    {
+      "id": "n83",
+      "title": "Comprendre les réalités des citoyens",
+      "n_avis": 564,
+      "n_claims": 652,
+      "official": [
+        "lien_proximite_confiance"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément les attentes du sous-thème officiel, en insistant sur l'écoute, la proximité, la confiance et l'exemplarité des élus.",
+          "official": "lien_proximite_confiance"
+        }
+      ]
+    },
+    {
+      "id": "n136",
+      "title": "Réduction des avantages et privilèges des élus",
+      "n_avis": 367,
+      "n_claims": 445,
+      "official": [
+        "privileges_remunerations"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les mêmes enjeux de réduction des avantages, rémunérations et retraites des élus, ainsi que leur moralisation.",
+          "official": "privileges_remunerations"
+        }
+      ]
+    },
+    {
+      "id": "n182",
+      "title": "Transparence totale des élus",
+      "n_avis": 293,
+      "n_claims": 311,
+      "official": [
+        "transparence_depenses",
+        "reddition_comptes"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent 'Transparence totale des élus' couvre intégralement et précisément le sous-thème officiel 'Transparence et contrôle de l'argent public', en insistant sur la publication, la justification des dépenses et le contrôle indépendant.",
+          "official": "transparence_depenses"
+        },
+        {
+          "alignment": 4,
+          "verdict": "finer_split",
+          "justification": "Le thème émergent couvre largement la reddition de comptes des élus (transparence financière, sanctions, évaluation) mais l'élargit à des aspects fiscaux et d'exemplarité qui dépassent partiellement le sous-thème officiel.",
+          "official": "reddition_comptes"
+        }
+      ]
+    },
+    {
+      "id": "n232",
+      "title": "Présence et rôle des députés",
+      "n_avis": 285,
+      "n_claims": 305,
+      "official": [
+        "nombre_elus"
+      ],
+      "judges": [
+        {
+          "alignment": 3,
+          "verdict": "partial",
+          "justification": "Le thème émergent se concentre sur la présence et le rôle des députés en circonscription, couvrant partiellement le sous-thème officiel qui inclut aussi la réduction du nombre d'élus et le fonctionnement global du Parlement.",
+          "official": "nombre_elus"
+        }
+      ]
+    },
+    {
+      "id": "n199",
+      "title": "Bienveillance politique et médias",
+      "n_avis": 269,
+      "n_claims": 309,
+      "official": [
+        "renouvellement_classe_politique"
+      ],
+      "judges": [
+        {
+          "alignment": 4,
+          "verdict": "partial",
+          "justification": "Le thème émergent aborde bien la critique des lobbies et la nécessité de renouveler les représentants, mais élargit excessivement le sujet aux médias et à la bienveillance perçue comme manipulatrice, qui ne font pas partie du sous-thème officiel.",
+          "official": "renouvellement_classe_politique"
+        }
+      ]
+    },
+    {
+      "id": "n254",
+      "title": "Représentation proportionnelle et tirage au sort",
+      "n_avis": 260,
+      "n_claims": 274,
+      "official": [
+        "scrutin_proportionnelle",
+        "tirage_au_sort"
+      ],
+      "judges": [
+        {
+          "alignment": 4,
+          "verdict": "finer_split",
+          "justification": "Le thème émergent couvre entièrement la demande de proportionnelle aux législatives (sous-thème officiel) mais l'élargit à d'autres élections et mécanismes (tirage au sort, jugements majoritaires), le rendant plus granulaire.",
+          "official": "scrutin_proportionnelle"
+        },
+        {
+          "alignment": 4,
+          "verdict": "finer_split",
+          "justification": "Le thème émergent couvre bien le sous-thème officiel du tirage au sort, mais l'étend à des propositions plus larges (réforme électorale, scrutin proportionnel) tout en détaillant des modalités précises (ex. : tirage au sort pour le Sénat, assemblées citoyennes trimestrielles).",
+          "official": "tirage_au_sort"
+        }
+      ]
+    },
+    {
+      "id": "n270",
+      "title": "Élus condamnés et inéligibilité",
+      "n_avis": 231,
+      "n_claims": 267,
+      "official": [
+        "casier_probite"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre exactement et entièrement le sous-thème officiel, en insistant sur l'inéligibilité des condamnés et l'exigence d'un casier judiciaire vierge pour les élus.",
+          "official": "casier_probite"
+        }
+      ]
+    },
+    {
+      "id": "n293",
+      "title": "Durée et cumul des mandats",
+      "n_avis": 225,
+      "n_claims": 257,
+      "official": [
+        "cumul_limitation_mandats"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les propositions citoyennes sur la limitation et le non-cumul des mandats.",
+          "official": "cumul_limitation_mandats"
+        }
+      ]
+    },
+    {
+      "id": "n313",
+      "title": "Référendums citoyens et constitution",
+      "n_avis": 202,
+      "n_claims": 214,
+      "official": [
+        "ric_referendum"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, incluant toutes les dimensions du RIC (législatif, abrogatoire, révocatoire, constituant) et l'élargissement des référendums.",
+          "official": "ric_referendum"
+        }
+      ]
+    },
+    {
+      "id": "n322",
+      "title": "Réorganisation territoriale et pouvoirs publics",
+      "n_avis": 163,
+      "n_claims": 199,
+      "official": [
+        "decentralisation_territoriale"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément les enjeux de réorganisation territoriale, de clarification des compétences et de proximité, en alignement parfait avec le sous-thème officiel.",
+          "official": "decentralisation_territoriale"
+        }
+      ]
+    },
+    {
+      "id": "n346",
+      "title": "Reconnaissance du vote blanc",
+      "n_avis": 98,
+      "n_claims": 112,
+      "official": [
+        "scrutin_proportionnelle"
+      ],
+      "judges": [
+        {
+          "alignment": 3,
+          "verdict": "partial",
+          "justification": "Le thème émergent couvre uniquement la 'reconnaissance du vote blanc' et ses implications, mais ignore les autres aspects du sous-thème officiel comme la proportionnelle ou le vote obligatoire en tant que mécanisme distinct.",
+          "official": "scrutin_proportionnelle"
+        }
+      ]
+    },
+    {
+      "id": "n347",
+      "title": "Limitation à 80 km/h imposée",
+      "n_avis": 14,
+      "n_claims": 14,
+      "official": null,
+      "judges": [],
+      "note": "out_of_axis"
+    },
+    {
+      "id": "n350",
+      "title": "Financement des partis politiques",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n351",
+      "title": "Structure bicamérale sous Napoléon",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n352",
+      "title": "Tactique des blousons noirs",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n353",
+      "title": "Cursus des énarques en dernière année",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n354",
+      "title": "Tradition judéo-chrétienne et lois récentes",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    }
+  ],
+  "official": {
+    "scrutin_proportionnelle": "Mode de scrutin : introduire une dose de proportionnelle aux législatives pour une Assemblée plus représentative ; reconnaissance du vote blanc ; débat sur le vote obligatoire.",
+    "ric_referendum": "Référendum d'initiative citoyenne (RIC) et recours élargi au référendum : législatif, abrogatoire, révocatoire, constituant.",
+    "cumul_limitation_mandats": "Limitation et non-cumul des mandats dans le temps pour renouveler la classe politique et éviter la professionnalisation.",
+    "nombre_elus": "Réduction du nombre d'élus et de parlementaires ; rôle et fonctionnement du Parlement (Assemblée, Sénat, quorum).",
+    "privileges_remunerations": "Privilèges, rémunérations, frais et retraites des élus jugés excessifs : suppression / plafonnement / contrôle (moralisation).",
+    "transparence_depenses": "Transparence et contrôle de l'argent public : publication et justification des dépenses, lutte contre le gaspillage.",
+    "reddition_comptes": "Responsabilité et reddition de comptes des élus : respect des promesses de campagne, bilans réguliers, sanctions en cas de manquement.",
+    "casier_probite": "Probité et casier judiciaire : casier vierge exigé, inéligibilité, sanctions pénales des élus condamnés.",
+    "participation_consultation": "Démocratie participative : associer les citoyens aux décisions entre les élections (consultations, plateformes, budgets participatifs).",
+    "debats_concertation": "Réunions publiques, débats et concertation de proximité ; intermédiaires et instances de dialogue élu-citoyen.",
+    "tirage_au_sort": "Tirage au sort de citoyens / assemblées citoyennes pour représenter et contrôler (CESE, conseils citoyens).",
+    "lien_proximite_confiance": "Restaurer le lien, la confiance et l'écoute : élus proches du terrain, à l'écoute des réalités vécues, exemplarité.",
+    "decentralisation_territoriale": "Organisation territoriale : clarifier les compétences État/régions/départements/communes, simplifier le millefeuille, proximité.",
+    "renouvellement_classe_politique": "Renouvellement et diversification de la classe politique : profils issus de la société civile, statut de l'élu, lutte contre les lobbies et la « politique politicienne »."
+  },
+  "mapping": {
+    "n0": [
+      "lien_proximite_confiance"
+    ],
+    "n83": [
+      "lien_proximite_confiance"
+    ],
+    "n32": [
+      "participation_consultation",
+      "debats_concertation"
+    ],
+    "n136": [
+      "privileges_remunerations"
+    ],
+    "n182": [
+      "transparence_depenses",
+      "reddition_comptes"
+    ],
+    "n232": [
+      "nombre_elus"
+    ],
+    "n199": [
+      "renouvellement_classe_politique"
+    ],
+    "n254": [
+      "scrutin_proportionnelle",
+      "tirage_au_sort"
+    ],
+    "n270": [
+      "casier_probite"
+    ],
+    "n293": [
+      "cumul_limitation_mandats"
+    ],
+    "n313": [
+      "ric_referendum"
+    ],
+    "n322": [
+      "decentralisation_territoriale"
+    ],
+    "n346": [
+      "scrutin_proportionnelle"
+    ],
+    "n347": []
+  }
+}

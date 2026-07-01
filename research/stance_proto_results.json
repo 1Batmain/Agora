@@ -1,0 +1,372 @@
+{
+  "dataset": "tiktok",
+  "seed": 42,
+  "stance_model": "mistral-small-latest",
+  "stance_prompt_system": "Tu es analyste de consultations citoyennes. On te donne UN SUJET (l'objet de débat d'un thème) et des CONTRIBUTIONS citoyennes verbatim (multilingues). Pour chaque contribution, classe la PRISE DE POSITION de l'auteur ENVERS LE SUJET en exactement une étiquette :\n  - \"favorable\"   : la contribution VALORISE, défend, minimise, ou s'adonne sans regret au sujet (le voit positivement / en veut plus) ;\n  - \"defavorable\" : la contribution DÉNONCE, critique, déplore le sujet ou veut le limiter / s'en protéger (le voit négativement) ;\n  - \"nuance\"      : position ambivalente, conditionnelle, ou aucune position claire envers le sujet.\nJuge la position envers le SUJET, pas la qualité de l'écriture. Réponds en JSON strict : {\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|nuance\",\"justif\":\"<≤15 mots, langue de la contribution>\"}]}. Une entrée par contribution, dans l'ordre, rien d'autre.",
+  "n_ideas": 1621,
+  "n_macros": 10,
+  "clusters": [
+    {
+      "theme": "addiction",
+      "node_id": "n38",
+      "label_ctfidf": "application · addiction · scroller",
+      "keywords": [
+        "application",
+        "addiction",
+        "scroller",
+        "sentiment",
+        "arrêter",
+        "téléphone"
+      ],
+      "subject": "Dépendance aux applications de vidéos courtes",
+      "n_members": 160,
+      "stance_counts": {
+        "favorable": 0,
+        "defavorable": 157,
+        "nuance": 3
+      },
+      "stance_dominant_frac": 0.981,
+      "examples": [
+        {
+          "avis_id": "tiktok:20",
+          "claim": "Sentiment de mal-être expliqué par le fait que regarder des vidéos courtes pendant 1h fait perdre notre productivité, notre temps (précieux), ne nous apprend absolument rien. Cela peut entrainer une d",
+          "stance": "defavorable",
+          "justif": "Critique la dépendance et perte de temps"
+        },
+        {
+          "avis_id": "tiktok:42",
+          "claim": "incapacité à s'extraire de son téléphone et à profiter de la vie réelle",
+          "stance": "defavorable",
+          "justif": "Incapacité à profiter de la vie réelle"
+        },
+        {
+          "avis_id": "tiktok:58",
+          "claim": "Il est compliqué de se détacher des contenus qui tournent en boucle. Envie d'y retourner régulièrement et grande perte de temps",
+          "stance": "defavorable",
+          "justif": "Difficulté à se détacher, perte de temps"
+        },
+        {
+          "avis_id": "tiktok:92",
+          "claim": "Dependance aux vidéos de courts formats et perte de concentration. Sentiment de manque dès qu'on ne se connecte pas dans la journée",
+          "stance": "defavorable",
+          "justif": "Dépendance et sentiment de manque"
+        },
+        {
+          "avis_id": "tiktok:122",
+          "claim": "Quand je passe trop de temps sur l'application, j'ai le sentiment d'être vide et de me distraire du monde qui m'entoure.",
+          "stance": "defavorable",
+          "justif": "Sentiment de vide et distraction"
+        },
+        {
+          "avis_id": "tiktok:149",
+          "claim": "Addiction à des publications morbides avec mise en avant systématique de contenus non sollicités + arnaque sur personne vulnérable pour aider financièrement de faux dépressifs",
+          "stance": "defavorable",
+          "justif": "Contenus morbides et arnaques"
+        },
+        {
+          "avis_id": "tiktok:150",
+          "claim": "Addiction très forte , agressivité colere",
+          "stance": "defavorable",
+          "justif": "Addiction, agressivité, colère"
+        },
+        {
+          "avis_id": "tiktok:188",
+          "claim": "Lié à une utilisation compulsive de l'application",
+          "stance": "defavorable",
+          "justif": "Utilisation compulsive"
+        },
+        {
+          "avis_id": "tiktok:256",
+          "claim": "Malgré toute notre vigilance, nos enfants sont confrontés à des contenus choquants et sans aucun intérêt! Ils nous posent des questions pour évacuer la gêne qu'ils ont ressenti mais on voit bien que c",
+          "stance": "defavorable",
+          "justif": "Addiction des enfants, fakes news"
+        },
+        {
+          "avis_id": "tiktok:304",
+          "claim": "Vraie sensation d'addiction : je voulais m'arrêter j'avais les yeux qui brûlaient, j'avais pas envie de regarder mais je pouvais pas m'arrêter. Je me disais j'arrête à telle heure et puis je décalait ",
+          "stance": "defavorable",
+          "justif": "Sensation d'addiction incontrôlable"
+        },
+        {
+          "avis_id": "tiktok:367",
+          "claim": "Mal être lié à l'impossibilité d'arrêter d'y aller, addiction ?",
+          "stance": "defavorable",
+          "justif": "critique l'addiction"
+        },
+        {
+          "avis_id": "tiktok:656",
+          "claim": "Mal être lié au temps inutile gaspillé sur l'application et l'incapacité de s'en défaire à cause d'une trop grande addiction.",
+          "stance": "defavorable",
+          "justif": "dénonce gaspillage temps"
+        }
+      ],
+      "cibles_per_claim": {
+        "n_members": 160,
+        "n_members_with_claim": 160,
+        "n_claims": 301,
+        "n_cibles_unusable": 45,
+        "n_cibles_usable": 256,
+        "n_distinct_usable_cibles": 217,
+        "frac_unusable": 0.15,
+        "top_distinct": [
+          [
+            "cette application",
+            12
+          ],
+          [
+            "l'application",
+            9
+          ],
+          [
+            "l'addiction",
+            5
+          ],
+          [
+            "addiction",
+            4
+          ],
+          [
+            "application",
+            3
+          ],
+          [
+            "sensation d'addiction",
+            2
+          ],
+          [
+            "une dépendance psychologique chronique",
+            2
+          ],
+          [
+            "le mal être",
+            2
+          ],
+          [
+            "le contenu",
+            2
+          ],
+          [
+            "contenu",
+            2
+          ],
+          [
+            "temps perdu",
+            2
+          ],
+          [
+            "passer 1heure à scroller",
+            2
+          ]
+        ],
+        "sample_cibles": [
+          "regarder des vidéos courtes pendant 1h",
+          "Cela",
+          "cette addiction",
+          "incapacité à s'extraire de son téléphone et à profiter de la vie réelle",
+          "contenus qui tournent en boucle",
+          "Envie d'y retourner régulièrement",
+          null,
+          "manque",
+          null,
+          "publications morbides",
+          "arnaque sur personne vulnérable",
+          "Addiction",
+          "agressivité colere",
+          "utilisation compulsive de l'application",
+          "contenus choquants et sans aucun intérêt",
+          null,
+          "fakes news et d'absurdité",
+          "cette application",
+          "sensation d'addiction",
+          "impossibilité d'arrêter d'y aller",
+          "temps inutile gaspillé sur l'application",
+          "incapacité de s'en défaire",
+          "Difficulté à se détacher de l'application",
+          "montrer une vie lisse et parfaite",
+          "cette espèce d'addiction à l'application"
+        ]
+      }
+    },
+    {
+      "theme": "harcelement",
+      "node_id": "n0",
+      "label_ctfidf": "haine · commentaires · harcèlement",
+      "keywords": [
+        "haine",
+        "commentaires",
+        "harcèlement",
+        "vidéo",
+        "fille",
+        "insultes"
+      ],
+      "subject": "Harcèlement en ligne contre les filles",
+      "n_members": 305,
+      "stance_counts": {
+        "favorable": 4,
+        "defavorable": 276,
+        "nuance": 25
+      },
+      "stance_dominant_frac": 0.905,
+      "examples": [
+        {
+          "avis_id": "tiktok:48",
+          "claim": "Souvent suite à des contenus de haine envers certaines personnes et communautés (notamment antisémites, islamophobes et envers les lgbt).",
+          "stance": "defavorable",
+          "justif": "Dénonce haine en ligne"
+        },
+        {
+          "avis_id": "tiktok:54",
+          "claim": "Très souvent ceux qui sont derrière leur téléphone utilisent des mots très blessant et se croisent absolument tout permis il faut mettre fin à cela",
+          "stance": "defavorable",
+          "justif": "Critique mots blessants"
+        },
+        {
+          "avis_id": "tiktok:65",
+          "claim": "Plus de liberté d'expression sur ses idées politique. J'ai reçu des messages comme \"sale facho\", \"Sale française\", \"Ta Gueule\", \"Sale Nazi\", \"On va tuer tout les français!\".",
+          "stance": "defavorable",
+          "justif": "Dénonce insultes politiques"
+        },
+        {
+          "avis_id": "tiktok:91",
+          "claim": "doxxing suite au post d'une vidéo avec laquelle un influenceur masculiniste n'était pas d'accord. j'avais fermé mon compte à l'époque et je n'ai plus jamais eu de problèmes.",
+          "stance": "favorable",
+          "justif": "Dénonce doxxing"
+        },
+        {
+          "avis_id": "tiktok:97",
+          "claim": "Ma fille en mal être suite a divorce c est automutile avec TS , elle a influencé son frère qui lui avait simplement commençe les scarifications .",
+          "stance": "defavorable",
+          "justif": "Dénonce mal-être fille"
+        },
+        {
+          "avis_id": "tiktok:101",
+          "claim": "Notre baby-sitter a publié une vidéo de notre fils à caractère raciste",
+          "stance": "defavorable",
+          "justif": "Dénonce vidéo raciste"
+        },
+        {
+          "avis_id": "tiktok:153",
+          "claim": "Certains influenceurs ont des discours moralement répréhensibles : masculinisme, propagande religieuse, etc. Certains contenus me mettent mal à l'aise : mineurs dans des positions ou habillés de façon",
+          "stance": "defavorable",
+          "justif": "Critique discours moralement répréhensibles"
+        },
+        {
+          "avis_id": "tiktok:155",
+          "claim": "Contenus en accès libre et inadaptés à l'âge du public qui le consulte. Désinformation à outrance, discours de haine et défis dangereux, ridiculiser des individus gratuitement, apologie du masculinism",
+          "stance": "defavorable",
+          "justif": "Dénonce contenus inadaptés"
+        },
+        {
+          "avis_id": "tiktok:185",
+          "claim": "Inscription au compte de ma fille par des personnes mal intentionnées et allusions dans des publications.",
+          "stance": "defavorable",
+          "justif": "Dénonce usurpation compte"
+        },
+        {
+          "avis_id": "tiktok:236",
+          "claim": "Alors toute plateforme confondue, je trouve un mal-être de voir des créateurs de contenu devoir faire eux-même la modération sur les plateformes. Voir même embaucher, etc. des \"modérateurs\", c'est à m",
+          "stance": "defavorable",
+          "justif": "Critique responsabilité plateformes"
+        },
+        {
+          "avis_id": "tiktok:350",
+          "claim": "Lorsque je vois nasdas utilisé des personnes vulnérables pour faire du contenu et qu'il fait de plus en plus du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans. Ça me pose question.",
+          "stance": "defavorable",
+          "justif": "Dénonce harcèlement en ligne"
+        },
+        {
+          "avis_id": "tiktok:363",
+          "claim": "Tomber sur des contenus d'extrême droite ou complotistes. Ce sont des contenus qui me sont imposé (dans le sens où je ne les ai pas recherché activement) mais que je regarde plus que d'autres par « ha",
+          "stance": "defavorable",
+          "justif": "Critique algorithmes toxiques"
+        }
+      ],
+      "cibles_per_claim": {
+        "n_members": 305,
+        "n_members_with_claim": 302,
+        "n_claims": 450,
+        "n_cibles_unusable": 66,
+        "n_cibles_usable": 384,
+        "n_distinct_usable_cibles": 360,
+        "frac_unusable": 0.147,
+        "top_distinct": [
+          [
+            "désinformation",
+            6
+          ],
+          [
+            "contenus",
+            4
+          ],
+          [
+            "contenu",
+            3
+          ],
+          [
+            "incitation à la haine",
+            3
+          ],
+          [
+            "mauvaises blagues pour brisé les couples",
+            3
+          ],
+          [
+            "contenus d'extrême droite ou complotistes",
+            2
+          ],
+          [
+            "homophobie",
+            2
+          ],
+          [
+            "des commentaires",
+            2
+          ],
+          [
+            "se faire blâmer sur ce genre de platforms",
+            2
+          ],
+          [
+            "les commentaires",
+            2
+          ],
+          [
+            "usurpation d'identité",
+            2
+          ],
+          [
+            "cette application",
+            2
+          ]
+        ],
+        "sample_cibles": [
+          "contenus de haine envers certaines personnes et communautés",
+          "mots très blessant",
+          "cela",
+          "liberté d'expression sur ses idées politique",
+          "messages",
+          "doxxing",
+          null,
+          "une vidéo de notre fils à caractère raciste",
+          null,
+          "contenus",
+          "Contenus en accès libre",
+          "Désinformation",
+          "discours de haine et défis dangereux",
+          "ridiculiser des individus gratuitement",
+          "apologie du masculinisme et des extrémismes",
+          null,
+          "Inscription au compte de ma fille",
+          "des publications",
+          "la modération sur les plateformes",
+          null,
+          null,
+          "nasdas utilisé des personnes vulnérables",
+          "du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans",
+          "Les lives match des autre d'influenceurs",
+          "l'ancien président du collectif Avi qui se reconvertit dans l'équipe d'Hmi"
+        ]
+      }
+    }
+  ]
+}
