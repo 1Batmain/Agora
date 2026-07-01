@@ -2,7 +2,7 @@
 que la reformulation générique courte, tout en gardant la **centralité en garde-fou**
 (pas de hors-sujet).
 
-Mesure préalable (cf. `backend/measure_develop.py` et `DEVELOP_NOTE.md`) : la longueur du
+Mesure préalable (cf. `backend/measure_develop.py` et `.agent/notes/DEVELOP_NOTE.md`) : la longueur du
 claim corrèle POSITIVEMENT avec la distance au centroïde (tiktok +0.46, granddebat
 +0.38 intra-feuille). Autrement dit le pur médoïde (plus proche du centroïde) surface
 les claims COURTS et génériques ; les arguments développés sont plus loin. D'où ce

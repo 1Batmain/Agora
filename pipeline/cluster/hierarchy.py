@@ -41,7 +41,7 @@ from pipeline.cluster.leiden_cluster import run_leiden
 DEFAULT_RESOLUTION_MACRO = 1.0
 # Réconcilié avec le backend live (était 3.0 dans build, 1.5 dans le backend —
 # l'incohérence inter-modules signalée par l'audit #6). Valeur unique = celle du
-# contrat FROZEN (queue/cross-lane.md), pour que build et le backend produisent
+# contrat FROZEN (`.agent/queue/cross-lane.md`), pour que build et le backend produisent
 # la MÊME structure sur les mêmes données.
 DEFAULT_RESOLUTION_SUB = 1.5
 DEFAULT_MIN_SUB_SIZE = 15

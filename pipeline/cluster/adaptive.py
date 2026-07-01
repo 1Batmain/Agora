@@ -27,7 +27,7 @@ filtres live (`min_chars=12`, `dedup=0.95`, N=1597) :
     derive_dup_threshold        ≈ 0.869   (p98)
 
 → 8 macros / 47 sous-thèmes, modularité 0.60 : IDENTIQUE au réglage manuel gelé
-que ces défauts remplacent (non-régression prouvée, cf. ADAPTIVE_NOTE.md).
+que ces défauts remplacent (non-régression prouvée, cf. `.agent/notes/ADAPTIVE_NOTE.md`).
 """
 
 from __future__ import annotations
