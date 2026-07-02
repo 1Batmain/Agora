@@ -26,5 +26,14 @@
     "balance": null,
     "cap": 3000,
     "seed": 42
+  },
+  "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+  "context": "Grand Débat National (2019), espace « Démocratie et citoyenneté » — open data data.gouv.fr (Licence Ouverte 2.0). Réponses libres à une question ouverte : « Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ? ». Un vaste panel de propositions citoyennes contrastées.",
+  "official_baseline": {
+    "label": "Dispositif officiel 2019",
+    "cost": "3,25 M€ (traitement et analyse des données, tous thèmes)",
+    "duration": "~3 mois (clôture 18 mars → synthèse juin 2019)",
+    "note": "Chiffres communiqués par le Premier ministre (réponse au député N. Dupont-Aignan, mai 2019) ; l'enveloppe couvre les 4 thèmes et ~2 M de contributions, numérisation BnF incluse — ordre de grandeur, pas une comparaison à périmètre égal.",
+    "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
   }
 }
