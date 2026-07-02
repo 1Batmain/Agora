@@ -388,6 +388,7 @@ def build_opinion(
     model = model or MODEL
     extract_model = extract_model or EXTRACT_MODEL
     rng = random.Random(seed)
+    mistral_client.reset_usage()  # suivi tokens/coût de la phase opinion (cleavage + stance)
 
     _log(f"{dataset} · construction de l'arbre (caché si déjà extrait)…")
     tree = build_theme_tree(ds, backend=backend, model=extract_model, embedder=embedder,
@@ -510,6 +511,12 @@ def build_opinion(
     }
     store.write_opinion(dataset, payload)
     store.write_claim_stance(dataset, claim_stance)
+    # Coût LLM de la phase opinion (cleavage + stance + synthèses parents) — jamais bloquant.
+    try:
+        from backend import cost as _cost
+        _cost.record_phase(dataset, "opinion", mistral_client.get_usage())
+    except Exception as _e:
+        _log(f"{dataset} · (coût opinion non enregistré: {_e})")
     _log(f"{dataset} · ✓ opinion.json écrit · {total} feuilles "
          f"({n_clivant} clivant / {n_consensuel} consensuel / {n_impur} impur) · {took_s}s")
     _log(f"{dataset} · ✓ claim_stance.json écrit · {len(claim_stance)} claims classés "
