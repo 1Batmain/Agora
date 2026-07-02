@@ -151,14 +151,14 @@ def build_cache(
             f"Aucun avis lisible pour {dataset} (source absente ou descripteur ?)."
         )
 
-    ideas = subset(
-        ideas,
-        min_chars=min_chars,
-        dedup_exact=dedup_exact,
-        balance=balance,
-        cap=cap,
-        seed=seed,
-    )
+    # Deux temps : filtres de VALIDITÉ (min_chars + dédup) d'abord → n_responses = voix
+    # réelles à la question dans le CORPUS ENTIER (sémantique stable, capé ou non) ; puis
+    # l'échantillonnage (balance/cap) qui ne change pas ce dénominateur.
+    ideas = subset(ideas, min_chars=min_chars, dedup_exact=dedup_exact,
+                   balance=None, cap=None, seed=seed)
+    n_responses = int(round(sum(i["props"].get("weight", 1.0) or 1.0 for i in ideas)))
+    ideas = subset(ideas, min_chars=0, dedup_exact=False,
+                   balance=balance, cap=cap, seed=seed)
     if not ideas:
         raise SystemExit("Aucun avis après sous-échantillonnage (filtres trop stricts ?).")
 
@@ -185,9 +185,9 @@ def build_cache(
         "label": label or desc.extra.get("label") or dataset,
         "status": desc.status,
         "n_nodes": len(ideas),
-        # Voix réelles retenues (textes uniques × poids de dédup) — l'affichage distingue
-        # participants (n_loaded) / réponses à la question (n_responses) / textes analysés.
-        "n_responses": int(round(sum(i["props"].get("weight", 1.0) or 1.0 for i in ideas))),
+        # Voix réelles à la question dans le CORPUS (pré-échantillonnage) — l'affichage
+        # distingue participants (n_loaded) / réponses (n_responses) / textes analysés.
+        "n_responses": n_responses,
         "languages": [lg for lg, _ in lang_counts.most_common()],
         "lang_counts": dict(lang_counts.most_common()),
         "source": src_counts.most_common(1)[0][0] if src_counts else dataset,
