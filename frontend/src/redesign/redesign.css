@@ -2036,10 +2036,11 @@ button.opinion__card:disabled { cursor: default; }
 }
 
 /* Transparence des coûts de traitement (sous les stats) — Agora vs dispositif officiel. */
+.overview__footer { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid #e6e6ef; }
 .overview__cost {
-  margin: -1.2rem 0 2rem; padding: .55rem .9rem; font-size: .82rem; line-height: 1.6;
-  color: #55555f; background: #f7f7fc; border-left: 3px solid var(--agora, #000091); border-radius: 0 6px 6px 0;
+  margin: 0; padding: 0; font-size: .78rem; line-height: 1.65; color: #7a7a86;
 }
+.overview__cost-est { font-size: .72rem; color: #9a9aa5; font-style: italic; }
 .overview__cost strong { color: var(--agora, #000091); font-family: ui-monospace, "IBM Plex Mono", monospace; }
 .overview__cost-baseline { color: #6b6b76; }
 .overview__cost-baseline a { color: var(--agora, #000091); }

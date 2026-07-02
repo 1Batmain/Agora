@@ -514,7 +514,7 @@ def build_opinion(
     # Coût LLM de la phase opinion (cleavage + stance + synthèses parents) — jamais bloquant.
     try:
         from backend import cost as _cost
-        _cost.record_phase(dataset, "opinion", mistral_client.get_usage())
+        _cost.record_phase(dataset, "opinion", mistral_client.get_usage(), duration_seconds=took_s)
     except Exception as _e:
         _log(f"{dataset} · (coût opinion non enregistré: {_e})")
     _log(f"{dataset} · ✓ opinion.json écrit · {total} feuilles "
