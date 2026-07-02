@@ -1,0 +1,745 @@
+{
+  "summary": {
+    "n_macros": 37,
+    "n_macros_scored": 16,
+    "n_singletons_ignored": 20,
+    "official_subthemes_total": 14,
+    "official_subthemes_covered": 14,
+    "coverage_pct": 100.0,
+    "covered": [
+      "casier_probite",
+      "cumul_limitation_mandats",
+      "debats_concertation",
+      "decentralisation_territoriale",
+      "lien_proximite_confiance",
+      "nombre_elus",
+      "participation_consultation",
+      "privileges_remunerations",
+      "reddition_comptes",
+      "renouvellement_classe_politique",
+      "ric_referendum",
+      "scrutin_proportionnelle",
+      "tirage_au_sort",
+      "transparence_depenses"
+    ],
+    "missing": [],
+    "out_of_scope_expected_absent": [
+      "immigration_laicite",
+      "civisme_engagement"
+    ],
+    "additions": [
+      {
+        "id": "n32",
+        "title": "Éducation civique et institutionnelle",
+        "n_avis": 527
+      }
+    ],
+    "singletons_ignored": [
+      {
+        "id": "n35",
+        "title": "Sanctions contre employeurs de clandestins"
+      },
+      {
+        "id": "n36",
+        "title": "Comprendre avec nos milliards de neurones"
+      },
+      {
+        "id": "n37",
+        "title": "Moyens et lutte contre la corruption"
+      },
+      {
+        "id": "n38",
+        "title": "Dirigeante de Danone stock-options"
+      },
+      {
+        "id": "n39",
+        "title": "Prise en charge des frais dentaires et auditifs pour retraités"
+      },
+      {
+        "id": "n40",
+        "title": "Parcours atypiques des énarques"
+      },
+      {
+        "id": "n41",
+        "title": "Manque de transparence sur un projet"
+      },
+      {
+        "id": "n42",
+        "title": "Dégagement de CO2 et bonnets rouges"
+      },
+      {
+        "id": "n43",
+        "title": "Lutte contre la pauvreté structurelle"
+      },
+      {
+        "id": "n44",
+        "title": "Recul du progrès des travailleurs"
+      },
+      {
+        "id": "n45",
+        "title": "Citoyenneté multiculturelle et défense nationale"
+      },
+      {
+        "id": "n46",
+        "title": "Inégalités sociales et politiques urbaines"
+      },
+      {
+        "id": "n47",
+        "title": "Protection sociale et besoins vitaux"
+      },
+      {
+        "id": "n48",
+        "title": "Pollution usine déchets Basque"
+      },
+      {
+        "id": "n49",
+        "title": "Calcul taux Livret A inflation"
+      },
+      {
+        "id": "n50",
+        "title": "Structure bicamérale sous l'Empire"
+      },
+      {
+        "id": "n51",
+        "title": "Interruption volontaire de vie"
+      },
+      {
+        "id": "n52",
+        "title": "Coût de l'aide médicale aux réfugiés"
+      },
+      {
+        "id": "n53",
+        "title": "Retraites étrangères en France"
+      },
+      {
+        "id": "n54",
+        "title": "Régulation et distribution du cannabis"
+      }
+    ],
+    "mean_alignment_all_pairs": 4.61,
+    "mean_alignment_coverage": 4.71,
+    "n_pairs_judged": 18,
+    "faithful": 13,
+    "finer_split": 2,
+    "partial": 3,
+    "mismatch": 0,
+    "best_by_official": {
+      "lien_proximite_confiance": {
+        "alignment": 5,
+        "macro": "n1",
+        "verdict": "faithful"
+      },
+      "participation_consultation": {
+        "alignment": 5,
+        "macro": "n2",
+        "verdict": "faithful"
+      },
+      "debats_concertation": {
+        "alignment": 5,
+        "macro": "n2",
+        "verdict": "faithful"
+      },
+      "tirage_au_sort": {
+        "alignment": 4,
+        "macro": "n2",
+        "verdict": "finer_split"
+      },
+      "transparence_depenses": {
+        "alignment": 5,
+        "macro": "n4",
+        "verdict": "faithful"
+      },
+      "privileges_remunerations": {
+        "alignment": 5,
+        "macro": "n5",
+        "verdict": "faithful"
+      },
+      "casier_probite": {
+        "alignment": 5,
+        "macro": "n23",
+        "verdict": "faithful"
+      },
+      "renouvellement_classe_politique": {
+        "alignment": 3,
+        "macro": "n24",
+        "verdict": "partial"
+      },
+      "nombre_elus": {
+        "alignment": 4,
+        "macro": "n25",
+        "verdict": "finer_split"
+      },
+      "cumul_limitation_mandats": {
+        "alignment": 5,
+        "macro": "n26",
+        "verdict": "faithful"
+      },
+      "ric_referendum": {
+        "alignment": 5,
+        "macro": "n27",
+        "verdict": "faithful"
+      },
+      "scrutin_proportionnelle": {
+        "alignment": 5,
+        "macro": "n28",
+        "verdict": "faithful"
+      },
+      "reddition_comptes": {
+        "alignment": 5,
+        "macro": "n30",
+        "verdict": "faithful"
+      },
+      "decentralisation_territoriale": {
+        "alignment": 5,
+        "macro": "n29",
+        "verdict": "faithful"
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "n1",
+      "title": "Réduire la distance entre élus et citoyens",
+      "n_avis": 4621,
+      "n_claims": 5108,
+      "official": [
+        "lien_proximite_confiance"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en insistant sur la proximité, l'écoute et l'exemplarité des élus, tout en détaillant des propositions concrètes alignées sur ces principes.",
+          "official": "lien_proximite_confiance"
+        }
+      ]
+    },
+    {
+      "id": "n2",
+      "title": "Implication citoyenne dans les décisions",
+      "n_avis": 4590,
+      "n_claims": 4944,
+      "official": [
+        "participation_consultation",
+        "debats_concertation",
+        "tirage_au_sort"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément les attentes du sous-thème officiel en détaillant des modalités concrètes (réunions locales, agoras, outils hybrides) pour associer les citoyens aux décisions.",
+          "official": "participation_consultation"
+        },
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les modalités d'implication citoyenne (réunions locales, agoras, outils hybrides) et l'exigence de dialogue élu-citoyen.",
+          "official": "debats_concertation"
+        },
+        {
+          "alignment": 4,
+          "verdict": "finer_split",
+          "justification": "Le thème émergent couvre largement la demande d'implication citoyenne directe, incluant des mécanismes comme le tirage au sort (mentionné via 'tirés'), mais élargit la réflexion à d'autres formes de participation (réunions locales, agoras) tout en restant cohérent avec l'esprit du sous-thème officiel.",
+          "official": "tirage_au_sort"
+        }
+      ]
+    },
+    {
+      "id": "n3",
+      "title": "Représentation populaire et dialogue citoyen",
+      "n_avis": 3084,
+      "n_claims": 3398,
+      "official": [
+        "lien_proximite_confiance"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent capture exactement et entièrement le sous-thème officiel en insistant sur l'écoute, la proximité et la restauration de la confiance entre citoyens et élus.",
+          "official": "lien_proximite_confiance"
+        }
+      ]
+    },
+    {
+      "id": "n4",
+      "title": "Transparence des comptes publics",
+      "n_avis": 2848,
+      "n_claims": 3075,
+      "official": [
+        "transparence_depenses"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les mécanismes de transparence et de contrôle des dépenses publiques, avec des propositions concrètes alignées sur la justification des dépenses et la lutte contre l'opacité.",
+          "official": "transparence_depenses"
+        }
+      ]
+    },
+    {
+      "id": "n5",
+      "title": "Réduction des avantages et salaires des élus",
+      "n_avis": 2296,
+      "n_claims": 2750,
+      "official": [
+        "privileges_remunerations"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les mêmes demandes de suppression, plafonnement et contrôle des avantages, rémunérations et retraites des élus.",
+          "official": "privileges_remunerations"
+        }
+      ]
+    },
+    {
+      "id": "n23",
+      "title": "Exemplarité et sanctions des élus",
+      "n_avis": 2056,
+      "n_claims": 2338,
+      "official": [
+        "casier_probite"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les attentes citoyennes autour de la probité, de l'inéligibilité et des sanctions pénales pour les élus condamnés.",
+          "official": "casier_probite"
+        }
+      ]
+    },
+    {
+      "id": "n24",
+      "title": "Comportements politiques et communication",
+      "n_avis": 2011,
+      "n_claims": 2338,
+      "official": [
+        "renouvellement_classe_politique"
+      ],
+      "judges": [
+        {
+          "alignment": 3,
+          "verdict": "partial",
+          "justification": "Le thème émergent aborde principalement la défiance envers les comportements politiques actuels et la communication, tandis que le sous-thème officiel se concentre sur le renouvellement structurel de la classe politique (profils, statut, lobbies), avec une intersection limitée sur la critique de la 'politique politicienne'.",
+          "official": "renouvellement_classe_politique"
+        }
+      ]
+    },
+    {
+      "id": "n25",
+      "title": "Réforme du Parlement et des institutions",
+      "n_avis": 1819,
+      "n_claims": 2098,
+      "official": [
+        "nombre_elus"
+      ],
+      "judges": [
+        {
+          "alignment": 4,
+          "verdict": "finer_split",
+          "justification": "Le thème émergent couvre intégralement la réduction du nombre d'élus et aborde en plus des réformes structurelles du Parlement, mais avec un focus plus granulaire sur les mécanismes de représentation et d'indépendance.",
+          "official": "nombre_elus"
+        }
+      ]
+    },
+    {
+      "id": "n26",
+      "title": "Réforme des mandats politiques",
+      "n_avis": 1773,
+      "n_claims": 1964,
+      "official": [
+        "cumul_limitation_mandats"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les propositions de limitation et de non-cumul des mandats comme solution centrale.",
+          "official": "cumul_limitation_mandats"
+        }
+      ]
+    },
+    {
+      "id": "n27",
+      "title": "Référendums d'initiative citoyenne",
+      "n_avis": 1745,
+      "n_claims": 1877,
+      "official": [
+        "ric_referendum"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, incluant les différentes formes de RIC (législatif, abrogatoire, révocatoire, constituant) et les attentes citoyennes associées.",
+          "official": "ric_referendum"
+        }
+      ]
+    },
+    {
+      "id": "n28",
+      "title": "Réforme du scrutin et représentation proportionnelle",
+      "n_avis": 1578,
+      "n_claims": 1707,
+      "official": [
+        "scrutin_proportionnelle"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement et précisément le sous-thème officiel, en détaillant les modalités de la proportionnelle et en incluant la reconnaissance du vote blanc.",
+          "official": "scrutin_proportionnelle"
+        }
+      ]
+    },
+    {
+      "id": "n30",
+      "title": "Contrôle et révocation des élus",
+      "n_avis": 986,
+      "n_claims": 1024,
+      "official": [
+        "reddition_comptes"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les mécanismes de contrôle, de sanction et de révocation des élus pour manquement à leurs engagements.",
+          "official": "reddition_comptes"
+        }
+      ]
+    },
+    {
+      "id": "n29",
+      "title": "Réorganisation territoriale et services publics",
+      "n_avis": 962,
+      "n_claims": 1103,
+      "official": [
+        "decentralisation_territoriale"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en détaillant les enjeux de clarification des compétences, de simplification administrative et de proximité, tout en y ajoutant des propositions concrètes sans s'en écarter.",
+          "official": "decentralisation_territoriale"
+        }
+      ]
+    },
+    {
+      "id": "n31",
+      "title": "Reconnaissance du vote blanc et obligation",
+      "n_avis": 804,
+      "n_claims": 905,
+      "official": [
+        "scrutin_proportionnelle"
+      ],
+      "judges": [
+        {
+          "alignment": 4,
+          "verdict": "partial",
+          "justification": "Le thème émergent couvre bien la reconnaissance du vote blanc et le débat sur le vote obligatoire, mais ignore la dimension centrale de la proportionnelle aux législatives présente dans le sous-thème officiel.",
+          "official": "scrutin_proportionnelle"
+        }
+      ]
+    },
+    {
+      "id": "n32",
+      "title": "Éducation civique et institutionnelle",
+      "n_avis": 527,
+      "n_claims": 559,
+      "official": null,
+      "judges": [],
+      "note": "out_of_axis"
+    },
+    {
+      "id": "n33",
+      "title": "Rétablir la confiance citoyenne",
+      "n_avis": 513,
+      "n_claims": 526,
+      "official": [
+        "lien_proximite_confiance"
+      ],
+      "judges": [
+        {
+          "alignment": 5,
+          "verdict": "faithful",
+          "justification": "Le thème émergent couvre intégralement le sous-thème officiel en abordant la restauration de la confiance, l'exemplarité des élus et la nécessité d'un lien renouvelé avec les citoyens.",
+          "official": "lien_proximite_confiance"
+        }
+      ]
+    },
+    {
+      "id": "n34",
+      "title": "Régulation et transparence du lobbying",
+      "n_avis": 494,
+      "n_claims": 541,
+      "official": [
+        "renouvellement_classe_politique"
+      ],
+      "judges": [
+        {
+          "alignment": 3,
+          "verdict": "partial",
+          "justification": "Le thème émergent se concentre spécifiquement sur la régulation du lobbying et la transparence, qui est une composante du sous-thème officiel, mais ne couvre pas l'ensemble des aspects comme le renouvellement des profils politiques ou le statut de l'élu.",
+          "official": "renouvellement_classe_politique"
+        }
+      ]
+    },
+    {
+      "id": "n35",
+      "title": "Sanctions contre employeurs de clandestins",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n36",
+      "title": "Comprendre avec nos milliards de neurones",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n37",
+      "title": "Moyens et lutte contre la corruption",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n38",
+      "title": "Dirigeante de Danone stock-options",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n39",
+      "title": "Prise en charge des frais dentaires et auditifs pour retraités",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n40",
+      "title": "Parcours atypiques des énarques",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n41",
+      "title": "Manque de transparence sur un projet",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n42",
+      "title": "Dégagement de CO2 et bonnets rouges",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n43",
+      "title": "Lutte contre la pauvreté structurelle",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n44",
+      "title": "Recul du progrès des travailleurs",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n45",
+      "title": "Citoyenneté multiculturelle et défense nationale",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n46",
+      "title": "Inégalités sociales et politiques urbaines",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n47",
+      "title": "Protection sociale et besoins vitaux",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n48",
+      "title": "Pollution usine déchets Basque",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n49",
+      "title": "Calcul taux Livret A inflation",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n50",
+      "title": "Structure bicamérale sous l'Empire",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n51",
+      "title": "Interruption volontaire de vie",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n52",
+      "title": "Coût de l'aide médicale aux réfugiés",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n53",
+      "title": "Retraites étrangères en France",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    },
+    {
+      "id": "n54",
+      "title": "Régulation et distribution du cannabis",
+      "n_avis": 1,
+      "n_claims": 1,
+      "official": null,
+      "judges": [],
+      "note": "singleton_ignored"
+    }
+  ],
+  "official": {
+    "scrutin_proportionnelle": "Mode de scrutin : introduire une dose de proportionnelle aux législatives pour une Assemblée plus représentative ; reconnaissance du vote blanc ; débat sur le vote obligatoire.",
+    "ric_referendum": "Référendum d'initiative citoyenne (RIC) et recours élargi au référendum : législatif, abrogatoire, révocatoire, constituant.",
+    "cumul_limitation_mandats": "Limitation et non-cumul des mandats dans le temps pour renouveler la classe politique et éviter la professionnalisation.",
+    "nombre_elus": "Réduction du nombre d'élus et de parlementaires ; rôle et fonctionnement du Parlement (Assemblée, Sénat, quorum).",
+    "privileges_remunerations": "Privilèges, rémunérations, frais et retraites des élus jugés excessifs : suppression / plafonnement / contrôle (moralisation).",
+    "transparence_depenses": "Transparence et contrôle de l'argent public : publication et justification des dépenses, lutte contre le gaspillage.",
+    "reddition_comptes": "Responsabilité et reddition de comptes des élus : respect des promesses de campagne, bilans réguliers, sanctions en cas de manquement.",
+    "casier_probite": "Probité et casier judiciaire : casier vierge exigé, inéligibilité, sanctions pénales des élus condamnés.",
+    "participation_consultation": "Démocratie participative : associer les citoyens aux décisions entre les élections (consultations, plateformes, budgets participatifs).",
+    "debats_concertation": "Réunions publiques, débats et concertation de proximité ; intermédiaires et instances de dialogue élu-citoyen.",
+    "tirage_au_sort": "Tirage au sort de citoyens / assemblées citoyennes pour représenter et contrôler (CESE, conseils citoyens).",
+    "lien_proximite_confiance": "Restaurer le lien, la confiance et l'écoute : élus proches du terrain, à l'écoute des réalités vécues, exemplarité.",
+    "decentralisation_territoriale": "Organisation territoriale : clarifier les compétences État/régions/départements/communes, simplifier le millefeuille, proximité.",
+    "renouvellement_classe_politique": "Renouvellement et diversification de la classe politique : profils issus de la société civile, statut de l'élu, lutte contre les lobbies et la « politique politicienne »."
+  },
+  "mapping": {
+    "n1": [
+      "lien_proximite_confiance"
+    ],
+    "n2": [
+      "participation_consultation",
+      "debats_concertation",
+      "tirage_au_sort"
+    ],
+    "n3": [
+      "lien_proximite_confiance"
+    ],
+    "n4": [
+      "transparence_depenses"
+    ],
+    "n5": [
+      "privileges_remunerations"
+    ],
+    "n23": [
+      "casier_probite"
+    ],
+    "n24": [
+      "renouvellement_classe_politique"
+    ],
+    "n25": [
+      "nombre_elus"
+    ],
+    "n26": [
+      "cumul_limitation_mandats"
+    ],
+    "n27": [
+      "ric_referendum"
+    ],
+    "n28": [
+      "scrutin_proportionnelle"
+    ],
+    "n29": [
+      "decentralisation_territoriale"
+    ],
+    "n30": [
+      "reddition_comptes"
+    ],
+    "n31": [
+      "scrutin_proportionnelle"
+    ],
+    "n32": [],
+    "n33": [
+      "lien_proximite_confiance"
+    ],
+    "n34": [
+      "renouvellement_classe_politique"
+    ]
+  }
+}
