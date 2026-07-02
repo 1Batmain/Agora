@@ -137,6 +137,8 @@ export interface Citation {
   dist_to_centroid: number; // smaller = more representative
   weight: number;
   avis_id?: string; // source avis — opens its full text with highlights
+  /** Rang par proximité au centroïde (0 = le plus représentatif du cluster). */
+  rank?: number;
 }
 
 /** A character range `[start, end)` into the avis text (verbatim gate applies). */
@@ -156,6 +158,8 @@ export interface CharRange {
 export interface AvisClaim {
   id: string;
   cluster_id: string | null;
+  /** Feuille réelle du claim (le cluster fin) — `cluster_id` est le MACRO (couleur). */
+  leaf_id?: string | null;
   color: string;
   spans: CharRange[];
   target: CharRange | null;

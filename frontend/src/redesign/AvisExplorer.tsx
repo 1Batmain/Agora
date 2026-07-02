@@ -1,14 +1,25 @@
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   AnalysisPayload,
+  AvisClaim,
   AvisListItem,
   AvisProvenance,
+  Citation,
   Consultation,
   SpatialTheme,
+  ThemeOpinion,
 } from './contract';
-import { fetchAnalysis, fetchAvis, fetchAvisList, fetchFlags } from './analysisApi';
+import {
+  fetchAnalysis,
+  fetchAvis,
+  fetchAvisList,
+  fetchCitations,
+  fetchFlags,
+  fetchOpinion,
+} from './analysisApi';
 import { Header } from './Header';
-import { AvisAnalysis, AvisBody, FlagControl } from './AvisDetail';
+import { AvisAnalysis, AvisBody, ClaimStatsCard, FlagControl } from './AvisDetail';
+import type { ClaimStatsData } from './AvisDetail';
 import { LOCALE } from './strings';
 
 const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entiers inline)
@@ -16,11 +27,12 @@ const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entie
 /**
  * Page d'EXPLORATION DES AVIS — AUTO-SUFFISANTE : recense TOUS les avis d'une
  * consultation et affiche CHACUN EN ENTIER, INLINE, sous forme de carte : son texte
- * complet avec ses **surlignages** verbatim (claims, réutilise `AvisBody`), un toggle
- * **FR / original** par avis (si traduit) et un bouton **« Signaler »** par avis. Un
- * toggle GLOBAL « Surligner les passages retenus » (défaut ON) masque/affiche les
- * surlignages sur toutes les cartes. Recherche plein-texte (debounce), filtre par
- * cluster et pagination « Voir plus ». PLUS de page séparée par avis : `focusAvisId`
+ * complet avec ses **surlignages** verbatim (claims, réutilise `AvisBody`) RÉVÉLÉS AU
+ * SURVOL de la carte (repos sobre), un toggle **FR / original** par avis (si traduit) et
+ * un bouton **« Signaler »**. CLIC sur un passage surligné → carte de STATS du claim
+ * (volume du cluster, sentiment, lecture du modèle, représentativité au centroïde).
+ * Filtres : recherche plein-texte (debounce), CHIPS de grands thèmes + menu du sous-arbre
+ * (fini le méga-menu), chips de SENTIMENT (visibles/désactivables) et pagination. PLUS de page séparée par avis : `focusAvisId`
  * (entrée depuis une citation) épingle la carte ciblée en tête, mise en évidence et
  * scrollée en vue.
  */
@@ -61,8 +73,41 @@ export function AvisExplorer({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Toggle GLOBAL des surlignages (défaut ON) — pilote toutes les cartes.
-  const [showHighlights, setShowHighlights] = useState(true);
+  // Répartition d'opinion par thème (chargée UNE fois) — alimente la carte de stats d'un claim.
+  const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchOpinion(dataset.id)
+      .then((op) => !cancelled && setOpinions(op ?? []))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset.id]);
+
+  // Lookups pour la carte de stats d'un claim (feuille → volumes / opinion).
+  const themeById = useMemo(() => new Map(themes.map((t) => [t.id, t])), [themes]);
+  const opinionByTheme = useMemo(
+    () => new Map(opinions.map((o) => [o.theme_id, o])),
+    [opinions],
+  );
+
+  // Citations par feuille (représentativité au centroïde) : fetch à la demande + cache.
+  const citCache = useRef<Map<string, Citation[]>>(new Map());
+  useEffect(() => {
+    citCache.current = new Map();
+  }, [dataset.id]);
+  const getCitations = useCallback(
+    async (leafId: string): Promise<Citation[]> => {
+      const hit = citCache.current.get(leafId);
+      if (hit) return hit;
+      const res = await fetchCitations(dataset.id, leafId).catch(() => null);
+      const list = (res?.data as Citation[] | null) ?? [];
+      citCache.current.set(leafId, list);
+      return list;
+    },
+    [dataset.id],
+  );
 
   // Flags d'avis du dataset (avis_id → texte), chargés une fois → restauration à l'affichage.
   const [flags, setFlags] = useState<Record<string, string>>({});
@@ -160,8 +205,33 @@ export function AvisExplorer({
       return next;
     });
 
-  // Thèmes ordonnés hiérarchiquement (parent puis enfants) avec profondeur → <option> indentées.
-  const themeOptions = useMemo(() => orderThemes(themes), [themes]);
+  // Sélecteur de catégories à DEUX niveaux : chips des GRANDS thèmes (macros), puis un
+  // menu compact limité au sous-arbre du macro actif — fini le méga-menu de 300 options.
+  const macros = useMemo(() => themes.filter((t) => !t.parent_id), [themes]);
+  const activeMacroId = useMemo(() => {
+    let cur = themeId ? themeById.get(themeId) : undefined;
+    let guard = 0;
+    while (cur && cur.parent_id != null && guard++ < 64) cur = themeById.get(cur.parent_id);
+    return cur?.id ?? null;
+  }, [themeId, themeById]);
+  const subOptions = useMemo(() => {
+    if (!activeMacroId) return [];
+    const inSub = new Set<string>();
+    const kids = new Map<string | null, SpatialTheme[]>();
+    for (const t of themes) {
+      const arr = kids.get(t.parent_id ?? null);
+      if (arr) arr.push(t);
+      else kids.set(t.parent_id ?? null, [t]);
+    }
+    const walk = (id: string) => {
+      for (const c of kids.get(id) ?? []) {
+        inSub.add(c.id);
+        walk(c.id);
+      }
+    };
+    walk(activeMacroId);
+    return orderThemes(themes).filter(({ theme }) => inSub.has(theme.id));
+  }, [themes, activeMacroId]);
   const hasMore = items.length < total;
   // L'avis épinglé est retiré de la liste pour éviter un doublon avec la carte en tête.
   const listItems = focusAvis ? items.filter((it) => it.avis_id !== focusAvis.id) : items;
@@ -188,34 +258,80 @@ export function AvisExplorer({
             aria-label="Rechercher dans les avis"
             onChange={(e) => setQInput(e.target.value)}
           />
-          <select
-            className="avisx__filter"
-            value={themeId ?? ''}
-            aria-label="Filtrer par thème"
-            onChange={(e) => setThemeId(e.target.value || null)}
-          >
-            <option value="">Tous les thèmes</option>
-            {themeOptions.map(({ theme, depth }) => (
-              <option key={theme.id} value={theme.id}>
-                {'  '.repeat(depth)}
-                {theme.title || theme.label}
+          {/* Niveau 1 : chips des GRANDS thèmes (au lieu d'un méga-menu de 300 options). */}
+          {macros.length > 0 && (
+            <div className="avisx__chips" role="group" aria-label="Filtrer par grand thème">
+              <button
+                type="button"
+                className={`avisx__chip${themeId == null ? ' avisx__chip--on' : ''}`}
+                onClick={() => setThemeId(null)}
+              >
+                Tous
+              </button>
+              {macros.map((m) => (
+                <button
+                  type="button"
+                  key={m.id}
+                  className={`avisx__chip${activeMacroId === m.id ? ' avisx__chip--on' : ''}`}
+                  onClick={() => setThemeId(m.id)}
+                  title={m.title || m.label}
+                >
+                  {m.title || m.label}
+                </button>
+              ))}
+            </div>
+          )}
+          {/* Niveau 2 : affiner DANS le grand thème choisi (sous-arbre seul, indenté). */}
+          {activeMacroId && subOptions.length > 0 && (
+            <select
+              className="avisx__filter"
+              value={themeId ?? activeMacroId}
+              aria-label="Affiner dans le grand thème"
+              onChange={(e) => setThemeId(e.target.value || null)}
+            >
+              <option value={activeMacroId}>
+                Tout « {themeById.get(activeMacroId)?.title || themeById.get(activeMacroId)?.label} »
               </option>
-            ))}
-          </select>
-          <label className="avisx__hltoggle" title="Afficher ou masquer les passages retenus">
-            <input
-              type="checkbox"
-              checked={showHighlights}
-              onChange={(e) => setShowHighlights(e.target.checked)}
-            />
-            Surligner les passages retenus
-          </label>
+              {subOptions.map(({ theme, depth }) => (
+                <option key={theme.id} value={theme.id}>
+                  {'  '.repeat(Math.max(0, depth - 1))}
+                  {theme.title || theme.label}
+                </option>
+              ))}
+            </select>
+          )}
+          {/* Filtre SENTIMENT — visible et désactivable (le filtre caché causait des pages vides). */}
+          <div className="avisx__chips avisx__chips--stance" role="group" aria-label="Filtrer par sentiment">
+            <button
+              type="button"
+              className={`avisx__chip${stance == null ? ' avisx__chip--on' : ''}`}
+              onClick={() => setStance(null)}
+            >
+              Tous
+            </button>
+            <button
+              type="button"
+              className={`avisx__chip avisx__chip--pos${stance === 'favorable' ? ' avisx__chip--on' : ''}`}
+              onClick={() => setStance(stance === 'favorable' ? null : 'favorable')}
+            >
+              ↑ Positifs
+            </button>
+            <button
+              type="button"
+              className={`avisx__chip avisx__chip--neg${stance === 'defavorable' ? ' avisx__chip--on' : ''}`}
+              onClick={() => setStance(stance === 'defavorable' ? null : 'defavorable')}
+            >
+              ↓ Négatifs
+            </button>
+          </div>
         </div>
 
         <p className="avisx__count" aria-live="polite">
           {loading
             ? 'Chargement…'
-            : `${total.toLocaleString(LOCALE)} avis${q || themeId ? ' (filtrés)' : ''}`}
+            : `${total.toLocaleString(LOCALE)} avis${
+                stance ? ` · sentiment ${stance === 'favorable' ? 'positif' : 'négatif'}` : ''
+              }${q || themeId ? ' (filtrés)' : ''}`}
         </p>
 
         <ul className="avisx__list">
@@ -225,9 +341,11 @@ export function AvisExplorer({
               ref={focusRef}
               avis={focusAvis}
               dataset={dataset.id}
-              highlight={showHighlights}
               flagText={flags[focusAvis.id]}
               onFlagChange={onFlagChange}
+              themeById={themeById}
+              opinionByTheme={opinionByTheme}
+              getCitations={getCitations}
               focused
             />
           )}
@@ -238,15 +356,38 @@ export function AvisExplorer({
                 key={it.avis_id}
                 avis={toProvenance(it)}
                 dataset={dataset.id}
-                highlight={showHighlights}
                 flagText={flags[it.avis_id]}
                 onFlagChange={onFlagChange}
+                themeById={themeById}
+                opinionByTheme={opinionByTheme}
+                getCitations={getCitations}
               />
             ))}
         </ul>
 
         {!loading && listItems.length === 0 && !focusAvis && (
-          <p className="overview__loading">Aucun avis ne correspond.</p>
+          <div className="avisx__empty">
+            <p>
+              Aucun avis ne correspond à ces filtres.
+              {stance && (
+                <>
+                  {' '}Le filtre <strong>sentiment {stance === 'favorable' ? 'positif' : 'négatif'}</strong>{' '}
+                  est actif — certains thèmes n'ont pas de sentiment mesuré (signal diffus).
+                </>
+              )}
+            </p>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                setStance(null);
+                setThemeId(null);
+                setQInput('');
+              }}
+            >
+              Réinitialiser les filtres
+            </button>
+          </div>
         )}
 
         {hasMore && (
@@ -276,14 +417,59 @@ const AvisCard = forwardRef<
   {
     avis: AvisProvenance;
     dataset: string;
-    highlight: boolean;
     flagText?: string;
     onFlagChange: (id: string, text: string | null) => void;
+    /** Lookups pour la carte de stats d'un claim (feuille → volumes / opinion / citations). */
+    themeById: Map<string, SpatialTheme>;
+    opinionByTheme: Map<string, ThemeOpinion>;
+    getCitations: (leafId: string) => Promise<Citation[]>;
     focused?: boolean;
   }
->(({ avis, dataset, highlight, flagText, onFlagChange, focused = false }, ref) => {
+>(({ avis, dataset, flagText, onFlagChange, themeById, opinionByTheme, getCitations,
+    focused = false }, ref) => {
   const [analysisOpen, setAnalysisOpen] = useState(false);
   const toggle = () => setAnalysisOpen((o) => !o);
+
+  // Claim sélectionné (clic sur un passage surligné) → carte de stats dashboard.
+  const [selClaim, setSelClaim] = useState<AvisClaim | null>(null);
+  const [selStats, setSelStats] = useState<ClaimStatsData>({});
+  const onClaimClick = (claim: AvisClaim) => {
+    if (selClaim?.id === claim.id) {
+      setSelClaim(null); // re-clic → referme
+      return;
+    }
+    const leafId = claim.leaf_id || claim.cluster_id;
+    const leaf = leafId ? themeById.get(leafId) : undefined;
+    const op = leafId ? opinionByTheme.get(leafId) : undefined;
+    setSelClaim(claim);
+    setSelStats({
+      leafTitle: leaf ? leaf.title || leaf.label : claim.theme_title,
+      nAvis: leaf?.n_avis ?? null,
+      nClaims: leaf?.n_claims ?? null,
+      opinion: op ? { fav: op.fav, def: op.def, nuance: op.nuance, proposition: op.proposition } : null,
+      citation: null,
+      loading: Boolean(leafId),
+    });
+    if (!leafId) return;
+    // Représentativité : retrouver CE claim dans les citations de sa feuille (triées par
+    // proximité au centroïde). Match par avis_id, affiné par texte de span si plusieurs.
+    getCitations(leafId).then((list) => {
+      const mine = list.filter((c) => c.avis_id === avis.id);
+      let found = mine[0];
+      if (mine.length > 1 && claim.spans.length > 0) {
+        const spanText = avis.text.slice(claim.spans[0].start, claim.spans[0].end).trim();
+        found = mine.find((c) => c.text && spanText && (c.text.includes(spanText.slice(0, 60)) || spanText.includes(c.text.slice(0, 60)))) ?? mine[0];
+      }
+      setSelStats((s) => ({
+        ...s,
+        loading: false,
+        citation:
+          found && typeof found.rank === 'number'
+            ? { rank: found.rank, total: list.length, dist: found.dist_to_centroid }
+            : null,
+      }));
+    });
+  };
   return (
     <li
       ref={ref}
@@ -315,8 +501,12 @@ const AvisCard = forwardRef<
           }
         }}
       >
-        <AvisBody avis={avis} highlight={highlight} />
+        <AvisBody avis={avis} highlight onClaimClick={onClaimClick} />
       </div>
+      {/* Carte de stats du claim cliqué (dashboard : volume, sentiment, lecture, représentativité). */}
+      {selClaim && (
+        <ClaimStatsCard claim={selClaim} stats={selStats} onClose={() => setSelClaim(null)} />
+      )}
       <p className="avisx__analyzehint" aria-hidden>
         {analysisOpen ? '▾ analyse de l’avis' : '▸ cliquer pour analyser'}
       </p>
