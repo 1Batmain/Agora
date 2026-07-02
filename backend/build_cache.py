@@ -197,6 +197,12 @@ def build_cache(
             "seed": seed,
         },
     }
+    # QUESTION posée + CONTEXTE : recopiés du DESCRIPTEUR (source de vérité, générique).
+    # Sans ça, ils n'existaient que comme modifs manuelles de meta.json, perdues à chaque
+    # rebuild/reset (bug : la question cadre l'extraction v2 ET le titre de la page).
+    for _k in ("question", "context", "official_baseline"):
+        if desc.extra.get(_k):
+            meta[_k] = desc.extra[_k]
     (out_dir / META_NAME).write_text(
         json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
     )
