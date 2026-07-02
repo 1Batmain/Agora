@@ -278,13 +278,14 @@ interface Seg {
 
 /**
  * Stance presentation — same transparency as the verbatim highlight: we SHOW the
- * opinion classification (favorable / défavorable / nuancé) so it can be audited
- * against the text. ↑ vert = pour, ↓ rouge = contre, ~ gris = nuancé.
+ * SENTIMENT toward the cleavage object (positif / négatif / neutre) so it can be audited
+ * against the text. ↑ vert = positif, ↓ rouge = négatif, ~ gris = neutre.
+ * (Les clés internes restent favorable/defavorable/nuance = le sens du sentiment.)
  */
 const STANCE_META: Record<string, { glyph: string; color: string; label: string }> = {
-  favorable: { glyph: '↑', color: '#1a7f37', label: 'favorable' },
-  defavorable: { glyph: '↓', color: '#c1121f', label: 'défavorable' },
-  nuance: { glyph: '~', color: '#6b7280', label: 'nuancé' },
+  favorable: { glyph: '↑', color: '#1a7f37', label: 'positif' },
+  defavorable: { glyph: '↓', color: '#c1121f', label: 'négatif' },
+  nuance: { glyph: '~', color: '#6b7280', label: 'neutre' },
 };
 
 /**
