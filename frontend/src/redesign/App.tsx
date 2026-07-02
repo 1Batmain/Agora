@@ -9,7 +9,7 @@ import RedesignApp from './RedesignApp';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
 type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis';
-type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null };
+type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null; focusStance?: 'favorable' | 'defavorable' | null };
 
 /**
  * Shell d'Agora. La vue d'accueil est la LANDING (grille de consultations). Au clic
@@ -28,6 +28,8 @@ export default function App() {
   const [focusAvis, setFocusAvis] = useState<string | null>(null);
   // Thème courant à focaliser dans le graphe / l'explorateur (null = complet).
   const [focusTheme, setFocusTheme] = useState<string | null>(null);
+  // Sentiment à pré-filtrer dans l'explorateur (clic carte positif/négatif de la synthèse).
+  const [focusStance, setFocusStance] = useState<'favorable' | 'defavorable' | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -51,6 +53,7 @@ export default function App() {
       setActiveId(st?.activeId ?? null);
       setFocusAvis(st?.focus ?? null);
       setFocusTheme(st?.focusTheme ?? null);
+      setFocusStance(st?.focusStance ?? null);
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
@@ -116,19 +119,25 @@ export default function App() {
     );
   }, []);
 
-  // Bouton « Consulter les témoignages » : explorateur FILTRÉ sur le thème courant.
-  const exploreTheme = useCallback((datasetId: string, themeId: string | null) => {
-    setActiveId(datasetId);
-    setRoute('avis');
-    setFocusAvis(null);
-    setFocusTheme(themeId);
-    const url = `?c=${datasetId}&view=avis${themeId ? `&t=${encodeURIComponent(themeId)}` : ''}`;
-    window.history.pushState(
-      { route: 'avis', activeId: datasetId, focusTheme: themeId } as HistState,
-      '',
-      url,
-    );
-  }, []);
+  // Bouton « Consulter les témoignages » / clic carte sentiment : explorateur FILTRÉ sur le
+  // thème courant, éventuellement sur un SENTIMENT (positif=favorable / négatif=defavorable).
+  const exploreTheme = useCallback(
+    (datasetId: string, themeId: string | null,
+     stance: 'favorable' | 'defavorable' | null = null) => {
+      setActiveId(datasetId);
+      setRoute('avis');
+      setFocusAvis(null);
+      setFocusTheme(themeId);
+      setFocusStance(stance);
+      const url = `?c=${datasetId}&view=avis`
+        + (themeId ? `&t=${encodeURIComponent(themeId)}` : '')
+        + (stance ? `&s=${stance}` : '');
+      window.history.pushState(
+        { route: 'avis', activeId: datasetId, focusTheme: themeId, focusStance: stance } as HistState,
+        '',
+        url,
+      );
+    }, []);
 
   const backToLanding = useCallback(() => {
     setRoute('landing');
@@ -142,7 +151,7 @@ export default function App() {
         dataset={active}
         onHome={backToLanding}
         onViewGraph={(themeId) => viewGraph(active.id, themeId)}
-        onExploreTheme={(themeId) => exploreTheme(active.id, themeId)}
+        onExploreTheme={(themeId, stance) => exploreTheme(active.id, themeId, stance)}
         onExploreAvis={(avisId) => exploreAvis(active.id, avisId)}
       />
     );
@@ -153,6 +162,7 @@ export default function App() {
         dataset={active}
         focusAvisId={focusAvis}
         focusThemeId={focusTheme}
+        focusStance={focusStance}
         onHome={backToLanding}
       />
     );

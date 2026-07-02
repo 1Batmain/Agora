@@ -12,7 +12,14 @@ import type { ThemeOpinion } from './contract';
  * répartition fiable → on ne montre rien. Un thème `consensuel` surface tout de même la
  * minorité de sceptiques.
  */
-export function OpinionBar({ opinion }: { opinion: ThemeOpinion }) {
+export function OpinionBar({
+  opinion,
+  onSelectStance,
+}: {
+  opinion: ThemeOpinion;
+  /** Clic sur la carte positive/négative → ouvrir les avis de ce sentiment (câblé par le shell). */
+  onSelectStance?: (stance: 'favorable' | 'defavorable') => void;
+}) {
   const {
     proposition, fav, def, nuance, n, engagement, pct_favorable, profil,
     is_aggregate, n_children, child_propositions,
@@ -50,35 +57,40 @@ export function OpinionBar({ opinion }: { opinion: ThemeOpinion }) {
         </details>
       )}
 
-      {/* 1 ── ENGAGEMENT : part des contributions qui expriment un sentiment net */}
-      <div className="opinion__metric">
-        <p className="opinion__lead">
-          <strong>{engPct}%</strong> des contributions expriment un sentiment net{' '}
-          <span className="opinion__sub">({engaged} sur {total})</span>
-        </p>
-        <div className="opinion__bar" role="img" aria-label={`${engaged} avec sentiment, ${nuance} neutres`}>
-          <span className="opinion__seg opinion__seg--engaged" style={{ width: `${engPct}%` }} title={`Avec sentiment : ${engaged}`} />
-          <span className="opinion__seg opinion__seg--nu" style={{ width: `${100 - engPct}%` }} title={`Neutres / hors-sujet : ${nuance}`} />
+      {/* Dashboard de cartes : engagement (grande) + positif / négatif (cliquables → avis). */}
+      <div className="opinion__cards">
+        <div className="opinion__card opinion__card--eng">
+          <strong className="opinion__card-pct">{engPct}%</strong>
+          <span className="opinion__card-label">des contributions expriment un sentiment net</span>
+          <span className="opinion__card-sub">{engaged} sur {total}</span>
         </div>
+        {engaged > 0 && (
+          <>
+            <button
+              type="button"
+              className="opinion__card opinion__card--pos"
+              onClick={() => onSelectStance?.('favorable')}
+              disabled={!onSelectStance}
+              title={`Voir les ${fav} avis au sentiment positif`}
+            >
+              <strong className="opinion__card-pct">{pctFav}%</strong>
+              <span className="opinion__card-label">sentiment positif</span>
+              <span className="opinion__card-sub">{fav} avis{onSelectStance ? ' · voir →' : ''}</span>
+            </button>
+            <button
+              type="button"
+              className="opinion__card opinion__card--neg"
+              onClick={() => onSelectStance?.('defavorable')}
+              disabled={!onSelectStance}
+              title={`Voir les ${def} avis au sentiment négatif`}
+            >
+              <strong className="opinion__card-pct">{pctDef}%</strong>
+              <span className="opinion__card-label">sentiment négatif</span>
+              <span className="opinion__card-sub">{def} avis{onSelectStance ? ' · voir →' : ''}</span>
+            </button>
+          </>
+        )}
       </div>
-
-      {/* 2 ── SENTIMENT : positif / négatif envers l'objet de clivage, PARMI les engagées */}
-      {engaged > 0 && (
-        <div className="opinion__metric">
-          <p className="opinion__lead">
-            Parmi elles : <strong className="opinion__txt--fav">{pctFav}% positifs</strong>
-            {' · '}
-            <strong className="opinion__txt--def">{pctDef}% négatifs</strong>
-          </p>
-          <div className="opinion__bar" role="img" aria-label={`${fav} positifs, ${def} négatifs`}>
-            <span className="opinion__seg opinion__seg--fav" style={{ width: `${pctFav}%` }} title={`Positifs : ${fav}`} />
-            <span className="opinion__seg opinion__seg--def" style={{ width: `${pctDef}%` }} title={`Négatifs : ${def}`} />
-          </div>
-          <p className="opinion__note">
-            {clivant ? 'Sentiment partagé.' : 'Sentiment majoritairement positif, une minorité négative.'}
-          </p>
-        </div>
-      )}
 
       {/* 3 ── (à venir) argument mining : arguments les plus mis en avant pour / contre */}
     </div>
