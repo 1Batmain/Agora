@@ -93,6 +93,7 @@ class ThemeTree:
     derived_global: object          # DerivedDefaults sur tout le corpus de claims
     root_coarsen: dict | None = None  # diagnostic du coarsening racine (fusion macros)
     claim_idf: dict | None = None     # idf corpus des claims (D1, calculé une fois au build)
+    recut: dict | None = None         # diagnostic de la re-coupe sauce_magique (backend.recut)
 
     def get(self, node_id: str) -> ThemeNode | None:
         return self.nodes.get(node_id)
@@ -787,6 +788,9 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None,
                     "des dispersions macro) ET ≥2 sous-thèmes viables",
         },
         "root_coarsen": tree.root_coarsen,   # fusion des racines trop proches (entrée grossière)
+        # re-coupe sauce_magique (backend.recut) : façade macro = coupe optimale de l'arbre.
+        # `getattr` : robuste aux arbres construits hors build (mocks, anciens pickles).
+        "recut": getattr(tree, "recut", None),
         "derived": None if dg is None else {
             "k": dg.k,
             "threshold": round(dg.threshold, 4),
