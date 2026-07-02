@@ -83,7 +83,7 @@ export function ThemeNavigator({
   const card = (t: SpatialTheme) => {
     const name = t.title || t.label;
     const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
-    const coh = Math.round((t.consensus ?? 0) * 100);
+    const coh = Math.round((t.cohesion ?? t.consensus ?? 0) * 100);
     const selected = t.id === currentId;
     return (
       <button
