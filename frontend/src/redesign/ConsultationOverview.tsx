@@ -186,43 +186,6 @@ export function ConsultationOverview({
             </p>
           )}
 
-        {/* Transparence des COÛTS : tokens + $ + durée du traitement Agora, et — quand le
-            descripteur du dataset en porte un — le point de comparaison OFFICIEL sourcé. */}
-        {cost && (
-          <p className="overview__cost" role="note">
-            <span className="overview__cost-agora">
-              Traitement Agora&nbsp;:{' '}
-              <strong>{(cost.total.total_tokens / 1e6).toLocaleString(LOCALE, { maximumFractionDigits: 1 })}&nbsp;M tokens</strong>
-              {' · '}
-              <strong>≈&nbsp;{cost.total.estimated_usd.toLocaleString(LOCALE, { maximumFractionDigits: 2 })}&nbsp;$</strong>
-              {(() => {
-                const secs = (cost.durations?.analysis_seconds ?? 0) + (cost.durations?.opinion_seconds ?? 0);
-                if (!secs) return null;
-                const mins = Math.max(1, Math.round(secs / 60));
-                return <>{' · '}<strong>~{mins}&nbsp;min de calcul</strong></>;
-              })()}
-            </span>
-            {dataset.official_baseline && (
-              <span className="overview__cost-baseline">
-                {' '}versus {dataset.official_baseline.label}&nbsp;:{' '}
-                {dataset.official_baseline.cost}
-                {dataset.official_baseline.duration ? ` · ${dataset.official_baseline.duration}` : ''}
-                {dataset.official_baseline.source_url && (
-                  <>
-                    {' '}
-                    <a href={dataset.official_baseline.source_url} target="_blank" rel="noreferrer">
-                      (source)
-                    </a>
-                  </>
-                )}
-                {dataset.official_baseline.note && (
-                  <span className="overview__cost-note"> {dataset.official_baseline.note}</span>
-                )}
-              </span>
-            )}
-          </p>
-        )}
-
         <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (
             <>
@@ -405,6 +368,57 @@ export function ConsultationOverview({
             );
           })()}
         </section>
+
+        {/* PIED DE PAGE — transparence des coûts : tokens · $ · durée RÉELLE du traitement
+            (somme des phases mesurées + estimées marquées), versus le dispositif officiel
+            sourcé quand le descripteur en porte un. */}
+        {cost && (
+          <footer className="overview__footer" role="contentinfo">
+            <p className="overview__cost">
+              <span className="overview__cost-agora">
+                Traitement Agora&nbsp;:{' '}
+                <strong>{(cost.total.total_tokens / 1e6).toLocaleString(LOCALE, { maximumFractionDigits: 1 })}&nbsp;M tokens</strong>
+                {' · '}
+                <strong>≈&nbsp;{cost.total.estimated_usd.toLocaleString(LOCALE, { maximumFractionDigits: 2 })}&nbsp;$</strong>
+                {(() => {
+                  const secs =
+                    (cost.total as { duration_seconds?: number }).duration_seconds ||
+                    (cost.durations?.analysis_seconds ?? 0) + (cost.durations?.opinion_seconds ?? 0);
+                  if (!secs) return null;
+                  const label = secs >= 5400
+                    ? `~${(secs / 3600).toLocaleString(LOCALE, { maximumFractionDigits: 1 })}\u00a0h`
+                    : `~${Math.max(1, Math.round(secs / 60))}\u00a0min`;
+                  const estimated = Object.keys(cost.phases ?? {}).some((k) => k.endsWith('_estimee'));
+                  return (
+                    <>
+                      {' · '}
+                      <strong>{label} de traitement</strong>
+                      {estimated && <span className="overview__cost-est"> (durée en partie estimée)</span>}
+                    </>
+                  );
+                })()}
+              </span>
+              {dataset.official_baseline && (
+                <span className="overview__cost-baseline">
+                  {' '}versus {dataset.official_baseline.label}&nbsp;:{' '}
+                  {dataset.official_baseline.cost}
+                  {dataset.official_baseline.duration ? ` · ${dataset.official_baseline.duration}` : ''}
+                  {dataset.official_baseline.source_url && (
+                    <>
+                      {' '}
+                      <a href={dataset.official_baseline.source_url} target="_blank" rel="noreferrer">
+                        (source)
+                      </a>
+                    </>
+                  )}
+                  {dataset.official_baseline.note && (
+                    <span className="overview__cost-note"> {dataset.official_baseline.note}</span>
+                  )}
+                </span>
+              )}
+            </p>
+          </footer>
+        )}
       </main>
     </div>
   );

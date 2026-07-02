@@ -27,6 +27,7 @@ import argparse
 import json
 import random
 from pathlib import Path
+from time import perf_counter
 
 import numpy as np
 
@@ -133,6 +134,7 @@ def build_cache(
     label: str | None = None,
     seed: int = 42,
 ) -> dict:
+    _t0_build = perf_counter()
     desc = resolve_descriptor(dataset, descriptor)
 
     # Télécharge la source si absente (idempotent ; ne bloque pas si offline).
@@ -207,6 +209,15 @@ def build_cache(
         json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
+    # Durée réelle de l'ingestion+embedding (0 token LLM — c'est du calcul local, mais elle
+    # compte dans la durée de traitement affichée honnêtement par l'overview).
+    try:
+        from backend import cost as _cost
+        _cost.record_phase(dataset, "ingest_embed",
+                           {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "by_model": {}},
+                           duration_seconds=perf_counter() - _t0_build)
+    except Exception:
+        pass
     print(f"✓ {out_dir / EMB_NAME}  ({vecs.shape[0]}×{vecs.shape[1]} float32)")
     print(f"✓ {out_dir / IDEAS_NAME}  ({len(ideas)} avis)")
     print(f"✓ {out_dir / META_NAME}")
