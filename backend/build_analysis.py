@@ -261,7 +261,8 @@ def build_analysis(
 
         # Coût LLM de ce build (extraction + nommage + enrichissement + insights).
         try:
-            cost.record_phase(dataset, "analysis", mistral_client.get_usage())
+            cost.record_phase(dataset, "analysis", mistral_client.get_usage(),
+                              duration_seconds=perf_counter() - t0)
         except Exception as _e:  # le coût est un bonus, jamais bloquant
             _log(f"{dataset} · (coût non enregistré: {_e})")
 

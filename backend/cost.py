@@ -73,11 +73,13 @@ def read_cost(dataset: str) -> dict | None:
         return None
 
 
-def record_phase(dataset: str, phase: str, usage: dict, *, extra: dict | None = None) -> dict:
-    """Enregistre l'usage d'UNE phase (`analysis`/`opinion`) et recalcule le total.
+def record_phase(dataset: str, phase: str, usage: dict, *, extra: dict | None = None,
+                 duration_seconds: float | None = None) -> dict:
+    """Enregistre l'usage d'UNE phase (`ingest`/`analysis`/`opinion`…) et recalcule le total.
 
-    `usage` = snapshot de `mistral_client.get_usage()`. Idempotent par phase (ré-écrit la
-    phase). Retourne le `cost.json` mis à jour.
+    `usage` = snapshot de `mistral_client.get_usage()`. `duration_seconds` = durée RÉELLE
+    mesurée de la phase (mur d'horloge) — les phases `*_estimee` peuvent porter une durée
+    estimée, marquée par leur nom. Idempotent par phase. Retourne le `cost.json` à jour.
     """
     doc = read_cost(dataset) or {"dataset": dataset, "phases": {}}
     doc.setdefault("phases", {})
@@ -87,9 +89,12 @@ def record_phase(dataset: str, phase: str, usage: dict, *, extra: dict | None = 
         "completion_tokens": usage.get("completion_tokens", 0),
         "by_model": usage.get("by_model", {}),
     }
+    if duration_seconds is not None:
+        doc["phases"][phase]["duration_seconds"] = round(float(duration_seconds), 1)
     by_model = _sum_models(doc["phases"])
     pt = sum(u["prompt_tokens"] for u in by_model.values())
     ct = sum(u["completion_tokens"] for u in by_model.values())
+    dur = sum(ph.get("duration_seconds", 0) for ph in doc["phases"].values())
     doc["total"] = {
         "calls": sum(u["calls"] for u in by_model.values()),
         "prompt_tokens": pt,
@@ -97,6 +102,8 @@ def record_phase(dataset: str, phase: str, usage: dict, *, extra: dict | None = 
         "total_tokens": pt + ct,
         "by_model": by_model,
         "estimated_usd": estimate_usd(by_model),
+        # Somme des durées de phase CONNUES (mesurées ou estimées-marquées) ; 0 = inconnu.
+        "duration_seconds": round(dur, 1),
     }
     if extra:
         doc.update(extra)
