@@ -204,13 +204,16 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consult
         # repli sur n_sample (datasets non capés, ex. tiktok).
         "n_contributions": meta.get("n_loaded", n_sample),
         "n_nodes": n_sample,  # rétro-compat : == n_sample (lu par pytest /datasets)
-        # Réponses réelles à la question (voix, doublons regroupés inclus). Fallback prudent :
-        # n_sample (aucune voix inventée si ni meta ni ideas ne l'exposent).
-        "n_responses": meta.get("n_responses", derived.get("n_responses", n_sample)),
         "languages": meta.get("languages", derived.get("languages", [])),
         "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
         "source": meta.get("source", derived.get("source", dataset)),
     }
+    # Réponses réelles à la question (voix du CORPUS, pré-échantillonnage) — servi SEULEMENT
+    # si connu (meta écrite par build_cache, ou dérivé des ideas d'un corpus non capé). Pas
+    # de fallback n_sample : un dénominateur inventé fausserait la note d'échantillon du front.
+    n_responses = meta.get("n_responses", derived.get("n_responses"))
+    if n_responses and (meta.get("built_with", {}).get("cap") is None or "n_responses" in meta):
+        out["n_responses"] = n_responses
     # Sujet affiché (consultations clôturées qui en exposent un dans meta.json).
     if meta.get("question"):
         out["question"] = meta["question"]
