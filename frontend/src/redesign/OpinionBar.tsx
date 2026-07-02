@@ -92,6 +92,13 @@ export function OpinionBar({
         )}
       </div>
 
+      {/* Honnêteté : ces % décrivent les CONTRIBUTIONS REÇUES (participation volontaire,
+          classement automatique) — pas l'opinion de la population. */}
+      <p className="opinion__disclaimer" role="note">
+        Ceci n'est pas un sondage : ces proportions décrivent les contributions reçues
+        (participation volontaire, classement automatique par IA), pas la population générale.
+      </p>
+
       {/* 3 ── (à venir) argument mining : arguments les plus mis en avant pour / contre */}
     </div>
   );

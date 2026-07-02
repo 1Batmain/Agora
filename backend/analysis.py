@@ -738,6 +738,10 @@ def theme_dict(n: ThemeNode) -> dict:
         "n_avis": n.n_avis,
         "n_claims": n.n_claims,
         "weight": n.weight,
+        # « cohesion » = COHÉSION SÉMANTIQUE (proximité des claims dans l'espace d'embedding),
+        # PAS un accord d'opinion — nom honnête (contrat de métriques). `consensus` reste servi
+        # en ALIAS rétro-compat pour les clients existants.
+        "cohesion": n.consensus,
         "consensus": n.consensus,
         "convergence": n.convergence,   # accord intra-cluster (consensus_eff pondéré pop.)
         "dispersion": n.dispersion,

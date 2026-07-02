@@ -2029,3 +2029,8 @@ button.opinion__card:disabled { cursor: default; }
 .claimstats__pos { color: #18753c; }
 .claimstats__neg { color: #c1121f; }
 .claimstats__conf { font-size: .7em; color: #999; letter-spacing: .1em; }
+
+/* Honnêteté : disclaimer « pas un sondage » sous les cartes d'opinion. */
+.opinion__disclaimer {
+  margin: .5rem 0 0; font-size: .72rem; color: #8a8a97; font-style: italic; line-height: 1.45;
+}
