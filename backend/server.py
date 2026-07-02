@@ -472,6 +472,17 @@ def get_cost(dataset: str | None = Query(None)) -> dict:
     data = _cost.read_cost(ds.id)
     if data is None:
         raise HTTPException(status_code=404, detail="coût non mesuré pour ce dataset.")
+    # DURÉES au serve-time (jamais bakées dans cost.json) : build d'analyse (status.json)
+    # + phase opinion (opinion.json) — pour l'affichage « coût · tokens · durée » du front.
+    durations: dict = {}
+    prog = analysis_store.progress(ds.id)
+    if isinstance(prog, dict) and prog.get("took_seconds"):
+        durations["analysis_seconds"] = prog["took_seconds"]
+    op = analysis_store.read_opinion(ds.id)
+    if isinstance(op, dict) and op.get("took_seconds"):
+        durations["opinion_seconds"] = op["took_seconds"]
+    if durations:
+        data = {**data, "durations": durations}
     return data
 
 

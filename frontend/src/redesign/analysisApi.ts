@@ -103,6 +103,20 @@ export async function fetchCitations(
   }
 }
 
+/** GET /cost {dataset} → coût LLM du traitement (tokens, $ estimé, durées) ; null si non mesuré. */
+export async function fetchCost(
+  dataset: string,
+): Promise<import('./contract').CostPayload | null> {
+  try {
+    const qs = new URLSearchParams({ dataset });
+    const { status, body } = await rawFetch(`/cost?${qs}`);
+    if (status === 200 && body && body.total) return body as import('./contract').CostPayload;
+  } catch {
+    /* non mesuré / réseau */
+  }
+  return null;
+}
+
 /**
  * GET /opinion {dataset} → répartition d'opinion par thème feuille (objet de clivage +
  * stance agrégée). Artefact À PART, indépendant de l'analyse : chargé UNE fois puis
