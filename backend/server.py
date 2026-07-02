@@ -548,6 +548,7 @@ def get_avis_list(
     dataset: str | None = Query(None),
     theme_id: str | None = Query(None),
     q: str | None = Query(None),
+    stance: str | None = Query(None),  # "favorable"|"defavorable" → n'garde que les avis de ce sentiment
     limit: int = Query(15, ge=1, le=200),
     offset: int = Query(0, ge=0),
 ) -> dict:
@@ -570,10 +571,12 @@ def get_avis_list(
         return _not_ready_response(ds, response)
     payload = analysis_store.read_analysis(ds.id)
     themes = (payload or {}).get("themes", [])
-    result = avis.avis_list(avis_data, themes,
-                            theme_id=theme_id, q=q, limit=limit, offset=offset)
-    # Join gracieux de la stance par claim sur les avis de la page (absent → inchangé).
+    # Stance lue AVANT le filtrage : `avis.avis_list` peut ne garder que les avis dont ≥1 claim
+    # (dans le thème) porte le sentiment demandé (`stance`), pour les cartes cliquables.
     stance_map = analysis_store.read_claim_stance(ds.id)
+    result = avis.avis_list(avis_data, themes, theme_id=theme_id, q=q,
+                            stance=stance, claim_stance=stance_map, limit=limit, offset=offset)
+    # Join gracieux de la stance par claim sur les avis de la page (absent → inchangé).
     if stance_map:
         for item in result.get("items", []):
             item["claims"] = avis.join_claim_stance(item.get("claims", []), stance_map)
