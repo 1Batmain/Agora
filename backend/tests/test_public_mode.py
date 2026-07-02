@@ -33,7 +33,10 @@ def test_protected_endpoints_fail_closed(client, public):
     """Sans token, en public, les endpoints PROTÉGÉS renvoient 403 (et non 200/ouvert)."""
     assert client.post("/flag", json={"dataset": "tiktok", "target_type": "avis",
                                       "target_id": "a1", "text": "x"}).status_code == 403
-    assert client.post("/submit", json={"dataset": "x", "text": "bonjour"}).status_code == 403
+    # /submit est OUVERT en public (participation citoyenne, mode COLLECTE sans embedding) :
+    # consultation inconnue → 404 (validation), PAS 403. Voir test_integration (parcours).
+    assert client.post("/submit", json={"consultation_id": "inconnue",
+                                        "text": "bonjour le monde"}).status_code == 404
 
 
 def test_compute_endpoints_disabled(client, public):
