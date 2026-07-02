@@ -207,6 +207,7 @@ def _avis_themes(claims: list[dict]) -> list[dict]:
 
 def avis_list(avis_data: dict, themes: list[dict], *,
               theme_id: str | None = None, q: str | None = None,
+              stance: str | None = None, claim_stance: dict | None = None,
               limit: int = 15, offset: int = 0) -> dict:
     """Liste paginée/filtrée des avis depuis `avis.json` → `{total, items}`.
 
@@ -235,6 +236,16 @@ def avis_list(avis_data: dict, themes: list[dict], *,
             (c.get("leaf_id") or c.get("cluster_id")) in keep_ids for c in claims
         ):
             continue
+        # Filtre par SENTIMENT : ne garder que les avis ayant ≥1 claim (DANS le thème filtré)
+        # dont la stance bakée == `stance`. La stance est jointe par id de claim (`avis_id#idx`).
+        if stance and claim_stance:
+            def _in_theme(c: dict) -> bool:
+                return keep_ids is None or (c.get("leaf_id") or c.get("cluster_id")) in keep_ids
+            if not any(
+                _in_theme(c) and (claim_stance.get(c.get("id")) or {}).get("stance") == stance
+                for c in claims
+            ):
+                continue
         text = entry.get("text") or ""
         if needle is not None and needle not in _fold(text):
             continue

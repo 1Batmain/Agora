@@ -28,6 +28,7 @@ export function AvisExplorer({
   dataset,
   focusAvisId,
   focusThemeId,
+  focusStance,
   onHome,
 }: {
   dataset: Consultation;
@@ -35,6 +36,8 @@ export function AvisExplorer({
   focusAvisId?: string | null;
   /** Thème sur lequel PRÉ-FILTRER l'explorateur (bouton « Consulter les témoignages du thème »). */
   focusThemeId?: string | null;
+  /** Sentiment sur lequel PRÉ-FILTRER (clic carte positif/négatif de la synthèse). */
+  focusStance?: 'favorable' | 'defavorable' | null;
   onHome: () => void;
 }) {
   // Filtres : saisie immédiate `qInput` → `q` debouncé (300 ms) ; thème sélectionné
@@ -42,11 +45,15 @@ export function AvisExplorer({
   const [qInput, setQInput] = useState('');
   const [q, setQ] = useState('');
   const [themeId, setThemeId] = useState<string | null>(focusThemeId ?? null);
+  const [stance, setStance] = useState<'favorable' | 'defavorable' | null>(focusStance ?? null);
 
-  // Synchronise le filtre si le thème de focus change (navigation depuis un autre sous-thème).
+  // Synchronise les filtres si le focus change (navigation depuis un autre thème / sentiment).
   useEffect(() => {
     setThemeId(focusThemeId ?? null);
   }, [focusThemeId]);
+  useEffect(() => {
+    setStance(focusStance ?? null);
+  }, [focusStance]);
 
   const [themes, setThemes] = useState<SpatialTheme[]>([]);
   const [items, setItems] = useState<AvisListItem[]>([]);
@@ -102,7 +109,7 @@ export function AvisExplorer({
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    fetchAvisList(dataset.id, { themeId, q, limit: PAGE, offset: 0 })
+    fetchAvisList(dataset.id, { themeId, q, stance, limit: PAGE, offset: 0 })
       .then(({ data }) => {
         if (cancelled) return;
         setItems(data?.items ?? []);
@@ -112,7 +119,7 @@ export function AvisExplorer({
     return () => {
       cancelled = true;
     };
-  }, [dataset.id, themeId, q]);
+  }, [dataset.id, themeId, q, stance]);
 
   // Avis ciblé (citation) → chargé une fois pour l'épingler en tête.
   useEffect(() => {
@@ -135,7 +142,7 @@ export function AvisExplorer({
 
   function loadMore() {
     setLoadingMore(true);
-    fetchAvisList(dataset.id, { themeId, q, limit: PAGE, offset: items.length })
+    fetchAvisList(dataset.id, { themeId, q, stance, limit: PAGE, offset: items.length })
       .then(({ data }) => {
         if (data) {
           setItems((prev) => [...prev, ...data.items]);

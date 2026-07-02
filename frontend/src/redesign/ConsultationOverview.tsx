@@ -35,7 +35,7 @@ export function ConsultationOverview({
   /** Ouvre le graphe, focalisé sur le thème courant (null = graphe complet). */
   onViewGraph: (themeId: string | null) => void;
   /** Ouvre l'explorateur d'avis, filtré sur le thème courant (null = tous les avis). */
-  onExploreTheme: (themeId: string | null) => void;
+  onExploreTheme: (themeId: string | null, stance?: 'favorable' | 'defavorable' | null) => void;
   /** Clic sur une citation représentative → page d'exploration FOCALISÉE sur l'avis. */
   onExploreAvis: (avisId: string) => void;
 }) {
@@ -279,7 +279,13 @@ export function ConsultationOverview({
                 {/* Répartition d'opinion du thème (si bakée) : objet de clivage en
                     proposition polaire + barre fav/déf/nuance + badge clivant/consensuel.
                     Honnête : on n'affiche RIEN si le thème est 'impur' (signal trop diffus). */}
-                {selectedTheme && focusOpinion && <OpinionBar opinion={focusOpinion} />}
+                {selectedTheme && focusOpinion && (
+                  <OpinionBar
+                    opinion={focusOpinion}
+                    onSelectStance={(stance) =>
+                      selectedThemeId && onExploreTheme(selectedThemeId, stance)}
+                  />
+                )}
                 {/* Pas de flash : si une synthèse est déjà là, on la garde (estompée)
                     pendant le re-fetch plutôt que de vider la zone. */}
                 {dynSource ? (
