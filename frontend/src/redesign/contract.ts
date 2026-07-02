@@ -116,6 +116,11 @@ export interface ThemeOpinion {
   profil: 'clivant' | 'consensuel' | 'impur';
   title?: string;
   cleavage_justif?: string;
+  // Thème PARENT : sentiment agrégé (moyenne pondérée par claims) de ses feuilles-descendantes,
+  // et objet de clivage SYNTHÉTISÉ (LLM) à partir des objets des sous-thèmes.
+  is_aggregate?: boolean;
+  n_children?: number;
+  child_propositions?: string[];
 }
 
 /** Payload de `GET /opinion` : la répartition par thème (vide si non bakée). */

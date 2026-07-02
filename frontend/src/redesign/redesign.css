@@ -1436,6 +1436,13 @@ body {
 .opinion__badge--clivant { background: #ffe9e9; color: #b81b1b; }
 .opinion__badge--consensuel { background: #d6f3e0; color: #18753c; }
 .opinion__proposition { margin: .5rem 0 .8rem; font-size: 1rem; font-weight: 600; color: #1a1a2e; }
+
+/* Objets de clivage des sous-thèmes (thème parent agrégé) — liste dépliable. */
+.opinion__children { margin: .1rem 0 .6rem; font-size: .82rem; color: #555; }
+.opinion__children summary { cursor: pointer; color: var(--agora, #000091); font-weight: 600; }
+.opinion__children ul { margin: .4rem 0 0; padding-left: 1.1rem; }
+.opinion__children li { margin: .18rem 0; line-height: 1.45; }
+
 .opinion__bar {
   display: flex; height: 14px; border-radius: 7px; overflow: hidden;
   background: #ececf4;
