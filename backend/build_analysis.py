@@ -38,6 +38,7 @@ from backend.analysis import (
     build_theme_tree,
 )
 from backend.avis import build_avis_provenance
+from backend.recut import recut_tree
 from backend.translate import build_translations
 from backend.keywords_fr import translate_tree_keywords
 from backend.citations import citations_for_theme
@@ -165,6 +166,15 @@ def build_analysis(
             ds, backend=backend, model=extract_model, embedder=embedder,
             resolution=resolution, seed=seed, extract_progress=_extract_progress,
         )
+        # 1a) RE-COUPE sauce_magique (backend.recut) : la façade macro devient la COUPE
+        #     optimale de l'arbre (anti macro-géant à l'échelle). Ids de nœuds inchangés,
+        #     ancêtres dissous retirés, couleurs/convergence réassignées. No-op si la
+        #     coupe optimale est déjà la façade actuelle.
+        rc = recut_tree(tree)
+        if rc:
+            report("recut", "re-coupe sauce_magique : "
+                            f"{rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros "
+                            f"(top1 {rc['avant']['top1']:.0%}→{rc['apres']['top1']:.0%})")
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
 
