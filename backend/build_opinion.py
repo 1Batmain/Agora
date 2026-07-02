@@ -146,6 +146,39 @@ def derive_cleavage(node: ThemeNode, sample_texts: list[str], title: str,
         return {"objet": fallback, "justif": "(repli label)"}
 
 
+# Synthèse PARENT — condense les objets de clivage des sous-thèmes en UNE phrase.
+CLEAVAGE_SYNTH_SYSTEM = (
+    "Tu reçois le TITRE d'un thème et les objets de clivage (propositions polaires) de ses "
+    "sous-thèmes. Formule en UNE SEULE PHRASE l'objet de clivage GLOBAL du thème : la tension "
+    "centrale qui synthétise ces sous-objets, écrite comme une proposition débattable (on peut "
+    "être POUR ou CONTRE). Pas de préambule ni de liste — une seule phrase.\n"
+    'Réponds en JSON : {"objet":"<une phrase>"}'
+)
+
+
+def synthesize_cleavage(propositions: list[str], title: str, *, model: str) -> str:
+    """Synthétise les objets de clivage d'enfants en UNE phrase = objet de clivage du parent.
+
+    0 objet → le titre ; 1 objet → tel quel ; sinon un appel LLM. Repli gracieux = titre.
+    """
+    props = [p for p in propositions if p]
+    if not props:
+        return title
+    if len(props) == 1:
+        return props[0]
+    user = (f"TITRE : {title}\n\nOBJETS DE CLIVAGE DES SOUS-THÈMES :\n"
+            + "\n".join(f"- {p}" for p in props[:20]))
+    messages = [{"role": "system", "content": CLEAVAGE_SYNTH_SYSTEM},
+                {"role": "user", "content": user}]
+    try:
+        raw = mistral_client.chat(messages, model=model, temperature=0.0,
+                                  max_tokens=120, json_mode=True)
+        objet = str(json.loads(raw).get("objet", "")).strip()
+        return objet or title
+    except (mistral_client.MistralError, json.JSONDecodeError):
+        return title
+
+
 # --------------------------------------------------------------------------- #
 # Stance — classe chaque claim envers la cible (batché, repli unitaire).
 # --------------------------------------------------------------------------- #
@@ -406,6 +439,47 @@ def build_opinion(
 
     # Ordre STABLE (par theme_id dans l'ordre de l'arbre) — indépendant de l'ordonnancement.
     rank = {nid: i for i, nid in enumerate(tree.order)}
+    opinions.sort(key=lambda o: rank.get(o["theme_id"], 1 << 30))
+
+    # ── Remontée aux PARENTS : pour chaque nœud non-feuille, MOYENNE PONDÉRÉE (par nombre de
+    #    claims) du sentiment de ses feuilles-descendantes + SYNTHÈSE LLM de leurs objets de
+    #    clivage en une phrase. Un thème parent porte ainsi le sentiment agrégé de ses enfants.
+    leaf_op = {o["theme_id"]: o for o in opinions}
+
+    def _leaf_descendants(nid: str) -> list[str]:
+        node = tree.nodes[nid]
+        if not node.children:
+            return [nid]
+        acc: list[str] = []
+        for c in node.children:
+            acc.extend(_leaf_descendants(c))
+        return acc
+
+    parent_ops: list[dict] = []
+    for nid in tree.order:
+        node = tree.nodes[nid]
+        if not node.children:
+            continue  # feuille : déjà traitée
+        kids = [leaf_op[l] for l in _leaf_descendants(nid)
+                if l in leaf_op and leaf_op[l]["profil"] != "impur"]
+        if not kids:
+            continue  # aucun signal exploitable sous ce parent
+        fav = sum(o["fav"] for o in kids)
+        dfv = sum(o["def"] for o in kids)
+        nu = sum(o["nuance"] for o in kids)
+        ptitle = node.title or node.label
+        child_props = [o["proposition"] for o in kids if o.get("proposition")]
+        agg = aggregate(nid, synthesize_cleavage(child_props, ptitle, model=model),
+                        Counter({"favorable": fav, "defavorable": dfv, "nuance": nu}),
+                        fav + dfv + nu)
+        agg["title"] = ptitle
+        agg["is_aggregate"] = True
+        agg["n_children"] = len(kids)
+        agg["child_propositions"] = child_props[:20]
+        parent_ops.append(agg)
+
+    _log(f"{dataset} · {len(parent_ops)} thèmes parents agrégés (moyenne pondérée + objet synthétisé)")
+    opinions = opinions + parent_ops
     opinions.sort(key=lambda o: rank.get(o["theme_id"], 1 << 30))
 
     n_clivant = sum(1 for o in opinions if o["profil"] == "clivant")
