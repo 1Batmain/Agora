@@ -13,7 +13,10 @@ import type { ThemeOpinion } from './contract';
  * minorité de sceptiques.
  */
 export function OpinionBar({ opinion }: { opinion: ThemeOpinion }) {
-  const { proposition, fav, def, nuance, n, engagement, pct_favorable, profil } = opinion;
+  const {
+    proposition, fav, def, nuance, n, engagement, pct_favorable, profil,
+    is_aggregate, n_children, child_propositions,
+  } = opinion;
   if (profil === 'impur') return null;
 
   const engaged = fav + def;
@@ -26,12 +29,26 @@ export function OpinionBar({ opinion }: { opinion: ThemeOpinion }) {
   return (
     <div className="opinion" aria-label="Répartition d'opinion du thème">
       <div className="opinion__head">
-        <span className="opinion__label">Objet de clivage</span>
+        <span className="opinion__label">
+          {is_aggregate
+            ? `Objet de clivage · synthèse de ${n_children ?? 0} sous-thèmes`
+            : 'Objet de clivage'}
+        </span>
         <span className={`opinion__badge opinion__badge--${profil}`}>
           {clivant ? 'Clivant' : 'Consensuel'}
         </span>
       </div>
       <p className="opinion__proposition">« {proposition} »</p>
+      {is_aggregate && child_propositions && child_propositions.length > 0 && (
+        <details className="opinion__children">
+          <summary>Voir les {child_propositions.length} objets de clivage des sous-thèmes</summary>
+          <ul>
+            {child_propositions.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </details>
+      )}
 
       {/* 1 ── ENGAGEMENT : part des contributions qui expriment un sentiment net */}
       <div className="opinion__metric">
