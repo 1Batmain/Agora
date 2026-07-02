@@ -169,6 +169,11 @@ def enrich_indices(payload: dict, dataset: str, ideas) -> dict:
     de même clé. No-op si la forme attendue est absente (robustesse).
     """
     filter_generic_keywords(payload)            # retire les mots-clés génériques (cross-macro)
+    # Nom honnête au SERVE-time : « cohesion » (cohésion sémantique, PAS un accord d'opinion),
+    # y compris pour les analysis.json bakés avant le renommage. `consensus` reste l'alias.
+    for t in payload.get("themes") or []:
+        if isinstance(t, dict) and "cohesion" not in t and "consensus" in t:
+            t["cohesion"] = t["consensus"]
     stats = payload.get("dataset_stats")
     if not isinstance(stats, dict):
         return payload
