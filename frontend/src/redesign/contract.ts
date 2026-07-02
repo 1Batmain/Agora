@@ -38,7 +38,10 @@ export interface SpatialTheme {
   n_avis: number;
   n_claims: number;
   weight: number;
-  consensus: number; // 0..1
+  /** COHÉSION SÉMANTIQUE 0..1 (proximité des claims dans l'espace d'embedding) — PAS un
+   *  accord d'opinion. Nom honnête ; `consensus` = alias historique servi en rétro-compat. */
+  cohesion?: number;
+  consensus: number; // 0..1 — alias historique de `cohesion` (même valeur)
   dispersion: number; // internal spread; drives adaptive subdivision (backend-side)
   parent_id: string | null; // null = root (global level)
   has_children: boolean; // true → drillable; false → leaf (→ citations)
