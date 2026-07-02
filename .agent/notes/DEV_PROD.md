@@ -20,3 +20,13 @@ Deux checkouts, deux rôles — séparation stricte (ordre + sécurité + budget
 ## Flux de travail
 1. **Code (front/back)** : dev → commit → push → **PR** → merge `main` → le runner **déploie sur prod automatiquement**.
 2. **Rebuild de données** (nouveau pipeline / dataset) : construire en **DEV** (clé dev) → valider → `deploy/promote-cache.sh [dataset]` (rsync dev→prod + restart prod).
+
+## ⚠️ Gotcha : `avis.json` et `claim_stance.json` doivent venir du MÊME build
+Les claims sont identifiés `f"{avis_id}#{index_global}"` où l'index global vient de
+`tree.prepared`. `build_analysis` écrit `avis.json` (+ l'arbre), `build_opinion` écrit
+`claim_stance.json` (+ `opinion.json`). Si on re-bake **l'un sans l'autre**, les index de
+claims divergent → les ids ne matchent plus (stance par avis + filtre `/avis_list?stance=`
+cassés, ~1% de recouvrement). **Toujours re-lancer `build_analysis` PUIS `build_opinion`
+ensemble** pour un dataset, et **promouvoir le dossier `analysis/` entier** (jamais un seul
+fichier). Vérif rapide : `intersection(ids avis.json, clés claim_stance)` doit être ≈ la
+part de claims dans les feuilles non-`impur` (≈80-100%).
