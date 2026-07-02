@@ -185,6 +185,9 @@ def build_cache(
         "label": label or desc.extra.get("label") or dataset,
         "status": desc.status,
         "n_nodes": len(ideas),
+        # Voix réelles retenues (textes uniques × poids de dédup) — l'affichage distingue
+        # participants (n_loaded) / réponses à la question (n_responses) / textes analysés.
+        "n_responses": int(round(sum(i["props"].get("weight", 1.0) or 1.0 for i in ideas))),
         "languages": [lg for lg, _ in lang_counts.most_common()],
         "lang_counts": dict(lang_counts.most_common()),
         "source": src_counts.most_common(1)[0][0] if src_counts else dataset,
