@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AnalysisPayload, Citation, Consultation, ThemeOpinion } from './contract';
-import { fetchAnalysis, fetchCitations, fetchInsights, fetchOpinion } from './analysisApi';
+import type { AnalysisPayload, Citation, Consultation, CostPayload, ThemeOpinion } from './contract';
+import { fetchAnalysis, fetchCitations, fetchCost, fetchInsights, fetchOpinion } from './analysisApi';
 import { OpinionBar } from './OpinionBar';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
@@ -50,6 +50,16 @@ export function ConsultationOverview({
   const [citations, setCitations] = useState<Citation[] | null>(null);
   // Répartition d'opinion : chargée UNE fois par dataset, lookup par theme_id (gracieux si absent).
   const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
+  // Coût LLM du traitement (transparence) — null si non mesuré.
+  const [cost, setCost] = useState<CostPayload | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setCost(null);
+    fetchCost(dataset.id).then((c) => !cancelled && setCost(c));
+    return () => {
+      cancelled = true;
+    };
+  }, [dataset.id]);
   // Mot-clé cliqué → on ne montre que les avis qui le mentionnent (les plus proches).
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   // Ancre du navigateur : on y ramène doucement la vue à chaque (dé)sélection.
@@ -175,6 +185,43 @@ export function ConsultationOverview({
               par thème sont celles de cet échantillon.
             </p>
           )}
+
+        {/* Transparence des COÛTS : tokens + $ + durée du traitement Agora, et — quand le
+            descripteur du dataset en porte un — le point de comparaison OFFICIEL sourcé. */}
+        {cost && (
+          <p className="overview__cost" role="note">
+            <span className="overview__cost-agora">
+              Traitement Agora&nbsp;:{' '}
+              <strong>{(cost.total.total_tokens / 1e6).toLocaleString(LOCALE, { maximumFractionDigits: 1 })}&nbsp;M tokens</strong>
+              {' · '}
+              <strong>≈&nbsp;{cost.total.estimated_usd.toLocaleString(LOCALE, { maximumFractionDigits: 2 })}&nbsp;$</strong>
+              {(() => {
+                const secs = (cost.durations?.analysis_seconds ?? 0) + (cost.durations?.opinion_seconds ?? 0);
+                if (!secs) return null;
+                const mins = Math.max(1, Math.round(secs / 60));
+                return <>{' · '}<strong>~{mins}&nbsp;min de calcul</strong></>;
+              })()}
+            </span>
+            {dataset.official_baseline && (
+              <span className="overview__cost-baseline">
+                {' '}versus {dataset.official_baseline.label}&nbsp;:{' '}
+                {dataset.official_baseline.cost}
+                {dataset.official_baseline.duration ? ` · ${dataset.official_baseline.duration}` : ''}
+                {dataset.official_baseline.source_url && (
+                  <>
+                    {' '}
+                    <a href={dataset.official_baseline.source_url} target="_blank" rel="noreferrer">
+                      (source)
+                    </a>
+                  </>
+                )}
+                {dataset.official_baseline.note && (
+                  <span className="overview__cost-note"> {dataset.official_baseline.note}</span>
+                )}
+              </span>
+            )}
+          </p>
+        )}
 
         <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (

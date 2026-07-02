@@ -126,6 +126,37 @@ export interface ThemeOpinion {
   child_propositions?: string[];
 }
 
+/**
+ * `GET /cost` — coût LLM du traitement de la consultation (transparence des coûts).
+ * `total` agrège les phases (extraction, enrichissement, opinion) ; les phases nommées
+ * `*_estimee` sont des ESTIMATIONS a posteriori (marquées), pas des mesures à l'appel.
+ * `durations` (serve-time) : secondes des builds disponibles.
+ */
+export interface CostPayload {
+  dataset: string;
+  phases: Record<string, { calls: number; prompt_tokens: number; completion_tokens: number }>;
+  total: {
+    calls: number;
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+    estimated_usd: number;
+  };
+  durations?: { analysis_seconds?: number; opinion_seconds?: number };
+}
+
+/**
+ * Point de comparaison OFFICIEL d'une consultation (coût/durée du dispositif d'origine,
+ * sourcé) — porté par le descripteur du dataset, servi par `/datasets` (rien en dur).
+ */
+export interface OfficialBaseline {
+  label: string;
+  cost?: string;
+  duration?: string;
+  note?: string;
+  source_url?: string;
+}
+
 /** Payload de `GET /opinion` : la répartition par thème (vide si non bakée). */
 export interface OpinionPayload {
   dataset: string;
@@ -302,6 +333,8 @@ export interface Consultation {
   /** Consultations OUVERTES (et clôturées qui en exposent un) : sujet affiché. */
   question?: string;
   context?: string;
+  /** Comparaison au dispositif officiel d'origine (coût/durée, sourcé) — cf. OfficialBaseline. */
+  official_baseline?: OfficialBaseline;
   /**
    * Hiérarchie MÈRE→ENFANTS (cf. backend/build_children.py).
    * - `parent_id` présent ⟹ c'est un ENFANT (sous-consultation, ex. un topic).
