@@ -2045,3 +2045,8 @@ button.opinion__card:disabled { cursor: default; }
 .overview__cost-baseline { color: #6b6b76; }
 .overview__cost-baseline a { color: var(--agora, #000091); }
 .overview__cost-note { display: block; font-size: .72rem; color: #9a9aa5; font-style: italic; margin-top: .15rem; }
+
+/* Variante « couverture complète » de la note (vert sobre — pas un avertissement). */
+.overview__sample--full { background: #f0f9f2; border-color: #bfe6c9; color: #23593a; }
+.overview__sample--full .overview__sample-tag { background: #bfe6c9; color: #18753c; }
+.overview__sample--full strong { color: #18753c; }

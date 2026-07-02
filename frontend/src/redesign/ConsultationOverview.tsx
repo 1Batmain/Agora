@@ -130,6 +130,11 @@ export function ConsultationOverview({
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
   const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
+  // Distinction honnête : participants (lignes reçues) / réponses à LA question (voix,
+  // doublons regroupés) / textes uniques analysés. `n_responses` sert de dénominateur vrai.
+  const nResp = dataset.n_responses ?? nReponses;
+  const isSampled = dataset.n_sample != null && nResp != null && dataset.n_sample < 0.98 * nResp;
+  const hasNonRespondents = nResp != null && nReponses != null && nResp < nReponses;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
   // Arbre navigable : tous les thèmes du payload, dénominateur racine = voix totales.
@@ -158,8 +163,13 @@ export function ConsultationOverview({
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
           <div className="overview__stat">
-            <strong>{nReponses != null ? nReponses.toLocaleString(LOCALE) : '—'}</strong>
-            <span>réponses</span>
+            <strong>{nResp != null ? nResp.toLocaleString(LOCALE) : '—'}</strong>
+            <span>
+              réponses à la question
+              {hasNonRespondents && nReponses != null && (
+                <> · {nReponses.toLocaleString(LOCALE)} participants</>
+              )}
+            </span>
           </div>
           <div className="overview__stat">
             <strong>{nThemes ?? '—'}</strong>
@@ -173,18 +183,31 @@ export function ConsultationOverview({
 
         {/* Transparence : quand l'analyse porte sur un ÉCHANTILLON (coût), on le dit
             clairement — pas de faux « tout est analysé ». Masqué si couverture 100 %. */}
-        {dataset.n_sample != null &&
-          dataset.n_contributions != null &&
-          dataset.n_sample < dataset.n_contributions && (
-            <p className="overview__sample" role="note">
-              <span className="overview__sample-tag">Échantillon</span>
-              L'analyse porte sur un échantillon représentatif de{' '}
-              <strong>{dataset.n_sample.toLocaleString(LOCALE)}</strong> réponses —{' '}
-              <strong>{Math.round((dataset.n_sample / dataset.n_contributions) * 100)}&nbsp;%</strong>{' '}
-              des {dataset.n_contributions.toLocaleString(LOCALE)} au total. Les proportions
-              par thème sont celles de cet échantillon.
-            </p>
-          )}
+        {isSampled && dataset.n_sample != null && nResp != null ? (
+          <p className="overview__sample" role="note">
+            <span className="overview__sample-tag">Échantillon</span>
+            L'analyse porte sur un échantillon représentatif de{' '}
+            <strong>{dataset.n_sample.toLocaleString(LOCALE)}</strong> textes —{' '}
+            <strong>{Math.round((dataset.n_sample / nResp) * 100)}&nbsp;%</strong> des{' '}
+            {nResp.toLocaleString(LOCALE)} réponses à la question
+            {hasNonRespondents && nReponses != null && (
+              <> ({nReponses.toLocaleString(LOCALE)} participants, dont{' '}
+              {(nReponses - nResp).toLocaleString(LOCALE)} sans réponse à cette question)</>
+            )}
+            . Les proportions par thème sont celles de cet échantillon.
+          </p>
+        ) : dataset.n_sample != null && nResp != null && hasNonRespondents ? (
+          <p className="overview__sample overview__sample--full" role="note">
+            <span className="overview__sample-tag">Couverture complète</span>
+            <strong>{dataset.n_sample.toLocaleString(LOCALE)}</strong> textes uniques analysés,
+            couvrant <strong>{nResp.toLocaleString(LOCALE)}</strong> réponses (doublons
+            strictement identiques regroupés, chaque voix comptée)&nbsp;;{' '}
+            {nReponses != null && (
+              <>{(nReponses - nResp).toLocaleString(LOCALE)} participants n'ont pas répondu à
+              cette question.</>
+            )}
+          </p>
+        ) : null}
 
         <section className="overview__synthesis" ref={synthRef}>
           {themes.length > 0 && (

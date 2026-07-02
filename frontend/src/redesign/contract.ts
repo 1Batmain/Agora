@@ -321,8 +321,11 @@ export interface Consultation {
   label: string;
   /** Consultation status: 'open' (participation en cours) | 'closed' (analyse seule). */
   status: 'open' | 'closed';
-  /** Échantillon réellement analysé (= ancien n_nodes). */
+  /** Textes uniques réellement analysés (= ancien n_nodes). */
   n_sample: number;
+  /** Réponses RÉELLES à la question (voix, doublons exacts regroupés inclus) — peut être
+   *  < n_contributions (participants n'ayant pas répondu à cette question). */
+  n_responses?: number;
   /** Nombre RÉEL de contributions reçues (avant cap d'échantillonnage). */
   n_contributions: number;
   /** Rétro-compat : alias historique de n_sample (toujours == n_sample). */
