@@ -183,6 +183,9 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consult
             "languages": [lg for lg, _ in lang_counts.most_common()],
             "lang_counts": dict(lang_counts.most_common()),
             "source": src_counts.most_common(1)[0][0] if src_counts else dataset,
+            # Voix RÉELLES portées par les textes analysés (doublons exacts inclus via le
+            # poids de dédup) — distinct de n_loaded (participants) et n_nodes (textes uniques).
+            "n_responses": int(round(sum(getattr(i, "weight", 1.0) or 1.0 for i in ideas))),
         }
     else:
         derived = {}
@@ -201,6 +204,9 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consult
         # repli sur n_sample (datasets non capés, ex. tiktok).
         "n_contributions": meta.get("n_loaded", n_sample),
         "n_nodes": n_sample,  # rétro-compat : == n_sample (lu par pytest /datasets)
+        # Réponses réelles à la question (voix, doublons regroupés inclus). Fallback prudent :
+        # n_sample (aucune voix inventée si ni meta ni ideas ne l'exposent).
+        "n_responses": meta.get("n_responses", derived.get("n_responses", n_sample)),
         "languages": meta.get("languages", derived.get("languages", [])),
         "lang_counts": meta.get("lang_counts", derived.get("lang_counts", {})),
         "source": meta.get("source", derived.get("source", dataset)),
