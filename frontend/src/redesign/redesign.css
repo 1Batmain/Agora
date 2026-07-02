@@ -1785,12 +1785,6 @@ button.opinion__card:disabled { cursor: default; }
   background: #f0f0f4; padding: .15rem .5rem;
 }
 /* Toggle GLOBAL des surlignages (en-tête des contrôles). */
-.avisx__hltoggle {
-  display: inline-flex; align-items: center; gap: .45rem;
-  font-size: .85rem; color: #333; cursor: pointer; user-select: none;
-  margin-left: auto; padding: 0 .2rem;
-}
-.avisx__hltoggle input { accent-color: var(--agora, #000091); cursor: pointer; }
 
 /* Carte d'avis INLINE : texte complet + surlignages + Signaler, plus de page séparée. */
 .avisx__card {
@@ -1979,3 +1973,59 @@ button.opinion__card:disabled { cursor: default; }
 .tnav-card__fill { display: block; height: 100%; background: var(--agora, #000091); }
 .tnav-card__coh { font-size: 0.72rem; color: #777; }
 .tnav-card__drill { font-size: 0.72rem; color: var(--agora, #000091); font-weight: 600; }
+
+/* ── Explorateur d'avis v2 : surlignages au survol, chips, stats de claim ── */
+/* Surlignages via CSS-vars : APPLIQUÉS partout par défaut (pages détail), mais dans la
+   liste de l'explorateur ils ne se RÉVÈLENT qu'au survol de la carte (repos sobre). */
+.avisdetail__hl {
+  background: var(--hl-bg); border-bottom: 2px solid var(--hl-border);
+  border-radius: 2px; transition: background .16s ease, border-color .16s ease;
+}
+.avisx__card:not(:hover):not(.avisx__card--open) .avisdetail__hl {
+  background: transparent; border-bottom-color: transparent;
+}
+.avisdetail__hl--clickable { cursor: pointer; }
+.avisdetail__hl--clickable:hover { filter: saturate(1.4); }
+
+/* Chips de filtres (grands thèmes + sentiment). */
+.avisx__chips { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+.avisx__chip {
+  font: inherit; font-size: .78rem; padding: .28rem .7rem; cursor: pointer;
+  border: 1px solid #d7d7e6; border-radius: 999px; background: #fbfbff; color: #3a3a45;
+  transition: background .12s ease, border-color .12s ease;
+  max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.avisx__chip:hover { background: #f0f0f8; }
+.avisx__chip--on { background: var(--agora, #000091); border-color: var(--agora, #000091); color: #fff; }
+.avisx__chip--pos.avisx__chip--on { background: #18753c; border-color: #18753c; }
+.avisx__chip--neg.avisx__chip--on { background: #c1121f; border-color: #c1121f; }
+
+/* État vide avec sortie (le filtre sentiment caché causait des pages vides). */
+.avisx__empty { text-align: center; color: #666; padding: 1.6rem 0; }
+.avisx__empty p { margin: 0 0 .9rem; }
+
+/* Carte de stats d'un claim — même langage que les dashboards de synthèse. */
+.claimstats {
+  margin: .7rem 0 .2rem; border: 1px solid #dcdcea; border-radius: 8px;
+  background: #fafaff; padding: .7rem .9rem;
+}
+.claimstats__head { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+.claimstats__title { font-weight: 700; font-size: .9rem; color: #222; flex: 1; }
+.claimstats__close {
+  font: inherit; border: none; background: none; color: #888; cursor: pointer; padding: .1rem .3rem;
+}
+.claimstats__close:hover { color: #222; }
+.claimstats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
+@media (max-width: 760px) { .claimstats__grid { grid-template-columns: repeat(2, 1fr); } }
+.claimstats__cell {
+  display: flex; flex-direction: column; gap: .15rem; padding: .55rem .7rem;
+  background: #fff; border: 1px solid #ececf4; border-radius: 6px;
+}
+.claimstats__cell strong {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: 1.05rem; color: var(--agora, #000091);
+}
+.claimstats__cell span { font-size: .72rem; color: #666; line-height: 1.3; }
+.claimstats__cell em { font-size: .72rem; color: #999; font-style: italic; line-height: 1.35; }
+.claimstats__pos { color: #18753c; }
+.claimstats__neg { color: #c1121f; }
+.claimstats__conf { font-size: .7em; color: #999; letter-spacing: .1em; }

@@ -89,7 +89,16 @@ function langName(code?: string): string {
  *    highlighted, with no useless toggle.
  * A language badge announces the translation (« traduit de l'allemand »).
  */
-export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; highlight?: boolean }) {
+export function AvisBody({
+  avis,
+  highlight = true,
+  onClaimClick,
+}: {
+  avis: AvisProvenance;
+  highlight?: boolean;
+  /** Clic sur un passage surligné → statistiques de CE claim (câblé par l'explorateur). */
+  onClaimClick?: (claim: AvisClaim) => void;
+}) {
   const isFr = !avis.lang || avis.lang.toLowerCase().startsWith('fr');
   const hasTranslation = !isFr && typeof avis.text_fr === 'string' && avis.text_fr.length > 0;
   const [showOriginal, setShowOriginal] = useState(false);
@@ -142,18 +151,30 @@ export function AvisBody({ avis, highlight = true }: { avis: AvisProvenance; hig
             ? segments(avis.text, avis.claims).map((seg, i) => {
                 if (!seg.claim) return <span key={i}>{seg.text}</span>;
                 // Fond du surlignage = couleur du THÈME (cluster) ; la cible (target) porte
-                // une bordure pleine de cette même couleur. La stance n'entre PAS dans le
-                // surlignage — elle vit dans la légende d'analyse (clic sur l'avis).
+                // une bordure pleine de cette même couleur. Les couleurs passent par des
+                // CSS-VARS : le CSS ne les APPLIQUE qu'au survol de la carte (révélation au
+                // hover) — le texte reste sobre au repos. Clic → stats du claim.
                 const color = seg.claim.color;
+                const claim = seg.claim;
                 return (
                   <mark
                     key={i}
-                    className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}`}
+                    className={`avisdetail__hl${seg.target ? ' avisdetail__hl--target' : ''}${
+                      onClaimClick ? ' avisdetail__hl--clickable' : ''
+                    }`}
                     title={claimTitle(seg.claim, seg.target)}
                     style={{
-                      backgroundColor: tint(color),
-                      borderBottom: `2px solid ${seg.target ? color : tint(color)}`,
+                      ['--hl-bg' as string]: tint(color),
+                      ['--hl-border' as string]: seg.target ? color : tint(color),
                     }}
+                    onClick={
+                      onClaimClick
+                        ? (e) => {
+                            e.stopPropagation(); // ne pas ouvrir la légende de la carte
+                            onClaimClick(claim);
+                          }
+                        : undefined
+                    }
                   >
                     {seg.text}
                   </mark>
@@ -405,6 +426,122 @@ export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/**
+ * Carte DASHBOARD des statistiques d'UN claim (clic sur un passage surligné) — même
+ * langage visuel que les cartes de la synthèse : volume du cluster, sentiment agrégé,
+ * interprétation du passage par le modèle (stance + justif + confiance), et
+ * REPRÉSENTATIVITÉ (proximité au centroïde du cluster, via /citations).
+ */
+export interface ClaimStatsData {
+  /** Feuille du claim (titre + volumes), depuis la carte des thèmes de /analysis. */
+  leafTitle?: string | null;
+  nAvis?: number | null;
+  nClaims?: number | null;
+  /** Répartition d'opinion de la feuille (depuis /opinion), si bakée. */
+  opinion?: { fav: number; def: number; nuance: number; proposition?: string } | null;
+  /** Représentativité : rang du claim par proximité au centroïde (depuis /citations). */
+  citation?: { rank: number; total: number; dist: number } | null;
+  /** Chargement en cours (citations fetchées à la demande). */
+  loading?: boolean;
+}
+
+export function ClaimStatsCard({
+  claim,
+  stats,
+  onClose,
+}: {
+  claim: AvisClaim;
+  stats: ClaimStatsData;
+  onClose: () => void;
+}) {
+  const meta = claim.stance ? STANCE_META[claim.stance] : undefined;
+  const conf = claim.stance_confidence ? CONFIDENCE_META[claim.stance_confidence] : undefined;
+  const op = stats.opinion;
+  const pol = op ? op.fav + op.def : 0;
+  const pctPos = pol > 0 ? Math.round((100 * (op?.fav ?? 0)) / pol) : null;
+  const cit = stats.citation;
+  // Représentativité : rang 0 = le plus proche du centroïde → percentile haut = très central.
+  const reprPct = cit && cit.total > 1 ? Math.round(100 * (1 - cit.rank / (cit.total - 1))) : null;
+  return (
+    <div className="claimstats" role="region" aria-label="Statistiques du passage sélectionné">
+      <div className="claimstats__head">
+        <span className="avisdetail__chip" style={{ background: claim.color }} aria-hidden />
+        <span className="claimstats__title">{stats.leafTitle || claim.theme_title}</span>
+        <button type="button" className="claimstats__close" onClick={onClose} aria-label="Fermer">
+          ✕
+        </button>
+      </div>
+      <div className="claimstats__grid">
+        <div className="claimstats__cell">
+          <strong>{stats.nAvis != null ? stats.nAvis.toLocaleString('fr-FR') : '—'}</strong>
+          <span>témoignages dans ce cluster</span>
+          {stats.nClaims != null && <em>{stats.nClaims.toLocaleString('fr-FR')} idées</em>}
+        </div>
+        <div className="claimstats__cell">
+          {pctPos != null ? (
+            <>
+              <strong>
+                <span className="claimstats__pos">{pctPos}%</span>
+                {' / '}
+                <span className="claimstats__neg">{100 - pctPos}%</span>
+              </strong>
+              <span>sentiment du cluster (positif / négatif)</span>
+              {op?.proposition && <em>envers « {op.proposition} »</em>}
+            </>
+          ) : (
+            <>
+              <strong>—</strong>
+              <span>sentiment non mesuré (signal diffus)</span>
+            </>
+          )}
+        </div>
+        <div className="claimstats__cell">
+          {meta ? (
+            <>
+              <strong style={{ color: meta.color }}>
+                {meta.glyph} {meta.label}
+                {conf && (
+                  <span className="claimstats__conf" title={`Confiance du modèle : ${conf.label}`}>
+                    {' '}{conf.dots}
+                  </span>
+                )}
+              </strong>
+              <span>lecture de CE passage par le modèle</span>
+              {claim.stance_justif && <em>« {claim.stance_justif} »</em>}
+            </>
+          ) : (
+            <>
+              <strong>~</strong>
+              <span>passage non classé (thème au signal diffus)</span>
+            </>
+          )}
+        </div>
+        <div className="claimstats__cell">
+          {stats.loading ? (
+            <>
+              <strong>…</strong>
+              <span>représentativité (calcul)</span>
+            </>
+          ) : reprPct != null && cit ? (
+            <>
+              <strong>{reprPct}%</strong>
+              <span>représentativité du cluster</span>
+              <em>
+                {cit.rank + 1}ᵉ / {cit.total} par proximité au centroïde (dist {cit.dist.toFixed(2)})
+              </em>
+            </>
+          ) : (
+            <>
+              <strong>—</strong>
+              <span>représentativité indisponible</span>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
