@@ -18,10 +18,9 @@ Les compteurs de coût/latence vont dans un `OllamaStats` partagé (réutilisé 
 from __future__ import annotations
 
 import os
-import time
-
 from pipeline.claims.ollama import OllamaClient, OllamaStats, _redact
 from pipeline.cluster import mistral_client
+import time
 
 # Modèles par défaut, surchargeables par env (aucune valeur de corpus codée en dur).
 API_MODEL = os.environ.get("AGORA_CLAIMS_API_MODEL", "ministral-3b-latest")
@@ -179,6 +178,97 @@ class MacBackend(ClaimBackend):
                                 stats=stats, max_tokens=max_tokens)
 
 
+class LangchainBackend(ClaimBackend):
+    """Backend générique Langchain pour les API compatibles OpenAI (LM Studio, NIM)."""
+
+    def __init__(self, llm, name: str, sovereign: bool, note: str):
+        self.llm = llm
+        self.model = llm.model_name
+        self.name = name
+        self.sovereign = sovereign
+        self.note = note
+
+    def complete(self, messages: list[dict], *, stats: OllamaStats,
+                 max_tokens: int | None = None) -> str | None:
+        from langchain_core.messages import SystemMessage, HumanMessage
+        t0 = time.monotonic()
+        
+        lc_msgs = []
+        for m in messages:
+            if m["role"] == "system":
+                lc_msgs.append(SystemMessage(content=m["content"]))
+            else:
+                lc_msgs.append(HumanMessage(content=m["content"]))
+
+        try:
+            llm_to_use = self.llm
+            if max_tokens:
+                llm_to_use = self.llm.bind(max_tokens=max_tokens)
+            
+            response = llm_to_use.invoke(lc_msgs)
+            
+            usage_metadata = response.response_metadata.get("token_usage", {})
+            stats.calls += 1
+            stats.cold_seconds += time.monotonic() - t0
+            stats.eval_tokens += usage_metadata.get("completion_tokens", 0)
+            
+            return response.content
+            
+        except Exception as exc:
+            stats.errors += 1
+            print(f"  ⚠️ langchain[{self.model}]: {type(exc).__name__} - {exc}")
+            return None
+
+
+class LMStudioBackend(LangchainBackend):
+    """LM Studio local (compatible OpenAI) via Langchain."""
+
+    def __init__(self, model: str | None = None) -> None:
+        from langchain_openai import ChatOpenAI
+        model_name = model or os.environ.get("AGORA_LMSTUDIO_MODEL", "mistral-7b-instruct-v0.3")
+        base_url = os.environ.get("AGORA_LMSTUDIO_URL", "http://localhost:1234/v1")
+        llm = ChatOpenAI(
+            model=model_name,
+            api_key="lm-studio",
+            base_url=base_url,
+            temperature=0.0,
+            model_kwargs={"response_format": {"type": "json_object"}}
+        )
+        super().__init__(
+            llm=llm,
+            name="lmstudio",
+            sovereign=True,
+            note="Extraction 100% locale (LM Studio) — les données ne sortent pas du réseau."
+        )
+
+
+class NimBackend(LangchainBackend):
+    """Nvidia NIM (compatible OpenAI) via Langchain."""
+
+    def __init__(self, model: str | None = None) -> None:
+        from langchain_openai import ChatOpenAI
+        model_name = model or os.environ.get("AGORA_NIM_MODEL", "mistralai/mistral-small-4-119b-2603")
+        base_url = os.environ.get("AGORA_NIM_URL", "https://integrate.api.nvidia.com/v1")
+        api_key = os.environ.get("NIM_API_KEY", "")
+        llm = ChatOpenAI(
+            model=model_name,
+            api_key=api_key or "dummy",
+            base_url=base_url,
+            temperature=0.0,
+            model_kwargs={"response_format": {"type": "json_object"}}
+        )
+        super().__init__(
+            llm=llm,
+            name="nim",
+            sovereign=False,
+            note="Données envoyées à Nvidia NIM pour extraction."
+        )
+
+    def preflight(self) -> None:
+        if not os.environ.get("NIM_API_KEY"):
+            raise BackendUnavailable("clé API NIM absente — fournir NIM_API_KEY.")
+
+
 def resolve_backend(
     name: str | None = None,
     *,
@@ -203,6 +293,10 @@ def resolve_backend(
             return mac
         print("  ↪️ Mac indisponible → repli sur l'API Mistral.")
         return ApiBackend()  # repli : modèle API par défaut
+    if name == "lmstudio":
+        return LMStudioBackend(model=model)
+    if name == "nim":
+        return NimBackend(model=model)
     raise ValueError(
-        f"AGORA_CLAIMS_BACKEND inconnu: {name!r} (attendu: api | mac | auto)."
+        f"AGORA_CLAIMS_BACKEND inconnu: {name!r} (attendu: api | mac | auto | lmstudio | nim)."
     )
