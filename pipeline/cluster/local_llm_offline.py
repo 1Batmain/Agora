@@ -129,6 +129,9 @@ def _make_vllm_complete(args: argparse.Namespace) -> Complete:
         gpu_memory_utilization=args.gpu_memory_utilization,
         enable_prefix_caching=True,
         trust_remote_code=True,
+        # Échappatoire au chemin torch.compile (exige ninja + toolchain C) :
+        # ~5-10 % plus lent, zéro dépendance de build.
+        enforce_eager=args.enforce_eager,
     )
 
     def complete(messages: list, temperature: float, max_tokens: int,
@@ -173,6 +176,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--gpu-memory-utilization", type=float, default=0.85)
     ap.add_argument("--fold-system", action="store_true",
                     help="fondre le rôle system dans le tour user (templates Gemma)")
+    ap.add_argument("--enforce-eager", action="store_true",
+                    help="désactiver torch.compile (pas besoin de ninja/toolchain)")
     ap.add_argument("target", choices=[*_TARGETS, "selftest"],
                     help="build à exécuter (ses propres flags suivent, ex. --dataset)")
     ap.add_argument("target_args", nargs=argparse.REMAINDER,
