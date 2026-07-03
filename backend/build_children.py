@@ -263,7 +263,7 @@ def main() -> None:
     )
     ap.add_argument("--parent", required=True, help="id du dataset parent (sous backend/cache/)")
     ap.add_argument("--by", required=True, help="champ de props sur lequel splitter (ex. topic)")
-    ap.add_argument("--backend", default=None, help="api (défaut) | mac | auto")
+    ap.add_argument("--backend", default=None, help="api (défaut) | ollama | auto")
     ap.add_argument("--model", default=None, help="modèle d'extraction (défaut: build_analysis)")
     args = ap.parse_args()
 

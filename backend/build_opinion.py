@@ -528,7 +528,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description="Bake la répartition d'opinion par thème feuille (objet de clivage T2 + stance).")
     ap.add_argument("--dataset", required=True, help="id du dataset (sous backend/cache/)")
-    ap.add_argument("--backend", default=None, help="api (défaut) | mac | auto")
+    ap.add_argument("--backend", default=None, help="api (défaut) | ollama | auto")
     ap.add_argument("--model", default=None, help=f"modèle cleavage+stance (défaut {MODEL})")
     ap.add_argument("--extract-model", default=None,
                     help=f"modèle d'extraction de l'arbre (défaut {EXTRACT_MODEL} — doit "

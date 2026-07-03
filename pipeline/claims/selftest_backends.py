@@ -1,15 +1,15 @@
-"""Auto-test des 3 chemins d'extraction des claims (api / mac / auto→repli).
+"""Auto-test des 3 chemins d'extraction des claims (api / ollama / auto→repli).
 
     uv run --extra contender python -m pipeline.claims.selftest_backends
 
 Vérifie, sur quelques avis réels :
   1. DÉFAUT (rien d'exporté)            → backend `api`, claims extraits, format list[str] ;
-  2. AGORA_CLAIMS_BACKEND=mac           → backend `mac` (SKIP honnête si le Mac est down) ;
-  3. =auto avec Mac simulé injoignable  → bascule `api`, claims extraits.
+  2. AGORA_CLAIMS_BACKEND=ollama           → backend `ollama` (SKIP honnête si le Ollama est down) ;
+  3. =auto avec Ollama simulé injoignable  → bascule `api`, claims extraits.
 Puis : les claims des 3 chemins ont le MÊME format (dict[str, list[str]] non vide).
 
-N'imprime JAMAIS de secret (ni la clé Mistral, ni l'URL du Mac). Sortie non nulle si
-un chemin requis échoue ; le chemin `mac` est OPTIONNEL (dépend de la dispo du Mac).
+N'imprime JAMAIS de secret (ni la clé Mistral, ni l'URL du Ollama). Sortie non nulle si
+un chemin requis échoue ; le chemin `ollama` est OPTIONNEL (dépend de la dispo du Ollama).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from __future__ import annotations
 import os
 import sys
 
-from pipeline.claims.backend import MacBackend, resolve_backend
+from pipeline.claims.backend import OllamaBackend, resolve_backend
 from pipeline.claims.extract import extract_claims
 from pipeline.claims.ollama import OllamaStats
 from pipeline.claims.pipeline import Avis
@@ -74,20 +74,20 @@ def main() -> int:
     elif claims:
         formats.append(claims)
 
-    # 2) mac (opt-in) — OPTIONNEL : skip honnête si le Mac est injoignable.
-    print("[2] AGORA_CLAIMS_BACKEND=mac → attendu: mac (ou SKIP si Mac down)")
-    mac_url = os.environ.get("AGORA_OLLAMA_URL") or _read_mac_url()
-    if mac_url and MacBackend(mac_url).probe():
-        ok, name, claims = _run_path("mac", backend="mac", ollama_url=mac_url)
-        if not ok or name != "mac":
-            failures.append("mac")
+    # 2) ollama (opt-in) — OPTIONNEL : skip honnête si le Ollama est injoignable.
+    print("[2] AGORA_CLAIMS_BACKEND=ollama → attendu: ollama (ou SKIP si Ollama down)")
+    ollama_url = os.environ.get("AGORA_OLLAMA_URL") or _read_ollama_url()
+    if ollama_url and OllamaBackend(ollama_url).probe():
+        ok, name, claims = _run_path("ollama", backend="ollama", ollama_url=ollama_url)
+        if not ok or name != "ollama":
+            failures.append("ollama")
         elif claims:
             formats.append(claims)
     else:
-        print("  ⏭️  SKIP: Mac injoignable (attendu — le Mac de Bob est souvent éteint).")
+        print("  ⏭️  SKIP: Ollama injoignable (attendu — le Ollama de Bob est souvent éteint).")
 
-    # 3) auto avec Mac simulé down → repli api
-    print("[3] =auto, Mac injoignable (127.0.0.1:1) → attendu: repli api")
+    # 3) auto avec Ollama simulé down → repli api
+    print("[3] =auto, Ollama injoignable (127.0.0.1:1) → attendu: repli api")
     ok, name, claims = _run_path("auto→repli", backend="auto", ollama_url="http://127.0.0.1:1")
     if not ok or name != "api":
         failures.append("auto→api")
@@ -110,15 +110,15 @@ def main() -> int:
     if failures:
         print(f"ÉCHEC: {', '.join(failures)}")
         return 1
-    print("OK: tous les chemins requis passent (api défaut + auto repli; mac si dispo).")
+    print("OK: tous les chemins requis passent (api défaut + auto repli; ollama si dispo).")
     return 0
 
 
-def _read_mac_url() -> str | None:
-    """Lit l'URL du Mac depuis var/MAC_LOCAL_OLLAMA sans jamais l'imprimer."""
+def _read_ollama_url() -> str | None:
+    """Lit l'URL de Ollama depuis var/OLLAMA_LOCAL_URL sans jamais l'imprimer."""
     from pathlib import Path
 
-    f = Path(__file__).resolve().parents[2] / "var" / "MAC_LOCAL_OLLAMA"
+    f = Path(__file__).resolve().parents[2] / "var" / "OLLAMA_LOCAL_URL"
     try:
         url = f.read_text(encoding="utf-8").strip()
         return url or None

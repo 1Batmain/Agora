@@ -282,7 +282,7 @@ def extract_claims(
     """Extrait les claims VERBATIM de chaque avis → ``{avis_id: [Claim, ...]}``.
 
     `avis` : liste d'objets portant ``.id`` et ``.text`` (cf. `pipeline.claims.pipeline.Avis`).
-    `backend` : un `ClaimBackend` (API Mistral, Mac Ollama…) — le prompt et le parsing
+    `backend` : un `ClaimBackend` (API Mistral, Ollama Ollama…) — le prompt et le parsing
     sont IDENTIQUES quel que soit le backend, donc des claims au format identique.
 
     BATCHING : on groupe `batch_size` avis par appel LLM (défaut `BATCH_SIZE`) — réponse

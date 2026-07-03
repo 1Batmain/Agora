@@ -400,13 +400,13 @@ def _not_ready_response(ds, response: Response) -> dict:
 class AnalysisBody(BaseModel):
     """Corps de `/analysis` — lecture de la carte spatiale PRÉCALCULÉE d'un dataset.
 
-    Contrat : `{dataset, backend?(api|mac|auto)}`. SERVE-only : `backend`/`model`/
+    Contrat : `{dataset, backend?(api|ollama|auto)}`. SERVE-only : `backend`/`model`/
     `embedder`/`resolution` sont acceptés pour compat mais n'influent PAS sur la lecture
     (l'analyse canonique est précalculée côté backend) ; utilise `POST /build` pour
     (re)construire.
     """
     dataset: str | None = None
-    backend: str | None = None          # api (défaut) | mac | auto
+    backend: str | None = None          # api (défaut) | ollama | auto
     model: str | None = None
     embedder: str | None = None
     resolution: float = Field(1.0, gt=0.0)

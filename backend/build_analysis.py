@@ -297,7 +297,7 @@ def build_analysis(
 def main() -> None:
     ap = argparse.ArgumentParser(description="Précalcul + persistance de l'analyse complète d'un dataset.")
     ap.add_argument("--dataset", required=True, help="id du dataset (sous backend/cache/)")
-    ap.add_argument("--backend", default=None, help="api (défaut) | mac | auto")
+    ap.add_argument("--backend", default=None, help="api (défaut) | ollama | auto")
     ap.add_argument("--model", default=None,
                     help=f"modèle d'EXTRACTION (défaut {EXTRACT_MODEL}, gros/qualité, caché)")
     ap.add_argument("--enrich-model", default=None,

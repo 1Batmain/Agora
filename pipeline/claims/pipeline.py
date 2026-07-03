@@ -318,8 +318,8 @@ def run_claims(
 ) -> dict:
     """Pipeline complet : extraction (backend claims) → clustering émergent → carte.
 
-    `backend` choisit le moteur d'extraction (``api`` par défaut via Mistral, ``mac``
-    Ollama souverain, ``auto`` Mac→repli API ; sinon `AGORA_CLAIMS_BACKEND`). `model`
+    `backend` choisit le moteur d'extraction (``api`` par défaut via Mistral, ``ollama``
+    Ollama souverain, ``auto`` Ollama→repli API ; sinon `AGORA_CLAIMS_BACKEND`). `model`
     surcharge le modèle du backend. `claims_by_id` permet de RÉUTILISER une extraction
     cachée (rejeu de résolution sans ré-extraire). Si le backend est inutilisable, lève
     `BackendUnavailable` (l'appelant renvoie une erreur HTTP claire). La sortie inclut

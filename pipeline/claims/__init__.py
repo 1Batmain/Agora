@@ -2,15 +2,15 @@
 
 Aucune taxonomie imposée : les thèmes émergent du clustering des claims (style
 TalkToTheCity). L'extraction a plusieurs backends (`pipeline.claims.backend`) :
-API Mistral `ministral-3b-latest` par DÉFAUT, Mac Ollama `ministral-3` souverain en
-opt-in (`mac`/`auto`). Réutilise `pipeline.embed` / `pipeline.cluster`.
+API Mistral `ministral-3b-latest` par DÉFAUT, Ollama Ollama `ministral-3` souverain en
+opt-in (`ollama`/`auto`). Réutilise `pipeline.embed` / `pipeline.cluster`.
 """
 
 from pipeline.claims.backend import (
     ApiBackend,
     BackendUnavailable,
     ClaimBackend,
-    MacBackend,
+    OllamaBackend,
     resolve_backend,
 )
 from pipeline.claims.extract import (
@@ -35,7 +35,7 @@ __all__ = [
     "Avis",
     "BackendUnavailable",
     "ClaimBackend",
-    "MacBackend",
+    "OllamaBackend",
     "OllamaClient",
     "OllamaStats",
     "Theme",

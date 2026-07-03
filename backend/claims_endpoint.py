@@ -8,8 +8,8 @@ de cache disque par dataset :
 
 Conséquence (acceptance) : le 1er run extrait + embed ; les suivants — y compris
 un changement de RÉSOLUTION — rejouent le clustering SANS ré-extraire ni ré-embed.
-L'extraction n'appelle le Mac (`AGORA_OLLAMA_URL`) QUE pour les avis manquants ;
-si le Mac est injoignable on lève une erreur claire (l'API renvoie 503).
+L'extraction n'appelle le Ollama (`AGORA_OLLAMA_URL`) QUE pour les avis manquants ;
+si le Ollama est injoignable on lève une erreur claire (l'API renvoie 503).
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ DEFAULT_MIN_CHARS = 12
 
 
 class OllamaUnavailable(RuntimeError):
-    """Backend d'extraction inutilisable (Mac injoignable, clé absente…) — 503 clair.
+    """Backend d'extraction inutilisable (Ollama injoignable, clé absente…) — 503 clair.
 
     Conservé pour compat ; `BackendUnavailable` (générique) en est un alias logique.
     """
@@ -208,7 +208,7 @@ class PreparedClaims:
     def meta(self) -> dict:
         """Bloc `meta` commun (backend/cache/coût) — sans `took_ms` ni `dataset`."""
         return {
-            "backend": self.backend.name,      # `api` (Mistral UE) | `mac` (souverain local)
+            "backend": self.backend.name,      # `api` (Mistral UE) | `ollama` (souverain local)
             "sovereign": self.backend.sovereign,
             "data_note": self.backend.note,
             "model": self.model,
@@ -245,9 +245,9 @@ def prepare_claims(
     Étapes 1 (extraction LLM) + 2 (embed) du pipeline, isolées pour être RÉUTILISÉES
     par `/analysis`, `/insights`, `/citations` (qui ont besoin des vecteurs internes,
     pas seulement du dict de sortie de `cluster_claims`). `ds` porte `.id` et `.ideas`.
-    `backend` choisit le moteur (``api`` défaut, ``mac``, ``auto``). Le cache claims est
+    `backend` choisit le moteur (``api`` défaut, ``ollama``, ``auto``). Le cache claims est
     clé par MODÈLE. Lève `OllamaUnavailable` si une extraction est nécessaire mais le
-    backend est inutilisable (clé absente, Mac injoignable).
+    backend est inutilisable (clé absente, Ollama injoignable).
     """
     ollama_url = ollama_url or os.environ.get("AGORA_OLLAMA_URL")
     avis = _avis_from_ideas(ds.ideas, min_chars)
@@ -268,7 +268,7 @@ def prepare_claims(
 
     # 1) Extraction (cachée). On résout le backend pour connaître le MODÈLE (clé de cache)
     #    et n'extraire que les avis manquants. La résolution est paresseuse côté réseau :
-    #    `api` ne valide que la présence de la clé, `mac`/`auto` ne sondent qu'à l'usage.
+    #    `api` ne valide que la présence de la clé, `ollama`/`auto` ne sondent qu'à l'usage.
     be = resolve_backend(backend, ollama_url=ollama_url, model=model)
     model = be.model
     claims_path = ddir / CLAIMS_NAME
@@ -340,10 +340,10 @@ def claims_payload(
     """Calcule (ou rejoue depuis le cache) la carte des thèmes émergents d'un dataset.
 
     `ds` est un `_Dataset` du serveur (porte `.id` et `.ideas`). `backend` choisit le
-    moteur d'extraction (``api`` par défaut, ``mac``, ``auto`` ; sinon `AGORA_CLAIMS_BACKEND`).
-    Le cache claims est clé par MODÈLE → API et Mac ne se mélangent pas. Lève
+    moteur d'extraction (``api`` par défaut, ``ollama``, ``auto`` ; sinon `AGORA_CLAIMS_BACKEND`).
+    Le cache claims est clé par MODÈLE → API et Ollama ne se mélangent pas. Lève
     `BackendUnavailable` si une extraction est nécessaire mais le backend est inutilisable
-    (clé absente, Mac injoignable).
+    (clé absente, Ollama injoignable).
     """
     t0 = perf_counter()
     prepared = prepare_claims(

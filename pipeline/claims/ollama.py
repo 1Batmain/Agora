@@ -2,7 +2,7 @@
 
 Promu depuis `research/segmentation/small_models.py` pour devenir un composant
 DURABLE de `pipeline.claims` — utilisable par le backend sans dépendre du code
-d'évaluation. Cible : le Mac de Bob (Apple Silicon via Tailscale), où tourne
+d'évaluation. Cible : le Ollama de Bob (Apple Silicon via Tailscale), où tourne
 `ministral-3` ; la donnée citoyenne ne sort jamais du réseau privé.
 
 Caractéristiques :
@@ -25,7 +25,7 @@ from pathlib import Path
 
 CACHE_DIR = Path(__file__).resolve().parent / ".cache" / "ollama"
 
-# Endpoint par défaut : Mac via Tailscale si AGORA_OLLAMA_URL est exporté, sinon
+# Endpoint par défaut : Ollama via Tailscale si AGORA_OLLAMA_URL est exporté, sinon
 # Ollama local. On NE logge jamais l'URL complète (réseau privé).
 DEFAULT_BASE = os.environ.get("AGORA_OLLAMA_URL", "http://localhost:11434").rstrip("/")
 
