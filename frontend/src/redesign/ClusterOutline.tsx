@@ -34,6 +34,8 @@ export function ClusterOutline({
   total,
   opinions,
   navTotal,
+  openPath,
+  onOpenPath,
   onViewGraph,
   onExploreTheme,
   onExploreAvis,
@@ -47,6 +49,10 @@ export function ClusterOutline({
   opinions: ThemeOpinion[];
   /** Total « panel » pour le % de volume affiché dans chaque panneau. */
   navTotal: number;
+  /** Chemin ouvert racine→courant, PILOTÉ par le parent (permet d'ouvrir un cluster
+   *  depuis les raccourcis « principaux thèmes » de la synthèse globale). */
+  openPath: string[];
+  onOpenPath: (path: string[]) => void;
   onViewGraph: (themeId: string | null) => void;
   onExploreTheme: (themeId: string | null, stance?: 'favorable' | 'defavorable' | null) => void;
   onExploreAvis: (avisId: string) => void;
@@ -68,9 +74,7 @@ export function ClusterOutline({
     return m;
   }, [themes]);
 
-  // Chemin ouvert racine→courant. `isOpen` = présent dans le chemin.
-  const [openPath, setOpenPath] = useState<string[]>([]);
-
+  // Chemin ouvert racine→courant, piloté par le parent. `isOpen` = présent dans le chemin.
   const ancestorsAndSelf = (id: string): string[] => {
     const chain: string[] = [];
     let cur: SpatialTheme | undefined = byId.get(id);
@@ -83,11 +87,9 @@ export function ClusterOutline({
   };
 
   const toggle = (id: string) => {
-    setOpenPath((path) => {
-      const i = path.indexOf(id);
-      if (i !== -1) return path.slice(0, i); // déjà ouvert → on le referme (et ses descendants)
-      return ancestorsAndSelf(id); // sinon → on ouvre son chemin (referme les branches voisines)
-    });
+    const i = openPath.indexOf(id);
+    if (i !== -1) onOpenPath(openPath.slice(0, i)); // déjà ouvert → referme (et ses descendants)
+    else onOpenPath(ancestorsAndSelf(id)); // sinon → ouvre son chemin (referme les branches voisines)
   };
 
   const roots = childrenOf.get(null) ?? [];
@@ -101,7 +103,7 @@ export function ClusterOutline({
       const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
       const coh = Math.round((t.cohesion ?? t.consensus ?? 0) * 100);
       return (
-        <div key={t.id} className={`clout__node${open ? ' clout__node--open' : ''}`}>
+        <div key={t.id} id={`clout-node-${t.id}`} className={`clout__node${open ? ' clout__node--open' : ''}`}>
           <button
             type="button"
             className="clout__row"
