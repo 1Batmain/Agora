@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS files (
   consultation_slug TEXT NOT NULL,
   filename         TEXT NOT NULL,          -- basename de l'URL
   url              TEXT NOT NULL,
-  format           TEXT NOT NULL,          -- csv | json_zip | xml_zip | zip | json | other
+  format           TEXT NOT NULL,          -- csv | json_zip | xml_zip | zip | json | xml | other
   size_bytes       BIGINT,
   downloaded_at    TIMESTAMP,
   status           TEXT NOT NULL,  -- ok | listed | empty | redundant | unsupported_format | too_large | error

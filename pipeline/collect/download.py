@@ -14,10 +14,19 @@ import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
+from urllib.parse import quote, urlsplit, urlunsplit
 
 from . import config
 
 _CHUNK = 1 << 16
+
+
+def _encode_url(url: str) -> str:
+    """IRI → URI : urllib exige de l'ASCII ; certains fichiers du portail ont des
+    accents dans leur chemin. Le '%' reste sûr (pas de double encodage)."""
+    p = urlsplit(url)
+    return urlunsplit((p.scheme, p.netloc, quote(p.path, safe="/%"),
+                       quote(p.query, safe="=&%"), p.fragment))
 
 
 @dataclass(frozen=True)
@@ -35,7 +44,7 @@ def _urlopen(url: str, timeout: int):
 def fetch_page(url: str) -> bytes:
     """Fetch simple (pages HTML du portail) avec UA + délai de politesse."""
     time.sleep(config.REQUEST_DELAY_S)
-    with _urlopen(url, config.TIMEOUT_S) as r:
+    with _urlopen(_encode_url(url), config.TIMEOUT_S) as r:
         return r.read()
 
 
@@ -44,6 +53,7 @@ def download(url: str, dest: Path, *, force: bool = False,
              open_url: Callable = _urlopen,
              delay_s: float = 0.0) -> DownloadResult:
     """Télécharge `url` → `dest` de façon idempotente. Ne lève jamais : statut."""
+    url = _encode_url(url)
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists() and not force:
         size = dest.stat().st_size

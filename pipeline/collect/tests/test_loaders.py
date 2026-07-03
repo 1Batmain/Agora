@@ -63,6 +63,26 @@ def test_bare_json(tmp_path):
     assert list(table.rows()) == [["1", "x", None], [None, "y", "z"]]
 
 
+def test_json_tolerates_control_characters(tmp_path):
+    # Cas réel (europe, institutions) : contrôles bruts (\n, \t) dans les chaînes.
+    p = tmp_path / "t.json"
+    p.write_bytes('[{"texte": "ligne 1\nligne 2\ttabulée"}]'.encode("utf-8"))
+    table = loaders.load_table(p, "json")
+    assert list(table.rows()) == [["ligne 1\nligne 2\ttabulée"]]
+
+
+def test_json_lines_fallback(tmp_path):
+    # Cas réel (pour-une-nouvelle-assemblee-nationale) : un objet JSON par ligne.
+    p = tmp_path / "t.json"
+    p.write_text('{"a": "x", "b": {"$oid": "1"}}\n{"a": "y"}\n', encoding="utf-8")
+    table = loaders.load_table(p, "json")
+    assert table.header == ["a", "b"]
+    rows = list(table.rows())
+    assert rows[0][0] == "x"
+    assert rows[0][1] == '{"$oid": "1"}'  # objet imbriqué sérialisé
+    assert rows[1] == ["y", None]
+
+
 def test_json_must_be_list_of_objects(tmp_path):
     p = tmp_path / "t.json"
     p.write_text('{"pas": "une liste"}', encoding="utf-8")

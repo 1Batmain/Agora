@@ -23,8 +23,13 @@ _FORMAT_BY_SUFFIX = (
     (".xml.zip", "xml_zip"),
     (".csv", "csv"),
     (".json", "json"),
+    (".xml", "xml"),
     (".zip", "zip"),
 )
+# Un fichier XML est redondant si son jumeau JSON de même stem existe
+# (paires zippées comme nues — cas réels du portail).
+_XML_TWINS = {"xml_zip": (".xml.zip", "json_zip", ".json.zip"),
+              "xml": (".xml", "json", ".json")}
 
 
 @dataclass(frozen=True)
@@ -100,15 +105,22 @@ def _tag_format(filename: str) -> str:
 
 
 def _mark_redundant_xml(files: Iterable[DataFile]) -> list[DataFile]:
-    """Un `X.xml.zip` est redondant si son jumeau `X.json.zip` existe (règle de format)."""
+    """Marque redondants les XML dont le jumeau JSON de même stem existe."""
     files = list(files)
-    json_stems = {f.filename[: -len(".json.zip")] for f in files if f.format == "json_zip"}
-    return [
-        DataFile(f.filename, f.url, f.format, redundant=True)
-        if f.format == "xml_zip" and f.filename[: -len(".xml.zip")] in json_stems
-        else f
-        for f in files
-    ]
+    stems = {fmt: {f.filename[: -len(suffix)]
+                   for f in files if f.format == fmt and f.filename.lower().endswith(suffix)}
+             for fmt, suffix in (("json_zip", ".json.zip"), ("json", ".json"))}
+    out = []
+    for f in files:
+        twin = _XML_TWINS.get(f.format)
+        if twin:
+            xml_suffix, json_fmt, _ = twin
+            stem = f.filename[: -len(xml_suffix)]
+            if stem in stems[json_fmt]:
+                out.append(DataFile(f.filename, f.url, f.format, redundant=True))
+                continue
+        out.append(f)
+    return out
 
 
 def list_data_files(page_url: str, fetch: Fetch) -> list[DataFile]:

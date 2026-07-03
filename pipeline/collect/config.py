@@ -20,9 +20,10 @@ DB_PATH = COLLECT_DIR / "consultations.duckdb"
 USER_AGENT = "agora-an-2026/collect (open-data)"
 REQUEST_DELAY_S = 1.0
 TIMEOUT_S = 60
-# Cap de téléchargement — écarte les dumps pathologiques (ex. SQL de 476 Mo)
-# sans nommer aucune consultation.
-MAX_DOWNLOAD_BYTES = 200 * 2**20
+# Cap de téléchargement — garde-fou contre les fichiers pathologiques, sans
+# nommer aucune consultation. 400 MiB laisse passer les plus gros CSV légitimes
+# observés (~253 Mo) tout en bornant le pire cas.
+MAX_DOWNLOAD_BYTES = 400 * 2**20
 
 # Heuristique de classification des colonnes (voir classify.py).
 DATE_SHARE_MIN = 0.90       # part de valeurs "date" pour kind=date

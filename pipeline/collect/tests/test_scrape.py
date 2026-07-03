@@ -47,5 +47,19 @@ def test_list_data_files_absolute_href_same_host_only():
                             "CONSULTATIONS_CITOYENNES/TIKTOK/tiktok_appel_a_temoignages.csv")
 
 
+def test_bare_xml_twin_is_redundant():
+    # Cas réel (egalite-femmes-hommes) : paires EGALITE.json / EGALITE.xml nues.
+    html = b"""<html><body>
+    <a href="/static/openData/repository/CC/EG/EGALITE.json">json</a>
+    <a href="/static/openData/repository/CC/EG/EGALITE.xml">xml</a>
+    <a href="/static/openData/repository/CC/EG/seul.xml">xml sans jumeau</a>
+    </body></html>"""
+    files = scrape.list_data_files(f"{INDEX_URL}/eg", fetch=lambda url: html)
+    by_name = {f.filename: f for f in files}
+    assert by_name["EGALITE.xml"].redundant is True
+    assert by_name["seul.xml"].redundant is False
+    assert by_name["EGALITE.xml"].format == "xml"
+
+
 def test_list_data_files_none():
     assert scrape.list_data_files(f"{INDEX_URL}/vide", fetch=_fetch_fixture("page_nolinks.html")) == []

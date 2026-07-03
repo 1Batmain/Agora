@@ -102,11 +102,28 @@ def _coerce(value) -> str | None:
     return str(value)
 
 
-def _load_json(raw: bytes) -> Table:
+def _parse_json(raw: bytes):
+    """JSON tolérant : contrôles bruts dans les chaînes acceptés (strict=False),
+    repli JSON Lines quand le document est une suite d'objets (un par ligne)."""
     try:
-        data = json.load(io.BytesIO(raw))
+        return json.loads(raw, strict=False)
     except json.JSONDecodeError as e:
-        raise LoaderError(f"JSON invalide : {e}") from e
+        if "Extra data" not in e.msg:
+            raise LoaderError(f"JSON invalide : {e}") from e
+    records = []
+    for n, line in enumerate(raw.splitlines(), start=1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            records.append(json.loads(line, strict=False))
+        except json.JSONDecodeError as e:
+            raise LoaderError(f"JSON Lines invalide (ligne {n}) : {e}") from e
+    return records
+
+
+def _load_json(raw: bytes) -> Table:
+    data = _parse_json(raw)
     if not isinstance(data, list) or any(not isinstance(r, dict) for r in data):
         raise LoaderError("JSON attendu : liste d'objets")
     header: list[str] = []

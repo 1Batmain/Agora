@@ -90,6 +90,15 @@ def test_download_keeps_empty_marker(tmp_path):
     assert calls == []
 
 
+def test_download_percent_encodes_non_ascii_url(tmp_path):
+    # Cas réel (natalite) : URL avec caractères accentués → urllib exige de l'ASCII.
+    calls = []
+    res = download.download("https://ex.fr/fichier ét é.json", tmp_path / "f.json",
+                            open_url=_opener(b"ok", calls=calls))
+    assert res.status == "ok"
+    assert calls == ["https://ex.fr/fichier%20%C3%A9t%20%C3%A9.json"]
+
+
 def test_download_retries_once_on_transient_error(tmp_path):
     attempts = []
 
