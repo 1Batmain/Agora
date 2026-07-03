@@ -74,9 +74,25 @@ def _global_summary(tree: ThemeTree) -> str:
     return "\n".join(lines)
 
 
-def _theme_summary(tree: ThemeTree, node: ThemeNode) -> str:
-    """Résumé compact d'UN thème pour la synthèse ciblée."""
+def _theme_summary(tree: ThemeTree, node: ThemeNode,
+                   child_insights: dict[str, str] | None = None) -> str:
+    """Résumé compact d'UN thème pour la synthèse ciblée.
+
+    BOTTOM-UP : si le thème a des sous-thèmes ET que leurs synthèses Markdown sont
+    déjà générées (`child_insights` : id_enfant → markdown), le résumé du PARENT est
+    bâti par AGRÉGATION des synthèses de ses enfants — pas de ses propres claims. Une
+    FEUILLE (ou un parent dont aucun enfant n'a encore de synthèse) retombe sur ses
+    claims représentatives (comportement historique). Cf. `_summary_from_children` /
+    `_summary_from_claims`."""
     children = [tree.nodes[c] for c in node.children]
+    have_children_md = bool(children) and bool(child_insights) and any(
+        (child_insights or {}).get(c.id) for c in children)
+    return (_summary_from_children(node, children, child_insights or {})
+            if have_children_md else _summary_from_claims(node, children))
+
+
+def _summary_header(node: ThemeNode) -> list[str]:
+    """Entête commune (label + métriques + mots-clés) d'un résumé de thème."""
     lines = [
         f"Thème : {node.label}",
         f"Poids social : {node.weight} · avis : {node.n_avis} · claims : {node.n_claims}",
@@ -84,6 +100,12 @@ def _theme_summary(tree: ThemeTree, node: ThemeNode) -> str:
     ]
     if node.keywords:
         lines.append(f"Mots-clés : {', '.join(node.keywords[:8])}")
+    return lines
+
+
+def _summary_from_claims(node: ThemeNode, children: list[ThemeNode]) -> str:
+    """Résumé « historique » d'un thème : ses claims représentatives + aperçu enfants."""
+    lines = _summary_header(node)
     lines.append("")
     lines.append("Claims représentatives :")
     for rep in node.representative_claims:
@@ -97,6 +119,32 @@ def _theme_summary(tree: ThemeTree, node: ThemeNode) -> str:
                          + (f" ; {ckw}" if ckw else "") + ")")
             for rep in c.representative_claims[:1]:
                 lines.append(f"      • {rep}")
+    return "\n".join(lines)
+
+
+def _summary_from_children(node: ThemeNode, children: list[ThemeNode],
+                           child_insights: dict[str, str]) -> str:
+    """Résumé BOTTOM-UP : les synthèses déjà rédigées des sous-thèmes, à agréger.
+
+    Chaque sous-thème apporte sa synthèse Markdown complète (repli sur ses mots-clés +
+    2 claims s'il n'en a pas). Le prompt parent (`_theme_messages(from_children=True)`)
+    demande d'AGRÉGER, pas de recopier."""
+    lines = _summary_header(node)
+    lines.append("")
+    lines.append("Synthèses des sous-thèmes (à AGRÉGER en une synthèse du thème "
+                 "parent, sans les recopier telles quelles) :")
+    for c in children:
+        md = (child_insights.get(c.id) or "").strip()
+        lines.append("")
+        lines.append(f"— Sous-thème [{c.id}] {c.label} — {c.n_avis} avis :")
+        if md:
+            lines.append(md)
+        else:  # enfant sans synthèse (repli/erreur) → mots-clés + 2 claims
+            ckw = ", ".join((c.keywords or [])[:5])
+            if ckw:
+                lines.append(f"  mots-clés : {ckw}")
+            for rep in c.representative_claims[:2]:
+                lines.append(f"  • {rep}")
     return "\n".join(lines)
 
 
@@ -123,25 +171,44 @@ def _global_messages(summary: str) -> list[dict]:
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
-def _theme_messages(summary: str) -> list[dict]:
+def _theme_messages(summary: str, *, from_children: bool = False) -> list[dict]:
     system = (
         "Tu es analyste de consultations citoyennes pour des parlementaires. Tu "
         "synthétises la parole citoyenne d'UN thème, de façon neutre et factuelle, "
         "sans rien inventer hors des données fournies."
     )
-    user = (
-        "À partir du résumé d'UN thème ci-dessous (issu d'un regroupement automatique "
-        "de contributions citoyennes), rédige une SYNTHÈSE DU THÈME en Markdown COURT, "
-        "structurée ainsi :\n\n"
-        "## Ce que disent les citoyens\n"
-        "Le cœur de la parole sur ce thème : préoccupations, propositions, nuances. "
-        "Si des sous-thèmes existent, montre comment ils se répartissent.\n\n"
-        "## À retenir\n"
-        "2 à 4 puces : l'essentiel pour un décideur.\n\n"
-        "Rédige dans la langue dominante des contributions. Reste COURT. N'invente "
-        "aucun chiffre absent du résumé.\n\n"
-        f"Résumé du thème :\n\n{summary}\n"
-    )
+    if from_children:
+        # BOTTOM-UP : le résumé fourni est fait des synthèses déjà rédigées des
+        # sous-thèmes → on demande une AGRÉGATION (vue d'ensemble), pas une redite.
+        user = (
+            "Ci-dessous, les SYNTHÈSES déjà rédigées des SOUS-THÈMES d'un thème (issu "
+            "d'un regroupement automatique de contributions citoyennes). Rédige la "
+            "SYNTHÈSE DU THÈME PARENT en AGRÉGEANT ces synthèses, en Markdown COURT, "
+            "structurée ainsi :\n\n"
+            "## Ce que disent les citoyens\n"
+            "La vue d'ensemble du thème : ce que ses sous-thèmes ont en commun, ce qui "
+            "les distingue, leur poids relatif, les points de convergence et de tension. "
+            "N'énumère pas mécaniquement les sous-thèmes : fais-en une vraie synthèse.\n\n"
+            "## À retenir\n"
+            "2 à 4 puces : l'essentiel pour un décideur.\n\n"
+            "Rédige dans la langue dominante des contributions. Reste COURT. N'invente "
+            "aucun chiffre ni fait absent des synthèses fournies.\n\n"
+            f"Résumé du thème et synthèses des sous-thèmes :\n\n{summary}\n"
+        )
+    else:
+        user = (
+            "À partir du résumé d'UN thème ci-dessous (issu d'un regroupement automatique "
+            "de contributions citoyennes), rédige une SYNTHÈSE DU THÈME en Markdown COURT, "
+            "structurée ainsi :\n\n"
+            "## Ce que disent les citoyens\n"
+            "Le cœur de la parole sur ce thème : préoccupations, propositions, nuances. "
+            "Si des sous-thèmes existent, montre comment ils se répartissent.\n\n"
+            "## À retenir\n"
+            "2 à 4 puces : l'essentiel pour un décideur.\n\n"
+            "Rédige dans la langue dominante des contributions. Reste COURT. N'invente "
+            "aucun chiffre absent du résumé.\n\n"
+            f"Résumé du thème :\n\n{summary}\n"
+        )
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
@@ -165,14 +232,20 @@ def _attach_global_context(out: dict, dataset_id: str) -> dict:
 
 
 def render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
-                   *, model: str | None = None) -> dict:
-    """Synthèse Markdown d'un niveau (sans cache) ; la GLOBALE s'ouvre sur le contexte (B2)."""
-    out = _render_insight(tree, level, theme_id, model=model)
+                   *, model: str | None = None,
+                   child_insights: dict[str, str] | None = None) -> dict:
+    """Synthèse Markdown d'un niveau (sans cache) ; la GLOBALE s'ouvre sur le contexte (B2).
+
+    `child_insights` (BOTTOM-UP) : synthèses déjà générées des sous-thèmes (id → markdown).
+    Fourni par le BUILD qui génère feuilles→racine → un thème PARENT est synthétisé à
+    partir des synthèses de ses enfants (cf. `_theme_summary`). Absent → voie historique."""
+    out = _render_insight(tree, level, theme_id, model=model, child_insights=child_insights)
     return _attach_global_context(out, tree.dataset)
 
 
 def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
-                    *, model: str | None = None) -> dict:
+                    *, model: str | None = None,
+                    child_insights: dict[str, str] | None = None) -> dict:
     """Génère (sans cache) la synthèse Markdown d'un niveau à partir d'un arbre déjà bâti.
 
     Cœur PUR (résumé → prompt → LLM → `{markdown, meta}`) partagé entre le BUILD
@@ -196,8 +269,10 @@ def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
         node = tree.get(theme_id)
         if node is None:
             raise ValueError(f"thème inconnu: {theme_id!r} (dataset {tree.dataset!r}).")
-        summary = _theme_summary(tree, node)
-        messages = _theme_messages(summary)
+        from_children = bool(node.children) and bool(child_insights) and any(
+            (child_insights or {}).get(c) for c in node.children)
+        summary = _theme_summary(tree, node, child_insights)
+        messages = _theme_messages(summary, from_children=from_children)
         target_label = node.label
 
     def _stamp(extra: dict) -> dict:
