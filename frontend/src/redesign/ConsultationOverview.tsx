@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AnalysisPayload, Consultation, CostPayload, ThemeOpinion } from './contract';
 import { fetchAnalysis, fetchCost, fetchInsights, fetchOpinion } from './analysisApi';
 import { Header } from './Header';
@@ -38,16 +38,8 @@ export function ConsultationOverview({
   const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
   // Coût LLM du traitement (transparence) — null si non mesuré.
   const [cost, setCost] = useState<CostPayload | null>(null);
-  // Chemin ouvert de l'outline de clusters (piloté ici pour que les raccourcis
-  // « principaux thèmes » de la synthèse globale puissent ouvrir + scroller un cluster).
+  // Chemin ouvert de l'outline de clusters (accordéon par niveau).
   const [openPath, setOpenPath] = useState<string[]>([]);
-  // Ouvre un macro-cluster depuis un raccourci et l'amène doucement à l'écran.
-  const openMacro = (id: string) => {
-    setOpenPath([id]);
-    requestAnimationFrame(() =>
-      document.getElementById(`clout-node-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-    );
-  };
   useEffect(() => {
     let cancelled = false;
     setCost(null);
@@ -97,9 +89,6 @@ export function ConsultationOverview({
   // l'afficher comme total honnête (c'est le bug des « 4377 » vs 3000 analysés / 28384 total).
   const nAnalyzed = dataset.n_sample ?? navTotal;
   const globalSource = stripSaillants(synthesis);
-  // Les 5 plus gros clusters (macros) — raccourcis cliquables « principaux thèmes »
-  // qui prolongent la synthèse globale et ouvrent l'outline en dessous.
-  const topMacros = [...macros].sort((a, b) => (b.n_avis ?? 0) - (a.n_avis ?? 0)).slice(0, 5);
 
   return (
     <div className="agora overview">
@@ -190,28 +179,6 @@ export function ConsultationOverview({
             ) : (
               <p className="overview__loading">Synthèse indisponible.</p>
             )}
-            {/* Prolonge la synthèse LLM (contexte + analyse) : les principaux thèmes, en
-                RACCOURCIS cliquables qui ouvrent le cluster dans l'outline ci-dessous.
-                Le LLM ne les liste plus lui-même → un seul bloc cohérent. */}
-            {!loading && topMacros.length > 0 && (
-              <p className="overview__toplist">
-                Les principaux thèmes identifiés sont&nbsp;:{' '}
-                {topMacros.map((m, i) => (
-                  <Fragment key={m.id}>
-                    <button
-                      type="button"
-                      className="overview__toplink"
-                      onClick={() => openMacro(m.id)}
-                    >
-                      {m.title || m.label}
-                    </button>
-                    {i < topMacros.length - 1
-                      ? i === topMacros.length - 2 ? ' et ' : ', '
-                      : '.'}
-                  </Fragment>
-                ))}
-              </p>
-            )}
             {themes.length > 0 && (
               <div className="overview__actions">
                 <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
@@ -224,11 +191,12 @@ export function ConsultationOverview({
             )}
           </div>
 
-          {/* 2) OUTLINE DES CLUSTERS — chaque cluster déployable EN PLACE (accordéon
-              récursif par niveau) avec sa synthèse riche. */}
+          {/* 2) LES CLUSTERS — introduits par la phrase qui prolonge la synthèse globale.
+              L'outline n'affiche que les 5 plus gros par défaut (+ « voir plus »), chacun
+              déployable EN PLACE (accordéon récursif par niveau) avec sa synthèse riche. */}
           {themes.length > 0 && (
             <>
-              <h3 className="synthesis__subhead synthesis__subhead--clusters">Les clusters</h3>
+              <p className="overview__clusters-lead">Les principaux thèmes identifiés sont&nbsp;:</p>
               <ClusterOutline
                 dataset={dataset.id}
                 themes={themes}
