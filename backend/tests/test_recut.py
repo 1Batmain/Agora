@@ -20,6 +20,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from pipeline.cluster.palette import NOISE_COLOR
+
 from backend.recut import best_cut, recut_tree, sauce_magique
 
 
@@ -90,6 +92,75 @@ def test_recut_noop_quand_facade_deja_optimale():
     before_order = list(tree.order)
     assert recut_tree(tree) is None
     assert tree.order == before_order and set(tree.macros) == set(nodes)
+
+
+def _dusty_tree():
+    """Géant r0 (996 voix) à 3 enfants équilibrés + TROIS racines poussière (1 voix chacune).
+
+    Après re-coupe, la coupe optimale = {c1,c2,c3,d1,d2,d3} ; d1/d2/d3 pèsent chacun
+    0,1 % (< DUST_SHARE) → ils sont REGROUPÉS sous un unique `n_dust`.
+    """
+    nodes = {
+        "r0": _node("r0", None, 996, 0.3, children=["c1", "c2", "c3"]),
+        "c1": _node("c1", "r0", 332, 0.8, depth=1),
+        "c2": _node("c2", "r0", 332, 0.8, depth=1),
+        "c3": _node("c3", "r0", 332, 0.8, depth=1),
+        "d1": _node("d1", None, 1, 1.0),
+        "d2": _node("d2", None, 1, 1.0),
+        "d3": _node("d3", None, 1, 1.0),
+    }
+    return SimpleNamespace(
+        nodes=nodes, order=["r0", "c1", "c2", "c3", "d1", "d2", "d3"],
+        macros=["r0", "d1", "d2", "d3"], recut=None,
+    )
+
+
+def test_recut_regroupe_la_poussiere_sous_un_noeud_unique():
+    tree = _dusty_tree()
+    before_total = sum(n.n_avis for n in tree.nodes.values() if n.parent_id is None)  # 999
+    detail = recut_tree(tree)
+    assert detail is not None
+
+    # Un nœud synthétique unique, SINGLETONS REGROUPÉS dessous.
+    assert "n_dust" in tree.nodes
+    dust = tree.nodes["n_dust"]
+    assert dust.label == "Contributions isolées" and dust.title == "Contributions isolées"
+    assert dust.keywords == []
+    assert dust.parent_id is None and dust.depth == 0
+    assert dust.children == ["d1", "d2", "d3"]          # navigables, has_children
+
+    # VOIX CONSERVÉES : sommes sur le nœud poussière + total macro inchangé.
+    assert dust.n_avis == 3 and dust.n_claims == 3 and dust.weight == 3.0
+    assert sum(tree.nodes[m].n_avis for m in tree.macros) == before_total == 999
+
+    # Façade : 3 vrais macros + le nœud poussière (poids décroissant, poussière en fin).
+    assert tree.macros == ["c1", "c2", "c3", "n_dust"]
+
+    # IDS INTACTS : poussières devenues enfants de n_dust, aucun id perdu, ancêtre dissous.
+    for did in ("d1", "d2", "d3"):
+        assert tree.nodes[did].parent_id == "n_dust"
+        assert did not in tree.macros
+        assert tree.nodes[did].depth == 1
+    assert {"c1", "c2", "c3", "d1", "d2", "d3"} <= set(tree.nodes)
+    assert "r0" not in tree.nodes                       # seul l'ancêtre est dissous
+
+    # Couleur grise neutre (palette, source unique) sur le nœud poussière ET ses enfants.
+    assert dust.color == NOISE_COLOR
+    assert all(tree.nodes[d].color == NOISE_COLOR for d in ("d1", "d2", "d3"))
+
+    # Traçabilité (params.recut.poussiere).
+    assert detail["poussiere"] == {"id": "n_dust", "n_macros": 3, "n_avis": 3,
+                                   "share": round(3 / 999, 4)}
+
+
+def test_recut_une_seule_poussiere_pas_de_regroupement():
+    """Une SEULE poussière macro (la racine r1 à 1 voix) → pas de n_dust."""
+    tree = _giant_tree()                       # r1 (1 voix) est l'unique macro < 0,5 %
+    detail = recut_tree(tree)
+    assert detail is not None
+    assert "n_dust" not in tree.nodes          # « regrouper » suppose ≥ 2 poussières
+    assert detail["poussiere"] is None
+    assert tree.macros == ["c1", "c2", "c3", "r1"]
 
 
 def test_best_cut_et_score_coherents():

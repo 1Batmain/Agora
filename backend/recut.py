@@ -30,15 +30,27 @@ référencent), `depth`/`has_children` recalculés, ordre stable (macros par poi
 social décroissant, sous-arbres en parcours préfixe), couleurs macro réassignées
 depuis la palette (source unique) et propagées à chaque sous-arbre, convergence
 recalculée (son shrinkage dépend de la façade macro).
+
+REGROUPEMENT DE LA POUSSIÈRE : après la re-coupe, les macros minuscules (part de
+voix < `DUST_SHARE`) sont regroupés sous UN nœud synthétique unique `n_dust`
+(« Contributions isolées », couleur grise neutre) dont ils deviennent les ENFANTS
+— ids intacts, voix conservées, rien supprimé, tout reste navigable. Le nœud
+poussière N'ENTRE PAS dans la fonction sauce_magique : le score `apres` rapporté
+est celui de la COUPE (poussières comptées individuellement), calculé AVANT ce
+regroupement de façade — `n_dust` est un post-traitement de présentation, jamais
+un terme de l'objectif.
 """
 
 from __future__ import annotations
 
+import copy
 import math
 
 # Poids v1 de la fonction objectif — NON CALIBRÉS (cf. docstring module).
 W = {"alpha": 1.0, "beta": 0.5, "gamma": 1.0, "delta": 1.0}
 DUST_SHARE = 0.005   # cluster « poussière » : < 0,5 % des voix
+DUST_ID = "n_dust"                    # id stable du nœud synthétique de regroupement
+DUST_LABEL = "Contributions isolées"  # label/title du nœud poussière
 
 
 def sauce_magique(cut: list[dict], *, weights: dict = W) -> tuple[float, dict]:
@@ -100,13 +112,74 @@ def best_cut(themes: list[dict], *, weights: dict = W) -> tuple[list[dict], dict
     return cut, detail
 
 
+def _subtree(nodes: dict, root_id: str) -> list[str]:
+    """Ids du sous-arbre fermé sous `root_id` (racine incluse)."""
+    out: list[str] = []
+    stack = [root_id]
+    while stack:
+        nid = stack.pop()
+        out.append(nid)
+        stack.extend(getattr(nodes[nid], "children", None) or [])
+    return out
+
+
+def _regroup_dust(nodes: dict, macros: list[str], *, dust_share: float = DUST_SHARE):
+    """Regroupe les macros < `dust_share` des voix sous un nœud synthétique unique.
+
+    Les macros minuscules (poussière) deviennent les ENFANTS de `n_dust`
+    (« Contributions isolées ») : ids INTACTS, voix conservées, rien supprimé, tout
+    reste navigable (le nœud poussière a `has_children`). Le nœud synthétique porte
+    les SOMMES (n_avis/n_claims/weight) et l'union des `members` (pour que le balayage
+    claim→macro de `backend.avis` couvre bien ses claims) ; cohésion/dispersion non
+    recalculables sans vecteurs → 0. Renvoie (nouvelle façade macro, nœud poussière) ;
+    (façade inchangée, None) si moins de 2 poussières (rien à regrouper).
+    """
+    total = sum(max(0, nodes[m].n_avis) for m in macros)
+    if total <= 0:
+        return list(macros), None
+    dust_ids = [m for m in macros if nodes[m].n_avis / total < dust_share]
+    if len(dust_ids) < 2:                 # « regrouper » suppose une pluralité
+        return list(macros), None
+
+    dust = copy.copy(nodes[dust_ids[0]])  # même type (ThemeNode / mock) → champs valides
+    dust.id = DUST_ID
+    dust.parent_id = None
+    dust.depth = 0
+    dust.children = list(dust_ids)
+    dust.n_avis = sum(nodes[m].n_avis for m in dust_ids)
+    dust.n_claims = sum(nodes[m].n_claims for m in dust_ids)
+    dust.weight = sum(nodes[m].weight for m in dust_ids)
+    dust.label = DUST_LABEL
+    dust.title = DUST_LABEL
+    dust.hook = ""
+    dust.description = ""
+    dust.keywords = []
+    dust.representative_claims = []
+    dust.consensus = 0.0                  # cohésion : non recalculable ici → 0
+    dust.dispersion = 0.0
+    dust.convergence = 0.0
+    members: list[int] = []
+    for m in dust_ids:
+        members.extend(getattr(nodes[m], "members", None) or [])
+    dust.members = members
+
+    nodes[DUST_ID] = dust
+    for m in dust_ids:
+        nodes[m].parent_id = DUST_ID
+    dust_set = set(dust_ids)
+    facade = [m for m in macros if m not in dust_set] + [DUST_ID]
+    return facade, dust
+
+
 def recut_tree(tree, *, weights: dict = W) -> dict | None:
     """RE-RACINE `tree` (ThemeTree) sur sa coupe sauce_magique optimale, EN PLACE.
 
-    Renvoie le détail `{avant, apres, weights, n_dissous}` (aussi posé sur
+    Renvoie le détail `{avant, apres, weights, n_dissous, poussiere}` (aussi posé sur
     `tree.recut`, exposé dans `params.recut` du payload), ou `None` si la coupe
-    optimale est déjà la façade actuelle (arbre inchangé). Cf. INVARIANTS du
-    docstring module — en particulier : aucun id de nœud ne change.
+    optimale est déjà la façade actuelle (arbre inchangé). `poussiere` = `None` ou
+    `{id, n_macros, n_avis, share}` si des macros minuscules ont été regroupés sous
+    `n_dust`. Cf. INVARIANTS du docstring module — en particulier : aucun id de nœud
+    ne change, et `n_dust` n'entre pas dans le score sauce_magique rapporté.
     """
     nodes = tree.nodes
     view = [{"id": n.id, "parent_id": n.parent_id, "n_avis": n.n_avis,
@@ -134,11 +207,18 @@ def recut_tree(tree, *, weights: dict = W) -> dict | None:
     for nid in dissolved:
         del nodes[nid]
 
+    # REGROUPEMENT DE LA POUSSIÈRE : les macros de la coupe pesant < DUST_SHARE des
+    # voix deviennent les ENFANTS d'un unique nœud synthétique `n_dust` (façade lisible,
+    # poussières navigables). Fait AVANT le tri/la re-racinage pour que `n_dust` prenne
+    # sa place dans l'ordre macro ; le score `apres` (déjà calculé sur la coupe) reste
+    # celui des poussières individuelles → `n_dust` hors sauce_magique (cf. docstring).
+    orig_pos = {nid: i for i, nid in enumerate(tree.order)}
+    facade, dust = _regroup_dust(nodes, cut_ids, dust_share=DUST_SHARE)
+
     # Re-racinage : la coupe devient les macros (poids social décroissant, départage
     # par la position d'origine → ordre stable), profondeurs recalculées en préfixe.
-    orig_pos = {nid: i for i, nid in enumerate(tree.order)}
-    macros = sorted(cut_ids, key=lambda nid: (-nodes[nid].weight,
-                                              orig_pos.get(nid, len(orig_pos))))
+    macros = sorted(facade, key=lambda nid: (-nodes[nid].weight,
+                                             orig_pos.get(nid, len(orig_pos))))
     order: list[str] = []
 
     def _walk(nid: str, depth: int) -> None:
@@ -161,7 +241,22 @@ def recut_tree(tree, *, weights: dict = W) -> dict | None:
     _assign_colors(nodes, macros)
     _assign_convergence(nodes, macros)
 
+    # Le sous-arbre poussière garde une couleur GRISE NEUTRE (palette, source unique),
+    # réappliquée APRÈS _assign_colors (qui aurait sinon donné à `n_dust` une teinte de
+    # macro comme les autres).
+    if dust is not None:
+        from pipeline.cluster.palette import NOISE_COLOR
+        for nid in _subtree(nodes, DUST_ID):
+            nodes[nid].color = NOISE_COLOR
+
+    total_facade = sum(max(0, nodes[m].n_avis) for m in macros)
     detail = {"avant": before, "apres": after,
-              "weights": dict(weights), "n_dissous": len(dissolved)}
+              "weights": dict(weights), "n_dissous": len(dissolved),
+              "poussiere": None if dust is None else {
+                  "id": DUST_ID,
+                  "n_macros": len(dust.children),
+                  "n_avis": dust.n_avis,
+                  "share": round(dust.n_avis / total_facade, 4) if total_facade else 0.0,
+              }}
     tree.recut = detail
     return detail
