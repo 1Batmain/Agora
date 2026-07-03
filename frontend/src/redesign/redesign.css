@@ -1705,6 +1705,37 @@ button.opinion__card:disabled { cursor: default; }
   color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
 
+/* ── Outline de clusters (accordéon récursif « par niveau ») ─────────────── */
+.clout { display: flex; flex-direction: column; margin-top: .4rem; }
+.clout__node { border-top: 1px solid #e8e8f2; }
+.clout__node:first-child { border-top: 0; }
+.clout__row {
+  width: 100%; display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr) auto; grid-template-rows: auto auto;
+  align-items: center; gap: .1rem .6rem; padding: .7rem .4rem;
+  background: none; border: 0; cursor: pointer; text-align: left; font: inherit;
+  color: #111; transition: background .12s;
+}
+.clout__row:hover { background: #f5f5fe; }
+.clout__row[aria-expanded="true"] { background: #f0f0fc; }
+.clout__caret { grid-row: 1 / span 2; color: var(--agora, #000091); font-size: .8rem; }
+.clout__name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clout__row[aria-expanded="true"] .clout__name { color: var(--agora, #000091); }
+.clout__figs { display: flex; align-items: baseline; gap: .55rem; font-size: .8rem; color: #555; white-space: nowrap; }
+.clout__pct { font-weight: 700; color: var(--agora, #000091); }
+.clout__coh { color: #8a8aa0; }
+.clout__track { grid-column: 2 / span 2; height: .35rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
+.clout__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); border-radius: 2px; }
+.clout__body { padding: 0 .2rem .6rem; }
+.clout__panel { margin: .2rem 0 .8rem; }
+/* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
+.clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
+@media (max-width: 640px) {
+  .clout__row { grid-template-columns: 1.2rem minmax(0, 1fr); }
+  .clout__figs { grid-column: 2; grid-row: 2; }
+  .clout__track { grid-column: 1 / span 2; }
+}
+
 /* ── Sous-titre « Points de convergence » (au-dessus du navigateur de thèmes) ── */
 .synthesis__subhead {
   font-family: ui-monospace, "IBM Plex Mono", monospace;
