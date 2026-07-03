@@ -76,6 +76,9 @@ def _kind(acc: _Accumulator) -> str:
          and distinct_ratio >= config.OPEN_DISTINCT_RATIO_FLOOR)
         or (avg_len >= config.OPEN_AVG_LEN_WEAK
             and distinct_ratio >= config.OPEN_DISTINCT_RATIO_MIN)
+        or (avg_len >= config.OPEN_AVG_LEN_WEAK
+            and acc.max_len >= config.OPEN_MAX_LEN_LONG
+            and acc.n_distinct >= config.OPEN_DISTINCT_ABS_MIN)
     ):
         return "open_text"
     return "closed"

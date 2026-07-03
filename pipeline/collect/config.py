@@ -35,6 +35,10 @@ OPEN_DISTINCT_RATIO_MIN = 0.5
 # Plancher de diversité de la règle forte : écarte les libellés longs RÉPÉTÉS
 # (colonne "Question" des exports agrégés) qui ne sont pas du texte libre.
 OPEN_DISTINCT_RATIO_FLOOR = 0.05
+# Règle "payload dupliqué" : réponses courtes très dupliquées mais vraies
+# contributions longues présentes (colonne "Contribution" des exports agrégés).
+OPEN_MAX_LEN_LONG = 500     # au moins une valeur de cette longueur
+OPEN_DISTINCT_ABS_MIN = 100  # et une diversité absolue suffisante
 DISTINCT_CAP = 50_000       # cap mémoire du comptage de valeurs distinctes
 
 # Chargement DuckDB : taille des lots executemany.

@@ -44,6 +44,25 @@ def test_repeated_long_label_is_not_open_text():
     assert _profile({"q": values})["q"].kind == "closed"
 
 
+def test_duplicated_payload_with_long_outliers_is_open_text():
+    # Cas réel (colonne "Contribution" des exports agrégés) : réponses courtes
+    # très dupliquées ("Marie Curie" ×500) MAIS vraies contributions longues
+    # présentes → le max_len élevé + une diversité absolue suffisante signent
+    # une colonne de texte libre.
+    values = ["Marie Curie"] * 300
+    values += [f"Réponse développée distincte numéro {i} qui argumente longuement."
+               for i in range(120)]
+    values += ["Une très longue contribution citoyenne. " * 30]  # ~1200 caractères
+    q = _profile({"q": values})["q"]
+    assert q.kind == "open_text"
+
+
+def test_closed_choice_stays_closed_despite_volume():
+    # Une vraie colonne fermée (choix courts, max_len petit) ne bascule pas.
+    values = (["Oui"] * 200) + (["Non"] * 200) + (["Sans opinion"] * 100)
+    assert _profile({"q": values})["q"].kind == "closed"
+
+
 def test_too_few_answers_is_not_open_text():
     values = ["Un texte pourtant très long qui ressemble fort à du texte libre."] * 3
     assert _profile({"q": values})["q"].kind != "open_text"
