@@ -181,24 +181,39 @@ class MacBackend(ClaimBackend):
 class LangchainBackend(ClaimBackend):
     """Backend générique Langchain pour les API compatibles OpenAI (LM Studio, NIM)."""
 
-    def __init__(self, llm, name: str, sovereign: bool, note: str):
+    def __init__(self, llm, name: str, sovereign: bool, note: str, supports_system_role: bool = True):
         self.llm = llm
         self.model = llm.model_name
         self.name = name
         self.sovereign = sovereign
         self.note = note
+        self.supports_system_role = supports_system_role
 
     def complete(self, messages: list[dict], *, stats: OllamaStats,
                  max_tokens: int | None = None) -> str | None:
         from langchain_core.messages import SystemMessage, HumanMessage
         t0 = time.monotonic()
         
+        system_prompt = ""
+        if not self.supports_system_role:
+            for m in messages:
+                if m["role"] == "system":
+                    system_prompt += m["content"] + "\n\n"
+                    
         lc_msgs = []
         for m in messages:
             if m["role"] == "system":
-                lc_msgs.append(SystemMessage(content=m["content"]))
+                if self.supports_system_role:
+                    lc_msgs.append(SystemMessage(content=m["content"]))
+            elif m["role"] == "assistant":
+                # Fallback for assistant role if needed
+                from langchain_core.messages import AIMessage
+                lc_msgs.append(AIMessage(content=m["content"]))
             else:
-                lc_msgs.append(HumanMessage(content=m["content"]))
+                content = m["content"]
+                if not self.supports_system_role and system_prompt and not any(isinstance(x, HumanMessage) for x in lc_msgs):
+                    content = system_prompt + content
+                lc_msgs.append(HumanMessage(content=content))
 
         try:
             llm_to_use = self.llm
@@ -216,7 +231,7 @@ class LangchainBackend(ClaimBackend):
             
         except Exception as exc:
             stats.errors += 1
-            print(f"  ⚠️ langchain[{self.model}]: {type(exc).__name__} - {exc}")
+            print(f"  [!] langchain[{self.model}]: {type(exc).__name__} - {exc}")
             return None
 
 
@@ -226,19 +241,19 @@ class LMStudioBackend(LangchainBackend):
     def __init__(self, model: str | None = None) -> None:
         from langchain_openai import ChatOpenAI
         model_name = model or os.environ.get("AGORA_LMSTUDIO_MODEL", "mistral-7b-instruct-v0.3")
-        base_url = os.environ.get("AGORA_LMSTUDIO_URL", "http://localhost:1234/v1")
+        base_url = os.environ.get("AGORA_LMSTUDIO_URL", "http://127.0.0.1:1234/v1")
         llm = ChatOpenAI(
             model=model_name,
             api_key="lm-studio",
             base_url=base_url,
-            temperature=0.0,
-            model_kwargs={"response_format": {"type": "json_object"}}
+            temperature=0.0
         )
         super().__init__(
             llm=llm,
             name="lmstudio",
             sovereign=True,
-            note="Extraction 100% locale (LM Studio) — les données ne sortent pas du réseau."
+            note="Extraction 100% locale (LM Studio) — les données ne sortent pas du réseau.",
+            supports_system_role=False
         )
 
 
