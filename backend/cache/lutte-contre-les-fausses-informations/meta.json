@@ -1,0 +1,28 @@
+{
+  "id": "lutte-contre-les-fausses-informations",
+  "label": "Lutte contre les fausses informations",
+  "status": "closed",
+  "n_nodes": 198,
+  "n_responses": 1933,
+  "languages": [
+    "fr",
+    "it"
+  ],
+  "lang_counts": {
+    "fr": 196,
+    "it": 2
+  },
+  "source": "lutte-contre-les-fausses-informations",
+  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+  "dim": 768,
+  "n_loaded": 1933,
+  "built_with": {
+    "min_chars": 1,
+    "dedup_exact": true,
+    "balance": null,
+    "cap": null,
+    "seed": 42
+  },
+  "question": "Que pensez-vous des mesures proposées pour lutter contre la manipulation de l'information et les fausses informations en ligne ?",
+  "context": "Consultation citoyenne de l'Assemblée nationale (2018) menée dans le cadre des propositions de loi relatives à la lutte contre les fausses informations. Les citoyens ont déposé des contributions libres dans plusieurs fils de débat thématiques (rôle des plateformes, du juge, éducation aux médias, etc.)."
+}

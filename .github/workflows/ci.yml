@@ -18,7 +18,8 @@ jobs:
           AGORA_CLAIMS_BACKEND=api uv run --extra contender --extra embed-contender --extra faiss \
             --extra collect \
             --with fastapi --with pytest --with httpx \
-            pytest backend/tests pipeline/collect/tests -p no:warnings
+            pytest backend/tests pipeline/collect/tests pipeline/ingest_full/tests \
+              pipeline/cluster/tests -p no:warnings
 
   frontend:
     runs-on: ubuntu-latest
