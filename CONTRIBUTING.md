@@ -11,10 +11,13 @@ Prérequis : **uv** et **node/npm**. La clé Mistral est **optionnelle** (le fro
 lecture des caches marchent sans ; elle ne sert qu'à *construire* de nouvelles analyses).
 
 ## Workflow (PR obligatoire)
-1. `git checkout -b feat/mon-sujet`
+**Branche d'intégration : `dev`** — tous les collaborateurs y poussent librement ;
+`main` (protégée, review @1Batmain requise) ne reçoit que des PR depuis `dev`.
+
+1. `git checkout dev && git pull` puis `git checkout -b feat/mon-sujet` (branche courte depuis dev)
 2. Code — guidelines dans **`.agent/README.md`**, décisions passées dans `.agent/notes/`.
 3. Vérifie : `make test && make build`
-4. Pousse + ouvre une **PR vers `main`**.
+4. Pousse + merge dans **`dev`** (push direct ou petite PR d'équipe) ; régulièrement, une **PR `dev` → `main`** est soumise pour validation.
 5. La **CI** (pytest + build) doit passer → un mainteneur merge → le VPS **se déploie seul**.
 
 ⚠️ Ne laisse pas d'état local non poussé : le déploiement fait `reset --hard origin/main`.
