@@ -1,0 +1,23 @@
+[
+  {
+    "name": "LMStudio-Local",
+    "source": "lmstudio",
+    "url": "http://localhost:1234/v1/embeddings",
+    "path": "nomic-embed-text-v1.5",
+    "api_key": ""
+  },
+  {
+    "name": "Nvidia-NIM-Example",
+    "source": "nvidia nim",
+    "url": "https://integrate.api.nvidia.com/v1/embeddings",
+    "path": "nvidia/nv-embedqa-e5-v5",
+    "api_key": "YOUR_NVIDIA_API_KEY"
+  },
+  {
+    "name": "Mistral-API",
+    "source": "api key",
+    "url": "https://api.mistral.ai/v1/embeddings",
+    "path": "mistral-embed",
+    "api_key": "YOUR_MISTRAL_API_KEY"
+  }
+]
