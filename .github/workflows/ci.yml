@@ -16,8 +16,9 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           AGORA_CLAIMS_BACKEND=api uv run --extra contender --extra embed-contender --extra faiss \
+            --extra collect \
             --with fastapi --with pytest --with httpx \
-            pytest backend/tests -p no:warnings
+            pytest backend/tests pipeline/collect/tests -p no:warnings
 
   frontend:
     runs-on: ubuntu-latest
