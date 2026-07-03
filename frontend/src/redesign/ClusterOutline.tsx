@@ -92,8 +92,13 @@ export function ClusterOutline({
     else onOpenPath(ancestorsAndSelf(id)); // sinon → ouvre son chemin (referme les branches voisines)
   };
 
+  // On n'affiche que les TOP_N plus gros clusters par défaut ; « voir plus » déroule le reste.
+  const [showAll, setShowAll] = useState(false);
+  const TOP_N = 5;
+
   const roots = childrenOf.get(null) ?? [];
   if (!roots.length || total <= 0) return null;
+  const shownRoots = showAll ? roots : roots.slice(0, TOP_N);
 
   const renderNodes = (nodes: SpatialTheme[], denom: number): JSX.Element[] =>
     nodes.map((t) => {
@@ -147,7 +152,14 @@ export function ClusterOutline({
 
   return (
     <div className="clout" aria-label="Synthèses par cluster (dépliables)">
-      {renderNodes(roots, total)}
+      {renderNodes(shownRoots, total)}
+      {roots.length > TOP_N && (
+        <button type="button" className="clout__more" onClick={() => setShowAll((v) => !v)}>
+          {showAll
+            ? 'Voir moins'
+            : `Voir plus — ${roots.length - TOP_N} autres thèmes`}
+        </button>
+      )}
     </div>
   );
 }

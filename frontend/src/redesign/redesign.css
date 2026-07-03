@@ -1736,15 +1736,15 @@ button.opinion__card:disabled { cursor: default; }
   .clout__track { grid-column: 1 / span 2; }
 }
 
-/* Raccourcis « principaux thèmes » qui prolongent la synthèse globale. */
-.overview__toplist { margin: .2rem 0 0; line-height: 1.9; color: #333; }
-.overview__toplink {
-  background: var(--agora-soft, #ececfe); border: 1px solid rgba(0,0,145,.18);
-  color: var(--agora, #000091); font: inherit; font-weight: 600; cursor: pointer;
-  padding: .05rem .5rem; border-radius: 999px; transition: background .12s, border-color .12s;
+/* Phrase d'introduction qui prolonge la synthèse globale vers l'outline des clusters. */
+.overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
+/* Toggle « voir plus » sous le top-5 des clusters. */
+.clout__more {
+  margin: .5rem 0 .2rem; padding: .35rem .7rem; background: none; cursor: pointer;
+  border: 1px solid rgba(0,0,145,.25); border-radius: 6px; font: inherit; font-size: .85rem;
+  color: var(--agora, #000091); transition: background .12s;
 }
-.overview__toplink:hover { background: #dcdcfb; border-color: var(--agora, #000091); }
-.overview__toplink:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
+.clout__more:hover { background: #f5f5fe; }
 
 /* ── Sous-titre « Points de convergence » (au-dessus du navigateur de thèmes) ── */
 .synthesis__subhead {
