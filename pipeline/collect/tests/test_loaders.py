@@ -76,16 +76,43 @@ def test_json_lines_fallback(tmp_path):
     p = tmp_path / "t.json"
     p.write_text('{"a": "x", "b": {"$oid": "1"}}\n{"a": "y"}\n', encoding="utf-8")
     table = loaders.load_table(p, "json")
-    assert table.header == ["a", "b"]
+    assert table.header == ["a", "b.$oid"]  # dict imbriqué aplati en chemin pointé
     rows = list(table.rows())
-    assert rows[0][0] == "x"
-    assert rows[0][1] == '{"$oid": "1"}'  # objet imbriqué sérialisé
+    assert rows[0] == ["x", "1"]
     assert rows[1] == ["y", None]
 
 
-def test_json_must_be_list_of_objects(tmp_path):
+def test_json_nested_lists_exploded(tmp_path):
+    # Cas réel (europe) : export agrégé par question, réponses en liste imbriquée.
     p = tmp_path / "t.json"
-    p.write_text('{"pas": "une liste"}', encoding="utf-8")
+    p.write_text(json.dumps([
+        {"Question": "Q1 ?", "Réponses": [{"reponse": "r1"}, {"reponse": "r2"}]},
+        {"Question": "Q2 ?", "Réponses": [{"reponse": "r3"}]},
+    ], ensure_ascii=False), encoding="utf-8")
+    table = loaders.load_table(p, "json")
+    assert table.header == ["Question", "Réponses.reponse"]
+    assert list(table.rows()) == [["Q1 ?", "r1"], ["Q1 ?", "r2"], ["Q2 ?", "r3"]]
+
+
+def test_json_dict_root_descended(tmp_path):
+    # Cas réel (institutions) : racine objet, listes imbriquées en profondeur.
+    p = tmp_path / "t.json"
+    p.write_text(json.dumps({"consultation": {
+        "titre": "T",
+        "themes": {"theme": [
+            {"titre": "th1", "questions": {"question": [{"texte": "q1"}, {"texte": "q2"}]}},
+            {"titre": "th2", "questions": {"question": [{"texte": "q3"}]}},
+        ]},
+    }}, ensure_ascii=False), encoding="utf-8")
+    table = loaders.load_table(p, "json")
+    assert table.header == ["consultation.titre", "consultation.themes.theme.titre",
+                            "consultation.themes.theme.questions.question.texte"]
+    assert list(table.rows()) == [["T", "th1", "q1"], ["T", "th1", "q2"], ["T", "th2", "q3"]]
+
+
+def test_json_scalar_root_rejected(tmp_path):
+    p = tmp_path / "t.json"
+    p.write_text('"juste une chaîne"', encoding="utf-8")
     with pytest.raises(loaders.LoaderError):
         loaders.load_table(p, "json")
 

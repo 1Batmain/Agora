@@ -72,7 +72,8 @@ def _kind(acc: _Accumulator) -> str:
     avg_len = acc.sum_len / acc.n
     distinct_ratio = acc.n_distinct / acc.n
     if acc.n >= config.OPEN_MIN_ANSWERS and (
-        avg_len >= config.OPEN_AVG_LEN_STRONG
+        (avg_len >= config.OPEN_AVG_LEN_STRONG
+         and distinct_ratio >= config.OPEN_DISTINCT_RATIO_FLOOR)
         or (avg_len >= config.OPEN_AVG_LEN_WEAK
             and distinct_ratio >= config.OPEN_DISTINCT_RATIO_MIN)
     ):

@@ -97,8 +97,6 @@ def _coerce(value) -> str | None:
         return None
     if isinstance(value, str):
         return value
-    if isinstance(value, (dict, list)):
-        return json.dumps(value, ensure_ascii=False)
     return str(value)
 
 
@@ -122,20 +120,55 @@ def _parse_json(raw: bytes):
     return records
 
 
+def _flatten(record: dict, prefix: str = "") -> list[dict]:
+    """Aplatit un objet JSON en lignes plates et GÉNÉRIQUES : les dicts imbriqués
+    deviennent des chemins pointés (`a.b`), chaque liste imbriquée explose la
+    ligne (une ligne par item, héritant des champs scalaires des ancêtres) —
+    c'est la forme des exports agrégés par question observés sur le portail."""
+    base: dict = {}
+    exploded: list[list[dict]] = []
+    for key, value in record.items():
+        path = f"{prefix}{key}"
+        if value is None:
+            continue
+        if isinstance(value, dict):
+            sub = _flatten(value, path + ".")
+            if len(sub) == 1:
+                base.update(sub[0])
+            elif sub:
+                exploded.append(sub)
+        elif isinstance(value, list):
+            item_rows: list[dict] = []
+            for item in value:
+                if isinstance(item, dict):
+                    item_rows.extend(_flatten(item, path + "."))
+                elif item is not None:
+                    item_rows.append({path: _coerce(item)})
+            exploded.append(item_rows)
+        else:
+            base[path] = _coerce(value)
+    if not exploded:
+        return [base]
+    return [{**base, **sub} for part in exploded for sub in part]
+
+
 def _load_json(raw: bytes) -> Table:
     data = _parse_json(raw)
+    if isinstance(data, dict):
+        data = [data]
     if not isinstance(data, list) or any(not isinstance(r, dict) for r in data):
-        raise LoaderError("JSON attendu : liste d'objets")
+        raise LoaderError("JSON attendu : objet ou liste d'objets")
+    records = [flat for record in data for flat in _flatten(record)]
     header: list[str] = []
     seen = set()
-    for record in data:
+    for record in records:
         for key in record:
             if key not in seen:
                 seen.add(key)
                 header.append(key)
 
     def rows() -> Iterator[Row]:
-        for record in data:
-            yield [_coerce(record.get(k)) for k in header]
+        for record in records:
+            yield [record.get(k) for k in header]
 
     return Table(header=header, rows=rows)

@@ -29,9 +29,12 @@ MAX_DOWNLOAD_BYTES = 400 * 2**20
 DATE_SHARE_MIN = 0.90       # part de valeurs "date" pour kind=date
 NUMERIC_SHARE_MIN = 0.95    # part de valeurs numériques pour kind=numeric
 OPEN_MIN_ANSWERS = 10       # en deçà, pas assez de signal pour "texte libre"
-OPEN_AVG_LEN_STRONG = 60    # longueur moyenne suffisante à elle seule
-OPEN_AVG_LEN_WEAK = 25      # longueur moyenne + diversité requise
+OPEN_AVG_LEN_STRONG = 60    # longueur moyenne suffisante (avec plancher de diversité)
+OPEN_AVG_LEN_WEAK = 25      # longueur moyenne + forte diversité requise
 OPEN_DISTINCT_RATIO_MIN = 0.5
+# Plancher de diversité de la règle forte : écarte les libellés longs RÉPÉTÉS
+# (colonne "Question" des exports agrégés) qui ne sont pas du texte libre.
+OPEN_DISTINCT_RATIO_FLOOR = 0.05
 DISTINCT_CAP = 50_000       # cap mémoire du comptage de valeurs distinctes
 
 # Chargement DuckDB : taille des lots executemany.

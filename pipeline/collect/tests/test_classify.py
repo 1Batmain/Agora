@@ -36,6 +36,14 @@ def test_short_but_diverse_is_open_text():
     assert _profile({"q": values})["q"].kind == "open_text"
 
 
+def test_repeated_long_label_is_not_open_text():
+    # Une question longue RÉPÉTÉE (export agrégé) n'est pas du texte libre :
+    # la règle forte (longueur) exige aussi un plancher de diversité.
+    values = ["Que pensez-vous de la place du Parlement dans les institutions "
+              "de la Cinquième République ?"] * 200
+    assert _profile({"q": values})["q"].kind == "closed"
+
+
 def test_too_few_answers_is_not_open_text():
     values = ["Un texte pourtant très long qui ressemble fort à du texte libre."] * 3
     assert _profile({"q": values})["q"].kind != "open_text"
