@@ -248,26 +248,51 @@ def build_analysis(
                 report("citations", "tri par proximité au centroïde", i, total)
 
         # 4) Insights LLM par niveau (B3) : global + un par thème, persistés.
+        # BOTTOM-UP : les thèmes sont générés par PROFONDEUR DÉCROISSANTE (feuilles →
+        # racines). La synthèse d'un thème PARENT AGRÈGE les synthèses déjà rédigées de
+        # ses sous-thèmes (`insights_md`, cf. backend.insights) ; une feuille part de ses
+        # propres claims. Le global reste bâti depuis les macro-thèmes (inchangé).
         # Garde-fou : on N'ÉCRIT PAS un insight de REPLI (Mistral indispo/erreur) → le `.json`
         # reste absent (`/insights` → 404 gracieux) et un re-bake ultérieur le régénère, au lieu
-        # de FIGER un message d'erreur en cache et de le servir.
+        # de FIGER un message d'erreur en cache et de le servir. Un enfant en repli n'entre
+        # pas dans `insights_md` → le parent retombe gracieusement sur ses claims.
+        insights_md: dict[str, str] = {}
+        md_lock = threading.Lock()
+
         def _write_insight(level: str, nid: str | None) -> None:
-            payload = render_insight(tree, level, nid, model=enrich)
+            payload = render_insight(
+                tree, level, nid, model=enrich,
+                child_insights=insights_md if level == "theme" else None,
+            )
             if (payload.get("meta") or {}).get("fallback"):
                 return
             store.write_insights(dataset, level, nid, payload)
+            if level == "theme" and nid is not None:
+                with md_lock:  # dispo pour le PARENT (bande de profondeur suivante)
+                    insights_md[nid] = payload.get("markdown", "")
 
         report("insights", f"synthèse globale ({enrich})", 0, total + 1)
         _write_insight("global", None)
 
-        def _insight_work(nid: str) -> None:
-            _write_insight("theme", nid)
+        # Bandes de profondeur, des feuilles (profondeur max) vers les racines. Chaque
+        # bande est un BARRAGE : quand un parent est synthétisé, TOUS ses enfants (plus
+        # profonds) sont déjà dans `insights_md`. Parallélisme intra-bande conservé (les
+        # nœuds d'une même profondeur sont indépendants — jamais parent↔enfant entre eux).
+        by_depth: dict[int, list[str]] = {}
+        for nid in node_ids:
+            by_depth.setdefault(tree.nodes[nid].depth, []).append(nid)
+        done = 0
+        for depth in sorted(by_depth, reverse=True):
+            band = by_depth[depth]
 
-        def _insight_done(k: int) -> None:
-            if k == total or k % 25 == 0:
-                report("insights", f"synthèses par thème ({enrich})", k, total)
+            def _insight_done(k: int, _base: int = done) -> None:
+                seen = _base + k
+                if seen == total or seen % 25 == 0:
+                    report("insights", f"synthèses par thème ({enrich})", seen, total)
 
-        _parallel_for(node_ids, _insight_work, on_done=_insight_done)
+            _parallel_for(band, lambda nid: _write_insight("theme", nid),
+                          on_done=_insight_done)
+            done += len(band)
 
         # Coût LLM de ce build (extraction + nommage + enrichissement + insights).
         try:
