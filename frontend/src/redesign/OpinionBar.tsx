@@ -42,8 +42,8 @@ export function OpinionBar({
         </span>
       </div>
       <p className="opinion__proposition">
-        par rapport à la question&nbsp;: « {proposition} »
-        {is_aggregate ? ` (synthèse de ${n_children ?? 0} sous-thèmes)` : ''}
+        Par rapport à la question{is_aggregate ? ` (synthèse de ${n_children ?? 0} sous-thèmes)` : ''}&nbsp;:
+        <span className="opinion__cleavage">{proposition}</span>
       </p>
       {is_aggregate && child_propositions && child_propositions.length > 0 && (
         <details className="opinion__children">
