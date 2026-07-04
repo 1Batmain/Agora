@@ -295,14 +295,6 @@ function ClusterPanel({
         </div>
       )}
 
-      {/* Répartition d'opinion (thème feuille avec objet de clivage baké). */}
-      {opinion && (
-        <OpinionBar
-          opinion={opinion}
-          onSelectStance={(stance) => onExploreTheme(theme.id, stance)}
-        />
-      )}
-
       {/* VUE GÉNÉRALE — ce qui fait l'identité de la thématique. */}
       {body ? (
         <div className="overview__synthbody">
@@ -319,10 +311,21 @@ function ClusterPanel({
           accordéon imbriqué), présentées COMME la vue globale, AVANT « À relever ». */}
       {subclusters}
 
-      {/* À RELEVER — tensions / consensus, APRÈS les sous-thématiques. */}
+      {/* À RELEVER — ce qui ressort (consensus/clivage, adapté au signal), APRÈS les sous-thématiques. */}
       {relever && (
         <div className="overview__synthbody overview__retenir">
           <Markdown source={`## À relever\n${relever}`} />
+        </div>
+      )}
+
+      {/* ANALYSE DE STANCE — répartition d'opinion (objet de clivage + fav/déf), À LA FIN
+          de la synthèse (thème avec opinion bakée). */}
+      {opinion && (
+        <div className="clout__stance">
+          <OpinionBar
+            opinion={opinion}
+            onSelectStance={(stance) => onExploreTheme(theme.id, stance)}
+          />
         </div>
       )}
 
