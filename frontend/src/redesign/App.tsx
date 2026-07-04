@@ -168,7 +168,14 @@ export default function App() {
     );
   }
   if (route === 'analysis' && active) {
-    return <RedesignApp initialDataset={active.id} initialThemeId={focusTheme} onBack={backToLanding} />;
+    return (
+      <RedesignApp
+        initialDataset={active.id}
+        initialThemeId={focusTheme}
+        onBack={backToLanding}
+        onOpenAvis={(avisId) => exploreAvis(active.id, avisId)}
+      />
+    );
   }
   if (route === 'participate' && active) {
     return <Participate dataset={active} onBack={backToLanding} />;

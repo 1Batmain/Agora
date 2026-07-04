@@ -231,7 +231,7 @@ export function ConsultationOverview({
                   className="btn-primary"
                   onClick={() => onViewGraph(selectedThemeId)}
                 >
-                  {selectedTheme ? 'Voir le graphe du thème →' : 'Voir le graphe →'}
+                  {selectedTheme ? "Voir l'analyse du thème →" : "Voir l'analyse →"}
                 </button>
                 <button
                   type="button"
