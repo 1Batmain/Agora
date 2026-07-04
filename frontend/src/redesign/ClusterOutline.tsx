@@ -126,7 +126,6 @@ export function ClusterOutline({
       const kids = childrenOf.get(t.id) ?? [];
       const name = t.title || t.label;
       const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
-      const coh = Math.round((t.cohesion ?? t.consensus ?? 0) * 100);
       return (
         <div key={t.id} id={`clout-node-${t.id}`} className={`clout__node${open ? ' clout__node--open' : ''}`}>
           <button
@@ -142,7 +141,6 @@ export function ClusterOutline({
             <span className="clout__figs">
               <span className="clout__pct">{pct}%</span>
               <span className="clout__voix">{(t.n_avis ?? 0).toLocaleString(LOCALE)} voix</span>
-              <span className="clout__coh">cohésion {coh}%</span>
             </span>
             <span className="clout__track" aria-hidden>
               <span className="clout__fill" style={{ width: `${pct}%` }} />
