@@ -2243,31 +2243,26 @@ button.opinion__card:disabled { cursor: default; }
 .avisx__empty { text-align: center; color: #666; padding: 1.6rem 0; }
 .avisx__empty p { margin: 0 0 .9rem; }
 
-/* Carte de stats d'un claim — même langage que les dashboards de synthèse. */
+/* Petite carte de thème d'un claim cliqué (nom du thème + filtre) — plus de grille de
+   stats détaillées (volume/sentiment/représentativité), retirée sur retour utilisateur :
+   trop lourde pour un simple aparté de lecture. */
 .claimstats {
   margin: .7rem 0 .2rem; border: 1px solid #dcdcea; border-radius: 8px;
-  background: #fafaff; padding: .7rem .9rem;
+  background: #fafaff; padding: .55rem .9rem;
 }
+.claimstats--compact .claimstats__head { margin-bottom: 0; }
 .claimstats__head { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; }
 .claimstats__title { font-weight: 700; font-size: .9rem; color: #222; flex: 1; }
+.claimstats__filterbtn {
+  font: inherit; font-size: .78rem; font-weight: 600; white-space: nowrap;
+  border: 1px solid var(--agora, #000091); background: #fff; color: var(--agora, #000091);
+  cursor: pointer; padding: .3rem .6rem; border-radius: 999px;
+}
+.claimstats__filterbtn:hover { background: var(--agora-soft, #ececfe); }
 .claimstats__close {
   font: inherit; border: none; background: none; color: #888; cursor: pointer; padding: .1rem .3rem;
 }
 .claimstats__close:hover { color: #222; }
-.claimstats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
-@media (max-width: 760px) { .claimstats__grid { grid-template-columns: repeat(2, 1fr); } }
-.claimstats__cell {
-  display: flex; flex-direction: column; gap: .15rem; padding: .55rem .7rem;
-  background: #fff; border: 1px solid #ececf4; border-radius: 6px;
-}
-.claimstats__cell strong {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: 1.05rem; color: var(--agora, #000091);
-}
-.claimstats__cell span { font-size: .72rem; color: #666; line-height: 1.3; }
-.claimstats__cell em { font-size: .72rem; color: #999; font-style: italic; line-height: 1.35; }
-.claimstats__pos { color: #18753c; }
-.claimstats__neg { color: #c1121f; }
-.claimstats__conf { font-size: .7em; color: #999; letter-spacing: .1em; }
 
 /* Honnêteté : disclaimer « pas un sondage » sous les cartes d'opinion. */
 .opinion__disclaimer {
