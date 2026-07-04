@@ -541,6 +541,70 @@ def _cooccurrence(tree: ThemeTree) -> list[dict]:
 
 
 # --------------------------------------------------------------------------- #
+# Cœur PARTAGÉ de construction de la forêt de macros (claims /analysis ↔ idées Console)
+# --------------------------------------------------------------------------- #
+def _build_macro_forest(
+    fine_groups: list[list[int]],
+    vecs,
+    weights,
+    owner: list[int],
+    texts: list[str],
+    *,
+    min_sub_size: int,
+    resolution: float = DEFAULT_RESOLUTION,
+    seed: int = DEFAULT_SEED,
+) -> tuple[dict, list, list, float, float]:
+    """À partir des clusters FINS Leiden, construit la forêt de macros et la remplit.
+
+    Étapes (IDENTIQUES pour `/analysis` et la Console live — c'est la SEULE source de
+    cette orchestration, plus de recopie à synchroniser à la main) : coarsening racine
+    (`_coarsen_roots`), seuil de dispersion `tau` dérivé des clusters subdivisibles,
+    sous-arbres variance-adaptatifs (`_build_subtree`), puis nommage c-TF-IDF, couleurs
+    par macro et convergence intra. Agnostique au TYPE de membre : l'appelant passe ses
+    propres vecteurs/poids/owner/textes (claims pour `/analysis`, idées pour la Console)
+    et la source du graphe RACINE amont (seuil dérivé vs seuil donné) reste son choix.
+
+    Renvoie `(nodes, order, macros, tau, merge_thr)`.
+    """
+    nodes: dict = {}
+    order: list = []
+    macros: list = []
+
+    # COARSENING de l'ENTRÉE : fusionne les racines aux centroïdes trop proches (μ+σ,
+    # dérivé) → moins de macros, plus distincts. Les clusters fins fusionnés deviennent
+    # les enfants (drill-down). Aucun effet si rien ne se recoupe.
+    super_groups, merge_thr = _coarsen_roots(fine_groups, vecs)
+
+    # Seuil de dispersion DÉRIVÉ de la distribution des dispersions des clusters FINS. On
+    # ne garde que ceux RÉELLEMENT subdivisibles (≥ min_sub_size) : les singletons/outliers
+    # (1-2 membres) ne peuvent pas être coupés et fausseraient le gap en tirant le seuil
+    # vers 0 (→ sur-subdivision de tout le reste).
+    macro_disp = [_node_stats(g, vecs, weights)[1]
+                  for g in fine_groups if len(g) >= min_sub_size]
+    tau = _derive_tau(macro_disp)
+
+    counter = [0]
+    # Macros (super-groupes) triés par poids social décroissant ; à l'intérieur, les
+    # clusters fins fusionnés sont triés de même (ordre d'affichage stable).
+    def _w(members: list[int]) -> float:
+        return _node_stats(members, vecs, weights)[3]
+    merged = [sorted((fine_groups[i] for i in sg), key=lambda g: -_w(g))
+              for sg in super_groups]
+    merged.sort(key=lambda fine: -_w([m for g in fine for m in g]))
+    for fine in merged:
+        union = [m for g in fine for m in g]
+        forced = fine if len(fine) >= 2 else None    # ≥2 fins fusionnés ⇒ drill-down
+        mid = _build_subtree(union, None, 0, counter, nodes, order, vecs, weights,
+                             owner, tau, resolution, seed, forced_children=forced)
+        macros.append(mid)
+
+    _name_nodes(nodes, texts)
+    _assign_colors(nodes, macros)
+    _assign_convergence(nodes, macros)
+    return nodes, order, macros, tau, merge_thr
+
+
+# --------------------------------------------------------------------------- #
 # Point d'entrée : construit l'arbre (sans x,y) — réutilisé par insights/citations
 # --------------------------------------------------------------------------- #
 def build_theme_tree(
@@ -589,43 +653,17 @@ def build_theme_tree(
             by_cluster.setdefault(c, []).append(i)
         fine_groups = list(by_cluster.values())
 
-        # COARSENING de l'ENTRÉE : fusionne les racines aux centroïdes trop proches
-        # (μ+σ, dérivé) → moins de macros, plus distincts. Les clusters fins fusionnés
-        # deviennent les enfants (drill-down). Aucun effet si rien ne se recoupe.
-        super_groups, merge_thr = _coarsen_roots(fine_groups, vecs)
-
-        # Seuil de dispersion DÉRIVÉ de la distribution des dispersions des clusters
-        # FINS. On ne garde que ceux RÉELLEMENT subdivisibles (≥ min_sub_size) : les
-        # singletons/outliers (1-2 avis) ne peuvent pas être coupés et fausseraient le
-        # gap en tirant le seuil vers 0 (→ sur-subdivision de tout le reste).
-        floor = derived_global.min_sub_size
-        macro_disp = [_node_stats(g, vecs, weights)[1]
-                      for g in fine_groups if len(g) >= floor]
-        tau = _derive_tau(macro_disp)
-
-        counter = [0]
-        # Macros (super-groupes) triés par poids social décroissant ; à l'intérieur, les
-        # clusters fins fusionnés sont triés de même (ordre d'affichage stable).
-        def _w(members: list[int]) -> float:
-            return _node_stats(members, vecs, weights)[3]
-        merged = [sorted((fine_groups[i] for i in sg), key=lambda g: -_w(g))
-                  for sg in super_groups]
-        merged.sort(key=lambda fine: -_w([m for g in fine for m in g]))
-        for fine in merged:
-            union = [m for g in fine for m in g]
-            forced = fine if len(fine) >= 2 else None    # ≥2 fins fusionnés ⇒ drill-down
-            mid = _build_subtree(union, None, 0, counter, nodes, order, vecs, weights,
-                                 owner, tau, resolution, seed, forced_children=forced)
-            macros.append(mid)
+        # Cœur PARTAGÉ avec la Console live (`live_cluster.build_live_tree`) : coarsening
+        # racine, tau dérivé, sous-arbres variance-adaptatifs, nommage/couleurs/convergence.
+        nodes, order, macros, tau, merge_thr = _build_macro_forest(
+            fine_groups, vecs, weights, owner, prepared.claim_texts,
+            min_sub_size=derived_global.min_sub_size, resolution=resolution, seed=seed)
         root_coarsen = {
             "n_fine": len(fine_groups), "n_macros": len(macros),
             "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
             "criterion": "fusion racines si cos(centroïdes) > μ+σ des sims inter-centroïdes ET > min(cohésion) (garde-fou généricité)",
         }
 
-        _name_nodes(nodes, prepared.claim_texts)
-        _assign_colors(nodes, macros)
-        _assign_convergence(nodes, macros)
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.
         avis_total = (np.bincount(np.asarray(prepared.claim_owner, dtype=int),
                                   minlength=len(prepared.avis))

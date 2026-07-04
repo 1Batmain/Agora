@@ -31,14 +31,8 @@ import numpy as np
 # cf. brief) — l'unité « membre » est ici une idée et non un claim, mais toute la
 # logique d'indices/hiérarchie est agnostique au type de membre.
 from backend.analysis import (
-    _assign_colors,
-    _assign_convergence,
-    _build_subtree,
-    _coarsen_roots,
+    _build_macro_forest,
     _dataset_stats,
-    _derive_tau,
-    _name_nodes,
-    _node_stats,
     theme_dict,
 )
 from backend import density
@@ -69,11 +63,12 @@ def build_live_tree(
 ) -> SimpleNamespace:
     """Construit l'arbre de thèmes LIVE au seuil `knn_threshold` (idées = membres).
 
-    Reproduit le corps de `analysis.build_theme_tree`, mais : (a) part des idées + vecs
-    cachés (aucun re-embed, aucun LLM) ; (b) le graphe racine utilise le seuil DONNÉ au
-    lieu du seuil dérivé (`None` → seuil dérivé, comme `/analysis`) ; (c) `owner[i] = i`
-    (chaque idée est son propre avis). Les sous-thèmes re-dérivent leur graphe local
-    normalement (variance-adaptatif).
+    Partage le CŒUR de construction de forêt avec `analysis.build_theme_tree` via
+    `analysis._build_macro_forest` (plus de recopie à synchroniser). Les seules différences,
+    toutes EN AMONT du cœur partagé : (a) part des idées + vecs cachés (aucun re-embed,
+    aucun LLM) ; (b) le graphe racine utilise le seuil DONNÉ au lieu du seuil dérivé
+    (`None` → seuil dérivé, comme `/analysis`) ; (c) `owner[i] = i` (chaque idée est son
+    propre avis). Les sous-thèmes re-dérivent leur graphe local (variance-adaptatif).
 
     Renvoie un namespace léger duck-typé `nodes/order/macros/...` — suffisant pour les
     helpers d'indices/couleurs et la sérialisation, sans porter de `PreparedClaims`.
@@ -119,33 +114,13 @@ def build_live_tree(
             by_cluster.setdefault(c, []).append(i)
         fine_groups = list(by_cluster.values())
 
-        # Coarsening de l'ENTRÉE (fusion des racines trop proches) + seuil de dispersion
-        # DÉRIVÉ sur les clusters réellement subdivisibles — identique à `/analysis`.
-        super_groups, merge_thr = _coarsen_roots(fine_groups, vecs64)
-        floor = derived.min_sub_size
-        macro_disp = [_node_stats(g, vecs64, weights_arr)[1]
-                      for g in fine_groups if len(g) >= floor]
-        tau = _derive_tau(macro_disp)
-
-        counter = [0]
-
-        def _w(members: list[int]) -> float:
-            return _node_stats(members, vecs64, weights_arr)[3]
-
-        merged = [sorted((fine_groups[i] for i in sg), key=lambda g: -_w(g))
-                  for sg in super_groups]
-        merged.sort(key=lambda fine: -_w([m for g in fine for m in g]))
-        for fine in merged:
-            union = [m for g in fine for m in g]
-            forced = fine if len(fine) >= 2 else None
-            mid = _build_subtree(union, None, 0, counter, nodes, order, vecs64,
-                                 weights_arr, owner, tau, resolution, seed,
-                                 forced_children=forced)
-            macros.append(mid)
-
-        _name_nodes(nodes, texts)               # c-TF-IDF (zéro LLM)
-        _assign_colors(nodes, macros)
-        _assign_convergence(nodes, macros)
+        # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) — MÊME orchestration
+        # (coarsening racine, tau, sous-arbres variance-adaptatifs, nommage/couleurs/
+        # convergence). Ici les membres sont des IDÉES et le graphe racine part du seuil
+        # DONNÉ (levier Console), pas du seuil dérivé — c'est la seule divergence, en amont.
+        nodes, order, macros, tau, merge_thr = _build_macro_forest(
+            fine_groups, vecs64, weights_arr, owner, texts,
+            min_sub_size=derived.min_sub_size, resolution=resolution, seed=seed)
 
     return SimpleNamespace(
         nodes=nodes, order=order, macros=macros, dataset=None,
