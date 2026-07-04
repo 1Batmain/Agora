@@ -35,6 +35,13 @@ embed-contender = [
 faiss = [
     "faiss-cpu>=1.8",
 ]
+# NER léger pour l'anonymisation renforcée post-hoc (research/anonymize_pii.py),
+# CPU-only, sans LLM. Modèle à télécharger séparément :
+#   uv run --extra anonymize python -m spacy download fr_core_news_lg
+anonymize = [
+    "phonenumbers>=9.0.34",
+    "spacy>=3.7",
+]
 
 [tool.uv]
 # Projet "virtuel" : on ne build/installe pas le paquet, juste l'env + deps.

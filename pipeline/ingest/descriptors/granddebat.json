@@ -1,25 +1,25 @@
 {
-  "name": "granddebat",
-  "status": "closed",
-  "format": "csv",
-  "path": "data/raw/granddebat_democratie_citoyennete.csv",
-  "url": "https://static.data.gouv.fr/resources/donnees-ouvertes-du-grand-debat-national/20200611-221937/democratie-et-citoyennete.csv",
-  "encoding": "utf-8",
-  "delimiter": ",",
-  "has_header": true,
-  "columns": {
-    "id": 0,
-    "ts": 3,
-    "text": 13
-  },
-  "_note": "Grand Debat National 2019 — espace 'La democratie et la citoyennete' (open data data.gouv.fr, Licence Ouverte 2.0). CSV UTF-8, separateur ','. 46 colonnes; une ligne = une contribution; de nombreuses colonnes sont des QUESTIONS OUVERTES (texte libre). col 13 = 'Que faudrait-il faire pour renouer le lien entre les citoyens et les elus qui les representent ?' : question tres ouverte => opinions VARIEES et CONTRASTEES (contrairement a TikTok qui oriente tout). ATTENTION col 14 = question FERMEE (non-cumul des mandats) => reponses courtes filtrees: NE PAS utiliser. Snapshot 31/01/2019 (92 MB) choisi pour limiter l'ingestion. Autres colonnes ouvertes possibles: 16 (mieux representer), 19 (participation citoyens), 22 (decisions publiques), 25 (consulter directement), 26 (role assemblees/Senat), 41 (immigration, tres clivant), 43, 45 (sujet libre). author non mappe => defaut = id (1 contribution = 1 repondant). PAS de 'lang_keep': la source n'a pas de colonne langue, le FR est (re)detecte en aval (audit #13); filtrer ensuite via --balance/--lang fr au build_cache. Les lignes a reponse vide sur cette colonne sont filtrees en aval par --min-chars.",
-  "context": "Grand Débat National (2019), espace « Démocratie et citoyenneté » — open data data.gouv.fr (Licence Ouverte 2.0). Réponses libres à une question ouverte : « Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ? ». Un vaste panel de propositions citoyennes contrastées.",
-  "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
-  "official_baseline": {
-    "label": "Dispositif officiel 2019",
-    "cost": "3,25 M€ (traitement et analyse des données, tous thèmes)",
-    "duration": "~3 mois (clôture 18 mars → synthèse juin 2019)",
-    "note": "Périmètre très différent : notre corpus = UNE question ouverte du seul thème Démocratie (22 471 réponses de l'export open data ; 118 356 contributions officielles à cette question) ; les 3,25 M€ couvrent le traitement des ~2 M de contributions des 4 thèmes, questions fermées, cahiers et numérisation BnF inclus. Ordre de grandeur uniquement. Extrapolation naïve au coût Agora mesuré (~1,1 $/1 000 réponses) : traiter les ~2 M de contributions ≈ 2 000-2 500 $ de LLM — hors validation humaine et normes du dispositif officiel.",
-    "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
-  }
+ "name": "granddebat",
+ "status": "closed",
+ "format": "csv",
+ "path": "data/raw/granddebat_democratie_citoyennete.csv",
+ "url": "https://static.data.gouv.fr/resources/donnees-ouvertes-du-grand-debat-national/20200611-221937/democratie-et-citoyennete.csv",
+ "encoding": "utf-8",
+ "delimiter": ",",
+ "has_header": true,
+ "columns": {
+  "id": 0,
+  "ts": 3,
+  "text": 13
+ },
+ "_note": "Grand Debat National 2019 — espace 'La democratie et la citoyennete' (open data data.gouv.fr, Licence Ouverte 2.0). CSV UTF-8, separateur ','. 46 colonnes; une ligne = une contribution; de nombreuses colonnes sont des QUESTIONS OUVERTES (texte libre). col 13 = 'Que faudrait-il faire pour renouer le lien entre les citoyens et les elus qui les representent ?' : question tres ouverte => opinions VARIEES et CONTRASTEES (contrairement a TikTok qui oriente tout). ATTENTION col 14 = question FERMEE (non-cumul des mandats) => reponses courtes filtrees: NE PAS utiliser. Snapshot 31/01/2019 (92 MB) choisi pour limiter l'ingestion. Autres colonnes ouvertes possibles: 16 (mieux representer), 19 (participation citoyens), 22 (decisions publiques), 25 (consulter directement), 26 (role assemblees/Senat), 41 (immigration, tres clivant), 43, 45 (sujet libre). author non mappe => defaut = id (1 contribution = 1 repondant). PAS de 'lang_keep': la source n'a pas de colonne langue, le FR est (re)detecte en aval (audit #13); filtrer ensuite via --balance/--lang fr au build_cache. Les lignes a reponse vide sur cette colonne sont filtrees en aval par --min-chars.",
+ "context": "Grand Débat National — grande consultation nationale organisée du 15 janvier au 15 mars 2019, espace « Démocratie et citoyenneté » — open data data.gouv.fr (Licence Ouverte 2.0). Réponses libres à une question ouverte : « Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ? ». Un vaste panel de propositions citoyennes contrastées.",
+ "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+ "official_baseline": {
+  "label": "Dispositif officiel 2019",
+  "cost": "3,25 M€ (traitement et analyse des données, tous thèmes)",
+  "duration": "~3 mois (clôture 18 mars → synthèse juin 2019)",
+  "note": "Périmètre très différent : notre corpus = UNE question ouverte du seul thème Démocratie (22 471 réponses de l'export open data ; 118 356 contributions officielles à cette question) ; les 3,25 M€ couvrent le traitement des ~2 M de contributions des 4 thèmes, questions fermées, cahiers et numérisation BnF inclus. Ordre de grandeur uniquement. Extrapolation naïve au coût Agora mesuré (~1,1 $/1 000 réponses) : traiter les ~2 M de contributions ≈ 2 000-2 500 $ de LLM — hors validation humaine et normes du dispositif officiel.",
+  "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
+ }
 }
