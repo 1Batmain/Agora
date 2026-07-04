@@ -201,5 +201,6 @@ def title_for_node(dataset: str, node, *, model: str | None = None,
         encode=lambda t: {"id": node.id, "title": t, "model": synth_model},
         postprocess=_clean_title,
         refresh=refresh,
+        cache_fallback=False,  # repli JAMAIS caché (429 transitoire ≠ vérité — bug des 257 titres-labels)
     )
     return title
