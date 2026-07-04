@@ -1728,6 +1728,11 @@ button.opinion__card:disabled { cursor: default; }
 .clout__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); border-radius: 2px; }
 .clout__body { padding: 0 .2rem .6rem; }
 .clout__panel { margin: .2rem 0 .8rem; }
+/* Sous-thématiques : lead « N sous-thématiques identifiées : » + accordéon imbriqué,
+   intercalé entre le corps de la synthèse et le « À retenir ». */
+.clout__sub { margin: 1.1rem 0 .2rem; }
+.clout__sublead { margin: 0 0 .35rem; }
+.overview__retenir { margin-top: 1.2rem; }
 /* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
 .clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
 @media (max-width: 640px) {
