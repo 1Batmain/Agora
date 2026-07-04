@@ -71,20 +71,24 @@ def eval_api_model(
     config: dict,
     corpus: multilingual_data.MultiCorpus,
     p: dict,
+    embedder_instance=None
 ) -> APIModelResult:
-    """Évalue UN modèle via son API."""
+    """Évalue UN modèle via son API ou une instance native."""
     name = config.get("name", "Unnamed")
     source = config.get("source", "unknown")
     url = config.get("url", "")
     model_path = config.get("path", "")
     api_key = config.get("api_key", "")
 
-    embedder = APIEmbedder(
-        url=url,
-        model_path=model_path,
-        api_key=api_key,
-        batch_size=32
-    )
+    if embedder_instance is not None:
+        embedder = embedder_instance
+    else:
+        embedder = APIEmbedder(
+            url=url,
+            model_path=model_path,
+            api_key=api_key,
+            batch_size=32
+        )
 
     t0 = time.perf_counter()
     try:
