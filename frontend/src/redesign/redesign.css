@@ -1705,6 +1705,67 @@ button.opinion__card:disabled { cursor: default; }
   color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
 
+/* ── Outline de clusters (accordéon récursif « par niveau ») ─────────────── */
+.clout { display: flex; flex-direction: column; margin-top: .4rem; }
+.clout__node { border-top: 1px solid #e8e8f2; }
+.clout__node:first-child { border-top: 0; }
+.clout__row {
+  width: 100%; display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr) auto; grid-template-rows: auto auto;
+  align-items: center; gap: .1rem .6rem; padding: .7rem .4rem;
+  background: none; border: 0; cursor: pointer; text-align: left; font: inherit;
+  color: #111; transition: background .12s;
+}
+.clout__row:hover { background: #f5f5fe; }
+.clout__row[aria-expanded="true"] { background: #f0f0fc; }
+.clout__caret { grid-row: 1 / span 2; color: var(--agora, #000091); font-size: .8rem; }
+.clout__name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clout__row[aria-expanded="true"] .clout__name { color: var(--agora, #000091); }
+.clout__figs { display: flex; align-items: baseline; gap: .55rem; font-size: .8rem; color: #555; white-space: nowrap; }
+.clout__pct { font-weight: 700; color: var(--agora, #000091); }
+.clout__coh { color: #8a8aa0; }
+.clout__track { grid-column: 2 / span 2; height: .35rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
+.clout__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); border-radius: 2px; }
+.clout__body { padding: 0 .2rem .6rem; }
+.clout__panel { margin: .2rem 0 .8rem; }
+/* Sous-thématiques : lead « N sous-thématiques identifiées : » + accordéon imbriqué,
+   intercalé entre le corps de la synthèse et le « À retenir ». */
+.clout__sub { margin: 1.1rem 0 .2rem; }
+.clout__sublead { margin: 0 0 .35rem; }
+.overview__retenir { margin-top: 1.2rem; }
+/* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
+.overview__hero {
+  margin: .2rem 0 1.2rem; padding: 1rem 1.1rem; cursor: pointer;
+  background: var(--agora-soft, #ececfe); border: 1px solid rgba(0,0,145,.14);
+  border-left: 3px solid var(--agora, #000091); border-radius: 8px;
+  transition: background .12s, border-color .12s;
+}
+.overview__hero:hover { background: #e2e2fb; }
+.overview__hero:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
+.overview__hero-label {
+  font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--agora, #000091); font-weight: 700; margin-bottom: .4rem;
+}
+.overview__hero-quote { margin: 0; font-size: 1.05rem; line-height: 1.6; font-style: italic; color: #222; }
+.overview__hero-more { display: inline-block; margin-top: .5rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
+/* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
+.clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
+@media (max-width: 640px) {
+  .clout__row { grid-template-columns: 1.2rem minmax(0, 1fr); }
+  .clout__figs { grid-column: 2; grid-row: 2; }
+  .clout__track { grid-column: 1 / span 2; }
+}
+
+/* Phrase d'introduction qui prolonge la synthèse globale vers l'outline des clusters. */
+.overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
+/* Toggle « voir plus » sous le top-5 des clusters. */
+.clout__more {
+  margin: .5rem 0 .2rem; padding: .35rem .7rem; background: none; cursor: pointer;
+  border: 1px solid rgba(0,0,145,.25); border-radius: 6px; font: inherit; font-size: .85rem;
+  color: var(--agora, #000091); transition: background .12s;
+}
+.clout__more:hover { background: #f5f5fe; }
+
 /* ── Sous-titre « Points de convergence » (au-dessus du navigateur de thèmes) ── */
 .synthesis__subhead {
   font-family: ui-monospace, "IBM Plex Mono", monospace;
@@ -1908,6 +1969,24 @@ button.opinion__card:disabled { cursor: default; }
   max-width: 72ch;
   margin: 1.1rem 0 2.4rem;
 }
+
+/* Courte intro non-italique au-dessus de la question, + question en dessous. */
+.overview__question-lead {
+  display: block; font-style: normal; font-size: .82rem; letter-spacing: .04em;
+  text-transform: uppercase; color: #8a8a97; margin-bottom: .35rem;
+}
+.overview__question-text { display: block; }
+/* Lien vers la consultation officielle (sous la question). */
+.overview__official { margin: -1.6rem 0 2.4rem; font-size: .9rem; }
+.overview__official a {
+  color: var(--agora, #000091); text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,145,.3);
+}
+.overview__official a:hover { border-bottom-color: var(--agora, #000091); }
+/* Boutons d'accès placés TOUT EN BAS de la synthèse. */
+.overview__actions--bottom { margin-top: 2rem; padding-top: 1.4rem; border-top: 1px solid #e6e6ef; }
+/* Petite info additionnelle de footer : langues du panel. */
+.overview__langs { margin: .6rem 0 0; font-size: .78rem; color: #9a9aa5; }
 
 /* ── Nom de la consultation en titre MODESTE au-dessus de la question ── */
 .overview__name {

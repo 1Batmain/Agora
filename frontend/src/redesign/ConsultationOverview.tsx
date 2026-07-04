@@ -1,27 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
-import type { AnalysisPayload, Citation, Consultation, CostPayload, ThemeOpinion } from './contract';
-import { fetchAnalysis, fetchCitations, fetchCost, fetchInsights, fetchOpinion } from './analysisApi';
-import { OpinionBar } from './OpinionBar';
+import { useEffect, useState } from 'react';
+import type { AnalysisPayload, Consultation, CostPayload, ThemeOpinion } from './contract';
+import { fetchAnalysis, fetchCost, fetchInsights, fetchOpinion } from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
-import { ThemeNavigator } from './ThemeNavigator';
+import { ClusterOutline, stripSaillants } from './ClusterOutline';
 import { LOCALE } from './strings';
 
-/** Retire la section « ## Points saillants » de la synthèse LLM (choix produit : on ne
- * l'affiche plus). De la ligne de titre jusqu'au prochain « ## » (ou la fin). */
-function stripSaillants(md: string | null): string | null {
+/** Retire une phrase d'AMORCE résiduelle en toute fin de synthèse globale (ex. « Les
+ * principaux thèmes identifiés sont : ») : le front la remplace par son propre lead
+ * cliquable (« Agora a identifié N thèmes distincts : »), donc une amorce laissée par
+ * le LLM ferait DOUBLON. On ne coupe que si la toute fin est une courte ligne en « : ». */
+function stripDanglingLead(md: string | null): string | null {
   if (!md) return md;
-  return md
-    .replace(/(^|\n)#{1,3}\s*Points?\s+saillants[^\n]*\n[\s\S]*?(?=\n#{1,3}\s|$)/i, '$1')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return md.replace(/\n+[^\n]{0,120}:\s*$/, '').trim();
 }
 
 /**
  * Page d'APERÇU d'une consultation CLOSE (sous-page entre la landing et le graphe).
  * Présente la consultation — questions/contexte, panel (langues), nombre de réponses,
- * nombre de thèmes identifiés, et la SYNTHÈSE générale — puis un bouton « Voir le
- * graphe » qui ouvre la vue d'analyse interactive.
+ * nombre de thèmes — puis la SYNTHÈSE : la vue d'ensemble GLOBALE (fixe, en tête) suivie
+ * de l'OUTLINE des clusters (`ClusterOutline`), un accordéon récursif où chaque cluster
+ * se déplie EN PLACE avec sa propre synthèse riche (plus de navigation qui remplace la
+ * page → on garde le fil de la profondeur). Un bouton « Voir le graphe » ouvre la vue
+ * d'analyse interactive.
  */
 export function ConsultationOverview({
   dataset,
@@ -42,16 +43,12 @@ export function ConsultationOverview({
   const [analysis, setAnalysis] = useState<AnalysisPayload | null>(null);
   const [synthesis, setSynthesis] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  // Synthèse DYNAMIQUE : null = vue globale ; sinon synthèse du thème sélectionné.
-  const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
-  const [themeSynthesis, setThemeSynthesis] = useState<string | null>(null);
-  const [themeLoading, setThemeLoading] = useState(false);
-  // Avis représentatifs du focus = citations triées centroïde (cliquables → exploration).
-  const [citations, setCitations] = useState<Citation[] | null>(null);
   // Répartition d'opinion : chargée UNE fois par dataset, lookup par theme_id (gracieux si absent).
   const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
   // Coût LLM du traitement (transparence) — null si non mesuré.
   const [cost, setCost] = useState<CostPayload | null>(null);
+  // Chemin ouvert de l'outline de clusters (accordéon par niveau).
+  const [openPath, setOpenPath] = useState<string[]>([]);
   useEffect(() => {
     let cancelled = false;
     setCost(null);
@@ -60,25 +57,12 @@ export function ConsultationOverview({
       cancelled = true;
     };
   }, [dataset.id]);
-  // Mot-clé cliqué → on ne montre que les avis qui le mentionnent (les plus proches).
-  const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
-  // Ancre du navigateur : on y ramène doucement la vue à chaque (dé)sélection.
-  const synthRef = useRef<HTMLElement>(null);
-
-  // Sélectionner un cluster (ou null = vue générale) SANS rechargement brutal :
-  // on met à jour l'état puis on ramène doucement le navigateur en haut.
-  const selectTheme = (id: string | null) => {
-    setSelectedThemeId(id);
-    requestAnimationFrame(() => {
-      synthRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  };
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    setSelectedThemeId(null);
     setOpinions([]);
+    setOpenPath([]);
     Promise.all([
       fetchAnalysis(dataset.id).catch(() => null),
       fetchInsights(dataset.id, 'global').catch(() => null),
@@ -95,40 +79,7 @@ export function ConsultationOverview({
     };
   }, [dataset.id]);
 
-  // Fetch PARESSEUX de la synthèse du thème sélectionné ; annule le fetch précédent
-  // au changement de sélection. null = vue globale (déjà chargée), pas de fetch.
-  const selectedTheme = analysis?.themes?.find((t) => t.id === selectedThemeId) ?? null;
-  useEffect(() => {
-    if (selectedThemeId == null) {
-      setCitations(null);
-      return;
-    }
-    let cancelled = false;
-    setThemeLoading(true);
-    // On NE vide PAS `themeSynthesis` : on garde l'ancien contenu (estompé) pendant
-    // le re-fetch pour éviter tout flash « tout disparaît / réapparaît ».
-    setCitations(null);
-    fetchInsights(dataset.id, 'theme', selectedThemeId, selectedTheme ?? undefined)
-      .catch(() => null)
-      .then((s) => {
-        if (cancelled) return;
-        setThemeSynthesis(s?.data ?? null);
-        setThemeLoading(false);
-      });
-    fetchCitations(dataset.id, selectedThemeId)
-      .catch(() => null)
-      .then((r) => {
-        if (!cancelled) setCitations(r?.data ?? null);
-      });
-    return () => {
-      cancelled = true;
-    };
-    // selectedTheme dérive de selectedThemeId — pas besoin de le suivre.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataset.id, selectedThemeId]);
-
   const totals = (analysis?.dataset_stats as { totals?: Record<string, number> } | undefined)?.totals ?? {};
-  const keywords = (analysis?.dataset_stats as { keywords?: string[] } | undefined)?.keywords ?? [];
   const nReponses = dataset.n_contributions ?? totals.participants ?? totals.n_avis ?? dataset.n_nodes ?? null;
   // Distinction honnête : participants (lignes reçues) / réponses à LA question (voix,
   // doublons regroupés) / textes uniques analysés. `n_responses` sert de dénominateur vrai.
@@ -146,6 +97,7 @@ export function ConsultationOverview({
   // `n_avis` par thème) DOUBLE-COMPTE les avis présents dans plusieurs thèmes → ne JAMAIS
   // l'afficher comme total honnête (c'est le bug des « 4377 » vs 3000 analysés / 28384 total).
   const nAnalyzed = dataset.n_sample ?? navTotal;
+  const globalSource = stripDanglingLead(stripSaillants(synthesis));
 
   return (
     <div className="agora overview">
@@ -153,31 +105,28 @@ export function ConsultationOverview({
 
       <main className="overview__body">
         <section className="overview__head">
-          {/* Nom de la consultation en titre MODESTE, puis la question posée en
-              sous-titre italique entre guillemets (centrés). */}
+          {/* Nom de la consultation en titre MODESTE, une courte intro, puis la question
+              posée en sous-titre italique entre guillemets (centrés). */}
           <h1 className="overview__name">{dataset.label}</h1>
           {dataset.question && (
-            <p className="overview__question">« {dataset.question} »</p>
+            <p className="overview__question">
+              <span className="overview__question-lead">Analyse des réponses à la question&nbsp;:</span>
+              <span className="overview__question-text">« {dataset.question} »</span>
+            </p>
+          )}
+          {dataset.official_url && (
+            <p className="overview__official">
+              <a href={dataset.official_url} target="_blank" rel="noreferrer">
+                Voir la consultation officielle ↗
+              </a>
+            </p>
           )}
         </section>
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
           <div className="overview__stat">
-            <strong>{nResp != null ? nResp.toLocaleString(LOCALE) : '—'}</strong>
-            <span>
-              réponses à la question
-              {hasNonRespondents && nReponses != null && (
-                <> · {nReponses.toLocaleString(LOCALE)} participants</>
-              )}
-            </span>
-          </div>
-          <div className="overview__stat">
-            <strong>{nThemes ?? '—'}</strong>
-            <span>thèmes identifiés</span>
-          </div>
-          <div className="overview__stat">
-            <strong>{langues || '—'}</strong>
-            <span>panel · langues</span>
+            <strong>{nAnalyzed > 0 ? nAnalyzed.toLocaleString(LOCALE) : '—'}</strong>
+            <span>témoignages analysés</span>
           </div>
         </section>
 
@@ -209,194 +158,64 @@ export function ConsultationOverview({
           </p>
         ) : null}
 
-        <section className="overview__synthesis" ref={synthRef}>
+        <section className="overview__synthesis">
+          {/* 1) VUE D'ENSEMBLE — synthèse globale FIXE, toujours en tête. */}
+          <div className={`overview__dynsynth${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
+            <h3 className="synthesis__subhead">Vue d'ensemble</h3>
+            {globalSource ? (
+              <div className="overview__synthbody">
+                <Markdown source={globalSource} />
+                {loading && <p className="overview__synthloading">Actualisation…</p>}
+              </div>
+            ) : loading ? (
+              <p className="overview__loading">Chargement de la synthèse…</p>
+            ) : (
+              <p className="overview__loading">Synthèse indisponible.</p>
+            )}
+          </div>
+
+          {/* 2) LES CLUSTERS — introduits par la phrase qui prolonge la synthèse globale.
+              L'outline n'affiche que les 5 plus gros par défaut (+ « voir plus »), chacun
+              déployable EN PLACE (accordéon récursif par niveau) avec sa synthèse riche. */}
           {themes.length > 0 && (
             <>
-              <h3 className="synthesis__subhead">Clusters identifiés</h3>
-              <ThemeNavigator
+              <p className="overview__clusters-lead">
+                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts&nbsp;:
+              </p>
+              <ClusterOutline
+                dataset={dataset.id}
                 themes={themes}
                 total={navTotal}
-                currentId={selectedThemeId}
-                onSelect={selectTheme}
-                onBack={() => {
-                  const cur = themes.find((t) => t.id === selectedThemeId);
-                  selectTheme(cur?.parent_id ?? null);
-                }}
+                navTotal={navTotal}
+                opinions={opinions}
+                openPath={openPath}
+                onOpenPath={setOpenPath}
+                onViewGraph={onViewGraph}
+                onExploreTheme={onExploreTheme}
+                onExploreAvis={onExploreAvis}
               />
-              {/* Accès graphe + explorateur SOUS le sélecteur, SCOPÉS au thème courant :
-                  vue générale → graphe/explorateur complet ; sous-thème → celui du thème. */}
-              <div className="overview__actions">
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => onViewGraph(selectedThemeId)}
-                >
-                  {selectedTheme ? 'Voir le graphe du thème →' : 'Voir le graphe →'}
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => onExploreTheme(selectedThemeId)}
-                >
-                  {selectedTheme ? 'Consulter les témoignages du thème →' : 'Consulter les témoignages →'}
-                </button>
-              </div>
             </>
           )}
 
-          {(() => {
-            const dynLoading = selectedThemeId == null ? loading : themeLoading;
-            const dynSource = stripSaillants(selectedThemeId == null ? synthesis : themeSynthesis);
-            const dynTitle = selectedTheme
-              ? selectedTheme.title || selectedTheme.label
-              : "Vue d'ensemble";
-            // Mots-clés DU FOCUS : globaux si rien de sélectionné, sinon ceux du thème.
-            const focusKeywords = selectedTheme ? (selectedTheme.keywords ?? []) : keywords;
-            // Avis du focus : si un mot-clé est cliqué, on ne garde que ceux qui le
-            // mentionnent (les plus proches) ; sinon les représentatifs (centroïde).
-            // Répartition d'opinion du thème focalisé (objet de clivage + barre fav/def).
-            const focusOpinion = selectedThemeId
-              ? opinions.find((o) => o.theme_id === selectedThemeId) ?? null
-              : null;
-            const allAvis = citations ?? [];
-            const repAvis = (selectedKeyword
-              ? allAvis.filter((c) => (c.text || '').toLowerCase().includes(selectedKeyword.toLowerCase()))
-              : allAvis
-            ).slice(0, selectedKeyword ? 8 : 5);
-            return (
-              <div
-                className={`overview__dynsynth${dynLoading ? ' is-loading' : ''}`}
-                aria-live="polite"
-                aria-busy={dynLoading}
-              >
-                <h3 className="synthesis__subhead">{dynTitle}</h3>
-                {selectedTheme && (
-                  <button
-                    type="button"
-                    className="overview__backgen"
-                    onClick={() => selectTheme(null)}
-                  >
-                    ← Vue générale
-                  </button>
-                )}
-                {/* Dashboard de VOLUME à CE niveau de synthèse : nombre RÉEL de témoignages
-                    (avis distincts) du cluster, sa part du panel, et le nombre d'idées (claims). */}
-                {(() => {
-                  const avisN = selectedTheme ? (selectedTheme.n_avis ?? 0) : nAnalyzed;
-                  const claimsN = selectedTheme ? (selectedTheme.n_claims ?? 0) : null;
-                  const pct = selectedTheme && navTotal > 0
-                    ? Math.round((avisN / navTotal) * 100) : null;
-                  if (!avisN) return null;
-                  return (
-                    <div className="overview__dash" aria-label="Volume de ce niveau de synthèse">
-                      <span className="overview__dash-item">
-                        <strong>{avisN.toLocaleString(LOCALE)}</strong> témoignages{!selectedTheme && ' analysés'}
-                      </span>
-                      {pct != null && (
-                        <span className="overview__dash-item overview__dash-pct">{pct}% du panel</span>
-                      )}
-                      {!selectedTheme && nReponses != null && nReponses > avisN && (
-                        <span className="overview__dash-item overview__dash-pct">
-                          sur {nReponses.toLocaleString(LOCALE)} réponses (
-                          {Math.round((avisN / nReponses) * 100)}%)
-                        </span>
-                      )}
-                      {claimsN != null && (
-                        <span className="overview__dash-item">
-                          <strong>{claimsN.toLocaleString(LOCALE)}</strong> idées
-                        </span>
-                      )}
-                    </div>
-                  );
-                })()}
-                {/* Répartition d'opinion du thème (si bakée) : objet de clivage en
-                    proposition polaire + barre fav/déf/nuance + badge clivant/consensuel.
-                    Honnête : on n'affiche RIEN si le thème est 'impur' (signal trop diffus). */}
-                {selectedTheme && focusOpinion && (
-                  <OpinionBar
-                    opinion={focusOpinion}
-                    onSelectStance={(stance) =>
-                      selectedThemeId && onExploreTheme(selectedThemeId, stance)}
-                  />
-                )}
-                {/* Pas de flash : si une synthèse est déjà là, on la garde (estompée)
-                    pendant le re-fetch plutôt que de vider la zone. */}
-                {dynSource ? (
-                  <div className="overview__synthbody">
-                    <Markdown source={dynSource} />
-                    {dynLoading && <p className="overview__synthloading">Actualisation…</p>}
-                  </div>
-                ) : dynLoading ? (
-                  <p className="overview__loading">Chargement de la synthèse…</p>
-                ) : (
-                  <p className="overview__loading">Synthèse indisponible.</p>
-                )}
-                {/* Mots-clés CLIQUABLES, juste au-dessus des avis : un clic filtre les avis
-                    sur ceux qui mentionnent ce mot-clé (les plus proches). */}
-                {selectedTheme && focusKeywords.length > 0 && (
-                  <div className="kw-chips kw-chips--clickable" aria-label="Mots-clés — cliquer pour filtrer les avis">
-                    {focusKeywords.map((kw) => {
-                      const on = selectedKeyword === kw;
-                      return (
-                        <button
-                          key={kw}
-                          type="button"
-                          className={`kw-chip kw-chip--btn${on ? ' kw-chip--on' : ''}`}
-                          aria-pressed={on}
-                          title={on ? 'Retirer le filtre' : `Avis mentionnant « ${kw} »`}
-                          onClick={() => setSelectedKeyword(on ? null : kw)}
-                        >
-                          {kw}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-                {selectedTheme && allAvis.length > 0 && (
-                  <div className="overview__avis">
-                    <h4 className="synthesis__subhead">
-                      {selectedKeyword ? `Avis mentionnant « ${selectedKeyword} »` : 'Avis représentatifs'}
-                      {selectedKeyword && (
-                        <button
-                          type="button"
-                          className="overview__kwclear"
-                          onClick={() => setSelectedKeyword(null)}
-                        >
-                          × tous
-                        </button>
-                      )}
-                    </h4>
-                    {repAvis.length > 0 ? (
-                      repAvis.map((c, i) => {
-                        const id = c.avis_id;
-                        return (
-                          <blockquote
-                            key={id ?? i}
-                            className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
-                            role={id ? 'button' : undefined}
-                            tabIndex={id ? 0 : undefined}
-                            onClick={id ? () => onExploreAvis(id) : undefined}
-                            onKeyDown={id ? (e) => { if (e.key === 'Enter') onExploreAvis(id); } : undefined}
-                          >
-                            « {c.text} »
-                          </blockquote>
-                        );
-                      })
-                    ) : (
-                      <p className="overview__loading">Aucun avis ne mentionne « {selectedKeyword} ».</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+          {/* Accès graphe + explorateur TOUT EN BAS de la synthèse (vue globale). */}
+          {themes.length > 0 && (
+            <div className="overview__actions overview__actions--bottom">
+              <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
+                Voir le graphe →
+              </button>
+              <button type="button" className="btn-secondary" onClick={() => onExploreTheme(null)}>
+                Consulter les témoignages →
+              </button>
+            </div>
+          )}
         </section>
 
         {/* PIED DE PAGE — transparence des coûts : tokens · $ · durée RÉELLE du traitement
             (somme des phases mesurées + estimées marquées), versus le dispositif officiel
             sourcé quand le descripteur en porte un. */}
-        {cost && (
+        {(cost || langues) && (
           <footer className="overview__footer" role="contentinfo">
+            {cost && (
             <p className="overview__cost">
               <span className="overview__cost-agora">
                 Traitement Agora&nbsp;:{' '}
@@ -409,8 +228,8 @@ export function ConsultationOverview({
                     (cost.durations?.analysis_seconds ?? 0) + (cost.durations?.opinion_seconds ?? 0);
                   if (!secs) return null;
                   const label = secs >= 5400
-                    ? `~${(secs / 3600).toLocaleString(LOCALE, { maximumFractionDigits: 1 })}\u00a0h`
-                    : `~${Math.max(1, Math.round(secs / 60))}\u00a0min`;
+                    ? `~${(secs / 3600).toLocaleString(LOCALE, { maximumFractionDigits: 1 })} h`
+                    : `~${Math.max(1, Math.round(secs / 60))} min`;
                   const estimated = Object.keys(cost.phases ?? {}).some((k) => k.endsWith('_estimee'));
                   return (
                     <>
@@ -440,6 +259,11 @@ export function ConsultationOverview({
                 </span>
               )}
             </p>
+            )}
+            {/* Petite info additionnelle : langues du panel. */}
+            {langues && (
+              <p className="overview__langs">Langues du panel&nbsp;: {langues}</p>
+            )}
           </footer>
         )}
       </main>
