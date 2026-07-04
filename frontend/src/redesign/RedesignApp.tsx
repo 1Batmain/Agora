@@ -45,6 +45,7 @@ export default function RedesignApp({
   initialThemeId = null,
   onBack,
   onOpenAvis,
+  onAbout,
 }: {
   initialDataset?: string | null;
   /** Thème sur lequel OUVRIR l'analyse (bouton « Voir l'analyse du thème ») : on pré-drill. */
@@ -52,6 +53,8 @@ export default function RedesignApp({
   onBack?: () => void;
   /** Ouvre l'avis en entier dans l'explorateur (lien « voir l'avis complet » de la table). */
   onOpenAvis?: (avisId: string) => void;
+  /** Ouvre la page « À propos » (présentation du projet). */
+  onAbout?: () => void;
 } = {}) {
   const [datasets, setDatasets] = useState<Consultation[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
@@ -333,6 +336,7 @@ export default function RedesignApp({
     <div className="agora">
       <Header
         onHome={onBack}
+        onAbout={onAbout}
         right={
           <span className="header-consultation" title="Consultation en cours">
             {datasets.find((d) => d.id === dataset)?.label ?? dataset}
