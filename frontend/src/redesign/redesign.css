@@ -1050,6 +1050,22 @@ body {
   color: var(--agora-active);
 }
 
+/* « Comment ça marche ? » : lien discret vers la page « À propos ». */
+.gov-header__navlink {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--agora);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  white-space: nowrap;
+}
+.gov-header__navlink:hover {
+  text-decoration: underline;
+}
+
 /* ---------- Landing ---------- */
 .landing__body {
   --landing-ink: #15233a;
@@ -1254,6 +1270,27 @@ body {
   font-size: 14px;
   line-height: 1.7;
   color: var(--landing-muted);
+}
+.trust-note__list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  max-width: 780px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--landing-muted);
+}
+.trust-note__list strong {
+  color: var(--landing-ink);
+}
+/* Variante « avertissement » : même carte, accent ambre au lieu du bleu institutionnel. */
+.trust-note--warn {
+  border-left-color: #c98a12;
+  background: #fff8ea;
+}
+.trust-note--warn .trust-note__title {
+  color: #8a5a00;
 }
 
 /* En-tête de section landing : titre clair à gauche, indice court à droite. */
@@ -2258,22 +2295,20 @@ button.opinion__card:disabled { cursor: default; }
 .section-prose p { color: var(--landing-text); line-height: 1.75; margin: 0 0 1.1rem; font-size: 16px; }
 .section-prose p:last-child { margin-bottom: 0; }
 .section-prose strong { font-weight: 700; color: var(--landing-ink); }
-.landing__pipeline { margin-top: 88px; }
-.pipe { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1.8rem; max-width: 780px; }
-.pipe__step {
-  padding: 0; border: 0; background: none;
+.landing__pipeline { margin-top: 64px; }
+/* Petit badge pastille (techno / étape) — même langage visuel que `.hero__kicker`. */
+.tag-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--landing-muted);
+  background: var(--landing-panel);
+  border: 1px solid var(--landing-line);
+  border-radius: 999px;
+  padding: 4px 10px;
 }
-.pipe__step strong {
-  display: block; margin-bottom: .35rem; color: #111;
-  font-family: var(--font-main);
-}
-.pipe__step p { margin: 0; color: #555; line-height: 1.6; font-size: .92rem; }
-.pipe__step em { font-style: normal; font-weight: 700; color: #111; }
-.pipe__tag {
-  float: right; margin-left: .6rem; font-size: .72rem; color: #555;
-  font-family: var(--font-main);
-  background: #f0f0f4; padding: .15rem .5rem;
-}
+.how__step .tag-pill { float: right; margin-left: 12px; }
 /* Toggle GLOBAL des surlignages (en-tête des contrôles). */
 
 /* Carte d'avis INLINE : texte complet + surlignages + Signaler, plus de page séparée. */
@@ -2320,6 +2355,73 @@ button.opinion__card:disabled { cursor: default; }
 .avisx__factorvalue { margin: 0; font-size: .82rem; }
 .avisx__stancetag { font-weight: 600; white-space: nowrap; }
 .avisx__factorsep { color: #c4c4d4; font-weight: 400; }
+
+/* ── Page « À propos » : grille d'architecture (dépôt) + équipe ── */
+.landing__archi, .landing__method, .landing__warn, .landing__security { margin-top: 64px; }
+.landing__warn .trust-note { margin-top: 1.6rem; }
+
+.archi {
+  list-style: none; margin: 1.6rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;
+  max-width: 940px;
+}
+@media (max-width: 720px) {
+  .archi { grid-template-columns: 1fr; }
+}
+.archi__item {
+  padding: 22px 24px; border: 1px solid var(--landing-line); border-radius: 14px; background: #fff;
+}
+.archi__item strong {
+  display: block; margin: 0 0 8px; color: var(--landing-ink); font-family: inherit;
+  font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+}
+.archi__item p { margin: 0; color: var(--landing-text); line-height: 1.65; font-size: 14px; }
+.archi__item code {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .85em;
+  background: var(--landing-panel); padding: 0 .3em; border-radius: 4px; color: var(--landing-ink);
+}
+
+/* ── Page « À propos » : contributeurs ── */
+/* Grille (pas un flex-wrap) : cartes de LARGEUR ÉGALE par colonne, pour un alignement
+   propre entre lignes quel que soit le nombre de caractères du nom/rôle. */
+.team {
+  list-style: none; margin: 1.4rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem;
+  max-width: 900px;
+}
+.team__card {
+  display: flex; align-items: center; gap: .65rem; width: 100%; box-sizing: border-box;
+  padding: .6rem .9rem .6rem .6rem; border: 1px solid var(--landing-line); border-radius: 12px;
+  background: #fff;
+}
+/* Variante cliquable (profil LinkedIn communiqué) : même carte, en lien. */
+a.team__card--link {
+  text-decoration: none; cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+a.team__card--link:hover {
+  background: var(--landing-panel); border-color: #a7b7cf;
+}
+.team__avatar {
+  display: grid; place-items: center; width: 34px; height: 34px; flex: none;
+  border-radius: 50%; background: linear-gradient(135deg, var(--agora), var(--agora-active));
+  color: #fff; font-weight: 700; font-size: .9rem;
+}
+.team__info { display: flex; flex-direction: column; line-height: 1.3; }
+.team__name {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-weight: 700; color: var(--landing-ink); font-size: .88rem;
+}
+.team__role { color: var(--landing-muted); font-size: .78rem; }
+/* Petits badges « in »/« gh » — indiquent un lien LinkedIn/GitHub sans dépendre
+   d'une icône externe. */
+.team__badge {
+  display: inline-grid; place-items: center; width: 16px; height: 16px;
+  border-radius: 3px; color: #fff;
+  font-size: 9px; font-weight: 800; line-height: 1;
+}
+.team__badge--linkedin { background: #0a66c2; }
+.team__badge--github { background: #24292f; }
 
 /* ── Landing : section « Collaborer » (onboarding hackathon) ── */
 .landing__collab { margin-top: 64px; }
