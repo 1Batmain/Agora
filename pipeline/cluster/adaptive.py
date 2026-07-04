@@ -44,7 +44,7 @@ EDGE_SIGMA = 3.2          # seuil = μ − EDGE_SIGMA · σ des cosinus k-NN
 MIN_SUB_FRAC = 0.011      # min_sub_size = max(MIN_SUB_FLOOR, round(frac · N))
 MIN_SUB_FLOOR = 5
 DUP_PERCENTILE = 98.0     # near-dup (diversity) = ce percentile des cosinus k-NN
-DUP_MIN, DUP_MAX = 0.80, 0.995
+DUP_MAX = 0.995
 
 
 @dataclass
@@ -135,13 +135,13 @@ def derive_dup_threshold(vecs: np.ndarray, k: int,
     """Seuil near-dup (pour `diversity`) = haut percentile des cosinus k-NN.
 
     « Quasi-doublon » = similarité dans le haut de la distribution observée —
-    notion relative au modèle, pas un 0.93 figé. Borné [DUP_MIN, DUP_MAX].
+    notion relative au modèle, pas un 0.93 figé. Borné max [DUP_MAX] et min [pool.mean()].
     """
     if pool is None:
         pool = knn_sim_pool(vecs, k)
     if pool.size == 0:
         return DUP_MAX
-    return float(min(DUP_MAX, max(DUP_MIN, float(np.percentile(pool, DUP_PERCENTILE)))))
+    return float(min(DUP_MAX, max(float(pool.mean()), float(np.percentile(pool, DUP_PERCENTILE)))))
 
 
 def derive_defaults(vecs: np.ndarray, *, k: int | None = None,

@@ -57,9 +57,7 @@ OPPOSITION_CLIVANT = 0.15        # opposition ≥ ce seuil → 'clivant', sinon 
 REP_FOR_TITLE = 8                # claims représentatifs pour le repli de titre
 LLM_MAX_WORKERS = max(1, int(os.environ.get("AGORA_LLM_MAX_WORKERS", "4")))
 # Seuil de FIT cible↔titre sous lequel on MARQUE la cible « peu représentative »
-# (`cleavage_fit_low`). Le fit est cos(emb(proposition), emb(titre)) — voir build_opinion.
-# NB : c'est un MARQUEUR (audit/affichage prudent), pas un filtre dur — on n'efface rien.
-CLEAVAGE_FIT_LOW = float(os.environ.get("AGORA_CLEAVAGE_FIT_LOW", "0.75"))
+# (`cleavage_fit_low`). Il est désormais dérivé DYNAMIQUEMENT depuis `tree.derived_global.threshold`.
 
 ProgressFn = Callable[[str, int, int], None]
 
@@ -266,7 +264,7 @@ def aggregate(theme_id: str, proposition: str, counts: Counter, n: int) -> dict:
     }
 
 
-def _attach_cleavage_fit(opinions: list[dict], *, embedder: str = DEFAULT_EMBEDDER) -> None:
+def _attach_cleavage_fit(opinions: list[dict], threshold: float, *, embedder: str = DEFAULT_EMBEDDER) -> None:
     """Ajoute `cleavage_fit` (cos cible↔titre) + `cleavage_fit_low` à chaque opinion, EN PLACE.
 
     Mesure de représentativité de la cible : embedde proposition ET titre avec l'encodeur
@@ -287,7 +285,7 @@ def _attach_cleavage_fit(opinions: list[dict], *, embedder: str = DEFAULT_EMBEDD
         for o, p, t in zip(opinions, pv, tv):
             fit = max(0.0, float(np.dot(p, t)))   # vecteurs déjà L2-normalisés
             o["cleavage_fit"] = round(fit, 4)
-            o["cleavage_fit_low"] = bool(fit < CLEAVAGE_FIT_LOW)
+            o["cleavage_fit_low"] = bool(fit < threshold)
     except Exception as exc:  # embed indisponible / erreur torch — diagnostic facultatif
         _log(f"cleavage_fit indisponible ({type(exc).__name__}) — fit non calculé")
         for o in opinions:
@@ -438,7 +436,8 @@ def build_opinion(
     # le centroïde est dominé par la facette la PLUS BRUYANTE → il récompense le biais « saillant »
     # qu'on combat (sur le cas-test il classait la PIRE cible plus haut). Un seul batch d'embed,
     # hors thread (torch). Marque `cleavage_fit_low` si fit < seuil — MARQUEUR, pas filtre.
-    _attach_cleavage_fit(opinions)
+    dynamic_threshold = float(tree.derived_global.threshold) if hasattr(tree, "derived_global") and tree.derived_global else 0.75
+    _attach_cleavage_fit(opinions, threshold=dynamic_threshold)
 
     # Ordre STABLE (par theme_id dans l'ordre de l'arbre) — indépendant de l'ordonnancement.
     rank = {nid: i for i, nid in enumerate(tree.order)}
@@ -502,7 +501,7 @@ def build_opinion(
         },
         "cleavage_prompt_system": cleavage_system("<TITRE>"),
         "stance_prompt_system": STANCE_SYSTEM,
-        "cleavage_fit_low_threshold": CLEAVAGE_FIT_LOW,
+        "cleavage_fit_low_threshold": round(dynamic_threshold, 4),
         "counts": {"clivant": n_clivant, "consensuel": n_consensuel, "impur": n_impur,
                    "fit_low": sum(1 for o in opinions if o.get("cleavage_fit_low"))},
         "n_leaves": total,

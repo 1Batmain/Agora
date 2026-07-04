@@ -29,13 +29,7 @@ CACHE_DIR = Path(__file__).resolve().parent / "cache"
 SEED_NAME = "submissions.seed.jsonl"
 LIVE_NAME = "submissions.jsonl"
 
-# Seuil de similarité cosinus pour compter une contribution « proche ».
-# CALIBRÉ pour nomic-v2, dont les cosinus tournent haut : sur un échantillon de
-# retours variés, les paires NON reliées (ex. « plus d'arbres en ville » vs un
-# retour produit) plafonnent ~0.54, les paraphrases reliées (perf/export/mobile)
-# atteignent 0.70–0.75. 0.68 sépare proprement « même sujet » de « hors-sujet ».
-# Ce n'est PAS un littéral de corpus : c'est une calibration de l'embedder.
-SIMILARITY_THRESHOLD = 0.68
+# Le seuil de similarité est calculé dynamiquement dans correlate()
 
 
 def seed_path(consultation_id: str) -> Path:
@@ -107,7 +101,7 @@ def embed_text(text: str) -> np.ndarray:
 def correlate(
     vec: np.ndarray,
     existing: list[dict],
-    threshold: float = SIMILARITY_THRESHOLD,
+    threshold: float | None = None,
 ) -> dict:
     """Corrèle un vecteur aux contributions existantes (cosinus).
 
@@ -121,6 +115,14 @@ def correlate(
     if mat.size == 0:
         return {"n_similar": 0, "nearest_cos": None}
     sims = mat @ q
+    
+    # Calcul dynamique du seuil (Z-score) s'il n'est pas fourni
+    if threshold is None:
+        if len(sims) > 1:
+            threshold = float(sims.mean() + 3.0 * sims.std())
+        else:
+            threshold = 0.999 # Fallback statique si 1 seul élément
+            
     n_similar = int((sims >= threshold).sum())
     return {
         "n_similar": n_similar,
