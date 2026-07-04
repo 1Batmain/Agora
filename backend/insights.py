@@ -167,10 +167,11 @@ def _global_messages(summary: str) -> list[dict]:
         "2. une ANALYSE BRÈVE de la tonalité générale et du MESSAGE CENTRAL qui ressort "
         "des contributions — par ex. « Les contributions révèlent une critique massive "
         "de … perçue comme … ».\n\n"
-        "Le texte doit se terminer de façon à s'enchaîner naturellement avec une phrase "
-        "« Les principaux thèmes identifiés sont : … » ajoutée APRÈS (ne l'écris pas "
-        "toi-même). Rédige dans la langue dominante des contributions. Reste TRÈS COURT. "
-        "N'invente aucun chiffre absent du résumé.\n\n"
+        "TERMINE sur ton analyse (une phrase de conclusion). N'ajoute SURTOUT AUCUNE "
+        "phrase d'amorce vers une liste de thèmes (du type « Les principaux thèmes "
+        "sont : ») : cette amorce est ajoutée séparément, l'écrire ferait doublon. "
+        "Rédige dans la langue dominante des contributions. Reste TRÈS COURT. N'invente "
+        "aucun chiffre absent du résumé.\n\n"
         f"Résumé des thèmes :\n\n{summary}\n"
     )
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
