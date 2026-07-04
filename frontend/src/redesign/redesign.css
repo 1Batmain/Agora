@@ -1733,6 +1733,7 @@ button.opinion__card:disabled { cursor: default; }
 .clout__sub { margin: 1.1rem 0 .2rem; }
 .clout__sublead { margin: 0 0 .35rem; }
 .overview__retenir { margin-top: 1.2rem; }
+.clout__stance { margin-top: 1.4rem; }
 /* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
 .overview__hero {
   margin: .2rem 0 1.2rem; padding: 1rem 1.1rem; cursor: pointer;
