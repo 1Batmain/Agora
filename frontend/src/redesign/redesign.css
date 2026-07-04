@@ -74,6 +74,12 @@ body {
   top: 0;
   z-index: 20;
 }
+.gov-header__brandgroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
 .gov-header__brand {
   display: flex;
   align-items: center;
@@ -124,39 +130,70 @@ body {
   min-width: 0;
   background: var(--bg);
 }
-/* The map lives in a fixed-height canvas; the dashboard flows beneath it → the
-   whole page scrolls vertically. */
+/* The camembert lives in a fixed-height canvas; the indices dashboard and the
+   citizen-answers table flow beneath it → the whole page scrolls vertically. */
 .agora__canvas {
   position: relative;
-  height: 62vh;
-  min-height: 380px;
+  height: 48vh;
+  min-height: 360px;
 }
 
-/* Right panel: sticky beneath the header, its own scroll, drag-resizable width. */
+/* Right panel: sticky beneath the header, its own scroll, drag-resizable width,
+   and ROLLABLE — `flex-basis`/`width` animate down to 0 to roll it up. The
+   panel's CONTENT (`.agora__right-inner`) keeps its natural width and is
+   right-aligned (`justify-content: flex-end`) so as the outer box shrinks, the
+   overflow gets clipped starting at the content's LEFT edge — the section
+   visibly empties LEFT→RIGHT (rather than an instant top-to-bottom hide). */
 .agora__right {
   flex: 0 0 var(--right-w, 380px);
   width: var(--right-w, 380px);
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
   background: var(--bg-raised);
   border-left: 1px solid var(--border);
-  padding: 16px;
   position: sticky;
   top: var(--header-h);
   height: calc(100vh - var(--header-h));
+  transition: flex-basis 260ms ease, width 260ms ease, border-color 260ms ease;
+}
+.agora__right--collapsed {
+  border-left-color: transparent;
+}
+/* No easing while the user is actively dragging the handle — must track 1:1. */
+.agora__right--dragging {
+  transition: none;
+}
+.agora__right-inner {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 16px;
   overflow-y: auto;
 }
 
-/* Drag handle between the canvas and the right panel. */
-.agora__resizer {
+/* Divider between the canvas and the right panel: hosts TWO independent
+   SIBLINGS — the drag hit-area (`.agora__resizer`) and the roll/unroll toggle
+   button. Kept as siblings (never one nested in the other) so the button's
+   click can NEVER be intercepted by the drag handler's `setPointerCapture`. */
+.agora__divider {
   flex: 0 0 8px;
   align-self: stretch;
   position: sticky;
   top: var(--header-h);
   height: calc(100vh - var(--header-h));
+}
+.agora__resizer {
+  position: absolute;
+  inset: 0;
   cursor: col-resize;
   display: grid;
   place-items: center;
   background: transparent;
   touch-action: none;
+}
+.agora__divider--collapsed .agora__resizer {
+  cursor: pointer;
 }
 .agora__resizer:hover .agora__resizer-grip,
 .agora__resizer:active .agora__resizer-grip {
@@ -168,6 +205,29 @@ body {
   border-radius: 3px;
   background: var(--border);
   transition: background 0.12s;
+}
+.agora__right-toggle {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-raised);
+  color: var(--agora);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  z-index: 3;
+}
+.agora__right-toggle:hover {
+  background: var(--agora-soft, #ececfe);
+  color: var(--agora-active);
 }
 .agora__loading {
   flex: 1;
@@ -327,132 +387,127 @@ body {
   text-decoration: underline;
 }
 
-/* ---------- spatial map ---------- */
-.map {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.map__svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  cursor: grab;
-  touch-action: none;
-}
-.map__svg:active {
-  cursor: grabbing;
-}
-.bubble {
-  cursor: pointer;
-}
-/* Clean fill — NO hard border. Depth comes from a soft drop shadow, not a stroke;
-   hover/selection add a subtle ring (below) instead of the old grey outline. */
-.bubble__circle {
-  stroke: none;
-  transition: r 450ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.16));
-}
-.bubble:hover .bubble__circle {
-  stroke: rgba(255, 255, 255, 0.9);
-  stroke-width: 2;
-}
-/* Drillable indicator: a faint solid halo (replaces the old dashed eyesore). */
-.bubble__ring {
-  fill: none;
-  stroke: var(--agora);
-  stroke-width: 2;
-  opacity: 0.28;
-}
-.bubble--sel .bubble__circle {
-  stroke: var(--agora-active);
-  stroke-width: 3;
-}
-.bubble--dim {
-  opacity: 0.18;
-}
-.bubble__stat {
-  text-anchor: middle;
-  font-size: 16px;
-  font-weight: 700;
-  fill: rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-}
-.map__legend {
-  position: absolute;
-  left: 14px;
-  bottom: 12px;
+/* ---------- camembert (PieChart) ---------- */
+.piechart {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--grey-500);
-  background: rgba(255, 255, 255, 0.85);
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-}
-.map__legenditem {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 28px;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow-y: auto;
 }
-.map__legendhint {
-  color: var(--grey-300);
+.piechart__chartwrap {
+  flex: 0 0 auto;
+  width: min(320px, 46vw);
 }
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
+.piechart__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
 }
-/* Legend swatches: same hue, low vs high population-weighted consensus. */
-.dot--pale {
-  background: hsl(240, 24%, 86%);
+.piechart__slice {
+  cursor: pointer;
+  stroke: var(--bg-raised, #fff);
+  stroke-width: 1.5;
+  transition: transform 160ms ease, filter 160ms ease;
+  outline: none;
 }
-.dot--vivid {
-  background: hsl(240, 70%, 40%);
+.piechart__slice:hover,
+.piechart__slice--active {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.28));
 }
-/* F3 — hover info panel: FIXED to the top-right corner of the map, always at the
-   same spot (not a tooltip floating over the node). Light content only. */
-.map__hover {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  pointer-events: none;
-  z-index: 5;
+.piechart__slice:focus-visible {
+  stroke: var(--agora-active);
+  stroke-width: 2.5;
+}
+.piechart__hole {
+  fill: var(--bg-raised, #fff);
+}
+.piechart__totalvalue {
+  font-size: 30px;
+  font-weight: 700;
+  fill: var(--grey-1000);
+}
+.piechart__totallabel {
+  font-size: 12px;
+  fill: var(--grey-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.piechart__totalsub {
+  font-size: 11px;
+  fill: var(--grey-300);
+}
+.piechart__empty {
+  padding: 24px;
+  color: var(--grey-500);
+  text-align: center;
+}
+
+/* Legend list: exact number + percentage per cluster, clickable like the slices. */
+.piechart__legend {
+  flex: 1 1 260px;
+  min-width: 220px;
+  max-width: 420px;
+  max-height: 100%;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: max-content;
-  max-width: 300px;
-  padding: 12px 14px;
-  font-size: 12px;
-  line-height: 1.4;
+  gap: 2px;
+}
+.piechart__legenditem {
+  border-radius: 6px;
+}
+.piechart__legendbtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: pointer;
   color: var(--grey-1000);
-  background: #fff;
-  border: 1px solid var(--agora-soft2);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
-.map__hover strong {
-  color: var(--agora-active);
-  font-size: 14px;
+.piechart__legendbtn:hover,
+.piechart__legenditem--active .piechart__legendbtn {
+  background: var(--agora-soft, #ececfe);
 }
-/* accroche (hook) — the single-line teaser. */
-.map__hoverhook {
-  font-style: italic;
-  color: var(--grey-700);
+.piechart__legenddot {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
 }
-.map__hoverkw {
-  color: var(--grey-500);
+.piechart__legendlabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.map__hovermeta {
+.piechart__legendstats {
+  flex: 0 0 auto;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--grey-700);
+  color: var(--grey-500);
+  white-space: nowrap;
 }
-.map__hoverhint {
-  color: var(--grey-300);
+.piechart__legendarrow {
+  flex: 0 0 auto;
+  color: var(--agora);
+  font-size: 14px;
 }
 
 /* ---------- panels (insights / citations) ---------- */
@@ -470,6 +525,8 @@ body {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .panel__head-right {
   display: flex;
@@ -924,8 +981,23 @@ body {
     flex-direction: column;
     align-items: stretch;
   }
+  /* No side-by-side drag-resize when stacked — the divider collapses to a slim
+     horizontal strip that carries ONLY the roll/unroll toggle. */
+  .agora__divider {
+    flex: none;
+    width: 100%;
+    height: 34px;
+    position: relative;
+  }
   .agora__resizer {
+    cursor: default;
+  }
+  .agora__resizer-grip {
     display: none;
+  }
+  .agora__right-toggle {
+    top: 6px;
+    transform: translateX(-50%) rotate(90deg);
   }
   .agora__right {
     flex: none;
@@ -935,8 +1007,26 @@ body {
     border-left: none;
     border-top: 1px solid var(--border);
   }
+  .agora__right-inner {
+    width: 100% !important;
+  }
+  .agora__right--collapsed {
+    display: none;
+  }
   .agora__canvas {
     height: 56vh;
+    min-height: 320px;
+  }
+  .piechart {
+    flex-direction: column;
+  }
+  .piechart__chartwrap {
+    width: min(280px, 70vw);
+  }
+  .piechart__legend {
+    max-width: none;
+    width: 100%;
+    max-height: none;
   }
 }
 
@@ -944,6 +1034,7 @@ body {
 
 /* « ← Consultations » : retour à la landing, dans le header brand. */
 .gov-header__back {
+  flex-shrink: 0;
   font-size: 13px;
   font-weight: 600;
   color: var(--agora);
@@ -1499,111 +1590,152 @@ button.opinion__card:disabled { cursor: default; }
   font-family: var(--font-main);
 }
 
-/* ── Toggle de visualisation « Graphe · Densité 3D · Nuage 2D » (page d'analyse) ── */
-.viewtoggle {
-  display: inline-flex;
-  gap: 2px;
-  margin: 0 0 10px;
-  padding: 3px;
-  background: var(--agora-soft, #ececfe);
-  border-radius: var(--radius, 8px);
-  width: fit-content;
-}
-.viewtoggle__tab {
-  font-family: inherit;
-  font-size: 0.82rem;
-  border: none;
-  background: transparent;
-  color: var(--agora, #000091);
-  padding: 5px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  letter-spacing: -0.01em;
-}
-.viewtoggle__tab--active {
-  background: var(--bg-raised, #fff);
-  font-weight: 600;
-  box-shadow: var(--shadow);
-}
-.viewtoggle__tab:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.density3d {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius, 8px);
-  background: var(--bg);
-}
-.density3d__canvas {
-  position: absolute;
-  inset: 0;
-}
-.density3d__canvas canvas {
-  display: block;
-}
-.density3d__overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  color: var(--grey-500);
-  font-size: 0.9rem;
-  background: color-mix(in srgb, var(--bg) 70%, transparent);
-}
-.density3d__error {
-  color: var(--grey-700);
-}
-.density3d__legend {
-  position: absolute;
-  left: 12px;
-  bottom: 10px;
-  margin: 0;
-  max-width: 70%;
-  font-size: 0.74rem;
-  line-height: 1.5;
-  color: var(--grey-500);
-  pointer-events: none;
-}
-
-/* ---------- Nuage UMAP 2D (Scatter2D) ---------- */
-.scatter2d {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
+/* ── Table des réponses des citoyens (page d'analyse — sous le camembert) ── */
+.answerstable {
+  margin-top: 22px;
   border: 1px solid var(--border);
   border-radius: var(--radius, 8px);
   background: var(--bg-raised);
+  overflow: hidden;
 }
-.scatter2d__canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+.answerstable__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
 }
-.scatter2d__overlay {
-  position: absolute;
-  inset: 0;
+.answerstable__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--grey-1000);
+}
+.answerstable__count {
+  font-size: 12.5px;
+  color: var(--grey-500);
+  white-space: nowrap;
+}
+.answerstable__loading {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
   color: var(--grey-500);
-  font-size: 0.9rem;
+  font-size: 13px;
 }
-.scatter2d__legend {
-  position: absolute;
-  left: 12px;
-  bottom: 10px;
-  margin: 0;
-  max-width: 80%;
-  font-size: 0.74rem;
-  line-height: 1.5;
+.answerstable__empty {
+  padding: 24px 16px;
   color: var(--grey-500);
-  pointer-events: none;
+  font-size: 13px;
+  margin: 0;
+}
+.answerstable__scroll {
+  overflow-x: auto;
+}
+.answerstable__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.answerstable__table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--grey-500);
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.answerstable__table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.answerstable__table tbody tr:last-child td {
+  border-bottom: none;
+}
+.answerstable__table tbody tr:hover {
+  background: var(--agora-soft, #ececfe);
+}
+.answerstable__thidx,
+.answerstable__idx {
+  width: 1%;
+  color: var(--grey-300);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.answerstable__excerpt {
+  min-width: 260px;
+  max-width: 480px;
+  color: var(--grey-1000);
+  line-height: 1.45;
+}
+.answerstable__themes {
+  min-width: 150px;
+}
+.answerstable__themewrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.answerstable__themechip {
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--grey-700);
+  white-space: nowrap;
+}
+.answerstable__thememore {
+  font-size: 11px;
+  color: var(--grey-300);
+  align-self: center;
+}
+.answerstable__thaction {
+  width: 1%;
+}
+.answerstable__action {
+  text-align: right;
+}
+.answerstable__openbtn {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--agora);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+.answerstable__openbtn:hover {
+  background: var(--agora-soft, #ececfe);
+  text-decoration: underline;
+}
+.answerstable__more {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--agora);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.answerstable__more:hover {
+  background: var(--agora-soft, #ececfe);
+}
+.answerstable__more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ── Aperçu : mots-clés représentatifs du dataset (c-TF-IDF agrégés) ── */
@@ -1833,19 +1965,132 @@ button.opinion__card:disabled { cursor: default; }
 .btn-secondary:hover { background: #f1f1fb; }
 .btn-secondary:disabled { color: var(--grey-300, #999); border-color: var(--grey-300, #ccc); cursor: not-allowed; }
 
-.avisx__controls { display: flex; gap: .8rem; flex-wrap: wrap; margin: 0 0 1rem; }
+/* ── Barre d'outils : recherche + tri + filtres, regroupés dans un panneau visible ── */
+.avisx__toolbar {
+  display: flex; flex-direction: column; gap: 1rem;
+  margin: 0 0 1.1rem; padding: 1rem 1.15rem 1.15rem;
+  background: #fbfbfe; border: 1px solid #e6e6ef; border-radius: 10px;
+}
+.avisx__grouplabel {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .06em;
+  color: #8a8aa0; font-weight: 600;
+}
+
+/* Ligne 1 : recherche plein-texte (priorité visuelle) + tri du lot chargé. */
+.avisx__searchrow { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+.avisx__searchwrap { position: relative; flex: 1 1 320px; min-width: 0; }
+.avisx__searchicon {
+  position: absolute; left: .8rem; top: 50%; transform: translateY(-50%);
+  color: #9a9ab0; font-size: 1.05rem; pointer-events: none;
+}
 .avisx__search {
-  flex: 1 1 280px; min-width: 0;
-  padding: .6rem .8rem; font-size: .95rem;
-  border: 1px solid #ccccdb; border-radius: 6px; background: #fff;
+  width: 100%; box-sizing: border-box;
+  padding: .7rem .8rem .7rem 2.15rem; font-size: 1rem;
+  border: 1px solid #ccccdb; border-radius: 7px; background: #fff;
+  transition: border-color .12s, box-shadow .12s;
 }
-.avisx__search:focus { outline: 2px solid var(--agora, #000091); outline-offset: 1px; border-color: var(--agora, #000091); }
-.avisx__filter {
-  flex: 0 1 240px;
-  padding: .6rem .7rem; font-size: .95rem;
-  border: 1px solid #ccccdb; border-radius: 6px; background: #fff; cursor: pointer;
+.avisx__search:focus {
+  outline: none; border-color: var(--agora, #000091); box-shadow: 0 0 0 3px rgba(0,0,145,.12);
 }
+.avisx__searchclear {
+  position: absolute; right: .35rem; top: 50%; transform: translateY(-50%);
+  width: 1.7rem; height: 1.7rem; display: grid; place-items: center;
+  border: 0; background: none; color: #9a9ab0; font-size: 1.3rem; line-height: 1;
+  cursor: pointer; border-radius: 50%; transition: background .12s, color .12s;
+}
+.avisx__searchclear:hover { color: #333; background: #ececf4; }
+.avisx__sortwrap { display: flex; flex-direction: column; gap: .3rem; flex: 0 0 auto; }
+.avisx__dd--sort .avisx__dd-btn { min-width: 220px; }
+
+/* Ligne 2 : filtres regroupés et étiquetés, séparés visuellement de la recherche. */
+.avisx__filterrow {
+  display: flex; gap: 1.7rem; flex-wrap: wrap; align-items: flex-start;
+  padding-top: .9rem; border-top: 1px solid #ececf3;
+}
+.avisx__filtergroup { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+
+/* Dropdown personnalisé RÉUTILISABLE (thème, tri…) — mêmes codes visuels que le reste
+   de la barre d'outils (bordure/rayon/police), mais un panneau flottant qui n'écourte
+   JAMAIS un libellé (contrairement aux anciennes chips de thème tronquées avec « … »
+   ou au `<select>` natif dont l'apparence dépend du navigateur). */
+.avisx__dd { position: relative; display: inline-block; min-width: 240px; max-width: 100%; }
+.avisx__dd-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem;
+  width: 100%; box-sizing: border-box;
+  padding: .5rem .7rem; font: inherit; font-size: .88rem; text-align: left;
+  border: 1px solid #ccccdb; border-radius: 6px; background: #fff; color: #222; cursor: pointer;
+  transition: border-color .12s, box-shadow .12s;
+}
+.avisx__dd-btn:hover { border-color: #b7b7cf; }
+.avisx__dd-btn:focus-visible,
+.avisx__dd-btn[aria-expanded="true"] {
+  outline: none; border-color: var(--agora, #000091); box-shadow: 0 0 0 3px rgba(0,0,145,.12);
+}
+.avisx__dd-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.avisx__dd-caret { color: #8a8aa0; font-size: .7rem; flex: 0 0 auto; }
+.avisx__dd-panel {
+  position: absolute; z-index: 20; top: calc(100% + 6px); left: 0;
+  min-width: 100%; width: max-content; max-width: min(380px, 84vw); max-height: 340px;
+  overflow-y: auto; margin: 0; padding: .35rem; list-style: none;
+  background: #fff; border: 1px solid #dcdcea; border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(20,20,60,.14);
+}
+.avisx__dd-item {
+  display: flex; align-items: center; gap: .5rem; width: 100%; box-sizing: border-box;
+  padding: .46rem .6rem; font: inherit; font-size: .85rem; line-height: 1.3;
+  text-align: left; white-space: normal; word-break: break-word;
+  border: 0; border-radius: 5px; background: none; color: #2b2b35; cursor: pointer;
+  transition: background .1s ease;
+}
+.avisx__dd-item:hover { background: #f0f0f8; }
+.avisx__dd-item--on { background: var(--agora, #000091); color: #fff; }
+.avisx__dd-panel li { margin: 0; }
+
+/* Grand thème = SECTION (gras, séparée des sections précédentes) ; sous-thème = branche
+   rattachée (poids normal). Le connecteur/tracé porte la hiérarchie, plus le retrait. */
+.avisx__dd-item--macro { font-weight: 600; color: #17172a; }
+.avisx__dd-item--section { margin-top: .3rem; padding-top: .58rem; border-top: 1px solid #ececf4; }
+
+/* Tracé d'arbre (└/├ + traits verticaux de continuité) — remplace l'indentation par
+   simples espaces. Une seule teinte (bleu-gris neutre), cohérente avec le reste de la
+   palette de l'app ; le connecteur ne porte AUCUNE couleur de cluster. */
+.avisx__dd-guides { display: inline-flex; align-self: stretch; flex: 0 0 auto; }
+.avisx__dd-guide { position: relative; display: inline-block; width: .8rem; }
+.avisx__dd-guide--on::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  background: #d6d6ec; transform: translateX(-50%);
+}
+.avisx__dd-branch {
+  display: inline-flex; align-items: center; justify-content: center; width: .8rem;
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem; color: #adadcc;
+}
+.avisx__dd-item--on .avisx__dd-branch { color: rgba(255, 255, 255, .75); }
+.avisx__dd-item--on .avisx__dd-guide--on::before { background: rgba(255, 255, 255, .4); }
+
+/* Puce du thème : UNE seule couleur (bleu Agora) — fini le code couleur par cluster,
+   c'est la position dans l'arbre (section/branche) qui distingue les niveaux. */
+.avisx__dd-dot {
+  width: .42rem; height: .42rem; border-radius: 50%; flex: 0 0 auto;
+  background: var(--agora, #000091);
+}
+.avisx__dd-item--sub .avisx__dd-dot { width: .32rem; height: .32rem; opacity: .55; }
+.avisx__dd-item--on .avisx__dd-dot { background: #fff; opacity: 1; }
+.avisx__dd-itemlabel { flex: 1; min-width: 0; }
+.avisx__clearall {
+  margin-left: auto; align-self: center;
+  border: 0; background: none; cursor: pointer;
+  font-size: .8rem; font-weight: 600; color: var(--agora, #000091);
+  padding: .3rem .2rem; white-space: nowrap;
+}
+.avisx__clearall:hover { text-decoration: underline; }
+
 .avisx__count { color: #777; font-size: .85rem; margin: 0 0 1rem; }
+@media (max-width: 640px) {
+  .avisx__toolbar { padding: .9rem .9rem 1rem; }
+  .avisx__sortwrap, .avisx__dd { width: 100%; min-width: 0; }
+  .avisx__clearall { margin-left: 0; }
+}
 
 .avisx__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
 .avisx__item {
@@ -1905,12 +2150,6 @@ button.opinion__card:disabled { cursor: default; }
 .avisx__cardbody:focus-visible {
   outline: 2px solid var(--agora, #000091); outline-offset: 3px; border-radius: 4px;
 }
-/* Indice discret « cliquer pour analyser » / « analyse ». */
-.avisx__analyzehint {
-  margin: .5rem 0 0; font-size: .74rem; color: #8a8aa0; user-select: none;
-  letter-spacing: .01em;
-}
-.avisx__card--open .avisx__analyzehint { color: var(--agora, #000091); }
 
 /* ── Légende d'ANALYSE (au clic) : fiche extensible, 1 ligne par cluster + facteurs ── */
 .avisx__analysis {
@@ -2120,31 +2359,26 @@ button.opinion__card:disabled { cursor: default; }
 .avisx__empty { text-align: center; color: #666; padding: 1.6rem 0; }
 .avisx__empty p { margin: 0 0 .9rem; }
 
-/* Carte de stats d'un claim — même langage que les dashboards de synthèse. */
+/* Petite carte de thème d'un claim cliqué (nom du thème + filtre) — plus de grille de
+   stats détaillées (volume/sentiment/représentativité), retirée sur retour utilisateur :
+   trop lourde pour un simple aparté de lecture. */
 .claimstats {
   margin: .7rem 0 .2rem; border: 1px solid #dcdcea; border-radius: 8px;
-  background: #fafaff; padding: .7rem .9rem;
+  background: #fafaff; padding: .55rem .9rem;
 }
+.claimstats--compact .claimstats__head { margin-bottom: 0; }
 .claimstats__head { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; }
 .claimstats__title { font-weight: 700; font-size: .9rem; color: #222; flex: 1; }
+.claimstats__filterbtn {
+  font: inherit; font-size: .78rem; font-weight: 600; white-space: nowrap;
+  border: 1px solid var(--agora, #000091); background: #fff; color: var(--agora, #000091);
+  cursor: pointer; padding: .3rem .6rem; border-radius: 999px;
+}
+.claimstats__filterbtn:hover { background: var(--agora-soft, #ececfe); }
 .claimstats__close {
   font: inherit; border: none; background: none; color: #888; cursor: pointer; padding: .1rem .3rem;
 }
 .claimstats__close:hover { color: #222; }
-.claimstats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
-@media (max-width: 760px) { .claimstats__grid { grid-template-columns: repeat(2, 1fr); } }
-.claimstats__cell {
-  display: flex; flex-direction: column; gap: .15rem; padding: .55rem .7rem;
-  background: #fff; border: 1px solid #ececf4; border-radius: 6px;
-}
-.claimstats__cell strong {
-  font-family: var(--font-main); font-size: 1.05rem; color: var(--agora, #000091);
-}
-.claimstats__cell span { font-size: .72rem; color: #666; line-height: 1.3; }
-.claimstats__cell em { font-size: .72rem; color: #999; font-style: italic; line-height: 1.35; }
-.claimstats__pos { color: #18753c; }
-.claimstats__neg { color: #c1121f; }
-.claimstats__conf { font-size: .7em; color: #999; letter-spacing: .1em; }
 
 /* Honnêteté : disclaimer « pas un sondage » sous les cartes d'opinion. */
 .opinion__disclaimer {
