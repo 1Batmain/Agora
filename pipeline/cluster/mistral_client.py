@@ -21,7 +21,7 @@ from pathlib import Path
 # Endpoint chat-completions Mistral (EU). Surcharge possible (proxy/tests).
 API_URL = os.environ.get("AGORA_MISTRAL_URL", "https://api.mistral.ai/v1/chat/completions").rstrip("/")
 # Modèle par défaut pour le nommage (titres courts batchés).
-NAMING_MODEL = os.environ.get("AGORA_MISTRAL_MODEL", "mistral-small-latest")
+NAMING_MODEL = os.environ.get("AGORA_MISTRAL_MODEL", "mistral-large-latest")
 # Modèle pour la synthèse (rapport) — par défaut le même, surchargeable (p.ex.
 # `mistral-large-latest` pour un rapport plus fin).
 SYNTHESIS_MODEL = os.environ.get("AGORA_MISTRAL_SYNTH_MODEL", NAMING_MODEL)

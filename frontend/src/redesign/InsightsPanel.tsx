@@ -23,6 +23,11 @@ export interface ThemeFlagTarget {
 }
 
 /**
+ * @deprecated NE PAS utiliser dans de NOUVELLES implémentations. Ce panneau est lié à
+ * la VUE GRAPHE, vouée à être retirée. La page d'aperçu utilise désormais
+ * `ClusterOutline` (accordéon récursif des synthèses sur une seule page). Conservé
+ * uniquement le temps que la vue graphe existe encore.
+ *
  * F4 — right column. Renders the LLM Markdown synthesis for the CURRENT zoom
  * level (global vs selected theme). Shows a spinner during generation. At a leaf
  * the parent swaps this for the citations panel (no LLM there).
@@ -63,6 +68,9 @@ export function InsightsPanel({
   /** Remonter d'un niveau dans le drill. */
   onBackTheme?: () => void;
 }) {
+  // Le repli/dépli se fait maintenant au niveau du PANNEAU ENTIER (glissement
+  // horizontal de `.agora__right`, cf. `RedesignApp`) plutôt qu'ici (le contenu
+  // de ce composant est donc toujours rendu en entier).
   return (
     <section className="panel insights">
       <header className="panel__head">
