@@ -336,6 +336,9 @@ export interface Consultation {
   /** Consultations OUVERTES (et clôturées qui en exposent un) : sujet affiché. */
   question?: string;
   context?: string;
+  /** Lien vers la consultation OFFICIELLE d'origine (page publique) — porté par meta.json,
+   *  affiché en tête de l'overview. Optionnel (absent → pas de lien). */
+  official_url?: string;
   /** Comparaison au dispositif officiel d'origine (coût/durée, sourcé) — cf. OfficialBaseline. */
   official_baseline?: OfficialBaseline;
   /**
