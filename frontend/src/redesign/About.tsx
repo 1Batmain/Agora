@@ -232,9 +232,83 @@ export function About({ onHome }: { onHome: () => void }) {
           </p>
         </section>
 
-        <section className="landing__security">
+        <section className="landing__method">
           <header className="sec-head">
             <span className="sec-head__num">04</span>
+            <h2>Comment on obtient ces résultats</h2>
+            <span className="sec-head__hint">méthode &amp; transparence</span>
+          </header>
+          <div className="section-prose">
+            <p>
+              Chaque chiffre affiché (un thème, un pourcentage, une synthèse) est le
+              produit du <strong>pipeline ci-dessus</strong> appliqué à un
+              <strong> échantillon</strong> des contributions reçues — jamais une opinion
+              ajoutée après coup. Quand l'analyse ne porte pas sur l'intégralité des
+              réponses, la taille et la couverture de l'échantillon sont affichées en toutes
+              lettres sur la page de la consultation (bandeau « Échantillon » ou « Couverture
+              complète »).
+            </p>
+            <p>
+              La <strong>répartition d'opinion</strong> (favorable / défavorable / nuancé)
+              n'est pas un vote : pour chaque thème, un modèle identifie l'objet de clivage
+              puis classe chaque passage retenu, avec un <strong>niveau de confiance
+              auto-évalué</strong> (élevée / moyenne / faible) affiché à côté de sa lecture —
+              jamais présenté comme une certitude.
+            </p>
+            <p>
+              Le <strong>coût et la durée réels</strong> du traitement (tokens consommés,
+              $ estimés, temps de calcul) sont exposés en pied de page de chaque
+              consultation, pour comparer honnêtement à un dépouillement humain classique.
+            </p>
+          </div>
+        </section>
+
+        <section className="landing__warn">
+          <header className="sec-head">
+            <span className="sec-head__num">05</span>
+            <h2>Limites &amp; contenu généré par IA</h2>
+            <span className="sec-head__hint">à lire avant de faire confiance aux chiffres</span>
+          </header>
+          <div className="notebox" role="note">
+            <p className="notebox__title">
+              <span className="notebox__icon" aria-hidden>⚠</span>
+              Une partie du contenu affiché est <strong>généré par un modèle de langage</strong>{' '}
+              (Mistral) — il peut se tromper.
+            </p>
+            <ul>
+              <li>
+                <strong>Titres et synthèses de thèmes</strong> sont rédigés par un LLM à
+                partir des verbatims du cluster. Même s'il travaille sur des extraits réels,
+                un résumé peut rester <strong>approximatif ou incomplet</strong> — il ne
+                remplace jamais la lecture des témoignages sources.
+              </li>
+              <li>
+                <strong>La classification d'opinion</strong> (pour / contre / nuancé) et le
+                niveau de confiance qui l'accompagne sont une <strong>estimation
+                automatique</strong>, pas un jugement humain vérifié un par un.
+              </li>
+              <li>
+                <strong>Les pourcentages ne sont pas un sondage</strong> : ils décrivent les
+                contributions reçues (participation volontaire), pas l'opinion de la
+                population générale.
+              </li>
+              <li>
+                En revanche, chaque <strong>extrait verbatim</strong> (claim) reste, lui, une
+                sous-chaîne EXACTE du texte citoyen — c'est l'interprétation qui peut se
+                tromper, jamais la citation elle-même.
+              </li>
+              <li>
+                Une extraction ou une lecture qui semble fausse ? Le bouton{' '}
+                <strong>« Signaler »</strong>, présent sur chaque avis, permet de le
+                remonter à l'équipe.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="landing__security">
+          <header className="sec-head">
+            <span className="sec-head__num">06</span>
             <h2>Sécurité &amp; souveraineté</h2>
             <span className="sec-head__hint">fail-closed par défaut</span>
           </header>
@@ -256,7 +330,7 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__collab">
           <header className="sec-head">
-            <span className="sec-head__num">05</span>
+            <span className="sec-head__num">07</span>
             <h2>Collaborer</h2>
             <span className="sec-head__hint">repo ouvert · PR obligatoire</span>
           </header>
