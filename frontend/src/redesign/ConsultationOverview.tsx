@@ -194,24 +194,6 @@ export function ConsultationOverview({
                 onExploreTheme={onExploreTheme}
                 onExploreAvis={onExploreAvis}
               />
-              {/* Accès graphe + explorateur SOUS le sélecteur, SCOPÉS au thème courant :
-                  vue générale → graphe/explorateur complet ; sous-thème → celui du thème. */}
-              <div className="overview__actions">
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => onViewGraph(selectedThemeId)}
-                >
-                  {selectedTheme ? "Voir l'analyse du thème →" : "Voir l'analyse →"}
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => onExploreTheme(selectedThemeId)}
-                >
-                  {selectedTheme ? 'Consulter les témoignages du thème →' : 'Consulter les témoignages →'}
-                </button>
-              </div>
             </>
           )}
 
