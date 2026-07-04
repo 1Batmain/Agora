@@ -1,5 +1,5 @@
 import { useCallbackRef } from '../useCallbackRef';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import { fetchDatasets } from '../api';
 import type { Consultation } from './contract';
 import type {
@@ -10,33 +10,21 @@ import type {
   SpatialTheme,
 } from './contract';
 import { fetchAnalysis, fetchCitations, fetchFlags, fetchInsights } from './analysisApi';
-import { fetchDensity, type DensityPayload } from './densityApi';
-import { densityScatterPoints } from './densityScatter';
 import { Header } from './Header';
-import { SpatialMap } from './SpatialMap';
-import { Density3D } from './Density3D';
-import { Scatter2D } from './Scatter2D';
+import { PieChart } from './PieChart';
+import { AnswersTable } from './AnswersTable';
 import { InsightsPanel, type ThemeFlagState } from './InsightsPanel';
 import { CitationsPanel } from './CitationsPanel';
 import { IndicesDashboard } from './IndicesDashboard';
 import { themeCaption } from './labels';
 
-/** Mode de visualisation de la carte d'analyse. */
-type VizMode = 'graph' | 'density' | 'scatter';
-/** État du cache de densité (UMAP+KDE précalculé) servant les vues 3D / 2D. */
-type DensityStatus = 'idle' | 'loading' | 'ready' | 'unavailable';
-
-/** Onglets du toggle de visualisation (ordre d'affichage). */
-const VIZ_TABS: { id: VizMode; label: string }[] = [
-  { id: 'graph', label: 'Graphe' },
-  { id: 'density', label: 'Densité 3D' },
-  { id: 'scatter', label: 'Nuage 2D' },
-];
-
 // Right panel width (px) — drag-resizable, persisted, with sane bounds.
 const RIGHT_MIN = 300;
 const RIGHT_MAX = 760;
 const RIGHT_KEY = 'agora.rightWidth';
+// Whether the right panel (« Synthèse globale » / citations) is rolled up — persisted
+// like the width, so a reader's choice survives navigation/reload.
+const RIGHT_COLLAPSED_KEY = 'agora.rightCollapsed';
 
 /**
  * Redesigned "Agora pour députés". DSFR-inspired shell (recoloured orange). The
@@ -56,11 +44,14 @@ export default function RedesignApp({
   initialDataset = null,
   initialThemeId = null,
   onBack,
+  onOpenAvis,
 }: {
   initialDataset?: string | null;
-  /** Thème sur lequel OUVRIR le graphe (bouton « Voir le graphe du thème ») : on pré-drill. */
+  /** Thème sur lequel OUVRIR l'analyse (bouton « Voir l'analyse du thème ») : on pré-drill. */
   initialThemeId?: string | null;
   onBack?: () => void;
+  /** Ouvre l'avis en entier dans l'explorateur (lien « voir l'avis complet » de la table). */
+  onOpenAvis?: (avisId: string) => void;
 } = {}) {
   const [datasets, setDatasets] = useState<Consultation[]>([]);
   const [dataset, setDataset] = useState<string | null>(null);
@@ -71,16 +62,9 @@ export default function RedesignApp({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // navigation: drill path (themes we've descended into) + selected bubble
+  // navigation: drill path (themes we've descended into) + selected slice (camembert)
   const [path, setPath] = useState<SpatialTheme[]>([]);
   const [selected, setSelected] = useState<SpatialTheme | null>(null);
-
-  // Mode de visualisation de la carte (graphe à bulles · paysage 3D · nuage 2D). Les
-  // vues 3D/2D lisent le MÊME cache de densité PRÉCALCULÉ (`/density` → umap2d.npy),
-  // chargé paresseusement à la 1ʳᵉ sélection ; aucun calcul/recluster à la requête.
-  const [vizMode, setVizMode] = useState<VizMode>('graph');
-  const [densityPayload, setDensityPayload] = useState<DensityPayload | null>(null);
-  const [densityStatus, setDensityStatus] = useState<DensityStatus>('idle');
 
   // right-column content state
   const [markdown, setMarkdown] = useState<string | null>(null);
@@ -103,12 +87,26 @@ export default function RedesignApp({
     localStorage.setItem(RIGHT_KEY, String(rightWidth));
   }, [rightWidth]);
 
+  // Roll/unroll the WHOLE right panel — a horizontal slide (the panel's content
+  // keeps its natural width and gets progressively CLIPPED from its left edge as
+  // the panel rolls up, so it visibly "empties" left→right rather than an
+  // instant top-to-bottom show/hide of its content). `rightDragging` briefly
+  // disables the transition while the user is actively resizing (drag must
+  // track the pointer 1:1, not ease).
+  const [rightCollapsed, setRightCollapsed] = useState<boolean>(
+    () => localStorage.getItem(RIGHT_COLLAPSED_KEY) === '1',
+  );
+  const [rightDragging, setRightDragging] = useState(false);
+  useEffect(() => {
+    localStorage.setItem(RIGHT_COLLAPSED_KEY, rightCollapsed ? '1' : '0');
+  }, [rightCollapsed]);
+
   const currentParentId = path.length ? path[path.length - 1].id : null;
   const contextTheme = selected ?? (path.length ? path[path.length - 1] : null);
   const showCitations = selected != null && !selected.has_children;
   const atGlobal = path.length === 0 && !selected;
 
-  // Pré-drill sur `initialThemeId` (bouton « Voir le graphe du thème ») : dès que
+  // Pré-drill sur `initialThemeId` (bouton « Voir l'analyse du thème ») : dès que
   // l'analyse est chargée, on reconstruit le chemin racine→thème. Un thème à enfants →
   // on DESCEND dedans (ses enfants s'affichent) ; une feuille → on la SÉLECTIONNE à son
   // niveau parent (ses citations s'ouvrent). Appliqué UNE seule fois.
@@ -263,48 +261,6 @@ export default function RedesignApp({
     };
   }, [dataset]);
 
-  // Changement de dataset → on repart sur le graphe et on invalide le cache densité
-  // (la 3D/2D rechargeront paresseusement la nouvelle grille à la prochaine sélection).
-  useEffect(() => {
-    setVizMode('graph');
-    setDensityPayload(null);
-    setDensityStatus('idle');
-  }, [dataset]);
-
-  // Chargement PARESSEUX de la densité PRÉCALCULÉE : déclenché seulement quand l'utilisateur
-  // bascule sur « Densité 3D » ou « Nuage 2D » (jamais au chargement de la page). On lit le
-  // cache `/density` (umap2d.npy + KDE) — aucun `/recluster`, aucun re-clustering live. En cas
-  // d'indisponibilité (503 / pas de cache), on grise les deux options et on revient au graphe.
-  useEffect(() => {
-    if (!dataset) return;
-    if (vizMode === 'graph' || densityStatus !== 'idle') return;
-    let cancelled = false;
-    setDensityStatus('loading');
-    fetchDensity(dataset)
-      .then((data) => {
-        if (cancelled) return;
-        if (data) {
-          setDensityPayload(data);
-          setDensityStatus('ready');
-        } else {
-          setDensityStatus('unavailable');
-          setVizMode('graph');
-        }
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setDensityStatus('unavailable');
-        setVizMode('graph');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [dataset, vizMode, densityStatus]);
-
-  // Nuage 2D dérivé de la grille de densité (vue UMAP de dessus). Mémoïsé : recalculé
-  // seulement quand la grille change, pas à chaque rendu.
-  const scatterPoints = useMemo(() => densityScatterPoints(densityPayload), [densityPayload]);
-
   const onDataset = useCallbackRef(async (id: string) => {
     if (id === dataset) return;
     setDataset(id);
@@ -327,6 +283,7 @@ export default function RedesignApp({
   const dragging = useRef(false);
   const onResizeStart = useCallback((e: React.PointerEvent) => {
     dragging.current = true;
+    setRightDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
   }, []);
   const onResizeMove = useCallback((e: React.PointerEvent) => {
@@ -337,11 +294,11 @@ export default function RedesignApp({
   }, []);
   const onResizeEnd = useCallback((e: React.PointerEvent) => {
     dragging.current = false;
+    setRightDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
   }, []);
 
   const themes = analysis?.themes ?? [];
-  const edges = analysis?.edges ?? [];
   const insightTitle = contextTheme ? themeCaption(contextTheme) : 'Synthèse globale';
 
   // F2 — the collection context is the START of the GLOBAL synthesis (one
@@ -383,35 +340,13 @@ export default function RedesignApp({
         }
       />
 
-      <div className="agora__body" style={{ '--right-w': `${rightWidth}px` } as React.CSSProperties}>
+      <div
+        className="agora__body"
+        style={{ '--right-w': `${rightCollapsed ? 0 : rightWidth}px` } as React.CSSProperties}
+      >
         <main className="agora__center">
-          {/* Toggle de mode de visualisation (intègre les vues de l'ancienne Console).
-              Les vues Densité 3D / Nuage 2D lisent le cache de densité PRÉCALCULÉ —
-              grisées tant qu'il est indisponible (chargement paresseux, pas de calcul). */}
+          {/* Fil d'Ariane du drill (camembert → sous-camembert → …). */}
           {!busy && themes.length > 0 && (
-            <div className="viewtoggle" role="tablist" aria-label="Mode de visualisation">
-              {VIZ_TABS.map((t) => {
-                const disabled = t.id !== 'graph' && densityStatus === 'unavailable';
-                return (
-                  <button
-                    key={t.id}
-                    role="tab"
-                    aria-selected={vizMode === t.id}
-                    disabled={disabled}
-                    title={disabled ? 'donnée de densité indisponible pour cette consultation' : undefined}
-                    className={`viewtoggle__tab${vizMode === t.id ? ' viewtoggle__tab--active' : ''}`}
-                    onClick={() => setVizMode(t.id)}
-                  >
-                    {t.label}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Fil d'Ariane = navigation du GRAPHE uniquement (le drill n'a pas de sens
-              sur les vues densité/nuage, qui montrent la consultation entière). */}
-          {vizMode === 'graph' && (
             <nav className="breadcrumb">
               {crumbs.map((c, i) => (
                 <span key={c.idx}>
@@ -437,32 +372,13 @@ export default function RedesignApp({
                 <span className="spinner" /> calcul de la carte…
               </div>
             ) : themes.length ? (
-              vizMode === 'graph' ? (
-                <SpatialMap
-                  themes={themes}
-                  edges={edges}
-                  currentParentId={currentParentId}
-                  selectedId={selected?.id ?? null}
-                  onSelect={setSelected}
-                  onDrill={onDrill}
-                />
-              ) : densityStatus === 'loading' || densityStatus === 'idle' ? (
-                <div className="agora__loading">
-                  <span className="spinner" /> chargement du paysage…
-                </div>
-              ) : densityStatus === 'unavailable' || !densityPayload ? (
-                <div className="agora__loading agora__build-error">
-                  <strong>Vue indisponible</strong>
-                  <p>le paysage de densité n'est pas précalculé pour cette consultation.</p>
-                </div>
-              ) : vizMode === 'density' ? (
-                <Density3D payload={densityPayload} />
-              ) : (
-                <Scatter2D
-                  points={scatterPoints}
-                  legend="Nuage UMAP 2D des contributions · couleur = densité locale (amas = thèmes denses)"
-                />
-              )
+              <PieChart
+                themes={themes}
+                currentParentId={currentParentId}
+                selectedId={selected?.id ?? null}
+                onSelect={setSelected}
+                onDrill={onDrill}
+              />
             ) : analysisSource === 'building' ? (
               <div className="agora__loading agora__building">
                 <span className="spinner" />
@@ -482,78 +398,113 @@ export default function RedesignApp({
           {/* F8 — dataset indices under the map (graceful when absent). */}
           {!busy && themes.length > 0 && <IndicesDashboard stats={analysis?.dataset_stats} />}
 
+          {/* F9 — table des réponses des citoyens qui composent le cluster courant
+              (obligatoire : quel que soit le niveau de drill, on voit les avis concrets). */}
+          {!busy && themes.length > 0 && dataset && (
+            <AnswersTable
+              dataset={dataset}
+              themeId={contextTheme?.id ?? null}
+              title={contextTheme ? `Avis — ${themeCaption(contextTheme)}` : 'Avis — toute la consultation'}
+              onOpenAvis={onOpenAvis}
+            />
+          )}
+
           {error && <p className="agora__error">{error}</p>}
         </main>
 
-        <div
-          className="agora__resizer"
-          role="separator"
-          aria-orientation="vertical"
-          aria-label="Redimensionner le panneau"
-          onPointerDown={onResizeStart}
-          onPointerMove={onResizeMove}
-          onPointerUp={onResizeEnd}
-        >
-          <span className="agora__resizer-grip" />
+        {/* `agora__divider` : conteneur PARTAGÉ entre la zone de drag (resizer) et le
+            bouton roll/unroll — les deux sont des ENFANTS SÉPARÉS (siblings), jamais
+            l'un dans l'autre. Le bouton avait été placé DANS le resizer, dont le
+            `pointerdown` appelle `setPointerCapture` (drag) : même avec
+            `stopPropagation`, ce genre d'imbrication reste fragile d'un navigateur à
+            l'autre — les siblings l'évitent une fois pour toutes. */}
+        <div className={`agora__divider${rightCollapsed ? ' agora__divider--collapsed' : ''}`}>
+          <div
+            className="agora__resizer"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Redimensionner le panneau"
+            onPointerDown={rightCollapsed ? undefined : onResizeStart}
+            onPointerMove={rightCollapsed ? undefined : onResizeMove}
+            onPointerUp={rightCollapsed ? undefined : onResizeEnd}
+          >
+            {!rightCollapsed && <span className="agora__resizer-grip" />}
+          </div>
+          <button
+            type="button"
+            className="agora__right-toggle"
+            aria-expanded={!rightCollapsed}
+            title={rightCollapsed ? 'Afficher le panneau de synthèse' : 'Masquer le panneau de synthèse'}
+            onClick={() => setRightCollapsed((c) => !c)}
+          >
+            <span aria-hidden>{rightCollapsed ? '‹' : '›'}</span>
+          </button>
         </div>
 
-        <aside className="agora__right">
-          {showCitations && selected ? (
-            <CitationsPanel
-              dataset={dataset}
-              themeLabel={themeCaption(selected)}
-              themeColor={selected.color}
-              hook={selected.hook}
-              description={selected.description}
-              convergence={selected.convergence}
-              citations={citations}
-              loading={citationsLoading}
-              source={citationsSource}
-              onBack={() => setSelected(null)}
-            />
-          ) : (
-            <InsightsPanel
-              title={insightTitle}
-              markdown={panelMarkdown}
-              loading={insightsLoading}
-              source={insightsSource}
-              keywords={levelKeywords}
-              themes={themes}
-              themesTotal={themesTotal}
-              navCurrentId={contextTheme?.id ?? null}
-              onSelectTheme={(id) => {
-                const t = themes.find((x) => x.id === id);
-                if (t) setSelected(t);
-              }}
-              onDrillTheme={(id) => {
-                const t = themes.find((x) => x.id === id);
-                if (t) onDrill(t);
-              }}
-              onBackTheme={() => {
-                setSelected(null);
-                setPath((p) => p.slice(0, -1));
-              }}
-              flagTarget={
-                dataset && contextTheme
-                  ? {
-                      dataset,
-                      themeId: contextTheme.id,
-                      // depth of the synthesised theme: a selected bubble sits at the
-                      // current level (path.length); a drilled-into theme one above.
-                      layer: selected ? path.length : path.length - 1,
-                      flag: themeFlags[contextTheme.id],
-                      onChange: (id, flag) =>
-                        setThemeFlags((prev) => {
-                          const next = { ...prev };
-                          if (flag) next[id] = flag;
-                          else delete next[id];
-                          return next;
-                        }),
-                    }
-                  : undefined
-              }
-            />
-          )}
+        <aside
+          className={`agora__right${rightCollapsed ? ' agora__right--collapsed' : ''}${
+            rightDragging ? ' agora__right--dragging' : ''
+          }`}
+          aria-hidden={rightCollapsed}
+        >
+          <div className="agora__right-inner" style={{ width: rightWidth }}>
+            {showCitations && selected ? (
+              <CitationsPanel
+                dataset={dataset}
+                themeLabel={themeCaption(selected)}
+                themeColor={selected.color}
+                hook={selected.hook}
+                description={selected.description}
+                convergence={selected.convergence}
+                citations={citations}
+                loading={citationsLoading}
+                source={citationsSource}
+                onBack={() => setSelected(null)}
+              />
+            ) : (
+              <InsightsPanel
+                title={insightTitle}
+                markdown={panelMarkdown}
+                loading={insightsLoading}
+                source={insightsSource}
+                keywords={levelKeywords}
+                themes={themes}
+                themesTotal={themesTotal}
+                navCurrentId={contextTheme?.id ?? null}
+                onSelectTheme={(id) => {
+                  const t = themes.find((x) => x.id === id);
+                  if (t) setSelected(t);
+                }}
+                onDrillTheme={(id) => {
+                  const t = themes.find((x) => x.id === id);
+                  if (t) onDrill(t);
+                }}
+                onBackTheme={() => {
+                  setSelected(null);
+                  setPath((p) => p.slice(0, -1));
+                }}
+                flagTarget={
+                  dataset && contextTheme
+                    ? {
+                        dataset,
+                        themeId: contextTheme.id,
+                        // depth of the synthesised theme: a selected bubble sits at the
+                        // current level (path.length); a drilled-into theme one above.
+                        layer: selected ? path.length : path.length - 1,
+                        flag: themeFlags[contextTheme.id],
+                        onChange: (id, flag) =>
+                          setThemeFlags((prev) => {
+                            const next = { ...prev };
+                            if (flag) next[id] = flag;
+                            else delete next[id];
+                            return next;
+                          }),
+                      }
+                    : undefined
+                }
+              />
+            )}
+          </div>
         </aside>
       </div>
     </div>
