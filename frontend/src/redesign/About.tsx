@@ -19,7 +19,7 @@ function GithubIcon() {
 /** Contributeurs affichés en bas de page — `linkedin`/`github` optionnels (pas de lien
  *  fabriqué : seuls les profils communiqués par les intéressés sont renseignés). */
 const TEAM: { name: string; role: string; linkedin?: string; github?: string }[] = [
-  { name: 'Baptiste Duval', role: 'Mainteneur', github: 'https://github.com/1Batmain' },
+  { name: 'Baptiste Duval', role: 'Mainteneur', linkedin: 'https://www.linkedin.com/in/baptiste-duval-4508422a9/' },
   { name: 'Eliott Pelpel', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/eliott-pelpel/' },
   { name: 'Rick Gao', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/rickgao03/' },
   { name: 'Anis Outaleb', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/aniss-outaleb/' },
