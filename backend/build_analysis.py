@@ -259,10 +259,20 @@ def build_analysis(
         insights_md: dict[str, str] = {}
         md_lock = threading.Lock()
 
+        # OPINION (si déjà bakée) → nourrit la section « À relever » (tensions/consensus)
+        # du harness d'insights. Graceful si absente (repli sur les claims). L'ordre
+        # opinion→insights est assuré par l'orchestration du rebuild complet : bake
+        # l'opinion AVANT ce build (ou re-lance ce build après build_opinion — idempotent).
+        op = store.read_opinion(dataset) or {}
+        opinions_by_id: dict[str, dict] = {o["theme_id"]: o for o in op.get("themes", [])}
+        if opinions_by_id:
+            _log(f"{dataset} · opinion chargée ({len(opinions_by_id)} thèmes) → « À relever »")
+
         def _write_insight(level: str, nid: str | None) -> None:
             payload = render_insight(
                 tree, level, nid, model=enrich,
                 child_insights=insights_md if level == "theme" else None,
+                opinion=opinions_by_id.get(nid) if level == "theme" else None,
             )
             if (payload.get("meta") or {}).get("fallback"):
                 return
