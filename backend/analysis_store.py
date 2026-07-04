@@ -33,6 +33,8 @@ ANALYSIS_NAME = "analysis.json"
 AVIS_NAME = "avis.json"
 OPINION_NAME = "opinion.json"
 CLAIM_STANCE_NAME = "claim_stance.json"
+ARGUMENTS_NAME = "arguments.json"
+DEMOGRAPHICS_NAME = "demographics.json"
 CITATIONS_DIRNAME = "citations"
 INSIGHTS_DIRNAME = "insights"
 
@@ -80,6 +82,26 @@ def claim_stance_path(dataset: str) -> Path:
     thèmes assez purs ; les endpoints joignent gracieusement (absent → pas de stance).
     """
     return analysis_dir(dataset) / CLAIM_STANCE_NAME
+
+
+def arguments_path(dataset: str) -> Path:
+    """Arguments minés par thème (synthèse LLM sourcée sur contributions réelles).
+
+    Artefact À PART et OPTIONNEL, baké par `backend.build_arguments` — jamais requis :
+    les datasets déjà analysés n'en ont pas et tout dégrade gracieusement (contrat de
+    rétro-compat). Ne touche à aucun artefact existant.
+    """
+    return analysis_dir(dataset) / ARGUMENTS_NAME
+
+
+def demographics_path(dataset: str) -> Path:
+    """Profil démographique du panel (global + majorités par thème).
+
+    Artefact À PART et OPTIONNEL, baké par `backend.build_demographics` (pure
+    jointure CSV enrichi ↔ avis, zéro LLM). Absent sur les datasets sans données
+    démographiques : tout dégrade gracieusement.
+    """
+    return analysis_dir(dataset) / DEMOGRAPHICS_NAME
 
 
 def _safe(name: str) -> str:
@@ -221,6 +243,18 @@ def read_opinion(dataset: str) -> dict | None:
     return data if isinstance(data, dict) else None
 
 
+def read_arguments(dataset: str) -> dict | None:
+    """Arguments minés bakés (`{dataset, model, themes:[…]}`) ou None si absents."""
+    data = _read_json(arguments_path(dataset))
+    return data if isinstance(data, dict) else None
+
+
+def read_demographics(dataset: str) -> dict | None:
+    """Profil démographique baké (`{dataset, axes, global, themes:[…]}`) ou None."""
+    data = _read_json(demographics_path(dataset))
+    return data if isinstance(data, dict) else None
+
+
 # Stance par claim : un seul fichier `{claim_id: {…}}` par dataset, caché par mtime
 # (joint à chaque requête `/avis`/`/avis_list`, comme la provenance avis).
 _CLAIM_STANCE_CACHE: dict[str, tuple[float, dict]] = {}
@@ -270,6 +304,16 @@ def write_insights(dataset: str, level: str, theme_id: str | None, payload: dict
 def write_opinion(dataset: str, payload: dict) -> None:
     """Persiste la répartition d'opinion (fichier À PART, n'efface aucun cache d'analyse)."""
     write_json(opinion_path(dataset), payload)
+
+
+def write_arguments(dataset: str, payload: dict) -> None:
+    """Persiste les arguments minés (fichier À PART, n'efface aucun cache d'analyse)."""
+    write_json(arguments_path(dataset), payload)
+
+
+def write_demographics(dataset: str, payload: dict) -> None:
+    """Persiste le profil démographique (fichier À PART, n'efface aucun cache)."""
+    write_json(demographics_path(dataset), payload)
 
 
 def write_claim_stance(dataset: str, claim_stance: dict) -> None:
