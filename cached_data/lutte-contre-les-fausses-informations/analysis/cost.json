@@ -1,0 +1,74 @@
+{
+  "dataset": "lutte-contre-les-fausses-informations",
+  "phases": {
+    "ingest_embed": {
+      "calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "by_model": {},
+      "duration_seconds": 419.3
+    },
+    "analysis": {
+      "calls": 154,
+      "prompt_tokens": 123362,
+      "completion_tokens": 48808,
+      "by_model": {
+        "mistralai/Ministral-3-14B-Instruct-2512": {
+          "calls": 154,
+          "prompt_tokens": 123362,
+          "completion_tokens": 48808
+        }
+      },
+      "duration_seconds": 481.3
+    },
+    "opinion": {
+      "calls": 92,
+      "prompt_tokens": 59129,
+      "completion_tokens": 14311,
+      "by_model": {
+        "mistralai/Ministral-3-14B-Instruct-2512": {
+          "calls": 92,
+          "prompt_tokens": 59129,
+          "completion_tokens": 14311
+        }
+      },
+      "duration_seconds": 143.5
+    },
+    "arguments": {
+      "calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "by_model": {},
+      "duration_seconds": 0.8
+    }
+  },
+  "total": {
+    "calls": 246,
+    "prompt_tokens": 182491,
+    "completion_tokens": 63119,
+    "total_tokens": 245610,
+    "by_model": {
+      "mistralai/Ministral-3-14B-Instruct-2512": {
+        "calls": 246,
+        "prompt_tokens": 182491,
+        "completion_tokens": 63119
+      }
+    },
+    "estimated_usd": 0.0372,
+    "duration_seconds": 1044.9
+  },
+  "pricing_usd_per_1m": {
+    "mistral-large-latest": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "mistral-medium-latest": {
+      "input": 0.4,
+      "output": 2.0
+    },
+    "mistral-small-latest": {
+      "input": 0.1,
+      "output": 0.3
+    }
+  }
+}
