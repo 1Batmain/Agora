@@ -139,6 +139,9 @@ def run(index_url: str = config.INDEX_URL, db_path: Path = config.DB_PATH,
 
     consultations = scrape.list_consultations(index_url, fetch)
     if only:
+        if not any(c.slug == only for c in consultations):
+            page_url = f"{index_url.rstrip('/')}/{only}"
+            consultations.append(scrape.Consultation(slug=only, title=only, page_url=page_url))
         consultations = [c for c in consultations if c.slug == only]
     if limit:
         consultations = consultations[:limit]
