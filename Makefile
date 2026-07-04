@@ -6,7 +6,7 @@ setup: ## installe tout (deps, caches, secrets)
 	./scripts/setup.sh
 
 back: ## backend FastAPI :8010 (serve-only)
-	AGORA_CLAIMS_BACKEND=api uv run $(UV_EXTRAS) --with fastapi --with uvicorn \
+	AGORA_CLAIMS_BACKEND=api uv run $(UV_EXTRAS) --extra serve \
 	  uvicorn backend.server:app --host 0.0.0.0 --port 8010
 
 front: ## front Vite :5180
@@ -19,5 +19,5 @@ build: ## build de prod du front
 	cd frontend && npm run build
 
 test: ## tests backend (pytest)
-	AGORA_CLAIMS_BACKEND=api uv run $(UV_EXTRAS) --with fastapi --with pytest --with httpx \
+	AGORA_CLAIMS_BACKEND=api uv run $(UV_EXTRAS) --extra serve --with pytest --with httpx \
 	  pytest backend/tests -p no:warnings
