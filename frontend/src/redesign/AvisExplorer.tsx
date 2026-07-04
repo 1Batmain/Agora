@@ -4,22 +4,12 @@ import type {
   AvisClaim,
   AvisListItem,
   AvisProvenance,
-  Citation,
   Consultation,
   SpatialTheme,
-  ThemeOpinion,
 } from './contract';
-import {
-  fetchAnalysis,
-  fetchAvis,
-  fetchAvisList,
-  fetchCitations,
-  fetchFlags,
-  fetchOpinion,
-} from './analysisApi';
+import { fetchAnalysis, fetchAvis, fetchAvisList, fetchFlags } from './analysisApi';
 import { Header } from './Header';
-import { AvisAnalysis, AvisBody, ClaimStatsCard, FlagControl } from './AvisDetail';
-import type { ClaimStatsData } from './AvisDetail';
+import { AvisAnalysis, AvisBody, ClaimThemeCard, FlagControl } from './AvisDetail';
 import { LOCALE } from './strings';
 
 const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entiers inline)
@@ -29,8 +19,8 @@ const PAGE = 15; // taille d'une page « Voir plus » (items lourds : avis entie
  * consultation et affiche CHACUN EN ENTIER, INLINE, sous forme de carte : son texte
  * complet avec ses **surlignages** verbatim (claims, réutilise `AvisBody`) RÉVÉLÉS AU
  * SURVOL de la carte (repos sobre), un toggle **FR / original** par avis (si traduit) et
- * un bouton **« Signaler »**. CLIC sur un passage surligné → carte de STATS du claim
- * (volume du cluster, sentiment, lecture du modèle, représentativité au centroïde).
+ * un bouton **« Signaler »**. CLIC sur un passage surligné → petite carte de THÈME
+ * (nom du thème + bouton « Filtrer sur ce thème »).
  * Filtres : recherche plein-texte (debounce), CHIPS de grands thèmes + menu du sous-arbre
  * (fini le méga-menu), chips de SENTIMENT (visibles/désactivables) et pagination. PLUS de page séparée par avis : `focusAvisId`
  * (entrée depuis une citation) épingle la carte ciblée en tête, mise en évidence et
@@ -75,41 +65,8 @@ export function AvisExplorer({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Répartition d'opinion par thème (chargée UNE fois) — alimente la carte de stats d'un claim.
-  const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    fetchOpinion(dataset.id)
-      .then((op) => !cancelled && setOpinions(op ?? []))
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [dataset.id]);
-
-  // Lookups pour la carte de stats d'un claim (feuille → volumes / opinion).
+  // Lookup pour la carte de thème d'un claim (feuille → libellé), depuis la hiérarchie.
   const themeById = useMemo(() => new Map(themes.map((t) => [t.id, t])), [themes]);
-  const opinionByTheme = useMemo(
-    () => new Map(opinions.map((o) => [o.theme_id, o])),
-    [opinions],
-  );
-
-  // Citations par feuille (représentativité au centroïde) : fetch à la demande + cache.
-  const citCache = useRef<Map<string, Citation[]>>(new Map());
-  useEffect(() => {
-    citCache.current = new Map();
-  }, [dataset.id]);
-  const getCitations = useCallback(
-    async (leafId: string): Promise<Citation[]> => {
-      const hit = citCache.current.get(leafId);
-      if (hit) return hit;
-      const res = await fetchCitations(dataset.id, leafId).catch(() => null);
-      const list = (res?.data as Citation[] | null) ?? [];
-      citCache.current.set(leafId, list);
-      return list;
-    },
-    [dataset.id],
-  );
 
   // Flags d'avis du dataset (avis_id → texte), chargés une fois → restauration à l'affichage.
   const [flags, setFlags] = useState<Record<string, string>>({});
@@ -220,6 +177,14 @@ export function AvisExplorer({
     setStance(null);
   }, []);
 
+  // Filtrer sur le thème d'un claim cliqué (carte de stats) : applique le filtre thème
+  // de la barre d'outils et remonte la page pour que le résultat soit visible.
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const onFilterTheme = useCallback((id: string) => {
+    setThemeId(id);
+    toolbarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
   return (
     <div className="agora overview">
       <Header onHome={onHome} right={<span className="overview__crumb">{dataset.label}</span>} />
@@ -233,7 +198,7 @@ export function AvisExplorer({
           </p>
         </section>
 
-        <div className="avisx__toolbar">
+        <div className="avisx__toolbar" ref={toolbarRef}>
           {/* Ligne 1 : recherche plein-texte (large, prioritaire) + tri du lot chargé. */}
           <div className="avisx__searchrow">
             <div className="avisx__searchwrap">
@@ -326,8 +291,7 @@ export function AvisExplorer({
               flagText={flags[focusAvis.id]}
               onFlagChange={onFlagChange}
               themeById={themeById}
-              opinionByTheme={opinionByTheme}
-              getCitations={getCitations}
+              onFilterTheme={onFilterTheme}
               focused
             />
           )}
@@ -341,8 +305,7 @@ export function AvisExplorer({
                 flagText={flags[it.avis_id]}
                 onFlagChange={onFlagChange}
                 themeById={themeById}
-                opinionByTheme={opinionByTheme}
-                getCitations={getCitations}
+                onFilterTheme={onFilterTheme}
               />
             ))}
         </ul>
@@ -547,57 +510,28 @@ const AvisCard = forwardRef<
     dataset: string;
     flagText?: string;
     onFlagChange: (id: string, text: string | null) => void;
-    /** Lookups pour la carte de stats d'un claim (feuille → volumes / opinion / citations). */
+    /** Lookup pour la carte de thème d'un claim (feuille → libellé). */
     themeById: Map<string, SpatialTheme>;
-    opinionByTheme: Map<string, ThemeOpinion>;
-    getCitations: (leafId: string) => Promise<Citation[]>;
+    /** Applique le filtre « thème » de la barre d'outils (bouton de la carte de thème). */
+    onFilterTheme?: (themeId: string) => void;
     focused?: boolean;
   }
->(({ avis, dataset, flagText, onFlagChange, themeById, opinionByTheme, getCitations,
-    focused = false }, ref) => {
+>(({ avis, dataset, flagText, onFlagChange, themeById, onFilterTheme, focused = false }, ref) => {
   const [analysisOpen, setAnalysisOpen] = useState(false);
   const toggle = () => setAnalysisOpen((o) => !o);
 
-  // Claim sélectionné (clic sur un passage surligné) → carte de stats dashboard.
+  // Claim sélectionné (clic sur un passage surligné) → petite carte de thème.
   const [selClaim, setSelClaim] = useState<AvisClaim | null>(null);
-  const [selStats, setSelStats] = useState<ClaimStatsData>({});
+  const [selLeafId, setSelLeafId] = useState<string | null>(null);
   const onClaimClick = (claim: AvisClaim) => {
     if (selClaim?.id === claim.id) {
       setSelClaim(null); // re-clic → referme
       return;
     }
-    const leafId = claim.leaf_id || claim.cluster_id;
-    const leaf = leafId ? themeById.get(leafId) : undefined;
-    const op = leafId ? opinionByTheme.get(leafId) : undefined;
     setSelClaim(claim);
-    setSelStats({
-      leafTitle: leaf ? leaf.title || leaf.label : claim.theme_title,
-      nAvis: leaf?.n_avis ?? null,
-      nClaims: leaf?.n_claims ?? null,
-      opinion: op ? { fav: op.fav, def: op.def, nuance: op.nuance, proposition: op.proposition } : null,
-      citation: null,
-      loading: Boolean(leafId),
-    });
-    if (!leafId) return;
-    // Représentativité : retrouver CE claim dans les citations de sa feuille (triées par
-    // proximité au centroïde). Match par avis_id, affiné par texte de span si plusieurs.
-    getCitations(leafId).then((list) => {
-      const mine = list.filter((c) => c.avis_id === avis.id);
-      let found = mine[0];
-      if (mine.length > 1 && claim.spans.length > 0) {
-        const spanText = avis.text.slice(claim.spans[0].start, claim.spans[0].end).trim();
-        found = mine.find((c) => c.text && spanText && (c.text.includes(spanText.slice(0, 60)) || spanText.includes(c.text.slice(0, 60)))) ?? mine[0];
-      }
-      setSelStats((s) => ({
-        ...s,
-        loading: false,
-        citation:
-          found && typeof found.rank === 'number'
-            ? { rank: found.rank, total: list.length, dist: found.dist_to_centroid }
-            : null,
-      }));
-    });
+    setSelLeafId(claim.leaf_id || claim.cluster_id || null);
   };
+  const selLeaf = selLeafId ? themeById.get(selLeafId) : undefined;
   return (
     <li
       ref={ref}
@@ -631,9 +565,21 @@ const AvisCard = forwardRef<
       >
         <AvisBody avis={avis} highlight onClaimClick={onClaimClick} />
       </div>
-      {/* Carte de stats du claim cliqué (dashboard : volume, sentiment, lecture, représentativité). */}
+      {/* Petite carte de thème du claim cliqué : nom du thème + filtre. */}
       {selClaim && (
-        <ClaimStatsCard claim={selClaim} stats={selStats} onClose={() => setSelClaim(null)} />
+        <ClaimThemeCard
+          claim={selClaim}
+          themeTitle={(selLeaf && (selLeaf.title || selLeaf.label)) || selClaim.theme_title}
+          onClose={() => setSelClaim(null)}
+          onFilterTheme={
+            selLeafId && onFilterTheme
+              ? () => {
+                  onFilterTheme(selLeafId);
+                  setSelClaim(null);
+                }
+              : undefined
+          }
+        />
       )}
       {analysisOpen && <AvisAnalysis claims={avis.claims} />}
     </li>
