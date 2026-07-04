@@ -1857,7 +1857,20 @@ button.opinion__card:disabled { cursor: default; }
 .clout__coh { color: #8a8aa0; }
 .clout__track { grid-column: 2 / span 2; height: .35rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
 .clout__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); border-radius: 2px; }
-.clout__body { padding: 0 .2rem .6rem; }
+.clout__body { display: flex; align-items: stretch; padding: 0 .2rem .6rem; }
+/* Rail gauche CLIQUABLE : replie la thématique ; sa ligne verticale matérialise
+   l'imbrication (elle longe tout le contenu déplié) et se surligne au survol. */
+.clout__collapse-rail {
+  flex: 0 0 18px; align-self: stretch; border: 0; background: none; padding: 0;
+  cursor: pointer;
+}
+.clout__collapse-rail::before {
+  content: ''; display: block; width: 2px; height: 100%; margin: 0 auto;
+  background: var(--agora-soft, #ececfe); border-radius: 2px; transition: background .12s;
+}
+.clout__collapse-rail:hover::before,
+.clout__collapse-rail:focus-visible::before { background: var(--agora, #000091); }
+.clout__body-inner { flex: 1 1 auto; min-width: 0; }
 .clout__panel { margin: .2rem 0 .8rem; }
 /* Sous-thématiques : lead « N sous-thématiques identifiées : » + accordéon imbriqué,
    intercalé entre le corps de la synthèse et le « À retenir ». */
