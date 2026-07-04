@@ -18,28 +18,38 @@ export function Landing({
 }) {
   const openCount = datasets.filter((d) => d.status === 'open').length;
   const closedCount = datasets.length - openCount;
+  const formatResponseCount = (n: number | null | undefined) =>
+    n != null ? `${n.toLocaleString(LOCALE)} réponses citoyennes` : 'Nombre de réponses indisponible';
   const features = [
     {
-      title: 'Voir les grands thèmes',
-      body: 'Comprendre rapidement les sujets qui reviennent le plus dans les réponses citoyennes.',
+      title: 'Les thèmes identifiés',
+      body: 'Les grands sujets qui reviennent dans les contributions citoyennes.',
     },
     {
-      title: 'Vérifier les résultats',
-      body: 'Retrouver les réponses citoyennes utilisées pour produire l’analyse.',
+      title: 'Les chiffres clés',
+      body: 'Le nombre de contributions analysées, le nombre de thèmes identifiés et l’état de la consultation.',
+    },
+    {
+      title: 'Des exemples d’avis',
+      body: 'Des extraits de contributions pour garder un lien avec ce que les citoyens ont réellement exprimé.',
     },
   ];
   const steps = [
     {
-      title: 'Lire les réponses',
-      body: 'Agora analyse les réponses libres envoyées par les citoyens.',
+      title: '1. Une question est posée',
+      body: 'Une consultation publique invite les citoyens à donner leur avis sur un sujet précis.',
     },
     {
-      title: 'Regrouper les idées proches',
-      body: 'Les réponses qui parlent du même sujet sont regroupées en thèmes.',
+      title: '2. Les citoyens contribuent',
+      body: 'Ils expriment leurs avis, leurs préoccupations ou leurs propositions dans des textes libres.',
     },
     {
-      title: 'Résumer avec des exemples',
-      body: 'Chaque thème est accompagné de chiffres clés et de réponses sources.',
+      title: '3. Agora regroupe les sujets récurrents',
+      body: 'Les contributions qui parlent de sujets proches sont rapprochées.',
+    },
+    {
+      title: '4. Les résultats sont présentés clairement',
+      body: 'Agora affiche les thèmes identifiés, les chiffres clés et des exemples d’avis exprimés.',
     },
   ];
 
@@ -49,28 +59,50 @@ export function Landing({
 
       <main className="landing__body">
         <section className="hero">
-          <h1 className="hero__title">Comprendre ce que disent les citoyens</h1>
+          <p className="hero__kicker">Outil d’analyse de consultations publiques</p>
+          <h1 className="hero__title">Comprendre ce que disent les citoyens dans une consultation</h1>
           <p className="hero__tagline">
-            Agora organise les réponses libres d’une consultation en grands thèmes,
-            chiffres clés et exemples vérifiables.
+            Agora analyse les contributions citoyennes publiées dans une
+            consultation et fait ressortir les sujets qui reviennent le plus
+            souvent.
           </p>
+          <a className="hero__cta btn-primary" href="#consultations">
+            Voir les consultations
+          </a>
           <ul className="hero__meta" aria-hidden={datasets.length === 0}>
             <li>
-              <strong>{datasets.length}</strong> consultations
+              <strong>{datasets.length}</strong> consultations disponibles
             </li>
             <li>
-              <strong>{openCount}</strong> ouvertes
+              <strong>{openCount}</strong> consultations ouvertes
             </li>
             <li>
-              <strong>{closedCount}</strong> analysées
+              <strong>{closedCount}</strong> analyses disponibles
             </li>
           </ul>
         </section>
 
+        <section className="landing__how">
+          <header className="sec-head">
+            <h2>Comment ça fonctionne</h2>
+            <span className="sec-head__hint">De la question posée à une lecture plus claire des contributions.</span>
+          </header>
+          <ol className="how__steps">
+            {steps.map((step) => (
+              <li key={step.title} className="how__step">
+                <div>
+                  <strong>{step.title}</strong>
+                  <p>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         <section className="landing__features">
           <header className="sec-head">
-            <h2>Ce que vous pouvez faire</h2>
-            <span className="sec-head__hint">Deux repères simples pour comprendre rapidement une consultation</span>
+            <h2>Ce que vous pouvez voir</h2>
+            <span className="sec-head__hint">Trois repères pour comprendre rapidement le contenu d’une consultation.</span>
           </header>
           <ul className="feature-grid">
             {features.map((feature) => (
@@ -82,10 +114,10 @@ export function Landing({
           </ul>
         </section>
 
-        <section className="landing__list">
+        <section id="consultations" className="landing__list">
           <header className="sec-head">
             <h2>Consultations disponibles</h2>
-            <span className="sec-head__hint">Choisissez une consultation à analyser ou à rejoindre</span>
+            <span className="sec-head__hint">Choisissez une consultation pour voir la question posée, la source officielle, les chiffres clés et l’analyse des thèmes identifiés.</span>
           </header>
           {loading ? (
             <div className="landing__loading">
@@ -111,10 +143,7 @@ export function Landing({
                       <span className="ds-card__eyebrow">Question posée</span>
                       <span className="ds-card__title">{d.label}</span>
                       <span className="ds-card__meta">
-                        {(() => {
-                          const n = d.n_contributions ?? d.n_nodes;
-                          return n != null ? `${n.toLocaleString(LOCALE)} réponses citoyennes` : '—';
-                        })()}
+                        {formatResponseCount(d.n_contributions ?? d.n_nodes)}
                       </span>
                       <span className="ds-card__source">Source : consultation publique</span>
                       <span className="ds-card__cta">
@@ -126,54 +155,18 @@ export function Landing({
               })}
             </ul>
           )}
-          <p className="landing__note">
-            Analyse automatique : les résultats doivent être vérifiés avec les réponses
-            sources.
-          </p>
-        </section>
-
-        <section className="landing__problem">
-          <header className="sec-head">
-            <h2>Pourquoi Agora existe</h2>
-            <span className="sec-head__hint">Lire des milliers de réponses à la main prend beaucoup de temps</span>
-          </header>
-          <div className="section-prose">
-            <p>
-              Une consultation publique peut produire des milliers de réponses libres. Les
-              lire une par une prend beaucoup de temps. Agora aide à faire émerger les grands
-              thèmes, tout en gardant un lien avec les réponses citoyennes d’origine.
-            </p>
-          </div>
-        </section>
-
-        <section className="landing__how">
-          <header className="sec-head">
-            <h2>Comment ça marche ?</h2>
-            <span className="sec-head__hint">Une version simple de la méthode</span>
-          </header>
-          <ol className="how__steps">
-            {steps.map((step) => (
-              <li key={step.title} className="how__step">
-                <div>
-                  <strong>{step.title}</strong>
-                  <p>{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p className="how__footer">
-            Agora ne remplace pas la lecture humaine : l’outil aide à organiser les
-            réponses, à repérer les grands thèmes et à retrouver les exemples qui les
-            justifient.
+          <p className="landing__summary">
+            Les résultats sont une aide à la lecture. Ils ne remplacent pas une
+            analyse humaine ni une synthèse officielle.
           </p>
         </section>
 
         <section className="landing__collab">
           <header className="sec-head">
             <h2>Projet ouvert</h2>
-            <span className="sec-head__hint">Code source et contribution</span>
+            <span className="sec-head__hint">Code source et contribution.</span>
           </header>
-          <p className="how__lead">
+          <p className="collab__lead">
             Le code source est disponible sur GitHub pour contribuer au projet.
           </p>
           <div className="collab__actions">
