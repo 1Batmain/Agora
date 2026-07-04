@@ -1738,8 +1738,13 @@ button.opinion__card:disabled { cursor: default; }
    pas de fond blanc, pas de cartes, police alignée sur le texte. Couleurs fav/déf et
    clic (voir les avis) conservés. */
 .clout__stance .opinion { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
-/* « par rapport à la question : « … » » — insight discret sous le titre (pas de gras). */
-.clout__stance .opinion__proposition { font-size: .85rem; font-weight: 400; color: #555; margin: .1rem 0 .6rem; }
+/* « Par rapport à la question : » — intro discrète (pas de gras) ; la question passe
+   DESSOUS, centrée façon citation (sans guillemets). */
+.clout__stance .opinion__proposition { font-size: .85rem; font-weight: 400; color: #555; margin: .1rem 0 .7rem; }
+.clout__stance .opinion__cleavage {
+  display: block; text-align: center; margin-top: .45rem;
+  font-style: italic; font-size: .95rem; font-weight: 500; color: #1a1a2e;
+}
 .clout__stance .opinion__cards { gap: 1.1rem; margin: .5rem 0 .2rem; }
 .clout__stance .opinion__card,
 .clout__stance .opinion__card--pos,
@@ -1767,7 +1772,7 @@ button.opinion__card:disabled { cursor: default; }
   font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
   color: #8a8a97; font-weight: 700; margin-bottom: .35rem;
 }
-.overview__hero-quote { margin: 0; font-size: 15px; line-height: 1.6; font-style: italic; color: #333; }
+.overview__hero-quote { margin: 0; font-size: 14px; line-height: 1.6; font-style: italic; color: #333; }
 .overview__hero-more { display: inline-block; margin-top: .45rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
 /* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
 .clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
@@ -1781,7 +1786,7 @@ button.opinion__card:disabled { cursor: default; }
 /* Titre de section HOMOGÈNE (aligné sur .md h2 = titres Contexte / Vue générale / À
    relever) — réutilisé pour « Thèmes », « Thèmes distincts », « Analyse de position ». */
 .synth-h {
-  font-size: 15px; font-weight: 700; line-height: 1.6;
+  font-size: 13px; font-weight: 700; line-height: 1.5;
   margin: 16px 0 6px; color: var(--agora-active);
 }
 .overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
