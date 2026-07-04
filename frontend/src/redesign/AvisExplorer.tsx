@@ -32,6 +32,7 @@ export function AvisExplorer({
   focusThemeId,
   focusStance,
   onHome,
+  onAbout,
 }: {
   dataset: Consultation;
   /** Avis à mettre en évidence au chargement (deep-link `&focus=`) : carte épinglée. */
@@ -41,6 +42,8 @@ export function AvisExplorer({
   /** Sentiment sur lequel PRÉ-FILTRER (clic carte positif/négatif de la synthèse). */
   focusStance?: 'favorable' | 'defavorable' | null;
   onHome: () => void;
+  /** Ouvre la page « À propos » (présentation du projet). */
+  onAbout?: () => void;
 }) {
   // Filtres : saisie immédiate `qInput` → `q` debouncé (300 ms) ; thème sélectionné
   // (initialisé sur le thème de focus quand on arrive depuis un sous-thème).
@@ -187,7 +190,11 @@ export function AvisExplorer({
 
   return (
     <div className="agora overview">
-      <Header onHome={onHome} right={<span className="overview__crumb">{dataset.label}</span>} />
+      <Header
+        onHome={onHome}
+        onAbout={onAbout}
+        right={<span className="overview__crumb">{dataset.label}</span>}
+      />
 
       <main className="overview__body avisx">
         <section className="overview__head">
