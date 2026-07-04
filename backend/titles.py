@@ -110,14 +110,22 @@ def _content_key(dataset: str, node, model: str, anchors: list[str]) -> str:
     """Hash STABLE du contenu d'un thème → clé de cache idempotente.
 
     Inclut tout ce qui change le titre : id, modèle, MÉTHODE de sélection, label,
-    mots-clés et claims d'ANCRAGE montrées. Même contenu + même méthode ⇒ même hash ⇒
-    cache HIT (zéro LLM au rebuild) ; changer `ANCHOR_METHOD` ou les ancres ⇒ nouveau
-    hash ⇒ re-génération ciblée (jamais un titre périmé servi).
+    mots-clés et l'ENSEMBLE des claims d'ANCRAGE montrées. Même contenu + même méthode ⇒
+    même hash ⇒ cache HIT (zéro LLM au rebuild) ; changer `ANCHOR_METHOD` ou l'ensemble
+    des ancres ⇒ nouveau hash ⇒ re-génération ciblée (jamais un titre périmé servi).
+
+    Les ancres sont TRIÉES dans la clé : c'est l'ENSEMBLE montré au LLM qui définit le
+    titre, pas son ordre incident. Cet ordre varie pourtant entre builds (re-ranking
+    « développement » des `representative_claims`, régime plein-ancrage vs repli) — sans
+    tri, une simple permutation flippait la clé → cache MISS → re-génération en avalanche
+    (incident du 4/07 : 257/281 thèmes tiktok retombés en mots-clés au rebuild parallèle).
+    Le PROMPT, lui, conserve l'ordre de sélection (`_title_messages`) : seule la clé est
+    rendue insensible à l'ordre.
     """
     parts = [
         dataset, node.id, model, ANCHOR_METHOD, node.label or "",
         "|".join((node.keywords or [])[:MAX_KEYWORDS]),
-        "|".join(anchors[:REP_PER_THEME]),
+        "|".join(sorted(anchors[:REP_PER_THEME])),
     ]
     raw = "\x00".join(parts)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
