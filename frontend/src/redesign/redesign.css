@@ -1050,6 +1050,22 @@ body {
   color: var(--agora-active);
 }
 
+/* « Comment ça marche ? » : lien discret vers la page « À propos ». */
+.gov-header__navlink {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--agora);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  white-space: nowrap;
+}
+.gov-header__navlink:hover {
+  text-decoration: underline;
+}
+
 /* ---------- Landing ---------- */
 .landing__body {
   --landing-ink: #15233a;
@@ -2320,6 +2336,92 @@ button.opinion__card:disabled { cursor: default; }
 .avisx__factorvalue { margin: 0; font-size: .82rem; }
 .avisx__stancetag { font-weight: 600; white-space: nowrap; }
 .avisx__factorsep { color: #c4c4d4; font-weight: 400; }
+
+/* ── Page « À propos » : grille d'architecture (dépôt) + équipe ── */
+.landing__archi, .landing__method, .landing__warn, .landing__security { margin-top: 88px; }
+
+/* Bloc d'avertissement (contenu généré par IA, limites) — même ton honnête que
+   `.overview__sample` (fond ambre), mais générique et en liste. */
+.notebox {
+  margin: 1.6rem 0 0; padding: 1.1rem 1.3rem; max-width: 820px;
+  background: #fff8e8; border: 1px solid #f0dca8; border-radius: 8px;
+  color: #6b5a22;
+}
+.notebox__title {
+  display: flex; align-items: baseline; gap: .5rem;
+  margin: 0 0 .8rem; font-size: .92rem; line-height: 1.5;
+}
+.notebox__title strong { color: #5a4a12; }
+.notebox__icon { flex: none; font-size: 1rem; }
+.notebox ul { margin: 0; padding-left: 1.15rem; display: grid; gap: .6rem; }
+.notebox li { font-size: .87rem; line-height: 1.6; }
+.notebox li strong { color: #5a4a12; }
+.archi {
+  list-style: none; margin: 1.6rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem;
+  max-width: 900px;
+}
+@media (max-width: 720px) {
+  .archi { grid-template-columns: 1fr; }
+}
+.archi__item {
+  padding: 1rem 1.1rem; border: 1px solid #e6e6ef; border-radius: 8px; background: #fcfcff;
+}
+.archi__item strong {
+  display: block; margin: .3rem 0 .35rem; color: #111; font-family: var(--font-main);
+  font-size: .95rem;
+}
+.archi__item p { margin: 0; color: #555; line-height: 1.6; font-size: .87rem; }
+.archi__item code {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82em;
+  background: #f0f0f4; padding: 0 .3em; border-radius: 3px;
+}
+.archi__tag {
+  display: inline-block; font-size: .7rem; color: #555; font-family: var(--font-main);
+  background: #f0f0f4; padding: .15rem .5rem; border-radius: 3px;
+}
+
+/* ── Page « À propos » : contributeurs ── */
+/* Grille (pas un flex-wrap) : cartes de LARGEUR ÉGALE par colonne, pour un alignement
+   propre entre lignes quel que soit le nombre de caractères du nom/rôle. */
+.team {
+  list-style: none; margin: 1.4rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem;
+  max-width: 900px;
+}
+.team__card {
+  display: flex; align-items: center; gap: .65rem; width: 100%; box-sizing: border-box;
+  padding: .6rem .9rem .6rem .6rem; border: 1px solid #e6e6ef; border-radius: 10px;
+  background: #fcfcff;
+}
+/* Variante cliquable (profil LinkedIn communiqué) : même carte, en lien. */
+a.team__card--link {
+  text-decoration: none; cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+a.team__card--link:hover {
+  background: var(--agora-soft, #ececfe); border-color: var(--agora-soft2, #cacafb);
+}
+.team__avatar {
+  display: grid; place-items: center; width: 34px; height: 34px; flex: none;
+  border-radius: 50%; background: linear-gradient(135deg, var(--agora), var(--agora-active));
+  color: #fff; font-weight: 700; font-size: .9rem;
+}
+.team__info { display: flex; flex-direction: column; line-height: 1.3; }
+.team__name {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-weight: 700; color: #111; font-size: .88rem;
+}
+.team__role { color: #777; font-size: .78rem; }
+/* Petits badges « in »/« gh » — indiquent un lien LinkedIn/GitHub sans dépendre
+   d'une icône externe. */
+.team__badge {
+  display: inline-grid; place-items: center; width: 16px; height: 16px;
+  border-radius: 3px; color: #fff;
+  font-size: 9px; font-weight: 800; line-height: 1;
+}
+.team__badge--linkedin { background: #0a66c2; }
+.team__badge--github { background: #24292f; }
 
 /* ── Landing : section « Collaborer » (onboarding hackathon) ── */
 .landing__collab { margin-top: 64px; }
