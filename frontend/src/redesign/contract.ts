@@ -24,6 +24,10 @@ export interface SpatialTheme {
   keywords?: string[];
   /** Contributions représentatives (proches du centroïde), verbatim. */
   representative_claims?: string[];
+  /** Avis le plus REPRÉSENTATIF du thème (score composite au build : pureté × couverture
+   *  × représentativité × lisibilité) — le front l'affiche en Hero, avec repli gracieux
+   *  sur le 1er avis représentatif si absent/introuvable. */
+  hero_avis_id?: string | null;
   /**
    * Optional LLM hover fields (emitted by the backend in parallel — graceful when
    * absent). `hook` = one-line accroche; `description` = a short Markdown synthesis
