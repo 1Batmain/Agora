@@ -2233,13 +2233,16 @@ button.opinion__card:disabled { cursor: default; }
 }
 
 /* ── Page « À propos » : contributeurs ── */
+/* Grille (pas un flex-wrap) : cartes de LARGEUR ÉGALE par colonne, pour un alignement
+   propre entre lignes quel que soit le nombre de caractères du nom/rôle. */
 .team {
   list-style: none; margin: 1.4rem 0 0; padding: 0;
-  display: flex; flex-wrap: wrap; gap: 1rem; max-width: 900px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem;
+  max-width: 900px;
 }
 .team__card {
-  display: flex; align-items: center; gap: .65rem;
-  padding: .6rem .9rem .6rem .6rem; border: 1px solid #e6e6ef; border-radius: 999px;
+  display: flex; align-items: center; gap: .65rem; width: 100%; box-sizing: border-box;
+  padding: .6rem .9rem .6rem .6rem; border: 1px solid #e6e6ef; border-radius: 10px;
   background: #fcfcff;
 }
 /* Variante cliquable (profil LinkedIn communiqué) : même carte, en lien. */
