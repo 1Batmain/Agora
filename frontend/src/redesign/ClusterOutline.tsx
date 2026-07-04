@@ -249,6 +249,25 @@ function ClusterPanel({
 
   return (
     <div className={`overview__dynsynth clout__panel${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
+      {/* HERO — le témoignage le plus représentatif, EN PREMIER. Cliquable → TOUS les
+          témoignages de la thématique (explorateur d'avis filtré sur le thème). */}
+      {repAvis[0] && (
+        <figure
+          className="overview__hero"
+          role="button"
+          tabIndex={0}
+          title="Voir tous les témoignages de cette thématique"
+          onClick={() => onExploreTheme(theme.id)}
+          onKeyDown={(e) => { if (e.key === 'Enter') onExploreTheme(theme.id); }}
+        >
+          <figcaption className="overview__hero-label">
+            Témoignage représentatif{selectedKeyword ? ` · « ${selectedKeyword} »` : ''}
+          </figcaption>
+          <blockquote className="overview__hero-quote">« {repAvis[0].text} »</blockquote>
+          <span className="overview__hero-more">Voir tous les témoignages →</span>
+        </figure>
+      )}
+
       {/* Dashboard de VOLUME de la thématique. */}
       {avisN > 0 && (
         <div className="overview__dash" aria-label="Volume de cette thématique">
@@ -310,39 +329,6 @@ function ClusterPanel({
               </button>
             );
           })}
-        </div>
-      )}
-
-      {/* Avis représentatifs (cliquables → exploration focalisée). */}
-      {allAvis.length > 0 && (
-        <div className="overview__avis">
-          <h4 className="synthesis__subhead">
-            {selectedKeyword ? `Avis mentionnant « ${selectedKeyword} »` : 'Avis représentatifs'}
-            {selectedKeyword && (
-              <button type="button" className="overview__kwclear" onClick={() => setSelectedKeyword(null)}>
-                × tous
-              </button>
-            )}
-          </h4>
-          {repAvis.length > 0 ? (
-            repAvis.map((c, i) => {
-              const id = c.avis_id;
-              return (
-                <blockquote
-                  key={id ?? i}
-                  className={`overview__avis-quote${id ? ' overview__avis-quote--open' : ''}`}
-                  role={id ? 'button' : undefined}
-                  tabIndex={id ? 0 : undefined}
-                  onClick={id ? () => onExploreAvis(id) : undefined}
-                  onKeyDown={id ? (e) => { if (e.key === 'Enter') onExploreAvis(id); } : undefined}
-                >
-                  « {c.text} »
-                </blockquote>
-              );
-            })
-          ) : (
-            <p className="overview__loading">Aucun avis ne mentionne « {selectedKeyword} ».</p>
-          )}
         </div>
       )}
 
