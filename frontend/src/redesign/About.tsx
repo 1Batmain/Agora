@@ -44,11 +44,10 @@ export function About({ onHome }: { onHome: () => void }) {
 
       <main className="landing__body">
         <section className="hero">
-          <span className="hero__eyebrow">À propos</span>
+          <span className="hero__kicker">À propos</span>
           <h1 className="hero__title">
             Comment fonctionne
             <span className="hero__accent"> Agora</span>
-            <br />
           </h1>
           <p className="hero__tagline">
             Agora transforme des milliers de témoignages citoyens en texte libre en une{' '}
@@ -59,9 +58,8 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__problem">
           <header className="sec-head">
-            <span className="sec-head__num">01</span>
             <h2>Le problème</h2>
-            <span className="sec-head__hint">pourquoi Agora existe</span>
+            <span className="sec-head__hint">Pourquoi Agora existe</span>
           </header>
           <div className="section-prose">
             <p>
@@ -77,25 +75,24 @@ export function About({ onHome }: { onHome: () => void }) {
               traçable jusqu'à son témoignage d'origine.
             </p>
           </div>
-          <ul className="hero__diff">
-            <li>
+          <ul className="feature-grid">
+            <li className="feature-card">
               <strong>Fidèle</strong>
-              <span>zéro reformulation — les extraits sont des sous-chaînes exactes du texte citoyen</span>
+              <p>Zéro reformulation — les extraits sont des sous-chaînes exactes du texte citoyen.</p>
             </li>
-            <li>
+            <li className="feature-card">
               <strong>Traçable</strong>
-              <span>chaque thème → ses claims → l'avis complet, surligné, d'où ils viennent</span>
+              <p>Chaque thème → ses claims → l'avis complet, surligné, d'où ils viennent.</p>
             </li>
-            <li>
+            <li className="feature-card">
               <strong>Souverain</strong>
-              <span>embeddings calculés en local, aucun texte citoyen envoyé à un cloud tiers</span>
+              <p>Embeddings calculés en local, aucun texte citoyen envoyé à un cloud tiers.</p>
             </li>
           </ul>
         </section>
 
         <section className="landing__pipeline">
           <header className="sec-head">
-            <span className="sec-head__num">02</span>
             <h2>Le pipeline, en détail</h2>
             <span className="sec-head__hint">6 étapes, des avis aux thèmes</span>
           </header>
@@ -103,9 +100,9 @@ export function About({ onHome }: { onHome: () => void }) {
             Du texte brut à la carte des opinions, sans jamais perdre le fil vers la
             source :
           </p>
-          <ol className="pipe">
-            <li className="pipe__step">
-              <span className="pipe__tag">Mistral&nbsp;large</span>
+          <ol className="how__steps">
+            <li className="how__step">
+              <span className="tag-pill">Mistral&nbsp;large</span>
               <strong>1 · Claims — extraction verbatim</strong>
               <p>
                 Chaque avis est découpé en affirmations (<em>claims</em>) : la question de
@@ -113,8 +110,8 @@ export function About({ onHome }: { onHome: () => void }) {
                 morceau EXACT du texte d'origine (multi-passages si besoin).
               </p>
             </li>
-            <li className="pipe__step">
-              <span className="pipe__tag">embeddings · nomic</span>
+            <li className="how__step">
+              <span className="tag-pill">embeddings · nomic</span>
               <strong>2 · Embeddings — coordonnées de sens</strong>
               <p>
                 Chaque claim devient un vecteur, calculé <em>en local</em> (souverain, hors
@@ -122,8 +119,8 @@ export function About({ onHome }: { onHome: () => void }) {
                 si elles n'emploient pas les mêmes mots.
               </p>
             </li>
-            <li className="pipe__step">
-              <span className="pipe__tag">graphe k-NN</span>
+            <li className="how__step">
+              <span className="tag-pill">graphe k-NN</span>
               <strong>3 · Graphe k-NN — relier les idées proches</strong>
               <p>
                 Chaque claim est relié à ses quelques voisins les plus ressemblants
@@ -131,8 +128,8 @@ export function About({ onHome }: { onHome: () => void }) {
                 idées proches sont connectées.
               </p>
             </li>
-            <li className="pipe__step">
-              <span className="pipe__tag">Leiden</span>
+            <li className="how__step">
+              <span className="tag-pill">Leiden</span>
               <strong>4 · Leiden — les thèmes émergent</strong>
               <p>
                 Un algorithme de détection de communautés (<em>Leiden</em>) repère les
@@ -141,8 +138,8 @@ export function About({ onHome }: { onHome: () => void }) {
                 variance-adaptative, jamais une taxonomie imposée à l'avance.
               </p>
             </li>
-            <li className="pipe__step">
-              <span className="pipe__tag">synthèse IA</span>
+            <li className="how__step">
+              <span className="tag-pill">synthèse IA</span>
               <strong>5 · Enrichissement — nommer, résumer</strong>
               <p>
                 Pour chaque thème, un LLM (sur le <em>cluster</em>, jamais sur le citoyen
@@ -150,8 +147,8 @@ export function About({ onHome }: { onHome: () => void }) {
                 les avis les plus représentatifs (proximité au centroïde).
               </p>
             </li>
-            <li className="pipe__step">
-              <span className="pipe__tag">stance calibrée</span>
+            <li className="how__step">
+              <span className="tag-pill">stance calibrée</span>
               <strong>6 · Opinion — pour / contre / nuancé</strong>
               <p>
                 Sur chaque thème, le modèle identifie l'objet de clivage et classe chaque
@@ -168,9 +165,8 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__archi">
           <header className="sec-head">
-            <span className="sec-head__num">03</span>
             <h2>Architecture du dépôt</h2>
-            <span className="sec-head__hint">qui fait quoi</span>
+            <span className="sec-head__hint">Qui fait quoi</span>
           </header>
           <p className="how__lead">
             Une séparation nette entre le calcul (fait une fois, hors ligne) et le service
@@ -178,7 +174,7 @@ export function About({ onHome }: { onHome: () => void }) {
           </p>
           <ul className="archi">
             <li className="archi__item">
-              <span className="archi__tag">Python · FastAPI</span>
+              <span className="tag-pill">Python · FastAPI</span>
               <strong>backend/</strong>
               <p>
                 API qui <em>sert</em> le cache précalculé (thèmes, synthèses, citations,
@@ -188,7 +184,7 @@ export function About({ onHome }: { onHome: () => void }) {
               </p>
             </li>
             <li className="archi__item">
-              <span className="archi__tag">Python</span>
+              <span className="tag-pill">Python</span>
               <strong>pipeline/</strong>
               <p>
                 Le cœur algorithmique : extraction des claims (<code>claims/</code>),
@@ -198,7 +194,7 @@ export function About({ onHome }: { onHome: () => void }) {
               </p>
             </li>
             <li className="archi__item">
-              <span className="archi__tag">React · Vite · TypeScript</span>
+              <span className="tag-pill">React · Vite · TypeScript</span>
               <strong>frontend/</strong>
               <p>
                 L'application que tu utilises : carte des thèmes, explorateur de
@@ -207,7 +203,7 @@ export function About({ onHome }: { onHome: () => void }) {
               </p>
             </li>
             <li className="archi__item">
-              <span className="archi__tag">scripts + Tailscale</span>
+              <span className="tag-pill">scripts + Tailscale</span>
               <strong>deploy/</strong>
               <p>
                 Scripts de déploiement et de promotion de cache vers la production — un
@@ -216,7 +212,7 @@ export function About({ onHome }: { onHome: () => void }) {
               </p>
             </li>
             <li className="archi__item">
-              <span className="archi__tag">GitHub Actions</span>
+              <span className="tag-pill">GitHub Actions</span>
               <strong>.github/</strong>
               <p>
                 CI (tests + build sur chaque PR) et déploiement automatique : un merge sur{' '}
@@ -224,7 +220,7 @@ export function About({ onHome }: { onHome: () => void }) {
               </p>
             </li>
             <li className="archi__item">
-              <span className="archi__tag">Markdown</span>
+              <span className="tag-pill">Markdown</span>
               <strong>.agent/</strong>
               <p>
                 Notes de R&amp;D (décisions d'algorithmes, arbitrages mesurés) et ledger des
@@ -241,9 +237,8 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__method">
           <header className="sec-head">
-            <span className="sec-head__num">04</span>
             <h2>Comment on obtient ces résultats</h2>
-            <span className="sec-head__hint">méthode &amp; transparence</span>
+            <span className="sec-head__hint">Méthode &amp; transparence</span>
           </header>
           <div className="section-prose">
             <p>
@@ -272,17 +267,16 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__warn">
           <header className="sec-head">
-            <span className="sec-head__num">05</span>
             <h2>Limites &amp; contenu généré par IA</h2>
-            <span className="sec-head__hint">à lire avant de faire confiance aux chiffres</span>
+            <span className="sec-head__hint">À lire avant de faire confiance aux chiffres</span>
           </header>
-          <div className="notebox" role="note">
-            <p className="notebox__title">
-              <span className="notebox__icon" aria-hidden>⚠</span>
-              Une partie du contenu affiché est <strong>généré par un modèle de langage</strong>{' '}
+          <div className="trust-note trust-note--warn" role="note">
+            <p className="trust-note__title">Avertissement</p>
+            <p className="trust-note__lead">
+              Une partie du contenu affiché est <strong>générée par un modèle de langage</strong>{' '}
               (Mistral) — il peut se tromper.
             </p>
-            <ul>
+            <ul className="trust-note__list">
               <li>
                 <strong>Titres et synthèses de thèmes</strong> sont rédigés par un LLM à
                 partir des verbatims du cluster. Même s'il travaille sur des extraits réels,
@@ -315,9 +309,8 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__security">
           <header className="sec-head">
-            <span className="sec-head__num">06</span>
             <h2>Sécurité &amp; souveraineté</h2>
-            <span className="sec-head__hint">fail-closed par défaut</span>
+            <span className="sec-head__hint">Fail-closed par défaut</span>
           </header>
           <div className="section-prose">
             <p>
@@ -337,9 +330,8 @@ export function About({ onHome }: { onHome: () => void }) {
 
         <section className="landing__collab">
           <header className="sec-head">
-            <span className="sec-head__num">07</span>
             <h2>Collaborer</h2>
-            <span className="sec-head__hint">repo ouvert · PR obligatoire</span>
+            <span className="sec-head__hint">Repo ouvert · PR obligatoire</span>
           </header>
           <p className="how__lead">
             Agora est né lors du hackathon de l'Assemblée nationale et continue de vivre en
