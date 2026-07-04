@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import math
 import re
+from collections import Counter
 
 import numpy as np
 
@@ -125,3 +126,74 @@ def rerank_order(members: list[int], sims: np.ndarray, texts: list[str],
     score = gate * dev
     # Tri stable : score desc, puis centralité desc en départage.
     return np.lexsort((-sims, -score))
+
+
+# --------------------------------------------------------------------------- #
+# Sélection DISTINCTIVE — claims denses dans le vocabulaire c-TF-IDF du cluster.
+#
+# Dual du re-ranking DÉVELOPPEMENT ci-dessus (`rerank_order`) mais objectif opposé :
+# non pas l'argument le plus ÉTOFFÉ, mais la contribution qui PORTE le mieux les termes
+# CARACTÉRISTIQUES du cluster. Motivation (cf. `research/cluster_merge_note.md`, §5) :
+# sous l'anisotropie de l'embedding (centroïdes quasi colinéaires, +0.04 de contraste
+# inter-cluster à peine), les claims proches du centroïde sont GÉNÉRIQUES — elles
+# partagent la composante commune du corpus — et font tomber le titrage LLM sur des
+# quasi-synonymes (« addiction » / « temps perdu » répétés entre thèmes DISTINCTS). On
+# ANCRE plutôt le titrage dans les claims riches en vocabulaire distinctif. Déterministe,
+# zéro LLM, zéro mot de domaine en dur.
+#
+# Helper PARTAGÉ : sert le titrage ancré (`backend.titles`) ET la lane stance (sélection
+# des claims saillants d'un pôle par le même critère de distinctivité).
+# --------------------------------------------------------------------------- #
+def cluster_term_weights(texts: list[str], idf: dict[str, float]) -> dict[str, float]:
+    """Poids c-TF-IDF (class-based) des termes d'un cluster : tf_cluster(t) · idf(t).
+
+    `tf_cluster` = nombre TOTAL d'occurrences du terme dans les claims du cluster ; `idf`
+    = idf corpus des claims (cf. `corpus_idf`), qui écrase les termes présents PARTOUT
+    (« tiktok », « vélo »…). Un terme fréquent DANS le cluster et rare AILLEURS pèse
+    lourd = distinctif ; un one-off rare (tf 1) reste modeste. Déterministe, langue-
+    agnostique (même tokenizer que le naming c-TF-IDF). Renvoie {} si aucun token.
+    """
+    tf: Counter[str] = Counter()
+    for t in texts:
+        tf.update(_tokenizer(t))
+    return {tok: c * idf.get(tok, 0.0) for tok, c in tf.items()}
+
+
+def select_distinctive_claims(texts: list[str], idf: dict[str, float], k: int = 5,
+                              *, anchor_terms: list[str] | None = None) -> list[int]:
+    """Indices LOCAUX des ≤`k` claims les plus DENSES dans le vocabulaire distinctif.
+
+    Densité d'un claim = poids c-TF-IDF MOYEN de ses tokens DISTINCTS (cf.
+    `cluster_term_weights`) : on moyenne sur le vocabulaire du claim (set), pas sur les
+    répétitions, pour qu'un claim ne remonte pas juste en martelant un même terme
+    porteur — c'est la RICHESSE en vocabulaire caractéristique qui compte. On surface
+    ainsi les contributions ancrées dans les termes du cluster plutôt que le médoïde
+    générique (centroïde-proche sous anisotropie). Déterministe : tri stable par densité
+    décroissante puis index croissant → même sortie à chaque run, aucun appel LLM.
+
+    `texts` = claims du cluster (pas tout le corpus). `idf` = idf corpus des claims
+    (`corpus_idf`) ; recalculé LOCALEMENT s'il est vide (repli autonome). `anchor_terms`
+    (optionnel, p.ex. les mots-clés c-TF-IDF déjà nommés du nœud) restreint le vocabulaire
+    porteur à ces termes → sélection ALIGNÉE sur les ancres montrées ensuite au LLM.
+
+    API partagée titrage ↔ lane stance : renvoie des indices (le caller mappe vers les
+    textes ou les ids de claims selon son besoin).
+    """
+    n = len(texts)
+    if n == 0 or k <= 0:
+        return []
+    if not idf:
+        idf = corpus_idf(texts)
+    weights = cluster_term_weights(texts, idf)
+    if anchor_terms is not None:
+        allow = {a.lower() for a in anchor_terms}
+        weights = {t: w for t, w in weights.items() if t in allow}
+
+    scored: list[tuple[float, int]] = []
+    for i, text in enumerate(texts):
+        toks = set(_tokenizer(text))
+        density = sum(weights.get(t, 0.0) for t in toks) / len(toks) if toks else 0.0
+        scored.append((density, i))
+    # Tri stable : densité desc, index asc en départage (déterminisme total).
+    scored.sort(key=lambda si: (-si[0], si[1]))
+    return [i for _, i in scored[:k]]
