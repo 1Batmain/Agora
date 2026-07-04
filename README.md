@@ -1,7 +1,5 @@
 # Agora — outil d'analyse des consultations citoyennes
 
-contact :
-Baptiste Duval 0630203409
 
 [![Démo live](https://img.shields.io/badge/D%C3%A9mo_live-forge.tail0b8aa8.ts.net-2ea44f?style=for-the-badge)](https://forge.tail0b8aa8.ts.net)
 &nbsp;
