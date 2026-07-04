@@ -148,6 +148,15 @@ export function ClusterOutline({
           </button>
           {open && (
             <div className="clout__body">
+              {/* Rail gauche cliquable : replie la thématique + matérialise l'imbrication. */}
+              <button
+                type="button"
+                className="clout__collapse-rail"
+                aria-label={`Replier « ${name} »`}
+                title="Replier"
+                onClick={() => toggle(t.id)}
+              />
+              <div className="clout__body-inner">
               <ClusterPanel
                 dataset={dataset}
                 theme={t}
@@ -169,6 +178,7 @@ export function ClusterOutline({
                 onExploreTheme={onExploreTheme}
                 onExploreAvis={onExploreAvis}
               />
+              </div>
             </div>
           )}
         </div>
