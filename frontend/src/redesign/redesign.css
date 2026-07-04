@@ -1950,6 +1950,24 @@ button.opinion__card:disabled { cursor: default; }
   margin: 1.1rem 0 2.4rem;
 }
 
+/* Courte intro non-italique au-dessus de la question, + question en dessous. */
+.overview__question-lead {
+  display: block; font-style: normal; font-size: .82rem; letter-spacing: .04em;
+  text-transform: uppercase; color: #8a8a97; margin-bottom: .35rem;
+}
+.overview__question-text { display: block; }
+/* Lien vers la consultation officielle (sous la question). */
+.overview__official { margin: -1.6rem 0 2.4rem; font-size: .9rem; }
+.overview__official a {
+  color: var(--agora, #000091); text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,145,.3);
+}
+.overview__official a:hover { border-bottom-color: var(--agora, #000091); }
+/* Boutons d'accès placés TOUT EN BAS de la synthèse. */
+.overview__actions--bottom { margin-top: 2rem; padding-top: 1.4rem; border-top: 1px solid #e6e6ef; }
+/* Petite info additionnelle de footer : langues du panel. */
+.overview__langs { margin: .6rem 0 0; font-size: .78rem; color: #9a9aa5; }
+
 /* ── Nom de la consultation en titre MODESTE au-dessus de la question ── */
 .overview__name {
   font-family: ui-monospace, "IBM Plex Mono", monospace;
