@@ -1,0 +1,162 @@
+{
+  "dataset": "tiktok",
+  "question": "Voici le TITRE d'un thème citoyen et quelques contributions. Deux propositions d'« objet de clivage » (X et Y) tentent de résumer la tension débattable AU CŒUR de ce thème. Laquelle capture le mieux le sujet CENTRAL du thème (pas une facette secondaire ni le détail le plus bruyant), tout en restant une proposition polaire claire sur laquelle on peut être POUR ou CONTRE ? Réponds \"X\", \"Y\" ou \"nul\" (équivalentes).",
+  "key": {
+    "n33__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n33",
+      "title": "Perte de temps et culpabilité sur TikTok"
+    },
+    "n33__ac": {
+      "X": "a",
+      "Y": "c",
+      "theme_id": "n33",
+      "title": "Perte de temps et culpabilité sur TikTok"
+    },
+    "n33__bc": {
+      "X": "b",
+      "Y": "c",
+      "theme_id": "n33",
+      "title": "Perte de temps et culpabilité sur TikTok"
+    },
+    "n164__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n164",
+      "title": "Perte de notion du temps"
+    },
+    "n164__ac": {
+      "X": "a",
+      "Y": "c",
+      "theme_id": "n164",
+      "title": "Perte de notion du temps"
+    },
+    "n164__bc": {
+      "X": "b",
+      "Y": "c",
+      "theme_id": "n164",
+      "title": "Perte de notion du temps"
+    },
+    "n14__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n14",
+      "title": "Addiction aux réseaux sociaux"
+    },
+    "n14__bc": {
+      "X": "c",
+      "Y": "b",
+      "theme_id": "n14",
+      "title": "Addiction aux réseaux sociaux"
+    },
+    "n13__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n13",
+      "title": "Dépendance aux réseaux sociaux"
+    },
+    "n13__ac": {
+      "X": "a",
+      "Y": "c",
+      "theme_id": "n13",
+      "title": "Dépendance aux réseaux sociaux"
+    },
+    "n13__bc": {
+      "X": "b",
+      "Y": "c",
+      "theme_id": "n13",
+      "title": "Dépendance aux réseaux sociaux"
+    },
+    "n280__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n280",
+      "title": "Temps perdu à scroller"
+    },
+    "n280__ac": {
+      "X": "c",
+      "Y": "a",
+      "theme_id": "n280",
+      "title": "Temps perdu à scroller"
+    },
+    "n280__bc": {
+      "X": "c",
+      "Y": "b",
+      "theme_id": "n280",
+      "title": "Temps perdu à scroller"
+    },
+    "n163__ab": {
+      "X": "b",
+      "Y": "a",
+      "theme_id": "n163",
+      "title": "Culpabilité liée aux réseaux sociaux"
+    },
+    "n163__ac": {
+      "X": "a",
+      "Y": "c",
+      "theme_id": "n163",
+      "title": "Culpabilité liée aux réseaux sociaux"
+    },
+    "n163__bc": {
+      "X": "c",
+      "Y": "b",
+      "theme_id": "n163",
+      "title": "Culpabilité liée aux réseaux sociaux"
+    },
+    "n267__ab": {
+      "X": "a",
+      "Y": "b",
+      "theme_id": "n267",
+      "title": "Temps excessif sur les applis"
+    },
+    "n267__ac": {
+      "X": "a",
+      "Y": "c",
+      "theme_id": "n267",
+      "title": "Temps excessif sur les applis"
+    },
+    "n267__bc": {
+      "X": "c",
+      "Y": "b",
+      "theme_id": "n267",
+      "title": "Temps excessif sur les applis"
+    },
+    "n29__ab": {
+      "X": "b",
+      "Y": "a",
+      "theme_id": "n29",
+      "title": "Réseaux sociaux et mal-être"
+    },
+    "n29__ac": {
+      "X": "c",
+      "Y": "a",
+      "theme_id": "n29",
+      "title": "Réseaux sociaux et mal-être"
+    },
+    "n29__bc": {
+      "X": "c",
+      "Y": "b",
+      "theme_id": "n29",
+      "title": "Réseaux sociaux et mal-être"
+    },
+    "n273__ab": {
+      "X": "b",
+      "Y": "a",
+      "theme_id": "n273",
+      "title": "Addiction aux applications de réseaux sociaux"
+    },
+    "n273__ac": {
+      "X": "c",
+      "Y": "a",
+      "theme_id": "n273",
+      "title": "Addiction aux applications de réseaux sociaux"
+    },
+    "n273__bc": {
+      "X": "b",
+      "Y": "c",
+      "theme_id": "n273",
+      "title": "Addiction aux applications de réseaux sociaux"
+    }
+  }
+}
