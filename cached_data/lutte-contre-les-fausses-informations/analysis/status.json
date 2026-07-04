@@ -1,0 +1,1 @@
+{"dataset": "lutte-contre-les-fausses-informations", "status": "ready", "phase": "done", "detail": "analyse prête en 481.3s", "done": 32, "total": 32, "error": null, "n_themes": 32, "n_macros": 9, "backend_used": "api", "took_seconds": 481.3}
