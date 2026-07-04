@@ -1,4 +1,5 @@
 import type { ThemeOpinion } from './contract';
+import { stripMd } from './strings';
 
 /**
  * Répartition d'opinion d'un thème FEUILLE, en DEUX niveaux d'insight :
@@ -43,7 +44,7 @@ export function OpinionBar({
       </div>
       <p className="opinion__proposition">
         Par rapport à la question{is_aggregate ? ` (synthèse de ${n_children ?? 0} sous-thèmes)` : ''}&nbsp;:
-        <span className="opinion__cleavage">{proposition}</span>
+        <span className="opinion__cleavage">{stripMd(proposition)}</span>
       </p>
       {is_aggregate && child_propositions && child_propositions.length > 0 && (
         <details className="opinion__children">
@@ -98,7 +99,8 @@ export function OpinionBar({
         (participation volontaire, classement automatique par IA), pas la population générale.
       </p>
 
-      {/* 3 ── (à venir) argument mining : arguments les plus mis en avant pour / contre */}
+      {/* 3 ── argument mining : rendu par <ArgumentsPanel> juste en dessous (artefact
+          optionnel `arguments.json` — voir backend/build_arguments.py) */}
     </div>
   );
 }

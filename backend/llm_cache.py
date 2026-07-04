@@ -63,6 +63,7 @@ def cached_llm(
     accept: Callable[[Any], bool] = bool,
     cache_fallback: bool = True,
     refresh: bool = False,
+    json_mode: bool = False,
 ) -> tuple[Any, str]:
     """Exécute le flux LLM-caché commun et renvoie `(valeur, source)`. Ne lève jamais (LLM/disque).
 
@@ -112,6 +113,7 @@ def cached_llm(
         content = mistral_client.chat(
             build_messages(), model=model,
             temperature=temperature, max_tokens=max_tokens,
+            json_mode=json_mode,
         )
     except mistral_client.MistralError as exc:
         value = fallback_fn("api_error", exc)

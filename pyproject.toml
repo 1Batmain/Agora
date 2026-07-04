@@ -35,6 +35,11 @@ embed-contender = [
 faiss = [
     "faiss-cpu>=1.8",
 ]
+# Collecte open data (pipeline/collect) : consultations citoyennes AN → DuckDB.
+# Optionnel : le chemin serve reste sans base de données.
+collect = [
+    "duckdb>=1.0",
+]
 # NER léger pour l'anonymisation renforcée post-hoc (research/anonymize_pii.py),
 # CPU-only, sans LLM. Modèle à télécharger séparément :
 #   uv run --extra anonymize python -m spacy download fr_core_news_lg
@@ -63,6 +68,7 @@ torch = { index = "pytorch-cpu" }
 # `analysis/` (ou `claims.json` pour /sandbox) du dataset est absent — jamais d'échec
 # parasite ni de build LLM déclenché (cf. backend/tests/conftest.py).
 [tool.pytest.ini_options]
-testpaths = ["backend/tests"]
+testpaths = ["backend/tests", "pipeline/collect/tests", "pipeline/ingest_full/tests",
+             "pipeline/cluster/tests"]
 python_files = ["test_*.py"]
 addopts = "-q -ra"

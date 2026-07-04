@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { AnalysisPayload, Consultation, CostPayload, ThemeOpinion } from './contract';
-import { fetchAnalysis, fetchCost, fetchInsights, fetchOpinion } from './analysisApi';
+import type {
+  AnalysisPayload, Consultation, CostPayload, DemographicsPayload, ThemeArguments, ThemeOpinion,
+} from './contract';
+import {
+  fetchAnalysis, fetchArguments, fetchCost, fetchDemographics, fetchInsights, fetchOpinion,
+} from './analysisApi';
 import { Header } from './Header';
 import { Markdown } from './Markdown';
 import { ClusterOutline, stripSaillants } from './ClusterOutline';
@@ -45,6 +49,10 @@ export function ConsultationOverview({
   const [loading, setLoading] = useState(true);
   // Répartition d'opinion : chargée UNE fois par dataset, lookup par theme_id (gracieux si absent).
   const [opinions, setOpinions] = useState<ThemeOpinion[]>([]);
+  // Arguments minés (artefact OPTIONNEL) : même contrat — vide = pas de panneau.
+  const [themeArgs, setThemeArgs] = useState<ThemeArguments[]>([]);
+  // Profil démographique du panel (artefact OPTIONNEL) : null = pas d'affichage.
+  const [demographics, setDemographics] = useState<DemographicsPayload | null>(null);
   // Coût LLM du traitement (transparence) — null si non mesuré.
   const [cost, setCost] = useState<CostPayload | null>(null);
   // Chemin ouvert de l'outline de clusters (accordéon par niveau).
@@ -63,15 +71,21 @@ export function ConsultationOverview({
     setLoading(true);
     setOpinions([]);
     setOpenPath([]);
+    setThemeArgs([]);
+    setDemographics(null);
     Promise.all([
       fetchAnalysis(dataset.id).catch(() => null),
       fetchInsights(dataset.id, 'global').catch(() => null),
       fetchOpinion(dataset.id).catch(() => []),
-    ]).then(([a, s, op]) => {
+      fetchArguments(dataset.id).catch(() => []),
+      fetchDemographics(dataset.id).catch(() => null),
+    ]).then(([a, s, op, ar, dg]) => {
       if (cancelled) return;
       setAnalysis(a?.data ?? null);
       setSynthesis(s?.data ?? null);
       setOpinions(op ?? []);
+      setThemeArgs(ar ?? []);
+      setDemographics(dg ?? null);
       setLoading(false);
     });
     return () => {
@@ -84,7 +98,10 @@ export function ConsultationOverview({
   // Distinction honnête : participants (lignes reçues) / réponses à LA question (voix,
   // doublons regroupés) / textes uniques analysés. `n_responses` sert de dénominateur vrai.
   const nResp = dataset.n_responses ?? nReponses;
-  const isSampled = dataset.n_sample != null && nResp != null && dataset.n_sample < 0.98 * nResp;
+  // Échantillonné = cap/balance a réduit le corpus (flag backend). La dédup exacte n'en
+  // est PAS un : sans le flag (vieux meta), on retombe sur l'heuristique de ratio.
+  const isSampled = dataset.sampled
+    ?? (dataset.n_sample != null && nResp != null && dataset.n_sample < 0.98 * nResp);
   const hasNonRespondents = nResp != null && nReponses != null && nResp < nReponses;
   const nThemes = totals.n_themes ?? null;
   const langues = (dataset.languages ?? []).map((l) => l.toUpperCase()).join(' · ');
@@ -158,6 +175,33 @@ export function ConsultationOverview({
           </p>
         ) : null}
 
+        {/* PROFIL DU PANEL (artefact démographique OPTIONNEL) : une SEULE ligne sobre —
+            top-2 groupes par axe sur TOUTES les contributions ; l'honnêteté (données
+            déclaratives) vit dans l'infobulle pour ne pas alourdir. */}
+        {demographics?.global && (
+          <p
+            className="overview__demog"
+            role="note"
+            title={`Profil déclaré par les répondants sur ${(demographics.n_contributions
+              ?? demographics.n_avis_matched ?? 0).toLocaleString(LOCALE)} contributions — données déclaratives, éventuellement incomplètes. Ceci n'est pas un sondage.`}
+          >
+            <span className="overview__demog-tag">Profils majoritaires :</span>
+            {/* Choix produit : seul l'ÂGE est affiché ici (le sexe reste servi par l'API
+                et visible dans les chips par thème). */}
+            {demographics.axes.filter((axis) => axis === 'age').map((axis) => {
+              const counts = demographics.global?.[axis] ?? {};
+              const total = Object.values(counts).reduce((s, n) => s + n, 0);
+              if (!total) return null;
+              return Object.entries(counts).slice(0, 2).map(([label, n]) => (
+                <span key={`${axis}:${label}`} className="overview__demog-item">
+                  {label}{axis === 'age' ? ' ans' : ''}{' '}
+                  <strong>{Math.round((n / total) * 100)}%</strong>
+                </span>
+              ));
+            })}
+          </p>
+        )}
+
         <section className="overview__synthesis">
           {/* 1) VUE D'ENSEMBLE — synthèse globale FIXE, toujours en tête. */}
           <div className={`overview__dynsynth${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
@@ -188,6 +232,8 @@ export function ConsultationOverview({
                 total={navTotal}
                 navTotal={navTotal}
                 opinions={opinions}
+                themeArgs={themeArgs}
+                demographics={demographics?.themes ?? []}
                 openPath={openPath}
                 onOpenPath={setOpenPath}
                 onViewGraph={onViewGraph}

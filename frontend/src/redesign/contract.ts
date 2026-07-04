@@ -169,6 +169,83 @@ export interface OpinionPayload {
   status?: string;
 }
 
+/** Une contribution source d'un argument miné (extrait verbatim + lien avis). */
+export interface ArgumentSource {
+  avis_id: string;
+  claim_id: string; // `${avis_id}#${index}` — même clé que /avis
+  text: string; // claim VERBATIM (jamais reformulé)
+  similarity: number; // cos argument↔claim (espace nomic, L2-normalisé)
+}
+
+/**
+ * Un argument miné : phrase SYNTHÉTISÉE par le LLM mais re-SOURCÉE sur des
+ * contributions réelles (fail-closed : il n'existe que si ≥ min_support claims
+ * au-dessus du seuil de similarité le soutiennent).
+ */
+export interface MinedArgument {
+  id: string; // `${theme_id}:${stance}:${k}`
+  theme_id: string;
+  stance: 'pour' | 'contre' | 'neutre';
+  argument: string; // une phrase courte reformulée
+  n_support: number; // claims réellement assignés (comptes disjoints)
+  weight: number;
+  share: number | null; // part du groupe (null sur les agrégats parents)
+  sources: ArgumentSource[]; // top 3-5, similarité décroissante
+  merged_from?: string[]; // parents : feuilles fusionnées (rollup)
+}
+
+/** Arguments minés d'UN thème (artefact OPTIONNEL `arguments.json`). */
+export interface ThemeArguments {
+  theme_id: string;
+  title?: string;
+  mode: 'pour_contre' | 'neutre';
+  proposition: string | null;
+  is_aggregate?: boolean;
+  n_children?: number;
+  n_claims?: Record<string, number>; // tailles des groupes (audit des parts)
+  arguments: MinedArgument[];
+}
+
+/** Payload de `GET /arguments` : arguments minés par thème (vide si non baké). */
+export interface ArgumentsPayload {
+  dataset: string;
+  model?: string;
+  themes: ThemeArguments[];
+  status?: string;
+}
+
+/** Groupe majoritaire d'un axe démographique dans un thème (ou globalement). */
+export interface DemographicMajority {
+  label: string;
+  n: number;
+  share: number; // part parmi les avis du thème AYANT RENSEIGNÉ l'axe
+}
+
+/** Profil démographique d'UN thème (chaque nœud de l'arbre, parents inclus). */
+export interface ThemeDemographics {
+  theme_id: string;
+  n_avis: number;
+  majority: Record<string, DemographicMajority>; // par axe (sexe, age, …)
+  counts?: Record<string, Record<string, number>>;
+}
+
+/**
+ * Payload de `GET /demographics` : profil du panel (artefact OPTIONNEL, pure
+ * jointure avec un CSV enrichi — vide si non baké). Le sexe peut inclure une
+ * complétion synthétique (usage test) — l'affichage reste prudent.
+ */
+export interface DemographicsPayload {
+  dataset: string;
+  axes: string[];
+  /** Contributions du CSV source — dénominateur du GLOBAL (toutes les voix). */
+  n_contributions?: number;
+  n_avis_matched?: number;
+  n_avis_total?: number;
+  global?: Record<string, Record<string, number>>;
+  themes: ThemeDemographics[];
+  status?: string;
+}
+
 /** One citation (verbatim claim) at a leaf theme, sorted by centroid proximity. */
 export interface Citation {
   text: string;
@@ -332,6 +409,10 @@ export interface Consultation {
   n_responses?: number;
   /** Nombre RÉEL de contributions reçues (avant cap d'échantillonnage). */
   n_contributions: number;
+  /** Un ÉCHANTILLONNAGE (cap/balance) a-t-il réduit le corpus ? La dédup exacte n'en
+   *  est PAS un (chaque voix comptée via le poids). Absent sur les vieux meta.json →
+   *  le front garde son heuristique. */
+  sampled?: boolean;
   /** Rétro-compat : alias historique de n_sample (toujours == n_sample). */
   n_nodes: number;
   languages: string[];
