@@ -4,7 +4,8 @@ Une `Consultation` est l'objet servi tel quel par `GET /datasets` (un par datase
 clôturé ET un par consultation ouverte). Il est construit en UN SEUL endroit côté
 backend — `recluster.dataset_descriptor` (clôturées, avec cache d'analyse) et
 `recluster.open_consultation_descriptor` (ouvertes, sans cache) — qui retournent
-tous deux CE type. Le front (`frontend/src/types.ts`) le mirroir à l'identique.
+tous deux CE type. Le front (`frontend/src/redesign/contract.ts`, interface `Consultation`)
+le mirroir à l'identique.
 
 Aucune valeur en dur, aucun champ fantôme : tout est dérivé des données
 (meta.json / ideas cachés / soumissions reçues).
