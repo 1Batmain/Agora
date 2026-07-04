@@ -214,6 +214,13 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consult
     n_responses = meta.get("n_responses", derived.get("n_responses"))
     if n_responses and (meta.get("built_with", {}).get("cap") is None or "n_responses" in meta):
         out["n_responses"] = n_responses
+    # Un ÉCHANTILLONNAGE n'a eu lieu que si cap/balance ont réduit le corpus — la dédup
+    # exacte n'en est PAS un (chaque voix reste comptée via le poids). Le front s'en sert
+    # pour choisir entre la note « Échantillon » et « Couverture complète ». Absent des
+    # vieux meta.json sans built_with (le front garde alors son heuristique).
+    if "built_with" in meta:
+        bw = meta.get("built_with") or {}
+        out["sampled"] = bool(bw.get("cap") or bw.get("balance"))
     # Sujet affiché (consultations clôturées qui en exposent un dans meta.json).
     if meta.get("question"):
         out["question"] = meta["question"]

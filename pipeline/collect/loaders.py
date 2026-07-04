@@ -1,0 +1,176 @@
+"""Lecture des fichiers de données par famille de FORMAT (jamais par consultation).
+
+Chaque loader rend une `Table` : un `header` et un `rows()` rappelable — l'appelant
+fait deux passes (stats puis melt) sur des fichiers locaux, re-lire est bon marché.
+Tout problème de contenu lève `LoaderError` (capturée par l'orchestration qui la
+transforme en statut de fichier, sans faire tomber le run).
+"""
+from __future__ import annotations
+
+import csv
+import io
+import json
+import zipfile
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Callable, Iterator
+
+Row = list  # list[str | None], aligné sur le header
+
+
+class LoaderError(ValueError):
+    """Fichier illisible ou format non pris en charge (détail dans le message)."""
+
+
+@dataclass(frozen=True)
+class Table:
+    header: list[str]
+    rows: Callable[[], Iterator[Row]]
+
+
+def load_table(path: Path, fmt: str) -> Table:
+    if fmt == "csv":
+        return _load_csv(path)
+    if fmt == "json_zip":
+        return _load_json(_read_zip_member(path))
+    if fmt == "json":
+        return _load_json(path.read_bytes())
+    raise LoaderError(f"format non pris en charge : {fmt} ({path.name})")
+
+
+# --- CSV (famille LimeSurvey : cp1252, ';', cellules multi-lignes quotées) ----
+
+def _sniff_csv(path: Path) -> tuple[str, str]:
+    """(encodage, délimiteur) — utf-8 strict d'abord, repli cp1252 (ne rate jamais)."""
+    head = path.open("rb").read(1 << 16)
+    try:
+        text = head.decode("utf-8")
+        encoding = "utf-8-sig"
+    except UnicodeDecodeError:
+        text = head.decode("cp1252", errors="replace")
+        encoding = "cp1252"
+    first_line = text.splitlines()[0] if text else ""
+    delimiter = max((";", ",", "\t"), key=first_line.count)
+    return encoding, delimiter
+
+
+def _load_csv(path: Path) -> Table:
+    encoding, delimiter = _sniff_csv(path)
+
+    def read(f) -> Iterator[Row]:
+        return csv.reader(f, delimiter=delimiter)
+
+    with path.open(encoding=encoding, newline="") as f:
+        try:
+            header = next(read(f))
+        except StopIteration:
+            raise LoaderError(f"CSV sans header : {path.name}") from None
+    width = len(header)
+
+    def rows() -> Iterator[Row]:
+        with path.open(encoding=encoding, newline="") as f:
+            it = read(f)
+            next(it, None)  # header
+            for row in it:
+                # Normalise à la largeur du header (lignes courtes complétées).
+                yield row[:width] + [None] * (width - len(row))
+
+    return Table(header=header, rows=rows)
+
+
+# --- JSON (liste d'objets, zippé ou non) --------------------------------------
+
+def _read_zip_member(path: Path) -> bytes:
+    try:
+        with zipfile.ZipFile(path) as z:
+            names = z.namelist()
+            json_names = [n for n in names if n.lower().endswith(".json")]
+            if len(json_names) != 1:
+                raise LoaderError(f"zip sans membre JSON unique : {names} ({path.name})")
+            return z.read(json_names[0])
+    except zipfile.BadZipFile as e:
+        raise LoaderError(f"zip corrompu : {path.name} ({e})") from e
+
+
+def _coerce(value) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False)
+    return str(value)
+
+
+def _parse_json(raw: bytes):
+    """JSON tolérant : contrôles bruts dans les chaînes acceptés (strict=False),
+    repli JSON Lines quand le document est une suite d'objets (un par ligne)."""
+    try:
+        return json.loads(raw, strict=False)
+    except json.JSONDecodeError as e:
+        if "Extra data" not in e.msg:
+            raise LoaderError(f"JSON invalide : {e}") from e
+    records = []
+    for n, line in enumerate(raw.splitlines(), start=1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            records.append(json.loads(line, strict=False))
+        except json.JSONDecodeError as e:
+            raise LoaderError(f"JSON Lines invalide (ligne {n}) : {e}") from e
+    return records
+
+
+def _flatten(record: dict, prefix: str = "") -> list[dict]:
+    """Aplatit un objet JSON en lignes plates et GÉNÉRIQUES : les dicts imbriqués
+    deviennent des chemins pointés (`a.b`), chaque liste imbriquée explose la
+    ligne (une ligne par item, héritant des champs scalaires des ancêtres) —
+    c'est la forme des exports agrégés par question observés sur le portail."""
+    base: dict = {}
+    exploded: list[list[dict]] = []
+    for key, value in record.items():
+        path = f"{prefix}{key}"
+        if value is None:
+            continue
+        if isinstance(value, dict):
+            sub = _flatten(value, path + ".")
+            if len(sub) == 1:
+                base.update(sub[0])
+            elif sub:
+                exploded.append(sub)
+        elif isinstance(value, list):
+            item_rows: list[dict] = []
+            for item in value:
+                if isinstance(item, dict):
+                    item_rows.extend(_flatten(item, path + "."))
+                elif item is not None:
+                    item_rows.append({path: _coerce(item)})
+            exploded.append(item_rows)
+        else:
+            base[path] = _coerce(value)
+    if not exploded:
+        return [base]
+    return [{**base, **sub} for part in exploded for sub in part]
+
+
+def _load_json(raw: bytes) -> Table:
+    data = _parse_json(raw)
+    if isinstance(data, dict):
+        data = [data]
+    if not isinstance(data, list) or any(not isinstance(r, dict) for r in data):
+        raise LoaderError("JSON attendu : objet ou liste d'objets")
+    records = [flat for record in data for flat in _flatten(record)]
+    header: list[str] = []
+    seen = set()
+    for record in records:
+        for key in record:
+            if key not in seen:
+                seen.add(key)
+                header.append(key)
+
+    def rows() -> Iterator[Row]:
+        for record in records:
+            yield [record.get(k) for k in header]
+
+    return Table(header=header, rows=rows)

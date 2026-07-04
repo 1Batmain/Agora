@@ -1,6 +1,15 @@
 # Lane data — ingestion · prétraitement · anonymisation
 
-Owns: `data/` (gitignored), `pipeline/ingest/`. Sortie = Idea JSONL canonique.
+Owns: `data/` (gitignored), `pipeline/ingest/`, `pipeline/collect/`. Sortie = Idea JSONL canonique.
+
+## T-D5 · Collecte multi-consultations AN → DuckDB
+- Goal : scraper le portail open data (data.assemblee-nationale.fr/autres/
+  consultations-citoyennes), télécharger toutes les consultations publiées et les
+  exposer dans une base DuckDB canonique (catalogue + vue `contributions`).
+- Accept : `python -m pipeline.collect run` catalogue ~30 consultations ; les
+  pathologiques (dump SQL 476 Mo, fichiers vides serveur) sont cataloguées
+  skipped/empty sans bloquer ; re-run idempotent ; zéro slug en dur.
+- Deps : aucune (module autonome ; pattern DuckDB repris de remontrances).
 
 ## T-D1 · Scripts de download reproductibles
 - Goal : récupérer Consultation TikTok (open data AN) + x-stance (ZurichNLP) dans
