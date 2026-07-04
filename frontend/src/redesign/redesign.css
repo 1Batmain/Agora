@@ -1734,21 +1734,35 @@ button.opinion__card:disabled { cursor: default; }
 .clout__sublead { margin: 0 0 .35rem; }
 .overview__retenir { margin-top: 1.2rem; }
 .clout__stance { margin-top: 1.4rem; }
+/* Analyse de stance INTÉGRÉE à la synthèse : c'est un insight, pas un dashboard →
+   pas de fond blanc, pas de cartes, police alignée sur le texte. Couleurs fav/déf et
+   clic (voir les avis) conservés. */
+.clout__stance .opinion { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
+.clout__stance .opinion__proposition { font-size: .95rem; margin: .35rem 0 .55rem; }
+.clout__stance .opinion__cards { gap: 1.1rem; margin: .5rem 0 .2rem; }
+.clout__stance .opinion__card,
+.clout__stance .opinion__card--pos,
+.clout__stance .opinion__card--neg { padding: 0; border: 0; background: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) { transform: none; box-shadow: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) .opinion__card-sub { text-decoration: underline; }
+.clout__stance .opinion__card-pct { font-size: 1.05rem; }
 /* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
+/* Hero témoignage INTÉGRÉ à la synthèse : pas de fond, juste un liseré discret comme
+   marqueur de citation ; police alignée. Reste cliquable (→ tous les témoignages). */
 .overview__hero {
-  margin: .2rem 0 1.2rem; padding: 1rem 1.1rem; cursor: pointer;
-  background: var(--agora-soft, #ececfe); border: 1px solid rgba(0,0,145,.14);
-  border-left: 3px solid var(--agora, #000091); border-radius: 8px;
-  transition: background .12s, border-color .12s;
+  margin: .2rem 0 1.2rem; padding: .1rem 0 .1rem .9rem; cursor: pointer;
+  background: none; border: 0; border-left: 3px solid var(--agora-soft, #ececfe);
+  transition: border-color .12s;
 }
-.overview__hero:hover { background: #e2e2fb; }
+.overview__hero:hover { border-left-color: var(--agora, #000091); }
+.overview__hero:hover .overview__hero-more { text-decoration: underline; }
 .overview__hero:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
 .overview__hero-label {
   font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--agora, #000091); font-weight: 700; margin-bottom: .4rem;
+  color: #8a8a97; font-weight: 700; margin-bottom: .35rem;
 }
-.overview__hero-quote { margin: 0; font-size: 1.05rem; line-height: 1.6; font-style: italic; color: #222; }
-.overview__hero-more { display: inline-block; margin-top: .5rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
+.overview__hero-quote { margin: 0; font-size: 1rem; line-height: 1.6; font-style: italic; color: #333; }
+.overview__hero-more { display: inline-block; margin-top: .45rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
 /* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
 .clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
 @media (max-width: 640px) {
