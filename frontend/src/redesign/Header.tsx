@@ -7,9 +7,19 @@ import type { ReactNode } from 'react';
  *  - `onHome` : si fourni, un bouton explicite « ← Accueil » apparaît à côté du
  *    brand (logo + titre) — LUI AUSSI cliquable, en repli. Absent (sur la
  *    landing) → ni bouton, ni brand cliquable.
+ *  - `onAbout` : si fourni, un lien « Comment ça marche ? » apparaît à droite,
+ *    vers la page de présentation du projet (architecture, pipeline, équipe).
  *  - `right`  : contenu optionnel à droite (nom de la consultation, badge statut…).
  */
-export function Header({ onHome, right }: { onHome?: () => void; right?: ReactNode }) {
+export function Header({
+  onHome,
+  onAbout,
+  right,
+}: {
+  onHome?: () => void;
+  onAbout?: () => void;
+  right?: ReactNode;
+}) {
   const brandInner = (
     <>
       <div className="gov-logo" aria-hidden>
@@ -47,7 +57,16 @@ export function Header({ onHome, right }: { onHome?: () => void; right?: ReactNo
           <div className="gov-header__brand">{brandInner}</div>
         )}
       </div>
-      {right && <div className="gov-header__right">{right}</div>}
+      {(onAbout || right) && (
+        <div className="gov-header__right">
+          {onAbout && (
+            <button type="button" className="gov-header__navlink" onClick={onAbout}>
+              Comment ça marche ?
+            </button>
+          )}
+          {right}
+        </div>
+      )}
     </header>
   );
 }
