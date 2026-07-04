@@ -30,11 +30,19 @@ from backend.analysis import (
     _dataset_context,
     get_or_build_tree,
 )
+from backend.analysis_store import INSIGHTS_DIRNAME  # même DIRNAME, source unique
 from backend.llm_cache import DISK, MEMORY, cached_llm
 from backend.recluster import dataset_dir
 from pipeline.cluster import mistral_client
 
-INSIGHTS_DIRNAME = "insights"
+# DEUX caches d'insights partagent le DIRNAME "insights" mais vivent sous des parents
+# DIFFÉRENTS et avec des schémas de nom DIFFÉRENTS — ce n'est pas un doublon, ce sont deux
+# étages :
+#   • BAKÉ  (analysis_store.insights_path) : <dataset>/analysis/insights/<global|theme_id>.json
+#     — précalculé au BUILD, servi tel quel quand l'analyse est prête (nom SÉMANTIQUE) ;
+#   • LIVE  (_disk_path ci-dessous)        : <dataset>/insights/<key_hash>.json
+#     — repli à la demande hors analyse bakée, caché par HASH de contenu.
+# On importe le DIRNAME depuis analysis_store pour n'avoir qu'un seul littéral "insights".
 INSIGHTS_MAX_TOKENS = 1200          # rapport COURT (tient dans le panneau)
 MAX_THEMES_IN_GLOBAL = 40           # garde-fou structurel de taille de prompt
 REP_PER_THEME = 2                   # claims représentatives citées par thème
@@ -476,6 +484,8 @@ def _strip_code_fence(text: str) -> str:
 
 
 def _disk_path(dataset: str, key_hash: str) -> Path:
+    # Cache LIVE (repli hors analyse bakée) : <dataset>/insights/<hash>.json — à distinguer
+    # du cache BAKÉ `analysis_store.insights_path` (<dataset>/analysis/insights/<name>.json).
     return dataset_dir(dataset) / INSIGHTS_DIRNAME / f"{key_hash}.json"
 
 
