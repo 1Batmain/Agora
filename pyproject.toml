@@ -40,6 +40,16 @@ faiss = [
 collect = [
     "duckdb>=1.0",
 ]
+# Stack web RUNTIME (endpoints SERVE-only). Séparée du cœur pipeline/build (qui n'importe
+# JAMAIS fastapi) : `--extra serve` ne s'active qu'au serveur. Déclarée+ÉPINGLÉE ici (et
+# donc dans uv.lock) pour qu'une montée majeure FastAPI/pydantic ne casse pas la prod en
+# silence — auparavant tirée non-versionnée via `uv run --with fastapi --with uvicorn`.
+serve = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn>=0.30,<1.0",
+    "starlette>=0.37,<2.0",
+    "pydantic>=2,<3",
+]
 # NER léger pour l'anonymisation renforcée post-hoc (research/anonymize_pii.py),
 # CPU-only, sans LLM. Modèle à télécharger séparément :
 #   uv run --extra anonymize python -m spacy download fr_core_news_lg
@@ -63,7 +73,7 @@ explicit = true
 torch = { index = "pytorch-cpu" }
 
 # Suite de régression API (FastAPI TestClient in-process, lit les vrais caches).
-# Lancer :  uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
+# Lancer :  uv run --extra embed-contender --extra faiss --extra serve --with pytest pytest -q
 # Les tests dépendant d'une analyse précalculée se SKIPPENT proprement si le cache
 # `analysis/` (ou `claims.json` pour /sandbox) du dataset est absent — jamais d'échec
 # parasite ni de build LLM déclenché (cf. backend/tests/conftest.py).

@@ -108,7 +108,7 @@ Backend — API FastAPI sur `:8010`, sert **uniquement le cache précalculé** (
 `/analysis`, `/insights`, `/citations`, `/opinion`, `/avis_list`, `/cost`) — aucun calcul
 lourd à la requête :
 ```bash
-uv run --extra contender --extra embed-contender --extra faiss --with fastapi \
+uv run --extra contender --extra embed-contender --extra faiss --extra serve \
   uvicorn backend.server:app --host 0.0.0.0 --port 8010
 ```
 Frontend — Vite sur `:5180` (proxifie `/api/*` vers `:8010`) :
@@ -140,7 +140,7 @@ build LLM). Les tests qui exigent une analyse précalculée **se skippent propre
 cache d'un dataset est absent — jamais d'échec parasite, jamais de build déclenché.
 
 ```bash
-make test    # ou : uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q
+make test    # ou : uv run --extra embed-contender --extra faiss --extra serve --with pytest pytest -q
 ```
 
 `backend/tests/test_integration.py` suit les vrais parcours : landing (`/datasets`),
