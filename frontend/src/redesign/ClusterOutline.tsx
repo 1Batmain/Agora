@@ -240,7 +240,6 @@ function ClusterPanel({
   const { body, retenir } = splitRetenir(stripSaillants(synthesis));
   const keywords = theme.keywords ?? [];
   const avisN = theme.n_avis ?? 0;
-  const claimsN = theme.n_claims ?? 0;
   const pct = navTotal > 0 ? Math.round((avisN / navTotal) * 100) : null;
   const allAvis = citations ?? [];
   const repAvis = (selectedKeyword
@@ -258,11 +257,6 @@ function ClusterPanel({
           </span>
           {pct != null && (
             <span className="overview__dash-item overview__dash-pct">{pct}% du panel</span>
-          )}
-          {claimsN > 0 && (
-            <span className="overview__dash-item">
-              <strong>{claimsN.toLocaleString(LOCALE)}</strong> idées
-            </span>
           )}
         </div>
       )}
