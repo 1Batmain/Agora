@@ -1,14 +1,15 @@
 """Store + corrélation des contributions citoyennes (consultations OUVERTES).
 
-PAS de LLM : chaque contribution est embeddée avec l'embedder nomic-v2 LOCAL (le
-même que les caches d'analyse) et corrélée au cosinus aux contributions déjà
-reçues. Aucune clé, aucun appel réseau.
+PAS de LLM : chaque contribution est embeddée avec l'embedder LOCAL (le même
+modèle — cf. `EMBED_MODEL_ID`, `.env` — que les caches d'analyse) et corrélée au
+cosinus aux contributions déjà reçues. Aucune clé, aucun appel réseau.
 
 Store append-only par consultation, deux fichiers sous `backend/cache/<id>/` :
   - `submissions.seed.jsonl` : seed de démo COMMITTÉ (corrélation non vide dès la
     1ʳᵉ vraie contribution) ; immuable.
   - `submissions.jsonl`       : contributions réelles, append-only, GITIGNORÉ.
-Une ligne = `{text, vec, ts}` (`vec` = embedding nomic-v2 L2-normalisé, 768 d).
+Une ligne = `{text, vec, ts}` (`vec` = embedding L2-normalisé, dimension du
+modèle configuré — 768 pour nomic-v2, 1024 pour jina-v3).
 
 Le module est volontairement INDÉPENDANT de `recluster` (pas d'import croisé) :
 il recalcule `CACHE_DIR` lui-même pour rester importable sans torch tant qu'on
@@ -35,6 +36,9 @@ LIVE_NAME = "submissions.jsonl"
 # retour produit) plafonnent ~0.54, les paraphrases reliées (perf/export/mobile)
 # atteignent 0.70–0.75. 0.68 sépare proprement « même sujet » de « hors-sujet ».
 # Ce n'est PAS un littéral de corpus : c'est une calibration de l'embedder.
+# ATTENTION en changeant `EMBED_MODEL_ID` : cette valeur est spécifique à
+# nomic-v2 — un autre modèle (jina-v3…) a sa PROPRE distribution de cosinus et
+# nécessite une recalibration (cf. R&D : mesurer avant d'adopter).
 SIMILARITY_THRESHOLD = 0.68
 
 
@@ -91,16 +95,16 @@ _EMBEDDER = None
 
 
 def embed_text(text: str) -> np.ndarray:
-    """Embedde un texte avec l'embedder nomic-v2 LOCAL (lazy-loadé, singleton).
+    """Embedde un texte avec l'embedder LOCAL (lazy-loadé, singleton).
 
     Le modèle torch n'est chargé qu'au 1ᵉʳ appel (1ʳᵉ contribution reçue) — le
     serveur démarre sans torch. Vecteur L2-normalisé (cosine = produit scalaire).
     """
     global _EMBEDDER
     if _EMBEDDER is None:
-        from pipeline.embed.embedder import Embedder  # lazy : pas de torch au boot
+        from pipeline.embed.embedder import create_embedder  # lazy : pas de torch au boot
 
-        _EMBEDDER = Embedder()
+        _EMBEDDER = create_embedder()
     return _EMBEDDER.embed(text)
 
 

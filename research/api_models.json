@@ -7,11 +7,27 @@
     "api_key": ""
   },
   {
+    "name": "LMStudio-Jina-v3",
+    "source": "lmstudio",
+    "url": "http://127.0.0.1:1234/v1/embeddings",
+    "path": "jina-embeddings-v3",
+    "api_key": ""
+  },
+  {
+    "name": "LMStudio-Jina-v3-1024",
+    "source": "lmstudio",
+    "url": "http://127.0.0.1:1234/v1/embeddings",
+    "path": "jina-embeddings-v3",
+    "api_key": "",
+    "dimensions": 1024
+  },
+  {
     "name": "Nvidia-NIM-Example",
     "source": "nvidia nim",
     "url": "https://integrate.api.nvidia.com/v1/embeddings",
     "path": "nvidia/nv-embedqa-e5-v5",
-    "api_key": "YOUR_NVIDIA_API_KEY"
+    "api_key": "${NIM_API_KEY}",
+    "input_type": "passage"
   },
   {
     "name": "Mistral-API",
@@ -19,5 +35,13 @@
     "url": "https://api.mistral.ai/v1/embeddings",
     "path": "mistral-embed",
     "api_key": "YOUR_MISTRAL_API_KEY"
+  },
+  {
+    "name": "Nvidia-NIM-Embed-v1-7B",
+    "source": "nvidia nim",
+    "url": "https://integrate.api.nvidia.com/v1/embeddings",
+    "path": "nvidia/nv-embed-v1",
+    "api_key": "${NIM_API_KEY}",
+    "input_type": "passage"
   }
 ]

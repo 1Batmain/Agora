@@ -66,6 +66,21 @@ REGISTRY: dict[str, ModelSpec] = {
         normalize=True,
         note="MoE multilingue ; requiert einops ; matryoshka (dim native gardée).",
     ),
+    # Multilingue fort (89 langues), code custom (blocs XLM-RoBERTa + LoRA task-adapters)
+    # => trust_remote_code. AUCUN préfixe texte (contrairement à nomic/e5) : la
+    # spécialisation tâche passe par un adaptateur LoRA choisi via `task=` à l'encodage,
+    # pas par une chaîne prependée — le préfixe reste donc vide ici.
+    "jinaai/jina-embeddings-v3": ModelSpec(
+        model_id="jinaai/jina-embeddings-v3",
+        doc_prefix="",
+        query_prefix="",
+        trust_remote_code=True,
+        # TODO: épingler un commit HF précis avant tout déploiement prod (cf. note
+        # sécurité sur `revision` ci-dessus) — laissé à `None` (main) en R&D.
+        revision=None,
+        normalize=True,
+        note="1024d, multilingue, LoRA task-adapters ; nécessite trust_remote_code.",
+    ),
     # Multilingue fort. AUCUN préfixe — en ajouter dégraderait la qualité.
     "BAAI/bge-m3": ModelSpec(
         model_id="BAAI/bge-m3",
@@ -85,6 +100,8 @@ ALIASES: dict[str, str] = {
     "nomic-v2": "nomic-ai/nomic-embed-text-v2-moe",
     "bge-m3": "BAAI/bge-m3",
     "bge": "BAAI/bge-m3",
+    "jina": "jinaai/jina-embeddings-v3",
+    "jina-v3": "jinaai/jina-embeddings-v3",
 }
 
 

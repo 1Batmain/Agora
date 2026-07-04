@@ -22,18 +22,74 @@ modèle chargé par instance — n'instanciez pas les 3 modèles simultanément
 
 from __future__ import annotations
 
+import os
 import time
+from pathlib import Path
 from typing import Iterable
 
 import numpy as np
 
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
+
+def _dotenv_value(name: str) -> str | None:
+    """Lit `name=...` dans le `.env` racine si absent de l'environnement shell.
+
+    Même convention minimale que `pipeline.cluster.mistral_client` (pas de
+    dépendance `python-dotenv`) : env réel d'abord, `.env` en repli.
+    """
+    env = os.environ.get(name)
+    if env and env.strip():
+        return env.strip()
+    dotenv = Path(__file__).resolve().parents[2] / ".env"
+    if not dotenv.exists():
+        return None
+    try:
+        for raw in dotenv.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            if key.strip() == name:
+                return val.strip().strip("\"'") or None
+    except OSError:
+        return None
+    return None
+
+
 # Défaut = le WINNER multilingue validé (banc qualité, cf. `.agent/queue/cross-lane.md`).
 # nomic-v2 mixe les langues PAR THÈME (NMI cluster↔langue=0.008) ; e5-small
 # clusterise PAR LANGUE (NMI=0.81) → inutilisable en multilingue. Le défaut batch
 # doit être COHÉRENT avec le backend live (qui embedde déjà en nomic-v2 / cache).
-DEFAULT_MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
+# Surchargeable via `EMBED_MODEL_ID` (env ou `.env` racine) — alias ou model_id
+# complet — pour passer à un contender (ex. jina-v3) SANS toucher au code ni
+# écraser le cache existant (chaque model_id a son propre cache dataset).
+DEFAULT_MODEL_ID = resolve_model_id(
+    _dotenv_value("EMBED_MODEL_ID") or "nomic-ai/nomic-embed-text-v2-moe"
+)
+
+
+def create_embedder(model_id: str | None = None):
+    """Fabrique l'embedder de PROD : API (LM Studio, NIM…) si `EMBED_API_URL` est
+    défini, sinon `Embedder` LOCAL (poids torch en RAM).
+
+    Ceci permet de servir un modèle (ex. Jina v3) depuis un runtime GGUF/LM
+    Studio sans passer par `sentence-transformers` + `trust_remote_code` en
+    process — juste un appel HTTP compatible OpenAI `/v1/embeddings`.
+    `model_id` : override explicite (ex. `--model` de build_cache) ; sinon
+    `EMBED_MODEL_ID`/défaut.
+    """
+    api_url = _dotenv_value("EMBED_API_URL")
+    if api_url:
+        from pipeline.embed.api_embedder import APIEmbedder
+
+        model_path = _dotenv_value("EMBED_API_MODEL_PATH") or model_id or DEFAULT_MODEL_ID
+        return APIEmbedder(
+            url=api_url,
+            model_path=model_path,
+            api_key=_dotenv_value("EMBED_API_KEY") or "",
+        )
+    return Embedder(model_id=model_id or DEFAULT_MODEL_ID)
 
 
 class Embedder:

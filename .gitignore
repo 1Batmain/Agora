@@ -48,3 +48,6 @@ backend/cache/*/density.json
 # Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
 backend/cache/*/submissions.jsonl
 eval/
+
+# Documentation interne hackathon (non versionnée)
+hackathon-an-2026/docs/ARCHITECTURE.md

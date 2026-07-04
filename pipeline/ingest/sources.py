@@ -265,11 +265,21 @@ def _read_jsonl(desc: SourceDescriptor, path: Path) -> Iterator[dict]:
 
 
 def load_descriptors(paths: list[Path] | None = None) -> list["SourceDescriptor"]:
-    """Charge des descripteurs explicites, ou tous ceux de `descriptors/` (triés)."""
+    """Charge des descripteurs explicites, ou tous ceux de `descriptors/` (triés).
+
+    Les descripteurs `status: open` (consultations sans fichier source — collecte
+    live via le backend) sont ignorés : ils n'ont pas les champs `format/path/columns`.
+    """
     if paths:
         return [SourceDescriptor.from_json(p) for p in paths]
     files = sorted(config.DESCRIPTORS_DIR.glob("*.json"))
-    return [SourceDescriptor.from_json(p) for p in files]
+    result = []
+    for p in files:
+        raw = json.loads(p.read_text(encoding="utf-8"))
+        if raw.get("status") == "open":
+            continue
+        result.append(SourceDescriptor.from_dict(raw))
+    return result
 
 
 def read_generic(desc: SourceDescriptor, root: Path | None = None) -> Iterator[dict]:

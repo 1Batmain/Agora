@@ -18,19 +18,27 @@ class APIEmbedder:
         model_path: str,
         api_key: str = "",
         batch_size: int = 32,
+        input_type: str | None = None,
+        dimensions: int | None = None,
     ) -> None:
         """Initialise le client API pour le modèle d'embedding.
-        
+
         Args:
             url: Endpoint de l'API (ex: 'http://localhost:1234/v1/embeddings').
             model_path: Nom ou identifiant du modèle côté serveur.
             api_key: Clé API si requise (vide pour LMStudio local).
             batch_size: Taille du batch de requêtes envoyées à l'API.
+            input_type: `input_type` NIM ('query'/'passage'), requis par les
+                modèles asymétriques (ex. `nv-embedqa-e5-v5`). None = omis.
+            dimensions: Troncature Matryoshka (ex. Jina-v3) via le champ
+                OpenAI `dimensions`. None = dimension native du modèle.
         """
         self.url = url
         self.model_path = model_path
         self.api_key = api_key
         self.batch_size = batch_size
+        self.input_type = input_type
+        self.dimensions = dimensions
         self._dim = None
 
     def embed(
@@ -58,6 +66,10 @@ class APIEmbedder:
                 "input": batch,
                 "model": self.model_path,
             }
+            if self.input_type:
+                payload["input_type"] = "query" if is_query else self.input_type
+            if self.dimensions:
+                payload["dimensions"] = self.dimensions
             try:
                 resp = httpx.post(self.url, json=payload, headers=headers, timeout=120.0)
                 resp.raise_for_status()
@@ -82,6 +94,11 @@ class APIEmbedder:
             arr = np.divide(arr, norms, out=np.zeros_like(arr), where=norms != 0)
 
         return arr[0] if single else arr
+
+    @property
+    def model_id(self) -> str:
+        """Alias de `model_path`, pour interface commune avec `Embedder` (batch/cache)."""
+        return self.model_path
 
     @property
     def dim(self) -> int:

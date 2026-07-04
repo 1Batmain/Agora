@@ -20,6 +20,8 @@ import numpy as np
 from backend.consultation_schema import Consultation
 from pipeline.cluster.io import Idea
 from pipeline.cluster.naming_methods import DEFAULT_NAMING, NAMING_METHODS
+from pipeline.embed.embedder import DEFAULT_MODEL_ID as _EMBED_DEFAULT_MODEL_ID
+from pipeline.embed.embedder import _dotenv_value
 
 # Méthodes de NOMMAGE switchables (orthogonales au clustering). "ctfidf" = défaut
 # (rétro-compat) ; "centroid" = verbatim représentatif ; "llm" = titre via API Mistral.
@@ -31,13 +33,20 @@ DEFAULT_NAMING_METHOD = DEFAULT_NAMING
 # les datasets sont DÉCOUVERTS en scannant le dossier). Défaut rétro-compat =
 # "tiktok".
 CACHE_DIR = Path(__file__).resolve().parent / "cache"
-DEFAULT_DATASET = "tiktok"
+# Surchargeable via `EMBED_DATASET` (.env) : chaque dataset a son propre cache
+# (dossier `backend/cache/<dataset>/`), donc changer de modèle d'embedding =
+# pointer vers un AUTRE dataset (ex. "tiktok-jina"), sans jamais écraser le
+# cache "tiktok" existant (nomic-v2).
+DEFAULT_DATASET = _dotenv_value("EMBED_DATASET") or "tiktok"
 
 # Descripteurs d'ingestion (un par consultation). Les consultations OUVERTES
 # (status:"open") n'ont pas encore de cache d'analyse : on les découvre ici.
 DESCRIPTORS_DIR = Path(__file__).resolve().parent.parent / "pipeline" / "ingest" / "descriptors"
 
-MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
+# Affiché par /health ; surchargeable via `EMBED_MODEL_ID` (.env, cf.
+# pipeline.embed.embedder.DEFAULT_MODEL_ID). Purement informatif ici — le
+# clustering live ne réembedde jamais, il lit les vecteurs déjà en cache.
+MODEL_ID = _EMBED_DEFAULT_MODEL_ID
 
 EMB_NAME = "embeddings.npy"
 IDEAS_NAME = "ideas.jsonl"

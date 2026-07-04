@@ -83,7 +83,9 @@ def eval_api_model(
         url=url,
         model_path=model_path,
         api_key=api_key,
-        batch_size=32
+        batch_size=32,
+        input_type=config.get("input_type"),
+        dimensions=config.get("dimensions"),
     )
 
     t0 = time.perf_counter()
@@ -183,6 +185,12 @@ def main(argv: list[str] | None = None) -> int:
 
     with open(args.config, "r", encoding="utf-8") as f:
         models_config = json.load(f)
+
+    # Résolution `${VAR}` -> variable d'environnement pour api_key (jamais de secret en clair dans le JSON).
+    for m in models_config:
+        key = m.get("api_key", "")
+        if key.startswith("${") and key.endswith("}"):
+            m["api_key"] = os.environ.get(key[2:-1], "")
 
     p = dict(DEFAULTS)
     p["k"] = args.k

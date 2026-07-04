@@ -32,7 +32,7 @@ from time import perf_counter
 import numpy as np
 
 from backend.recluster import CACHE_DIR, EMB_NAME, IDEAS_NAME, META_NAME
-from pipeline.embed.embedder import Embedder
+from pipeline.embed.embedder import DEFAULT_MODEL_ID, create_embedder
 from pipeline.ingest import download
 from pipeline.ingest.build import to_idea
 from pipeline.ingest.config import DESCRIPTORS_DIR
@@ -126,7 +126,7 @@ def build_cache(
     dataset: str = "tiktok",
     *,
     descriptor: str | None = None,
-    model: str = "nomic-v2",
+    model: str = DEFAULT_MODEL_ID,
     min_chars: int = 1,
     dedup_exact: bool = True,
     balance: str | None = None,
@@ -162,8 +162,8 @@ def build_cache(
     if not ideas:
         raise SystemExit("Aucun avis après sous-échantillonnage (filtres trop stricts ?).")
 
-    # SEUL appel au modèle torch de tout le système live.
-    embedder = Embedder(model_id=model)
+    # SEUL appel au modèle (torch local OU API type LM Studio) de tout le système live.
+    embedder = create_embedder(model_id=model)
     texts = [_idea_clean(i) for i in ideas]
     print(f"Embedding {len(texts)} avis [{dataset}] avec {embedder.model_id} (~1 min)…")
     vecs = embedder.embed(texts).astype(np.float32)
@@ -235,7 +235,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Cache d'embeddings nomic-v2 par dataset.")
     ap.add_argument("--dataset", default="tiktok", help="id du dataset = nom du descripteur")
     ap.add_argument("--descriptor", default=None, help="chemin descripteur explicite (override)")
-    ap.add_argument("--model", default="nomic-v2", help="alias/model_id (défaut nomic-v2)")
+    ap.add_argument(
+        "--model", default=DEFAULT_MODEL_ID,
+        help="alias/model_id (défaut : EMBED_MODEL_ID du .env, sinon nomic-v2)",
+    )
     ap.add_argument("--min-chars", type=int, default=1, help="filtre avis trop courts")
     ap.add_argument("--no-dedup-exact", action="store_true", help="garder les textes identiques")
     ap.add_argument("--balance", default=None,
