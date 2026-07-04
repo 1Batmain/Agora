@@ -114,6 +114,9 @@ def citations_path(dataset: str, theme_id: str) -> Path:
 
 
 def insights_path(dataset: str, level: str, theme_id: str | None) -> Path:
+    # Cache BAKÉ (précalculé au build) : <dataset>/analysis/insights/<global|theme_id>.json,
+    # nom SÉMANTIQUE. Le repli LIVE (`backend.insights._disk_path`) réutilise le même DIRNAME
+    # mais sous <dataset>/insights/ et nommé par HASH — deux étages distincts, un seul littéral.
     name = "global" if level == "global" else _safe(theme_id or "")
     return analysis_dir(dataset) / INSIGHTS_DIRNAME / f"{name}.json"
 
