@@ -34,13 +34,14 @@ from pipeline.claims.span import Claim, as_claim
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.palette import color_for
 from pipeline.cluster.knn import build_knn_graph
-from pipeline.cluster.leiden_cluster import run_leiden
+from pipeline.cluster.leiden_cluster import DEFAULT_SEED, run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.scoring import score_cluster
 
 DEFAULT_MODEL = "ministral-3:latest"
 DEFAULT_EMBEDDER = "nomic-v2"
-DEFAULT_SEED = 42
+# DEFAULT_SEED ré-exporté depuis sa source unique `pipeline.cluster.leiden_cluster`
+# (backend/analysis.py et les builds l'importent d'ici par commodité historique).
 N_REPRESENTATIVE = 4
 
 
