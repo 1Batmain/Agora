@@ -36,16 +36,15 @@ export function OpinionBar({
   return (
     <div className="opinion" aria-label="Répartition d'opinion du thème">
       <div className="opinion__head">
-        <span className="opinion__label">
-          {is_aggregate
-            ? `Objet de clivage · synthèse de ${n_children ?? 0} sous-thèmes`
-            : 'Objet de clivage'}
-        </span>
+        <span className="opinion__label">Analyse des positions</span>
         <span className={`opinion__badge opinion__badge--${profil}`}>
           {clivant ? 'Clivant' : 'Consensuel'}
         </span>
       </div>
-      <p className="opinion__proposition">« {proposition} »</p>
+      <p className="opinion__proposition">
+        Par rapport à la question{is_aggregate ? ` (synthèse de ${n_children ?? 0} sous-thèmes)` : ''}&nbsp;:
+        <span className="opinion__cleavage">{proposition}</span>
+      </p>
       {is_aggregate && child_propositions && child_propositions.length > 0 && (
         <details className="opinion__children">
           <summary>Voir les {child_propositions.length} objets de clivage des sous-thèmes</summary>

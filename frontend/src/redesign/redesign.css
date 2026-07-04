@@ -24,10 +24,9 @@
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   --radius: 8px;
 
-  /* Typographie machine à écrire : mono propre, lisible, partout. */
-  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', 'Menlo',
-    monospace;
-  font-family: var(--mono);
+  /* Typographie principale : Lato partout. */
+  --font-main: 'Lato', ui-sans-serif, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-main);
   color: var(--grey-1000);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -49,7 +48,7 @@ body,
 body {
   background: var(--bg);
   color: var(--grey-1000);
-  font-family: var(--mono);
+  font-family: var(--font-main);
   line-height: 1.6;
   letter-spacing: -0.01em;
 }
@@ -1446,7 +1445,7 @@ body {
 .participate__input {
   display: block; width: 100%; box-sizing: border-box;
   border: 0; outline: 0; background: transparent; resize: vertical;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.05rem; line-height: 1.7; color: #111;
   caret-color: var(--agora, #000091); padding: .2rem 0; margin: .2rem 0 1rem;
 }
@@ -1454,7 +1453,7 @@ body {
 
 /* ── Nom de la consultation dans le header (remplace le sélecteur de dataset) ── */
 .header-consultation {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: .92rem; font-weight: 600; color: var(--agora, #000091);
   padding: .3rem .55rem; border: 1px solid rgba(0,0,145,.25);
   white-space: nowrap; max-width: 42ch; overflow: hidden; text-overflow: ellipsis;
@@ -1462,7 +1461,7 @@ body {
 /* ── Page d'APERÇU d'une consultation close (présentation avant le graphe) ── */
 .overview__body { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .overview__title {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 2rem; line-height: 1.2; margin: 0 0 .6rem; color: #111;
 }
 .overview__context { color: #444; line-height: 1.7; margin: 0 0 2rem; max-width: 72ch; }
@@ -1473,7 +1472,7 @@ body {
 }
 .overview__stat { display: flex; flex-direction: column; }
 .overview__stat strong {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.55rem; color: var(--agora, #000091); line-height: 1.1;
 }
 .overview__stat span { color: #777; font-size: .85rem; margin-top: .25rem; }
@@ -1486,13 +1485,13 @@ body {
 }
 .overview__sample strong { color: #5a4a12; font-weight: 700; }
 .overview__sample-tag {
-  flex: none; font-family: ui-monospace, "IBM Plex Mono", monospace;
+  flex: none; font-family: var(--font-main);
   font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
   padding: .12rem .5rem; border-radius: 999px; background: #f0dca8; color: #6b5a22;
 }
 .overview__cta { margin: 0 0 2.6rem; }
 .overview__synthesis h2 {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.05rem; letter-spacing: .02em; margin: 0 0 1rem; color: var(--agora, #000091);
 }
 .overview__loading { color: #999; }
@@ -1506,7 +1505,7 @@ body {
 /* Pendant le re-fetch : on estompe l'ancien contenu (pas de zone vidée). */
 .overview__dynsynth.is-loading .overview__synthbody { opacity: .45; }
 .overview__synthloading {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: .78rem; color: var(--agora, #000091); margin: .6rem 0 0; opacity: .8;
 }
 
@@ -1517,7 +1516,7 @@ body {
 }
 .opinion__head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
 .opinion__label {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .7rem;
+  font-family: var(--font-main); font-size: .7rem;
   letter-spacing: .04em; text-transform: uppercase; color: #66667a;
 }
 .opinion__badge {
@@ -1544,7 +1543,7 @@ button.opinion__card:hover:not(:disabled) { transform: translateY(-1px); box-sha
 button.opinion__card:disabled { cursor: default; }
 .opinion__card--pos { border-color: #bfe6c9; background: #f2fbf4; }
 .opinion__card--neg { border-color: #f2c5c9; background: #fdf3f4; }
-.opinion__card-pct { font-family: ui-monospace,"IBM Plex Mono",monospace; font-size: 1.55rem; line-height: 1; color: var(--agora,#000091); }
+.opinion__card-pct { font-family: var(--font-main); font-size: 1.55rem; line-height: 1; color: var(--agora,#000091); }
 .opinion__card--pos .opinion__card-pct { color: #18753c; }
 .opinion__card--neg .opinion__card-pct { color: #c1121f; }
 .opinion__card-label { font-size: .82rem; color: #3a3a45; line-height: 1.3; }
@@ -1577,18 +1576,18 @@ button.opinion__card:disabled { cursor: default; }
 .how__step { display: flex; gap: 1.1rem; align-items: flex-start; }
 .how__num {
   flex: 0 0 auto; width: 2.1rem; height: 2.1rem; display: grid; place-items: center;
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-weight: 700;
+  font-family: var(--font-main); font-weight: 700;
   color: #fff; background: var(--agora, #000091);
 }
 .how__step strong {
   display: block; margin-bottom: .35rem; color: #111;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
 }
 .how__step p { margin: 0; color: #555; line-height: 1.65; }
 .how__step em { font-style: normal; color: var(--agora, #000091); }
 .how__footer {
   margin-top: 2.2rem; font-size: .82rem; letter-spacing: .04em; color: #9a9aa8;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
 }
 
 /* ── Table des réponses des citoyens (page d'analyse — sous le camembert) ── */
@@ -1746,7 +1745,7 @@ button.opinion__card:disabled { cursor: default; }
 .kw-chips::-webkit-scrollbar-thumb { background: rgba(0,0,145,.25); border-radius: 3px; }
 .kw-chip { flex: 0 0 auto; white-space: nowrap; }
 .kw-chip {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  font-family: var(--font-main); font-size: .8rem;
   color: var(--agora, #000091); padding: .25rem .6rem;
   border: 1px solid rgba(0,0,145,.25); background: #f5f5fe;
 }
@@ -1755,13 +1754,13 @@ button.opinion__card:disabled { cursor: default; }
 .poll { display: flex; flex-direction: column; gap: .45rem; margin: 0 0 1.4rem; }
 .poll__row { display: grid; grid-template-columns: minmax(0,14rem) 1fr 2.6rem; align-items: center; gap: .6rem; }
 .poll__label {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; color: #222;
+  font-family: var(--font-main); font-size: .82rem; color: #222;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .poll__track { height: .7rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
 .poll__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); }
 .poll__pct {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  font-family: var(--font-main); font-size: .8rem;
   color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
 
@@ -1785,19 +1784,19 @@ button.opinion__card:disabled { cursor: default; }
 }
 .tnav__back {
   border: 0; background: none; cursor: pointer; font: inherit;
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  font-family: var(--font-main); font-size: .8rem;
   color: var(--agora, #000091); font-weight: 600; padding: .1rem 0;
 }
 .tnav__back:hover { text-decoration: underline; }
 .tnav__here {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: .95rem; color: var(--agora, #000091); font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 /* Bouton « Voir plus / Voir moins » du niveau. */
 .tnav__more {
   border: 0; background: none; cursor: pointer; font: inherit;
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  font-family: var(--font-main); font-size: .8rem;
   color: var(--agora, #000091); text-align: left; padding: .45rem .25rem;
   border-top: 1px solid #f4f4fb;
 }
@@ -1827,19 +1826,116 @@ button.opinion__card:disabled { cursor: default; }
   font-size: .7rem; color: var(--agora, #000091); text-align: center; user-select: none;
 }
 .tnav__label {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; color: #222;
+  font-family: var(--font-main); font-size: .82rem; color: #222;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .tnav__track { height: .7rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
 .tnav__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); }
 .tnav__pct {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .8rem;
+  font-family: var(--font-main); font-size: .8rem;
   color: var(--agora, #000091); text-align: right; font-weight: 600;
 }
 
+/* ── Outline de clusters (accordéon récursif « par niveau ») ─────────────── */
+.clout { display: flex; flex-direction: column; margin-top: .4rem; }
+.clout__node { border-top: 1px solid #e8e8f2; }
+.clout__node:first-child { border-top: 0; }
+.clout__row {
+  width: 100%; display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr) auto; grid-template-rows: auto auto;
+  align-items: center; gap: .1rem .6rem; padding: .7rem .4rem;
+  background: none; border: 0; cursor: pointer; text-align: left; font: inherit;
+  color: #111; transition: background .12s;
+}
+.clout__row:hover { background: #f5f5fe; }
+.clout__row[aria-expanded="true"] { background: #f0f0fc; }
+.clout__caret { grid-row: 1 / span 2; color: var(--agora, #000091); font-size: .8rem; }
+.clout__name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clout__row[aria-expanded="true"] .clout__name { color: var(--agora, #000091); }
+.clout__figs { display: flex; align-items: baseline; gap: .55rem; font-size: .8rem; color: #555; white-space: nowrap; }
+.clout__pct { font-weight: 700; color: var(--agora, #000091); }
+.clout__coh { color: #8a8aa0; }
+.clout__track { grid-column: 2 / span 2; height: .35rem; background: #ececf4; border-radius: 2px; overflow: hidden; }
+.clout__fill { display: block; height: 100%; min-width: 2px; background: var(--agora, #000091); border-radius: 2px; }
+.clout__body { padding: 0 .2rem .6rem; }
+.clout__panel { margin: .2rem 0 .8rem; }
+/* Sous-thématiques : lead « N sous-thématiques identifiées : » + accordéon imbriqué,
+   intercalé entre le corps de la synthèse et le « À retenir ». */
+.clout__sub { margin: 1.1rem 0 .2rem; }
+.clout__sublead { margin: 0 0 .35rem; }
+.overview__retenir { margin-top: 1.2rem; }
+.clout__stance { margin-top: 1.4rem; }
+/* Analyse de stance INTÉGRÉE à la synthèse : c'est un insight, pas un dashboard →
+   pas de fond blanc, pas de cartes, police alignée sur le texte. Couleurs fav/déf et
+   clic (voir les avis) conservés. */
+.clout__stance .opinion { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
+/* « Par rapport à la question : » — intro discrète (pas de gras) ; la question passe
+   DESSOUS, centrée façon citation (sans guillemets). */
+.clout__stance .opinion__proposition { font-size: .85rem; font-weight: 400; color: #555; margin: .1rem 0 .7rem; }
+.clout__stance .opinion__cleavage {
+  display: block; text-align: center; margin-top: .45rem;
+  font-style: italic; font-size: .85rem; font-weight: 500; color: #1a1a2e;
+}
+.clout__stance .opinion__cards { gap: 1.1rem; margin: .5rem 0 .2rem; }
+.clout__stance .opinion__card,
+.clout__stance .opinion__card--pos,
+.clout__stance .opinion__card--neg { padding: 0; border: 0; background: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) { transform: none; box-shadow: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) .opinion__card-sub { text-decoration: underline; }
+.clout__stance .opinion__card-pct { font-size: 1.05rem; }
+/* « Analyse de position vis-à-vis de : » en format TITRE de section (homogène). */
+.clout__stance .opinion__label {
+  font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.6;
+  letter-spacing: 0; text-transform: none; color: var(--agora-active);
+}
+/* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
+/* Hero témoignage INTÉGRÉ à la synthèse : pas de fond, juste un liseré discret comme
+   marqueur de citation ; police alignée. Reste cliquable (→ tous les témoignages). */
+.overview__hero {
+  margin: .2rem 0 1.2rem; padding: .1rem 0 .1rem .9rem; cursor: pointer;
+  background: none; border: 0; border-left: 3px solid var(--agora-soft, #ececfe);
+  transition: border-color .12s;
+}
+.overview__hero:hover { border-left-color: var(--agora, #000091); }
+.overview__hero:hover .overview__hero-more { text-decoration: underline; }
+.overview__hero:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
+.overview__hero-label {
+  font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
+  color: #8a8a97; font-weight: 700; margin-bottom: .35rem;
+}
+.overview__hero-quote { margin: 0; font-size: 13px; line-height: 1.6; font-style: italic; color: #333; }
+.overview__hero-more { display: inline-block; margin-top: .45rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
+/* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
+.clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
+@media (max-width: 640px) {
+  .clout__row { grid-template-columns: 1.2rem minmax(0, 1fr); }
+  .clout__figs { grid-column: 2; grid-row: 2; }
+  .clout__track { grid-column: 1 / span 2; }
+}
+
+/* Phrase d'introduction qui prolonge la synthèse globale vers l'outline des clusters. */
+/* Titre de section HOMOGÈNE (aligné sur .md h2 = titres Contexte / Vue générale / À
+   relever) — réutilisé pour « Thèmes », « Thèmes distincts », « Analyse de position ». */
+.synth-h {
+  font-size: 13px; font-weight: 700; line-height: 1.5;
+  margin: 16px 0 6px; color: var(--agora-active);
+}
+.overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
+/* Sous-texte du titre « Thèmes » (compte des thèmes) — plus petit, discret. */
+.overview__clusters-lead--sub {
+  margin: 0 0 .5rem; font-size: .85rem; font-weight: 400; color: #777;
+}
+/* Toggle « voir plus » sous le top-5 des clusters. */
+.clout__more {
+  margin: .5rem 0 .2rem; padding: .35rem .7rem; background: none; cursor: pointer;
+  border: 1px solid rgba(0,0,145,.25); border-radius: 6px; font: inherit; font-size: .85rem;
+  color: var(--agora, #000091); transition: background .12s;
+}
+.clout__more:hover { background: #f5f5fe; }
+
 /* ── Sous-titre « Points de convergence » (au-dessus du navigateur de thèmes) ── */
 .synthesis__subhead {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: .9rem; color: var(--agora, #000091);
   margin: 1.6rem 0 .7rem; letter-spacing: .02em;
 }
@@ -1858,7 +1954,7 @@ button.opinion__card:disabled { cursor: default; }
 
 /* ───────────────────────── Page d'exploration des avis ───────────────────────── */
 .overview__crumb {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: .9rem; color: var(--agora, #000091);
 }
 .btn-secondary {
@@ -2020,13 +2116,13 @@ button.opinion__card:disabled { cursor: default; }
 }
 .pipe__step strong {
   display: block; margin-bottom: .35rem; color: #111;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
 }
 .pipe__step p { margin: 0; color: #555; line-height: 1.6; font-size: .92rem; }
 .pipe__step em { font-style: normal; font-weight: 700; color: #111; }
 .pipe__tag {
   float: right; margin-left: .6rem; font-size: .72rem; color: #555;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   background: #f0f0f4; padding: .15rem .5rem;
 }
 /* Toggle GLOBAL des surlignages (en-tête des contrôles). */
@@ -2093,11 +2189,11 @@ button.opinion__card:disabled { cursor: default; }
 .collab__link:hover { background: #f4f4f8; }
 .collab__link-arrow {
   grid-row: 1 / span 2; align-self: center;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   color: #111; font-size: 1.2rem; font-weight: 700;
 }
 .collab__link-label {
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-weight: 700;
+  font-family: var(--font-main); font-weight: 700;
   color: #111;
 }
 .collab__link-sub { color: #555; font-size: .82rem; }
@@ -2105,19 +2201,21 @@ button.opinion__card:disabled { cursor: default; }
 /* ── Aperçu : bouton « retour vue générale » sous le titre de la synthèse focus ── */
 .overview__backgen {
   display: inline-block; margin: 0 0 .8rem; border: 0; background: none; cursor: pointer;
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .82rem; font-weight: 600;
+  font-family: var(--font-main); font-size: .82rem; font-weight: 600;
   color: var(--agora, #000091); padding: 0;
 }
 .overview__backgen:hover { text-decoration: underline; }
 
 /* ── Mots-clés CLIQUABLES (filtrent les avis du focus) ── */
 .kw-chips--clickable { margin-top: 1.2rem; }
+/* Mots-clés c-TF-IDF : chips beaucoup plus petits (discrets, sous la synthèse). */
+.kw-chips--clickable .kw-chip { font-size: .65rem; padding: .1rem .45rem; line-height: 1.5; }
 .kw-chip--btn { border: 1px solid rgba(0,0,145,.28); cursor: pointer; font: inherit; line-height: 1.4; }
 .kw-chip--btn:hover { background: #e0e0fb; }
 .kw-chip--on { background: var(--agora, #000091); color: #fff; border-color: var(--agora, #000091); }
 .overview__kwclear {
   margin-left: .6rem; border: 0; background: none; cursor: pointer;
-  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .72rem;
+  font-family: var(--font-main); font-size: .72rem;
   font-weight: 600; color: var(--agora, #000091);
 }
 .overview__kwclear:hover { text-decoration: underline; }
@@ -2138,7 +2236,7 @@ button.opinion__card:disabled { cursor: default; }
 /* ── Page consultation : titre à GAUCHE, question aérée dessous (italique, guillemets) ── */
 .overview__head { text-align: left; padding: 0.6rem 0 1.2rem; }
 .overview__question {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-style: italic;
   font-weight: 400;
   font-size: 1.15rem;
@@ -2148,9 +2246,27 @@ button.opinion__card:disabled { cursor: default; }
   margin: 1.1rem 0 2.4rem;
 }
 
+/* Courte intro non-italique au-dessus de la question, + question en dessous. */
+.overview__question-lead {
+  display: block; font-style: normal; font-size: .82rem; letter-spacing: .04em;
+  text-transform: uppercase; color: #8a8a97; margin-bottom: .35rem;
+}
+.overview__question-text { display: block; }
+/* Lien vers la consultation officielle (sous la question). */
+.overview__official { margin: -1.6rem 0 2.4rem; font-size: .9rem; }
+.overview__official a {
+  color: var(--agora, #000091); text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,145,.3);
+}
+.overview__official a:hover { border-bottom-color: var(--agora, #000091); }
+/* Boutons d'accès placés TOUT EN BAS de la synthèse. */
+.overview__actions--bottom { margin-top: 2rem; padding-top: 1.4rem; border-top: 1px solid #e6e6ef; }
+/* Petite info additionnelle de footer : langues du panel. */
+.overview__langs { margin: .6rem 0 0; font-size: .78rem; color: #9a9aa5; }
+
 /* ── Nom de la consultation en titre MODESTE au-dessus de la question ── */
 .overview__name {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.35rem; font-weight: 600; line-height: 1.3;
   color: #111; margin: 0 0 .2rem;
 }
@@ -2172,7 +2288,7 @@ button.opinion__card:disabled { cursor: default; }
 }
 .overview__dash-item { font-size: 0.82rem; color: #555; }
 .overview__dash-item strong {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.25rem; color: #111; margin-right: 0.25rem;
 }
 .overview__dash-pct strong, .overview__dash-pct { color: var(--agora, #000091); }
@@ -2204,7 +2320,7 @@ button.opinion__card:disabled { cursor: default; }
 }
 .tnav-card__figs { display: flex; align-items: baseline; gap: 0.5rem; }
 .tnav-card__pct {
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-main);
   font-size: 1.35rem; font-weight: 700; color: var(--agora, #000091);
 }
 .tnav-card__voix { font-size: 0.75rem; color: #666; }
@@ -2275,7 +2391,7 @@ button.opinion__card:disabled { cursor: default; }
   margin: 0; padding: 0; font-size: .78rem; line-height: 1.65; color: #7a7a86;
 }
 .overview__cost-est { font-size: .72rem; color: #9a9aa5; font-style: italic; }
-.overview__cost strong { color: var(--agora, #000091); font-family: ui-monospace, "IBM Plex Mono", monospace; }
+.overview__cost strong { color: var(--agora, #000091); font-family: var(--font-main); }
 .overview__cost-baseline { color: #6b6b76; }
 .overview__cost-baseline a { color: var(--agora, #000091); }
 .overview__cost-note { display: block; font-size: .72rem; color: #9a9aa5; font-style: italic; margin-top: .15rem; }
