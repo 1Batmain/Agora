@@ -140,6 +140,49 @@ export async function fetchOpinion(
 }
 
 /**
+ * GET /arguments {dataset} → arguments minés par thème (synthèses LLM sourcées sur
+ * contributions réelles). Artefact À PART et OPTIONNEL (les datasets déjà analysés
+ * n'en ont pas) : même contrat que fetchOpinion — chargé UNE fois, lookup par
+ * theme_id, liste vide = pas de panneau, jamais d'état bloquant.
+ */
+export async function fetchArguments(
+  dataset: string,
+): Promise<import('./contract').ThemeArguments[]> {
+  if (FORCE_MOCK) return [];
+  try {
+    const qs = new URLSearchParams({ dataset });
+    const { status, body } = await rawFetch(`/arguments?${qs}`);
+    if (status === 200 && body && Array.isArray(body.themes)) {
+      return body.themes as import('./contract').ThemeArguments[];
+    }
+  } catch {
+    /* réseau indisponible → pas d'arguments minés */
+  }
+  return [];
+}
+
+/**
+ * GET /demographics {dataset} → profil démographique du panel (global + majorité
+ * par thème). Artefact À PART et OPTIONNEL : null (absent/réseau) = pas d'affichage,
+ * les datasets sans données démographiques sont strictement inchangés.
+ */
+export async function fetchDemographics(
+  dataset: string,
+): Promise<import('./contract').DemographicsPayload | null> {
+  if (FORCE_MOCK) return null;
+  try {
+    const qs = new URLSearchParams({ dataset });
+    const { status, body } = await rawFetch(`/demographics?${qs}`);
+    if (status === 200 && body && Array.isArray(body.themes) && body.themes.length) {
+      return body as import('./contract').DemographicsPayload;
+    }
+  } catch {
+    /* réseau indisponible → pas de profil démographique */
+  }
+  return null;
+}
+
+/**
  * Feedback FLAGS — Bob signals a badly cut / mis-targeted / mis-extracted avis
  * with a free-text comment, persisted server-side (upsert by avis_id) and editable.
  * These are LIGHT and independent of the analysis cache, so they never go through

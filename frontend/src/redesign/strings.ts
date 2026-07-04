@@ -146,3 +146,9 @@ export function indexExplanation(key: string, detail?: IndexDetail): string | un
   }
   return HINTS[key];
 }
+
+/** Nettoie l'emphase markdown littérale (**gras**, *italique*, y compris non
+ *  fermée en fin de titre) des chaînes affichées en texte brut — les artefacts
+ *  bakés avant le strip backend en portent encore. */
+export const stripMd = (s: string): string =>
+  s.replace(/\*{1,3}([^*]+)\*{1,3}/g, '$1').replace(/\*{1,3}/g, '').trim();
