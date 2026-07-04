@@ -44,6 +44,7 @@ faiss = [
     { name = "faiss-cpu" },
 ]
 serve = [
+    { name = "duckdb" },
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "starlette" },
@@ -53,6 +54,7 @@ serve = [
 [package.metadata]
 requires-dist = [
     { name = "duckdb", marker = "extra == 'collect'", specifier = ">=1.0" },
+    { name = "duckdb", marker = "extra == 'serve'", specifier = ">=1.0" },
     { name = "einops", marker = "extra == 'embed-contender'", specifier = ">=0.7" },
     { name = "faiss-cpu", marker = "extra == 'faiss'", specifier = ">=1.8" },
     { name = "fastapi", marker = "extra == 'serve'", specifier = ">=0.115,<1.0" },

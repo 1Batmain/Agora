@@ -35,6 +35,7 @@ OPINION_NAME = "opinion.json"
 CLAIM_STANCE_NAME = "claim_stance.json"
 ARGUMENTS_NAME = "arguments.json"
 DEMOGRAPHICS_NAME = "demographics.json"
+DUCKDB_NAME = "analysis.duckdb"
 CITATIONS_DIRNAME = "citations"
 INSIGHTS_DIRNAME = "insights"
 
@@ -281,6 +282,89 @@ def read_claim_stance(dataset: str) -> dict | None:
         _CLAIM_STANCE_CACHE[dataset] = (mtime, data)
         cached = _CLAIM_STANCE_CACHE[dataset]
     return cached[1]
+
+
+# --------------------------------------------------------------------------- #
+# Index DuckDB de LECTURE (hot path `/avis_list`) — cache dérivé, optionnel
+# --------------------------------------------------------------------------- #
+# Une connexion read-only par dataset, cachée par mtime (comme `avis.json`). C'est un
+# CACHE dérivé : absent ou plus vieux que ses sources (`avis.json`/`claim_stance.json`)
+# → on renvoie None et le serve retombe sur le chemin Python (aucun cache existant cassé).
+_DUCKDB_CACHE: dict[str, tuple[float, Any]] = {}
+
+
+def duckdb_path(dataset: str) -> Path:
+    return analysis_dir(dataset) / DUCKDB_NAME
+
+
+def avis_sources_sig(dataset: str) -> list[tuple[str, int]]:
+    """Signature des sources de l'index : (nom, taille octets) pour avis.json + claim_stance.
+
+    Taille = contenu (déterministe au `git checkout`), contrairement au mtime. Stockée dans
+    la table `meta` du `.duckdb` au bake, recomparée au serve : l'index est VALIDE ssi les
+    tailles courantes égalent celles du bake (self-heal si une source change ; robuste pour
+    un `.duckdb` COMMITÉ servi en prod après `reset --hard`). `-1` = fichier absent (distingue
+    « claim_stance jamais baké » de « claim_stance présent »).
+    """
+    out: list[tuple[str, int]] = []
+    for name, path in ((AVIS_NAME, avis_path(dataset)),
+                       (CLAIM_STANCE_NAME, claim_stance_path(dataset))):
+        out.append((name, path.stat().st_size if path.exists() else -1))
+    return out
+
+
+def _duckdb_valid(con, dataset: str) -> bool:
+    """L'index reflète-t-il les sources courantes ? (signature `meta` == tailles actuelles)."""
+    try:
+        rows = con.execute("SELECT source, n_bytes FROM meta").fetchall()
+    except Exception:
+        return False
+    return dict(rows) == dict(avis_sources_sig(dataset))
+
+
+def avis_duckdb_con(dataset: str):
+    """Curseur DuckDB read-only pour `/avis_list`, ou None si l'index n'est pas servable.
+
+    None dans tous les cas de repli : index absent, périmé (signature `meta` ≠ sources),
+    `duckdb` non installé, ou ouverture en échec. Le caller (`server.get_avis_list`) retombe
+    alors sur `avis.avis_list`. La connexion est cachée par mtime du `.duckdb` (un rebake en
+    dev change le mtime → réouverture ; en prod le process redémarre) ; on renvoie un
+    `.cursor()` thread-local (les endpoints sync tournent dans un threadpool).
+    """
+    p = duckdb_path(dataset)
+    if not p.exists():
+        return None
+    m = p.stat().st_mtime
+    try:
+        import duckdb
+    except ImportError:               # extra `collect`/`serve` non installé → fallback
+        return None
+    cached = _DUCKDB_CACHE.get(dataset)
+    if cached is None or cached[0] != m:
+        if cached is not None and cached[1] is not None:   # ferme l'ancienne (fichier remplacé)
+            try:
+                cached[1].close()
+            except Exception:
+                pass
+        try:
+            con = duckdb.connect(str(p), read_only=True)
+        except Exception:
+            _DUCKDB_CACHE[dataset] = (m, None)
+            return None
+        if not _duckdb_valid(con, dataset):    # index périmé → on mémorise le verdict négatif
+            try:
+                con.close()
+            except Exception:
+                pass
+            con = None
+        _DUCKDB_CACHE[dataset] = (m, con)
+        cached = _DUCKDB_CACHE[dataset]
+    if cached[1] is None:
+        return None
+    try:
+        return cached[1].cursor()
+    except Exception:
+        return None
 
 
 # --------------------------------------------------------------------------- #
