@@ -41,5 +41,8 @@ class Consultation(TypedDict):
     source: str
     question: NotRequired[str]
     context: NotRequired[str]
+    # Lien vers la consultation OFFICIELLE d'origine (page publique) — porté par meta.json,
+    # affiché en tête de l'overview. Optionnel, générique (aucune URL en dur dans le code).
+    official_url: NotRequired[str]
     parent_id: NotRequired[str]
     children: NotRequired[list[str]]

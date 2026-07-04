@@ -1,40 +1,41 @@
 {
-  "id": "granddebat",
-  "label": "Grand Débat National (FR)",
-  "n_nodes": 3000,
-  "languages": [
-    "fr",
-    "und",
-    "es",
-    "pt",
-    "it"
-  ],
-  "lang_counts": {
-    "fr": 2916,
-    "und": 66,
-    "es": 15,
-    "pt": 2,
-    "it": 1
-  },
-  "source": "granddebat",
-  "model_id": "nomic-ai/nomic-embed-text-v2-moe",
-  "dim": 768,
-  "n_loaded": 28384,
-  "built_with": {
-    "min_chars": 12,
-    "dedup_exact": true,
-    "balance": null,
-    "cap": 3000,
-    "seed": 42
-  },
-  "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
-  "context": "Grand Débat National (2019), espace « Démocratie et citoyenneté » — open data data.gouv.fr (Licence Ouverte 2.0). Réponses libres à une question ouverte : « Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ? ». Un vaste panel de propositions citoyennes contrastées.",
-  "official_baseline": {
-    "label": "Dispositif officiel 2019",
-    "cost": "3,25 M€ (traitement et analyse des données, tous thèmes)",
-    "duration": "~3 mois (clôture 18 mars → synthèse juin 2019)",
-    "note": "Périmètre très différent : notre corpus = UNE question ouverte du seul thème Démocratie (22 471 réponses de l'export open data ; 118 356 contributions officielles à cette question) ; les 3,25 M€ couvrent le traitement des ~2 M de contributions des 4 thèmes, questions fermées, cahiers et numérisation BnF inclus. Ordre de grandeur uniquement. Extrapolation naïve au coût Agora mesuré (~1,1 $/1 000 réponses) : traiter les ~2 M de contributions ≈ 2 000-2 500 $ de LLM — hors validation humaine et normes du dispositif officiel.",
-    "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
-  },
-  "n_responses": 22471
+ "id": "granddebat",
+ "label": "Grand Débat National (FR)",
+ "n_nodes": 3000,
+ "languages": [
+  "fr",
+  "und",
+  "es",
+  "pt",
+  "it"
+ ],
+ "lang_counts": {
+  "fr": 2916,
+  "und": 66,
+  "es": 15,
+  "pt": 2,
+  "it": 1
+ },
+ "source": "granddebat",
+ "model_id": "nomic-ai/nomic-embed-text-v2-moe",
+ "dim": 768,
+ "n_loaded": 28384,
+ "built_with": {
+  "min_chars": 12,
+  "dedup_exact": true,
+  "balance": null,
+  "cap": 3000,
+  "seed": 42
+ },
+ "question": "Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ?",
+ "context": "Grand Débat National — grande consultation nationale organisée du 15 janvier au 15 mars 2019, espace « Démocratie et citoyenneté » — open data data.gouv.fr (Licence Ouverte 2.0). Réponses libres à une question ouverte : « Que faudrait-il faire pour renouer le lien entre les citoyens et les élus qui les représentent ? ». Un vaste panel de propositions citoyennes contrastées.",
+ "official_baseline": {
+  "label": "Dispositif officiel 2019",
+  "cost": "3,25 M€ (traitement et analyse des données, tous thèmes)",
+  "duration": "~3 mois (clôture 18 mars → synthèse juin 2019)",
+  "note": "Périmètre très différent : notre corpus = UNE question ouverte du seul thème Démocratie (22 471 réponses de l'export open data ; 118 356 contributions officielles à cette question) ; les 3,25 M€ couvrent le traitement des ~2 M de contributions des 4 thèmes, questions fermées, cahiers et numérisation BnF inclus. Ordre de grandeur uniquement. Extrapolation naïve au coût Agora mesuré (~1,1 $/1 000 réponses) : traiter les ~2 M de contributions ≈ 2 000-2 500 $ de LLM — hors validation humaine et normes du dispositif officiel.",
+  "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
+ },
+ "n_responses": 22471,
+ "official_url": "https://www.data.gouv.fr/datasets/donnees-ouvertes-du-grand-debat-national"
 }
