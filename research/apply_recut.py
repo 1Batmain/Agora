@@ -42,7 +42,7 @@ from backend.claims_endpoint import (                 # noqa: E402
     CLAIMS_NAME, DEFAULT_MIN_CHARS, _avis_from_ideas, _load_claims_cache,
 )
 from backend.recluster import dataset_dir             # noqa: E402
-from backend.recut import recut_tree                  # noqa: E402
+from backend.recut import DUST_ID, recut_tree         # noqa: E402
 from backend.translate import translations_path      # noqa: E402
 
 
@@ -72,24 +72,36 @@ def main() -> None:
     tree = build_theme_tree(ds, model=EXTRACT_MODEL)
     assert tree.prepared.extracted == 0, "l'extraction aurait dû être 100 % cachée"
 
-    # 2) SANITY : l'arbre reconstruit == l'arbre persisté (sinon le recut ne
-    #    s'appliquerait pas au même objet que les artefacts existants → abort).
-    rebuilt = {nid: (tree.nodes[nid].parent_id, tree.nodes[nid].n_claims, tree.nodes[nid].n_avis)
-               for nid in tree.order}
-    persisted = {t["id"]: (t["parent_id"], t["n_claims"], t["n_avis"]) for t in old["themes"]}
-    if rebuilt != persisted:
-        only_new = set(rebuilt) - set(persisted)
-        only_old = set(persisted) - set(rebuilt)
-        diff = [k for k in set(rebuilt) & set(persisted) if rebuilt[k] != persisted[k]]
+    # 2) SANITY (tolérante à une re-coupe ANTÉRIEURE) : chaque nœud persisté doit exister
+    #    dans l'arbre reconstruit avec la MÊME POPULATION (n_claims, n_avis) — l'invariant
+    #    qui garantit que la re-coupe s'applique aux mêmes claims/artefacts. On NE compare
+    #    PAS `parent_id` : une re-coupe déjà appliquée au cache a légitimement re-raciné la
+    #    façade et dissous des ancêtres. L'arbre reconstruit (canonique) peut donc porter
+    #    des nœuds EN PLUS (ancêtres que le recut re-dissoudra, ex. le géant `n0`) ; le nœud
+    #    synthétique `n_dust` (regroupement de poussière d'une re-coupe antérieure) est
+    #    absent du reconstruit et ignoré ici (recut le recrée). Divergence de population ⇒
+    #    le code a divergé du cache ⇒ abort (re-bake complet requis).
+    rebuilt = {nid: (tree.nodes[nid].n_claims, tree.nodes[nid].n_avis) for nid in tree.order}
+    persisted = {t["id"]: (t["n_claims"], t["n_avis"]) for t in old["themes"]
+                 if t["id"] != DUST_ID}
+    only_old = sorted(set(persisted) - set(rebuilt))
+    diff = sorted(k for k in set(rebuilt) & set(persisted) if rebuilt[k] != persisted[k])
+    if only_old or diff:
         sys.exit("ABORT : l'arbre reconstruit diverge de l'analysis.json persisté "
-                 f"(nouveaux={sorted(only_new)[:5]} disparus={sorted(only_old)[:5]} "
-                 f"modifiés={sorted(diff)[:5]}…) — re-bake complet requis.")
-    print(f"[apply_recut] {dataset} · arbre reproduit à l'identique "
-          f"({len(tree.order)} nœuds, {len(tree.macros)} macros)")
+                 f"(persistés absents du reconstruit={only_old[:5]} "
+                 f"populations modifiées={diff[:5]}…) — re-bake complet requis.")
+    extra = sorted(set(rebuilt) - set(persisted))       # ancêtres re-dissous (info)
+    print(f"[apply_recut] {dataset} · populations reproduites à l'identique "
+          f"({len(tree.order)} nœuds reconstruits, {len(persisted)} persistés, "
+          f"+{len(extra)} ancêtre(s) à re-dissoudre: {extra[:5]})")
 
     # 3) Champs LLM existants recopiés par id (nœuds inchangés → toujours valides).
+    #    Les ancêtres présents dans le reconstruit mais absents du persisté (dissous par
+    #    une re-coupe antérieure, ex. `n0`) n'ont pas de champs LLM et seront re-dissous.
     for nid, node in tree.nodes.items():
-        t = old_by_id[nid]
+        t = old_by_id.get(nid)
+        if t is None:
+            continue
         node.title = t.get("title") or node.label
         node.hook = t.get("hook", "")
         node.description = t.get("description", "")
