@@ -33,6 +33,7 @@ from typing import Callable
 from backend import analysis_store as store
 from backend.analysis import (
     DEFAULT_EMBEDDER,
+    DEFAULT_RESOLUTION,
     DEFAULT_SEED,
     analysis_payload,
     build_theme_tree,
@@ -124,7 +125,7 @@ def build_analysis(
     model: str | None = None,
     enrich_model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
     on_progress: ProgressFn | None = None,
 ) -> dict:
@@ -338,7 +339,7 @@ def main() -> None:
     ap.add_argument("--enrich-model", default=None,
                     help=f"modèle d'ENRICHISSEMENT titres/insights (défaut {ENRICH_MODEL}, cheap)")
     ap.add_argument("--embedder", default=DEFAULT_EMBEDDER)
-    ap.add_argument("--resolution", type=float, default=1.0)
+    ap.add_argument("--resolution", type=float, default=DEFAULT_RESOLUTION)
     ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
     ap.add_argument("--force", action="store_true", help="efface l'analyse persistée avant de rebuild (garde claims.json -> re-clusterise sans réextraire)")
     ap.add_argument("--reextract", action="store_true", help="efface AUSSI claims.json -> réextraction LLM fraîche (ex. après changement du prompt d'extraction)")

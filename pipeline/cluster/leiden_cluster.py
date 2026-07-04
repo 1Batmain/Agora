@@ -15,6 +15,9 @@ from pipeline.cluster.knn import KnnGraph
 # (Les seeds d'ÉCHANTILLONNAGE — build_cache, ingest.synthetic — sont un concept distinct
 #  et gardent leur propre défaut.)
 DEFAULT_SEED = 42
+# SOURCE UNIQUE de la résolution Leiden de PREMIER NIVEAU (macro/plat = 1.0), importée par
+# claims.pipeline, backend.analysis et les endpoints/builds. À NE PAS confondre avec
+# `hierarchy.DEFAULT_RESOLUTION_SUB` (1.5) = résolution de SUBDIVISION intra-thème.
 DEFAULT_RESOLUTION = 1.0
 
 

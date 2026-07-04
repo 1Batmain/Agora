@@ -32,7 +32,12 @@ import numpy as np
 
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from backend.develop import corpus_idf, rerank_order
-from pipeline.claims.pipeline import DEFAULT_EMBEDDER, DEFAULT_SEED, N_REPRESENTATIVE
+from pipeline.claims.pipeline import (
+    DEFAULT_EMBEDDER,
+    DEFAULT_RESOLUTION,
+    DEFAULT_SEED,
+    N_REPRESENTATIVE,
+)
 from pipeline.cluster.adaptive import derive_defaults, derive_k
 from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import run_leiden
@@ -545,7 +550,7 @@ def build_theme_tree(
     model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
     min_chars: int | None = None,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
     prepared: PreparedClaims | None = None,
     extract_progress=None,
@@ -653,7 +658,7 @@ def get_or_build_tree(
     model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
     min_chars: int | None = None,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
 ) -> ThemeTree:
     """Renvoie l'arbre de thèmes (depuis le cache mémoire si déjà construit)."""

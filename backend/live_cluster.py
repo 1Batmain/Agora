@@ -45,7 +45,7 @@ from backend import density
 from backend.recluster import load_cache
 from pipeline.cluster.adaptive import derive_defaults, derive_k
 from pipeline.cluster.knn import build_knn_graph, knn_search
-from pipeline.cluster.leiden_cluster import DEFAULT_SEED, run_leiden
+from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION, DEFAULT_SEED, run_leiden
 
 
 def default_threshold(vecs: np.ndarray) -> float:
@@ -64,7 +64,7 @@ def build_live_tree(
     knn_threshold: float | None = None,
     *,
     k: int | None = None,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
 ) -> SimpleNamespace:
     """Construit l'arbre de thèmes LIVE au seuil `knn_threshold` (idées = membres).
@@ -205,7 +205,7 @@ def recluster_payload(
     knn_threshold: float | None = None,
     *,
     k: int | None = None,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
 ) -> dict:
     """Payload `POST /recluster` : `{themes, points, indices, meta}`. Rapide, zéro LLM.
