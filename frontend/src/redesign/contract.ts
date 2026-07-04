@@ -369,27 +369,12 @@ export interface BuildProgress {
  *   POST /submit {id, text} -> SubmitResult
  *
  * Source de vérité = backend ; on ne garde ici que les shapes réellement
- * consommées par l'UI (Consultation, Theme, SubmitResult).
+ * consommées par l'UI (Consultation, SubmitResult).
  * ───────────────────────────────────────────────────────────────────────────
  */
 
 /** Theme-naming methods served by the backend (capacités exposées par /datasets). */
 export type NamingMethod = 'ctfidf' | 'centroid' | 'llm';
-
-export interface Theme {
-  cluster_id: number;
-  level: 0 | 1; // 0 = macro, 1 = sub-theme
-  parent_id: number | null;
-  children: number[]; // sub-theme cluster_ids (macros only)
-  member_ids: string[];
-  size: number;
-  weight_sum: number;
-  diversity?: number;
-  consensus?: number;
-  label: string;
-  keywords?: string[];
-  color: string;
-}
 
 /**
  * One consultation, from `GET /api/datasets`. MIROIR EXACT du TypedDict
