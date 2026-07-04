@@ -43,7 +43,7 @@ Le cache est versionné (≈5 Mo) : le serveur démarre sans rejouer l'embedding
 ## Lancer le serveur
 
 ```bash
-uv run --extra contender --with fastapi --with uvicorn \
+uv run --extra contender --extra serve \
     uvicorn backend.server:app --host 0.0.0.0 --port 8010
 ```
 
