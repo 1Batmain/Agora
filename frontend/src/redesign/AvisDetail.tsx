@@ -431,116 +431,37 @@ export function AvisAnalysis({ claims }: { claims: AvisClaim[] }) {
 }
 
 /**
- * Carte DASHBOARD des statistiques d'UN claim (clic sur un passage surligné) — même
- * langage visuel que les cartes de la synthèse : volume du cluster, sentiment agrégé,
- * interprétation du passage par le modèle (stance + justif + confiance), et
- * REPRÉSENTATIVITÉ (proximité au centroïde du cluster, via /citations).
+ * Petite carte de THÈME pour UN claim (clic sur un passage surligné) — juste de quoi
+ * identifier le thème du passage et permettre de filtrer l'explorateur dessus. Les
+ * anciennes stats détaillées (volume, sentiment, représentativité) ont été retirées :
+ * trop lourdes pour un simple aparté de lecture, cf. retour utilisateur.
  */
-export interface ClaimStatsData {
-  /** Feuille du claim (titre + volumes), depuis la carte des thèmes de /analysis. */
-  leafTitle?: string | null;
-  nAvis?: number | null;
-  nClaims?: number | null;
-  /** Répartition d'opinion de la feuille (depuis /opinion), si bakée. */
-  opinion?: { fav: number; def: number; nuance: number; proposition?: string } | null;
-  /** Représentativité : rang du claim par proximité au centroïde (depuis /citations). */
-  citation?: { rank: number; total: number; dist: number } | null;
-  /** Chargement en cours (citations fetchées à la demande). */
-  loading?: boolean;
-}
-
-export function ClaimStatsCard({
+export function ClaimThemeCard({
   claim,
-  stats,
+  themeTitle,
   onClose,
+  onFilterTheme,
 }: {
   claim: AvisClaim;
-  stats: ClaimStatsData;
+  /** Libellé de la feuille (thème) du claim, résolu par l'appelant (carte des thèmes). */
+  themeTitle: string;
   onClose: () => void;
+  /** Présent si ce claim rattache à une feuille filtrable → bouton « Filtrer sur ce thème ». */
+  onFilterTheme?: () => void;
 }) {
-  const meta = claim.stance ? STANCE_META[claim.stance] : undefined;
-  const conf = claim.stance_confidence ? CONFIDENCE_META[claim.stance_confidence] : undefined;
-  const op = stats.opinion;
-  const pol = op ? op.fav + op.def : 0;
-  const pctPos = pol > 0 ? Math.round((100 * (op?.fav ?? 0)) / pol) : null;
-  const cit = stats.citation;
-  // Représentativité : rang 0 = le plus proche du centroïde → percentile haut = très central.
-  const reprPct = cit && cit.total > 1 ? Math.round(100 * (1 - cit.rank / (cit.total - 1))) : null;
   return (
-    <div className="claimstats" role="region" aria-label="Statistiques du passage sélectionné">
+    <div className="claimstats claimstats--compact" role="region" aria-label="Thème du passage sélectionné">
       <div className="claimstats__head">
         <span className="avisdetail__chip" style={{ background: claim.color }} aria-hidden />
-        <span className="claimstats__title">{stats.leafTitle || claim.theme_title}</span>
+        <span className="claimstats__title">{themeTitle}</span>
+        {onFilterTheme && (
+          <button type="button" className="claimstats__filterbtn" onClick={onFilterTheme}>
+            Filtrer sur ce thème →
+          </button>
+        )}
         <button type="button" className="claimstats__close" onClick={onClose} aria-label="Fermer">
           ✕
         </button>
-      </div>
-      <div className="claimstats__grid">
-        <div className="claimstats__cell">
-          <strong>{stats.nAvis != null ? stats.nAvis.toLocaleString('fr-FR') : '—'}</strong>
-          <span>témoignages dans ce cluster</span>
-          {stats.nClaims != null && <em>{stats.nClaims.toLocaleString('fr-FR')} idées</em>}
-        </div>
-        <div className="claimstats__cell">
-          {pctPos != null ? (
-            <>
-              <strong>
-                <span className="claimstats__pos">{pctPos}%</span>
-                {' / '}
-                <span className="claimstats__neg">{100 - pctPos}%</span>
-              </strong>
-              <span>sentiment du cluster (positif / négatif)</span>
-              {op?.proposition && <em>envers « {op.proposition} »</em>}
-            </>
-          ) : (
-            <>
-              <strong>—</strong>
-              <span>sentiment non mesuré (signal diffus)</span>
-            </>
-          )}
-        </div>
-        <div className="claimstats__cell">
-          {meta ? (
-            <>
-              <strong style={{ color: meta.color }}>
-                {meta.glyph} {meta.label}
-                {conf && (
-                  <span className="claimstats__conf" title={`Confiance du modèle : ${conf.label}`}>
-                    {' '}{conf.dots}
-                  </span>
-                )}
-              </strong>
-              <span>lecture de CE passage par le modèle</span>
-              {claim.stance_justif && <em>« {claim.stance_justif} »</em>}
-            </>
-          ) : (
-            <>
-              <strong>~</strong>
-              <span>passage non classé (thème au signal diffus)</span>
-            </>
-          )}
-        </div>
-        <div className="claimstats__cell">
-          {stats.loading ? (
-            <>
-              <strong>…</strong>
-              <span>représentativité (calcul)</span>
-            </>
-          ) : reprPct != null && cit ? (
-            <>
-              <strong>{reprPct}%</strong>
-              <span>représentativité du cluster</span>
-              <em>
-                {cit.rank + 1}ᵉ / {cit.total} par proximité au centroïde (dist {cit.dist.toFixed(2)})
-              </em>
-            </>
-          ) : (
-            <>
-              <strong>—</strong>
-              <span>représentativité indisponible</span>
-            </>
-          )}
-        </div>
       </div>
     </div>
   );
