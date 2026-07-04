@@ -1,0 +1,445 @@
+{
+  "dataset": "tiktok",
+  "rows": [
+    {
+      "theme_id": "n33",
+      "title": "Perte de temps et culpabilité sur TikTok",
+      "keywords": [
+        "passer",
+        "passe",
+        "culpabiliser",
+        "impression",
+        "culpabilité",
+        "perdu",
+        "hope",
+        "core",
+        "faire",
+        "heures"
+      ],
+      "distinctive_vocab": [
+        "tok",
+        "tik",
+        "temps",
+        "trop",
+        "passer",
+        "sur",
+        "passe",
+        "tiktok",
+        "impression",
+        "culpabiliser",
+        "quand",
+        "avoir"
+      ],
+      "central_sample": [
+        "Je me sens coupable de passer autant mon temps sur tik tok",
+        "Mal être du au fait de passer trop de temps sur tik tok sans s'en rendre compte",
+        "Je me sens mal quand je passe trop de temps sur tik tok (je sais que je perd mon temps et sa joue sur mon moral)",
+        "Je peux parfois me sentir mal lorsque je passe trop de temps sur Tiktok, j'ai cette impression d'avoir gâché du temps qui m'avait été donné pour faire des choses bien plus instructives",
+        "L'impression de pouvoir se vide la tête que sur tik tok et culpabiliser après d'y avoir passé trop de temps"
+      ],
+      "distinctive_sample": [
+        "L'impression de pouvoir se vide la tête que sur tik tok et culpabiliser après d'y avoir passé trop de temps",
+        "Quand je passe trop de temps d'affilée ( plus de 5min) sur tik tok ou Instagram, je me sens mal, j'ai l'impression d'être nul",
+        "Je me sens coupable de passer autant mon temps sur tik tok",
+        "Je me sens mal quand je passe trop de temps sur tik tok (je sais que je perd mon temps et sa joue sur mon moral)",
+        "Mal être du au fait de passer trop de temps sur tik tok sans s'en rendre compte"
+      ]
+    },
+    {
+      "theme_id": "n164",
+      "title": "Perte de notion du temps",
+      "keywords": [
+        "impression",
+        "perdre",
+        "notion",
+        "sentiment",
+        "perte",
+        "journée",
+        "déconnexion",
+        "perdu",
+        "vide",
+        "sensation"
+      ],
+      "distinctive_vocab": [
+        "temps",
+        "impression",
+        "perdre",
+        "sentiment",
+        "son",
+        "notion",
+        "perte",
+        "avoir",
+        "journée",
+        "rien",
+        "perdu",
+        "déconnexion"
+      ],
+      "central_sample": [
+        "L'impression de perdre son temps",
+        "Sentiment de perdre son temps",
+        "Une impression de perdre son temps, de ne servir à rien",
+        "sensation d'avoir perdu son temps inutilement",
+        "sentiment d'avoir perdu son temps"
+      ],
+      "distinctive_sample": [
+        "L'impression de perdre son temps",
+        "Sentiment de perdre son temps",
+        "j'ai le sentiment de perdre la notion du temps",
+        "l'impression de perdre son temps, de procrastiner",
+        "Une impression de perdre son temps, de ne servir à rien"
+      ]
+    },
+    {
+      "theme_id": "n14",
+      "title": "Addiction aux réseaux sociaux",
+      "keywords": [
+        "addictif",
+        "addiction",
+        "devoirs",
+        "dépendance",
+        "addictive",
+        "désinstaller",
+        "scroller",
+        "application",
+        "téléphone",
+        "bouffe"
+      ],
+      "distinctive_vocab": [
+        "addictif",
+        "tok",
+        "addiction",
+        "tiktok",
+        "tik",
+        "est",
+        "dépendance",
+        "dessus",
+        "addictive",
+        "devoirs",
+        "rend",
+        "scroller"
+      ],
+      "central_sample": [
+        "Tiktok était devenue une sorte d'addiction et il était compliqué de cesser de l'utiliser",
+        "TikTok est addictif, on peut y passer des heures sans s'en rendre compte",
+        "Tiktok est addictif et m'a fait perdre beaucoup de temps à rester dessus et enchaîner les vidéos sans pouvoir m'arrêter de façon raisonnable",
+        "Addiction à tiktok",
+        "Le fait de se sentir addictif et de ne pas réussir à réduire son temps d'écran sur Tik Tok"
+      ],
+      "distinctive_sample": [
+        "je pense plutôt au sentiment addictif de tik tok, quand j'arrête d'utiliser tiktok je ressens immédiatement l'envie de recommencer mais pendant que je regarde je ne profite même pas de l'utilisation car je sais que je suis en train de nourrir mon addiction",
+        "son utilisation est addictive, je m'en rend bien compte c'est pour cela que j'ai décidé de le désinstaller, mais même en désinstallant l'application, je passe toujours beaucoup de temps sur mon téléphone. Alors l'addiction n'est pas tellement de TikTok mais plutôt du téléphone en général",
+        "Je trouve que tik tok est juste très addictif",
+        "C'est très addictif dans les moments où l'on se sent un peu déprimé. Ca se présente comme une solution de facilité de se réfugier dessus mais, en réalité, ca n'arrange rien et ça isole plus qu'autre chose … Tik Tok rend cela bien plus addictif que les autres",
+        "Une addiction , à ne plus pouvoir décrocher . J ' ai d' ailleurs désinstaller Tik Tok de ma tablette que j' utilise à la maison pour ne pas être tenté de passer du temps dessus , je l' ai simplement sur mon téléphone et l' écran étant petit , je le regarde beaucoup moins souvent que quand je l' avais sur ma tablette … Il faudrait que j' arrive à le désinstaller aussi de mon téléphone mais pour l' instant je n 'y arrive pas . Il y a une vraie addiction"
+      ]
+    },
+    {
+      "theme_id": "n13",
+      "title": "Dépendance aux réseaux sociaux",
+      "keywords": [
+        "faire",
+        "sentiment",
+        "pouvoir",
+        "arrivais",
+        "impression",
+        "addict",
+        "chose",
+        "sortir",
+        "reels",
+        "devoir"
+      ],
+      "distinctive_vocab": [
+        "tiktok",
+        "faire",
+        "sentiment",
+        "fait",
+        "être",
+        "pouvoir",
+        "nous",
+        "pas",
+        "que",
+        "chez",
+        "chose",
+        "impression"
+      ],
+      "central_sample": [
+        "Le fait de passer beaucoup de temps sur tiktok et de se sentir dépendant",
+        "L'utilisation de tiktok donne l'impression d'être vide, de n'être pas cultivé ou d'être en retard vis à vis de la vie des autres",
+        "Je me sens mal d'être autant sur tiktok. Je perds du temps inutilement, pour faire quelque chose de bête",
+        "Tiktok cree un sentiment de mal etre par le simple fait d'etre addictif … Tu passe plusieurs heures a scrollez, et a la fin de la journée, tu n'as rien fait et tu culpabilises mais pourtant tu continues",
+        "Le fait de regarder tiktok me donne l'impression de ne rien faire et d'être accro je n'aime pas ce sentiment, j'essaie d'arrêter de plus en plus!"
+      ],
+      "distinctive_sample": [
+        "Le fait de regarder tiktok me donne l'impression de ne rien faire et d'être accro je n'aime pas ce sentiment, j'essaie d'arrêter de plus en plus!",
+        "L'utilisation intervient chez moi, comme chez les jeunes qui m'entourent, quand nous savons que nous avons beaucoup de choses à faire. Pour repousser le moment où nous ferons ces choses, on procrastine sur tiktok … je ressent déjà un mal-être car je ne fait pas quelque chose de productif … lorsque j'arrête Tiktok, peut être au bout d'un heure, le mal-être est plus grand qu'avant parce que du temps est passé et qu'il reste moins de temps pour faire ce que je devais faire … généralement je suis triste après avoir regarder des tiktok et donc je ne fais pas ce que je devais faire, je procrastine de nouveau",
+        "Le fait de perdre un temps fou, de gâcher son temps, de rien faire, le fait d'être sur tiktok donne envie de rien faire, c'est une boucle qui nous pousse à rien faire dans là journee et de ne pas sortir de chez soi",
+        "Attention à ne pas trop se focaliser sur tiktok, les reels d'instagram sont la même chose. Tout aussi addictif et tout aussi problématique. Sentiment de mal-être lié au sentiment de perte de temps, d'être soumis à un contenu mauvais et d'avoir une addiction sans que l'on nous aide à en sortir",
+        "Un sentiment de dégout face au temps passé sur tiktok et les réseaux qui offrent la possibilité de \"scroller\" plus généralement … Une forme d'impuissance face à cette chose dont je ne peut me passer alors que j'aimerai le pouvoir … je ne peux m'en passer par besoin social, par envie aussi car certains contenus sont intéressants … J'aimerai simplement que ces plateformes ne nous piègent pas"
+      ]
+    },
+    {
+      "theme_id": "n280",
+      "title": "Temps perdu à scroller",
+      "keywords": [
+        "scroller",
+        "scrolling",
+        "scroll",
+        "heures",
+        "scrollé",
+        "culpabilité",
+        "arrêter",
+        "trou",
+        "scrolle",
+        "pouvoir"
+      ],
+      "distinctive_vocab": [
+        "scroller",
+        "heures",
+        "scroll",
+        "culpabilité",
+        "scrolling",
+        "arrêter",
+        "scrollé",
+        "temps",
+        "avoir",
+        "pouvoir",
+        "trou",
+        "sans"
+      ],
+      "central_sample": [
+        "Je me sentais vide avec un besoin de scroller inlassablement",
+        "C'est qu'après que le regret de n'avoir fait que scroller se fait ressentir",
+        "J'ai l'impression de ne plus être concentré à cause du scrolling incessant, de ne plus arriver à rien",
+        "Sentiment de vide profond après avoir trop scroller et se sentir inutile",
+        "Difficultés à arrêter de scroller"
+      ],
+      "distinctive_sample": [
+        "Fatigué de scroller",
+        "Culpabilité du temps gâcher à scroller",
+        "Difficultés à arrêter de scroller",
+        "L'addiction, la culpabilité de ne pas réussir à s'arrêter de scroller pendant des heures alors même que je sais que ce n'est pas bien et que ça m'empêche de faire d'autres choses",
+        "Une culpabilité après être resté des heures à scroller sans s'en rendre compte"
+      ]
+    },
+    {
+      "theme_id": "n160",
+      "title": "Harcèlement en milieu scolaire",
+      "keywords": [
+        "collège",
+        "amie",
+        "frère",
+        "collége",
+        "publié",
+        "remarques",
+        "copines",
+        "classe",
+        "gay",
+        "savaient"
+      ],
+      "distinctive_vocab": [
+        "collège",
+        "tiktok",
+        "mon",
+        "amie",
+        "publié",
+        "sur",
+        "avait",
+        "harcèlement",
+        "était",
+        "frère",
+        "classe",
+        "remarques"
+      ],
+      "central_sample": [
+        "Ont m'a insulté parce que j'avais mis un truc sur tiktok et c'était des personnes de mon collège",
+        "Certaines personnes de mon lycée se moquer de moi sur tiktok mais aussi dans la vrai vie",
+        "Le harcèlement que j'ai pu recevoir pouvait être légèrement sur tiktok mais venait de personnes de mon collège",
+        "J'ai fait un tiktok et reçu des remarques méchantes sur mon physique puis de l'harcèlement au collège",
+        "Des remarques faites par des gens de mon lycée qui ont vu un tiktok que j'ai publié. Sur le coups, c'était déstabilisant et pas très gentil ce qu'ils ont dit"
+      ],
+      "distinctive_sample": [
+        "J'ai fait un tiktok et reçu des remarques méchantes sur mon physique puis de l'harcèlement au collège",
+        "Un enfant dans le collège de mon frère qui publiait des vidéos en disant que mon frère était gay et nul au jeu vidéo avec une coupe de cheveux moche mais tout a été vite supprimé.",
+        "Mon frère qui avait fait des TikTok ou après le collège s'est moqué de lui",
+        "Ont m'a insulté parce que j'avais mis un truc sur tiktok et c'était des personnes de mon collège",
+        "Mon petit frère est autiste et il a déjà était moqué les tiktok qu'il a publié"
+      ]
+    },
+    {
+      "theme_id": "n163",
+      "title": "Culpabilité liée aux réseaux sociaux",
+      "keywords": [
+        "culpabilité",
+        "culpabiliser",
+        "lieu travailler",
+        "sentiment",
+        "passer",
+        "culpabilise",
+        "perdu",
+        "lié",
+        "ressent",
+        "coupable"
+      ],
+      "distinctive_vocab": [
+        "culpabilité",
+        "temps",
+        "culpabiliser",
+        "dessus",
+        "sentiment",
+        "avoir",
+        "trop",
+        "passer",
+        "après",
+        "lié",
+        "perdu",
+        "travailler"
+      ],
+      "central_sample": [
+        "Sentiment de culpabilité après avoir passé trop de temps dessus en se disant que ce temps aurait pu être mieux utilisé",
+        "Sentiment de culpabilité après y avoir passé trop de temps au lieu de travailler",
+        "de la culpabilité de passer trop de temps dessus",
+        "Sentiment de culpabilité lié à son usage trop fréquent",
+        "Culpabilité d'y passer autant de temps"
+      ],
+      "distinctive_sample": [
+        "de la culpabilité de passer trop de temps dessus",
+        "Culpabilité de passer trop de temps dessus",
+        "Sentiment de culpabilité après y avoir passé trop de temps au lieu de travailler",
+        "Sentiment de culpabilité après avoir passé trop de temps dessus en se disant que ce temps aurait pu être mieux utilisé",
+        "Addiction et culpabilité après avoir perdu du temps"
+      ]
+    },
+    {
+      "theme_id": "n267",
+      "title": "Temps excessif sur les applis",
+      "keywords": [
+        "appli",
+        "application",
+        "heures",
+        "devoirs",
+        "résultant",
+        "envie rester",
+        "impression",
+        "passer",
+        "donne envie",
+        "semaine"
+      ],
+      "distinctive_vocab": [
+        "application",
+        "appli",
+        "cette",
+        "temps",
+        "heures",
+        "quand",
+        "plusieurs",
+        "devoirs",
+        "passer",
+        "impression",
+        "trop",
+        "sur"
+      ],
+      "central_sample": [
+        "je me sentais mal de passer trop de temps sur l'application",
+        "Je me sens pas très bien après avoir passé trop de temps sur cet application",
+        "je procrastine trop à cause de cette application",
+        "Malgré cela, je retournais sur l'application dans le but de me détendre",
+        "Je suis surtout affectés par des problèmes de procrastination à cause de cette application"
+      ],
+      "distinctive_sample": [
+        "Une trop grande utilisation de l'application (que j'ai désinstallé depuis) résultant en plusieurs heures de procrastination ? Beaucoup de temps perdu résultant en un mal être interne, et une difficulté à arrêter",
+        "je me sentais mal de passer trop de temps sur l'application",
+        "On peut passer un temps fou sur l'application ( parfois plusieurs heures ) sans même s'en rendre compte car le logiciel capte l'attention avec efficacité",
+        "Quand je passe beaucoup de temps sur l'application j'ai l'impression d'avoir persu mon temps … je me sens pas bien dans le sens où j'ai l'impression d'être de mauvaise humeur … je peux pas m'empêcher de continuer à scroller sur tiktok",
+        "je procrastine trop à cause de cette application"
+      ]
+    },
+    {
+      "theme_id": "n29",
+      "title": "Réseaux sociaux et mal-être",
+      "keywords": [
+        "renferme",
+        "vraie",
+        "vie",
+        "regard",
+        "tiktoks",
+        "pourtoi",
+        "triste",
+        "incite",
+        "enfonce",
+        "tristesse voir"
+      ],
+      "distinctive_vocab": [
+        "tiktok",
+        "nous",
+        "renferme",
+        "vie",
+        "dans",
+        "tiktoks",
+        "mal",
+        "tik",
+        "font",
+        "tok",
+        "pourtoi",
+        "incite"
+      ],
+      "central_sample": [
+        "Je trouve que les pourtois de tiktok nous enferment dans notre mal être",
+        "TikTok nous renferme dans un mal être dont on se sort difficilement",
+        "Voir des Tiktok triste ou de choses qui me concerne me font devenir triste également",
+        "trop réfléchir sur la vie après avoir vu certains tiktok",
+        "Parfois l'utilisation de tik tok renforce un mal-être déjà présent"
+      ],
+      "distinctive_sample": [
+        "TikTok nous renferme dans un mal être dont on se sort difficilement",
+        "tiktok c'est censé être comme un échappatoire de la vie réelle mais il y'a beaucoup de contenu triste donc ça nous enfonce simplement dans notre tristesse",
+        "les pourtoi tiktok m'ont déjà entraîné encore plus dans cette faiblesse ou cette tristesse, en \"entretenant\" ce mal-être",
+        "Tik tok nous renferme dans une idée de la vie qui n'est pas la vraie",
+        "Le mal être a grandi et j'ai fini par m'y noyer dans mes pourtoi tiktok"
+      ]
+    },
+    {
+      "theme_id": "n273",
+      "title": "Addiction aux applications de réseaux sociaux",
+      "keywords": [
+        "application",
+        "sentiment",
+        "arrêter",
+        "regret",
+        "addiction",
+        "sensation",
+        "questions",
+        "aspiré",
+        "désinstaller",
+        "utiliser"
+      ],
+      "distinctive_vocab": [
+        "application",
+        "passé",
+        "temps",
+        "sentiment",
+        "être",
+        "trop",
+        "après",
+        "sur",
+        "addiction",
+        "mal",
+        "arrêter",
+        "sensation"
+      ],
+      "central_sample": [
+        "Trop de temps passé sur l'application. Sentiment de perte de temps",
+        "C'est un sentiment de regret, suite au temps passé sur l'application on se rend compte du temps perdu ce qui éveille un sentiment de mal-être",
+        "Le fait aussi d'avoir cette espèce d'addiction à l'application. On sait que l'on perd du temps dessus mais on a du mal à ne pas l'utiliser",
+        "Mal être lié au temps inutile gaspillé sur l'application et l'incapacité de s'en défaire à cause d'une trop grande addiction",
+        "Mal être ressenti après avoir passé trop de temps sur l'application, sentiment de deception, dévalorisation"
+      ],
+      "distinctive_sample": [
+        "Mal être ressenti après avoir passé trop de temps sur l'application, sentiment de deception, dévalorisation",
+        "Trop de temps passé sur l'application. Sentiment de perte de temps",
+        "mal être car trop de temps passé sur l'application",
+        "C'est un sentiment de regret, suite au temps passé sur l'application on se rend compte du temps perdu ce qui éveille un sentiment de mal-être",
+        "Le mal être de se rendre compte du temps passé sur l'application après l'utilisation et de voir le temps gâché"
+      ]
+    }
+  ]
+}
