@@ -1732,21 +1732,47 @@ button.opinion__card:disabled { cursor: default; }
 .clout__sub { margin: 1.1rem 0 .2rem; }
 .clout__sublead { margin: 0 0 .35rem; }
 .overview__retenir { margin-top: 1.2rem; }
-/* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
-.overview__hero {
-  margin: .2rem 0 1.2rem; padding: 1rem 1.1rem; cursor: pointer;
-  background: var(--agora-soft, #ececfe); border: 1px solid rgba(0,0,145,.14);
-  border-left: 3px solid var(--agora, #000091); border-radius: 8px;
-  transition: background .12s, border-color .12s;
+.clout__stance { margin-top: 1.4rem; }
+/* Analyse de stance INTÉGRÉE à la synthèse : c'est un insight, pas un dashboard →
+   pas de fond blanc, pas de cartes, police alignée sur le texte. Couleurs fav/déf et
+   clic (voir les avis) conservés. */
+.clout__stance .opinion { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
+/* « Par rapport à la question : » — intro discrète (pas de gras) ; la question passe
+   DESSOUS, centrée façon citation (sans guillemets). */
+.clout__stance .opinion__proposition { font-size: .85rem; font-weight: 400; color: #555; margin: .1rem 0 .7rem; }
+.clout__stance .opinion__cleavage {
+  display: block; text-align: center; margin-top: .45rem;
+  font-style: italic; font-size: .85rem; font-weight: 500; color: #1a1a2e;
 }
-.overview__hero:hover { background: #e2e2fb; }
+.clout__stance .opinion__cards { gap: 1.1rem; margin: .5rem 0 .2rem; }
+.clout__stance .opinion__card,
+.clout__stance .opinion__card--pos,
+.clout__stance .opinion__card--neg { padding: 0; border: 0; background: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) { transform: none; box-shadow: none; }
+.clout__stance button.opinion__card:hover:not(:disabled) .opinion__card-sub { text-decoration: underline; }
+.clout__stance .opinion__card-pct { font-size: 1.05rem; }
+/* « Analyse de position vis-à-vis de : » en format TITRE de section (homogène). */
+.clout__stance .opinion__label {
+  font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.6;
+  letter-spacing: 0; text-transform: none; color: var(--agora-active);
+}
+/* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
+/* Hero témoignage INTÉGRÉ à la synthèse : pas de fond, juste un liseré discret comme
+   marqueur de citation ; police alignée. Reste cliquable (→ tous les témoignages). */
+.overview__hero {
+  margin: .2rem 0 1.2rem; padding: .1rem 0 .1rem .9rem; cursor: pointer;
+  background: none; border: 0; border-left: 3px solid var(--agora-soft, #ececfe);
+  transition: border-color .12s;
+}
+.overview__hero:hover { border-left-color: var(--agora, #000091); }
+.overview__hero:hover .overview__hero-more { text-decoration: underline; }
 .overview__hero:focus-visible { outline: 2px solid var(--agora, #000091); outline-offset: 2px; }
 .overview__hero-label {
   font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--agora, #000091); font-weight: 700; margin-bottom: .4rem;
+  color: #8a8a97; font-weight: 700; margin-bottom: .35rem;
 }
-.overview__hero-quote { margin: 0; font-size: 1.05rem; line-height: 1.6; font-style: italic; color: #222; }
-.overview__hero-more { display: inline-block; margin-top: .5rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
+.overview__hero-quote { margin: 0; font-size: 13px; line-height: 1.6; font-style: italic; color: #333; }
+.overview__hero-more { display: inline-block; margin-top: .45rem; font-size: .82rem; font-weight: 600; color: var(--agora, #000091); }
 /* Imbrication : trait vertical + indentation pour lire la profondeur à l'œil. */
 .clout__children { margin: .2rem 0 .2rem .7rem; border-left: 2px solid var(--agora-soft, #ececfe); padding-left: .7rem; }
 @media (max-width: 640px) {
@@ -1756,7 +1782,17 @@ button.opinion__card:disabled { cursor: default; }
 }
 
 /* Phrase d'introduction qui prolonge la synthèse globale vers l'outline des clusters. */
+/* Titre de section HOMOGÈNE (aligné sur .md h2 = titres Contexte / Vue générale / À
+   relever) — réutilisé pour « Thèmes », « Thèmes distincts », « Analyse de position ». */
+.synth-h {
+  font-size: 13px; font-weight: 700; line-height: 1.5;
+  margin: 16px 0 6px; color: var(--agora-active);
+}
 .overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
+/* Sous-texte du titre « Thèmes » (compte des thèmes) — plus petit, discret. */
+.overview__clusters-lead--sub {
+  margin: 0 0 .5rem; font-size: .85rem; font-weight: 400; color: #777;
+}
 /* Toggle « voir plus » sous le top-5 des clusters. */
 .clout__more {
   margin: .5rem 0 .2rem; padding: .35rem .7rem; background: none; cursor: pointer;
@@ -1933,6 +1969,8 @@ button.opinion__card:disabled { cursor: default; }
 
 /* ── Mots-clés CLIQUABLES (filtrent les avis du focus) ── */
 .kw-chips--clickable { margin-top: 1.2rem; }
+/* Mots-clés c-TF-IDF : chips beaucoup plus petits (discrets, sous la synthèse). */
+.kw-chips--clickable .kw-chip { font-size: .65rem; padding: .1rem .45rem; line-height: 1.5; }
 .kw-chip--btn { border: 1px solid rgba(0,0,145,.28); cursor: pointer; font: inherit; line-height: 1.4; }
 .kw-chip--btn:hover { background: #e0e0fb; }
 .kw-chip--on { background: var(--agora, #000091); color: #fff; border-color: var(--agora, #000091); }
