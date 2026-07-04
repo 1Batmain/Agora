@@ -126,7 +126,6 @@ export function ClusterOutline({
       const kids = childrenOf.get(t.id) ?? [];
       const name = t.title || t.label;
       const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
-      const coh = Math.round((t.cohesion ?? t.consensus ?? 0) * 100);
       return (
         <div key={t.id} id={`clout-node-${t.id}`} className={`clout__node${open ? ' clout__node--open' : ''}`}>
           <button
@@ -142,7 +141,6 @@ export function ClusterOutline({
             <span className="clout__figs">
               <span className="clout__pct">{pct}%</span>
               <span className="clout__voix">{(t.n_avis ?? 0).toLocaleString(LOCALE)} voix</span>
-              <span className="clout__coh">cohésion {coh}%</span>
             </span>
             <span className="clout__track" aria-hidden>
               <span className="clout__fill" style={{ width: `${pct}%` }} />
@@ -150,6 +148,15 @@ export function ClusterOutline({
           </button>
           {open && (
             <div className="clout__body">
+              {/* Rail gauche cliquable : replie la thématique + matérialise l'imbrication. */}
+              <button
+                type="button"
+                className="clout__collapse-rail"
+                aria-label={`Replier « ${name} »`}
+                title="Replier"
+                onClick={() => toggle(t.id)}
+              />
+              <div className="clout__body-inner">
               <ClusterPanel
                 dataset={dataset}
                 theme={t}
@@ -171,6 +178,7 @@ export function ClusterOutline({
                 onExploreTheme={onExploreTheme}
                 onExploreAvis={onExploreAvis}
               />
+              </div>
             </div>
           )}
         </div>
@@ -262,12 +270,20 @@ function ClusterPanel({
     ? allAvis.filter((c) => (c.text || '').toLowerCase().includes(selectedKeyword.toLowerCase()))
     : allAvis
   ).slice(0, selectedKeyword ? 8 : 5);
+  // HERO : l'avis au score composite (`theme.hero_avis_id`, calculé au build) s'il est
+  // présent ET trouvé dans les citations ; sinon REPLI gracieux sur le 1er représentatif.
+  // Un filtre mot-clé actif prime (on montre le meilleur avis mentionnant le mot-clé).
+  const heroCit = selectedKeyword
+    ? repAvis[0]
+    : (theme.hero_avis_id
+        ? (allAvis.find((c) => c.avis_id === theme.hero_avis_id) ?? repAvis[0])
+        : repAvis[0]);
 
   return (
     <div className={`overview__dynsynth clout__panel${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
       {/* HERO — le témoignage le plus représentatif, EN PREMIER. Cliquable → TOUS les
           témoignages de la thématique (explorateur d'avis filtré sur le thème). */}
-      {repAvis[0] && (
+      {heroCit && (
         <figure
           className="overview__hero"
           role="button"
@@ -279,7 +295,7 @@ function ClusterPanel({
           <figcaption className="overview__hero-label">
             Témoignage représentatif{selectedKeyword ? ` · « ${selectedKeyword} »` : ''}
           </figcaption>
-          <blockquote className="overview__hero-quote">« {repAvis[0].text} »</blockquote>
+          <blockquote className="overview__hero-quote">« {heroCit.text} »</blockquote>
           <span className="overview__hero-more">Voir tous les témoignages →</span>
         </figure>
       )}
