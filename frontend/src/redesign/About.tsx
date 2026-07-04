@@ -22,6 +22,10 @@ const TEAM: { name: string; role: string; linkedin?: string; github?: string }[]
   { name: 'Baptiste Duval', role: 'Mainteneur', github: 'https://github.com/1Batmain' },
   { name: 'Eliott Pelpel', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/eliott-pelpel/' },
   { name: 'Rick Gao', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/rickgao03/' },
+  { name: 'Anis Outaleb', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/aniss-outaleb/' },
+  { name: 'Pierre Chhieng', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/pierre-chhieng/' },
+  { name: 'Paul Pazart', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/paul-pazart/' },
+  { name: 'Amine Saboni', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/amine-saboni/' },
 ];
 
 /**
