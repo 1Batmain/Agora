@@ -247,8 +247,7 @@ def _attach_global_context(out: dict, dataset_id: str) -> dict:
 # rendues par le FRONT et s'intercalent aux positions prévues — pas générées ici.
 #
 #   THÉMATIQUE : ## Vue générale (LLM) · [Thèmes distincts — front] · ## À relever (LLM)
-#   GLOBALE    : ## Introduction (LLM) · ## Contexte (LLM) · ## Profil du panel (dérivé)
-#                                                          · [Thèmes identifiés — front]
+#   GLOBALE    : ## Contexte (LLM) · ## Profil du panel (dérivé) · [Thèmes identifiés — front]
 # ─────────────────────────────────────────────────────────────────────────────
 
 _HARNESS_SYSTEM = (
@@ -263,18 +262,18 @@ _TASK_IDENTITE = (
     "sans énumérer les sous-thématiques."
 )
 _TASK_TENSION = (
-    "En 2 à 4 puces Markdown, dégage les points de CONSENSUS (accords larges) et de "
-    "TENSION (désaccords, clivages) au sein de cette thématique, en t'appuyant sur les "
-    "données d'opinion fournies (objet de clivage, répartition favorable/défavorable). "
-    "Factuel ; ne recopie pas les chiffres bruts."
-)
-_TASK_INTRO = (
-    "Présente en 1 à 2 phrases, clairement et succinctement, l'OBJET de cette consultation "
-    "(de quoi il s'agit, ce sur quoi les citoyens se sont exprimés)."
+    "À partir des données d'opinion fournies (objet de clivage, profil, répartition "
+    "favorable/défavorable), RELÈVE ce qui ressort au sein de cette thématique : indique "
+    "si l'opinion est plutôt CONSENSUELLE, plutôt CLIVANTE, ou partagée, puis développe "
+    "EN CONSÉQUENCE (accords larges et/ou lignes de fracture, points saillants). Adapte "
+    "librement le fond ET la forme au signal réel — n'impose PAS de rubriques figées "
+    "« Consensus »/« Tensions » si l'un domine largement. 2 à 4 phrases ou puces, "
+    "factuel, sans recopier les chiffres bruts."
 )
 _TASK_CONTEXTE = (
-    "En 1 à 2 phrases, précise le BUT et le CADRE de cette consultation : quand, par qui "
-    "et pourquoi elle a été émise, d'après le contexte fourni."
+    "En 2 à 3 phrases, présente le CONTEXTE de cette consultation : son OBJET (de quoi il "
+    "s'agit, ce sur quoi les citoyens se sont exprimés) ET le but/cadre dans lequel elle a "
+    "été émise (quand, par qui, pourquoi), d'après le contexte fourni."
 )
 _SECTION_MAX_TOKENS = 320
 
@@ -442,8 +441,8 @@ def _render_insight(tree: ThemeTree, level: str, theme_id: str | None = None,
                 ("À relever", _llm(_TASK_TENSION, _tension_data(tree, node, opinion, child_insights))),
             ]
         else:
+            # Introduction retirée (redondante avec Contexte) → Contexte auto-suffisant.
             sections = [
-                ("Introduction", _llm(_TASK_INTRO, _global_data(tree))),
                 ("Contexte", _llm(_TASK_CONTEXTE, _global_data(tree))),
                 ("Profil du panel", _profil_panel(tree)),  # dérivé — pas de LLM
             ]
