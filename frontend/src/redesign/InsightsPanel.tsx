@@ -68,6 +68,9 @@ export function InsightsPanel({
   /** Remonter d'un niveau dans le drill. */
   onBackTheme?: () => void;
 }) {
+  // Le repli/dépli se fait maintenant au niveau du PANNEAU ENTIER (glissement
+  // horizontal de `.agora__right`, cf. `RedesignApp`) plutôt qu'ici (le contenu
+  // de ce composant est donc toujours rendu en entier).
   return (
     <section className="panel insights">
       <header className="panel__head">
