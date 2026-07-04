@@ -6,6 +6,15 @@ import { Markdown } from './Markdown';
 import { ClusterOutline, stripSaillants } from './ClusterOutline';
 import { LOCALE } from './strings';
 
+/** Retire une phrase d'AMORCE résiduelle en toute fin de synthèse globale (ex. « Les
+ * principaux thèmes identifiés sont : ») : le front la remplace par son propre lead
+ * cliquable (« Agora a identifié N thèmes distincts : »), donc une amorce laissée par
+ * le LLM ferait DOUBLON. On ne coupe que si la toute fin est une courte ligne en « : ». */
+function stripDanglingLead(md: string | null): string | null {
+  if (!md) return md;
+  return md.replace(/\n+[^\n]{0,120}:\s*$/, '').trim();
+}
+
 /**
  * Page d'APERÇU d'une consultation CLOSE (sous-page entre la landing et le graphe).
  * Présente la consultation — questions/contexte, panel (langues), nombre de réponses,
@@ -88,7 +97,7 @@ export function ConsultationOverview({
   // `n_avis` par thème) DOUBLE-COMPTE les avis présents dans plusieurs thèmes → ne JAMAIS
   // l'afficher comme total honnête (c'est le bug des « 4377 » vs 3000 analysés / 28384 total).
   const nAnalyzed = dataset.n_sample ?? navTotal;
-  const globalSource = stripSaillants(synthesis);
+  const globalSource = stripDanglingLead(stripSaillants(synthesis));
 
   return (
     <div className="agora overview">
