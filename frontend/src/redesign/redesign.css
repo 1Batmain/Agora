@@ -1749,8 +1749,8 @@ button.opinion__card:disabled { cursor: default; }
 .clout__stance .opinion__card-pct { font-size: 1.05rem; }
 /* « Analyse de position vis-à-vis de : » en format TITRE de section (homogène). */
 .clout__stance .opinion__label {
-  font-family: inherit; font-size: 18px; font-weight: 700; line-height: 1.6;
-  letter-spacing: 0; text-transform: none; color: var(--grey-1000, #111);
+  font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.6;
+  letter-spacing: 0; text-transform: none; color: var(--agora-active);
 }
 /* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
 /* Hero témoignage INTÉGRÉ à la synthèse : pas de fond, juste un liseré discret comme
@@ -1781,8 +1781,8 @@ button.opinion__card:disabled { cursor: default; }
 /* Titre de section HOMOGÈNE (aligné sur .md h2 = titres Contexte / Vue générale / À
    relever) — réutilisé pour « Thèmes », « Thèmes distincts », « Analyse de position ». */
 .synth-h {
-  font-size: 18px; font-weight: 700; line-height: 1.6;
-  margin: 1.2rem 0 8px; color: var(--grey-1000, #111);
+  font-size: 15px; font-weight: 700; line-height: 1.6;
+  margin: 16px 0 6px; color: var(--agora-active);
 }
 .overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
 /* Sous-texte du titre « Thèmes » (compte des thèmes) — plus petit, discret. */
