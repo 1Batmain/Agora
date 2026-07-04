@@ -161,7 +161,6 @@ export function ConsultationOverview({
         <section className="overview__synthesis">
           {/* 1) VUE D'ENSEMBLE — synthèse globale FIXE, toujours en tête. */}
           <div className={`overview__dynsynth${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
-            <h3 className="synthesis__subhead">Vue d'ensemble</h3>
             {globalSource ? (
               <div className="overview__synthbody">
                 <Markdown source={globalSource} />
