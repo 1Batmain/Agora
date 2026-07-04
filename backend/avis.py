@@ -30,6 +30,7 @@ Précalculé au BUILD et persisté (`analysis_store`), servi tel quel (instantan
 
 from __future__ import annotations
 
+import json
 import unicodedata
 
 from backend.analysis import ThemeTree, macro_of
@@ -205,6 +206,28 @@ def _avis_themes(claims: list[dict]) -> list[dict]:
     return list(seen.values())
 
 
+def _build_item(key: str, entry: dict) -> dict:
+    """Item servi par `/avis_list` : avis ENTIER + aperçu + thèmes uniques.
+
+    Reconstruit à L'IDENTIQUE depuis une entrée `avis.json` — partagé par le chemin Python
+    (`avis_list`) ET le chemin DuckDB (`avis_list_duckdb`), garantissant une parité de shape
+    entre les deux (l'un lit le dict, l'autre le `payload` verbatim de `analysis.duckdb`).
+    """
+    claims = entry.get("claims") or []
+    text = entry.get("text") or ""
+    # Avis ENTIER (text/text_fr/lang/claims) servi tel quel depuis `avis.json` —
+    # spans des claims ancrés sur `text` (text_clean masqué, cf. docstring module).
+    return {
+        "avis_id": entry.get("id", key),
+        "excerpt": _excerpt(text),
+        "themes": _avis_themes(claims),
+        "text": text,
+        "text_fr": entry.get("text_fr"),
+        "lang": entry.get("lang", "fr"),
+        "claims": claims,
+    }
+
+
 def avis_list(avis_data: dict, themes: list[dict], *,
               theme_id: str | None = None, q: str | None = None,
               stance: str | None = None, claim_stance: dict | None = None,
@@ -220,6 +243,9 @@ def avis_list(avis_data: dict, themes: list[dict], *,
     sous-arbre de `theme_id` (un macro filtre tous ses sous-thèmes). `q` : sous-chaîne
     insensible casse/accents sur le `text`. `limit`/`offset` paginent le résultat filtré
     (l'ordre suit `avis.json`, stable d'une requête à l'autre).
+
+    Chemin de repli O(N) (scan + fold Unicode par requête) : `avis_list_duckdb` sert la
+    MÊME sémantique en SQL indexé quand `analysis.duckdb` est présent (cf. `server`).
     """
     keep_ids = _descendants_of(themes, theme_id) if theme_id else None
     needle = _fold(q.strip()) if q and q.strip() else None
@@ -249,22 +275,73 @@ def avis_list(avis_data: dict, themes: list[dict], *,
         text = entry.get("text") or ""
         if needle is not None and needle not in _fold(text):
             continue
-        # Avis ENTIER (text/text_fr/lang/claims) servi tel quel depuis `avis.json` —
-        # spans des claims ancrés sur `text` (text_clean masqué, cf. docstring module).
-        matched.append({
-            "avis_id": entry.get("id", key),
-            "excerpt": _excerpt(text),
-            "themes": _avis_themes(claims),
-            "text": text,
-            "text_fr": entry.get("text_fr"),
-            "lang": entry.get("lang", "fr"),
-            "claims": claims,
-        })
+        matched.append(_build_item(key, entry))
 
     total = len(matched)
     start = max(0, offset)
     page = matched[start:start + limit] if limit >= 0 else matched[start:]
     return {"total": total, "items": page}
+
+
+def avis_list_duckdb(con, themes: list[dict], *,
+                     theme_id: str | None = None, q: str | None = None,
+                     stance: str | None = None, claim_stance: dict | None = None,
+                     limit: int = 15, offset: int = 0) -> dict:
+    """Variante SQL de `avis_list` : filtrage/pagination délégués à `analysis.duckdb`.
+
+    MÊME contrat et MÊME sémantique que `avis_list` — l'item est reconstruit par
+    `_build_item` depuis le `payload` verbatim stocké au bake, donc byte-identique au
+    fallback. Les prédicats miroir du fallback :
+      * `theme_id` → EXISTS un claim dont `filter_theme ∈ descendants(theme_id)` (calculés
+        en Python comme le fallback, générique, aucune profondeur en dur) ;
+      * `stance`   → (avec `claim_stance` présent) EXISTS un claim (DANS le thème) dont la
+        `stance` bakée == `stance` — même claim, comme le fallback ;
+      * `q`        → `contains(text_fold, needle)` où `text_fold`/`needle` sont foldés par
+        le MÊME `_fold` : sous-chaîne insensible casse/accents, parité exacte avec `in`.
+    `con` est un curseur DuckDB en lecture seule (thread-local, cf. `analysis_store`).
+    """
+    keep_ids = _descendants_of(themes, theme_id) if theme_id else None
+    needle = _fold(q.strip()) if q and q.strip() else None
+
+    conds: list[str] = []
+    params: list = []
+
+    # Filtre thème/stance : semi-jointure sur `claims` (`rank IN (SELECT …)`), planifiée en
+    # HASH JOIN par DuckDB, avec la sémantique « l'avis a ≥1 claim (dans le thème) portant la
+    # stance ». Le sous-arbre est passé comme UN SEUL paramètre liste (`list_contains`) et non
+    # comme N placeholders `IN (?,?,…)` : la requête reste de taille constante (un macro a des
+    # centaines de descendants) → pas de re-parse/plan proportionnel au sous-arbre.
+    use_stance = bool(stance and claim_stance)
+    if keep_ids is not None or use_stance:
+        sub = []
+        if keep_ids is not None:
+            sub.append("list_contains(?, filter_theme)")
+            params.append(sorted(keep_ids))     # une liste = un paramètre (ordre déterministe)
+        if use_stance:
+            sub.append("stance = ?")
+            params.append(stance)
+        conds.append("a.rank IN (SELECT avis_rank FROM claims WHERE "
+                     + " AND ".join(sub) + ")")
+
+    if needle is not None:
+        conds.append("contains(a.text_fold, ?)")
+        params.append(needle)
+
+    where = ("WHERE " + " AND ".join(conds)) if conds else ""
+
+    total = con.execute(f"SELECT count(*) FROM avis a {where}", params).fetchone()[0]
+
+    page_sql = f"SELECT a.key, a.payload FROM avis a {where} ORDER BY a.rank"
+    page_params = list(params)
+    if limit >= 0:
+        page_sql += " LIMIT ? OFFSET ?"
+        page_params += [limit, max(0, offset)]
+    else:
+        page_sql += " OFFSET ?"
+        page_params.append(max(0, offset))
+    rows = con.execute(page_sql, page_params).fetchall()
+    items = [_build_item(key, json.loads(payload)) for key, payload in rows]
+    return {"total": total, "items": items}
 
 
 def build_avis_provenance(tree: ThemeTree,
