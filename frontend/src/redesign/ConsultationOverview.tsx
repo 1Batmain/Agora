@@ -207,10 +207,10 @@ export function ConsultationOverview({
           {/* Accès graphe + explorateur TOUT EN BAS de la synthèse (vue globale). */}
           {themes.length > 0 && (
             <div className="overview__actions overview__actions--bottom">
-              <button type="button" className="btn-secondary" onClick={() => onViewGraph(null)}>
+              <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
                 Voir l'analyse →
               </button>
-              <button type="button" className="btn-primary" onClick={() => onExploreTheme(null)}>
+              <button type="button" className="btn-secondary" onClick={() => onExploreTheme(null)}>
                 Consulter tous les témoignages →
               </button>
             </div>

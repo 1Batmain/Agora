@@ -474,8 +474,22 @@ def _disk_path(dataset: str, key_hash: str) -> Path:
 
 
 def _cache_key(dataset: str, level: str, theme_id: str | None, model: str,
-               resolution: float) -> tuple:
-    return (dataset, level, theme_id or "", model, round(resolution, 4))
+               resolution: float, child_insights: dict[str, str] | None = None) -> tuple:
+    """Clé de cache d'un insight.
+
+    BOTTOM-UP : la synthèse d'un thème PARENT dépend des MARKDOWNS de ses ENFANTS.
+    Sans les inclure, un re-bake avec des synthèses enfants CHANGÉES ferait un cache
+    HIT sur l'ANCIENNE synthèse du parent. On ajoute donc un marqueur `bottomup` + un
+    hash sha256 court des markdowns enfants (triés par id → déterministe, indépendant de
+    l'ordre d'insertion). Une FEUILLE (ou tout appel sans `child_insights`) garde la clé
+    STABLE (base seule) — aucun changement de comportement."""
+    base = (dataset, level, theme_id or "", model, round(resolution, 4))
+    if child_insights:
+        joined = "\x00".join(f"{cid}\x01{child_insights[cid]}"
+                             for cid in sorted(child_insights))
+        digest = hashlib.sha256(joined.encode("utf-8")).hexdigest()[:12]
+        return (*base, "bottomup", digest)
+    return base
 
 
 def _key_hash(key: tuple) -> str:
@@ -502,6 +516,7 @@ def _insights_payload(
     embedder: str | None = None,
     resolution: float = 1.0,
     refresh: bool = False,
+    child_insights: dict[str, str] | None = None,
 ) -> dict:
     """Synthèse Markdown LLM d'un niveau de zoom, CACHÉE par (dataset, level, id).
 
@@ -518,7 +533,7 @@ def _insights_payload(
         raise ValueError("level='theme' exige un `id` de thème.")
 
     synth_model = mistral_client.SYNTHESIS_MODEL
-    key = _cache_key(ds.id, level, theme_id, synth_model, resolution)
+    key = _cache_key(ds.id, level, theme_id, synth_model, resolution, child_insights)
 
     # Arbre + résumé + libellé construits PARESSEUSEMENT : seulement sur cache miss
     # (réutilisés depuis le cache mémoire de `get_or_build_tree`). `state` mémorise pour
