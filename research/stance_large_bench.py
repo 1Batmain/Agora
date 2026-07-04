@@ -25,12 +25,37 @@ import json
 import os
 import random
 import sys
+import time
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.build_opinion import STANCE_SYSTEM, BATCH
 from pipeline.cluster import mistral_client
+
+# Backoff sur erreurs TRANSITOIRES (429 RPM bas de large, 5xx, réseau) — repris de
+# pipeline/claims/backend.py. SANS ça, un 429 tombe en repli « nuance/(échec LLM) » et
+# CONTAMINE le bench de large (RPM bas) : on mesurerait des échecs API, pas la stance.
+_RETRIABLE = frozenset({0, 408, 409, 429, 500, 502, 503, 504})
+_MAX_RETRIES = 6
+_BACKOFF_BASE = 2.0
+_BACKOFF_CAP = 30.0
+# Concurrence par modèle : large-latest a un RPM bas → on limite les workers pour ne pas
+# saturer (le backoff gère le résiduel). small tolère plus.
+WORKERS = {"mistral-small-latest": 6, "mistral-large-latest": 3}
+_JITTER = random.Random(42)  # jitter seedé (repro)
+
+
+def chat_retry(messages, *, model, **kw):
+    """mistral_client.chat + retry backoff exponentiel borné sur erreurs transitoires."""
+    for attempt in range(_MAX_RETRIES + 1):
+        try:
+            return mistral_client.chat(messages, model=model, **kw)
+        except mistral_client.MistralError as e:
+            if e.status not in _RETRIABLE or attempt == _MAX_RETRIES:
+                raise
+            delay = min(_BACKOFF_CAP, _BACKOFF_BASE ** attempt) * (0.5 + _JITTER.random())
+            time.sleep(delay)
 
 DATA = "backend/cache/xstance/ideas.jsonl"
 RAW = "research/stance_large_bench_raw.jsonl"
@@ -119,8 +144,8 @@ def stance_batch_cfg(cible, items, *, model, system):
             f"CONTRIBUTIONS (réponds pour chaque [indice]) :\n" + "\n".join(lines))
     messages = [{"role": "system", "content": system},
                 {"role": "user", "content": user}]
-    raw = mistral_client.chat(messages, model=model, temperature=0.0,
-                              max_tokens=1500, json_mode=True)
+    raw = chat_retry(messages, model=model, temperature=0.0,
+                     max_tokens=1500, json_mode=True)
     data = json.loads(raw)
     out = {}
     for rec in data.get("results", []):
@@ -160,7 +185,7 @@ def run_config(cfg_name, rows, tasks):
                     out[i] = {"stance": "nuance", "confidence": "low", "justif": "(échec LLM)"}
             return cible, out
 
-    with ThreadPoolExecutor(max_workers=6) as ex:
+    with ThreadPoolExecutor(max_workers=WORKERS.get(model, 4)) as ex:
         futs = {ex.submit(work, t): t for t in tasks}
         for fut in as_completed(futs):
             cible, got = fut.result()
