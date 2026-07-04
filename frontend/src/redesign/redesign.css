@@ -1746,6 +1746,11 @@ button.opinion__card:disabled { cursor: default; }
 .clout__stance button.opinion__card:hover:not(:disabled) { transform: none; box-shadow: none; }
 .clout__stance button.opinion__card:hover:not(:disabled) .opinion__card-sub { text-decoration: underline; }
 .clout__stance .opinion__card-pct { font-size: 1.05rem; }
+/* « Analyse de position vis-à-vis de : » en format TITRE de section (homogène). */
+.clout__stance .opinion__label {
+  font-family: inherit; font-size: 18px; font-weight: 700; line-height: 1.3;
+  letter-spacing: 0; text-transform: none; color: var(--grey-1000, #111);
+}
 /* HERO — témoignage représentatif en tête de thématique, cliquable → tous les avis. */
 /* Hero témoignage INTÉGRÉ à la synthèse : pas de fond, juste un liseré discret comme
    marqueur de citation ; police alignée. Reste cliquable (→ tous les témoignages). */
@@ -1772,7 +1777,17 @@ button.opinion__card:disabled { cursor: default; }
 }
 
 /* Phrase d'introduction qui prolonge la synthèse globale vers l'outline des clusters. */
+/* Titre de section HOMOGÈNE (aligné sur .md h2 = titres Contexte / Vue générale / À
+   relever) — réutilisé pour « Thèmes », « Thèmes distincts », « Analyse de position ». */
+.synth-h {
+  font-size: 18px; font-weight: 700; line-height: 1.3;
+  margin: 1.4rem 0 .35rem; color: var(--grey-1000, #111);
+}
 .overview__clusters-lead { margin: 1.4rem 0 .3rem; font-weight: 600; color: #222; }
+/* Sous-texte du titre « Thèmes » (compte des thèmes) — plus petit, discret. */
+.overview__clusters-lead--sub {
+  margin: 0 0 .5rem; font-size: .85rem; font-weight: 400; color: #777;
+}
 /* Toggle « voir plus » sous le top-5 des clusters. */
 .clout__more {
   margin: .5rem 0 .2rem; padding: .35rem .7rem; background: none; cursor: pointer;

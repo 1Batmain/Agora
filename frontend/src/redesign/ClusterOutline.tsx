@@ -158,9 +158,10 @@ export function ClusterOutline({
                 subclusters={
                   kids.length > 0 ? (
                     <div className="clout__sub">
-                      <p className="overview__clusters-lead clout__sublead">
+                      <h3 className="synth-h">Thèmes distincts</h3>
+                      <p className="overview__clusters-lead--sub">
                         {kids.length} sous-thématique{kids.length > 1 ? 's' : ''} identifiée
-                        {kids.length > 1 ? 's' : ''}&nbsp;:
+                        {kids.length > 1 ? 's' : ''}.
                       </p>
                       <div className="clout__children">{renderNodes(kids, t.n_avis ?? 0)}</div>
                     </div>
