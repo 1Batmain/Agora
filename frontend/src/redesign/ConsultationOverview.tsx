@@ -179,8 +179,9 @@ export function ConsultationOverview({
               déployable EN PLACE (accordéon récursif par niveau) avec sa synthèse riche. */}
           {themes.length > 0 && (
             <>
-              <p className="overview__clusters-lead">
-                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts&nbsp;:
+              <h3 className="synth-h">Thèmes</h3>
+              <p className="overview__clusters-lead--sub">
+                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts.
               </p>
               <ClusterOutline
                 dataset={dataset.id}
