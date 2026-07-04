@@ -38,8 +38,8 @@ export function OpinionBar({
       <div className="opinion__head">
         <span className="opinion__label">
           {is_aggregate
-            ? `Objet de clivage · synthèse de ${n_children ?? 0} sous-thèmes`
-            : 'Objet de clivage'}
+            ? `Analyse de position vis-à-vis de (synthèse de ${n_children ?? 0} sous-thèmes) :`
+            : 'Analyse de position vis-à-vis de :'}
         </span>
         <span className={`opinion__badge opinion__badge--${profil}`}>
           {clivant ? 'Clivant' : 'Consensuel'}
