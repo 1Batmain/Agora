@@ -89,7 +89,9 @@ def create_embedder(model_id: str | None = None):
             model_path=model_path,
             api_key=_dotenv_value("EMBED_API_KEY") or "",
         )
-    return Embedder(model_id=model_id or DEFAULT_MODEL_ID)
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    return Embedder(model_id=model_id or DEFAULT_MODEL_ID, device=device)
 
 
 class Embedder:
@@ -104,7 +106,7 @@ class Embedder:
         self,
         model_id: str = DEFAULT_MODEL_ID,
         device: str = "cpu",
-        batch_size: int = 32,
+        batch_size: int = 16,
         use_prefix: bool = True,
         e5_prefix: bool | None = None,  # alias rétro-compat de use_prefix
     ) -> None:
@@ -130,6 +132,10 @@ class Embedder:
             if self.spec.revision:
                 kwargs["revision"] = self.spec.revision
             self._model = SentenceTransformer(self.model_id, **kwargs)
+            
+            # Prevent OOM on 8GB GPUs for large models with long context (e.g. jina-v3)
+            if self._model.max_seq_length > 1024:
+                self._model.max_seq_length = 1024
         return self._model
 
     def _prep(self, texts: list[str], prefix: str) -> list[str]:

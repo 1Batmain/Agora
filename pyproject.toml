@@ -19,6 +19,7 @@ dependencies = [
     # Langchain pour intégrer LM Studio et Nvidia NIM
     "langchain>=0.2.0",
     "langchain-openai>=0.1.0",
+    "transformers<4.45",
 ]
 
 # Contender pour le banc d'éval + accélérateur k-NN (optionnels, CPU).
@@ -46,12 +47,12 @@ package = false
 
 # Torch CPU-only (box partagée, pas de GPU) — évite le wheel CUDA volumineux.
 [[tool.uv.index]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
 explicit = true
 
 [tool.uv.sources]
-torch = { index = "pytorch-cpu" }
+torch = { index = "pytorch-cu121" }
 
 # Suite de régression API (FastAPI TestClient in-process, lit les vrais caches).
 # Lancer :  uv run --extra embed-contender --extra faiss --with fastapi --with pytest pytest -q

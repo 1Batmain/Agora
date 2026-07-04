@@ -221,9 +221,9 @@ def build_cache(
                            duration_seconds=perf_counter() - _t0_build)
     except Exception:
         pass
-    print(f"✓ {out_dir / EMB_NAME}  ({vecs.shape[0]}×{vecs.shape[1]} float32)")
-    print(f"✓ {out_dir / IDEAS_NAME}  ({len(ideas)} avis)")
-    print(f"✓ {out_dir / META_NAME}")
+    print(f"[OK] {out_dir / EMB_NAME}  ({vecs.shape[0]}×{vecs.shape[1]} float32)")
+    print(f"[OK] {out_dir / IDEAS_NAME}  ({len(ideas)} avis)")
+    print(f"[OK] {out_dir / META_NAME}")
     print(f"  langues : {meta['lang_counts']}")
     print(f"  subset  : {n_loaded}→{len(ideas)} "
           f"(min_chars≥{min_chars}, dedup_exact={dedup_exact}, "

@@ -18,7 +18,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-# Endpoint chat-completions Mistral (EU). Surcharge possible (proxy/tests).
+# Endpoint chat-completions par défaut (peut basculer sur NIM si NIM_API_KEY est détecté)
 API_URL = os.environ.get("AGORA_MISTRAL_URL", "https://api.mistral.ai/v1/chat/completions").rstrip("/")
 # Modèle par défaut pour le nommage (titres courts batchés).
 NAMING_MODEL = os.environ.get("AGORA_MISTRAL_MODEL", "mistral-small-latest")
@@ -27,6 +27,14 @@ NAMING_MODEL = os.environ.get("AGORA_MISTRAL_MODEL", "mistral-small-latest")
 SYNTHESIS_MODEL = os.environ.get("AGORA_MISTRAL_SYNTH_MODEL", NAMING_MODEL)
 # Timeout réseau par appel (s). La synthèse peut être plus lente qu'un naming.
 TIMEOUT = float(os.environ.get("AGORA_MISTRAL_TIMEOUT", "60"))
+
+# Auto-configuration NVIDIA NIM si MISTRAL n'est pas configuré mais NIM_API_KEY est présent
+if not os.environ.get("MISTRAL_API_KEY") and os.environ.get("NIM_API_KEY"):
+    if "AGORA_MISTRAL_URL" not in os.environ:
+        API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+    if "AGORA_MISTRAL_MODEL" not in os.environ:
+        NAMING_MODEL = "mistralai/mistral-large"
+        SYNTHESIS_MODEL = "mistralai/mistral-large"
 
 # ── Suivi d'usage (tokens) ──────────────────────────────────────────────────
 # Accumulateur PROCESS-level : TOUT passe par `chat()` (extraction via ApiBackend,
@@ -97,14 +105,14 @@ def load_api_key() -> str | None:
 
     Ne lève jamais, ne logge jamais la valeur.
     """
-    env = os.environ.get(_KEY_ENV)
+    env = os.environ.get(_KEY_ENV) or os.environ.get("NIM_API_KEY")
     if env and env.strip():
         return env.strip()
 
     root = _repo_root()
     dotenv = root.joinpath(*_DOTENV_REL)
     if dotenv.exists():
-        k = _read_dotenv_key(dotenv, _KEY_ENV)
+        k = _read_dotenv_key(dotenv, _KEY_ENV) or _read_dotenv_key(dotenv, "NIM_API_KEY")
         if k:
             return k
 
