@@ -16,6 +16,16 @@ export function stripSaillants(md: string | null): string | null {
     .trim();
 }
 
+/** Sépare le CORPS (« Ce que disent les citoyens ») de la section « À retenir » d'une
+ * synthèse de thématique — pour intercaler la liste des sous-thématiques ENTRE les deux
+ * (corps → sous-thématiques → à retenir), à l'image de la vue globale. */
+function splitRetenir(md: string | null): { body: string | null; retenir: string | null } {
+  if (!md) return { body: md, retenir: null };
+  const m = md.match(/\n#{1,4}\s*(?:À|A)\s+retenir\b[^\n]*/i);
+  if (!m || m.index == null) return { body: md.trim(), retenir: null };
+  return { body: md.slice(0, m.index).trim(), retenir: md.slice(m.index + 1).trim() };
+}
+
 /**
  * OUTLINE DE CLUSTERS — accordéon récursif « par niveau » affiché SOUS la synthèse
  * globale, sur la même page (plus de navigation qui remplace le contenu). Chaque
@@ -135,15 +145,21 @@ export function ClusterOutline({
                 theme={t}
                 opinion={opinions.find((o) => o.theme_id === t.id) ?? null}
                 navTotal={navTotal}
+                subclusters={
+                  kids.length > 0 ? (
+                    <div className="clout__sub">
+                      <p className="overview__clusters-lead clout__sublead">
+                        {kids.length} sous-thématique{kids.length > 1 ? 's' : ''} identifiée
+                        {kids.length > 1 ? 's' : ''}&nbsp;:
+                      </p>
+                      <div className="clout__children">{renderNodes(kids, t.n_avis ?? 0)}</div>
+                    </div>
+                  ) : null
+                }
                 onViewGraph={onViewGraph}
                 onExploreTheme={onExploreTheme}
                 onExploreAvis={onExploreAvis}
               />
-              {kids.length > 0 && (
-                <div className="clout__children">
-                  {renderNodes(kids, t.n_avis ?? 0)}
-                </div>
-              )}
             </div>
           )}
         </div>
@@ -151,7 +167,7 @@ export function ClusterOutline({
     });
 
   return (
-    <div className="clout" aria-label="Synthèses par cluster (dépliables)">
+    <div className="clout" aria-label="Synthèses par thématique (dépliables)">
       {renderNodes(shownRoots, total)}
       {roots.length > TOP_N && (
         <button type="button" className="clout__more" onClick={() => setShowAll((v) => !v)}>
@@ -176,6 +192,7 @@ function ClusterPanel({
   theme,
   opinion,
   navTotal,
+  subclusters,
   onViewGraph,
   onExploreTheme,
   onExploreAvis,
@@ -184,6 +201,9 @@ function ClusterPanel({
   theme: SpatialTheme;
   opinion: ThemeOpinion | null;
   navTotal: number;
+  /** Liste des sous-thématiques (lead + accordéon imbriqué), intercalée entre le corps
+   *  de la synthèse et la section « À retenir ». Null si thématique feuille. */
+  subclusters: JSX.Element | null;
   onViewGraph: (themeId: string | null) => void;
   onExploreTheme: (themeId: string | null, stance?: 'favorable' | 'defavorable' | null) => void;
   onExploreAvis: (avisId: string) => void;
@@ -217,7 +237,7 @@ function ClusterPanel({
     };
   }, [dataset, theme.id, theme]);
 
-  const dynSource = stripSaillants(synthesis);
+  const { body, retenir } = splitRetenir(stripSaillants(synthesis));
   const keywords = theme.keywords ?? [];
   const avisN = theme.n_avis ?? 0;
   const claimsN = theme.n_claims ?? 0;
@@ -230,9 +250,9 @@ function ClusterPanel({
 
   return (
     <div className={`overview__dynsynth clout__panel${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
-      {/* Dashboard de VOLUME du cluster. */}
+      {/* Dashboard de VOLUME de la thématique. */}
       {avisN > 0 && (
-        <div className="overview__dash" aria-label="Volume de ce cluster">
+        <div className="overview__dash" aria-label="Volume de cette thématique">
           <span className="overview__dash-item">
             <strong>{avisN.toLocaleString(LOCALE)}</strong> témoignages
           </span>
@@ -255,16 +275,27 @@ function ClusterPanel({
         />
       )}
 
-      {/* Synthèse Markdown du cluster. */}
-      {dynSource ? (
+      {/* CORPS de la synthèse (« Ce que disent les citoyens »). */}
+      {body ? (
         <div className="overview__synthbody">
-          <Markdown source={dynSource} />
+          <Markdown source={body} />
           {loading && <p className="overview__synthloading">Actualisation…</p>}
         </div>
       ) : loading ? (
         <p className="overview__loading">Chargement de la synthèse…</p>
       ) : (
         <p className="overview__loading">Synthèse indisponible.</p>
+      )}
+
+      {/* Sous-thématiques (lead « N sous-thématiques identifiées : » + accordéon imbriqué),
+          présentées COMME la vue globale, AVANT le « À retenir ». */}
+      {subclusters}
+
+      {/* « À retenir » — déplacé APRÈS les sous-thématiques identifiées. */}
+      {retenir && (
+        <div className="overview__synthbody overview__retenir">
+          <Markdown source={retenir} />
+        </div>
       )}
 
       {/* Mots-clés cliquables → filtrent les avis représentatifs. */}
@@ -321,7 +352,7 @@ function ClusterPanel({
         </div>
       )}
 
-      {/* Accès graphe + explorateur scopés à CE cluster. */}
+      {/* Accès graphe + explorateur scopés à CETTE thématique. */}
       <div className="overview__actions">
         <button type="button" className="btn-primary" onClick={() => onViewGraph(theme.id)}>
           Voir le graphe du thème →
