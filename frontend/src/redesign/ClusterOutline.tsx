@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { Citation, SpatialTheme, ThemeOpinion } from './contract';
+import type {
+  Citation, SpatialTheme, ThemeArguments, ThemeDemographics, ThemeOpinion,
+} from './contract';
 import { fetchCitations, fetchInsights } from './analysisApi';
+import { ArgumentsPanel } from './ArgumentsPanel';
 import { OpinionBar } from './OpinionBar';
 import { Markdown } from './Markdown';
-import { LOCALE } from './strings';
+import { LOCALE, stripMd } from './strings';
 
 /** Retire la section « ## Points saillants » de la synthèse LLM (choix produit : on ne
  * l'affiche plus). De la ligne de titre jusqu'au prochain « ## » (ou la fin). Exporté
@@ -53,6 +56,8 @@ export function ClusterOutline({
   themes,
   total,
   opinions,
+  themeArgs = [],
+  demographics = [],
   navTotal,
   openPath,
   onOpenPath,
@@ -67,6 +72,10 @@ export function ClusterOutline({
   total: number;
   /** Répartitions d'opinion (lookup par theme_id ; gracieux si absent). */
   opinions: ThemeOpinion[];
+  /** Arguments minés (artefact OPTIONNEL ; lookup par theme_id, gracieux si absent). */
+  themeArgs?: ThemeArguments[];
+  /** Profil démographique par thème (artefact OPTIONNEL ; gracieux si absent). */
+  demographics?: ThemeDemographics[];
   /** Total « panel » pour le % de volume affiché dans chaque panneau. */
   navTotal: number;
   /** Chemin ouvert racine→courant, PILOTÉ par le parent (permet d'ouvrir un cluster
@@ -124,7 +133,7 @@ export function ClusterOutline({
     nodes.map((t) => {
       const open = openPath.includes(t.id);
       const kids = childrenOf.get(t.id) ?? [];
-      const name = t.title || t.label;
+      const name = stripMd(t.title || t.label);
       const pct = denom > 0 ? Math.round(((t.n_avis ?? 0) / denom) * 100) : 0;
       return (
         <div key={t.id} id={`clout-node-${t.id}`} className={`clout__node${open ? ' clout__node--open' : ''}`}>
@@ -161,6 +170,8 @@ export function ClusterOutline({
                 dataset={dataset}
                 theme={t}
                 opinion={opinions.find((o) => o.theme_id === t.id) ?? null}
+                args={themeArgs.find((a) => a.theme_id === t.id) ?? null}
+                demog={demographics.find((d) => d.theme_id === t.id) ?? null}
                 navTotal={navTotal}
                 subclusters={
                   kids.length > 0 ? (
@@ -210,6 +221,8 @@ function ClusterPanel({
   dataset,
   theme,
   opinion,
+  args,
+  demog,
   navTotal,
   subclusters,
   onViewGraph,
@@ -219,6 +232,10 @@ function ClusterPanel({
   dataset: string;
   theme: SpatialTheme;
   opinion: ThemeOpinion | null;
+  /** Arguments minés du thème (artefact optionnel — null = pas de panneau). */
+  args: ThemeArguments | null;
+  /** Profil démographique du thème (artefact optionnel — null = pas de chip). */
+  demog: ThemeDemographics | null;
   navTotal: number;
   /** Liste des sous-thématiques (lead + accordéon imbriqué), intercalée entre le corps
    *  de la synthèse et la section « À retenir ». Null si thématique feuille. */
@@ -309,6 +326,15 @@ function ClusterPanel({
           {pct != null && (
             <span className="overview__dash-item overview__dash-pct">{pct}% du panel</span>
           )}
+          {demog && Object.entries(demog.majority).map(([axis, m]) => (
+            <span
+              key={axis}
+              className="overview__dash-item overview__dash-demog"
+              title={`Groupe majoritaire (${axis === 'age' ? 'âge' : axis}) parmi les répondants de ce thème — profil déclaré`}
+            >
+              <strong>{m.label}</strong> {Math.round(m.share * 100)}%
+            </span>
+          ))}
         </div>
       )}
 
@@ -345,6 +371,11 @@ function ClusterPanel({
           />
         </div>
       )}
+
+      {/* ARGUMENTS MINÉS (artefact OPTIONNEL) : les arguments les plus mis en avant
+          pour / contre, chacun sourcé sur des contributions réelles (extraits
+          verbatim cliquables). Rendu aussi sans OpinionBar (mode neutre). */}
+      {args && <ArgumentsPanel args={args} onExploreAvis={onExploreAvis} />}
 
       {/* Mots-clés cliquables → filtrent les avis représentatifs. */}
       {keywords.length > 0 && (

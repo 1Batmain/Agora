@@ -3,6 +3,7 @@ data/
 *.csv
 # Exception : fixtures synthétiques/anonymes committées (démo d'ingestion générique).
 !pipeline/ingest/fixtures/*.csv
+!pipeline/collect/tests/fixtures/*.csv
 
 # Python
 __pycache__/
