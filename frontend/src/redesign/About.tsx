@@ -26,6 +26,9 @@ const TEAM: { name: string; role: string; linkedin?: string; github?: string }[]
   { name: 'Pierre Chhieng', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/pierre-chhieng/' },
   { name: 'Paul Pazart', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/paul-pazart/' },
   { name: 'Amine Saboni', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/amine-saboni/' },
+  { name: 'Antoine Monot', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/antoine-monot/' },
+  { name: 'Ksenia Ossi', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/ksenia-ossi/' },
+  { name: 'Sebastien Bo', role: 'Contributeur', linkedin: 'https://www.linkedin.com/in/sebastien-bo-402096340/' },
 ];
 
 /**
