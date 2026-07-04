@@ -351,15 +351,6 @@ function ClusterPanel({
         </div>
       )}
 
-      {/* Accès graphe + explorateur scopés à CETTE thématique. */}
-      <div className="overview__actions">
-        <button type="button" className="btn-primary" onClick={() => onViewGraph(theme.id)}>
-          Voir le graphe du thème →
-        </button>
-        <button type="button" className="btn-secondary" onClick={() => onExploreTheme(theme.id)}>
-          Consulter les témoignages du thème →
-        </button>
-      </div>
     </div>
   );
 }
