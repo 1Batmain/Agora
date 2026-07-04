@@ -67,6 +67,9 @@ class ThemeNode:
     convergence: float = 0.0        # accord intra-cluster = consensus_eff (shrinkage pop.)
     keywords: list[str] = field(default_factory=list)
     representative_claims: list[str] = field(default_factory=list)
+    # Avis le plus REPRÉSENTATIF du thème (score composite au build, cf `_hero_avis`) —
+    # remplace le médoïde centroïde (générique sur corpus anisotrope). None si indéterminé.
+    hero_avis_id: str | None = None
     children: list[str] = field(default_factory=list)
     color: str = ""                 # couleur cluster (source unique : palette.py)
 
@@ -429,6 +432,68 @@ def _representatives(node: ThemeNode, vecs: np.ndarray, claim_texts: list[str],
 
 
 # --------------------------------------------------------------------------- #
+# Hero représentatif — score COMPOSITE (remplace le médoïde centroïde, générique sur
+# corpus mono-sujet anisotrope, cf research/cluster_merge_note.md)
+# --------------------------------------------------------------------------- #
+HERO_MIN_CHARS = 200
+HERO_MAX_CHARS = 1200
+
+
+def _lisibilite(text: str) -> float:
+    """Score de lisibilité [0,1] d'un avis : fenêtre `HERO_MIN..HERO_MAX` caractères.
+
+    Ni trop court (peu informatif/générique), ni trop long (illisible en hero). La
+    lisibilité FR est assurée EN AVAL par le front (affiche `text_fr` traduit)."""
+    n = len(text or "")
+    if n <= 0:
+        return 0.0
+    if n < HERO_MIN_CHARS:
+        return n / HERO_MIN_CHARS
+    if n > HERO_MAX_CHARS:
+        return HERO_MAX_CHARS / n
+    return 1.0
+
+
+def _hero_avis(node: ThemeNode, prepared, avis_total: np.ndarray) -> str | None:
+    """Avis le plus REPRÉSENTATIF du thème par score COMPOSITE (générique).
+
+    Pour chaque avis ayant ≥1 claim dans le thème :
+      hero = argmax( pureté × couverture × représentativité × lisibilité )
+    sur les claims du thème :
+      - pureté           = part des claims de l'avis qui tombent DANS le thème ;
+      - couverture       = nb de claims de l'avis dans le thème ;
+      - représentativité = sim moyenne de ses claims à TOUS les claims du thème
+                           (embeddings ; moyenne des vecteurs, PAS le centroïde normalisé) ;
+      - lisibilité       = fenêtre 200–1200 chars (`_lisibilite`).
+    `avis_total[a]` = nb TOTAL de claims de l'avis `a` (dénominateur de la pureté)."""
+    members = node.members
+    if not members:
+        return None
+    vecs = prepared.claim_vecs
+    owner = prepared.claim_owner
+    avis = prepared.avis
+    by_avis: dict[int, list[int]] = {}
+    for ci in members:
+        by_avis.setdefault(owner[ci], []).append(ci)
+    theme_mean = vecs[members].mean(axis=0)          # moyenne des embeddings (≠ centroïde normalisé)
+    best_id: str | None = None
+    best_score = -1.0
+    for aidx, cis in by_avis.items():
+        if aidx >= len(avis):
+            continue
+        total = int(avis_total[aidx]) if aidx < len(avis_total) else len(cis)
+        purete = (len(cis) / total) if total else 0.0
+        couverture = len(cis)
+        repres = max(0.0, float(np.mean(vecs[cis] @ theme_mean)))
+        lis = _lisibilite(getattr(avis[aidx], "text", "") or "")
+        score = purete * couverture * repres * lis
+        if score > best_score:
+            best_score = score
+            best_id = str(getattr(avis[aidx], "id", "") or "") or None
+    return best_id
+
+
+# --------------------------------------------------------------------------- #
 # Co-occurrence — entre frères de chaque groupe (macros, puis enfants de chaque nœud)
 # --------------------------------------------------------------------------- #
 def _cooccurrence(tree: ThemeTree) -> list[dict]:
@@ -556,9 +621,14 @@ def build_theme_tree(
         _name_nodes(nodes, prepared.claim_texts)
         _assign_colors(nodes, macros)
         _assign_convergence(nodes, macros)
+        # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.
+        avis_total = (np.bincount(np.asarray(prepared.claim_owner, dtype=int),
+                                  minlength=len(prepared.avis))
+                      if prepared.claim_owner else np.zeros(len(prepared.avis), dtype=int))
         for node in nodes.values():
             node.representative_claims = _representatives(
                 node, vecs, prepared.claim_texts, idf=claim_idf)
+            node.hero_avis_id = _hero_avis(node, prepared, avis_total)
 
     return ThemeTree(
         nodes=nodes, order=order, macros=macros, dataset=ds.id, prepared=prepared,
@@ -753,6 +823,8 @@ def theme_dict(n: ThemeNode) -> dict:
         "level": n.depth,
         "keywords": n.keywords,
         "representative_claims": n.representative_claims,
+        # Avis hero (score composite) — le front l'affiche en repli du 1er représentatif.
+        "hero_avis_id": n.hero_avis_id,
     }
 
 
