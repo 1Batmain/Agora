@@ -96,31 +96,28 @@ export function ConsultationOverview({
 
       <main className="overview__body">
         <section className="overview__head">
-          {/* Nom de la consultation en titre MODESTE, puis la question posée en
-              sous-titre italique entre guillemets (centrés). */}
+          {/* Nom de la consultation en titre MODESTE, une courte intro, puis la question
+              posée en sous-titre italique entre guillemets (centrés). */}
           <h1 className="overview__name">{dataset.label}</h1>
           {dataset.question && (
-            <p className="overview__question">« {dataset.question} »</p>
+            <p className="overview__question">
+              <span className="overview__question-lead">Analyse des réponses à la question&nbsp;:</span>
+              <span className="overview__question-text">« {dataset.question} »</span>
+            </p>
+          )}
+          {dataset.official_url && (
+            <p className="overview__official">
+              <a href={dataset.official_url} target="_blank" rel="noreferrer">
+                Voir la consultation officielle ↗
+              </a>
+            </p>
           )}
         </section>
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
           <div className="overview__stat">
             <strong>{nResp != null ? nResp.toLocaleString(LOCALE) : '—'}</strong>
-            <span>
-              réponses à la question
-              {hasNonRespondents && nReponses != null && (
-                <> · {nReponses.toLocaleString(LOCALE)} participants</>
-              )}
-            </span>
-          </div>
-          <div className="overview__stat">
-            <strong>{nThemes ?? '—'}</strong>
-            <span>thèmes identifiés</span>
-          </div>
-          <div className="overview__stat">
-            <strong>{langues || '—'}</strong>
-            <span>panel · langues</span>
+            <span>réponses recueillies</span>
           </div>
         </section>
 
@@ -179,16 +176,6 @@ export function ConsultationOverview({
             ) : (
               <p className="overview__loading">Synthèse indisponible.</p>
             )}
-            {themes.length > 0 && (
-              <div className="overview__actions">
-                <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
-                  Voir le graphe →
-                </button>
-                <button type="button" className="btn-secondary" onClick={() => onExploreTheme(null)}>
-                  Consulter les témoignages →
-                </button>
-              </div>
-            )}
           </div>
 
           {/* 2) LES CLUSTERS — introduits par la phrase qui prolonge la synthèse globale.
@@ -196,7 +183,9 @@ export function ConsultationOverview({
               déployable EN PLACE (accordéon récursif par niveau) avec sa synthèse riche. */}
           {themes.length > 0 && (
             <>
-              <p className="overview__clusters-lead">Les principaux thèmes identifiés sont&nbsp;:</p>
+              <p className="overview__clusters-lead">
+                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts&nbsp;:
+              </p>
               <ClusterOutline
                 dataset={dataset.id}
                 themes={themes}
@@ -211,13 +200,26 @@ export function ConsultationOverview({
               />
             </>
           )}
+
+          {/* Accès graphe + explorateur TOUT EN BAS de la synthèse (vue globale). */}
+          {themes.length > 0 && (
+            <div className="overview__actions overview__actions--bottom">
+              <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
+                Voir le graphe →
+              </button>
+              <button type="button" className="btn-secondary" onClick={() => onExploreTheme(null)}>
+                Consulter les témoignages →
+              </button>
+            </div>
+          )}
         </section>
 
         {/* PIED DE PAGE — transparence des coûts : tokens · $ · durée RÉELLE du traitement
             (somme des phases mesurées + estimées marquées), versus le dispositif officiel
             sourcé quand le descripteur en porte un. */}
-        {cost && (
+        {(cost || langues) && (
           <footer className="overview__footer" role="contentinfo">
+            {cost && (
             <p className="overview__cost">
               <span className="overview__cost-agora">
                 Traitement Agora&nbsp;:{' '}
@@ -261,6 +263,11 @@ export function ConsultationOverview({
                 </span>
               )}
             </p>
+            )}
+            {/* Petite info additionnelle : langues du panel. */}
+            {langues && (
+              <p className="overview__langs">Langues du panel&nbsp;: {langues}</p>
+            )}
           </footer>
         )}
       </main>
