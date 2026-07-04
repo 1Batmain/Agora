@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from backend.analysis import DEFAULT_SEED, ThemeTree, get_or_build_tree
+from backend.analysis import DEFAULT_RESOLUTION, DEFAULT_SEED, ThemeTree, get_or_build_tree
 from backend.develop import corpus_idf, development_scores, guard_gate
 from pipeline.claims.pipeline import DEFAULT_EMBEDDER
 
@@ -65,7 +65,7 @@ def citations_payload(
     backend: str | None = None,
     model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
 ) -> list[dict]:
     """Construit (ou réutilise) l'arbre puis renvoie les citations triées du thème."""

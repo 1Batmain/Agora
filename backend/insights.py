@@ -23,7 +23,13 @@ import re
 from pathlib import Path
 from time import perf_counter
 
-from backend.analysis import ThemeNode, ThemeTree, _dataset_context, get_or_build_tree
+from backend.analysis import (
+    DEFAULT_RESOLUTION,
+    ThemeNode,
+    ThemeTree,
+    _dataset_context,
+    get_or_build_tree,
+)
 from backend.llm_cache import DISK, MEMORY, cached_llm
 from backend.recluster import dataset_dir
 from pipeline.cluster import mistral_client
@@ -514,7 +520,7 @@ def _insights_payload(
     backend: str | None = None,
     model: str | None = None,
     embedder: str | None = None,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     refresh: bool = False,
     child_insights: dict[str, str] | None = None,
 ) -> dict:

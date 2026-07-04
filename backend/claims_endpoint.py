@@ -30,6 +30,7 @@ from pipeline.claims.ollama import OllamaStats
 from pipeline.claims.span import Claim, as_claim
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
+    DEFAULT_RESOLUTION,
     DEFAULT_SEED,
     Avis,
     _flatten,
@@ -329,7 +330,7 @@ def prepare_claims(
 def claims_payload(
     ds,
     *,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     backend: str | None = None,
     model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,

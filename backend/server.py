@@ -43,6 +43,9 @@ PROTECTED = [Depends(require_token), Depends(rate_limit)]
 COMPUTE = [Depends(forbid_in_public), Depends(rate_limit)]
 from pydantic import BaseModel, Field
 
+# Léger (numpy only, aucun torch) : la résolution Leiden par défaut, source unique.
+from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION
+
 from backend.recluster import (
     DEFAULT_DATASET,
     DEFAULT_NAMING_METHOD,
@@ -409,7 +412,7 @@ class AnalysisBody(BaseModel):
     backend: str | None = None          # api (défaut) | mac | auto
     model: str | None = None
     embedder: str | None = None
-    resolution: float = Field(1.0, gt=0.0)
+    resolution: float = Field(DEFAULT_RESOLUTION, gt=0.0)
 
 
 @app.post("/analysis")
@@ -662,7 +665,7 @@ class ReclusterBody(BaseModel):
     # `k` (nombre de voisins du graphe k-NN) = LEVIER de la Console (≥2).
     k: int | None = Field(None, ge=2, le=200)
     # Bornée HAUT (audit) : une `resolution` énorme alourdit Leiden gratuitement.
-    resolution: float = Field(1.0, gt=0.0, le=10.0)
+    resolution: float = Field(DEFAULT_RESOLUTION, gt=0.0, le=10.0)
 
 
 @app.post("/recluster", dependencies=COMPUTE)

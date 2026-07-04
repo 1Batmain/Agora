@@ -34,7 +34,7 @@ from pipeline.claims.span import Claim, as_claim
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.palette import color_for
 from pipeline.cluster.knn import build_knn_graph
-from pipeline.cluster.leiden_cluster import DEFAULT_SEED, run_leiden
+from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION, DEFAULT_SEED, run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.scoring import score_cluster
 
@@ -234,7 +234,7 @@ def cluster_claims(
     avis: list,
     claims_by_id: dict[str, list],
     *,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
     embedder: str = DEFAULT_EMBEDDER,
     claim_vecs: np.ndarray | None = None,
@@ -308,7 +308,7 @@ def cluster_claims(
 def run_claims(
     avis: list,
     *,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     backend: str | None = None,
     ollama_url: str | None = None,
     model: str | None = None,
