@@ -37,7 +37,14 @@ from time import perf_counter
 from typing import Callable
 
 from backend import analysis_store as store
-from backend.analysis import DEFAULT_EMBEDDER, DEFAULT_SEED, ThemeNode, ThemeTree, build_theme_tree
+from backend.analysis import (
+    DEFAULT_EMBEDDER,
+    DEFAULT_RESOLUTION,
+    DEFAULT_SEED,
+    ThemeNode,
+    ThemeTree,
+    build_theme_tree,
+)
 from backend.build_analysis import EXTRACT_MODEL, load_dataset
 from backend.titles import title_for_node
 from pipeline.cluster import mistral_client
@@ -367,7 +374,7 @@ def build_opinion(
     model: str | None = None,
     extract_model: str | None = None,
     embedder: str = DEFAULT_EMBEDDER,
-    resolution: float = 1.0,
+    resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
     on_progress: ProgressFn | None = None,
 ) -> dict:
@@ -534,7 +541,7 @@ def main() -> None:
                     help=f"modèle d'extraction de l'arbre (défaut {EXTRACT_MODEL} — doit "
                          f"matcher build_analysis pour réutiliser le cache claims)")
     ap.add_argument("--embedder", default=DEFAULT_EMBEDDER)
-    ap.add_argument("--resolution", type=float, default=1.0)
+    ap.add_argument("--resolution", type=float, default=DEFAULT_RESOLUTION)
     ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
     args = ap.parse_args()
 
