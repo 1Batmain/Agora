@@ -125,8 +125,8 @@ export function ConsultationOverview({
 
         <section className="overview__stats" aria-label="Chiffres de la consultation">
           <div className="overview__stat">
-            <strong>{nResp != null ? nResp.toLocaleString(LOCALE) : '—'}</strong>
-            <span>réponses recueillies</span>
+            <strong>{nAnalyzed > 0 ? nAnalyzed.toLocaleString(LOCALE) : '—'}</strong>
+            <span>témoignages analysés</span>
           </div>
         </section>
 
@@ -162,19 +162,6 @@ export function ConsultationOverview({
           {/* 1) VUE D'ENSEMBLE — synthèse globale FIXE, toujours en tête. */}
           <div className={`overview__dynsynth${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
             <h3 className="synthesis__subhead">Vue d'ensemble</h3>
-            {nAnalyzed > 0 && (
-              <div className="overview__dash" aria-label="Volume analysé">
-                <span className="overview__dash-item">
-                  <strong>{nAnalyzed.toLocaleString(LOCALE)}</strong> témoignages analysés
-                </span>
-                {nReponses != null && nReponses > nAnalyzed && (
-                  <span className="overview__dash-item overview__dash-pct">
-                    sur {nReponses.toLocaleString(LOCALE)} réponses (
-                    {Math.round((nAnalyzed / nReponses) * 100)}%)
-                  </span>
-                )}
-              </div>
-            )}
             {globalSource ? (
               <div className="overview__synthbody">
                 <Markdown source={globalSource} />
