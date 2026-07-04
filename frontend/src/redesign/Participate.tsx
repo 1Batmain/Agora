@@ -13,7 +13,16 @@ import type { Consultation, SubmitResult } from './contract';
  */
 type Status = 'idle' | 'sending' | 'done' | 'error';
 
-export function Participate({ dataset, onBack }: { dataset: Consultation; onBack: () => void }) {
+export function Participate({
+  dataset,
+  onBack,
+  onAbout,
+}: {
+  dataset: Consultation;
+  onBack: () => void;
+  /** Ouvre la page « À propos » (présentation du projet). */
+  onAbout?: () => void;
+}) {
   const [text, setText] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [result, setResult] = useState<SubmitResult | null>(null);
@@ -40,6 +49,7 @@ export function Participate({ dataset, onBack }: { dataset: Consultation; onBack
     <div className="agora participate">
       <Header
         onHome={onBack}
+        onAbout={onAbout}
         right={<span className="ds-card__badge ds-card__badge--open">Ouvert</span>}
       />
 

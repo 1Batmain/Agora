@@ -5,10 +5,11 @@ import { Landing } from './Landing';
 import { Participate } from './Participate';
 import { ConsultationOverview } from './ConsultationOverview';
 import { AvisExplorer } from './AvisExplorer';
+import { About } from './About';
 import RedesignApp from './RedesignApp';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'about';
 type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null; focusStance?: 'favorable' | 'defavorable' | null };
 
 /**
@@ -59,10 +60,16 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  // Deep-link initial : `?c=<id>` ouvre la consultation (une fois les datasets chargés).
+  // Deep-link initial : `?c=<id>` ouvre la consultation, `?about=1` la page de présentation
+  // (une fois les datasets chargés).
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(window.location.search);
+    if (params.get('about')) {
+      setRoute('about');
+      window.history.replaceState({ route: 'about', activeId: null } as HistState, '', '?about=1');
+      return;
+    }
     const cid = params.get('c');
     const d = cid ? datasets.find((x) => x.id === cid) : null;
     if (d) {
@@ -145,11 +152,21 @@ export default function App() {
     window.history.pushState({ route: 'landing', activeId: null } as HistState, '', window.location.pathname);
   }, []);
 
+  // Page « À propos » — pas de dataset associé, accessible depuis n'importe quel header.
+  const goAbout = useCallback(() => {
+    setRoute('about');
+    window.history.pushState({ route: 'about', activeId: null } as HistState, '', '?about=1');
+  }, []);
+
+  if (route === 'about') {
+    return <About onHome={backToLanding} />;
+  }
   if (route === 'overview' && active) {
     return (
       <ConsultationOverview
         dataset={active}
         onHome={backToLanding}
+        onAbout={goAbout}
         onViewGraph={(themeId) => viewGraph(active.id, themeId)}
         onExploreTheme={(themeId, stance) => exploreTheme(active.id, themeId, stance)}
         onExploreAvis={(avisId) => exploreAvis(active.id, avisId)}
@@ -164,6 +181,7 @@ export default function App() {
         focusThemeId={focusTheme}
         focusStance={focusStance}
         onHome={backToLanding}
+        onAbout={goAbout}
       />
     );
   }
@@ -174,13 +192,14 @@ export default function App() {
         initialThemeId={focusTheme}
         onBack={backToLanding}
         onOpenAvis={(avisId) => exploreAvis(active.id, avisId)}
+        onAbout={goAbout}
       />
     );
   }
   if (route === 'participate' && active) {
-    return <Participate dataset={active} onBack={backToLanding} />;
+    return <Participate dataset={active} onBack={backToLanding} onAbout={goAbout} />;
   }
   return (
-    <Landing datasets={datasets} loading={loading} onOpen={openConsultation} />
+    <Landing datasets={datasets} loading={loading} onOpen={openConsultation} onAbout={goAbout} />
   );
 }
