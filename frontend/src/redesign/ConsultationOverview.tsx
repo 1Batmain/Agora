@@ -27,12 +27,15 @@ function stripDanglingLead(md: string | null): string | null {
 export function ConsultationOverview({
   dataset,
   onHome,
+  onAbout,
   onViewGraph,
   onExploreTheme,
   onExploreAvis,
 }: {
   dataset: Consultation;
   onHome: () => void;
+  /** Ouvre la page « À propos » (présentation du projet). */
+  onAbout?: () => void;
   /** Ouvre le graphe, focalisé sur le thème courant (null = graphe complet). */
   onViewGraph: (themeId: string | null) => void;
   /** Ouvre l'explorateur d'avis, filtré sur le thème courant (null = tous les avis). */
@@ -101,7 +104,11 @@ export function ConsultationOverview({
 
   return (
     <div className="agora overview">
-      <Header onHome={onHome} right={<span className="ds-card__badge ds-card__badge--closed">Clos</span>} />
+      <Header
+        onHome={onHome}
+        onAbout={onAbout}
+        right={<span className="ds-card__badge ds-card__badge--closed">Clos</span>}
+      />
 
       <main className="overview__body">
         <section className="overview__head">
