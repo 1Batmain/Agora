@@ -44,7 +44,7 @@ from pipeline.cluster import mistral_client
 
 # Modèle CHEAP (cleavage + stance, ~1 + claims/BATCH appels par feuille) — surchargeable.
 MODEL = os.environ.get(
-    "AGORA_OPINION_MODEL", os.environ.get("AGORA_ENRICH_MODEL", "mistral-small-latest")
+    "AGORA_OPINION_MODEL", os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
 )
 BATCH = 10                       # claims par appel de stance
 # Plafond de claims classés par feuille. Par défaut quasi-illimité : on classe la stance
@@ -91,6 +91,12 @@ def cleavage_system(title: str) -> str:
         "polaire COURTE (≤12 mots), neutre et débattable, à l'infinitif ou nominale — ex. "
         "« instaurer le référendum d'initiative citoyenne », « rendre le vote obligatoire », "
         "« réduire le nombre d'élus », « tirer au sort des citoyens pour légiférer ». "
+        # Variante (b) VALIDÉE PAR PANEL AVEUGLE (research/stance_target_ab_verdict.md :
+        # b≻a 7-2, b≻c 6-3) : les mots-clés c-TF-IDF sont cadrés comme CE QUI DISTINGUE le
+        # thème — la cible reflète la spécificité SANS abandonner l'exigence « central ».
+        "Les MOTS-CLÉS fournis sont ce qui DISTINGUE ce thème des thèmes voisins de la même "
+        "consultation : ta proposition doit refléter cette SPÉCIFICITÉ (éviter une formulation "
+        "passe-partout qui conviendrait à n'importe quel thème), tout en restant CENTRALE au thème. "
         "Réponds en JSON strict : {\"objet\":\"<proposition>\",\"justif\":\"<≤14 mots>\"}."
     )
 

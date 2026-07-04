@@ -223,6 +223,9 @@ def dataset_descriptor(dataset: str, ideas: list[Idea] | None = None) -> Consult
     # le descripteur du dataset (générique, aucun corpus en dur) ; affiché par l'overview.
     if meta.get("official_baseline"):
         out["official_baseline"] = meta["official_baseline"]
+    # Lien vers la consultation officielle d'origine (page publique) — porté par meta.json.
+    if meta.get("official_url"):
+        out["official_url"] = meta["official_url"]
     # Hiérarchie MÈRE→ENFANTS (cf. backend.build_children) : un enfant porte
     # `parent_id`, une mère porte `children`. Servis tels quels par /datasets.
     if meta.get("parent_id"):
