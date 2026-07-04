@@ -83,6 +83,11 @@ générique** (INTER-CIBLES 0.718 → 0.759) mais répond **mieux** au cadrage d
   réconcilier. **À RÉCONCILIER** : ré-exécuter (c) avec le sélecteur canonique une fois mergé
   (~10 appels cleavage), le reste du harnais est inchangé (l'API locale est déjà alignée sur
   le contrat : `k` + `anchor_terms`).
+- **MISE À JOUR post-run** : le helper vient d'atterrir sur `feat/titles-ancres` (`fc07c31`,
+  « titrage ANCRÉ sur le vocabulaire distinctif ») — PAS encore sur `dev`. La réconciliation de
+  (c) est donc DÉBLOQUÉE : dès que `develop.py` arrive sur dev, ré-exécuter (c) avec le
+  canonique (~10 appels, dans le budget d'un follow-up). Même logique c-TF-IDF de densité que
+  le sélecteur local → (c) n'est pas attendu qualitativement différent, mais à VÉRIFIER.
 - Le sélecteur distinctif local est **bruité** sur ce corpus mono-sujet : le vocabulaire
   « distinctif » remonte encore « tiktok/tik/tok/temps/sur » (pas de stopwords corpus). C'est
   en soi une donnée : la distinctivité par vocabulaire est faible dans un espace anisotrope.
