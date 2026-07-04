@@ -13,17 +13,19 @@ export function Landing({
   datasets,
   loading,
   onOpen,
+  onAbout,
 }: {
   datasets: Consultation[];
   loading: boolean;
   onOpen: (d: Consultation) => void;
+  onAbout?: () => void;
 }) {
   const openCount = datasets.filter((d) => d.status === 'open').length;
   const closedCount = datasets.length - openCount;
 
   return (
     <div className="agora landing">
-      <Header />
+      <Header onAbout={onAbout} />
 
       <main className="landing__body">
         <section className="hero">
