@@ -7,6 +7,13 @@ DEV=/home/bat/agora-dev
 PROD=/home/bat/projects/Analyse-des-consultations-citoyennes
 DS="${1:-}"
 echo "[promote] $DEV → $PROD (dataset: ${DS:-TOUS})"
+# Index DuckDB de LECTURE du hot path /avis_list : (re)baké ICI, sur DEV, juste avant le
+# rsync — il part alors avec le reste de `analysis/` vers prod (analysis.duckdb est gitignoré,
+# ce chemin de promotion est sa seule route). Best-effort : si le bake échoue, on n'empêche
+# pas la promotion (le serve retombe gracieusement sur le scan Python). Signature de sources
+# recalculée au bake ⇒ l'index promu est toujours cohérent avec l'avis.json/claim_stance promus.
+( cd "$DEV" && AGORA_CLAIMS_BACKEND=api uv run --extra collect --extra serve \
+    python -m backend.bake_duckdb "${DS:---all}" ) || echo "[promote] ⚠ bake DuckDB ignoré (fallback Python)"
 rsync -a --info=stats1 "$DEV/backend/cache/${DS:+$DS/}" "$PROD/backend/cache/${DS:+$DS/}"
 XDG_RUNTIME_DIR=/run/user/1000 systemctl --user restart agora-backend
 echo "[promote] ✓ caches promus + backend prod redémarré"

@@ -615,16 +615,28 @@ def get_avis_list(
     ds = _resolve(dataset)
     if analysis_store.state(ds.id) != analysis_store.READY:
         return _not_ready_response(ds, response)
-    avis_data = analysis_store.read_avis_all(ds.id)
-    if avis_data is None:
-        return _not_ready_response(ds, response)
     payload = analysis_store.read_analysis(ds.id)
     themes = (payload or {}).get("themes", [])
     # Stance lue AVANT le filtrage : `avis.avis_list` peut ne garder que les avis dont ≥1 claim
     # (dans le thème) porte le sentiment demandé (`stance`), pour les cartes cliquables.
     stance_map = analysis_store.read_claim_stance(ds.id)
-    result = avis.avis_list(avis_data, themes, theme_id=theme_id, q=q,
-                            stance=stance, claim_stance=stance_map, limit=limit, offset=offset)
+    # Hot path RECHERCHE : le coût flagué par l'audit #1 est le scan O(N) + fold Unicode
+    # par requête, qui n'intervient QUE quand `q` est présent. On délègue alors le filtrage +
+    # la pagination à l'index DuckDB (`analysis.duckdb`, ×10–30 mesuré, cf. research/
+    # bench_duckdb_avis.py). SANS `q`, le fallback RAM (itération dict + court-circuit, aucun
+    # fold) est déjà optimal et bat le coût fixe d'une requête SQL → on le garde. Index
+    # absent/périmé/duckdb non installé → curseur None → fallback inchangé (parité prouvée).
+    con = analysis_store.avis_duckdb_con(ds.id) if (q and q.strip()) else None
+    if con is not None:
+        result = avis.avis_list_duckdb(con, themes, theme_id=theme_id, q=q,
+                                       stance=stance, claim_stance=stance_map,
+                                       limit=limit, offset=offset)
+    else:
+        avis_data = analysis_store.read_avis_all(ds.id)
+        if avis_data is None:
+            return _not_ready_response(ds, response)
+        result = avis.avis_list(avis_data, themes, theme_id=theme_id, q=q,
+                                stance=stance, claim_stance=stance_map, limit=limit, offset=offset)
     # Join gracieux de la stance par claim sur les avis de la page (absent → inchangé).
     if stance_map:
         for item in result.get("items", []):
