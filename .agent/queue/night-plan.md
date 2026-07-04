@@ -1,5 +1,11 @@
 # 🌙 PLAN DE NUIT — exécution autonome (validé avec Bob)
 
+> **📮 POST-MORTEM (2026-07-04) — plan HISTORIQUE, hackathon clôturé.** Exécuté ; le *done*
+> vit dans les commits, pas ici. Grand nettoyage post-hackathon fait sur `chore/grand-
+> nettoyage` (SSOT résolution/seed/insights, clé de cache titres déterministe, dédup
+> forêt de thèmes, stack web épinglée) — voir `research/nettoyage_post_hackathon.md` pour
+> le bilan et les chantiers à froid restants.
+
 > **Règle d'or : du FINI, du VÉRIFIÉ. App propre au réveil, ZÉRO debugging matinal.**
 > Chaque lane gatée + testée avant merge ; toute lane à risque de ne pas aboutir = terminée OU revertée (pas de demi-mesure).
 > **Pas de paramètre/knob `naming`** (inutile — Bob). Labels de cluster = c-TF-IDF passif, pas un réglage.
