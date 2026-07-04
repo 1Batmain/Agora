@@ -74,3 +74,16 @@ def test_content_key_depends_on_anchors():
     k1 = titles._content_key("ds", node, "m", ["claim a"])
     k2 = titles._content_key("ds", node, "m", ["claim b"])
     assert k1 != k2
+
+
+def test_content_key_invariant_to_anchor_order():
+    """Régression (incident 4/07) : c'est l'ENSEMBLE des ancres qui définit le titre,
+    pas leur ordre. Une permutation NE DOIT PAS changer la clé — sinon le re-ranking
+    « développement » ou le passage plein-ancrage↔repli déclenche une re-génération en
+    avalanche (titres retombés en mots-clés au rebuild parallèle)."""
+    node = _Node(keywords=["x", "y"])
+    anchors = ["claim gamma", "claim alpha", "claim beta"]
+    base = titles._content_key("ds", node, "m", anchors)
+    assert titles._content_key("ds", node, "m", list(reversed(anchors))) == base
+    assert titles._content_key("ds", node, "m", ["claim alpha", "claim beta",
+                                                 "claim gamma"]) == base
