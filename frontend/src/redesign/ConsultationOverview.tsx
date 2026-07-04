@@ -161,7 +161,6 @@ export function ConsultationOverview({
         <section className="overview__synthesis">
           {/* 1) VUE D'ENSEMBLE — synthèse globale FIXE, toujours en tête. */}
           <div className={`overview__dynsynth${loading ? ' is-loading' : ''}`} aria-live="polite" aria-busy={loading}>
-            <h3 className="synthesis__subhead">Vue d'ensemble</h3>
             {globalSource ? (
               <div className="overview__synthbody">
                 <Markdown source={globalSource} />
@@ -179,8 +178,9 @@ export function ConsultationOverview({
               déployable EN PLACE (accordéon récursif par niveau) avec sa synthèse riche. */}
           {themes.length > 0 && (
             <>
-              <p className="overview__clusters-lead">
-                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts&nbsp;:
+              <h3 className="synth-h">Thèmes identifiés</h3>
+              <p className="overview__clusters-lead--sub">
+                Agora a identifié <strong>{nThemes ?? macros.length}</strong> thèmes distincts.
               </p>
               <ClusterOutline
                 dataset={dataset.id}
@@ -200,11 +200,8 @@ export function ConsultationOverview({
           {/* Accès graphe + explorateur TOUT EN BAS de la synthèse (vue globale). */}
           {themes.length > 0 && (
             <div className="overview__actions overview__actions--bottom">
-              <button type="button" className="btn-primary" onClick={() => onViewGraph(null)}>
-                Voir le graphe →
-              </button>
-              <button type="button" className="btn-secondary" onClick={() => onExploreTheme(null)}>
-                Consulter les témoignages →
+              <button type="button" className="btn-primary" onClick={() => onExploreTheme(null)}>
+                Consulter tous les témoignages →
               </button>
             </div>
           )}

@@ -158,9 +158,10 @@ export function ClusterOutline({
                 subclusters={
                   kids.length > 0 ? (
                     <div className="clout__sub">
-                      <p className="overview__clusters-lead clout__sublead">
+                      <h3 className="synth-h">Thèmes distincts</h3>
+                      <p className="overview__clusters-lead--sub">
                         {kids.length} sous-thématique{kids.length > 1 ? 's' : ''} identifiée
-                        {kids.length > 1 ? 's' : ''}&nbsp;:
+                        {kids.length > 1 ? 's' : ''}.
                       </p>
                       <div className="clout__children">{renderNodes(kids, t.n_avis ?? 0)}</div>
                     </div>
@@ -295,14 +296,6 @@ function ClusterPanel({
         </div>
       )}
 
-      {/* Répartition d'opinion (thème feuille avec objet de clivage baké). */}
-      {opinion && (
-        <OpinionBar
-          opinion={opinion}
-          onSelectStance={(stance) => onExploreTheme(theme.id, stance)}
-        />
-      )}
-
       {/* VUE GÉNÉRALE — ce qui fait l'identité de la thématique. */}
       {body ? (
         <div className="overview__synthbody">
@@ -319,10 +312,21 @@ function ClusterPanel({
           accordéon imbriqué), présentées COMME la vue globale, AVANT « À relever ». */}
       {subclusters}
 
-      {/* À RELEVER — tensions / consensus, APRÈS les sous-thématiques. */}
+      {/* À RELEVER — ce qui ressort (consensus/clivage, adapté au signal), APRÈS les sous-thématiques. */}
       {relever && (
         <div className="overview__synthbody overview__retenir">
           <Markdown source={`## À relever\n${relever}`} />
+        </div>
+      )}
+
+      {/* ANALYSE DE STANCE — répartition d'opinion (objet de clivage + fav/déf), À LA FIN
+          de la synthèse (thème avec opinion bakée). */}
+      {opinion && (
+        <div className="clout__stance">
+          <OpinionBar
+            opinion={opinion}
+            onSelectStance={(stance) => onExploreTheme(theme.id, stance)}
+          />
         </div>
       )}
 
@@ -347,15 +351,6 @@ function ClusterPanel({
         </div>
       )}
 
-      {/* Accès graphe + explorateur scopés à CETTE thématique. */}
-      <div className="overview__actions">
-        <button type="button" className="btn-primary" onClick={() => onViewGraph(theme.id)}>
-          Voir le graphe du thème →
-        </button>
-        <button type="button" className="btn-secondary" onClick={() => onExploreTheme(theme.id)}>
-          Consulter les témoignages du thème →
-        </button>
-      </div>
     </div>
   );
 }
