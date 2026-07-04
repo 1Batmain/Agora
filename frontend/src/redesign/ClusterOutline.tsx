@@ -16,14 +16,24 @@ export function stripSaillants(md: string | null): string | null {
     .trim();
 }
 
-/** Sépare le CORPS (« Ce que disent les citoyens ») de la section « À retenir » d'une
- * synthèse de thématique — pour intercaler la liste des sous-thématiques ENTRE les deux
- * (corps → sous-thématiques → à retenir), à l'image de la vue globale. */
-function splitRetenir(md: string | null): { body: string | null; retenir: string | null } {
-  if (!md) return { body: md, retenir: null };
-  const m = md.match(/\n#{1,4}\s*(?:À|A)\s+retenir\b[^\n]*/i);
-  if (!m || m.index == null) return { body: md.trim(), retenir: null };
-  return { body: md.slice(0, m.index).trim(), retenir: md.slice(m.index + 1).trim() };
+/** Extrait le corps de la 1re section « ## <heading> » trouvée (teste plusieurs alias
+ * pour tolérer l'ANCIEN et le NOUVEAU format de synthèse), ou null. Miroir front de
+ * `insights._section_of` : le harness structure la synthèse de thématique en
+ * « Vue générale » (identité) puis « À relever » (tensions/consensus), avec la liste des
+ * sous-thématiques intercalée entre les deux. */
+function sectionOf(md: string | null, headings: string[]): string | null {
+  if (!md) return null;
+  for (const h of headings) {
+    const esc = h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const m = md.match(new RegExp(`(^|\\n)#{1,4}\\s*${esc}\\b[^\\n]*\\n`, 'i'));
+    if (m && m.index != null) {
+      const rest = md.slice(m.index + m[0].length);
+      const nxt = rest.match(/\n#{1,4}\s/);
+      const body = (nxt ? rest.slice(0, nxt.index ?? undefined) : rest).trim();
+      if (body) return body;
+    }
+  }
+  return null;
 }
 
 /**
@@ -237,7 +247,12 @@ function ClusterPanel({
     };
   }, [dataset, theme.id, theme]);
 
-  const { body, retenir } = splitRetenir(stripSaillants(synthesis));
+  // Harness : « Vue générale » (identité) → sous-thématiques → « À relever » (tensions/
+  // consensus). Alias inclus pour tolérer l'ancien format tant qu'on n'a pas re-baké.
+  const md = stripSaillants(synthesis);
+  const vue = sectionOf(md, ['Vue générale', 'Ce que disent les citoyens']);
+  const relever = sectionOf(md, ['À relever', 'À retenir']);
+  const body = vue ?? (relever ? null : md); // vieux format sans section connue → tout en corps
   const keywords = theme.keywords ?? [];
   const avisN = theme.n_avis ?? 0;
   const pct = navTotal > 0 ? Math.round((avisN / navTotal) * 100) : null;
@@ -288,7 +303,7 @@ function ClusterPanel({
         />
       )}
 
-      {/* CORPS de la synthèse (« Ce que disent les citoyens »). */}
+      {/* VUE GÉNÉRALE — ce qui fait l'identité de la thématique. */}
       {body ? (
         <div className="overview__synthbody">
           <Markdown source={body} />
@@ -296,18 +311,18 @@ function ClusterPanel({
         </div>
       ) : loading ? (
         <p className="overview__loading">Chargement de la synthèse…</p>
-      ) : (
+      ) : !relever ? (
         <p className="overview__loading">Synthèse indisponible.</p>
-      )}
+      ) : null}
 
-      {/* Sous-thématiques (lead « N sous-thématiques identifiées : » + accordéon imbriqué),
-          présentées COMME la vue globale, AVANT le « À retenir ». */}
+      {/* THÈMES DISTINCTS — sous-thématiques (lead « N sous-thématiques identifiées : » +
+          accordéon imbriqué), présentées COMME la vue globale, AVANT « À relever ». */}
       {subclusters}
 
-      {/* « À retenir » — déplacé APRÈS les sous-thématiques identifiées. */}
-      {retenir && (
+      {/* À RELEVER — tensions / consensus, APRÈS les sous-thématiques. */}
+      {relever && (
         <div className="overview__synthbody overview__retenir">
-          <Markdown source={retenir} />
+          <Markdown source={`## À relever\n${relever}`} />
         </div>
       )}
 
