@@ -2659,3 +2659,80 @@ a.team__card--link:hover {
 .overview__sample--full { background: #f0f9f2; border-color: #bfe6c9; color: #23593a; }
 .overview__sample--full .overview__sample-tag { background: #bfe6c9; color: #18753c; }
 .overview__sample--full strong { color: #18753c; }
+
+/* ── Arguments minés (ArgumentsPanel) — le « 3. » sous les cartes d'opinion :
+   arguments pour/contre synthétisés par IA, chacun sourcé sur des contributions
+   réelles (extraits verbatim dépliables, cliquables vers l'avis). */
+.argmine {
+  margin: 1.1rem 0 1.3rem; padding: 1rem 1.1rem; border: 1px solid #ececf4;
+  border-radius: 8px; background: #fbfbfe;
+}
+.argmine__head { display: flex; align-items: center; gap: .6rem; }
+.argmine__label {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .7rem;
+  letter-spacing: .04em; text-transform: uppercase; color: #66667a;
+}
+.argmine__cols { display: grid; grid-template-columns: 1fr; gap: .8rem; margin-top: .7rem; }
+.argmine__cols--split { grid-template-columns: 1fr 1fr; }
+@media (max-width: 720px) { .argmine__cols--split { grid-template-columns: 1fr; } }
+.argmine__col { border-radius: 8px; padding: .7rem .8rem; border: 1px solid #ececf4; }
+.argmine__col--pour { border-color: #bfe6c9; background: #f2fbf4; }
+.argmine__col--contre { border-color: #f2c5c9; background: #fdf3f4; }
+.argmine__col--neutre { background: #f7f7fb; }
+.argmine__coltitle {
+  margin: 0 0 .5rem; font-size: .78rem; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase;
+}
+.argmine__col--pour .argmine__coltitle { color: #18753c; }
+.argmine__col--contre .argmine__coltitle { color: #c1121f; }
+.argmine__col--neutre .argmine__coltitle { color: #3a3a45; }
+.argmine__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+.argmine__arg { padding: .55rem .65rem; border-radius: 6px; background: #fff; border: 1px solid #ececf4; }
+.argmine__text { margin: 0 0 .3rem; font-size: .9rem; font-weight: 600; color: #1a1a2e; line-height: 1.35; }
+.argmine__badge {
+  font-family: ui-monospace, "IBM Plex Mono", monospace; font-size: .7rem; color: #66667a;
+}
+.argmine__sources { margin-top: .35rem; }
+.argmine__sources > summary {
+  cursor: pointer; font-size: .78rem; color: var(--agora, #000091); font-weight: 600;
+}
+.argmine__sources ul { list-style: none; margin: .35rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .3rem; }
+.argmine__source {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  border: none; background: #f7f7fb; border-radius: 5px; padding: .4rem .55rem;
+  font-size: .8rem; color: #3a3a45; line-height: 1.4;
+}
+.argmine__source:hover:not(:disabled) { background: #efeff7; }
+.argmine__source:disabled { cursor: default; }
+.argmine__source q { quotes: "« " " »"; font-style: italic; }
+.argmine__source-go { color: var(--agora, #000091); font-weight: 600; white-space: nowrap; }
+.argmine__disclaimer {
+  margin: .6rem 0 0; font-size: .72rem; color: #8a8a97; font-style: italic; line-height: 1.45;
+}
+
+/* ── Profil démographique (artefact optionnel demographics.json) : note « Panel »
+   sur la page d'aperçu + chip « groupe majoritaire » dans le dash de chaque cluster. */
+/* Ligne UNIQUE, sobre, sans boîte : tag discret + valeurs séparées par des points
+   médians ; l'honnêteté (données déclaratives) vit dans le title + un suffixe muet. */
+.overview__demog {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem;
+  margin: .6rem 0 0; font-size: .82rem; color: #3a3a45; cursor: help;
+}
+.overview__demog-tag { font-weight: 600; color: #4a4a5a; }
+.overview__demog-item { white-space: nowrap; }
+.overview__demog-item + .overview__demog-item::before { content: "· "; color: #c5c5d2; }
+.overview__demog-item strong { color: #1a1a2e; font-variant-numeric: tabular-nums; }
+.overview__dash-demog { color: #4a4a5a; }
+.overview__dash-demog strong { color: #1a1a2e; }
+
+/* Sélecteur pour/contre des arguments minés (défaut = position majoritaire). */
+.argmine__tabs { display: inline-flex; gap: .3rem; margin: .1rem 0 .55rem; }
+.argmine__tab {
+  cursor: pointer; border: 1px solid #e2e2ee; background: #fff; border-radius: 999px;
+  padding: .14rem .6rem; font-size: .74rem; font-weight: 600; color: #66667a;
+}
+.argmine__tab--on.argmine__tab--pour { border-color: #bfe6c9; background: #f2fbf4; color: #18753c; }
+.argmine__tab--on.argmine__tab--contre { border-color: #f2c5c9; background: #fdf3f4; color: #c1121f; }
+.argmine__tab--on.argmine__tab--neutre { border-color: #c5c5d2; background: #f7f7fb; color: #3a3a45; }
+
+.argmine__empty { margin: 0; font-size: .82rem; color: #8a8a97; font-style: italic; }

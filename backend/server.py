@@ -481,6 +481,9 @@ def get_cost(dataset: str | None = Query(None)) -> dict:
     op = analysis_store.read_opinion(ds.id)
     if isinstance(op, dict) and op.get("took_seconds"):
         durations["opinion_seconds"] = op["took_seconds"]
+    args_art = analysis_store.read_arguments(ds.id)
+    if isinstance(args_art, dict) and args_art.get("took_seconds"):
+        durations["arguments_seconds"] = args_art["took_seconds"]
     if durations:
         data = {**data, "durations": durations}
     return data
@@ -520,6 +523,38 @@ def get_opinion(dataset: str | None = Query(None)) -> dict:
     """
     ds = _resolve(dataset)
     data = analysis_store.read_opinion(ds.id)
+    if data is None:
+        return {"dataset": ds.id, "themes": [], "status": "absent"}
+    return data
+
+
+@app.get("/arguments")
+def get_arguments(dataset: str | None = Query(None)) -> dict:
+    """SERVE-only : arguments minés PRÉCALCULÉS par thème (synthèses sourcées).
+
+    Lit `analysis/arguments.json` (baké par `backend.build_arguments`, OPTIONNEL) →
+    `{dataset, model, themes:[{theme_id, mode, proposition, arguments:[{argument,
+    stance, n_support, sources:[{avis_id, claim_id, text, similarity}]}]}]}`.
+    Artefact À PART : les datasets déjà analysés n'en ont pas → liste VIDE (200),
+    le front ne rend simplement pas le panneau (contrat de rétro-compat).
+    """
+    ds = _resolve(dataset)
+    data = analysis_store.read_arguments(ds.id)
+    if data is None:
+        return {"dataset": ds.id, "themes": [], "status": "absent"}
+    return data
+
+
+@app.get("/demographics")
+def get_demographics(dataset: str | None = Query(None)) -> dict:
+    """SERVE-only : profil démographique PRÉCALCULÉ (global + majorités par thème).
+
+    Lit `analysis/demographics.json` (baké par `backend.build_demographics`,
+    OPTIONNEL — pure jointure, zéro LLM). Absent → liste vide (200), le front ne
+    rend ni la description du panel ni les groupes majoritaires.
+    """
+    ds = _resolve(dataset)
+    data = analysis_store.read_demographics(ds.id)
     if data is None:
         return {"dataset": ds.id, "themes": [], "status": "absent"}
     return data
