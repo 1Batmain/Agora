@@ -27,8 +27,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from pipeline.cluster.adaptive import derive_k, derive_min_sub_size
-
-DEFAULT_SEED = 42
+from pipeline.cluster.leiden_cluster import DEFAULT_SEED  # source unique du seed de clustering
 
 # n_components de l'UMAP de clustering : FIXE (contrat). 5D = compromis usuel
 # (assez pour séparer, assez bas pour densifier avant HDBSCAN). PAS un knob.

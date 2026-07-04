@@ -33,7 +33,7 @@ from pipeline.cluster.hierarchy import (
     run_hierarchical,
 )
 from pipeline.cluster.knn import build_knn_graph
-from pipeline.cluster.leiden_cluster import run_leiden
+from pipeline.cluster.leiden_cluster import DEFAULT_SEED, run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.naming_methods import DEFAULT_NAMING, name_clusters_method
 from pipeline.cluster.palette import color_for
@@ -355,7 +355,7 @@ def build_payload(
     k: int | None = None,
     threshold: float | None = None,
     resolution: float = 1.5,
-    seed: int = 42,
+    seed: int = DEFAULT_SEED,
     model_id: str | None = None,
     with_hdbscan: bool = False,
     source: str | None = None,
@@ -534,7 +534,7 @@ def main() -> None:
     ap.add_argument("--threshold", type=float, default=None,
                     help="seuil d'arête cosine (défaut: DÉRIVÉ μ−σ·k des cosinus k-NN)")
     ap.add_argument("--resolution", type=float, default=1.5)
-    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
     ap.add_argument("--model", default=None, help="override model_id")
     ap.add_argument("--source", default=None,
                     help="ne garder que cette source (ex. tiktok)")

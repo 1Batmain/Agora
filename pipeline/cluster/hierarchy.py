@@ -31,7 +31,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from pipeline.cluster.knn import KnnGraph
-from pipeline.cluster.leiden_cluster import run_leiden
+from pipeline.cluster.leiden_cluster import DEFAULT_SEED, run_leiden
 
 # Résolutions = granularité, exposées en knobs (défauts d'usage raisonnables).
 # `DEFAULT_MIN_SUB_SIZE` n'est plus qu'un REPLI : le vrai défaut est DÉRIVÉ,
@@ -141,7 +141,7 @@ def run_hierarchical(
     resolution_macro: float = DEFAULT_RESOLUTION_MACRO,
     resolution_sub: float = DEFAULT_RESOLUTION_SUB,
     min_sub_size: int = DEFAULT_MIN_SUB_SIZE,
-    seed: int = 42,
+    seed: int = DEFAULT_SEED,
 ) -> HierarchyResult:
     n = graph.n
     if n == 0:
