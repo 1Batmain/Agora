@@ -155,6 +155,7 @@ def _field_for_node(dataset: str, node, kind: str, *, model: str | None,
         encode=lambda t: {"id": node.id, "kind": kind, "text": t, "model": synth_model},
         postprocess=_strip,
         refresh=refresh,
+        cache_fallback=False,  # repli JAMAIS caché (429 transitoire ≠ vérité — bug des 257 titres-labels)
     )
     return text
 
