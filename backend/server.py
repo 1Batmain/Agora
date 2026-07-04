@@ -61,6 +61,7 @@ from backend import (
     density,
     flags_store,
     live_cluster,
+    scatter,
     serve_metrics,
 )
 
@@ -594,7 +595,7 @@ def get_avis_list(
     return result
 
 
-@app.get("/density", dependencies=COMPUTE)
+@app.get("/density")
 def get_density(
     dataset: str | None = Query(None),
 ) -> dict:
@@ -613,6 +614,24 @@ def get_density(
     except density.DensityUnavailable as exc:
         # Message générique au client (pas de détail interne) ; cause loggée côté serveur.
         raise HTTPException(status_code=503, detail="Projection de densité indisponible.") from exc
+
+
+@app.get("/scatter")
+def get_scatter(
+    dataset: str | None = Query(None),
+) -> dict:
+    """Nuage de points UMAP 2D — une VRAIE contribution par point.
+
+    Renvoie `{points[], total, returned}` où chaque point a `(x, z, id,
+    cluster_id, color, text)`. Coordonnées réelles depuis `umap2d.npy` (cache
+    précalculé), couleur/cluster depuis `analysis/avis.json`. Pour les gros
+    datasets (>5000), échantillonnage déterministe. 503 si UMAP indisponible.
+    """
+    ds = _resolve(dataset)
+    try:
+        return scatter.scatter_payload(ds.id)
+    except scatter.ScatterUnavailable as exc:
+        raise HTTPException(status_code=503, detail="Nuage de points indisponible.") from exc
 
 
 class ReclusterBody(BaseModel):
