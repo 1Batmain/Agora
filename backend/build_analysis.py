@@ -58,7 +58,7 @@ ProgressFn = Callable[[str, str, int, int], None]
 #     modèle CHEAP. C'est le gros du coût d'un rebuild (extraction cachée) → cheap = vite.
 # Surchargeables par env (aucune valeur de corpus codée en dur).
 EXTRACT_MODEL = os.environ.get("AGORA_EXTRACT_MODEL", "mistral-large-latest")
-ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-small-latest")
+ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
 
 # Concurrence BORNÉE des appels LLM d'enrichissement (titres/accroches/descriptions/
 # insights). Chaque thème est indépendant (effet de bord sur SON nœud, cache idempotent)
