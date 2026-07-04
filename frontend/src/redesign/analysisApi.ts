@@ -204,9 +204,6 @@ export interface Flag {
   created_at?: string;
   updated_at?: string;
 }
-/** @deprecated kept as an alias — use Flag. */
-export type AvisFlag = Flag;
-
 /** GET /flags {dataset} → all flags of a dataset, every type (front filters). */
 export async function fetchFlags(dataset: string): Promise<Flag[]> {
   if (FORCE_MOCK) return [];
