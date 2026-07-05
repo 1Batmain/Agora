@@ -116,6 +116,11 @@ STANCE_SYSTEM = (
     "ATTENTION — le piège à éviter : ne confonds JAMAIS un sentiment négatif ENVERS LE SUJET "
     "avec une opposition à l'action. Quelqu'un qui critique ou subit un problème est FAVORABLE "
     "à une action qui vise à le corriger. Juge la position sur l'ACTION, pas la tonalité.\n"
+    # large_noabst — VALIDÉ research/stance_large_bench.md : sans cette consigne, mistral-large
+    # sur-abstient (25% nuance) ; avec, acc décidés 0.861 (vs small 0.796), rendement 77%,
+    # McNemar 33-7. À revalider sur corpus réel (engagement) — cf. le bench.
+    "PRIORITÉ : ne réserve \"nuance\" qu'aux contributions VRAIMENT sans position sur "
+    "l'action — si une lecture raisonnable permet de trancher, TRANCHE.\n"
     "Pour CHAQUE contribution, indique aussi ta CONFIANCE : \"high\" (position explicite et "
     "nette), \"medium\" (probable mais indirecte), \"low\" (ambigu/hors-sujet — tu hésites). "
     "Réponds en JSON strict : {\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|"
@@ -133,6 +138,26 @@ def _norm_confidence(value) -> str:
     return c if c in CONFIDENCE_LEVELS else "low"
 
 
+
+
+def _chat_retry(messages: list[dict], *, model: str, max_tokens: int) -> str:
+    """`mistral_client.chat` avec BACKOFF exponentiel sur 429/5xx/réseau.
+
+    Leçon du bench stance-large (research/stance_large_bench.md) : sans retry, les 429
+    (RPM bas de large) retombent en repli « nuance/(échec LLM) » → fausse abstention
+    massive et SILENCIEUSE. 4 tentatives, 2→16 s."""
+    delay = 2.0
+    for attempt in range(4):
+        try:
+            return mistral_client.chat(messages, model=model, temperature=0.0,
+                                       max_tokens=max_tokens, json_mode=True)
+        except mistral_client.MistralError as exc:
+            if exc.status in (429, 500, 502, 503, 504, 0) and attempt < 3:
+                time.sleep(delay); delay *= 2
+                continue
+            raise
+    raise mistral_client.MistralError(0, "retries_exhausted")
+
 # --------------------------------------------------------------------------- #
 # Cleavage T2 — objet de clivage dérivé (1 appel LLM par feuille).
 # --------------------------------------------------------------------------- #
@@ -145,8 +170,7 @@ def derive_cleavage(node: ThemeNode, sample_texts: list[str], title: str,
                 {"role": "user", "content": user}]
     fallback = title or node.title or node.label
     try:
-        raw = mistral_client.chat(messages, model=model, temperature=0.0,
-                                  max_tokens=200, json_mode=True)
+        raw = _chat_retry(messages, model=model, max_tokens=200)
         data = json.loads(raw)
         objet = str(data.get("objet", "")).strip()
         return {"objet": objet or fallback,
@@ -180,8 +204,7 @@ def synthesize_cleavage(propositions: list[str], title: str, *, model: str) -> s
     messages = [{"role": "system", "content": CLEAVAGE_SYNTH_SYSTEM},
                 {"role": "user", "content": user}]
     try:
-        raw = mistral_client.chat(messages, model=model, temperature=0.0,
-                                  max_tokens=120, json_mode=True)
+        raw = _chat_retry(messages, model=model, max_tokens=120)
         objet = str(json.loads(raw).get("objet", "")).strip()
         return objet or title
     except (mistral_client.MistralError, json.JSONDecodeError):
@@ -197,8 +220,7 @@ def stance_batch(cible: str, items: list[tuple[int, str]], *, model: str) -> dic
             f"CONTRIBUTIONS (réponds pour chaque [indice]) :\n" + "\n".join(lines))
     messages = [{"role": "system", "content": STANCE_SYSTEM},
                 {"role": "user", "content": user}]
-    raw = mistral_client.chat(messages, model=model, temperature=0.0,
-                              max_tokens=1500, json_mode=True)
+    raw = _chat_retry(messages, model=model, max_tokens=1500)
     data = json.loads(raw)
     out: dict[int, dict] = {}
     for rec in data.get("results", []):
