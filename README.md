@@ -12,13 +12,13 @@
 
 ---
 
-**Quatre engagements, tenus de bout en bout :**
+**Trois engagements, tenus de bout en bout :**
 
 | | |
 |---|---|
 | 🔍 **Fidèle** | zéro reformulation — chaque extrait est une sous-chaîne exacte du texte citoyen |
 | 🧭 **Traçable** | chaque thème émane des idées extraites du témoignage complet |
-| 🔒 **Souverain** | embeddings locaux, modèles ouverts  |
+| 🔒 **Souverain** | embeddings locaux, modèles ouverts |
 
 L'ambition, phase après phase ([ROADMAP](ROADMAP.md)) : des consultations mieux restituées
 aujourd'hui, une **place d'expression** demain — où l'on ouvre une consultation, où chacun
