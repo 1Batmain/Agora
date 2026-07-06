@@ -1,15 +1,18 @@
-# Agora - retranscrire la parole citoyenne
+# Agora — retranscrire la parole citoyenne
 
-> ###  Démo publique en ligne : **<https://forge.tail0b8aa8.ts.net>**
-> Testez la méthode agora sur des témoignanges publics receuillis lors de différentes consultations citoyennes
+> ### 🚀 Démo publique en ligne : **<https://forge.tail0b8aa8.ts.net>**
+> Testez la méthode Agora sur des témoignages publics recueillis lors de différentes consultations citoyennes.
+
+---
+
+## Agora propose un moyen d'améliorer les échanges entre les citoyens et les acteurs de la démocratie
+
+- **En simplifiant le recours à l'avis des citoyens**, grâce à l'automatisation complète de la phase d'analyse des témoignages recueillis ;
+- **En permettant de naviguer dans de larges recueils de témoignages** par thématiques, et de développer chacune d'elles jusqu'au verbatim exact qui la compose.
 
 ---
 
-## Agora propose un moyen d'améliorer les échanges entre les citoyens et les différents acteurs de la démocratie
--> En simplifiant le recours à l'avis des citoyens grâce à l'automatisant complète de la phase d'analyse des témoignages receuillis.
--> En permetant de naviguer dans de larges recceuils de témoignanges par thématiques, et de développer chacune d'elles jusqau'au verbatim exact qui les compose.
-
----
+**Quatre engagements, tenus de bout en bout :**
 
 | | |
 |---|---|
