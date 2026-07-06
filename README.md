@@ -5,7 +5,7 @@
 
 ---
 
-**Agora vise à améliorer les échanges entre les citoyens et les acteurs de la démocratie**
+**Agora propose un moyen d'améliorer les échanges entre les citoyens et les différents acteurs de la démocratie**
 -> En simplifiant le recours à l'avis des citoyens grâce à l'automatisant complète de la phase d'analyse des témoignages receuillis.
 -> En permetant de naviguer dans de larges recceuils de témoignanges par thématiques, et de développer chacune d'elles jusqau'au verbatim exact qui les compose.
 
