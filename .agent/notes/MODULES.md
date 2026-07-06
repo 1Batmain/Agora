@@ -169,7 +169,7 @@ seuil `cleavage_fit_low`.
 
 **Détection / règle** : `intersection(ids avis.json, clés claim_stance) ≈ part de claims dans
 feuilles non-impur (≈80-100 %)`. **Toujours** `build_analysis` PUIS `build_opinion` ensemble,
-puis promouvoir le dossier `analysis/` **entier** (`deploy/promote-cache.sh`, jamais un fichier
+puis promouvoir le dossier `analysis/` **entier** (via la promotion de cache, jamais un fichier
 seul). Test : `backend/tests/test_opinion.py` (round-trip stance + jointure). *Gap : pas de
 test d'intersection dédié — candidat à ajouter en CI.*
 
