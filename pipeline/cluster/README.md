@@ -87,7 +87,7 @@ Chaque ligne = un avis : au minimum `{ "id", "text" }`, optionnellement
 }
 ```
 
-- **couleur** du nœud = `cluster_id` Leiden (palette qualitative type `dummy`).
+- **couleur** du nœud = `cluster_id` Leiden (palette qualitative).
 - `themes` est **trié** par intérêt : `weight_sum × (0.5 + consensus·diversity)`
   → une idée minoritaire mais cohérente et non redondante remonte face au bruit
   majoritaire.

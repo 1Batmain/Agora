@@ -6,8 +6,8 @@ packing zoomable** sur la hiérarchie `macro → sous-thème → avis`.
 
 Port : **5180 uniquement**.
 
-> Pivot UX (2026-06-20) : l'ancien essaim 3D (R3F / three / d3-force-3d, forké de
-> `dummy`) a été **retiré**. Plus de web worker, plus de three.js — la console est
+> Pivot UX (2026-06-20) : l'ancien essaim 3D (R3F / three / d3-force-3d, forké
+> d'un prototype interne) a été **retiré**. Plus de web worker, plus de three.js — la console est
 > du React + SVG + `d3-hierarchy` (pack layout). `package.json` est allégé d'autant.
 
 ## Ce que fait la console
@@ -81,7 +81,6 @@ npm run build        # tsc -b && vite build (type-check + bundle)
 ```
 
 `npm run dev` force `--port 5180` (`vite.config.ts` met `strictPort`).
-Ports interdits (autres projets / Ollama) : `8000 5173 8765 11434`.
 
 ## Vérification d'acceptation
 
