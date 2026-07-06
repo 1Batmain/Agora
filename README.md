@@ -17,9 +17,8 @@
 | | |
 |---|---|
 | 🔍 **Fidèle** | zéro reformulation — chaque extrait est une sous-chaîne exacte du texte citoyen |
-| 🧭 **Traçable** | chaque thème → ses idées → le témoignage complet, surligné, d'où elles viennent |
-| 🔒 **Souverain** | embeddings locaux, modèles ouverts — portable en local de bout en bout |
-| ⚖️ **Honnête** | limites affichées (échantillons, incertitudes) — « ceci n'est pas un sondage » |
+| 🧭 **Traçable** | chaque thème émane des idées extraites du témoignage complet |
+| 🔒 **Souverain** | embeddings locaux, modèles ouverts  |
 
 L'ambition, phase après phase ([ROADMAP](ROADMAP.md)) : des consultations mieux restituées
 aujourd'hui, une **place d'expression** demain — où l'on ouvre une consultation, où chacun
