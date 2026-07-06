@@ -2,7 +2,7 @@
 # Installe Agora en local, d'un coup : deps back+front, caches d'analyse, secrets. Idempotent.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"; cd "$ROOT"
-REPO="1Batmain/Analyse-des-consultations-citoyennes"
+REPO="1Batmain/Agora"
 say() { printf '\033[1;34m▸ %s\033[0m\n' "$*"; }
 
 say "Prérequis"
