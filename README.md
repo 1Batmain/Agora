@@ -1,22 +1,15 @@
-# Agora
+# Agora - retranscrire la parole citoyenne
 
-[![Démo live](https://img.shields.io/badge/D%C3%A9mo_live-forge.tail0b8aa8.ts.net-2ea44f?style=for-the-badge)](https://forge.tail0b8aa8.ts.net)
-&nbsp;
-![Python](https://img.shields.io/badge/Python-3.11-3776ab?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/Front-React_+_Vite-61dafb?logo=react&logoColor=black)
-![Souverain](https://img.shields.io/badge/embeddings-100%25_local-6f42c1)
-![PR-only](https://img.shields.io/badge/main-prot%C3%A9g%C3%A9e_(PR)-orange)
+> ###  Démo publique en ligne : **<https://forge.tail0b8aa8.ts.net>**
+> Testez la méthode agora sur des témoignanges publics receuillis lors de différentes consultations citoyennes
 
-## En bref
+---
 
-**Agora veut améliorer les échanges entre les citoyens et les acteurs de la démocratie —
-et restaurer un lien de confiance.**
+**Agora vise à améliorer les échanges entre les citoyens et les acteurs de la démocratie
+-> En simplifiant le recours à l'avis des citoyens grâce à l'automatisant complète de la phase d'analyse des témoignages receuillis.
+-> En permetant de naviguer dans de larges recceuils de témoignanges par thématiques, et de développer chacune d'elles jusqau'au verbatim exact qui les compose.
 
-Quand des milliers de personnes répondent à une consultation publique, leur parole mérite
-mieux qu'un résumé qui lisse et reformule. Agora analyse l'intégralité des contributions
-et en fait **émerger les grands thèmes** — automatiquement, rapidement, à coût marginal —
-sans jamais trahir la parole d'origine :
+---
 
 | | |
 |---|---|
@@ -28,8 +21,6 @@ sans jamais trahir la parole d'origine :
 L'ambition, phase après phase ([ROADMAP](ROADMAP.md)) : des consultations mieux restituées
 aujourd'hui, une **place d'expression** demain — où l'on ouvre une consultation, où chacun
 témoigne, et où la synthèse vit sous les yeux de tous.
-
-👉 **Démo en ligne : <https://forge.tail0b8aa8.ts.net>**
 
 ## Le pipeline, en clair
 
