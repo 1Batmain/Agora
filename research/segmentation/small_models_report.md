@@ -17,7 +17,7 @@
 | ministral-3:latest | LLM local (Mac) | 0.934 | 0.934 | 78% | 664 | **oui** | non |
 | nemotron3:33b | LLM local (Mac) | 0.877 | 0.873 | 64% | 789 | **oui** | non |
 
-*\* Mistral ms/avis = ~70s cumulés / 305 avis ≈ 230 ms/avis amorti (batché 12/appel, réseau UE) — cf. `llm_report.md`. ms/avis classifieur = embedding (dominant) + tête (quasi-nul), 100% sur le VPS. ms/avis Ollama = latence **À CHAUD** (warm-up préalable, modèle déjà chargé) cumulée / N, 1 avis/appel, sur le Mac de Bob (`http://mac-local:11434`, Apple Silicon via Tailscale ; souverain — la donnée ne sort pas du réseau privé).*
+*\* Mistral ms/avis = ~70s cumulés / 305 avis ≈ 230 ms/avis amorti (batché 12/appel, réseau UE) — cf. `llm_report.md`. ms/avis classifieur = embedding (dominant) + tête (quasi-nul), 100% sur le serveur. ms/avis Ollama = latence **À CHAUD** (warm-up préalable, modèle déjà chargé) cumulée / N, 1 avis/appel, sur le poste local (`http://mac-local:11434`, Apple Silicon via Tailscale ; souverain — la donnée ne sort pas du réseau privé).*
 
 ## Candidat 1 — classifieur multi-label sur embedding (le cheval)
 
@@ -45,7 +45,7 @@ Vecteur d'avis ENTIER (pooling prod `embed_docs`) → tête multi-label. CV stra
 
 ## Candidat 2 — petit LLM local via Ollama, sur le Mac (filet souverain)
 
-Serveur **Ollama du Mac de Bob** (`http://mac-local:11434`, Apple Silicon via Tailscale) — bien plus rapide que l'Ollama CPU du VPS. MÊME prompt fermé que Mistral (`llm_seg.theme_prompt`), choix fermé sur les 8 thèmes, JSON mode, température 0. Les raisonneurs ont leur pensée coupée (`think:false`) ; un **warm-up** charge chaque modèle AVANT le timing → latence mesurée **à chaud**. 1 avis/appel (mapping non ambigu + vraie latence/avis). Cache disque `.cache/ollama/` clé par endpoint (relances gratuites, la latence d'un host ne pollue pas l'autre).
+Serveur **Ollama du poste local** (`http://mac-local:11434`, Apple Silicon via Tailscale) — bien plus rapide que l'Ollama CPU du serveur. MÊME prompt fermé que Mistral (`llm_seg.theme_prompt`), choix fermé sur les 8 thèmes, JSON mode, température 0. Les raisonneurs ont leur pensée coupée (`think:false`) ; un **warm-up** charge chaque modèle AVANT le timing → latence mesurée **à chaud**. 1 avis/appel (mapping non ambigu + vraie latence/avis). Cache disque `.cache/ollama/` clé par endpoint (relances gratuites, la latence d'un host ne pollue pas l'autre).
 
 | modèle | pensée coupée | micro-P | micro-R | micro-F1 | macro-F1 | exact-set | ms/avis (chaud) | tokens générés | erreurs |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
