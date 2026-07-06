@@ -28,8 +28,8 @@ from pipeline.cluster import mistral_client  # noqa: E402
 
 # Cache DEV du corpus complet re-coupé (identique à ce qui est promu en prod
 # sous l'id `granddebat-complet`). Surchageable : argv[1] = chemin du dossier analysis/.
-CACHE = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(
-    "~/agora-dev/backend/cache/granddebat/analysis"
+CACHE = Path(sys.argv[1]) if len(sys.argv) > 1 else (
+    Path.home() / "agora-dev/backend/cache/granddebat/analysis"
 )
 OUT = Path(__file__).resolve().parent / "granddebat_witness_recut_results.json"
 JUDGE_MODEL = "mistral-large-latest"

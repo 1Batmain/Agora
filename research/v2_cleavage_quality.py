@@ -47,8 +47,7 @@ JUDGE_MODEL = os.environ.get("AGORA_V2_MODEL", "mistral-large-latest")
 RESEARCH_DIR = Path(__file__).resolve().parent
 OUT = RESEARCH_DIR / "v2_cleavage_cache"
 OUT.mkdir(parents=True, exist_ok=True)
-KEY_FALLBACK = Path(
-    "~/projects/Analyse-des-consultations-citoyennes/var/mistral.key")
+KEY_FALLBACK = Path.home() / "projects/Analyse-des-consultations-citoyennes/var/mistral.key"
 
 CAP = 60
 MIN_CLAIMS = 12
