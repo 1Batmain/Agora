@@ -67,9 +67,12 @@ def closest_pairs(tree, neighbors, k=8):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", default="tiktok")
-    ap.add_argument("--recut", action="store_true", default=True,
-                    help="mesure la façade SERVIE (post-recut) — défaut")
-    ap.add_argument("--no-recut", dest="recut", action="store_false")
+    ap.add_argument(
+        "--recut",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="mesure la façade SERVIE (post-recut) — défaut",
+    )
     ap.add_argument("--pairs", type=int, default=8)
     args = ap.parse_args()
 
