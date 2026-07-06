@@ -5,7 +5,7 @@
 
 ---
 
-## Agora propose un moyen d'améliorer les échanges entre les citoyens et les acteurs de la démocratie
+## Améliorer les échanges entre les citoyens et les acteurs de la démocratie
 
 - **En simplifiant le recours à l'avis des citoyens**, grâce à l'automatisation complète de la phase d'analyse des témoignages recueillis ;
 - **En permettant de naviguer dans de larges recueils de témoignages** par thématiques, et de développer chacune d'elles jusqu'au verbatim exact qui la compose.
