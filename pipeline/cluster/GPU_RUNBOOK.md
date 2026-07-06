@@ -26,7 +26,7 @@ Testé le 2026-07-04 : H100 80 Go, Gemma 12B (`google/gemma-4-12B-it`), BF16.
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh   # si uv absent
 git clone -b feat/collect-open-data <url-du-repo>
-cd Analyse-des-consultations-citoyennes
+cd Agora
 ```
 
 ## 2. Venv GPU séparé
@@ -52,7 +52,7 @@ Le cache dataset (ideas + embeddings + meta) est gitignoré — l'envoyer :
 ```bash
 # sur la machine dev :
 rsync -avz backend/cache/<dataset>/ \
-    <gpu>:~/Analyse-des-consultations-citoyennes/backend/cache/<dataset>/
+    <gpu>:~/Agora/backend/cache/<dataset>/
 ```
 
 (Ce cache est produit sur la machine dev par `pipeline.ingest_full.prepare` +
@@ -121,7 +121,7 @@ PYTHONPATH=. python -m pipeline.ingest_full.full_run \
 ## 5. Rapatrier et explorer (machine dev)
 
 ```bash
-rsync -avz <gpu>:~/Analyse-des-consultations-citoyennes/backend/cache/<dataset>/ \
+rsync -avz <gpu>:~/Agora/backend/cache/<dataset>/ \
     backend/cache/<dataset>/
 make dev    # → http://localhost:5180 — le dataset est découvert automatiquement
 ```

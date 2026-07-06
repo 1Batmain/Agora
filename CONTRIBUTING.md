@@ -2,8 +2,8 @@
 
 ## Installation — une commande
 ```bash
-git clone git@github.com:1Batmain/Analyse-des-consultations-citoyennes.git
-cd Analyse-des-consultations-citoyennes
+git clone git@github.com:1Batmain/Agora.git
+cd Agora
 ./scripts/setup.sh     # deps back+front · caches d'analyse (release) · secrets locaux
 make dev               # backend :8010 + front :5180 → http://localhost:5180
 ```

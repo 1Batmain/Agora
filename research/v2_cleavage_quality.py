@@ -16,7 +16,7 @@ Durcissement vs research/cleavage_v2.py :
 Sortie : research/v2_cleavage_cache/results.json + résumé. Rapport : research/v2_quality_note.md.
 
 Lancement (racine du worktree) :
-  MISTRAL_API_KEY=$(cat ~/projects/Analyse-des-consultations-citoyennes/var/mistral.key) \
+  MISTRAL_API_KEY=$(cat ~/projects/Agora/var/mistral.key) \
   PYTHONPATH=. uv run --extra contender --extra embed-contender --extra faiss --with fastapi \
   python research/v2_cleavage_quality.py
 """
@@ -47,7 +47,7 @@ JUDGE_MODEL = os.environ.get("AGORA_V2_MODEL", "mistral-large-latest")
 RESEARCH_DIR = Path(__file__).resolve().parent
 OUT = RESEARCH_DIR / "v2_cleavage_cache"
 OUT.mkdir(parents=True, exist_ok=True)
-KEY_FALLBACK = Path.home() / "projects/Analyse-des-consultations-citoyennes/var/mistral.key"
+KEY_FALLBACK = Path.home() / "projects/Agora/var/mistral.key"
 
 CAP = 60
 MIN_CLAIMS = 12
