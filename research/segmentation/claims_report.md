@@ -1,6 +1,6 @@
 # Pipeline CLAIMS (TalkToTheCity) : avis → claims → embed → clustering ÉMERGENT — rapport
 
-*Jeu : `gold_large.json` — N=305 avis (104 mono, 201 multi), 8 thèmes gold. LLM d'extraction : **`ministral-3:latest`** (Mac de Bob, Apple Silicon via Tailscale — souverain), température 0, JSON mode, pensée coupée. Embeddings : **`nomic-v2`** (`search_document:`). Clustering : k-NN+Leiden, défauts DÉRIVÉS des données (k=11, seuil cosine=0.601), résolution 1.0.*
+*Jeu : `gold_large.json` — N=305 avis (104 mono, 201 multi), 8 thèmes gold. LLM d'extraction : **`ministral-3:latest`** (poste local, Apple Silicon via Tailscale — souverain), température 0, JSON mode, pensée coupée. Embeddings : **`nomic-v2`** (`search_document:`). Clustering : k-NN+Leiden, défauts DÉRIVÉS des données (k=11, seuil cosine=0.601), résolution 1.0.*
 
 **Question.** Le clustering ASCENDANT (claims libres → clusters) reconstruit-il les 8 thèmes du gold SANS jamais les voir, aussi bien que Mistral (choix fermé, micro-F1 0.928) ou le classifieur entraîné (0.939) — TOUT EN restant OUVERT (découvre du hors-taxo) et SOUVERAIN (100% local) ?
 

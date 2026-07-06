@@ -57,7 +57,7 @@ import research.k_sweep as ks  # repnum_gold_axes / alignment (gold officiel)
 
 DATASETS = ["tiktok", "granddebat", "xstance", "republique-numerique"]
 SEED = DEFAULT_SEED
-_SCRATCH = Path("/tmp/claude-1000/-home-bat-agora-worktrees-knn-weight")
+_SCRATCH = Path("/tmp/agora-knn-weight")
 
 
 # --------------------------------------------------------------------------- #
