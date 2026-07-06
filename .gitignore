@@ -16,6 +16,10 @@ venv/
 var/
 *.key
 
+# Boîte de handoff interne des agents/rôles (rapports de mission, notes privées).
+# NON public : ne doit jamais atterrir dans le dépôt.
+.agent/inbox/
+
 # OS / IDE / outils
 .DS_Store
 .idea/
