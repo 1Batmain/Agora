@@ -93,7 +93,7 @@ Clusters (taille ≥ 3) dont le centroïde est sémantiquement LOIN des 8 centro
 - **Extraction ministral (Mac, à chaud)** : **0 appels** réels + 305 servis par le cache `.cache/ollama/` — 1 avis/appel, **~635s** cumulés (~**2082 ms/avis**, ~10.6 min pour 305 avis), 25,231 tokens générés, 0 erreurs.
 - **968 claims** extraites au total (**3.17 claims/avis** en moyenne) — l'avis est décomposé en idées atomiques avant clustering.
 - **Embedding + clustering** : 100% local (nomic-v2 CPU + Leiden), négligeable devant l'extraction. Réutilise le cache d'embeddings `.cache/`.
-- **Souveraineté** : la donnée citoyenne ne sort JAMAIS du réseau privé (`http://macbat.tail0b8aa8.ts.net:11434`, Tailscale). À comparer à ~**2-4 € par grosse consultation** en API (Mistral EU) où le texte intégral des avis est transmis à un tiers. Local = **~0 €** marginal, données souveraines, mais dépend du Mac allumé et de sa latence.
+- **Souveraineté** : la donnée citoyenne ne sort JAMAIS du réseau privé (`http://mac-local:11434`, Tailscale). À comparer à ~**2-4 € par grosse consultation** en API (Mistral EU) où le texte intégral des avis est transmis à un tiers. Local = **~0 €** marginal, données souveraines, mais dépend du Mac allumé et de sa latence.
 
 ## Verdict — l'approche OUVERTE tient-elle près de 0.93 en restant ouverte & souveraine ?
 
