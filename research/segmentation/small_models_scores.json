@@ -369,7 +369,7 @@
     {
       "model": "qwen3:4b",
       "batch_size": 1,
-      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "endpoint": "http://mac-local:11434",
       "reasoner": true,
       "micro_P": 0.8032,
       "micro_R": 0.8706,
@@ -452,7 +452,7 @@
     {
       "model": "ministral-3:latest",
       "batch_size": 1,
-      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "endpoint": "http://mac-local:11434",
       "reasoner": true,
       "micro_P": 0.9337,
       "micro_R": 0.9353,
@@ -535,7 +535,7 @@
     {
       "model": "nemotron3:33b",
       "batch_size": 1,
-      "endpoint": "http://macbat.tail0b8aa8.ts.net:11434",
+      "endpoint": "http://mac-local:11434",
       "reasoner": true,
       "micro_P": 0.8669,
       "micro_R": 0.8881,

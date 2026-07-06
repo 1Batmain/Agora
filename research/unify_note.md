@@ -57,8 +57,8 @@ Vérifié sur le `claims.json` **réellement servi** (lecture seule, zéro ré-e
 
 ## ⚠️ À l'attention de l'architecte (merge / app au réveil)
 
-- Le serveur **:8010 actuellement up tourne depuis le repo principal**
-  (`~/projects/Analyse-des-consultations-citoyennes`), PAS depuis ce worktree. Il
+- Le serveur **:8010 actuellement up tourne depuis le checkout de prod**,
+  PAS depuis ce worktree. Il
   sert donc les caches du repo principal (état ANCIEN : `/avis` granddebat y renvoie vide,
   xstance sans claims). Les caches `backend/cache/<ds>/` sont **gitignored** → un merge
   `work/unify → main` ne les transporte pas.
