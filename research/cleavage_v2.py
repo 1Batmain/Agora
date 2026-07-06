@@ -42,7 +42,7 @@ DATASET = "granddebat"
 MODEL = os.environ.get("AGORA_OPINION_MODEL", "mistral-small-latest")
 RESEARCH_DIR = Path(__file__).resolve().parent
 RESULTS_PATH = RESEARCH_DIR / "cleavage_v2_results.json"
-KEY_FALLBACK = Path("/home/bat/projects/Analyse-des-consultations-citoyennes/var/mistral.key")
+KEY_FALLBACK = Path.home() / "projects/Analyse-des-consultations-citoyennes/var/mistral.key"
 
 CAP = 60                # claims échantillonnés / feuille (mêmes pour v1 et v2)
 MIN_CLAIMS = 12         # on ignore les feuilles trop petites (singletons résiduels)

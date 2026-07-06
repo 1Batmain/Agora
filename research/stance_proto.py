@@ -57,7 +57,7 @@ REP_FOR_TITLE = 8               # membres représentatifs passés au titreur LLM
 
 # Le secret + l'extraction `claims.json` vivent dans le dépôt principal ; ce worktree
 # R&D n'embarque ni `var/` ni le cache claims. On les lit en SEULE LECTURE.
-MAIN_REPO = Path("/home/bat/projects/Analyse-des-consultations-citoyennes")
+MAIN_REPO = Path.home() / "projects/Analyse-des-consultations-citoyennes"
 CLAIMS_JSON = MAIN_REPO / "backend" / "cache" / DATASET / "claims.json"
 KEY_FALLBACK = MAIN_REPO / "var" / "mistral.key"
 
