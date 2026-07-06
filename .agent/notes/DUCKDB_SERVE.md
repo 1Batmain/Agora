@@ -44,6 +44,6 @@ DuckDB reste ~7 ms → gain qui croît avec N.
 - Le `.duckdb` double ~le poids de `avis.json` sur disque (payload verbatim) — cache jetable.
 
 **Intégration au build.** `analysis.duckdb` vit sous `backend/cache/*/analysis/` (**gitignoré**),
-donc jamais commité. Il est (re)baké par `deploy/promote-cache.sh` **juste avant le rsync
-DEV→PROD** (seule route de la prod), best-effort. En dev/ad hoc :
+donc jamais commité. Il est (re)baké **juste avant la promotion de cache DEV→PROD** (seule route
+de la prod), best-effort. En dev/ad hoc :
 `uv run --extra collect python -m backend.bake_duckdb <dataset|--all>`.

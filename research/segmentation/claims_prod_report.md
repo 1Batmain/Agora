@@ -73,7 +73,7 @@ mots-clés : _vidéos, courtes, vidéo, répétée, résolution, meurtre_
 ## Coût & souveraineté
 
 - **Extraction ministral (Mac)** : 40 appels réels + 0 cache, ~98s (~2444 ms/avis), 3,798 tokens, 0 erreurs. Embed + clustering : local, négligeable.
-- **Souverain** : la donnée citoyenne ne quitte jamais le réseau privé (`http://macbat.tail0b8aa8.ts.net:11434`, Tailscale). Coût marginal ~0 € (vs ~2-4 €/consultation en API).
+- **Souverain** : la donnée citoyenne ne quitte jamais le réseau privé (`http://mac-local:11434`, Tailscale). Coût marginal ~0 € (vs ~2-4 €/consultation en API).
 
 ## Lecture
 

@@ -2,7 +2,7 @@
 
 Promu depuis `research/segmentation/small_models.py` pour devenir un composant
 DURABLE de `pipeline.claims` — utilisable par le backend sans dépendre du code
-d'évaluation. Cible : le Mac de Bob (Apple Silicon via Tailscale), où tourne
+d'évaluation. Cible : le poste local (Apple Silicon via Tailscale), où tourne
 `ministral-3` ; la donnée citoyenne ne sort jamais du réseau privé.
 
 Caractéristiques :

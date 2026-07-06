@@ -9,7 +9,7 @@
         [--out eval/segmentation/claims_report.md]
 
 IDÉE (TalkToTheCity, ascendant) — PAS de segmentation par frontières et AUCUNE
-taxonomie imposée. Pour chaque avis, un LLM LOCAL (`ministral-3` sur le Mac de Bob,
+taxonomie imposée. Pour chaque avis, un LLM LOCAL (`ministral-3` sur le poste local,
 souverain) extrait ses **CLAIMS atomiques** en vocabulaire LIBRE (idées autoportantes).
 On **embed** chaque claim (nomic-v2 `search_document:`) et on **clusterise** les claims
 de TOUT le corpus (k-NN + Leiden, défauts DÉRIVÉS des données). Les **thèmes ÉMERGENT**
@@ -349,7 +349,7 @@ def build_report(gold_path: Path, avis: list[Avis], labels: list[str], model: st
     L = []
     L.append("# Pipeline CLAIMS (TalkToTheCity) : avis → claims → embed → clustering ÉMERGENT — rapport\n")
     L.append(f"*Jeu : `{gold_path.name}` — N={n} avis ({n_mono} mono, {n_multi} multi), "
-             f"{len(labels)} thèmes gold. LLM d'extraction : **`{model}`** (Mac de Bob, "
+             f"{len(labels)} thèmes gold. LLM d'extraction : **`{model}`** (poste local, "
              f"Apple Silicon via Tailscale — souverain), température 0, JSON mode, pensée "
              f"{'coupée' if think is False else 'native (non-raisonneur)'}. Embeddings : "
              f"**`{embedder}`** (`search_document:`). Clustering : k-NN+Leiden, défauts "

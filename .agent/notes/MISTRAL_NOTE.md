@@ -2,7 +2,7 @@
 
 Le nommage `llm` des clusters et l'endpoint `/synthesize` passent désormais par
 l'**API Mistral** (EU, souverain au sens RGPD/UE). L'ancien backend **Ollama
-local est abandonné** (le VPS de déploiement ne peut pas l'exécuter). Tout est
+local est abandonné** (le serveur de prod ne peut pas l'exécuter). Tout est
 générique, langue-agnostique, zéro hardcoding de domaine ; **repli gracieux** si
 la clé manque ou si l'API échoue.
 
@@ -85,7 +85,7 @@ Mistral manquante » + `meta.fallback=true` (HTTP 200, pas un crash). Erreur API
 
 Le nommage `llm` et la synthèse envoient des **résumés de clusters + échantillons
 de témoignages** (déjà anonymisés) à l'API Mistral (EU). Choix produit assumé
-(VPS sans LLM local). Aucune autre donnée ne quitte le serveur.
+(serveur de prod sans LLM local). Aucune autre donnée ne quitte le serveur.
 
 ## Validé sans vraie clé / reste à valider
 
