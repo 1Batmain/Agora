@@ -1,6 +1,6 @@
 """Benchmark PETITS MODÈLES pour le VRAI but : multi-label de thèmes par avis.
 
-    AGORA_OLLAMA_URL="http://macbat…ts.net:11434" \
+    AGORA_OLLAMA_URL="http://mac-local:11434" \
     uv run --extra contender --extra embed-contender \
         python -m eval.segmentation.small_models
         [--gold eval/segmentation/gold_large.json]
