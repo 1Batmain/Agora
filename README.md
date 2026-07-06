@@ -48,7 +48,7 @@ Contributions citoyennes
  ⑤ ENRICH      titres + synthèses des thèmes (LLM, sur le cluster — pas sur le citoyen)
         │
         ▼
- ⑥ OPINION     objet de clivage + sentiment (positif / négatif / neutre) + confiance
+ ⑥ OPINION     objet de clivage + stance (favorable / défavorable / nuance) + confiance
         │
         ▼
  Carte navigable : thèmes → sous-thèmes → témoignages surlignés
