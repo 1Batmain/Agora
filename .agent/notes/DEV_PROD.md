@@ -1,25 +1,34 @@
-# Architecture Dev / Prod
+# Architecture Dev / Prod (concepts projet)
 
-Deux checkouts, deux rôles — séparation stricte (ordre + sécurité + budget).
+Deux rôles, séparation stricte (ordre + sécurité + budget). Ce document décrit les
+**concepts projet** ; les specs machine (chemins, services, exposition réseau) vivent
+hors du dépôt.
 
-## PROD — `~/projects/Analyse-des-consultations-citoyennes`
-- Repo **servi**, possédé par le **runner GitHub Actions**. Personne n'y code directement.
-- **Aucune clé Mistral** (mode public = sert le cache, zéro appel LLM au runtime → aucune clé sur la machine publique).
-- Services systemd : `agora-backend` (mode public fail-closed, :8010) + `agora-frontend` (build servi, :5180).
-- Exposé via Tailscale Funnel : **https://forge.tail0b8aa8.ts.net**
-- Mis à jour UNIQUEMENT par le workflow **Deploy** (push `main` → `deploy/deploy.sh` : `reset --hard` + build front + restart). Les caches (untracked) survivent au reset.
+## PROD — le serveur servi
+- Repo **servi**, mis à jour par l'automatisation de déploiement. Personne n'y code directement.
+- **Aucune clé Mistral** : mode public = sert le cache, **zéro appel LLM au runtime** → aucune
+  clé sur la machine publique.
+- Backend en **mode public fail-closed** (`AGORA_PUBLIC=1`) + frontend (build statique servi).
+- Mis à jour UNIQUEMENT par le workflow **Deploy** (push `main` → pull + build front + restart).
+  La procédure de déploiement est tenue hors-repo. Les caches (untracked) survivent au reset.
 
-## DEV — `~/agora-dev`
-- Clone de travail. **A la clé Mistral** (`agora-dev`, budget cappé) → c'est ici qu'on **construit**.
+## DEV — le clone de travail
+- **A la clé Mistral** (budget cappé) → c'est ici qu'on **construit**.
 - On y code et on y (re)construit les caches d'analyse (extraction / clustering / enrichment / opinion).
 
 ## Les caches d'analyse
 `backend/cache/<dataset>/` : claims, embeddings, arbre de thèmes, enrichissement LLM, opinion/stance.
-~258 Mo, **gitignorés** (dérivés + volumineux) — seuls ideas/embeddings/meta sont dans git. Prod ne les construit jamais.
+Volumineux et **gitignorés** (dérivés) — seuls ideas/embeddings/meta sont dans git. Prod ne les
+construit jamais.
 
 ## Flux de travail
-1. **Code (front/back)** : dev → commit → push → **PR** → merge `main` → le runner **déploie sur prod automatiquement**.
-2. **Rebuild de données** (nouveau pipeline / dataset) : construire en **DEV** (clé dev) → valider → `deploy/promote-cache.sh [dataset]` (rsync dev→prod + restart prod).
+1. **Code (front/back)** : dev → commit → push → **PR** → merge `main` → la prod **se met à jour
+   automatiquement**.
+2. **Rebuild de données** (nouveau pipeline / dataset) : construire en **DEV** (clé dev) → valider →
+   **promotion de cache** (sync dev→prod + restart). La promotion est le SEUL chemin par lequel la
+   prod reçoit des données (elle ne construit jamais).
+
+> ⚠️ Ne laisse pas d'état local non poussé : le déploiement fait `reset --hard origin/main`.
 
 ## ⚠️ Gotcha : `avis.json` et `claim_stance.json` doivent venir du MÊME build
 Les claims sont identifiés `f"{avis_id}#{index_global}"` où l'index global vient de

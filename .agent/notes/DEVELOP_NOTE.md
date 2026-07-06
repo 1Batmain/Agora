@@ -34,7 +34,7 @@ sont **plus loin**. Le pur médoïde surface donc le générique court — d'où
   sim ≥ 20ᵉ centile), décroît proportionnellement pour les outliers → jamais de hors-sujet
   en tête. Les claims développés modérément distants (ce qu'on VEUT) restent à plein poids.
 
-## Effet mesuré (auto-test :8011, build worktree)
+## Effet mesuré (auto-test sur build isolé)
 
 Longueur **médiane** des représentants top-1 (médoïde brut → D1) :
 tiktok **40 → 117**, granddebat **38 → 148**. Citations top-5 (centroïde-pur → D1) :
