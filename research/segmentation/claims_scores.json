@@ -162,7 +162,7 @@
     "cold_seconds": 635.08,
     "ms_per_avis": 2082.2,
     "eval_tokens": 25231,
-    "endpoint": "http://macbat.tail0b8aa8.ts.net:11434"
+    "endpoint": "http://mac-local:11434"
   },
   "baselines": {
     "mistral_micro_F1": 0.928,

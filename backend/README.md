@@ -28,9 +28,9 @@ data/processed/ideas.jsonl ──(build_cache, 1×)──▶ backend/cache/embed
 ## Cache (à refaire seulement si les avis changent)
 
 ```bash
-# 0) données (évite le download flaky)
+# 0) données : placer le CSV source de la consultation dans data/raw/
+#    (portail open data / pipeline.ingest.download)
 mkdir -p data/raw
-cp /home/bat/agora-worktrees/realdata/data/raw/tiktok_appel_a_temoignages.csv data/raw/
 uv run --with langdetect python -m pipeline.ingest.build      # → data/processed/ideas.jsonl
 
 # 1) cache d'embeddings nomic-v2 (~1 min, une fois)

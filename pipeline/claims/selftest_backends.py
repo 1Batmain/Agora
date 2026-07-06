@@ -84,7 +84,7 @@ def main() -> int:
         elif claims:
             formats.append(claims)
     else:
-        print("  ⏭️  SKIP: Mac injoignable (attendu — le Mac de Bob est souvent éteint).")
+        print("  ⏭️  SKIP: Mac injoignable (attendu — le poste local est souvent éteint).")
 
     # 3) auto avec Mac simulé down → repli api
     print("[3] =auto, Mac injoignable (127.0.0.1:1) → attendu: repli api")
