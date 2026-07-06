@@ -2,8 +2,8 @@
 
 ## Installation — une commande
 ```bash
-git clone git@github.com:1Batmain/Analyse-des-consultations-citoyennes.git
-cd Analyse-des-consultations-citoyennes
+git clone git@github.com:1Batmain/Agora.git
+cd Agora
 ./scripts/setup.sh     # deps back+front · caches d'analyse (release) · secrets locaux
 make dev               # backend :8010 + front :5180 → http://localhost:5180
 ```
@@ -18,7 +18,7 @@ lecture des caches marchent sans ; elle ne sert qu'à *construire* de nouvelles 
 2. Code — guidelines dans **`.agent/README.md`**, décisions passées dans `.agent/notes/`.
 3. Vérifie : `make test && make build`
 4. Pousse + merge dans **`dev`** (push direct ou petite PR d'équipe) ; régulièrement, une **PR `dev` → `main`** est soumise pour validation.
-5. La **CI** (pytest + build) doit passer → un mainteneur merge → le VPS **se déploie seul**.
+5. La **CI** (pytest + build) doit passer → un mainteneur merge → le serveur **se déploie seul**.
 
 ⚠️ Ne laisse pas d'état local non poussé : le déploiement fait `reset --hard origin/main`.
 

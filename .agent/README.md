@@ -21,19 +21,17 @@ Leiden → hiérarchie variance-adaptative → nommage/enrichissement/insights (
 | `backend/` | API FastAPI (:8010) **SERVE-only** + les builds (`build_analysis`, `build_opinion`, `build_cache`) |
 | `pipeline/` | le cœur algo : `ingest/`, `claims/`, `embed/`, `cluster/` |
 | `frontend/` | app Vite/React (:5180), contrat de types dans `src/redesign/contract.ts` |
-| `deploy/` | scripts de déploiement + promotion de cache (voir `.agent/notes/DEV_PROD.md`) |
-| `.github/` | CI (tests sur PR) + Deploy (auto-déploiement du VPS sur push `main`) |
+| `.github/` | CI (tests sur PR) + Deploy (auto-déploiement sur push `main`) |
 | `.agent/notes/` | **notes de R&D / décisions** (algorithmes, modèles, arbitrages) — à lire avant de toucher au domaine concerné |
-| `.agent/queue/` | **ledger des tâches** par lane (le *intended*, en regard des commits = le *done*) |
 | `research/` | harnais d'expériences (verdicts one-off) |
 | `data/`, `var/` | données brutes (gitignoré) · secrets (gitignoré) |
 
 ## 3. Comment on travaille (à respecter)
 - **Dev / prod séparés** — voir `.agent/notes/DEV_PROD.md`. On CODE dans un clone dev
-  (a la clé Mistral) ; la **prod** est possédée par le runner, **sans clé**, sert le cache.
+  (a la clé Mistral) ; la **prod** sert le cache **sans clé** (aucun appel LLM au runtime).
 - **Flux** : branche → **PR vers `main`** → la CI (pytest + build) doit passer → merge →
-  le VPS **se déploie tout seul**. Ne pousse jamais d'état local non commité (le deploy
-  fait `reset --hard origin/main`).
+  la prod **se met à jour toute seule**. Ne pousse jamais d'état local non commité (le
+  déploiement fait `reset --hard origin/main`).
 - **R&D pilotée par verdict** : toute idée « on pourrait… » se **mesure** avant d'être
   adoptée, et le verdict (OUI/NON + pourquoi) est écrit. Les `.agent/notes/` et la mémoire
   du projet sont pleins de « NON, testé, voici pourquoi » — lis-les pour ne pas refaire.
@@ -53,6 +51,5 @@ make dev                # lance backend :8010 + front :5180
 ## 5. Où trouver quoi
 - **Décisions/algorithmes** → `.agent/notes/` (ADAPTIVE, HDBSCAN, MISTRAL, NAMING_SWITCH,
   MULTIDATASET, DEVELOP, REALDATA) + `DEV_PROD.md`.
-- **Tâches en cours / intention** → `.agent/queue/*.md`.
 - **Contrat d'API front↔back** → `frontend/src/redesign/contract.ts`.
 - **Défi hackathon** → `hackathon-an-2026/DEFI.md`.

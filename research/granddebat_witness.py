@@ -35,9 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from pipeline.cluster import mistral_client  # noqa: E402
 
 # Cache produit par le pipeline mergé (build_analysis) sur le repo principal.
-CACHE = Path(
-    "~/projects/Analyse-des-consultations-citoyennes/backend/cache/granddebat/analysis"
-)
+CACHE = Path.home() / "projects/Agora/backend/cache/granddebat/analysis"
 OUT = Path(__file__).resolve().parent / "granddebat_witness_results.json"
 JUDGE_MODEL = "mistral-large-latest"
 

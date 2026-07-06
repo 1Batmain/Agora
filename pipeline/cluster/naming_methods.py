@@ -20,7 +20,7 @@ clustering décide *quels* groupes existent ; la méthode de NOMMAGE décide
    (médoïdes). Prompt **langue-agnostique** : titre dans la langue dominante du
    cluster. **Repli gracieux sur ctfidf** si pas de clé / erreur / timeout —
    `naming` reflète alors la méthode RÉELLEMENT appliquée. (L'ancien backend
-   Ollama local est abandonné : le VPS de déploiement ne peut pas l'exécuter.)
+   Ollama local est abandonné : le serveur de déploiement ne peut pas l'exécuter.)
 
 Interface unique : `name_clusters_method(cluster_docs, method=..., members=...,
 vecs=..., ideas=..., corpus_stopwords=...) -> (names, naming_meta)`. `names` a la

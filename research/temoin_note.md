@@ -97,7 +97,7 @@ constat → jugement → demande → nuance → proposition). Le regroupement ne
 
 ## Déploiement pour jugement visuel
 
-Le serveur live (`:8010`, cwd = repo principal) lit `…/Analyse-des-consultations-citoyennes/
+Le serveur live (`:8010`, cwd = repo principal) lit `…/Agora/
 backend/cache/tiktok/`. Le build a été produit dans le worktree puis **copié dans le cache
 du repo principal** (l'ancienne découpe ministral-3b sauvegardée sous
 `backend/cache/tiktok/_bak_ministral3b/` — restauration triviale si besoin). Le serveur

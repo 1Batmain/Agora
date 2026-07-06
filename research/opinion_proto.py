@@ -61,7 +61,7 @@ REP_FOR_TITLE = 8
 N_ANNOT = 45             # taille de l'échantillon dumpé pour annotation manuelle
 
 # Worktree R&D : ni var/ ni claims.json embarqués → repli lecture seule dépôt principal.
-MAIN_REPO = Path("~/projects/Analyse-des-consultations-citoyennes")
+MAIN_REPO = Path.home() / "projects/Agora"
 CLAIMS_JSON = MAIN_REPO / "backend" / "cache" / DATASET / "claims.json"
 KEY_FALLBACK = MAIN_REPO / "var" / "mistral.key"
 

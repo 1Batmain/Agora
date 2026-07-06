@@ -1,6 +1,6 @@
 """Benchmark PETITS MODÈLES pour le VRAI but : multi-label de thèmes par avis.
 
-    AGORA_OLLAMA_URL="http://macbat…ts.net:11434" \
+    AGORA_OLLAMA_URL="http://mac-local:11434" \
     uv run --extra contender --extra embed-contender \
         python -m eval.segmentation.small_models
         [--gold eval/segmentation/gold_large.json]
@@ -24,9 +24,9 @@ Deux familles de candidats, mêmes métriques que Mistral (micro/macro-F1, exact
   pli, aucune fuite). Probas hors-pli (OOF) → seuil PAR CLASSE calé pour max-F1.
   Inférence quasi-nulle (embed + produit matriciel).
 
-**Candidat 2 — LLM LOCAL via Ollama, sur le Mac de Bob** (filet souverain) :
+**Candidat 2 — LLM LOCAL via Ollama, sur le poste local** (filet souverain) :
   endpoint via `AGORA_OLLAMA_URL` (Mac Apple Silicon, Tailscale — bien plus rapide
-  que l'Ollama CPU du VPS). Modèles réels du Mac (cf. `/api/tags`) : `qwen3:4b`
+  que l'Ollama CPU du serveur). Modèles réels du Mac (cf. `/api/tags`) : `qwen3:4b`
   (raisonneur), `ministral-3` (petit dense), `nemotron3:33b` (gros — option
   souveraine haute qualité, peut viser Mistral 0.928). MÊME prompt fermé que Mistral
   (réutilise `llm_seg.theme_prompt`), choix fermé sur les 8 thèmes. Warm-up par
@@ -70,8 +70,8 @@ DEFAULT_GOLD = HERE / "gold_large.json"
 DEFAULT_REPORT = HERE / "small_models_report.md"
 DEFAULT_SCORES = HERE / "small_models_scores.json"
 OLLAMA_CACHE = HERE / ".cache" / "ollama"
-# Endpoint Ollama : Mac de Bob via Tailscale (rapide, GPU Apple Silicon) si
-# AGORA_OLLAMA_URL est exporté, sinon Ollama local du VPS (CPU, lent). Le cache
+# Endpoint Ollama : poste local via Tailscale (rapide, GPU Apple Silicon) si
+# AGORA_OLLAMA_URL est exporté, sinon Ollama local du serveur (CPU, lent). Le cache
 # est clé PAR endpoint → la latence d'un host ne contamine pas l'autre.
 OLLAMA_BASE = os.environ.get("AGORA_OLLAMA_URL", "http://localhost:11434").rstrip("/")
 OLLAMA_URL = OLLAMA_BASE + "/api/chat"
@@ -445,9 +445,9 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
     L.append(_md_table(rows, cols) + "\n")
     L.append(f"*\\* Mistral ms/avis = ~70s cumulés / 305 avis ≈ 230 ms/avis amorti "
              f"(batché 12/appel, réseau UE) — cf. `llm_report.md`. ms/avis classifieur = "
-             f"embedding (dominant) + tête (quasi-nul), 100% sur le VPS. ms/avis Ollama = "
+             f"embedding (dominant) + tête (quasi-nul), 100% sur le serveur. ms/avis Ollama = "
              f"latence **À CHAUD** (warm-up préalable, modèle déjà chargé) cumulée / N, "
-             f"1 avis/appel, sur le Mac de Bob (`{endpoint}`, Apple Silicon via Tailscale ; "
+             f"1 avis/appel, sur le poste local (`{endpoint}`, Apple Silicon via Tailscale ; "
              f"souverain — la donnée ne sort pas du réseau privé).*\n")
 
     # --- Classifieur : détail ---
@@ -486,8 +486,8 @@ def build_report(gold_path: Path, n_items: int, n_mono: int, n_multi: int,
     # --- Ollama : détail ---
     if olm:
         L.append("## Candidat 2 — petit LLM local via Ollama, sur le Mac (filet souverain)\n")
-        L.append(f"Serveur **Ollama du Mac de Bob** (`{endpoint}`, Apple Silicon via "
-                 f"Tailscale) — bien plus rapide que l'Ollama CPU du VPS. MÊME prompt fermé "
+        L.append(f"Serveur **Ollama du poste local** (`{endpoint}`, Apple Silicon via "
+                 f"Tailscale) — bien plus rapide que l'Ollama CPU du serveur. MÊME prompt fermé "
                  f"que Mistral (`llm_seg.theme_prompt`), choix fermé sur les {len(labels)} "
                  f"thèmes, JSON mode, température 0. Les raisonneurs ont leur pensée coupée "
                  f"(`think:false`) ; un **warm-up** charge chaque modèle AVANT le timing → "
@@ -594,7 +594,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Bench petits modèles — multi-label thèmes.")
     ap.add_argument("--gold", default=str(DEFAULT_GOLD))
     ap.add_argument("--embedders", default="nomic-v2,e5-small")
-    # Modèles réels du Mac de Bob (cf. /api/tags) : qwen3:4b (raisonneur),
+    # Modèles réels du poste local (cf. /api/tags) : qwen3:4b (raisonneur),
     # ministral-3 (petit dense), nemotron3:33b (gros — option souveraine HQ).
     ap.add_argument("--ollama", default="qwen3:4b,ministral-3:latest,nemotron3:33b")
     ap.add_argument("--folds", type=int, default=5)

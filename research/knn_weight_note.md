@@ -70,7 +70,7 @@ Alignement gold **repnum** (axes officiels Titre I/II/III) :
 | cos3 | 17 | 0.046 | 0.164 | 0.164 |
 | gauss | 15 | 0.022 | 0.060 | 0.060 |
 
-(JSON brut : `/tmp/claude-1000/-home-bat-agora-worktrees-knn-weight/knn_weight_results.json`.)
+(JSON brut des résultats conservé hors-repo.)
 
 ## Lecture
 
