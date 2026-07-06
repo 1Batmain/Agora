@@ -50,7 +50,7 @@ from scipy.stats import pearsonr, spearmanr
 from research.k_sweep import repnum_gold_axes
 
 SEED = DEFAULT_SEED
-SCRATCH = Path("/tmp/claude-1000/-home-bat-agora-worktrees-embed-norm/raw_embeds")
+SCRATCH = Path("/tmp/agora-embed-norm/raw_embeds")
 SCRATCH.mkdir(parents=True, exist_ok=True)
 
 DATASETS = ["xstance", "republique-numerique"]

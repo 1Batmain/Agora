@@ -65,7 +65,7 @@ REPNUM_CSV_URL = (
     "consultation-sur-le-projet-de-loi-republique-numerique/"
     "20151218-191444/projet-de-loi-numerique-consultation-anonyme.csv"
 )
-_SCRATCH = Path("/tmp/claude-1000/-home-bat-agora-worktrees-k-sweep")
+_SCRATCH = Path("/tmp/agora-k-sweep")
 REPNUM_CSV_CANDIDATES = [
     Path("/tmp/repnum.csv"),
     _SCRATCH / "repnum_consultation.csv",

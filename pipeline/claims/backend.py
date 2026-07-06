@@ -1,6 +1,6 @@
 """Adaptateur MULTI-BACKEND pour l'extraction des claims (API par défaut, Mac opt-in).
 
-Le Mac de Bob surchauffe → l'app ne dépend PAS de lui par défaut. L'extraction des
+Le poste local surchauffe → l'app ne dépend PAS de lui par défaut. L'extraction des
 claims passe par un backend interchangeable, sélectionné par `AGORA_CLAIMS_BACKEND` :
 
   - ``api``  (DÉFAUT) — API **Mistral** ``ministral-3b-latest`` (souverain EU,
