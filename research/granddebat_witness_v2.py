@@ -23,9 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from pipeline.cluster import mistral_client  # noqa: E402
 
-CACHE = Path(
-    "/home/bat/projects/Analyse-des-consultations-citoyennes/backend/cache/granddebat/analysis"
-)
+CACHE = Path.home() / "projects/Analyse-des-consultations-citoyennes/backend/cache/granddebat/analysis"
 OUT = Path(__file__).resolve().parent / "granddebat_witness_v2_results.json"
 JUDGE_MODEL = "mistral-large-latest"
 
