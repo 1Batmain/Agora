@@ -63,3 +63,7 @@ backend/cache/*/density.json
 # Le seed de demo (submissions.seed.jsonl) reste COMMITTE.
 backend/cache/*/submissions.jsonl
 eval/
+
+# R&D émergence — caches de build lourds (reproductibles via emerge_build.py)
+research/emerge_cache/
+research/emerge_build.log
