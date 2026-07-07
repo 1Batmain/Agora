@@ -73,4 +73,6 @@ make dev               # backend :8010 + front :5180 → http://localhost:5180
 
 ---
 
+**Licence** : [AGPL-3.0](LICENSE) (cœur libre) · licence commerciale disponible ([NOTICE](NOTICE)). Contribuer = accepter le [CLA](CLA.md).
+
 <sub>Agora — analyse fidèle, traçable et souveraine des consultations citoyennes.</sub>
