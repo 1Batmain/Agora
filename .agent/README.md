@@ -49,6 +49,7 @@ make dev                # lance backend :8010 + front :5180
 ```
 
 ## 5. Où trouver quoi
+- **Pipeline d'analyse (carte détaillée)** → `.agent/notes/PIPELINE.md`
 - **Décisions/algorithmes** → `.agent/notes/` (ADAPTIVE, HDBSCAN, MISTRAL, NAMING_SWITCH,
   MULTIDATASET, DEVELOP, REALDATA) + `DEV_PROD.md`.
 - **Contrat d'API front↔back** → `frontend/src/redesign/contract.ts`.
