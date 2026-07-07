@@ -2,6 +2,10 @@
 name = "agora-pipeline"
 version = "0.0.0"
 description = "Agora — pipeline batch NLP (embeddings, graphe k-NN, Leiden, scoring, naming)"
+# Cœur libre sous AGPL-3.0 (double licence : édition commerciale disponible, cf. NOTICE).
+# SPDX de dépôt — les dépendances copyleft (igraph/leidenalg, GPL) sont compatibles AGPL
+# pour l'édition libre ; voir NOTICE + l'audit légal pour l'édition commerciale.
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",

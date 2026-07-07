@@ -15,6 +15,16 @@ venv/
 # Secrets (clé API Mistral — JAMAIS commit). Cf. backend/MISTRAL_NOTE.md.
 var/
 *.key
+# Élargissement défensif : toute variante de dotenv (y compris .env-copy/.env.local)
+# et matériel cryptographique. `.env` seul ne couvrait pas ces cas.
+.env.*
+*.env
+.env-copy
+*.pem
+*.crt
+*.p12
+id_rsa
+id_rsa.*
 
 # Boîte de handoff interne des agents/rôles (rapports de mission, notes privées).
 # NON public : ne doit jamais atterrir dans le dépôt.

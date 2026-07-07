@@ -1,5 +1,7 @@
 # Agora — retranscrire la parole citoyenne
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE) [![Édition commerciale disponible](https://img.shields.io/badge/édition-commerciale%20dispo-green.svg)](NOTICE)
+
 > ### 🚀 Démo publique en ligne : **<https://forge.tail0b8aa8.ts.net>**
 > Testez la méthode Agora sur des témoignages publics recueillis lors de différentes consultations citoyennes.
 
