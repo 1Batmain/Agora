@@ -1,0 +1,1580 @@
+{
+  "dataset": "lutte-contre-les-fausses-informations",
+  "params": {
+    "min_support": 2,
+    "sim_threshold": 0.55,
+    "max_k": 5,
+    "select_model": "mistral-large-latest"
+  },
+  "methods": {
+    "vcluster": {
+      "n_themes": 16,
+      "n_arguments": 24,
+      "verbatim": {
+        "total": 24,
+        "verbatim_ok": 24,
+        "rate": 1.0,
+        "failures": []
+      },
+      "coverage": 1.0,
+      "themes": [
+        {
+          "theme_id": "n1",
+          "arguments": [
+            {
+              "argument": "Revoir la charte de déontologie des journalistes",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:451:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:451:3#77",
+              "n_support": 12,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:62:3#12",
+                  "text": "Revoir la déontologie des journalistes."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:288:3#32",
+                  "text": "Signature dune Charte de déontologie avec révocation du journaliste si diffusion de fausse info"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:435:3#74",
+                  "text": "Il faut agir en amont et en aval 1) Faire prendre conscience et apprendre à interpréter et à comprendre l'information dès le plus jeune âge dans le cadre de la formation du citoyen … 2) Faire du code de déontologie du journaliste un genre de serment d'hippocrate avec sanctions possibles si il y a dérapage !"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:451:3#77",
+                  "text": "Revoir la charte de déontologie des journalistes"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:496:3#93",
+                  "text": "Un(e) journaliste devrait signer à l'embauche, une charte déontologique l'obligeant à être totalement impartial lors des campagnes électorales et des débats. Cette règle doit prévaloir également pour l'ensemble des médias autorisés à diffuser les campagnes, ainsi que le CSA."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n10",
+          "arguments": [
+            {
+              "argument": "Plutôt que de porter une loi qui augmente l'impression d'une censure, avec des termes flous, une mauvaise prise en compte de la notion de \"fausse information\" (quand il faudrait déjà préférer celle de désinformation),",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#129",
+              "n_support": 7,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:120:3#19",
+                  "text": "suppression de ce texte, juste un prétexte pour museler la population"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:176:3#23",
+                  "text": "AUCUNE MODIFICATION ne doit être apportée à la situation actuelle, sinon c'est la censure et la dictature."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:516:3#108",
+                  "text": "De la pure censure, basée sur des mots clefs, que du coup on a plus le droit d'employer, même pour dénoncer ces actes hors la loi."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#129",
+                  "text": "Plutôt que de porter une loi qui augmente l'impression d'une censure, avec des termes flous, une mauvaise prise en compte de la notion de \"fausse information\" (quand il faudrait déjà préférer celle de désinformation),"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3#191",
+                  "text": "Les lois encadrant la publication existent déjà. … Tout autant que la censure."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Faire interdire les sites qui en ont l'habitude, et signler ceux sui le font pour se faire « Mousser »",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:842:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:842:3#232",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:321:3#37",
+                  "text": "Je dirais même plus, interdire tout simplement ce genre d'envoi 2 semaines avant une élection"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:455:3#78",
+                  "text": "Cibler ses comptes et sa propagande. Si l'Etat doit intervenir, c'est contre la propagande."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3#106",
+                  "text": "Enfin demander sérieusement (avec amende à la clé) aux GAFA d'arrêter de laisser passer des contenus hors la loi (racistes, homophobes, sexistes.)"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:839:3#227",
+                  "text": "La name & shame et une condamnation avec une publicité adéquate sont indispensables pour dissuader."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:842:3#232",
+                  "text": "Faire interdire les sites qui en ont l'habitude, et signler ceux sui le font pour se faire « Mousser »"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n17",
+          "arguments": [
+            {
+              "argument": "Je ne pense pas que ce soit à l'Etat de légiférer sur toutes les fausses informations, car le risque est que les libertés soient peu à peu entravées.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#124",
+              "n_support": 14,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#0",
+                  "text": "Aucune information de devraient être limitée par la loi, ce n'est pas à l'Etat de dire ce qui est vrai ou faux. … Cette proposition de loi est liberticide et très dangereuse pour la société."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:33:3#8",
+                  "text": "aucune informations ne devraient être limitée par la loi, ce n'est pas à l'Etat de dicter ce qui est vrai ou faux , mais aux citoyens de vérifier leurs sources."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:172:3#22",
+                  "text": "Aucune limitation à l'information, quelle qu'elle soit, sinon les abus et manipulations organisés par les puissants auront force de vérités … et serions très vite dans une dictature qui a déjà commencé."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#65",
+                  "text": "La divulgation des montants perçus est contraire à la liberté d'entreprendre et au secret des affaires."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#66",
+                  "text": "Le juge peut toujours, sur le fondement de la LCEN, ordonner le retrait de contenus illicites. Il n'y a donc pas besoin de l'article L. 163-2 qui est redondant."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "La liberté de l'information oblige la presse à veiller à la sincérité des informations diffusées auprès du public. Cette obligation est certes renforcée pendant des périodes où les choix démocratiques s'exercent mais elle s'impose également hors de ces périodes. Il importe que l'atteinte à la confiance que le public peut avoir dans l'information soit sanctionnée pendant la période électorale mais également hors de ces périodes. Il n'est pas discutable que la diffusion de fausses nouvelles a des conséquences graves sur la vie publique mais elle constitue de facto une atteinte à la liberté de la presse à raison de la perte de confiance qu'elle engendre dans l'opinion.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:503:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:503:3#99",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:496:3#92",
+                  "text": "Nous ne pouvons pas condamner les journalistes n'importe comment. La liberté de la presse doit permettre avant tout, de garantir à ne rien cacher de l'information ou tout au moins, autant que faire se peut. … Un(e) journaliste qui diffuse une première information se révélant être fausse par ce qu'il/elle relate les premiers éléments, et qui, grâce au complément de travail du/de la professionnel(le) ou de confrères(soeurs), permet d'y voir plus clair, peut être protégé(e) si et seulement si ce dernier/cette dernière publie un communiqué de rectification de l'information, exhaustivement par les mêmes voies de communication que l'information initiale. … Un(e) journaliste qui ne respecterait cependant pas ce devoir de rectification et qui continuerait de surcroît, à diffuser une fausse information doit être condamné(e) avec la plus grande fermeté. … Un chroniqueur ne doit par exemple plus être autorisé à diffuser une fausse information, sous prétexte qu'elle choque assez pour relancer l'audimat."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:501:3#98",
+                  "text": "Laisser diffuser des fake news porte une atteinte grave à la confiance du citoyen dans la démocratie. La liberté d'informer repose sur la confiance que le citoyen accorde à la sincérité de l'information. Cette confiance est du même ordre que celle qui repose sur les élus. Ce d'autant que cette l'exercice de cette liberté n'est pas sans conséquence sur la vie politique."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:503:3#99",
+                  "text": "La liberté de l'information oblige la presse à veiller à la sincérité des informations diffusées auprès du public. Cette obligation est certes renforcée pendant des périodes où les choix démocratiques s'exercent mais elle s'impose également hors de ces périodes. Il importe que l'atteinte à la confiance que le public peut avoir dans l'information soit sanctionnée pendant la période électorale mais également hors de ces périodes. Il n'est pas discutable que la diffusion de fausses nouvelles a des conséquences graves sur la vie publique mais elle constitue de facto une atteinte à la liberté de la presse à raison de la perte de confiance qu'elle engendre dans l'opinion."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:843:3#233",
+                  "text": "Un pas de plus vers la pensée unique souhaitée. Il est évident que la conséquence de la concentration des médias aux mains des groupes de pressions ultra libéraux , et des régimes corrompus à leurs ordres en est un mensonge quotidien, et pas seulement par omission. C'est une guerre de troisième génération malheureusement très efficace pour eux. Ces monopoles du mensonge n'admettront jamais qu'une vraie information ne puisse s'installer, que le choix de la source d'info soit possible, la loi sur les \"fake news\", fausses nouvelles rentre bien dans cette logique, on est loin de ce qui a été fait à la libération du pays pour le pluralisme et contre la presse pétainiste collaboratrice."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n18",
+          "arguments": [
+            {
+              "argument": "L'État peut-il s'ériger comme arbitre de la vérité ? Ne risque t-il pas d'être accusé de censure ? Les fake news circulent très vite, comment les repérer et les contrer en temps voulu ? De même, l'aspect international du réseau pose problème dans ce domaine.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:834:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:834:3#219",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:763:3#147",
+                  "text": "Je suis pour l'alerte citoyenne mais contre de demander à un organisme tiers, votre exemple parle des \"décodeurs\" du journal du Monde. Cela ne peut pas fonctionner puisque les-dits organismes peuvent être eux-mêmes pourvoyeur de de ces \"fausses nouvelles\"."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:834:3#219",
+                  "text": "L'État peut-il s'ériger comme arbitre de la vérité ? Ne risque t-il pas d'être accusé de censure ? Les fake news circulent très vite, comment les repérer et les contrer en temps voulu ? De même, l'aspect international du réseau pose problème dans ce domaine."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "\"Seul un juge peut déterminer ce qui constitue une fausse information et prendre des mesures visant à en limiter la diffusion.\"",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:890:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:890:3#285",
+              "n_support": 10,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#2",
+                  "text": "par le passé de vrai informations ont été dénoncé comme fausses par nombres de personnes, avant que la justice finisse par se saisir des personnes incriminées par ces informations, en ayant confirmé leurs véracité au préalable. Ce fut notamment le cas pour le financement de la campagne présidentielle de Nicolas Sarkosy par le régime de Mouhamar Qaddafi."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:62:3#13",
+                  "text": "Car aujourd'hui le peuple est bien souvent sous l'influence d'une fausse information et donc ils vont rejeté un personnage politique, même si il a fait des actions bonnes."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#44",
+                  "text": "Il apparait difficile concrètement d'établir des critères \"officiels\" qui permettraient de séparer une information vraie d'une information fausse. Toutefois, les informations, dont on connaitrait à l'avance la véracité (preuves historiques avec l'appui de témoignages, preuves scientifiques avec les résultats d'évaluations menées), et qui seraient manipulées, pourraient faire l'objet de restrictions, par la fermeture des sites."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#45",
+                  "text": "Pour diffuser cette véracité, le fact-checking réalisé par une autorité reconnue, pourrait être utile."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:422:3#59",
+                  "text": "A cet égard, le critère dégagé par le Conseil d'État dans son avis pourrait faire sens, à savoir que seules les fausses informations divulguées avec une intention de nuire seraient illicites."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n21",
+          "arguments": [
+            {
+              "argument": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3#53",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3#53",
+                  "text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:522:3#110",
+                  "text": "Mettre en place une loi \"garante\" de l'information en ligne est selon moi dangereux et peut conduire à des dérives certaines dont notamment la censure de discours à contre courant mais qui ne relèvent pas de la fausse information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:861:3#250",
+                  "text": "Aucune. Vouloir censurer une information n'a jamais rien de bon. il est préférable d'apprendre au gens à douter correctement de ce qu'ils reçoivent comme information. Aucune mesure technique ne peut lutter contre la diffusion d'information, sauf à vouloir totalement censurer certains sites."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:878:3#274",
+                  "text": "je ne pense pas que la lutte contre les fake news doivent faire l'objet d'une loi"
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3#186",
+              "n_support": 3,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3#186",
+                  "text": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:866:3#256",
+                  "text": "La Scam est en accord avec les recommandations formulées au paragraphe 10 de l'avis du Conseil d'Etat du 19 avril 2018 sur les propositions de loi relatives à la lutte contre les fausses informations, qui suggèrent de s'en tenir à la notion de « fausses informations », à la fois plus large que celle de « fausses nouvelles » (déjà présente à l'article 27 de la loi du 29/07/1881 et de l'article L.97 du code électoral) mais aussi plus opératoire dans le contexte visé."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:878:3#276",
+                  "text": "dans le cas ou un journal en diffuserait une, impossible du coup de légiférer en se basant sur l'argument : \"c'est un journaliste qui relaye l'information donc ce n'est pas une fake news\""
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n23",
+          "arguments": [
+            {
+              "argument": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\".",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:822:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:822:3#197",
+              "n_support": 7,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:53:3#10",
+                  "text": "La notion même de fausse nouvelle ou fausse information a un relent de censure et de contrôle de la presse. L'Etat n'a pas à imposer une vérité officielle."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:130:3#20",
+                  "text": "Ce n'est pas à l'Etat de légiférer sur ce qui est vrai ou faux … mais aux citoyens de vérifier les informations reçues."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:322:3#38",
+                  "text": "Ce n'est pas à l'Etat de décider de ce qui est vrai ou faux. Ni aux médias. Les journaux publient régulièrement de fausses informations sans en être inquiétés mais WikiLeaks pourrait l'être ?"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:780:3#167",
+                  "text": "Légiférer sur ce qui est vrai ne peut donc être perçu que comme une fuite en avant qui aura pour conséquence de fragiliser un peu plus la confiance des personnes à l'égard des médias autorisés par le pouvoir, qui continueront de leur côté à ne pas repenser les pratiques, droits et devoirs du journalisme à l'ère de l'internet."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:822:3#197",
+                  "text": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\"."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Il sans doute aussi légiférer sur les techniques d'embrigadement des sectes, des entreprises terroristes voire des partis politiques non républicains (et leurs associations satellites) qui diffusent des fake dans un but purement électoraliste.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3#105",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:180:3#24",
+                  "text": "Les fake sont antidémocratiques car les plus faibles les croient et votent en fonction de ça. … Ne rien faire au nom de la liberté d'expression risque de tuer la République."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:448:3#76",
+                  "text": "Pour moi, tout ce qui touche aux élections qu'elles soient présidentielles, législatives, européennes ou municipales. Elles instaurent comme les sondages de fausses intentions de votes qui peuvent faire changer le cours des élections. C'est pour moi la priorité."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3#105",
+                  "text": "Il sans doute aussi légiférer sur les techniques d'embrigadement des sectes, des entreprises terroristes voire des partis politiques non républicains (et leurs associations satellites) qui diffusent des fake dans un but purement électoraliste."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:731:3#142",
+                  "text": "La publication d'informations mensongères n'est pas une nouveauté dans la presse officielle. … Mais, du moins, des recours sont toujours possibles par les personnes ou organismes lésés : droits de réponse, condamnations, . … Les réseaux sociaux sont dispensés de toute règle déontologique en raison de l'anonymat qui protège les diffuseurs de fake-news."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:876:3#269",
+                  "text": "De nombreuses affirmations de députés sur différents sujets sont approximatives voire fausses, alors même que des sources documentées et accessibles existent (cf. les communications sur les migrants)"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n25",
+          "arguments": [
+            {
+              "argument": "aux citoyens de vérifier les sources et la fiabilités des dîtes informations",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#1",
+              "n_support": 7,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#1",
+                  "text": "aux citoyens de vérifier les sources et la fiabilités des dîtes informations"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:20:3#6",
+                  "text": "il revient aux citoyens de vérifier eux même les informations qu'ils reçoivent."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:79:3#14",
+                  "text": "Enseigner à la nation comment RECONNAÎTRE les fausses informations"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:431:3#71",
+                  "text": "exiger davantage de rigueur dans les transmissions d'informations : trop d'approximations, pas assez de contrôle en amant de la diffusion, recherche de scoops mal vérifiés, tout cela jette un trouble sur la crédibilité de ce qui est proposé au citoyen."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3#73",
+                  "text": "le citoyen lambda doit apprendre à trier les informations !"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n27",
+          "arguments": [
+            {
+              "argument": "il existe déjà un arsenal qui parait adapté et suffisant pour lutter contre les fausses informations, que cela soit en ou hors période électorale. … Il est patent que les dernières élections n'ont pas été manipulées par des fake news, elles ont au contraire été le théâtre de la manifestation de la vérité, qui a mené à la défaite de Fillon.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#61",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:53:3#11",
+                  "text": "la notion de fausse information est beaucoup trop large."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#61",
+                  "text": "il existe déjà un arsenal qui parait adapté et suffisant pour lutter contre les fausses informations, que cela soit en ou hors période électorale. … Il est patent que les dernières élections n'ont pas été manipulées par des fake news, elles ont au contraire été le théâtre de la manifestation de la vérité, qui a mené à la défaite de Fillon."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3#185",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:116:3#18",
+                  "text": "toutes les fausses infos donnés par la classe politique au pouvoir"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:281:3#27",
+                  "text": "Une information dont l'inexactitude est prouvée, créée délibérément dans le but de manipuler l'opinion de manière massive"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3#185",
+                  "text": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:830:3#211",
+                  "text": "Lorsque les fausses informations sont de natures à porter gravement atteinte à un individu (remise en question de sa probité, de son intégrité.) il paraît essentiel d'etablir des gardes-fous."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:869:3#260",
+                  "text": "insultes, fausses informations destinées à nuire à une personne ou une groupe de personnes"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n28",
+          "arguments": [
+            {
+              "argument": "les fake news sont alimentées via les réseaux sociaux.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3#31",
+              "n_support": 6,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3#31",
+                  "text": "les fake news sont alimentées via les réseaux sociaux."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:500:3#97",
+                  "text": "Le problème des fake news vient de gens qui ne sont pas journalistes, qui les produisent et les diffusent en utilisant des canaux, notamment les réseaux sociaux (mais pas seulement car les emails sont aussi un puissant vecteur de fake news)."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:516:3#107",
+                  "text": "Le FN, LRM, LR, la FI, le PS etc sont des partis républicains qui participent tous à des fausses nouvelles plus ou moins. … Le leader d'un de ces groupes à même bombardé un pays sur base d'une de ces fausses nouvelles."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3#160",
+                  "text": "Les pourvoyeurs de fake-news, qu'il s'agisse de particuliers ou de groupes organisés savent pertinemment ce qu'ils font."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:852:3#241",
+                  "text": "Clarifier ce qu'est une fake news, mettre un cadre plus précis à sa définition."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n29",
+          "arguments": [
+            {
+              "argument": "Plutôt que de légiférer au sujet des fake news, il faudrait mettre des moyens dans l'Education aux Medias et à l'Information.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#132",
+              "n_support": 15,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:183:3#25",
+                  "text": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\". … Mettre des moyens dans l'éducation aux médias et à l'information est beaucoup plus efficace que de voter une loi qui sera inopérante. … Dans une société de l'information, il faut apprendre à s'informer, savoir reconnaître le vrai du faux, protéger ses données personnelles, être capable de communiquer sur les réseaux sociaux, connaître le fonctionnement de l'économie du numérique. … C'est une question d'éducation avant tout."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:331:3#42",
+                  "text": "Ceci étant posé et précisé par la loi, le plus dur restera à faire, c'est à dire à apprendre aux internautes l'utilisation optimale de cette nouvelle transparence et cela passe par un travail éducatif dès l'école à la lecture de ces nouveaux médias et au décryptage des informations qu'ils véhiculent. Cela devrait d'ailleurs être une discipline à part entière du cursus des collégiens comme l'apprentissage de l'orthographe ou des règles élémentaires du calcul mental"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#46",
+                  "text": "L'enjeu véritable est une éducation à l'information des citoyens, et notamment à l'information qui est sur Internet. Cela pourrait passer par des formations (scolaires ou professionnelles) sur la formulation, le vocabulaire et l'argumentation choisis par les rédacteurs."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:358:3#49",
+                  "text": "Allouer davantage de moyens à l'enseignement scolaire, afin de sensibiliser à la forme que peut prendre les fausses informations, et ce, dès l'école primaire. Cela pourrait passer par des rencontres d'élèves avec des journalistes, ce qui permettrait de leur faire comprendre la manière de rédaction et d'analyse de l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:418:3#56",
+                  "text": "Pas certaine de l'opportunité de légiférer. Éduquer aux médias, au traitement de l'information afin d'en évaluer la pertinence et, de fait, de repérer les fake news serait mieux, non ??"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n3",
+          "arguments": [
+            {
+              "argument": "les plateformes (i) ne sont pas soumises à une obligation générale de surveillance et (ii) ne sont pas responsables des contenus qu'elles hébergent, puisqu'elles ne les éditorialisent pas. … Les plateformes ne sont que des intermédiaires et il est essentiel de ne pas oublier que les véritables fauteurs de troubles ne sont pas ces intermédiaires mais ceux qui se servent d'eux pour accomplir leurs sombres desseins.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#68",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#68",
+                  "text": "les plateformes (i) ne sont pas soumises à une obligation générale de surveillance et (ii) ne sont pas responsables des contenus qu'elles hébergent, puisqu'elles ne les éditorialisent pas. … Les plateformes ne sont que des intermédiaires et il est essentiel de ne pas oublier que les véritables fauteurs de troubles ne sont pas ces intermédiaires mais ceux qui se servent d'eux pour accomplir leurs sombres desseins."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:424:3#70",
+                  "text": "A nouveau, il s'agit de frapper sur les intermédiaires techniques d'Internet, qui sont par définition neutres dans ce débat et ne sont que les diffuseurs d'un contenu mis en ligne par un tiers. … A nouveau, le but n'est pas d'agir à cette source mais de tenter de contourner le problème en s'attaquant au dernier maillon de la chaine, et ce en réitérant une obligation qui figure déjà dans la LCEN (les intermédiaires doivent déjà avoir en place des processus de signalement) et en mettant les \"fausses informations\" au même niveau que la pédopornographie ou le terrorisme."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "\"à toute chaîne conventionnée participant à une entreprise de déstabilisation des institutions par la diffusion de fausses informations‚ y compris si elle n'est pas sous la dépendance d'un État étranger ?\"",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:901:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:901:3#288",
+              "n_support": 10,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:314:3#36",
+                  "text": "Faire obligation aux plateformes ayant un nombre de connexions important de signaler aux autorités publiques et à tous les candidats pendant la période électorale l'existence d'un envoi massif à des personnes ciblées pour leurs caractéristiques communes d'une information pouvant influencer leur choix."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:331:3#41",
+                  "text": "Et là la responsabilisation des opérateurs, quel que soit leur statut, est nécessaire de façon à pouvoir intervenir rapidement car si la diffusion de fausses nouvelles est punie par la loi, l'intervention de la justice, malgré une procédure de référé risque d'être trop tardive compte tenu de la vitesse de diffusion d'une information qu'on dit à juste titre virale"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:766:3#151",
+                  "text": "Obliger les gafas à ne publier que les sites labellisés en période électorale."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:833:3#216",
+                  "text": "Contraindre les plateformes à assumer leurs responsabilités de diffuseur est une nécessité. Pas seulement en période électorale !"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:881:3#280",
+                  "text": "\"Résilier unilatéralement la convention d'une chaîne sous la dépendance d'un État étranger si elle participe à une entreprise de déstabilisation des institutions par la diffusion de fausses informations.\""
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n30",
+          "arguments": [
+            {
+              "argument": "Pour le public qui subit ses infos, le seul moyen semble être l'éducation, la prévention, la sensibilisation.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3#157",
+              "n_support": 6,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:351:3#47",
+                  "text": "Il faudrait différencier les sites d'information (médias journalistiques reconnus) et les sites dits \"réseaux sociaux\", dont les \"informations\" ne sont ni vérifiées ni vérifiables. Faire savoir par ex que Wikipédia N'EST PAS une encyclopédie fiable."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:375:3#52",
+                  "text": "Les informations diffusées doivent avoir été vérifiées, recoupées, prouvées. L'information devrait répondre au besoin de savoir plus qu'à celui de \"faire le buzz\" pour augmenter la clientèle du média."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3#102",
+                  "text": "D'accord pour éduquer au bon usage des médias et réseaux sociaux. Apprendre comment vérifier l'info. L'éducation nationale le fait avec le CLEMI. De nombreuses associations d'éducation populaire aussi. Il faut leur donner des moyens."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3#157",
+                  "text": "Pour le public qui subit ses infos, le seul moyen semble être l'éducation, la prévention, la sensibilisation."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:779:3#163",
+                  "text": "Les adolescents sont \"informés\" majoritairement et pour certains exclusivement via les infos qui circulent sur les réseaux sociaux (les adultes n'en sont pas loin non plus) ou sur les chaînes d'info en continu qui doivent fournir un flux dont le seul but est de devancer la concurrence (on imagine la crédibilité et la vérification). Il faut donc mettre l'accent sur l'esprit critique."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n31",
+          "arguments": [
+            {
+              "argument": "Comme écrit précédemment il faut donner les moyens à l'école pour cette éducation. Il existe des enseignants experts de ces questions : les professeurs documentalistes. … Il faut leur permettre d'assurer un enseignement à la culture de l'information auprès des élèves de collèges et de lycées.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:856:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:856:3#245",
+              "n_support": 43,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:235:3#26",
+                  "text": "Pour lutter contre les fake news et éduquer à l'EMI (Education aux Médias et à l'Information ), augmentez le nombre de postes de professeurs documentalistes et donnez leur les moyens d'intervenir auprès des élèves (mise en place d'un curriculum au collège, lycée, université). … C'est là-dessus que vous devez légiférer."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:521:3#109",
+                  "text": "C'est effectivement une question d'éducation, mais pas aux \"bons usages\" des médias et réseaux sociaux, ce qui ne veut pas dire grand chose. … Donc plutôt que les bons usages, mettre en place une réelle formation, en sciences de l'information et de la communication, à l'école, au collège, au lycée. … Il y a déjà des personnels formés pour cela, qu'il faudrait recruter bien plus que ce qui est fait. … Ce sont les profs documentalistes, c'est leur mission, reste à leur donner les moyens de l'exercer pleinement."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#128",
+                  "text": "C'est bien dans l'enseignement qu'on peut envisager une solution pérenne, en développant l'enseignement reconnu de l'information-documentation, avec des professeurs documentalistes formés dans ce domaine, à condition de les recruter correctement et de leur donner les moyens horaires d'enseigner. … C'est bien en donnant des apprentissages en évaluation de l'information, qu'on y arrivera, pas en légiférant."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#130",
+                  "text": "c'est le cadre des enseignements qu'il convient de compléter pour reconnaître enfin un temps d'enseignement par des professeurs documentalistes recrutés en conséquence. … C'est une maîtrise de l'environnement informationnel, une maîtrise des processus de recherche, de documentation, une connaissance des médias, dans toute leur diversité, et sans a priori idéologique, qui permettent de développer cet esprit critique nécessaire dans une société de la communication et de l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#134",
+                  "text": "Des enseignants sont spécifiquement formés à l'éducation à l'information : ce sont les professeurs documentalistes, diplômés en Sciences de l'Information et de la Communication. … Hélas, à l'heure actuelle, les moyens nécessaires pour qu'ils puissent mettre en place cet enseignement auprès de l'ensemble des élèves ne leur sont pas alloués, alors qu'ils sont experts dans ce domaine et que leurs compétences sont reconnues."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n32",
+          "arguments": [
+            {
+              "argument": "Il faut simplement l'appliquer et éduquer à l'éducation aux médias et à l'information.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:542:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:542:3#113",
+              "n_support": 13,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:89:3#16",
+                  "text": "cher Thierry , j'entendais , éduquer avec LA méthode de Platon, de Montaigne et de Nietzsche bien sûr ! ,-o)"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:506:3#101",
+                  "text": "Les textes à modifier peuvent être cependant ceux de l'enseignement secondaire qui doivent avoir dans les cursus des cours d'esprit critique et d'opposition sur differents sujets de société, d'économies et de philosophie."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:542:3#113",
+                  "text": "Il faut simplement l'appliquer et éduquer à l'éducation aux médias et à l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#125",
+                  "text": "il doit agir dans l'éducation à l'esprit critique, au respect de tous et à la contre-manipulation (ou du moins à la vérification des sources et à l'argumentation) ."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:783:3#171",
+                  "text": "il est préférable d'éduquer, que de mettre en place des lois qui seront systématiquement détournées et qui renforceront l'idée des théories complotistes."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n4",
+          "arguments": [
+            {
+              "argument": "Les médias devraient donner un exemple d'objectivité, d'impartialité et de sérieux afin d'encourager l'honnêteté de tous.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#126",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:327:3#39",
+                  "text": "Une vraie égalité de représentation des candidats dans les médias lors des élections."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:362:3#51",
+                  "text": "Exemple : la chaîne info de Bolloré passe quasiment sous silence la mise en examen du patron. Chaque citoyen devrait pouvoir facilement savoir à quel groupe financier (marchand d'armes, bétonneur, r etc) appartient un média public. Quand ces mêmes groupes passent des marchés publics avec les collectivités, détenir une radio, un journal ou une (des) télé(s) leur donne un avantage conséquent (le poids des médias dans l'opinion publique)."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:468:3#88",
+                  "text": "Aucune interrogation sur nos chaînes de télévision française qui ne sont pas objectives … Trop complaisante avec certains"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:515:3#104",
+                  "text": "Amplifier les actions citoyennes de France Télévisions dans ce domaine (Marie-Laure Augry le fait régulièrement)."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#126",
+                  "text": "Les médias devraient donner un exemple d'objectivité, d'impartialité et de sérieux afin d'encourager l'honnêteté de tous."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n6",
+          "arguments": [
+            {
+              "argument": "La loi sera inutile, voire nuisible.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:825:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:825:3#204",
+              "n_support": 7,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:20:3#4",
+                  "text": "Ce projet de loi devrait être simplement annulé."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:554:3#114",
+                  "text": "Elle n'ajoute que des propositions liberticides ou infaisables à l'arsenal légal déjà existant."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:554:3#116",
+                  "text": "ce questionnaire ne proposant que des choix ne permettant pas de se prononcer contre les propositions de la loi est très biaisé : un bon exemple d'éducation à l'information"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:563:3#117",
+                  "text": "Surtout qu'il est indiqué un renforcement du CSA qui n'est lui même pas très indépendant."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#131",
+                  "text": "Une nouvelle loi serait un choix politique très contestable, car le contenu y est de l'ordre d'une subjectivité constante, alors qu'un développement d'un enseignement en la matière serait une ambition politique louable."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Il y a déjà des dispositions dans la loi, mais sans application possible a priori au regard du phénomène.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#127",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:456:3#79",
+                  "text": "La loi est déjà claire la-dessus : apologie au terrorisme, racisme à la violence etc.. Le problème relève de l'application et donc non du législatif mais de l'exécutif et du judicaire (le législatif peut cependant augmenter les moyens disponibles ou les moyens d'actions peut etre)"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:462:3#83",
+                  "text": "aucune lois ne peut porter sur des sujets précis, une loi est générale … Comment differencier la vérité du faux ? Comment estimer que les \"chiffres [sont faux\" ? Par qui ? Une instance dite \"indépendante\" ? des fonctionnaires ? des entreprises privées ? … La solution n'est pas dans un texte de loi je pense mais dans une mise en oeuvre dans lois prééxistentes avec modifications mineurs si besoin"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#127",
+                  "text": "Il y a déjà des dispositions dans la loi, mais sans application possible a priori au regard du phénomène."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:686:3#137",
+                  "text": "pas de loi nouvelle, l'existant suffit"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3#156",
+                  "text": "Pour les diffuseurs, une loi est peut-être nécessaire , peut-être faudrait-il déjà appliquer les lois existantes ?"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        }
+      ]
+    },
+    "vselect": {
+      "n_themes": 15,
+      "n_arguments": 36,
+      "verbatim": {
+        "total": 36,
+        "verbatim_ok": 36,
+        "rate": 1.0,
+        "failures": []
+      },
+      "coverage": 0.668,
+      "themes": [
+        {
+          "theme_id": "n1",
+          "arguments": [
+            {
+              "argument": "Signature dune Charte de déontologie avec révocation du journaliste si diffusion de fausse info",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:288:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:288:3#32",
+              "n_support": 6,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:62:3#12",
+                  "text": "Revoir la déontologie des journalistes."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:288:3#32",
+                  "text": "Signature dune Charte de déontologie avec révocation du journaliste si diffusion de fausse info"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:451:3#77",
+                  "text": "Revoir la charte de déontologie des journalistes"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:496:3#93",
+                  "text": "Un(e) journaliste devrait signer à l'embauche, une charte déontologique l'obligeant à être totalement impartial lors des campagnes électorales et des débats. Cette règle doit prévaloir également pour l'ensemble des médias autorisés à diffuser les campagnes, ainsi que le CSA."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:568:3#121",
+                  "text": "Une déontologie claire et transparente des médias, avec révocation et sanction disciplinaire pour ceux qui ne respectent pas ."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Il faut un organe neutre et incontestable, indépendant qui réunisse un panel de gens reconnus pour leur moralité (magistrats, savants, enseignants, journalistes, etc.. à la retraite et libres de toute appartenance partisane).",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:839:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:839:3#228",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:839:3#228",
+                  "text": "Il faut un organe neutre et incontestable, indépendant qui réunisse un panel de gens reconnus pour leur moralité (magistrats, savants, enseignants, journalistes, etc.. à la retraite et libres de toute appartenance partisane)."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:840:3#230",
+                  "text": "Une haute Autorité indépendante devrait être instituée dont les membres seraient désignés comme ceux du Conseil constitutionnel parmi des personnes à haute moralité (magistrats, savants, enseignants, journalistes, etc. à la retraite et non partisans). Saisie par tout citoyen, elle se prononcerait après avoir validé l'importance de l'enjeu. Elle sanctionnerait toute fake news d'importance de façon appropriée pour dissuader suffisamment et corriger la fausse information avec la publicité requise"
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "En revanche, un conseil de journalistes indépendant des \"grands média\" (à définir) serait probablement à même de traiter cela.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:763:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:763:3#148",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:763:3#148",
+                  "text": "En revanche, un conseil de journalistes indépendant des \"grands média\" (à définir) serait probablement à même de traiter cela."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:831:3#212",
+                  "text": "Plutôt que d'imaginer un malheureux juge des référés en charge de dire la vérité en 48h. … Mettre enfin en place les outils d'autoregulation qui favorisent le droit de chaque citoyen à une information de qualité , création d'un Conseil de Presse notamment."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n10",
+          "arguments": [
+            {
+              "argument": "suppression de ce texte, juste un prétexte pour museler la population",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:120:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:120:3#19",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:120:3#19",
+                  "text": "suppression de ce texte, juste un prétexte pour museler la population"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:879:3#277",
+                  "text": "Le sondage est très mal fait puisqu'on se retrouve forcés à voter pour plus de restrictions"
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Les lois encadrant la publication existent déjà. … Tout autant que la censure.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3#191",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:176:3#23",
+                  "text": "AUCUNE MODIFICATION ne doit être apportée à la situation actuelle, sinon c'est la censure et la dictature."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3#191",
+                  "text": "Les lois encadrant la publication existent déjà. … Tout autant que la censure."
+                }
+              ],
+              "stance": "contre"
+            }
+          ]
+        },
+        {
+          "theme_id": "n17",
+          "arguments": [
+            {
+              "argument": "Aucune information de devraient être limitée par la loi, ce n'est pas à l'Etat de dire ce qui est vrai ou faux. … Cette proposition de loi est liberticide et très dangereuse pour la société.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#0",
+              "n_support": 7,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#0",
+                  "text": "Aucune information de devraient être limitée par la loi, ce n'est pas à l'Etat de dire ce qui est vrai ou faux. … Cette proposition de loi est liberticide et très dangereuse pour la société."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:33:3#8",
+                  "text": "aucune informations ne devraient être limitée par la loi, ce n'est pas à l'Etat de dicter ce qui est vrai ou faux , mais aux citoyens de vérifier leurs sources."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:172:3#22",
+                  "text": "Aucune limitation à l'information, quelle qu'elle soit, sinon les abus et manipulations organisés par les puissants auront force de vérités … et serions très vite dans une dictature qui a déjà commencé."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#124",
+                  "text": "Je ne pense pas que ce soit à l'Etat de légiférer sur toutes les fausses informations, car le risque est que les libertés soient peu à peu entravées."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:780:3#166",
+                  "text": "Or, ce projet de loi contre les fausses informations ne semble être qu'un nouvel épisode institutionnalisé dans la lutte pour l'accaparement de cette légitimité à produire de l'information, à l'heure où les médias professionnels peinent à justifier leur monopole et à susciter la confiance."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Si une instance a le droit de décider de quelle information est vrai ou fausse et d'interdire aux médias de s'exprimer Il n'y a plus de liberté d'expression.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:459:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:459:3#81",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:459:3#81",
+                  "text": "Si une instance a le droit de décider de quelle information est vrai ou fausse et d'interdire aux médias de s'exprimer Il n'y a plus de liberté d'expression."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:506:3#100",
+                  "text": "Une loi ne peux statuer sur des faits spécifiques et aucun proposition de loi ne pourra y changer. Toute intervention restreindrait les libertés fondamentales : d'informer, de la presse et d'expression. C'est à l'exécutif et au judiciaire lorsque c'est possible de faire le travail."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:797:3#177",
+                  "text": "Il est impossible qu'un état démocratique puisse officialiser toute forme de censure."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3#192",
+                  "text": "Le projet de loi ne doit en aucun viser à remettre en cause la liberté d'expression ni la liberté de la presse."
+                }
+              ],
+              "stance": "contre"
+            }
+          ]
+        },
+        {
+          "theme_id": "n18",
+          "arguments": [
+            {
+              "argument": "les fakenews sont souvent colportées volontairement par personnes ou des organismes cela ne date pas d'aujourd'hui et éventuellement sanctionner par une action en justice quand il y a intention de nuire!",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3#72",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#2",
+                  "text": "par le passé de vrai informations ont été dénoncé comme fausses par nombres de personnes, avant que la justice finisse par se saisir des personnes incriminées par ces informations, en ayant confirmé leurs véracité au préalable. Ce fut notamment le cas pour le financement de la campagne présidentielle de Nicolas Sarkosy par le régime de Mouhamar Qaddafi."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:62:3#13",
+                  "text": "Car aujourd'hui le peuple est bien souvent sous l'influence d'une fausse information et donc ils vont rejeté un personnage politique, même si il a fait des actions bonnes."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3#72",
+                  "text": "les fakenews sont souvent colportées volontairement par personnes ou des organismes cela ne date pas d'aujourd'hui et éventuellement sanctionner par une action en justice quand il y a intention de nuire!"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:566:3#120",
+                  "text": "Je suis pour la suspension de tout personnage qu'il soit médiatique, politique où privé, (que ce soit dans son emploi de journaliste par exemple où de son compte sur les réseaux sociaux pour tout autre), véhiculant une fausse information, le délais pourrais varier selon la gravité, en cas de récidive une amende dissuasive devrait être appliquée, le but n'étant pas de faire dans la demi mesure."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "A cet égard, le critère dégagé par le Conseil d'État dans son avis pourrait faire sens, à savoir que seules les fausses informations divulguées avec une intention de nuire seraient illicites.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:422:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:422:3#59",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:422:3#59",
+                  "text": "A cet égard, le critère dégagé par le Conseil d'État dans son avis pourrait faire sens, à savoir que seules les fausses informations divulguées avec une intention de nuire seraient illicites."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:890:3#285",
+                  "text": "\"Seul un juge peut déterminer ce qui constitue une fausse information et prendre des mesures visant à en limiter la diffusion.\""
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Pour diffuser cette véracité, le fact-checking réalisé par une autorité reconnue, pourrait être utile.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#45",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#44",
+                  "text": "Il apparait difficile concrètement d'établir des critères \"officiels\" qui permettraient de séparer une information vraie d'une information fausse. Toutefois, les informations, dont on connaitrait à l'avance la véracité (preuves historiques avec l'appui de témoignages, preuves scientifiques avec les résultats d'évaluations menées), et qui seraient manipulées, pourraient faire l'objet de restrictions, par la fermeture des sites."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:349:3#45",
+                  "text": "Pour diffuser cette véracité, le fact-checking réalisé par une autorité reconnue, pourrait être utile."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n21",
+          "arguments": [
+            {
+              "argument": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3#53",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3#53",
+                  "text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:878:3#274",
+                  "text": "je ne pense pas que la lutte contre les fake news doivent faire l'objet d'une loi"
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3#186",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3#186",
+                  "text": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:866:3#256",
+                  "text": "La Scam est en accord avec les recommandations formulées au paragraphe 10 de l'avis du Conseil d'Etat du 19 avril 2018 sur les propositions de loi relatives à la lutte contre les fausses informations, qui suggèrent de s'en tenir à la notion de « fausses informations », à la fois plus large que celle de « fausses nouvelles » (déjà présente à l'article 27 de la loi du 29/07/1881 et de l'article L.97 du code électoral) mais aussi plus opératoire dans le contexte visé."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n23",
+          "arguments": [
+            {
+              "argument": "Ce n'est pas à l'Etat de légiférer sur ce qui est vrai ou faux … mais aux citoyens de vérifier les informations reçues.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:130:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:130:3#20",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:130:3#20",
+                  "text": "Ce n'est pas à l'Etat de légiférer sur ce qui est vrai ou faux … mais aux citoyens de vérifier les informations reçues."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:780:3#167",
+                  "text": "Légiférer sur ce qui est vrai ne peut donc être perçu que comme une fuite en avant qui aura pour conséquence de fragiliser un peu plus la confiance des personnes à l'égard des médias autorisés par le pouvoir, qui continueront de leur côté à ne pas repenser les pratiques, droits et devoirs du journalisme à l'ère de l'internet."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Vouloir légiférer pour limiter les \"fausses informations\" peut paraître comme une atteinte aux principes démocratiques eux-mêmes.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:823:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:823:3#201",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:822:3#197",
+                  "text": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\"."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:823:3#201",
+                  "text": "Vouloir légiférer pour limiter les \"fausses informations\" peut paraître comme une atteinte aux principes démocratiques eux-mêmes."
+                }
+              ],
+              "stance": "contre"
+            }
+          ]
+        },
+        {
+          "theme_id": "n25",
+          "arguments": [
+            {
+              "argument": "Enseigner à la nation comment RECONNAÎTRE les fausses informations",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:79:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:79:3#14",
+              "n_support": 3,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#1",
+                  "text": "aux citoyens de vérifier les sources et la fiabilités des dîtes informations"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:79:3#14",
+                  "text": "Enseigner à la nation comment RECONNAÎTRE les fausses informations"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3#73",
+                  "text": "le citoyen lambda doit apprendre à trier les informations !"
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "il est nécessaire d'apprendre aux gens à s'informer, savoir reconnaître le vrai du faux, vérifier les informations proposées, protéger ses données personnelles et connaître le fonctionnement de l'économie du numérique.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#133",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:20:3#6",
+                  "text": "il revient aux citoyens de vérifier eux même les informations qu'ils reçoivent."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#133",
+                  "text": "il est nécessaire d'apprendre aux gens à s'informer, savoir reconnaître le vrai du faux, vérifier les informations proposées, protéger ses données personnelles et connaître le fonctionnement de l'économie du numérique."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n27",
+          "arguments": [
+            {
+              "argument": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3#185",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:116:3#18",
+                  "text": "toutes les fausses infos donnés par la classe politique au pouvoir"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3#185",
+                  "text": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n28",
+          "arguments": [
+            {
+              "argument": "les fake news sont alimentées via les réseaux sociaux.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3#31",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:287:3#31",
+                  "text": "les fake news sont alimentées via les réseaux sociaux."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:878:3#275",
+                  "text": "elles se diffusent essentiellement sur les réseaux sociaux"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n29",
+          "arguments": [
+            {
+              "argument": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\". … Mettre des moyens dans l'éducation aux médias et à l'information est beaucoup plus efficace que de voter une loi qui sera inopérante. … Dans une société de l'information, il faut apprendre à s'informer, savoir reconnaître le vrai du faux, protéger ses données personnelles, être capable de communiquer sur les réseaux sociaux, connaître le fonctionnement de l'économie du numérique. … C'est une question d'éducation avant tout.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:183:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:183:3#25",
+              "n_support": 8,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:183:3#25",
+                  "text": "Je ne suis pas d'accord avec le principe de légiférer au sujet des \"fake news\". … Mettre des moyens dans l'éducation aux médias et à l'information est beaucoup plus efficace que de voter une loi qui sera inopérante. … Dans une société de l'information, il faut apprendre à s'informer, savoir reconnaître le vrai du faux, protéger ses données personnelles, être capable de communiquer sur les réseaux sociaux, connaître le fonctionnement de l'économie du numérique. … C'est une question d'éducation avant tout."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:331:3#42",
+                  "text": "Ceci étant posé et précisé par la loi, le plus dur restera à faire, c'est à dire à apprendre aux internautes l'utilisation optimale de cette nouvelle transparence et cela passe par un travail éducatif dès l'école à la lecture de ces nouveaux médias et au décryptage des informations qu'ils véhiculent. Cela devrait d'ailleurs être une discipline à part entière du cursus des collégiens comme l'apprentissage de l'orthographe ou des règles élémentaires du calcul mental"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:418:3#56",
+                  "text": "Pas certaine de l'opportunité de légiférer. Éduquer aux médias, au traitement de l'information afin d'en évaluer la pertinence et, de fait, de repérer les fake news serait mieux, non ??"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:522:3#111",
+                  "text": "Ces questions doivent rester à la portée du plus grand nombre et ne doivent pas nous échapper. … Un renforcement de l'éducation aux médias et à l'information dans le primaire et le secondaire est la meilleure des options pour faire face à la fausse information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:570:3#122",
+                  "text": "il faut déjà surtout miser sur l'éducation. … Légiférer contre la diffusion de fausses informations, est impossible, parce que le temps qu'elle soit identifiée, elle a déjà été diffusée. Et si on la censure, elle ressortira sous des formes variées. … aucun algorithme ne peut différencier une fausse nouvelle d'une vraie ou d'un billet d'humeur sur un sujet d'actualité. Le risque est la censure de certains terme. Orwellien."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Il est indispensable de former les jeunes fac à la propagation virale d'informations fausses. Apprendre à vérifier, croiser et prendre de la distance, réfléchir aux conséquences d'un transfert irréfléchi. Tout cela doit être enseigné.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:797:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:797:3#176",
+              "n_support": 3,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:358:3#49",
+                  "text": "Allouer davantage de moyens à l'enseignement scolaire, afin de sensibiliser à la forme que peut prendre les fausses informations, et ce, dès l'école primaire. Cela pourrait passer par des rencontres d'élèves avec des journalistes, ce qui permettrait de leur faire comprendre la manière de rédaction et d'analyse de l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:470:3#89",
+                  "text": "Réhabilitation d'un programme d'éducation civique à l'école et au collège, permettant également de traiter des fausses informations et du décryptage de l'information entre la première information sur un événement et ses compléments au fil de l'avancemen"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:797:3#176",
+                  "text": "Il est indispensable de former les jeunes fac à la propagation virale d'informations fausses. Apprendre à vérifier, croiser et prendre de la distance, réfléchir aux conséquences d'un transfert irréfléchi. Tout cela doit être enseigné."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Eduquer à l'esprit critique me semble la meilleure parade aux fake news . Ine éducation aux médias pour tous vaut mieux qu'une loi qui désengage le public de son jugement critique.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:770:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:770:3#153",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:770:3#153",
+                  "text": "Eduquer à l'esprit critique me semble la meilleure parade aux fake news . Ine éducation aux médias pour tous vaut mieux qu'une loi qui désengage le public de son jugement critique."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:837:3#223",
+                  "text": "Une éducation aux médias pour tous vaut mieux qu'une loi qui désengage le public de son jugement critique."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n3",
+          "arguments": [
+            {
+              "argument": "\"Résilier unilatéralement la convention d'une chaîne sous la dépendance d'un État étranger si elle participe à une entreprise de déstabilisation des institutions par la diffusion de fausses informations.\"",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:881:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:881:3#280",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:881:3#280",
+                  "text": "\"Résilier unilatéralement la convention d'une chaîne sous la dépendance d'un État étranger si elle participe à une entreprise de déstabilisation des institutions par la diffusion de fausses informations.\""
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:888:3#284",
+                  "text": "\"Refuser de signer une convention avec une chaîne sous la dépendance d'un État étranger si elle est susceptible de déstabiliser les institutions par la diffusion de fausses informations.\""
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:898:3#287",
+                  "text": "\"Suspendre de façon temporaire‚ en période électorale‚ sans en référer à un juge‚ une chaîne avec laquelle il a conclu une convention‚ qui est sous la dépendance d'un État étranger et qui participe à une entreprise de déstabilisation des institutions par la diffusion de fausses informations.\""
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:901:3#288",
+                  "text": "\"à toute chaîne conventionnée participant à une entreprise de déstabilisation des institutions par la diffusion de fausses informations‚ y compris si elle n'est pas sous la dépendance d'un État étranger ?\""
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Contraindre les plateformes à assumer leurs responsabilités de diffuseur est une nécessité. Pas seulement en période électorale !",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:833:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:833:3#216",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:833:3#216",
+                  "text": "Contraindre les plateformes à assumer leurs responsabilités de diffuseur est une nécessité. Pas seulement en période électorale !"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:882:3#281",
+                  "text": "\"pour ce qui est de la suspension en période électorale‚ à toutes les chaînes‚ conventionnées et non conventionnées‚ diffusées par le câble‚ le satellite‚ les box ou internet ?\""
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Les plateformes doivent être responsables des contenus postés par leurs utilisateurs et devraient être dans l'obligation de prendre des mesures pour limiter la diffusion de fausses informations.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:905:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:905:3#289",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:331:3#41",
+                  "text": "Et là la responsabilisation des opérateurs, quel que soit leur statut, est nécessaire de façon à pouvoir intervenir rapidement car si la diffusion de fausses nouvelles est punie par la loi, l'intervention de la justice, malgré une procédure de référé risque d'être trop tardive compte tenu de la vitesse de diffusion d'une information qu'on dit à juste titre virale"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:905:3#289",
+                  "text": "Les plateformes doivent être responsables des contenus postés par leurs utilisateurs et devraient être dans l'obligation de prendre des mesures pour limiter la diffusion de fausses informations."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n30",
+          "arguments": [
+            {
+              "argument": "Les informations diffusées doivent avoir été vérifiées, recoupées, prouvées. L'information devrait répondre au besoin de savoir plus qu'à celui de \"faire le buzz\" pour augmenter la clientèle du média.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:375:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:375:3#52",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:375:3#52",
+                  "text": "Les informations diffusées doivent avoir été vérifiées, recoupées, prouvées. L'information devrait répondre au besoin de savoir plus qu'à celui de \"faire le buzz\" pour augmenter la clientèle du média."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:777:3#157",
+                  "text": "Pour le public qui subit ses infos, le seul moyen semble être l'éducation, la prévention, la sensibilisation."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n31",
+          "arguments": [
+            {
+              "argument": "Pour lutter contre les fake news et éduquer à l'EMI (Education aux Médias et à l'Information ), augmentez le nombre de postes de professeurs documentalistes et donnez leur les moyens d'intervenir auprès des élèves (mise en place d'un curriculum au collège, lycée, université). … C'est là-dessus que vous devez légiférer.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:235:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:235:3#26",
+              "n_support": 18,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:235:3#26",
+                  "text": "Pour lutter contre les fake news et éduquer à l'EMI (Education aux Médias et à l'Information ), augmentez le nombre de postes de professeurs documentalistes et donnez leur les moyens d'intervenir auprès des élèves (mise en place d'un curriculum au collège, lycée, université). … C'est là-dessus que vous devez légiférer."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:666:3#135",
+                  "text": "Pour lutter contre les fake news et éduquer à l'EMI (Education aux Médias et à l'Information ), augmentez le nombre de postes de professeurs documentalistes et donnez leur les moyens d'intervenir auprès des élèves (mise en place d'un curriculum au collège, lycée, université et horaires d'enseignement dédiés). … Les personnels existent, sont formés et prêts à prendre en charge cet enseignement."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:698:3#140",
+                  "text": "Il faut mettre l'accent sur l'éducation des citoyen·nes et des élèves futur·es citoyen·nes pour aider tout un chacun à faire preuve de discernement et de responsabilité. … Qu'une loi réglementant la diffusion d'information soit rédigée ou pas ne dispense pas de cette action éducative. … Les derniers programmes de l'Education nationale prévoient une Éducation aux Médias et à l'Information. … Cet EMI transversalle aux discipline dispose de médiateurs-médiatrices formé·es pour cela dans les établissements scolaires : les professeur·es documentalistes. … Leurs professionnalisme, leurs compétences ne sont pas utilisés à leur juste valeur. … Ils sont les acteurs et actrices les plus approprié·es de cet enseignement en collaboration avec les équipes pédagogiques et éducatives. … Reconnaissons-leur la possibilité de mener cette EMI et appuyons leur action au sein des collèges et lycées. … Nous avons déjà un cadre pour agir !"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:737:3#143",
+                  "text": "Légiférer dans ce domaine paraît peu approprié. … Ce qui compte c'est de former les jeunes à l'esprit critique, et cela passe par l'Education aux Medias et à l'information. … Il y a des professeurs spécialisés en EMI : ce sont les quelques 12000 professeurs documentalistes de l'EN. … Quand leur donner a-t-on vraiment les moyens de former TOUS leurs élèves ?"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:743:3#144",
+                  "text": "Les fausses informations ont toujours existé, le phénomène est amplifié par le paysage informationnel actuel. … La meilleur façon de prévenir et de lutter reste l'éducation et l'acculturation aux problématiques informationnelles actuelles. … L'école a un rôle important à jouer et il faut laisser plus de place à l'enseignement de l'information-documentation dispensé par les professeurs documentalistes, en reconnaissant la spécificité de cet enseignement qui va au-delà d'une sensibilisation et apporte des connaissances devenues aujourd'hui indispensables."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "mettre en place au sein de l'éducation nationale un curriculum en information documentation qui inclurait une progression dans la formation des élèves à une connaissance critique et éclairée du fonctionnement des médias sociaux. Les professeurs spécialisés dans cette discipline existent : ce sont les professeurs documentalistes. Il s'agirait de leur confier cette mission et de former des élèves citoyens.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:806:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:806:3#184",
+              "n_support": 10,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#134",
+                  "text": "Des enseignants sont spécifiquement formés à l'éducation à l'information : ce sont les professeurs documentalistes, diplômés en Sciences de l'Information et de la Communication. … Hélas, à l'heure actuelle, les moyens nécessaires pour qu'ils puissent mettre en place cet enseignement auprès de l'ensemble des élèves ne leur sont pas alloués, alors qu'ils sont experts dans ce domaine et que leurs compétences sont reconnues."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:689:3#138",
+                  "text": "un curriculum sur l'éducation à l'information confié aux enseignants documentalistes"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:779:3#162",
+                  "text": "il existe dans les collèges et lycées des personnes dont la qualification semble les désigner pour s'occuper de la question. Ce sont les professeurs documentalistes. Pour cela, il faut cesser de vouloir démanteler leurs missions en voulant en faire des animateurs de super foyer numérique et en niant leur vocation à caractère pédagogique. Désolé pour l'institution, mais dans CAPES, le P signifie Professorat et non pas animateur."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:787:3#173",
+                  "text": "Les professeurs documentalistes formés en information-documentation sont experts et légitimes pour enseigner, former et éduquer les élèves. Ils sont compétents pour relever les défis d'une \"culture info-numérique\". L'enseignement par les professeurs documentalistes (heures dédiées ou co-enseignement avec d'autres disciplines) doit être (enfin) reconnu et inscrit dans l'emploi du temps des élèves."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:806:3#184",
+                  "text": "mettre en place au sein de l'éducation nationale un curriculum en information documentation qui inclurait une progression dans la formation des élèves à une connaissance critique et éclairée du fonctionnement des médias sociaux. Les professeurs spécialisés dans cette discipline existent : ce sont les professeurs documentalistes. Il s'agirait de leur confier cette mission et de former des élèves citoyens."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Formaliser un curriculum d'enseignement et une progression des apprentissages pour l'école primaire et le secondaire sur la base des travaux de recherche existants. … Dans le secondaire, confier cet enseignement aux professeurs documentalistes dont la discipline enseignée relève des Sciences de l'information et de la communication. … Leur enseignement a toujours porté sur ces questions, il sont les seuls a avoir les connaissances et la formation nécessaires pour former les élèves, il ne leur manque que le programme officiel et les temps d'enseignement auprès de tous les élèves.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:748:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:748:3#145",
+              "n_support": 9,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#128",
+                  "text": "C'est bien dans l'enseignement qu'on peut envisager une solution pérenne, en développant l'enseignement reconnu de l'information-documentation, avec des professeurs documentalistes formés dans ce domaine, à condition de les recruter correctement et de leur donner les moyens horaires d'enseigner. … C'est bien en donnant des apprentissages en évaluation de l'information, qu'on y arrivera, pas en légiférant."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#130",
+                  "text": "c'est le cadre des enseignements qu'il convient de compléter pour reconnaître enfin un temps d'enseignement par des professeurs documentalistes recrutés en conséquence. … C'est une maîtrise de l'environnement informationnel, une maîtrise des processus de recherche, de documentation, une connaissance des médias, dans toute leur diversité, et sans a priori idéologique, qui permettent de développer cet esprit critique nécessaire dans une société de la communication et de l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:748:3#145",
+                  "text": "Formaliser un curriculum d'enseignement et une progression des apprentissages pour l'école primaire et le secondaire sur la base des travaux de recherche existants. … Dans le secondaire, confier cet enseignement aux professeurs documentalistes dont la discipline enseignée relève des Sciences de l'information et de la communication. … Leur enseignement a toujours porté sur ces questions, il sont les seuls a avoir les connaissances et la formation nécessaires pour former les élèves, il ne leur manque que le programme officiel et les temps d'enseignement auprès de tous les élèves."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:798:3#178",
+                  "text": "Former les élèves nécessite avant tout d'en donner les moyens aux professeurs compétents : donner les moyens de leur enseignement aux professeurs documentalistes par le biais d'heures dédiées et d'un véritable curriculum en information documentation de la 6e à la terminale."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:802:3#180",
+                  "text": "il faut véritablement inscrire la formation des élèves à l'information documentation dans les programmes et pour cela prévoir un nombre d'heures et un curriculum de la 6e à la terminale permettant aux professeurs documentalistes de véritablement mettre en oeuvre un enseignement progressif, actif et suivi."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Mise en place d'un curriculum EMI de l'école primaire à l'université et inscription de l'EMI dans les programmes scolaires et universitaires. EMI enseignée par les professeurs documentalistes .",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:858:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:858:3#247",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:792:3#174",
+                  "text": "Former les jeunes à l'école avec un enseignement \"EMI\" dispensé par les professeurs documentalistes. Soit avec des projets pouvant faire intervenir des journalistes ou autres professionnels pour permettre aux élèves de d'expérimenter et de se confronter aux enjeux de l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:857:3#246",
+                  "text": "Je crois qu'il existe des professeurs formés pour cela : les professeurs-documentalistes, non ?? … En incorporant l'EMI comme matière d'enseignement dans les emplois du temps des élèves, les profs docs pourraient mener à bien cette mission, non ? … En ½ groupes pour les classes trop chargées ?? Sur de l'aide personnalisée matière ? … Un créneau EMI pour nos ados !"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:858:3#247",
+                  "text": "Mise en place d'un curriculum EMI de l'école primaire à l'université et inscription de l'EMI dans les programmes scolaires et universitaires. EMI enseignée par les professeurs documentalistes ."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:874:3#265",
+                  "text": "Donnons une vraie place à l'EMI dans l'école."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "C'est effectivement une question d'éducation, mais pas aux \"bons usages\" des médias et réseaux sociaux, ce qui ne veut pas dire grand chose. … Donc plutôt que les bons usages, mettre en place une réelle formation, en sciences de l'information et de la communication, à l'école, au collège, au lycée. … Il y a déjà des personnels formés pour cela, qu'il faudrait recruter bien plus que ce qui est fait. … Ce sont les profs documentalistes, c'est leur mission, reste à leur donner les moyens de l'exercer pleinement.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:521:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:521:3#109",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:521:3#109",
+                  "text": "C'est effectivement une question d'éducation, mais pas aux \"bons usages\" des médias et réseaux sociaux, ce qui ne veut pas dire grand chose. … Donc plutôt que les bons usages, mettre en place une réelle formation, en sciences de l'information et de la communication, à l'école, au collège, au lycée. … Il y a déjà des personnels formés pour cela, qu'il faudrait recruter bien plus que ce qui est fait. … Ce sont les profs documentalistes, c'est leur mission, reste à leur donner les moyens de l'exercer pleinement."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:828:3#207",
+                  "text": "Au centre des priorités de l'école, l'éducation aux médias et à l'information (Émi) est un pilier du parcours citoyen pour développer l'esprit critique des élèves et les former, en citoyens libres et éclairés. … Ainsi qu'il est rappelé dans les textes de loi, la mission de l'école est de développer les connaissances, les compétences et la culture nécessaires à l'exercice de la citoyenneté dans nos sociétés numériques de l'information et de la communication. … Cette action résonne singulièrement face à l'\"infobésité\" qui touche l'ensemble des classes d'âges, y compris dès les premières années de la vie. … En particulier, le contexte des attentats terroristes a révélé les risques liés à la prolifération des théories du complot pour l'équilibre de nos sociétés démocratiques. … Face à ces enjeux, il est impératif que les élèves soient formés à la maîtrise des outils qu'ils utilisent au quotidien, - écrans, ordinateurs, tablettes, téléphones cellulaires, réseaux sociaux, forums en ligne, etc. -, afin d'être prévenus des dérives qui peuvent en provenir, d'en avoir des pratiques raisonnées afin de pouvoir se construire en citoyen autonome, d'acquérir des savoirs, de les partager dans le respect et dans l'appropriation des valeurs de la République. … C'est là un enjeu pour l'avenir de notre société qui doit impliquer la communauté éducative dans son ensemble. … Le Centre pour l'éducation aux médias et à l'information (Clémi) service du réseau Canopé, est un opérateur clé de l'éducation nationale en France pour aborder ce thème sous ses aspects les plus diversifiés : formation des enseignants des 1er et 2nd degrés , productions de ressources pédagogiques dédiées , conseil à la création et à au soutien des médias scolaires , organisation d'actions éducatives tout au long de l'année au premier rang desquelles la \"Semaine de la presse et des médias dans l'école®\". … Fort de son expertise forgée depuis plus de trois décennies, le Clémi constitue un interlocuteur privilégié des pouvoirs publics, à l'articulation de la communauté éducative et du monde des médias et de l'information. … Son action s'inscrit dans un esprit résolument collaboratif, afin de progresser collectivement autour des enjeux de l'Émi. … Nous préconisons d'assurer tous les moyens à cet opérateur public pour lui permettre de développer ces missions à la hauteur des enjeux de la lutte contre les fausses informations."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n32",
+          "arguments": [
+            {
+              "argument": "il doit agir dans l'éducation à l'esprit critique, au respect de tous et à la contre-manipulation (ou du moins à la vérification des sources et à l'argumentation) .",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#125",
+              "n_support": 5,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:542:3#113",
+                  "text": "Il faut simplement l'appliquer et éduquer à l'éducation aux médias et à l'information."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:571:3#125",
+                  "text": "il doit agir dans l'éducation à l'esprit critique, au respect de tous et à la contre-manipulation (ou du moins à la vérification des sources et à l'argumentation) ."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:783:3#171",
+                  "text": "il est préférable d'éduquer, que de mettre en place des lois qui seront systématiquement détournées et qui renforceront l'idée des théories complotistes."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:803:3#181",
+                  "text": "L'éducation aux médias et à l'information est actuellement saupoudrée dans les différents enseignements"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:853:3#242",
+                  "text": "Faire intervenir des journalistes à l'ecole"
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "Mettre des moyens dans l'éducation nationale sans chercher à laver le cerveau des futures citoyens mais en leurs faisant développer l'esprit critique face à ce qu'ils peuvent lire ou voir cela me parait bien plus juste.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:877:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:877:3#271",
+              "n_support": 4,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:89:3#16",
+                  "text": "cher Thierry , j'entendais , éduquer avec LA méthode de Platon, de Montaigne et de Nietzsche bien sûr ! ,-o)"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:829:3#210",
+                  "text": "éduquer, éduquer encore, mais cela revient à développer l'esprit critique et la culture, donc en clair, il s'agit de soutenir l'éducation nationale."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:865:3#254",
+                  "text": "Donner plus de moyens à l'école pour éduquer les futurs citoyens sur ce sujet."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:877:3#271",
+                  "text": "Mettre des moyens dans l'éducation nationale sans chercher à laver le cerveau des futures citoyens mais en leurs faisant développer l'esprit critique face à ce qu'ils peuvent lire ou voir cela me parait bien plus juste."
+                }
+              ],
+              "stance": "pour"
+            },
+            {
+              "argument": "création d'une Agence Nationale de l'Education à l'Information capable de fédérer et de mobiliser tous les acteurs publics et l'ensemble de la société civile.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:831:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:831:3#213",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:831:3#213",
+                  "text": "création d'une Agence Nationale de l'Education à l'Information capable de fédérer et de mobiliser tous les acteurs publics et l'ensemble de la société civile."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:833:3#218",
+                  "text": "Une véritable politique nationale d'éducation à l'Information et la mise en place des outils d'autorégulation indépendants nécessaires à un exercice responsable de la profession."
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        },
+        {
+          "theme_id": "n6",
+          "arguments": [
+            {
+              "argument": "Une nouvelle loi serait un choix politique très contestable, car le contenu y est de l'ordre d'une subjectivité constante, alors qu'un développement d'un enseignement en la matière serait une ambition politique louable.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#131",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:554:3#116",
+                  "text": "ce questionnaire ne proposant que des choix ne permettant pas de se prononcer contre les propositions de la loi est très biaisé : un bon exemple d'éducation à l'information"
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:606:3#131",
+                  "text": "Une nouvelle loi serait un choix politique très contestable, car le contenu y est de l'ordre d'une subjectivité constante, alors qu'un développement d'un enseignement en la matière serait une ambition politique louable."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "La loi sera inutile, voire nuisible.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:825:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:825:3#204",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:20:3#4",
+                  "text": "Ce projet de loi devrait être simplement annulé."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:825:3#204",
+                  "text": "La loi sera inutile, voire nuisible."
+                }
+              ],
+              "stance": "contre"
+            },
+            {
+              "argument": "Il y a déjà des dispositions dans la loi, mais sans application possible a priori au regard du phénomène.",
+              "avis_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3",
+              "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#127",
+              "n_support": 2,
+              "sources": [
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:573:3#127",
+                  "text": "Il y a déjà des dispositions dans la loi, mais sans application possible a priori au regard du phénomène."
+                },
+                {
+                  "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:686:3#137",
+                  "text": "pas de loi nouvelle, l'existant suffit"
+                }
+              ],
+              "stance": "pour"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

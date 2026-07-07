@@ -1,0 +1,146 @@
+[
+  {
+    "theme_id": "n1",
+    "title": "Autorégulation déontologique des médias et protection citoyenne**",
+    "prop_a": "Instaurer un conseil d'autorégulation déontologique des médias",
+    "prop_b": "Instaurer un conseil de déontologie journalistique à pouvoir de sanction"
+  },
+  {
+    "theme_id": "n2",
+    "title": "Vérification et transparence des informations journalistiques",
+    "prop_a": "Imposer une vérification systématique avant publication",
+    "prop_b": "Obliger les journalistes à vérifier avant publication"
+  },
+  {
+    "theme_id": "n3",
+    "title": "Régulation des plateformes et désinformation électorale",
+    "prop_a": "Obliger les plateformes à modérer les contenus électoraux",
+    "prop_b": "Imposer aux plateformes une obligation de signalement en période électorale"
+  },
+  {
+    "theme_id": "n4",
+    "title": "Médias transparence et indépendance face aux influences**",
+    "prop_a": "Rendre publics les liens d'intérêts des médias",
+    "prop_b": "Imposer une transparence totale sur les liens d'influence des médias publics"
+  },
+  {
+    "theme_id": "n6",
+    "title": "Législation existante et limites de son application**",
+    "prop_a": "Renforcer l'application des lois existantes plutôt qu'en créer",
+    "prop_b": "Renforcer l'application des lois existantes plutôt que légiférer"
+  },
+  {
+    "theme_id": "n8",
+    "title": "Justice rapide et participation citoyenne dans les décisions",
+    "prop_a": "Réduire les délais judiciaires par des référés ultra-rapides",
+    "prop_b": "Décider en 48h sans recours administratif immédiat"
+  },
+  {
+    "theme_id": "n9",
+    "title": "Régulation des fausses informations et réparations**",
+    "prop_a": "Instaurer un droit à l'effacement des fausses informations",
+    "prop_b": "Imposer un repentir public effaçant la fausse information"
+  },
+  {
+    "theme_id": "n10",
+    "title": "Contrôle des contenus en ligne et risques de censure",
+    "prop_a": "Autoriser l'État à filtrer les contenus en ligne sans juge",
+    "prop_b": "Interdire les contenus en ligne par mots-clés sans contrôle judiciaire"
+  },
+  {
+    "theme_id": "n13",
+    "title": "Vérification accréditée des sources d'information",
+    "prop_a": "Instaurer une accréditation officielle des vérificateurs d'information",
+    "prop_b": "Confier à des organismes accrédités le décodage officiel des infos"
+  },
+  {
+    "theme_id": "n14",
+    "title": "Crédulité et risques de haine**",
+    "prop_a": "Instaurer un contrôle systématique des discours haineux en ligne",
+    "prop_b": "Instaurer un éveil critique obligatoire contre la haine"
+  },
+  {
+    "theme_id": "n15",
+    "title": "Critiques sur propositions floues et peines pécuniaires**",
+    "prop_a": "Instaurer des peines pécuniaires floues",
+    "prop_b": "Instaurer des peines pécuniaires floues en audiovisuel"
+  },
+  {
+    "theme_id": "n17",
+    "title": "Régulation des fausses informations et liberté de la presse**",
+    "prop_a": "Donner à l'État le pouvoir de censurer les fausses informations",
+    "prop_b": "Autoriser l'État à qualifier une information de fausse"
+  },
+  {
+    "theme_id": "n18",
+    "title": "Régulation des fausses informations et sanctions**",
+    "prop_a": "Sanctionner systématiquement les fausses informations avérées",
+    "prop_b": "Sanctionner les fausses informations certifiées par une autorité"
+  },
+  {
+    "theme_id": "n20",
+    "title": "Sites trompeurs sur IVG et santé publique**",
+    "prop_a": "Interdire les sites trompeurs sur l'IVG",
+    "prop_b": "Interdire les sites diffusant de fausses informations sur l'IVG"
+  },
+  {
+    "theme_id": "n21",
+    "title": "Régulation transparence fausses informations sites internet**",
+    "prop_a": "Obliger les sites à labelliser les informations vérifiées",
+    "prop_b": "Obliger les sites à labelliser les nouvelles diffusées"
+  },
+  {
+    "theme_id": "n22",
+    "title": "Légiférer contre rumeurs et harcèlement en ligne**",
+    "prop_a": "Étendre une loi anti-rumeurs à toute l'année",
+    "prop_b": "Étendre une loi anti-rumeurs au-delà des périodes électorales"
+  },
+  {
+    "theme_id": "n23",
+    "title": "Vérification des sources et désinformation aux élections**",
+    "prop_a": "Instaurer une vérification étatique des sources électorales",
+    "prop_b": "Légiférer pour certifier les sources officielles en période électorale"
+  },
+  {
+    "theme_id": "n25",
+    "title": "Éducation aux médias et vérification des informations**",
+    "prop_a": "Rendre obligatoire l'éducation aux médias pour tous",
+    "prop_b": "Enseigner à tous les citoyens à vérifier l'information"
+  },
+  {
+    "theme_id": "n27",
+    "title": "Démocratie et fausses informations nuisibles**",
+    "prop_a": "Réguler les fausses informations en démocratie",
+    "prop_b": "Établir un délit spécifique pour fausses informations nuisibles à la démocratie"
+  },
+  {
+    "theme_id": "n28",
+    "title": "Désinformation hors médias traditionnels**",
+    "prop_a": "Séparer responsabilité médias et plateformes numériques",
+    "prop_b": "Réguler les diffuseurs non-journalistes sur les plateformes"
+  },
+  {
+    "theme_id": "n29",
+    "title": "Éducation aux médias contre désinformation**",
+    "prop_a": "Instaurer un enseignement obligatoire d'éducation aux médias à l'école",
+    "prop_b": "Rendre obligatoire l'éducation aux médias à l'école plutôt que légiférer"
+  },
+  {
+    "theme_id": "n30",
+    "title": "Vérification des infos sur réseaux sociaux**",
+    "prop_a": "Obliger les réseaux sociaux à vérifier les infos diffusées",
+    "prop_b": "Imposer une vérification systématique des infos sur réseaux sociaux"
+  },
+  {
+    "theme_id": "n31",
+    "title": "Éducation aux médias et rôle des documentalistes**",
+    "prop_a": "Intégrer l'ÉMI comme discipline obligatoire au curriculum",
+    "prop_b": "Intégrer l'ÉMI au curriculum scolaire par les documentalistes"
+  },
+  {
+    "theme_id": "n32",
+    "title": "Éducation nationale esprit critique et formation citoyenne**",
+    "prop_a": "Intégrer un cours dédié à l'esprit critique dans les programmes scolaires",
+    "prop_b": "Intégrer un enseignement obligatoire d'esprit critique dans les programmes nationaux"
+  }
+]
