@@ -1,0 +1,346 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_arguments": 17,
+    "n_narrowed": 12,
+    "n_fallback_whole_claim": 5,
+    "narrow_rate": 0.706,
+    "verbatim_rate": 1.0,
+    "compression_median": 0.989,
+    "dedup_pairs_raw": 0,
+    "dedup_pairs_targetctx": 10,
+    "dedup_disagreements": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        14,
+        15
+      ]
+    ],
+    "dedup_pairs_reflet": 11,
+    "reflet_fidelity_median": 0.776,
+    "reflet_fidelity_min": 0.681
+  },
+  "arguments": [
+    {
+      "theme_id": "n1",
+      "stance": "pour",
+      "cible": "**Créer une autorité indépendante de déontologie médiatique avec pouvoir de sanction**",
+      "argument": "Signature dune Charte de déontologie avec révocation du journaliste si diffusion de fausse info",
+      "narrowed": false,
+      "claim_text": "Signature dune Charte de déontologie avec révocation du journaliste si diffusion de fausse info",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:288:3#32",
+      "seed_row": 1,
+      "member_rows_global": [
+        32,
+        77,
+        93,
+        121
+      ],
+      "n_support": 4,
+      "reflet": "L'extrait exprime une position favorable à la création d'une autorité indépendante de déontologie médiatique avec pouvoir de sanction, car il propose un mécanisme contraignant (révocation du journaliste) en cas de manquement à une charte de déontologie."
+    },
+    {
+      "theme_id": "n1",
+      "stance": "pour",
+      "cible": "**Créer une autorité indépendante de déontologie médiatique avec pouvoir de sanction**",
+      "argument": "Il faut un organe neutre et incontestable, indépendant qui réunisse un panel de gens reconnus pour leur moralité (magistrats, savants, enseignants, journalistes, etc.. à la retraite et libres de toute appartenance partisane)",
+      "narrowed": true,
+      "claim_text": "Il faut un organe neutre et incontestable, indépendant qui réunisse un panel de gens reconnus pour leur moralité (magistrats, savants, enseignants, journalistes, etc.. à la retraite et libres de toute appartenance partisane).",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:839:3#228",
+      "seed_row": 8,
+      "member_rows_global": [
+        228,
+        230
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position favorable à la création d'une autorité indépendante de déontologie médiatique avec pouvoir de sanction, car il défend la nécessité d'un organe neutre, incontestable et composé de personnalités reconnues pour leur moralité et leur indépendance."
+    },
+    {
+      "theme_id": "n1",
+      "stance": "pour",
+      "cible": "**Créer une autorité indépendante de déontologie médiatique avec pouvoir de sanction**",
+      "argument": "un conseil de journalistes indépendant des \"grands média\" (à définir) serait probablement à même de traiter cela",
+      "narrowed": true,
+      "claim_text": "En revanche, un conseil de journalistes indépendant des \"grands média\" (à définir) serait probablement à même de traiter cela.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:763:3#148",
+      "seed_row": 6,
+      "member_rows_global": [
+        148,
+        258
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position favorable à la création d'une autorité indépendante de déontologie médiatique, car il propose un conseil de journalistes indépendant des grands médias pour réguler cette question."
+    },
+    {
+      "theme_id": "n1",
+      "stance": "pour",
+      "cible": "**Créer une autorité indépendante de déontologie médiatique avec pouvoir de sanction**",
+      "argument": "Création d'un conseil de déontologie journalistique",
+      "narrowed": true,
+      "claim_text": "Création d'un conseil de déontologie journalistique.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:844:3#234",
+      "seed_row": 10,
+      "member_rows_global": [
+        12,
+        212,
+        234
+      ],
+      "n_support": 3,
+      "reflet": "L'extrait exprime une position favorable envers la création d'une autorité indépendante de déontologie médiatique, en proposant spécifiquement un conseil de déontologie journalistique comme forme concrète."
+    },
+    {
+      "theme_id": "n10",
+      "stance": "contre",
+      "cible": "**interdire la propagande ciblée en ligne 2 semaines avant les élections**",
+      "argument": "juste un prétexte pour museler la population",
+      "narrowed": true,
+      "claim_text": "suppression de ce texte, juste un prétexte pour museler la population",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:120:3#19",
+      "seed_row": 0,
+      "member_rows_global": [
+        19,
+        277
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une opposition à l'interdiction de la propagande ciblée en ligne avant les élections, car il considère cette mesure comme un moyen déguisé de restreindre la liberté d'expression de la population."
+    },
+    {
+      "theme_id": "n10",
+      "stance": "contre",
+      "cible": "**interdire la propagande ciblée en ligne 2 semaines avant les élections**",
+      "argument": "Tout autant que la censure.",
+      "narrowed": true,
+      "claim_text": "Les lois encadrant la publication existent déjà. … Tout autant que la censure.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:818:3#191",
+      "seed_row": 4,
+      "member_rows_global": [
+        23,
+        191
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une opposition à l'interdiction de la propagande ciblée en ligne avant les élections, car il assimile cette mesure à de la censure."
+    },
+    {
+      "theme_id": "n17",
+      "stance": "contre",
+      "cible": "**donner à l'État le pouvoir de définir et sanctionner les fausses informations**",
+      "argument": "Aucune information de devraient être limitée par la loi, ce n'est pas à l'Etat de dire ce qui est vrai ou faux … Cette proposition de loi est liberticide et très dangereuse pour la société",
+      "narrowed": true,
+      "claim_text": "Aucune information de devraient être limitée par la loi, ce n'est pas à l'Etat de dire ce qui est vrai ou faux. … Cette proposition de loi est liberticide et très dangereuse pour la société.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:0:3#0",
+      "seed_row": 0,
+      "member_rows_global": [
+        0,
+        8,
+        22,
+        124,
+        166,
+        169,
+        262
+      ],
+      "n_support": 7,
+      "reflet": "L'extrait exprime une position opposée à donner à l'État le pouvoir de définir et sanctionner les fausses informations, car cela serait liberticide et menacerait la liberté d'expression."
+    },
+    {
+      "theme_id": "n17",
+      "stance": "contre",
+      "cible": "**donner à l'État le pouvoir de définir et sanctionner les fausses informations**",
+      "argument": "Si une instance a le droit de décider de quelle information est vrai ou fausse et d'interdire aux médias de s'exprimer Il n'y a plus de liberté d'expression.",
+      "narrowed": false,
+      "claim_text": "Si une instance a le droit de décider de quelle information est vrai ou fausse et d'interdire aux médias de s'exprimer Il n'y a plus de liberté d'expression.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:459:3#81",
+      "seed_row": 5,
+      "member_rows_global": [
+        81,
+        100,
+        177,
+        192
+      ],
+      "n_support": 4,
+      "reflet": "Cet extrait exprime une opposition à donner à l'État le pouvoir de définir et sanctionner les fausses informations, car cela supprimerait la liberté d'expression en permettant à une instance de contrôler et d'interdire les médias."
+    },
+    {
+      "theme_id": "n18",
+      "stance": "pour",
+      "cible": "**sanctionner pénalement la diffusion de fausses informations avec intention de nuire**",
+      "argument": "seules les fausses informations divulguées avec une intention de nuire seraient illicites",
+      "narrowed": true,
+      "claim_text": "A cet égard, le critère dégagé par le Conseil d'État dans son avis pourrait faire sens, à savoir que seules les fausses informations divulguées avec une intention de nuire seraient illicites.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:422:3#59",
+      "seed_row": 4,
+      "member_rows_global": [
+        44,
+        45,
+        59,
+        285
+      ],
+      "n_support": 4,
+      "reflet": "L'extrait exprime une position favorable à la cible en précisant que seules les fausses informations diffusées avec une intention de nuire devraient être sanctionnées pénalement."
+    },
+    {
+      "theme_id": "n18",
+      "stance": "pour",
+      "cible": "**sanctionner pénalement la diffusion de fausses informations avec intention de nuire**",
+      "argument": "sanctionner par une action en justice quand il y a intention de nuire",
+      "narrowed": true,
+      "claim_text": "les fakenews sont souvent colportées volontairement par personnes ou des organismes cela ne date pas d'aujourd'hui et éventuellement sanctionner par une action en justice quand il y a intention de nuire!",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:433:3#72",
+      "seed_row": 5,
+      "member_rows_global": [
+        13,
+        72,
+        120
+      ],
+      "n_support": 3,
+      "reflet": "L'extrait exprime une position favorable à la sanction pénale de la diffusion de fausses informations, mais uniquement sous la forme d'une action en justice en cas d'intention de nuire."
+    },
+    {
+      "theme_id": "n21",
+      "stance": "contre",
+      "cible": "**obliger les plateformes à labelliser les sources d'information financées par des campagnes publicitaires**",
+      "argument": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+      "narrowed": false,
+      "claim_text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:396:3#53",
+      "seed_row": 0,
+      "member_rows_global": [
+        53,
+        274
+      ],
+      "n_support": 2,
+      "reflet": "Cet extrait exprime une position opposée à l'obligation de labelliser les sources d'information financées par des campagnes publicitaires, car il estime que cela ne serait pas efficace pour empêcher la diffusion de fake news."
+    },
+    {
+      "theme_id": "n21",
+      "stance": "pour",
+      "cible": "**obliger les plateformes à labelliser les sources d'information financées par des campagnes publicitaires**",
+      "argument": "obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations",
+      "narrowed": true,
+      "claim_text": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:808:3#186",
+      "seed_row": 0,
+      "member_rows_global": [
+        186,
+        256
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position favorable à l'obligation de labelliser les sources d'information financées par des campagnes publicitaires, car cela contribuerait à réduire la diffusion de fausses informations en limitant leur financement publicitaire."
+    },
+    {
+      "theme_id": "n23",
+      "stance": "contre",
+      "cible": "**légiférer pour définir et sanctionner les fausses informations aux élections**",
+      "argument": "Ce n'est pas à l'Etat de légiférer sur ce qui est vrai ou faux … aux citoyens de vérifier les informations reçues",
+      "narrowed": true,
+      "claim_text": "Ce n'est pas à l'Etat de légiférer sur ce qui est vrai ou faux … mais aux citoyens de vérifier les informations reçues.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:130:3#20",
+      "seed_row": 1,
+      "member_rows_global": [
+        20,
+        167
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position opposée à la législation sur les fausses informations électorales, car il estime que ce n'est pas le rôle de l'État de déterminer la vérité, mais celui des citoyens de vérifier les informations."
+    },
+    {
+      "theme_id": "n23",
+      "stance": "contre",
+      "cible": "**légiférer pour définir et sanctionner les fausses informations aux élections**",
+      "argument": "Vouloir légiférer pour limiter les \"fausses informations\" peut paraître comme une atteinte aux principes démocratiques eux-mêmes",
+      "narrowed": true,
+      "claim_text": "Vouloir légiférer pour limiter les \"fausses informations\" peut paraître comme une atteinte aux principes démocratiques eux-mêmes.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:823:3#201",
+      "seed_row": 6,
+      "member_rows_global": [
+        197,
+        201
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position opposée à la légifération pour définir et sanctionner les fausses informations aux élections, car cela serait perçu comme une atteinte aux principes démocratiques."
+    },
+    {
+      "theme_id": "n25",
+      "stance": "pour",
+      "cible": "**intégrer l'éducation aux médias dans les programmes scolaires obligatoires**",
+      "argument": "Enseigner à la nation comment RECONNAÎTRE les fausses informations",
+      "narrowed": false,
+      "claim_text": "Enseigner à la nation comment RECONNAÎTRE les fausses informations",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:79:3#14",
+      "seed_row": 2,
+      "member_rows_global": [
+        1,
+        14,
+        73
+      ],
+      "n_support": 3,
+      "reflet": "L'extrait exprime une position favorable à l'intégration de l'éducation aux médias dans les programmes scolaires obligatoires, car cela permettrait d'apprendre à reconnaître les fausses informations."
+    },
+    {
+      "theme_id": "n25",
+      "stance": "pour",
+      "cible": "**intégrer l'éducation aux médias dans les programmes scolaires obligatoires**",
+      "argument": "il est nécessaire d'apprendre aux gens à s'informer, savoir reconnaître le vrai du faux, vérifier les informations proposées, protéger ses données personnelles et connaître le fonctionnement de l'économie du numérique",
+      "narrowed": true,
+      "claim_text": "il est nécessaire d'apprendre aux gens à s'informer, savoir reconnaître le vrai du faux, vérifier les informations proposées, protéger ses données personnelles et connaître le fonctionnement de l'économie du numérique.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:637:3#133",
+      "seed_row": 5,
+      "member_rows_global": [
+        6,
+        133
+      ],
+      "n_support": 2,
+      "reflet": "L'extrait exprime une position favorable à l'intégration de l'éducation aux médias dans les programmes scolaires obligatoires, car cela permettrait d'apprendre aux élèves à s'informer, distinguer le vrai du faux, vérifier les informations, protéger leurs données et comprendre l'économie du numérique."
+    },
+    {
+      "theme_id": "n27",
+      "stance": "pour",
+      "cible": "**criminaliser les fausses informations *à intention délibérée de nuire* à la démocratie**",
+      "argument": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste.",
+      "narrowed": false,
+      "claim_text": "Toutes les fausses informations qui ont un impact sur la démocratie et dont l'intention de nuire et de déstabiliser la démocratie est manifeste.",
+      "claim_id": "lutte-contre-les-fausses-informations:fausses-informations_opendata.csv:807:3#185",
+      "seed_row": 2,
+      "member_rows_global": [
+        18,
+        185
+      ],
+      "n_support": 2,
+      "reflet": "Cet extrait exprime une position favorable à la criminalisation des fausses informations à intention délibérée de nuire à la démocratie, car il souligne la nécessité de cibler celles dont l'impact et l'intention de déstabilisation sont manifestes."
+    }
+  ]
+}
