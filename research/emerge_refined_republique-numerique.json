@@ -1,0 +1,2451 @@
+{
+  "summary": {
+    "dataset": "republique-numerique",
+    "judged": false,
+    "merge_thr": 0.85,
+    "n_leaves": 162,
+    "n_arguments": 190,
+    "communities_filtered_as_meta": 0,
+    "leaves_clivage": 25,
+    "leaves_consensus": 137,
+    "leaves_underdeveloped": 0
+  },
+  "leaves": [
+    {
+      "theme_id": "n1",
+      "title": "donnée · sensibles · api",
+      "n_claims": 87,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 87,
+          "dispersion": 0.19,
+          "argument": "Les données rendues publiques et leur(s) mise(s) à jour : il faut laisser tel quel à mon sens",
+          "display_gi": 1821
+        }
+      ]
+    },
+    {
+      "theme_id": "n2",
+      "title": "data · ouverture · secret défense",
+      "n_claims": 115,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 115,
+          "dispersion": 0.203,
+          "argument": "Rien à voir avec le sujet de l'ouverture des données publiques.",
+          "display_gi": 103
+        }
+      ]
+    },
+    {
+      "theme_id": "n3",
+      "title": "formats · format · pdf",
+      "n_claims": 69,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 60,
+          "dispersion": 0.205,
+          "argument": "Concernant les documents non disponibles sous forme électronique et qui présentent un intérêt, il serait bienvenu de fixer un cadre afin de les rendre accessible à tous, dans un format libre et gratuitement",
+          "display_gi": 684
+        },
+        {
+          "n_support": 9,
+          "dispersion": 0.108,
+          "argument": "supprimer les DRM qui empoisonnent la vie des acheteurs",
+          "display_gi": 3275
+        }
+      ]
+    },
+    {
+      "theme_id": "n5",
+      "title": "personnelles · contrôler · caractère personnel",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.171,
+          "argument": "Toute personne dispose du droit de décider des usages qui sont faits de ses données à caractère personnel et de les contrôler, dans les conditions et limites fixées par les lois et règlements en vigueur, y compris les données collectées par les services de renseignement ou protégées par le confidentiel/secret/très secret défense",
+          "display_gi": 1629
+        }
+      ]
+    },
+    {
+      "theme_id": "n6",
+      "title": "dcp · traitements · assuré",
+      "n_claims": 33,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 28,
+          "dispersion": 0.19,
+          "argument": "Il convient d'être vigilants sur le maintien de la spécificité des traitements de données à caractère personnel (qu'il soit en ligne ou non) dans le cadre d'un service public",
+          "display_gi": 3615
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.109,
+          "argument": "Imposer aux gestionnaires de contrats d'assurance-vie une obligation de déclaration numérique de l'assuré et des bénéficiaires auprès des services en charge de l'état-civil ; en cas de décès de l'assuré, les bénéficiaires sont immédiatement informés de l'existence du contrat et des coordonnées du gestionnaire du contrat.",
+          "display_gi": 1806
+        }
+      ]
+    },
+    {
+      "theme_id": "n7",
+      "title": "anonymisation · naissance · préalable",
+      "n_claims": 28,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 28,
+          "dispersion": 0.17,
+          "argument": "L'anonymisation préalable des données doit être garantie.",
+          "display_gi": 1521
+        }
+      ]
+    },
+    {
+      "theme_id": "n8",
+      "title": "privée · secret · correspondances",
+      "n_claims": 41,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 41,
+          "dispersion": 0.197,
+          "argument": "La protection de la vie privée et de la confidentialité est bien venue",
+          "display_gi": 1418
+        }
+      ]
+    },
+    {
+      "theme_id": "n9",
+      "title": "notaire · identifiants · passe",
+      "n_claims": 15,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 15,
+          "dispersion": 0.183,
+          "argument": "Les données perso restent persos … Tout ce qui touche à la vie privée doit être sécurisé",
+          "display_gi": 1400
+        }
+      ]
+    },
+    {
+      "theme_id": "n10",
+      "title": "nom · privée · vie",
+      "n_claims": 33,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 33,
+          "dispersion": 0.198,
+          "argument": "L'état a t il prévu de signifier à un individu qu'il va publier ses données personnelles ?",
+          "display_gi": 3293
+        }
+      ]
+    },
+    {
+      "theme_id": "n12",
+      "title": "intégralité · produit · étape transformation",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.176,
+          "argument": "Toutes les sources doivent être données, dans un souci de transparence.",
+          "display_gi": 3390
+        }
+      ]
+    },
+    {
+      "theme_id": "n13",
+      "title": "usager · intervenant · durée",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.183,
+          "argument": "Toute personne dont les inormations sont divulguées doit être contactée afin qu'elle donne son autorisation ou pas de divulguer ces dites informations",
+          "display_gi": 3892
+        }
+      ]
+    },
+    {
+      "theme_id": "n14",
+      "title": "annonces · faille · correction",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.121,
+          "argument": "Les organismes publics doivent, une fois les constatations, corrections et évaluations effectuées, annoncer publiquement les divulgations accidentelles de données personnelles suite à des failles, compromissions, inattentions, erreurs, etc … Ces annonces doivent inclurent la nature des données, les dates de début de la divulgation ainsi que la date de correction/identification du problème … Ces annonces peuvent/doivent s'associées à des préconisations pour limiter l'impact éventuel de ces fuites",
+          "display_gi": 3937
+        }
+      ]
+    },
+    {
+      "theme_id": "n16",
+      "title": "portabilité · patrimoine · consommateur",
+      "n_claims": 26,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 26,
+          "dispersion": 0.201,
+          "argument": "Le droit à la récupération des données, vient s'ajouter au droit d'accès déjà reconnu aux internautes par la loi actuelle. Il devrait permettre de faciliter la mobilité numérique des utilisateurs de services numériques. … Il convient donc de ne pas étendre le champ d'application du droit à la portabilité au-delà de ce qui est nécessaire afin de répondre aux besoins légitimes des personnes désireuses de récupérer leurs données pour les transférer à d'autres prestataires en cas de changement et sous réserve du respect du secret des affaires.",
+          "display_gi": 98
+        }
+      ]
+    },
+    {
+      "theme_id": "n17",
+      "title": "mesure audience · formuler exigences · limiter efficacité",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.173,
+          "argument": "Permettre un accès direct à un ensemble de données considérées comme privées est déjà prévu dans le cadre de la loi et me semble assez équilibré",
+          "display_gi": 817
+        }
+      ]
+    },
+    {
+      "theme_id": "n18",
+      "title": "cgv · cgu · documentation",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.159,
+          "argument": "Les CGV et CGU doivent être écrites sous formes de paragraphes définies dans la loi",
+          "display_gi": 2730
+        }
+      ]
+    },
+    {
+      "theme_id": "n19",
+      "title": "entreprises · barème · privées",
+      "n_claims": 89,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 89,
+          "dispersion": 0.209,
+          "argument": "Les données du domaine publique ne doivent absolument pas être utilisées par le privé (à des fins qui de toute façon seront lucratives pour elles)",
+          "display_gi": 754
+        }
+      ]
+    },
+    {
+      "theme_id": "n20",
+      "title": "rapport · sondage · servi rédaction",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.104,
+          "argument": "Les données brutes (sondage, consultation etc..) ayant servi à la rédaction d'un rapport doivent être aussi publiées avec le rapport",
+          "display_gi": 263
+        }
+      ]
+    },
+    {
+      "theme_id": "n21",
+      "title": "santé · numéro · sécurité sociale",
+      "n_claims": 24,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.18,
+          "argument": "Une loi sur la propriété des données de santé en faveur de la personne à laquelle les données s'appliquent obligerait tous les professionnels de santé, du médicament et du fitness (y compris la génétique) à expliciter l'usage qu'ils vont faire des données des patients … Une fois ces usages explicités, ils pourront être perçus comme indésirables par les patients et être rejetés par eux",
+          "display_gi": 567
+        },
+        {
+          "n_support": 11,
+          "dispersion": 0.168,
+          "argument": "Le numéro de sécurité sociale est à considérer comme une donnée personnelle qui ne doit sous aucun pretexte être utilisé à des fins statistiques ou transmis à des tiers dans ce but",
+          "display_gi": 397
+        }
+      ]
+    },
+    {
+      "theme_id": "n24",
+      "title": "attendre seconde · mandriva · peine",
+      "n_claims": 29,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 29,
+          "dispersion": 0.185,
+          "argument": "À utiliser avec parcimonie … À voir pour le reste de la connaissance",
+          "display_gi": 555
+        }
+      ]
+    },
+    {
+      "theme_id": "n25",
+      "title": "langue · orthographe · sourdes",
+      "n_claims": 35,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 35,
+          "dispersion": 0.203,
+          "argument": "Je suis d'accord avec la proposition, mais sans les fautes d'orthographe !",
+          "display_gi": 3912
+        }
+      ]
+    },
+    {
+      "theme_id": "n26",
+      "title": "veux · incitations terme · interne entendez",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.189,
+          "argument": "Il faut peut-être définir plus précisément la citation",
+          "display_gi": 2679
+        }
+      ]
+    },
+    {
+      "theme_id": "n27",
+      "title": "clair · cinéma différence · courtes",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.179,
+          "argument": "La seconde phrase n'est pas claire.",
+          "display_gi": 3959
+        }
+      ]
+    },
+    {
+      "theme_id": "n29",
+      "title": "france connect · structure · usine gaz",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.207,
+          "argument": "En cours avec France-connect. Mais jusqu'à quel point ?",
+          "display_gi": 2757
+        }
+      ]
+    },
+    {
+      "theme_id": "n30",
+      "title": "afnor · retard · norme",
+      "n_claims": 32,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 32,
+          "dispersion": 0.185,
+          "argument": "Pourquoi un principe ne pourrait être applicable systématiquement ?",
+          "display_gi": 450
+        }
+      ]
+    },
+    {
+      "theme_id": "n31",
+      "title": "organisme · cecill · expert",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.178,
+          "argument": "Peut-être limiter certaines bases à certains usages. Ou sous demande d'un organisme",
+          "display_gi": 2786
+        }
+      ]
+    },
+    {
+      "theme_id": "n32",
+      "title": "environnement santé · métiers · vague",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.199,
+          "argument": "Cela est aussi le travail des entreprises, organisations bénéficiaires, particulier de s'organiser",
+          "display_gi": 1344
+        }
+      ]
+    },
+    {
+      "theme_id": "n33",
+      "title": "assurer prestation · protocoles disponibles · offerts incluant",
+      "n_claims": 22,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 22,
+          "dispersion": 0.189,
+          "argument": "Les besoins ne sont pas démontrés et les moyens demandés sont trop importants.",
+          "display_gi": 2188
+        }
+      ]
+    },
+    {
+      "theme_id": "n34",
+      "title": "interprètes · certification · formation",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.181,
+          "argument": "Évidemment que c'est utile et nécessaire, mais qui va payer le travail des interprètes LSF, diplômés bac + 5 ?",
+          "display_gi": 608
+        }
+      ]
+    },
+    {
+      "theme_id": "n35",
+      "title": "supprimer · texte · darlays",
+      "n_claims": 104,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 104,
+          "dispersion": 0.194,
+          "argument": "Le texte prête confusion sur ce point",
+          "display_gi": 471
+        }
+      ]
+    },
+    {
+      "theme_id": "n36",
+      "title": "stipulation · contraire · mitigé",
+      "n_claims": 39,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 39,
+          "dispersion": 0.168,
+          "argument": "Ce serait encore mieux sans les \"sauf stipulation contraire\"",
+          "display_gi": 3200
+        }
+      ]
+    },
+    {
+      "theme_id": "n37",
+      "title": "proposition · simplification · propositions",
+      "n_claims": 82,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 82,
+          "dispersion": 0.188,
+          "argument": "la proposition me semble un peu simple et pas suffisament développé",
+          "display_gi": 199
+        }
+      ]
+    },
+    {
+      "theme_id": "n38",
+      "title": "url · doublon · évoqué",
+      "n_claims": 79,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 79,
+          "dispersion": 0.195,
+          "argument": "Je vais néanmoins proposer une modification sur des éléments plus nouveau à ce sujet",
+          "display_gi": 1686
+        }
+      ]
+    },
+    {
+      "theme_id": "n39",
+      "title": "risque zéro · sécurité · avis",
+      "n_claims": 60,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 60,
+          "dispersion": 0.209,
+          "argument": "la confidentialité ? Il faudrait néanmoins y penser également",
+          "display_gi": 4171
+        }
+      ]
+    },
+    {
+      "theme_id": "n42",
+      "title": "ondes · santé · wifi",
+      "n_claims": 17,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.147,
+          "argument": "L'accessibilité numérique devrait être OBLIGATOIRE pour tout le monde ! Que les personnes ne pouvant pas naviguer sur internet normalement puissent naviguer comme tout le monde et accès aux mêmes informations que tout le monde … l'amende devrait être plus élevé et plus dissuasif",
+          "display_gi": 390
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.152,
+          "argument": "Pour garantir à tout Francais un accès au numérique sans risque pour sa santé, pour garantir un apprentissage scolaire à tout enfant sans risque pour la santé et pour garantir à tout travailleur d'exercer son activité sans risque pour sa santé, la connexion filaire à internet devrait etre une priorité et une obligation. … Il conviendrait étant donné les alertes lancées par de nombreux scientifiques sur la nocivité des ondes électromagnétiques d'appliquer le principe de précaution quant à leur développement massif, et parfois mal encadré sur le territoire. Le numérique devrait passer par des connexions filaires pour réduire au minimum l'impact sur la santé. … Rappelons que l'OMS classe les ondes électromagnétiques comme potentiellement cancérigènes, que le nb d'électrosensibles ne fait qu'augmenter et que nous avons très peu de recul quant à l'usage de cette technologie (sans fil) qui se développe considérablement depuis 5/10 ans alors que les cancers (par exemple) se développent en 10/20 ans. des éudes par des laboratoires indépendants devraient également lancées. … Précisons que nos voisins européens sont pour la plupart beaucoup plus précautionneux quant aux normes en vigueur. En particulier, l'usage de cette technologie (sans fil : WIFI, DECT, WIMAX, Bluetouth.) pose question dans les écoles, crèches, collèges étant donné la sensibilité des enfants. (le WIFI est interdit en Allemagne dans les écoles). Il devrait également être prévu une connexion filaire sur les tablettes.",
+          "display_gi": 957
+        }
+      ]
+    },
+    {
+      "theme_id": "n43",
+      "title": "handicapées · démarches administratives · langue",
+      "n_claims": 12,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.15,
+          "argument": "les personnes handicapées doivent pouvoir accéder aux services publics en ligne si elles ont les moyens d'y accéder",
+          "display_gi": 1148
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.123,
+          "argument": "Les démarches administratives effectuées en ligne doivent être accessible par une traduition intégrale en Langue des Signes Française … Il est indispensable de rendre accessible les démarches administratives (impôts, CAF, sécurité sociale, .) pour les personnes sourdes dans leur langue naturelle … Afin qu'ils prennent en toute connaissance de cause leurs obligations et ainsi leur permettre d'éviter ainsi des désagréments administratifs (souvent des pénalités)",
+          "display_gi": 139
+        }
+      ]
+    },
+    {
+      "theme_id": "n44",
+      "title": "wifi · opérateur · émission",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.201,
+          "argument": "un internet disponible dans des relais de service public",
+          "display_gi": 653
+        }
+      ]
+    },
+    {
+      "theme_id": "n45",
+      "title": "citoyens français · fondamental · débit convenable",
+      "n_claims": 16,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 16,
+          "dispersion": 0.168,
+          "argument": "Tout le monde et sur tout le territoire devrait avoir accès à internet … Il y a des inégalités sur l'accès à internet",
+          "display_gi": 1035
+        }
+      ]
+    },
+    {
+      "theme_id": "n46",
+      "title": "détenus · réinsertion · progressif contrôlé",
+      "n_claims": 14,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 14,
+          "dispersion": 0.163,
+          "argument": "Dans un but de réinsertion sociale après leur libération, les détenus doivent obtenir un accès progressif et contrôlé à Internet",
+          "display_gi": 1782
+        }
+      ]
+    },
+    {
+      "theme_id": "n47",
+      "title": "traduction · écrite · simultanée",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.089,
+          "argument": "I. Après le 1er alinéa de l'article 78 de la loi n° 2005-102 du 11 février 2005 pour l'égalité des droits, il est ajouté l'alinéa suivant : « Les services d'accueil téléphonique destinés à recevoir les appels des usagers sont accessibles aux personnes déficientes auditives par la mise à disposition d'un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne, en respectant les mêmes conditions de traduction.» « Les associations reconnues d'utilité publiques, dont le montant annuel de ressources est supérieur à un seuil défini par décret dotées, d'un service d'accueil téléphonique, doivent mettre à la disposition des personnes déficientes auditives un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne » … II. L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite, l'intervention d'un interprète en langue des signes française et d'un codeur en langage parlé complété. Les spécifications techniques et les qualifications des opérateurs d'accessibilité sont définies par décret. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. » … III. Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle ». … IV. Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi.",
+          "display_gi": 2907
+        }
+      ]
+    },
+    {
+      "theme_id": "n49",
+      "title": "emploi · institution · interdit",
+      "n_claims": 23,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 23,
+          "dispersion": 0.198,
+          "argument": "\"Le site de mon pays me propose de me connecter avec des identifiants de sites étrangers (que j'ai banni) et n'est même pas capable de me reconnaître en tant que citoyen !\"",
+          "display_gi": 1513
+        }
+      ]
+    },
+    {
+      "theme_id": "n50",
+      "title": "vital · mourrir · monde",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.183,
+          "argument": "Pourquoi l'internet devrait-il se démarquer des autres espaces d'expression ?",
+          "display_gi": 2988
+        }
+      ]
+    },
+    {
+      "theme_id": "n51",
+      "title": "publicité · publicités · pub",
+      "n_claims": 30,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 30,
+          "dispersion": 0.18,
+          "argument": "La présence de publicités sur les sites est une nuisance",
+          "display_gi": 1118
+        }
+      ]
+    },
+    {
+      "theme_id": "n52",
+      "title": "dns · vaut · activation automatique",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.177,
+          "argument": "il faut aussi surveiller les autres entités qui régissent internet aujourd'hui",
+          "display_gi": 464
+        }
+      ]
+    },
+    {
+      "theme_id": "n53",
+      "title": "moteur · moteurs · cookies",
+      "n_claims": 15,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.144,
+          "argument": "Il est imporant que l'état propose un moteur de recherche public, et que l'on ne soit pas obligé d'utiliser les moteurs privés",
+          "display_gi": 483
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.166,
+          "argument": "Loi inapplicable, notamment à cause des cookies d'authentification, qui permettent à l'utilisateur d'éviter de s'authentifier activement à chaque nouvelle demande du serveur. Je ne me vois pas me connecter 15 (150?) fois par session de navigation (disons par jour) à un site - disons pour l'exemple, de presse - sur lequel je vais devoir retaper les identifiants à chaque chargement de page ou requête AJAX",
+          "display_gi": 1558
+        }
+      ]
+    },
+    {
+      "theme_id": "n54",
+      "title": "neutralité · trafic · principe",
+      "n_claims": 47,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 47,
+          "dispersion": 0.189,
+          "argument": "Totalement pour le concept de neutralité de l'internet !",
+          "display_gi": 3903
+        }
+      ]
+    },
+    {
+      "theme_id": "n56",
+      "title": "sites · conformité · accessibilité",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.186,
+          "argument": "Les sites internet des services de l'Etat, des collectivités territoriales et des établissements publics qui en dépendent, ou les sites réalisés par un délégataire qui assure la mise en ligne d'un site pour le compte d'une personne publique, portent, dans les conditions fixées par décret, une mention visible qui précise, dès l'ouverture, le niveau de conformité [ou de la non-conformité] du site aux règles d'accessibilité … Un mécanisme simple permet aux usagers de signaler les non-conformités éventuelles au responsable du site",
+          "display_gi": 1694
+        }
+      ]
+    },
+    {
+      "theme_id": "n57",
+      "title": "lien · sites · universelle acces",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.183,
+          "argument": "Un simple lien de type \"déclaration d'accessibilité\" obligatoire sur toutes les pages et donnant la même information sera sûrement plus accessible et ergonomique",
+          "display_gi": 711
+        }
+      ]
+    },
+    {
+      "theme_id": "n58",
+      "title": "accessibilité · sites · dépendent",
+      "n_claims": 14,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.11,
+          "argument": "Les sites internet des services de l'Etat, des collectivités territoriales et des établissements publics qui en dépendent, ou les sites réalisés par un délégataire qui assure la mise en ligne d'un site pour le compte d'une personne publique, portent, dans les conditions fixées par décret, une mention visible qui précise, dès l'ouverture, le niveau de conformité ou de la non-conformité du site aux règles d'accessibilité. Une sanction pécuniaire est fixée à l'encontre des sites qui ne respectent pas ce dispositif, à hauteur de 1.500 € appliquée à l'encontre des personnes responsables des sites publics appartenant aux communes de moins de 5000 habitants et de 5.000 € appliquée à l'encontre des communes de plus de 5000 habitants, des services de l'Etat et des établissements publics qui en dépendent. Le produit issu de ces sanctions pécuniaires est recouvré comme les créances de l'Etat étrangères à l'impôt et au domaine et est versé au fonds d'accompagnement de l'accessibilité universelle prévu à l'article L.111-7-12 du code de la construction et de l'habitation",
+          "display_gi": 583
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.123,
+          "argument": "Le fonds peut également participer au financement des prestations destinées à assurer le respect de l'obligation d'accessibilité des services de communication au public en ligne des autorités administratives, prévue par l'article 47 de la loi n° 2005-102 du 11 février 2005 pour l'égalité des droits et des chances, la participation et la citoyenneté des personnes handicapées",
+          "display_gi": 585
+        }
+      ]
+    },
+    {
+      "theme_id": "n59",
+      "title": "progiciels · schéma · feuille route",
+      "n_claims": 6,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.112,
+          "argument": "Les services de l'Etat, des collectivités territoriales et des établissements publics qui en dépendent élaborent un schéma pluriannuel de mise en accessibilité de leurs sites internet et intranet, des applications accessibles via un téléphone ou autre dispositif de communication mobile qu'ils éditent ainsi que de l'ensemble de leurs progiciels … Ce schéma est décliné en feuille de route annuelle et précise en outre les modalités de suivi et de contrôle régulier de l'accessibilité des sites et des progiciels à l'occasion de toute modification, entretien ou changement de contenu",
+          "display_gi": 1414
+        }
+      ]
+    },
+    {
+      "theme_id": "n61",
+      "title": "fibre · ruraux · zones",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.204,
+          "argument": "La fibre doit irriguer tout le pays c'est absolument prioritaire … La fibre permet d'établir une équité parfaite entre les territoires ruraux et Urbains … Serait il admissible que les jeunes Ruraux, et jeunes entreprises qui s'établissent en zone rurale ne puissent pas accéder à tous les services d'internet? … De même serait il admissible que les personnes âgés qui doivent pouvoir bénéficier d'un service internet santé soient oublié à cause qu'ils sont en zones rurale?",
+          "display_gi": 3500
+        }
+      ]
+    },
+    {
+      "theme_id": "n62",
+      "title": "débit · minimum · mega",
+      "n_claims": 16,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 16,
+          "dispersion": 0.185,
+          "argument": "Rien ne justifie le besoin d'avoir une connexion à 100Mbits aujourd'hui",
+          "display_gi": 1360
+        }
+      ]
+    },
+    {
+      "theme_id": "n63",
+      "title": "fibre · abonnés · renouvellement",
+      "n_claims": 5,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 5,
+          "dispersion": 0.149,
+          "argument": "Les FAI auront obligation d'accélérer le déploiement de la fibre sur tout le territoire, et pas uniquement dans les grandes agglomérations. Un calendrier précis sera mis en place, et tout retard sera sanctionné financièrement",
+          "display_gi": 3522
+        }
+      ]
+    },
+    {
+      "theme_id": "n64",
+      "title": "fibre · optique · réseau",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.192,
+          "argument": "Difficile de ne pas être d'accord avec le déploiement de la fibre. mais avant tout il faut harmoniser la France en terme de débits. La fibre peut être un moyen, parmi d'autres.",
+          "display_gi": 1120
+        }
+      ]
+    },
+    {
+      "theme_id": "n65",
+      "title": "avis · plateformes · vérification",
+      "n_claims": 49,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 49,
+          "dispersion": 0.209,
+          "argument": "L'obligation faite ensuite à la plateforme de délivrer une information loyale, claire et transparente sur les conditions générales d'utilisation du service d'intermédiation qu'elle propose et sur les modalités de référencement, de classement et de déréférencement des contenus, biens ou services auxquels ce service permet d'accéder devient alors parfaitement légitime",
+          "display_gi": 180
+        }
+      ]
+    },
+    {
+      "theme_id": "n67",
+      "title": "débit · débits · normalement",
+      "n_claims": 12,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.099,
+          "argument": "les débits minimums, normalement disponible, maximums montants et descendants fournis lorsqu'il s'agit de services d'accès à internet fixe et une estimation des débits maximums montants et descendants fournis dans le cas de services d'accès à internet mobile, ainsi que l'incidence sur la disponibilité des services offerts d'un écart significatif par rapport au débit prévu au contrat",
+          "display_gi": 223
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.178,
+          "argument": "Il faudrait obliger les FAI à rendre le service qu'ils ont vendu, un accès Internet n'est pas garanti certe, il y a des aléas mais dans ce cas rétrocéder au client une partie du prix de l'abonnement au prorata de la coupure ou de l'imposibilité d'utiliser l'accès Internet normalement coupures intempestives répétés, débit frisant le RTC d'autre fois … Mettre en place la notion de débit minimun garanti qui serait connu par le consommateur dès l'achat de l'abonnement. Il serait diférrent selon le débit théorique vendu et l'opérateur serait obligé de le fournir. Cela permettrait ainsi que les opérateurs entretiennent mieux les installations. Et les consommateurs ne passeraient pas leur vie à la hotline sans jamais obtenir de résultat",
+          "display_gi": 427
+        }
+      ]
+    },
+    {
+      "theme_id": "n68",
+      "title": "débits · compensations · continue récurrente",
+      "n_claims": 6,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.116,
+          "argument": "II. L'article L. 121-83 du code de la consommation est ainsi modifié : 1° Après le b), il est inséré un b bis) ainsi rédigé : « b bis) les débits minimums, normalement disponible, maximums montants et descendants fournis lorsqu'il s'agit de services d'accès à internet fixe et une estimation des débits maximums montants et descendants fournis dans le cas de services d'accès à internet mobile, ainsi que l'incidence sur la disponibilité des services offerts d'un écart significatif par rapport au débit prévu au contrat ; » 2° le d) est ainsi rédigé : « Les compensations et formules de remboursement applicables lorsque le niveau de qualité de services ou les débits prévus dans le contrat, ne sont généralement pas atteints, de façon continue ou récurrente ; » 3° le g) est complété par les mots : «, de protection de la vie privée et des données à caractère personnel, ainsi que l'impact des limitations de volume, de débits ou d'autres paramètres sur la qualité de l'accès à internet, en particulier l'utilisation de contenus, d'applications et de services, y compris ceux bénéficiant d'une qualité optimisée. » L'article L.121-83 du code de la consommation dans sa rédaction issue de la présente loi est applicable aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi.",
+          "display_gi": 3968
+        }
+      ]
+    },
+    {
+      "theme_id": "n69",
+      "title": "amende · art · passible",
+      "n_claims": 7,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.051,
+          "argument": "« Sous-section 3 : Champ d'application et sanctions « Art. L. 121-122.- La présente section est également applicable aux services fournis aux professionnels. « Art. L. 121-123.- Tout manquement aux articles L. 121-120 et L. 121-121 est passible d'une amende administrative dont le montant ne peut excéder 3 000 € pour une personne physique et 15 000 € pour une personne morale. L'amende est prononcée dans les conditions prévues à l'article L. 141-1-2. » II. - Au 2° du I de l'article L.141-1 du code de la consommation, les mots : « 12 et 15 » sont remplacés par les mots : « 12, 15 et 18 ».",
+          "display_gi": 422
+        }
+      ]
+    },
+    {
+      "theme_id": "n70",
+      "title": "courrier électronique · consommation · vérification",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.108,
+          "argument": "I. Le chapitre Ier du titre Ier du livre Ier du code de la consommation est modifié comme suit : 1° Après l'article L. 111-5-1 est inséré l'article L. 111-5-2, ainsi rédigé : « Art. L. 111-5-2 - Sans préjudice des obligations d'information prévues à l'article 19 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, toute personne dont l'activité consiste, à titre principal ou accessoire, à collecter, modérer ou diffuser des avis en ligne de consommateurs, est tenue de délivrer une information loyale, claire et transparente sur les modalités de vérification des avis mis en ligne. « Elle précise si les avis qu'elle a mis en ligne font l'objet ou non d'une vérification et, si tel est le cas, elle indique les caractéristiques principales de la vérification mise en œuvre. Elle précise si les avis qu'elle a mis en ligne font l'objet ou non d'une vérification de la réalité de l'expérience personnelle de consommation du produit ou service évalué par les auteurs des avis, et, si tel est le cas, elle indique les caractéristiques principales de la vérification mise en œuvre. Elle signale de façon claire et visible tout avis pour lequel la vérification n'a pas permis de s'assurer qu'il correspond à une expérience de consommation. « Les modalités et le contenu de ces informations sont fixés par décret. » 2° A l'article L. 111-6-1, la référence « et L. 111-5-1 » est remplacé par la référence « à L. 111-5-2 »",
+          "display_gi": 3967
+        }
+      ]
+    },
+    {
+      "theme_id": "n71",
+      "title": "fréquences · redevance · radioélectriques",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.143,
+          "argument": "Il ne s'agit pas de faciliter l'usage de fréquences \"inutilisées\" mais de consacrer le principe selon lequel certaines bandes dont l'utilisation ne fait l'objet ni d'autorisation ni d'assignation ne sont pas soumises à redevance … L'ajout proposé n'est donc pas utile pour accomplir l'objectif recherché",
+          "display_gi": 2102
+        }
+      ]
+    },
+    {
+      "theme_id": "n73",
+      "title": "opérateurs · numéro vert · nombre clients",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.174,
+          "argument": "Que l'état demande aux opérateurs de réagir rapidement à un problème signalé par un grand nombre de clients (création d'un numéro vert?)",
+          "display_gi": 2650
+        }
+      ]
+    },
+    {
+      "theme_id": "n74",
+      "title": "connexion · entreprises · techniquement",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.162,
+          "argument": "A quoi sert-il de brider la connexion des non-payeurs pour qu'ils puissent communiquer avec des entreprises de services publics si ces entreprises (aux intentions variables) peuvent simplement rendre techniquement impossible le dialogue avec ces personnes ?",
+          "display_gi": 485
+        }
+      ]
+    },
+    {
+      "theme_id": "n75",
+      "title": "saisi · adsl · pouvez",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.195,
+          "argument": "à condition de brider les connexions : hors de question que les personnes ne payant plus leurs factures puissent bénéficier d'un débit upload/download équivalent aux abonnés (que ce soit ADSL/Fibre/.)",
+          "display_gi": 1375
+        }
+      ]
+    },
+    {
+      "theme_id": "n76",
+      "title": "client · opérateurs · orange",
+      "n_claims": 10,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 5,
+          "dispersion": 0.141,
+          "argument": "Que le tarif social d'internet soit géré par tous les opérateurs existants (et pas seulement par orange.fr) ou que ça fonctionne comme le tarif de première nécessité du gaz",
+          "display_gi": 3842
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.099,
+          "argument": "la création d'une plateforme internet supervisée par l'état sur laquelle tous les opérateurs privés devront s'inscrire et proposer tous les services et options que l'usager/client (à travers un compte unique « à vie ») pourrait souscrire en cochant des cases (avec validation sécurisée et certificat de confirmation), et obliger les opérateurs à une transparence totale des tarifs et faciliter aussi la possibilité des clients à changer d'opérateur tout en conservant son compte unique",
+          "display_gi": 3845
+        }
+      ]
+    },
+    {
+      "theme_id": "n78",
+      "title": "logiciels · libres · utiliser",
+      "n_claims": 55,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 55,
+          "dispersion": 0.177,
+          "argument": "Utiliser au maximum les logiciels libres dans les écoles et les universités",
+          "display_gi": 1322
+        }
+      ]
+    },
+    {
+      "theme_id": "n79",
+      "title": "logiciels · logiciel · libres",
+      "n_claims": 44,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 44,
+          "dispersion": 0.187,
+          "argument": "Le logiciel libre na jamais empêcher le fait qu'un logiciel libre puisse être payant",
+          "display_gi": 1445
+        }
+      ]
+    },
+    {
+      "theme_id": "n80",
+      "title": "source · logiciel · formats",
+      "n_claims": 62,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 62,
+          "dispersion": 0.19,
+          "argument": "Doivent-ils publier leur code source ou utiliser systématiquement des logiciels open source ? L'article n'est pas clair sur ce point",
+          "display_gi": 880
+        }
+      ]
+    },
+    {
+      "theme_id": "n81",
+      "title": "linux · gnu · distributions",
+      "n_claims": 39,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 39,
+          "dispersion": 0.179,
+          "argument": "La proposition devrait parler de systèmes (d'exploitation) libres, car il en existe d'autres que GNU/Linux",
+          "display_gi": 3996
+        }
+      ]
+    },
+    {
+      "theme_id": "n83",
+      "title": "firmware · vendus · pilotes",
+      "n_claims": 6,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.142,
+          "argument": "Cet article devrait donner la possibilité à l'Agence Nationale de la Sécurité des Systèmes d'Information de pouvoir faire des contrôle, ou d'avoir un droit de regard, sur les logiciels, pilotes et autres programmes (firmware) des matériels vendus sur le territoire national. Ce contrôle permettrait de prévenir toutes utilisations \"abusives\" de logiciels violant les données utilisateurs (keyloggers intégrés, etc.) … Obliger purement et simplement l'ouverture du code des pilotes et autres programmes (firmware etc.) des matériels vendus sur le territoire national",
+          "display_gi": 1528
+        }
+      ]
+    },
+    {
+      "theme_id": "n84",
+      "title": "vente · logiciel · application",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.156,
+          "argument": "Application de la loi sur la consommation déjà existante qui interdit la vente lié d'un bien manufacturé (ordinateur) avec une prestation de service (licence logiciel, assurance etc)",
+          "display_gi": 150
+        }
+      ]
+    },
+    {
+      "theme_id": "n85",
+      "title": "verrouillage · liseuse · pleinement exercer",
+      "n_claims": 7,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.112,
+          "argument": "Pour que le consommateur puisse pleinement exercer sa propriété sur le support numérique (Smartphone, Tablette, liseuse.) qu'il a acheté, le revendeur doit avoir l'obligation de supprimer le verrouillage logiciel de modification du système d'exploitation",
+          "display_gi": 1303
+        }
+      ]
+    },
+    {
+      "theme_id": "n86",
+      "title": "constructeurs · remboursement · système",
+      "n_claims": 8,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.167,
+          "argument": "On pourrait rajouter le libre choix de système d'exploitation à l'achat d'un ordinateur, quitte à ajouter un délai avant récupération de son bien. Si une personne ne veut pas du système d'exploitation vendu sur l'ordinateur/tablette/téléphone mais un autre, on ne peut décemment pas le faire payer pour un système dont elle ne veut pas",
+          "display_gi": 3787
+        }
+      ]
+    },
+    {
+      "theme_id": "n87",
+      "title": "matériel · durée · maintien",
+      "n_claims": 6,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.163,
+          "argument": "Lors d'un achat de matériel par l'état ou une collectivité publique, au dela d'une certaine somme, l'achat ne devrait être autorisé que si les personnes en charge du maintien du matériel ont été identifiées, qu'elles ont les connaissances requises ou qu'un plan de formation est prévu, et qu'un financement a été prévu pour les payer. Le nombre d'heures de maintien doit être proportionnel au montant du matériel, et le plan de financement de ces administrateurs doit prendre en compte la durée de vie du matériel, suivant la durée d'amortissement en cours.",
+          "display_gi": 3673
+        }
+      ]
+    },
+    {
+      "theme_id": "n88",
+      "title": "logiciels · logiciel · libres",
+      "n_claims": 47,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 47,
+          "dispersion": 0.183,
+          "argument": "A quand un \"usage libre\" des systèmes et logiciels suivant le besoin de chacun",
+          "display_gi": 353
+        }
+      ]
+    },
+    {
+      "theme_id": "n89",
+      "title": "système · obligation utiliser · traite",
+      "n_claims": 28,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 28,
+          "dispersion": 0.161,
+          "argument": "L'État a l'obligation d'utiliser, dès qu'il traite des données de cittoyens, un système libre tel que ceux dérivés de GNU/Linux",
+          "display_gi": 3242
+        }
+      ]
+    },
+    {
+      "theme_id": "n90",
+      "title": "matériel · ordinateurs · bios",
+      "n_claims": 46,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 46,
+          "dispersion": 0.202,
+          "argument": "il serait intéressant d'uniformiser le système d'exploitation utilisé",
+          "display_gi": 3272
+        }
+      ]
+    },
+    {
+      "theme_id": "n91",
+      "title": "licence · logiciel · licences",
+      "n_claims": 47,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 47,
+          "dispersion": 0.186,
+          "argument": "Libre ne veut pas dire Gratuit et n'est pas un gage de fiabilité ou/et de sécurité",
+          "display_gi": 2861
+        }
+      ]
+    },
+    {
+      "theme_id": "n93",
+      "title": "programmation · comprendre · apprendre",
+      "n_claims": 46,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 46,
+          "dispersion": 0.185,
+          "argument": "S'il était déjà appris aux collégiens à correctement utiliser l'outil informatique et les enjeux qu'il peut y avoir derrière, l'apprentissage du code serait accessoire",
+          "display_gi": 2208
+        }
+      ]
+    },
+    {
+      "theme_id": "n95",
+      "title": "formation · mooc · élus",
+      "n_claims": 15,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.147,
+          "argument": "Toute personne devrait avoir la possibilité de suivre une formation en Mairie pour maîtriser les outils numériques … La formation élargirait l'utilisation du numérique",
+          "display_gi": 678
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.113,
+          "argument": "Les MOOCS sont faits pour ceux qui ont déjà de solide base en informatique … Je doute que tous les élus soient dans ce cas",
+          "display_gi": 2158
+        }
+      ]
+    },
+    {
+      "theme_id": "n96",
+      "title": "jeunes · plateformes digitales · constuire",
+      "n_claims": 16,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 16,
+          "dispersion": 0.178,
+          "argument": "Afin de permettre aux jeunes publics de connaitre les bases des codes informatiques les plus utilisés, afin de leur donner les moyens intellectuels de comprendre les architectures et moyens nécessaires pour constuire les plateformes digitales",
+          "display_gi": 927
+        }
+      ]
+    },
+    {
+      "theme_id": "n97",
+      "title": "lieux · epn · animation",
+      "n_claims": 7,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.164,
+          "argument": "Les EPN, lieux de médiation numérique, expérimentent et innovent au quotidien, sans que leurs actions, la portée de ces actions et l'expertise de compétence des animateurs soient toujours mise en visibilité ou valorisée. Les animateurs doivent pouvoir être encore, accompagnés, formés au partenariat transversal et bénéficier de ressources pour 1) identifier et élargir leur réseau de partenaires, sur leur territoire, surtout en milieu rural ; 2) pouvoir insérer leur action dans un schéma territorial de développement du numérique ; 3) apprendre à \"vendre\" leur valeur ajoutée auprès des décideurs. Ils pourraient être intégrés à des maisons de service public, les maisons de l'emploi et de la formation, voire les intercommunalités.",
+          "display_gi": 602
+        }
+      ]
+    },
+    {
+      "theme_id": "n98",
+      "title": "mairie · béneficiaire · conservées",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.164,
+          "argument": "il faut plutôt mettre des ordinateur avec internet en accès libre dans les mairies ou bibliothèque",
+          "display_gi": 3571
+        }
+      ]
+    },
+    {
+      "theme_id": "n100",
+      "title": "cours · enseignants · enseignant",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.164,
+          "argument": "demander aux établissement de proposer des moyens pour mettre les cours en ligne (la décision finale revenant à l'enseignant) aurait tout mon soutien",
+          "display_gi": 1016
+        }
+      ]
+    },
+    {
+      "theme_id": "n101",
+      "title": "outil · enfants · élèves",
+      "n_claims": 15,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 15,
+          "dispersion": 0.187,
+          "argument": "Il ne faut pas mélanger des buts pédagogiques et le choix d'un outil",
+          "display_gi": 354
+        }
+      ]
+    },
+    {
+      "theme_id": "n102",
+      "title": "plan · éducation nationale · enseignement",
+      "n_claims": 15,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 15,
+          "dispersion": 0.18,
+          "argument": "Je m'interroge beaucoup sur la soit-disant éco(nomie/logie) des outils numériques face aux outils \"traditionnels\" ! Dans le domaine du scolaire en tous cas",
+          "display_gi": 3011
+        }
+      ]
+    },
+    {
+      "theme_id": "n103",
+      "title": "enseignants · école · outils",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.185,
+          "argument": "les enseignants doivent eux aussi se former, c'est même un impératif",
+          "display_gi": 2826
+        }
+      ]
+    },
+    {
+      "theme_id": "n104",
+      "title": "éthiques · réflexion · éthique",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.149,
+          "argument": "Le Comité national consultatif d'éthique conduit une réflexion sur les problèmes éthiques et les questions de société soulevés par l'évolution des technologies numériques",
+          "display_gi": 81
+        }
+      ]
+    },
+    {
+      "theme_id": "n105",
+      "title": "informatique · établissements · cours",
+      "n_claims": 43,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 43,
+          "dispersion": 0.192,
+          "argument": "Par le biais des programmes scolaires, encourager les élèves/étudiants (notamment ceux en informatique mais pas que) à réaliser des projets permettant d'améliorer les logiciels libres et le système d'exploitation qu'ils utilisent",
+          "display_gi": 1364
+        }
+      ]
+    },
+    {
+      "theme_id": "n107",
+      "title": "numériques détriment · esprits · technologies",
+      "n_claims": 18,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.152,
+          "argument": "Hors sujet : on parle ici du numérique et en aucun cas du statut des parlementaires et responsables politiques",
+          "display_gi": 3250
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.157,
+          "argument": "L'engouement actuel pour les technologies numériques pousse de plus en plus les entreprises privées comme les administration vers des solutions numériques au détriment des autres solutions. Sous prétexte de modernisation ou de pseudo-économies, les contraintes pour ceux qui ne peuvent ou ne veulent utiliser ces technologies se font de plus en plus fortes. … Le monde a fonctionné depuis toujours sans les technologies numériques. Celles-ci doivent rester un progrès à disposition de l'humanité et non une obligation.",
+          "display_gi": 644
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.14,
+          "argument": "Sans un tel apprentissage et à l'ère des systèmes fermés, la numérisation massive de la société, des médias, des moyens de communication et de déplacement, d'alimentation et d'exercice du pouvoir public forme un cadre propice à une prise de contrôle de plus en plus importante de sociétés fournisseuses de services numériques au détriment de l'État démocratique : la firme transnationale informatique des années 2010 apparaît donc comme la plus facilement susceptible de muter en « société-État »",
+          "display_gi": 359
+        }
+      ]
+    },
+    {
+      "theme_id": "n108",
+      "title": "mort · vie · numériques",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.193,
+          "argument": "Pour ou contre un droit à une vie numérique ?",
+          "display_gi": 532
+        }
+      ]
+    },
+    {
+      "theme_id": "n109",
+      "title": "réduite · retransmettre · moyen moderne",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.188,
+          "argument": "Rien à voir avec un projet de loi sur le numérique",
+          "display_gi": 700
+        }
+      ]
+    },
+    {
+      "theme_id": "n110",
+      "title": "carnet · phase · référents numériques",
+      "n_claims": 22,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 22,
+          "dispersion": 0.189,
+          "argument": "Ça pourrait être une bonne idée mais il faudrait d'abord établir clairement ce que ces « référents numériques » enseigneraient",
+          "display_gi": 1723
+        }
+      ]
+    },
+    {
+      "theme_id": "n111",
+      "title": "stratégie · régionaux · développement",
+      "n_claims": 24,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 14,
+          "dispersion": 0.063,
+          "argument": "Le chapitre V du titre II du livre IV du code général des collectivités territoriales est complété par un article L. 1425-3 rédigé comme suit : « Art. L. 1425-3 -Dans les domaines de compétence que la loi leur attribue, les conseils départementaux ou les conseils régionaux peuvent établir une stratégie de développement des usages et services numériques existants, identifier les zones qu'ils desservent et présenter une stratégie de développement de ceux-ci, sur leur territoire. Cette stratégie, qui a une valeur indicative, vise à favoriser la cohérence des initiatives publiques et leur bonne articulation avec l'investissement privé, ainsi que la mise en place de ressources partagées et mutualisées afin de doter l'ensemble des territoires d'un maillage équilibré de services numériques. Elle est établie en cohérence avec les schémas régionaux de développement économique. Cette stratégie constitue un volet du schéma directeur territorial d'aménagement numérique. »",
+          "display_gi": 1594
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.154,
+          "argument": "La Région élabore, en concertation avec le(s) pôles de la médiation numérique dont elle relève ainsi qu'avec les organismes et acteurs de la médiation numérique, une stratégie régionale de la médiation numérique et peut contractualiser avec les départements, les communes et les établissements publics de coopération intercommunale à fiscalité propre pour la mise en œuvre des stratégies concertées et le déploiement de la médiation numérique sur le territoire régional … Les politiques publiques des collectivités territoriales et de leurs groupements en faveur de la médiation numérique peuvent s'inscrire dans des démarches de co-construction avec l'ensemble des acteurs concernés. Les modalités de cette co-construction s'appuient notamment sur la mise en place d'instances associant les acteurs concernés ou de démarches associant les citoyens au processus de décision publique … Les acteurs publics (services centraux et déconcentrés de l'Etat, services régionaux) fixent au sein des Contrats de Projets et des programmations européennes des moyens explicitement dédiés à services de la médiation numérique … Afin de contribuer à l'observation et l'évaluation des politiques territoriales en matière d'appropriation sociale des usages numériques et de l'appui à la transition numérique, les acteurs de la médiation numérique font l'objet d'une représentation au sein des Conseils Économiques Sociaux et Environnementaux Régionaux (CESER)",
+          "display_gi": 2956
+        }
+      ]
+    },
+    {
+      "theme_id": "n112",
+      "title": "jeunes · prix livre · enfants",
+      "n_claims": 30,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 30,
+          "dispersion": 0.201,
+          "argument": "Il faut, en parallèle, faire progresser l'éducation au numérique afin que les internautes soient sensibilisés à la diversité des modèles économiques du numérique et que leur consentement soit toujours éclairé",
+          "display_gi": 2818
+        }
+      ]
+    },
+    {
+      "theme_id": "n113",
+      "title": "jeux · sport · hasard",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.191,
+          "argument": "Plutôt favorable sur le principe de ne pas assimiler le e-sport aux jeux de hasard.",
+          "display_gi": 898
+        }
+      ]
+    },
+    {
+      "theme_id": "n116",
+      "title": "assemblée · commission · citoyens",
+      "n_claims": 14,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.125,
+          "argument": "Lorsque qu'un projet ou une proposition de loi est proposée à l'Assemblée Nationale ou au Sénat, elle est tout d'abord étudiée en commission. Avant ce travail en commission, les citoyens seraient consultés via une plateforme officielle pour amender des articles, en proposer de nouveaux et voter pour ou contre les articles initiaux et ceux proposés par les citoyens. Cette participation serait consultative et destinée à la commission chargée de l'étude du texte",
+          "display_gi": 12
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.141,
+          "argument": "Permettre, grâce aux réseaux sociaux et à une plateforme prévue à cette effet, aux citoyens de formuler des propositions lors des commissions parlementaires. Ces commissions parlementaires devront alors être publiques, et les médias d'informations se chargeront de mettre le citoyen au courant de leur tenue.",
+          "display_gi": 3926
+        }
+      ]
+    },
+    {
+      "theme_id": "n117",
+      "title": "tirés · citoyens · voter",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.177,
+          "argument": "Ce n'est pas le rôle des citoyens (mais du législateur)",
+          "display_gi": 2749
+        }
+      ]
+    },
+    {
+      "theme_id": "n118",
+      "title": "démocratie · révision · votes",
+      "n_claims": 15,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 15,
+          "dispersion": 0.169,
+          "argument": "Je pense que c'est une avancée nécessaire pour la suite de la démocratie … Cela peut également aider certaines personnes à voter",
+          "display_gi": 2391
+        }
+      ]
+    },
+    {
+      "theme_id": "n119",
+      "title": "politique · lois · amendement",
+      "n_claims": 8,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.151,
+          "argument": "Mettre en place un système de recueil information des demandes d'amendement ou de changement de la loi via internet. … Cela permettra aux citoyens de remontrer les problèmes que posent une loi plus rapidement, d'ouvrir le champ des possibles, on se sert des cerveaux de tout le monde, comme cela est fait pour cette proposition de loi. … Cela devrait aussi permettre de donner plus d'infos aux députés ou au gouvernement pour la création d'une loi ou de son évolution. … Il faut bien sûr un système de tri et de synthèse.",
+          "display_gi": 614
+        }
+      ]
+    },
+    {
+      "theme_id": "n121",
+      "title": "procureur · judiciaire · république",
+      "n_claims": 23,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.187,
+          "argument": "Il faut précisément caractériser le cas de force majeure, pour ne pas tomber dans l'excès de la loi renseignement",
+          "display_gi": 3456
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.11,
+          "argument": "Insérer la disposition suivante dans le code de l'organisation judiciaire : \"Est placé auprès du tribunal de grande instance de Paris, aux côtés du procureur de la République, un procureur de la République numérique\"",
+          "display_gi": 2789
+        }
+      ]
+    },
+    {
+      "theme_id": "n122",
+      "title": "renseignement · interception · surveillance",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.162,
+          "argument": "la loi sur le renseignement ne va pas du tout dans le bon sens",
+          "display_gi": 3528
+        }
+      ]
+    },
+    {
+      "theme_id": "n123",
+      "title": "alerte · lanceur · lanceurs",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.128,
+          "argument": "Il faut en particulier rendre impossible le licenciement d'un lanceur d'alerte au motif de cette \"alerte\"",
+          "display_gi": 669
+        }
+      ]
+    },
+    {
+      "theme_id": "n124",
+      "title": "drones · combat · robot",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.162,
+          "argument": "Les drones et l'utilisation de leurs données doivent s'inscrire dans un ensemble. Quid des données survolant une centrale nucléaire ou une propriété privée. Quelles limites ? etc",
+          "display_gi": 1310
+        }
+      ]
+    },
+    {
+      "theme_id": "n125",
+      "title": "famille · opérer remettre · augmentant",
+      "n_claims": 76,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 76,
+          "dispersion": 0.197,
+          "argument": "Ce n'est pas au législateur d'imposer quoi que ce soit là-dessus",
+          "display_gi": 1956
+        }
+      ]
+    },
+    {
+      "theme_id": "n127",
+      "title": "participent · absence · sanctionner",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.174,
+          "argument": "Il faut d'abord sanctionner (légèrement) l'absence ou la carence de volonté et de moyens (jugé au plan de mise en accessibilité, éventuellement pondéré par le budge de la collectivité/du site) ; Ensuite sanctionner (lourdement) l'absence de résultat … Sanctionner l'absence de message d'information est inefficace voire nuisible",
+          "display_gi": 826
+        }
+      ]
+    },
+    {
+      "theme_id": "n128",
+      "title": "sanctions · plan vigipirate · extorsion",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.171,
+          "argument": "Attention à ne pas définir des sanctions qui ne s'appliqueraiebt au aux acteurs français",
+          "display_gi": 2721
+        }
+      ]
+    },
+    {
+      "theme_id": "n129",
+      "title": "sanction · sanctions · pécuniaire",
+      "n_claims": 14,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 14,
+          "dispersion": 0.188,
+          "argument": "j'ai étudié cette proposition, en plus d'être moins explicitement claire, je n'ai pas d'idée des sanctions applicables et amendes, qui forment une bonne partie de cette proposition … N'hésitez pas à publier une modification comportant le montant de celles-ci, si vous pensez que cela manque",
+          "display_gi": 958
+        }
+      ]
+    },
+    {
+      "theme_id": "n130",
+      "title": "décret · décrets · application",
+      "n_claims": 37,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 37,
+          "dispersion": 0.21,
+          "argument": "C'est à mon avis trop précis pour être inscrit dans la loi, ceci relève plutôt des décrets d'applications",
+          "display_gi": 1744
+        }
+      ]
+    },
+    {
+      "theme_id": "n131",
+      "title": "lettre recommandée · lois · formulation",
+      "n_claims": 31,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 31,
+          "dispersion": 0.19,
+          "argument": "C'est une idée pertinente, cela répondrait à l'objectif de précision des lois.",
+          "display_gi": 3192
+        }
+      ]
+    },
+    {
+      "theme_id": "n132",
+      "title": "projet · distinction · législatif",
+      "n_claims": 28,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 28,
+          "dispersion": 0.172,
+          "argument": "Qu'est ce que cette question vient faire dans un projet de loi ? Ce site n'est pas un forum sur lequel on peut interpeller le gouvernement, ou alors je me trompe et dans ce cas je file de suite lui poser les miennes !",
+          "display_gi": 971
+        }
+      ]
+    },
+    {
+      "theme_id": "n134",
+      "title": "propriété · auteur · copie",
+      "n_claims": 62,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 62,
+          "dispersion": 0.196,
+          "argument": "Ce texte équivaut à abroger tout le droit de la propriété littéraire et artistique",
+          "display_gi": 1036
+        }
+      ]
+    },
+    {
+      "theme_id": "n135",
+      "title": "commerciale · vente liée · commercial",
+      "n_claims": 48,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 48,
+          "dispersion": 0.202,
+          "argument": "Voir ici ce qui concerne l'interdiction de la vente liée : [url]",
+          "display_gi": 3314
+        }
+      ]
+    },
+    {
+      "theme_id": "n136",
+      "title": "auteur · commons · licence",
+      "n_claims": 55,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 55,
+          "dispersion": 0.194,
+          "argument": "Il revient à l'auteur de décider s'il diffuse ou non sous forme libre",
+          "display_gi": 3220
+        }
+      ]
+    },
+    {
+      "theme_id": "n137",
+      "title": "photo · images · photos",
+      "n_claims": 56,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 56,
+          "dispersion": 0.208,
+          "argument": "Contre l'exploitation commerciale d'une image d'une oeuvre dans l'espace public. Sans l'accord de l'artiste … Ou alors l'état propose aux artistes une rémunération, pour que cette oeuvre soit exploitée comme un élément \"libre de droits\" ( les droits étant prépayés par cet \"abonnement\" . tant que l'oeuvre reste sur l'espace public. un droit de présentation permanent. )",
+          "display_gi": 827
+        }
+      ]
+    },
+    {
+      "theme_id": "n138",
+      "title": "auteurs · auteur · artistes",
+      "n_claims": 38,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 38,
+          "dispersion": 0.193,
+          "argument": "C'est à se demander si la personne à l'origine de cette proposition s'est documentée sur le sens du droit d'auteur et les réalités économiques des artistes contemporains !?",
+          "display_gi": 3537
+        }
+      ]
+    },
+    {
+      "theme_id": "n141",
+      "title": "bénéficiaire rsa · frais · économie collaborative",
+      "n_claims": 12,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.165,
+          "argument": "j'ai du mal à voir pourquoi le contribuable devrait financer ce service",
+          "display_gi": 2996
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.146,
+          "argument": "La gratuité des frais de mise en service pour un bénéficiaire du Rsa",
+          "display_gi": 3843
+        }
+      ]
+    },
+    {
+      "theme_id": "n142",
+      "title": "proposition demande · impliquée · consultation experts",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.163,
+          "argument": "Cette demande de normes, impliquée par la proposition, demande une consultation d'experts. Est-ce une bonne utilisation de l'argent du contribuable ?",
+          "display_gi": 486
+        }
+      ]
+    },
+    {
+      "theme_id": "n143",
+      "title": "euros · plafond · millions",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.211,
+          "argument": "Les seuils (50 et 300 euros) sont trop hauts. Les diviser par 5 et ajouter un plafond annuel par asso correspondant à 3 fois le plafond mensuel. Pour des dons importants, d'autres moyens de paiement simples et par internet existent déjà.",
+          "display_gi": 2061
+        }
+      ]
+    },
+    {
+      "theme_id": "n144",
+      "title": "cir · financement · investissements",
+      "n_claims": 14,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 14,
+          "dispersion": 0.184,
+          "argument": "il va encore falloir financer tout cela",
+          "display_gi": 3855
+        }
+      ]
+    },
+    {
+      "theme_id": "n145",
+      "title": "aide · associations · aidés",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.188,
+          "argument": "« Soutenir financièrement », il faudrait préciser d'où viennent les fonds. Est-ce que les associations ne peuvent pas jouer un rôle (et l'État assurer le financement via la subvention par des mécanismes déjà existant) ?",
+          "display_gi": 3488
+        }
+      ]
+    },
+    {
+      "theme_id": "n146",
+      "title": "organismes · action · etat",
+      "n_claims": 37,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 37,
+          "dispersion": 0.196,
+          "argument": "Ce n'est pas à l'Etat de faire cela. Cela doit rester hors de son champ d'intervention dans l'économie.",
+          "display_gi": 154
+        }
+      ]
+    },
+    {
+      "theme_id": "n147",
+      "title": "collectivités · citoyens · petites",
+      "n_claims": 48,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 48,
+          "dispersion": 0.193,
+          "argument": "Proposition à faire à vos collectivités locales.",
+          "display_gi": 1438
+        }
+      ]
+    },
+    {
+      "theme_id": "n149",
+      "title": "acteur collaboratif · activité · statut",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.187,
+          "argument": "Dans le cas où l'activité dégage des bénéfices, le statut d'auto-entrepreneur et les dispositifs types chèques emplois-services me paraissent suffisamment adaptés … Ils sont déjà souvent détournés par des employeurs pour éviter le paiement de charges sociales et le statut proposé dans l'article d'origine me paraît être la porte ouverte à d'autres détournements au détriment de la sécurité financière du travailleur … je pense que ce statut doit donc être strictement encadré",
+          "display_gi": 2155
+        }
+      ]
+    },
+    {
+      "theme_id": "n150",
+      "title": "association · permettre création · membre fondateur",
+      "n_claims": 5,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 5,
+          "dispersion": 0.122,
+          "argument": "Permettre la création d'un association loi 1901 par un seul membre fondateur. Je ne vois pas l'intérêt",
+          "display_gi": 2118
+        }
+      ]
+    },
+    {
+      "theme_id": "n151",
+      "title": "associations · association · agrément",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.165,
+          "argument": "Et pourquoi seulement les associations ? Et les particuliers qui constatent une violation de l'utilisation des communs ?",
+          "display_gi": 3951
+        }
+      ]
+    },
+    {
+      "theme_id": "n152",
+      "title": "associations · intérêts généraux · travaux intérêts",
+      "n_claims": 5,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 5,
+          "dispersion": 0.152,
+          "argument": "Un site Web permettrait aux associations de pouvoir centraliser leurs demandes et leurs besoins en terme de prestations. Ce site serait une plateforme de mise en relation des associations avec d'autres acteurs comme les personnes sans emplois ou les détenus condamnés à des travaux d'intérêts généraux. Un suivi pourrait être effectué et des rapports générés aux divers organismes afin de valider et d'évaluer la prestation par les différents acteurs",
+          "display_gi": 3012
+        }
+      ]
+    },
+    {
+      "theme_id": "n153",
+      "title": "argent · financements · encouragés",
+      "n_claims": 22,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 16,
+          "dispersion": 0.173,
+          "argument": "Les subventions doivent être rendues publiques quel que soit le montant",
+          "display_gi": 2820
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.123,
+          "argument": "5° La création d'œuvres et l'innovation sont encouragés par les pouvoirs publics par des financements en début de processus intellectuel et des rétributions après publication",
+          "display_gi": 4083
+        }
+      ]
+    },
+    {
+      "theme_id": "n154",
+      "title": "transparence · citoyens · hidalgo",
+      "n_claims": 22,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 22,
+          "dispersion": 0.187,
+          "argument": "Pour une démocratie transparente, chaque citoyen devrait avoir l'opportunité de consulter ces documents facilement, de pouvoir les étudier aussi longtemps que bon lui semble et de pouvoir en diffuser les informations",
+          "display_gi": 415
+        }
+      ]
+    },
+    {
+      "theme_id": "n156",
+      "title": "mois · durée · délais",
+      "n_claims": 61,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 61,
+          "dispersion": 0.203,
+          "argument": "Il ne doit pas y avoir de court délai d'embargo afin que les informations scientifiques soient exploitables dès leur parution",
+          "display_gi": 1762
+        }
+      ]
+    },
+    {
+      "theme_id": "n158",
+      "title": "publications · recherche · chercheurs",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.159,
+          "argument": "L'accès ouvert aux données et aux publications issues de la recherche doit être assuré",
+          "display_gi": 3238
+        }
+      ]
+    },
+    {
+      "theme_id": "n159",
+      "title": "recherche · chercheurs · pays",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.199,
+          "argument": "La situation actuelle de la recherche scientifique est plus complexe que la configuration présentée dans cet article \"une activité de recherche financée au moins pour moitié par des fonds publics\". Que faire dans le cas des projets financés par la commission européenne ou des projets financés par deux pays, par exemple par l'ANR en France et par la DFG en Allemagne ?",
+          "display_gi": 317
+        }
+      ]
+    },
+    {
+      "theme_id": "n160",
+      "title": "résultats · financement · année",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.173,
+          "argument": "Mise à disposition systématique des résultats de la recherche financée par des fonds publics sans embargo",
+          "display_gi": 149
+        }
+      ]
+    },
+    {
+      "theme_id": "n161",
+      "title": "recherche · revue · résultats",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.175,
+          "argument": "Si l'État finance des recherches et que leurs auteurs en publient les résultats dans une revue scientifique, on voit mal à quel titre il pourrait décider de ne pas publier l'article en accès libre … Ça devrait effectivement être un devoir et non un simple droit",
+          "display_gi": 2397
+        }
+      ]
+    },
+    {
+      "theme_id": "n162",
+      "title": "archive · dépôt · fichier national",
+      "n_claims": 8,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.14,
+          "argument": "je pense que le \"fichier national\" dans l'article est de trop … Que la thèse soit disponible sur une archive ouverte suffirait à la rendre accessible et indexable par les moteurs de recherche, que cette archive soit nationale ou limitée à une université",
+          "display_gi": 4087
+        }
+      ]
+    },
+    {
+      "theme_id": "n164",
+      "title": "éditeurs · chercheurs · publications",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.163,
+          "argument": "la proposition ne répond pas à la question: qui paiera? Comment sera financé un système dont, à terme, pour les raisons exposées ci-dessus, se retireront les éditeurs? … Espérer une prise en charge de l'intégralité des coûts de la publication scientifique par la puissance publique semble relever du voeu pieux. … Les revues qui vivent au prix d'un fort investissement personnel des chercheurs -- et qui sont également soutenues par des institutions publiques comme l'EHESS et le CNRS -- assurent aux travaux sur financement public des conditions de sélection, d'accompagnement, de stratégie scientifique de diffusion et d'indépendance dont, au-delà des nécessaires évolutions, il serait désastreux de signer la disparition au profit d'un système dont aucune des modalités (technique; éditoriale; financière; scientifique) n'est clairement définie",
+          "display_gi": 347
+        }
+      ]
+    },
+    {
+      "theme_id": "n165",
+      "title": "revues · shs · production",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.203,
+          "argument": "L'équilibre des revues en SHS est fragile, il importe d'y être attentif si l'on veut que la recherche en France continue à être diffusée à travers les revues dont le travail éditorial reste essentiel.",
+          "display_gi": 124
+        }
+      ]
+    },
+    {
+      "theme_id": "n166",
+      "title": "éditeurs · stm · access",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.183,
+          "argument": "A-t-on vraiment besoin des éditeurs scientifiques pour faire de la bonne recherche ? Non",
+          "display_gi": 2560
+        }
+      ]
+    },
+    {
+      "theme_id": "n167",
+      "title": "édition · peer reviewing · revues",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.158,
+          "argument": "Quand je lis l'argument de \"Fédération Nationale de la Presse d'information Spécialisée\", je suis outré. Je cite : \"Faut-il rappeler l'indispensable travail d'édition et d'intermédiation effectué par les éditeurs (sélection, organisation de l'évaluation et de la validation via le peer-reviewing, structuration, édition, impression, distribution imprimée et / ou numérique, archivage, etc.) en vue d'assurer la diffusion pérenne une information vérifiée et de qualité ?\" Là, je suis d'accord. Mais laisser entendre, comme le fait le reste du commentaire, que tout ceci est à la charge de l'éditeur, c'est mensonger. Au minimum, sélection, organisation de l'évaluation et de la validation via le peer-reviewing sont des tâches assurées gratuitement/bénévolement par la même communauté de chercheur qui publie dans ces revues. La structuration et l'édition sont parfois aussi prise en charge par la communauté (ça dépend des journaux et des communautés). Reste \"impression, distribution imprimée et / ou numérique, archivage\". Beaucoup de chercheurs se contenterait volontier d'un accès numérique, il reste donc \"distribution, archivage\" et parfois \"structuration et édition\". Et bien, on (la communauté de chercheur) paye vraiment très cher ces services par rapport au travail fourni gratuitement (toutes les autres tâches listées). … Dans certaines communautés, on a vu de comités de lecture (ie le cœur du travail) démissionner collectivement et refonder un journal similaire mais en utilisant les plateformes ouvertes (HAL, .) pour la distribution électronique et l'archivage. Le journal initial de l'éditeur s'effondre alors littéralement. C'est étonnant si l'éditeur apporte tant de choses. C'est très compréhensible si l'éditeur apporte peu de chose.",
+          "display_gi": 2896
+        }
+      ]
+    },
+    {
+      "theme_id": "n168",
+      "title": "éditeur · sciences · forme",
+      "n_claims": 34,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 34,
+          "dispersion": 0.056,
+          "argument": "Au chapitre 3 du titre 3 du livre V du code de la recherche, il est inséré un article L. 533-4 ainsi rédigé : «Art. L. 533-4 - I. Lorsque un écrit scientifique, issu d'une activité de recherche financée au moins pour moitié par des fonds publics, est publié dans un périodique, un ouvrage paraissant au moins une fois par an, des actes de congrès ou de colloques ou des recueils de mélanges, son auteur, même en cas de cession exclusive à un éditeur, dispose du droit de mettre à disposition gratuitement sous une forme numérique, sous réserve des droits des éventuels coauteurs, la dernière version acceptée de son manuscrit par son éditeur et à l'exclusion du travail de mise en forme qui incombe à ce dernier, au terme d'un délai de douze mois pour les sciences, la technique et la médecine et de vingt-quatre mois pour les sciences humaines et sociales, à compter de date de la première publication. Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale. « II. - Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours. »",
+          "display_gi": 705
+        }
+      ]
+    },
+    {
+      "theme_id": "n170",
+      "title": "traitement · libertés · directives",
+      "n_claims": 36,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 36,
+          "dispersion": 0.163,
+          "argument": "Après le deuxième alinéa de l'article 40 de la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, sont insérés les alinéas suivants : « Le responsable du traitement est tenu d'effacer dans les meilleurs délais les données à caractère personnel qui ont été collectées dans le cadre de l'offre de services de la société de l'information lorsque la personne concernée était mineure au moment de la collecte. « En cas de refus ou d'absence de réponse de la part du responsable de traitement à l'égard de la personne concernée, cette dernière peut saisir la Commission nationale de l'informatique et des libertés, qui se prononce sur la demande dans un délai de 15 jours. « Les dispositions des deux alinéas précédents ne s'appliquent pas lorsque le traitement de données à caractère personnel est nécessaire : - pour exercer le droit à la liberté d'expression et d'information - pour respecter une obligation légale qui requiert le traitement des données ou pour exercer une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement - pour des motifs d'intérêt public dans le domaine de la santé publique - à des fins d'archivage dans l'intérêt public ou à des fins scientifiques statistiques et historiques - à la constatation, à l'exercice ou à la défense de droits en justice « Les modalités d'application des huit alinéas précédents sont fixées par décret en Conseil d'Etat.",
+          "display_gi": 9
+        }
+      ]
+    },
+    {
+      "theme_id": "n171",
+      "title": "publication présente · documents · administrations mentionnées",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.056,
+          "argument": "I. Les deuxième, troisième et quatrième alinéas de l'article 7 de la loi n° 78-753 du 17 juillet 1978 sont remplacés par les dispositions suivantes : « Les administrations mentionnées à l'article 1er, à l'exception des personnes morales dont le nombre d'agents ou de salariés est inférieur à un seuil fixé par décret, diffusent publiquement en ligne dans un standard ouvert aisément réutilisable les documents suivants, sous réserve des dispositions de l'article 6, lorsqu'ils sont disponibles sous forme électronique : 1° les documents qu'elles communiquent en application des procédures prévues par le présent titre, ainsi que leurs mises à jour ; 2° l'ensemble des documents qui figurent dans le répertoire mentionné à l'article 17 ; 3° les bases de données qu'elles produisent ou qu'elles reçoivent, ainsi que les données dont la publication présente un intérêt économique, social ou environnemental. « Lorsque ces documents comportent des données à caractère personnel, ils ne peuvent être diffusés qu'après anonymisation de ces données, sauf si une disposition législative ou réglementaire autorise leur diffusion sans anonymisation préalable ou si la personne intéressée y a consenti. « Les administrations mentionnées à l'article 1er ne sont pas tenues de publier les archives publiques issues des opérations de sélection prévues aux articles L. 212-2 et L. 212-3 du code du patrimoine. « Sans préjudice des dispositions de l'article L. 1112-23 du code général des collectivités territoriales et de l'article L. 125-12 du code des communes de Nouvelle-Calédonie, les dispositions du deuxième à sixième alinéa du présent article ne s'appliquent pas aux collectivités territoriales, ni aux EPCI à fiscalité propre auxquels elles appartiennent. « Un décret en Conseil d'Etat pris après avis de la commission mentionnée au chapitre III définit les modalités d'application du présent article. » II. A l'article 9 de la même loi, après les mots : « sont communiqués », sont insérés les mots : « ou diffusés ». III. Sans préjudice des dispositions de l'article L. 1112-23 du code général des collectivités territoriales et de l'article L. 125-12 du code des communes de Nouvelle-Calédonie, les dispositions du I du présent article entrent en vigueur à une date fixée par décret et au plus tard deux ans après la publication de la présente loi. Dans un délai de six mois à compter de la publication de la présente loi, les administrations mentionnées au I diffusent publiquement les documents qu'elles communiquent en application des procédures prévues par le présent titre. Dans un délai d'un an à compter de la publication de la présente loi, les administrations mentionnées au I diffusent publiquement l'ensemble des documents qui figurent dans le répertoire mentionné à l'article 17 de la loi du 7 juillet 1978. Afin de pouvoir sécuriser des données sensibles, exclusivement militaire et diplomatique, la période d'un an peut être prolongée. Dans ce cas, cette prolognation se fait par vote des deux Assemblées et au cas par cas. La prolongation d'un seul fait ne peut pas se répéter une deuxième fois.",
+          "display_gi": 2012
+        }
+      ]
+    },
+    {
+      "theme_id": "n172",
+      "title": "représentation · ayants · propriété intellectuelle",
+      "n_claims": 13,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.035,
+          "argument": "L'article L.122-5 du code de la propriété intellectuelle est ainsi modifié : Après le dix-neuvième alinéa, il est inséré un alinéa ainsi rédigé : 10°) Les reproductions et représentation des oeuvres architecturales et des sculptures, réalisées pour être placées en permanence dans des lieux publics, SOUS RESERVE DE L'ACCEPTATION EXPLICITE ET SIGNEE DE L'AUTEUR.",
+          "display_gi": 4096
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.111,
+          "argument": "A l'article L. 122-5 du Code de Propriété Intellectuelle, le a) du 3° est supprimé et remplacé par : a) Les analyses et citations concernant une oeuvre protégée au sens des articles L.112-1 et L. 112-2 du présent Code, justifiées par le caractère critique,polémique, pédagogique, scientifique ou d'information de l'oeuvre à laquelle elles sont incorporées et effectuées dans la mesure justifiée par le but poursuivi",
+          "display_gi": 1382
+        }
+      ]
+    },
+    {
+      "theme_id": "n173",
+      "title": "bases · statistique · titre gratuit",
+      "n_claims": 16,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.062,
+          "argument": "I. Dans la loi n° 93-122 du 29 janvier 1993 relative à la prévention de la corruption et à la transparence de la vie économique et des procédures publiques, il est inséré un article 40-2 ainsi rédigé : « Art. 40-2.- Sauf stipulation contraire, le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. » … II. Après l'article L. 1411-3 du code général des collectivités territoriales, il est inséré un article ainsi rédigé : « Art. 1411-3-1 - Sauf stipulation contraire, le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. » … III. Le I et le II du présent sont applicables aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi.",
+          "display_gi": 3909
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.001,
+          "argument": "La loi n° 51-711 du 7 juin 1951 sur l'obligation, la coordination et le secret en matière de statistiques est ainsi modifiée : I. Le second alinéa de l'article 3 est abrogé ; II. Il est inséré un article 3-1 ainsi rédigé : « Art. 3-1.- « I. I. Pour les besoins d'enquêtes statistiques obligatoires ayant reçu le visa ministériel prévu à l'article 2, le ministre chargé de l'économie peut décider que le service statistique public accède à des bases de données des personnes enquêtées. « Cette décision est précédée d'une étude de faisabilité et d'opportunité. L'accès à des bases de données ne peut être décidé que si, au regard de l'étude, il est établi : « 1° que ce mode de collecte est adapté aux besoins de l'enquête ; « 2° et qu'il présente, par rapport à d'autres modes de collecte, des avantages en termes de coût pour le service statistique public ou les personnes enquêtées ou de qualité des données produites. « La décision précise la nature des enquêtes statistiques pour lesquelles l'accès est décidé. « Les renseignements extraits des bases de données ne peuvent être utilisés à d'autres fins que la réalisation de l'enquête statistique pour laquelle l'accès a été décidé. « La décision précise la durée pendant laquelle le service statistique public peut accéder aux bases de données des personnes enquêtées ainsi que la nature des enquêtes statistiques pour lesquelles l'accès est décidé. « Une convention entre le service statistique concerné et la personne enquêtée définit les conditions techniques de l'accès aux données. Les agents habilités à accéder aux données sont individuellement désignés par le chef du service. « Dans la limite des finalités de l'enquête statistique, les agents du service statistique public peuvent procéder à un enregistrement temporaire des données nécessaires à la réalisation de l'enquête. Un relevé mentionne la date de création de chaque enregistrement ainsi que la nature des renseignements collectés. Copie de ce relevé est donné à la personne enquêtée. « Les renseignements extraits des bases de données ne peuvent être utilisés à d'autres fins que la réalisation de l'enquête statistique pour laquelle l'accès a été décidé. « II. Par dérogation aux dispositions de l'article 7, en cas de refus d'accès à une base de données mentionnée au premier alinéa, le ministre chargé de l'économie peut, après mise en demeure et dans le délai imparti par cette mise en demeure, et après avis du conseil national de l'information statistique réuni en comité du contentieux des enquêtes statistiques obligatoires, prononcer une amende administrative. « L'avis du comité est communiqué au ministre accompagné, le cas échéant, des observations de l'intéressé qui peuvent être présentées dans un délai d'un mois après la notification des griefs. « La décision du ministre est motivée ; le recours dirigé contre cette décision est un recours de pleine juridiction. « Le montant de la première amende encourue à ce titre ne peut dépasser 100 000 euros. En cas de récidive dans un délai de trois ans, le montant de l'amende peut être porté à 250 000 euros au plus. « Le ministre peut rendre publiques les sanctions qu'il prononce. Il peut également ordonner leur insertion dans des publications, journaux et supports qu'il désigne aux frais des personnes sanctionnées. »",
+          "display_gi": 1600
+        }
+      ]
+    },
+    {
+      "theme_id": "n174",
+      "title": "documents · administrations mentionnées · publication présente",
+      "n_claims": 19,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.101,
+          "argument": "Les administrations mentionnées à l'article 1er, à l'exception des personnes morales dont le nombre d'agents ou de salariés est inférieur à un seuil fixé par décret, diffusent publiquement en ligne dans un standard ouvert aisément réutilisable les documents suivants, sous réserve des dispositions de l'article 6, lorsqu'ils sont disponibles sous forme électronique : 1° les documents qu'elles communiquent en application des procédures prévues par le présent titre, ainsi que leurs mises à jour ; 2° l'ensemble des documents qui figurent dans le répertoire mentionné à l'article 17 ; 3° les bases de données qu'elles produisent ou qu'elles reçoivent, ainsi que les données dont la publication présente un intérêt économique, social ou environnemental. 4°les données sur l'environnement issues de capteurs sont publiés en temps réel … Lorsque ces documents comportent des données à caractère personnel, ils ne peuvent être diffusés qu'après anonymisation de ces données, sauf si une disposition législative ou réglementaire autorise leur diffusion sans anonymisation préalable ou si la personne intéressée y a consenti … Les administrations mentionnées à l'article 1er ne sont pas tenues de publier les archives publiques issues des opérations de sélection prévues aux articles L. 212-2 et L. 212-3 du code du patrimoine … Sans préjudice des dispositions de l'article L. 1112-23 du code général des collectivités territoriales et de l'article L. 125-12 du code des communes de Nouvelle-Calédonie, les dispositions du deuxième à sixième alinéa du présent article ne s'appliquent pas aux collectivités territoriales, ni aux EPCI à fiscalité propre auxquels elles appartiennent",
+          "display_gi": 1230
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.032,
+          "argument": "les dispositions du I du présent article entrent en vigueur à une date fixée par décret et au plus tard deux ans après la publication de la présente loi … Dans un délai de six mois à compter de la publication de la présente loi, les administrations mentionnées au I diffusent publiquement les documents qu'elles communiquent en application des procédures prévues par le présent titre … Dans un délai d'un an à compter de la publication de la présente loi, les administrations mentionnées au I diffusent publiquement l'ensemble des documents qui figurent dans le répertoire mentionné à l'article 17 de la loi du 7 juillet 1978",
+          "display_gi": 161
+        }
+      ]
+    },
+    {
+      "theme_id": "n175",
+      "title": "informations · présent chapitre · réutilisation",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.156,
+          "argument": "L'article 10 de la même loi est remplacé par les dispositions suivantes : « Art. 10 - Les informations publiques figurant dans des documents administratifs communiqués ou diffusés peuvent être utilisées librement par toute personne qui le souhaite à d'autres fins que celles de la mission de service public pour les besoins de laquelle les documents ont été produits ou reçus. Les limites et conditions de cette réutilisation sont régies par le présent chapitre. Toute utilisation de données rendues publiques doit faire explicitement référence à l'origine des données utilisées. Ne sont pas considérées comme des informations publiques, pour l'application du présent chapitre, les informations contenues dans des documents : a) Dont la communication ne constitue pas un droit en application du chapitre Ier ou d'autres dispositions législatives, sauf si ces informations font l'objet d'une diffusion publique ; b) Ou sur lesquels des tiers détiennent des droits de propriété intellectuelle. »",
+          "display_gi": 3155
+        }
+      ]
+    },
+    {
+      "theme_id": "n176",
+      "title": "référence · diffusion · administrations",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.044,
+          "argument": "La mise à disposition et la diffusion publique des données de référence en vue de faciliter leur réutilisation constituent une mission de service public relevant de l'Etat. … Toutes les autorités administratives concourent à cette mission. … Sont des données de référence les données produites ou reçues par les administrations mentionnées à l'article 1er de la loi du 17 juillet 1978 qui font l'objet ou sont susceptibles de faire l'objet d'une utilisation fréquente par un grand nombre d'acteurs tant publics que privés et dont la qualité, en termes notamment de précision, de fréquence de mise à jour ou d'accessibilité, est essentielle pour ces utilisations. … Un décret fixe la liste des données de référence et désigne les administrations responsables de leur production et de leur diffusion. … Les modalités d'application du présent article sont définies par un décret en Conseil d'Etat. … Dans l'hypothèse où plusieurs administrations sont responsables, le décret détermine les modalités de la coordination entre ces administrations. … Il fixe la qualité minimale que la diffusion publique des données de référence doit respecter, notamment en termes de précision, de degré de détail, de fréquence de mise à jour, d'accessibilité et de format. … Il précise les modalités de participation des collectivités territoriales à la mise à disposition et à la diffusion publique des données de référence. … Il précise la manière dont les administrations responsables rendent compte de leur activité auprès de la CNIL et du parlement.",
+          "display_gi": 1044
+        }
+      ]
+    },
+    {
+      "theme_id": "n177",
+      "title": "commun · informationnel · domaine",
+      "n_claims": 22,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.097,
+          "argument": "I. Relèvent du domaine commun informationnel : 1° Les informations, faits, idées, principes, méthodes, découvertes, dès lors qu'ils ont fait l'objet d'une divulgation publique licite, notamment dans le respect du secret industriel et commercial et du droit à la protection de la vie privée, et qu'ils ne sont pas protégés par un droit spécifique, tel qu'un droit de propriété ou une obligation contractuelle ou extracontractuelle ; 2° Les œuvres, dessins, modèles, inventions, bases de données, protégés par le code de la propriété intellectuelle, dont la durée de protection légale, à l'exception du droit moral des auteurs, a expiré ; 3° Les informations issues des documents administratifs diffusés publiquement par les personnes mentionnées à l'article 1 de la loi n°78-753 du 17 juillet 1978 et dans les conditions précisées à l'article 7 de la même loi, sans préjudice des dispositions des articles 9, 10, 14 et 15 de ladite loi. Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que tels, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral … Les associations agréées ayant pour objet la diffusion des savoirs ou la défense des choses communes ont qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel. Cet agrément est attribué dans des conditions définies par un décret en Conseil d'Etat. Il est valable pour une durée limitée, et peut être abrogé lorsque l'association ne satisfait plus aux conditions qui ont conduit à le délivrer",
+          "display_gi": 1479
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.121,
+          "argument": "Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel »",
+          "display_gi": 2443
+        }
+      ]
+    },
+    {
+      "theme_id": "n179",
+      "title": "dns · sécurité · cloud",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.203,
+          "argument": "quelle information utiliser autre que l'IP ?",
+          "display_gi": 1649
+        }
+      ]
+    },
+    {
+      "theme_id": "n180",
+      "title": "mail · adresse · courrier",
+      "n_claims": 28,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 28,
+          "dispersion": 0.201,
+          "argument": "Interdiction de l'opérateur d'attribuer une adresse mail automatiquement si elle n'est pas souhaitée par le client qui peut déjà disposer d'une adresse mail",
+          "display_gi": 3840
+        }
+      ]
+    },
+    {
+      "theme_id": "n182",
+      "title": "mail · débiteur · adresse",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.172,
+          "argument": "les institutions devraient communiquer au travers d'un compte sécurisé, le mail ne servant qu'à dire qu'un document est à disposition à tel endroit … cela devrait aussi être le cas pour les privés qui envoient des factures ! En fait, pour tout ce qui est \"sensible\"",
+          "display_gi": 125
+        }
+      ]
+    },
+    {
+      "theme_id": "n183",
+      "title": "https · ovi · ministères",
+      "n_claims": 16,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.111,
+          "argument": "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par une cryptographie assurant une sécurité pérenne et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles et APIs utilisés et les publics visés",
+          "display_gi": 784
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.125,
+          "argument": "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques. Le chiffrement doit obligatoirement être effectué de bout en bout … L'ANSSI pourra aider au déploiement et à la mise en œuvre. Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants. Les OVI et les services \"sensibles\" devront réaliser un audit tous les 3 ans. Des ammendes administratives devront être prévue pour les fautes et les manquements graves",
+          "display_gi": 249
+        }
+      ]
+    },
+    {
+      "theme_id": "n184",
+      "title": "carte · identité · clef",
+      "n_claims": 15,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.173,
+          "argument": "Oui, un seul compte pour les allocations, les services citoyens (passeport, carte id, impôts.), où tous les services de l'état sont regroupés de façon compréhensible serait une grande simplification",
+          "display_gi": 596
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.124,
+          "argument": "A terme les échanges numériques entre citoyens (et ayants droits européens) et services de l'état et des collectivités territoriales, comme pour l'usage du citoyen d'accès à des services numériques publics (voire privés), pourront sur la base du volontariat être réalisés avec une ecarte d'identité (niveau renforcé) permettant une signature qualifiée et la garantie d'authentification mutuelle, d'horodatage, de confidentialité et d'intégrité pour la sécurisation des échanges tout un garantissant un haut niveau de protection individuelle des données personnelles",
+          "display_gi": 248
+        }
+      ]
+    },
+    {
+      "theme_id": "n185",
+      "title": "ipv · compatibles · compter janvier",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.155,
+          "argument": "Si une loi inscrit IPv6, le jour où nous aurons besoin d'une évolution du standard IP, nous serions bloqué par la loi",
+          "display_gi": 3442
+        }
+      ]
+    },
+    {
+      "theme_id": "n186",
+      "title": "chiffrement · clé · clés",
+      "n_claims": 38,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 22,
+          "dispersion": 0.172,
+          "argument": "De récentes lois adoptés à l'étranger remettent en cause le droit au chiffrement. C'est à dire le doit d'utiliser de la cryptologie pour sécuriser ses communications ou ses fichiers … Chiffrer doit être un droit pour protéger ses données … 1° Le chiffrement des commnunications et fichiers est autorisé pour tous les citoyens … 2° Aucun algorithme ne doit être interdit … 3° Aucune limite à la longueur de clé ne doit être défnie … 4° Tout citoyen a le droit de refuser de donner ses clés de chiffrement aux autorités si celles-ci le demande. Et ce refus ne peut être considéré comme de la culpabilité",
+          "display_gi": 1183
+        },
+        {
+          "n_support": 11,
+          "dispersion": 0.168,
+          "argument": "Inutile : pour être efficace, le chiffrement doit être de bout en bout et donc mis en place par les utilisateurs",
+          "display_gi": 4048
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.12,
+          "argument": "Effectivement, un message non chiffré passe sur internet comme une carte postale: tous ceux qui l'ont entre les mains peuvent la lire. … Le chiffrage est l'équivalent numérique de l'enveloppe. Le seul vrai garant du secret des correspondances.",
+          "display_gi": 883
+        }
+      ]
+    },
+    {
+      "theme_id": "n187",
+      "title": "vote · carte · monnaie",
+      "n_claims": 87,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 77,
+          "dispersion": 0.184,
+          "argument": "Comment vérifier que les votants par internet sont bien les votants inscrits sur les listes électorales, qu'ils votent sans aucune contrainte ? … A partir du moment où ces contraintes ne sont pas satisfaites, il me semble inenvisageable de voter par internet.",
+          "display_gi": 465
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.133,
+          "argument": "N'oublions pas que la monnaie virtuelle ne se résume en aucun cas au Bitcoin : il en existe des dizaines d'autres",
+          "display_gi": 892
+        }
+      ]
+    },
+    {
+      "theme_id": "n189",
+      "title": "sms · dons · paiement",
+      "n_claims": 18,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.17,
+          "argument": "Il est grand temps que le don par SMS soit possible dans notre pays pour facilité l'engagement de nos concitoyens",
+          "display_gi": 4142
+        }
+      ]
+    },
+    {
+      "theme_id": "n190",
+      "title": "sms · téléphone · temps réel",
+      "n_claims": 17,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.189,
+          "argument": "Il faut ajouter à cet article les services d'appels et de SMS !",
+          "display_gi": 2682
+        }
+      ]
+    },
+    {
+      "theme_id": "n191",
+      "title": "paiement · sms · arnaque",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.202,
+          "argument": "Ce système de paiement par SMS est très populaire dans les pays en \"voie de développement\" et a prouvé son efficacité. Pourquoi ne pas le permettre tout en proposant des solutions plus évoluées. Le montant pourrait être limité. Les SMS+ et le paiement via les opérateurs internet n'ont jamais posés de problèmes à personne.",
+          "display_gi": 123
+        }
+      ]
+    },
+    {
+      "theme_id": "n192",
+      "title": "cabines · téléphoniques · cabine",
+      "n_claims": 24,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 24,
+          "dispersion": 0.209,
+          "argument": "je trouve les cabines, ou des points de téléphone filaire à conserver et même à remettre dans certains endroits",
+          "display_gi": 578
+        }
+      ]
+    },
+    {
+      "theme_id": "n193",
+      "title": "communications électroniques · abonné · paiement",
+      "n_claims": 50,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 30,
+          "dispersion": 0.167,
+          "argument": "I. L'article L. 33-1 du code des postes et des communications électroniques est modifié comme suit : 1° Après le o), il est ajouté l'alinéa suivant : « p) la neutralité de l'Internet, garantie par le traitement égal et non discriminatoire du trafic par les opérateurs dans la fourniture des services d'accès à Internet ainsi que par le droit des utilisateurs finals, y compris les personnes fournissant des services de communication au public en ligne d'accéder et de contribuer à Internet, conformément au règlement du Parlement européen et du Conseil n° …. du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté. » ; 2° Au dernier alinéa, les mots : « a à o » sont remplacés par les mots : « a à p ». II. - Au 2° du I de l'article L. 32-4 du code des postes et des communications électroniques, après les mots : « les conditions techniques et tarifaires d'acheminement » sont ajoutés les mots : « et de gestion ». III. - Le 5° du II de l'article L. 36-8 du code des postes et des communications électroniques est ainsi modifié : 1° Après les mots : « d'acheminement » sont insérés les mots : « , notamment de gestion, » 2° Le mot « réciproques » est supprimé. IV. - Au 3° de l'article L. 36-7 du code des postes et des communications électroniques, après les mots : « à l'intérieur de l'Union » sont insérés les mots : « et du règlement n° …. du Parlement européen et du Conseil, du …, établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté ». V. - L'article L. 36-11 du code des postes et des communications électroniques est ainsi modifié : 1° Au premier alinéa, après les mots : « des personnes fournissant de services de communications électroniques », sont insérés les mots : « ou des personnes fournissant des services de communication au public en ligne » ; 2° Au premier alinéa du I, le mot : « ou » est remplacé par le mot : «, par » et après les mots : « personnes fournissant des services de communications électroniques » sont insérés les mots «, ou par une personne fournissant de services de communication au public en ligne » ; 3° Après le troisième alinéa du I est inséré un alinéa ainsi rédigé : « aux dispositions du règlement n° …. du Parlement européen et du Conseil, du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté ; » 4° Après le sixième alinéa du I, il est ajouté un alinéa ainsi rédigé : « Lorsque l'Autorité estime qu'il existe un risque caractérisé qu'un exploitant de réseau ou une personne fournissant des services de communications électroniques ne respecte pas ses obligations, résultant des dispositions et prescriptions mentionnées au I, à l'échéance prévue initialement, elle peut mettre en demeure l'exploitant ou le fournisseur de s'y conformer à cette échéance. »",
+          "display_gi": 42
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.073,
+          "argument": "L'article L. 32-3 du code des postes et des communications électroniques est ainsi modifié : 1° Au début du premier alinéa, est ajoutée la mention : « I. - » ; 2° Sont ajoutés cinq alinéas ainsi rédigés : « II. - Les éditeurs de services de communication au public en ligne permettant aux utilisateurs de ces services d'échanger des correspondances sont tenus de respecter le secret de celles-ci. Le secret couvre le contenu de la correspondance en ligne, l'en-tête du message ainsi que les documents joints à la correspondance, le cas échéant. « Tout traitement automatisé d'analyse du contenu de la correspondance en ligne ou des documents joints à celle-ci constitue une atteinte au secret des correspondances, sauf lorsque ce traitement a pour fonction l'affichage, le tri, la qualification du contenu dans des objectifs d'acheminement, de réponse automatisée, d'ajout de métadonnées facilitant le traitement ultérieur de la communnication par un automate ou un humain ou de statistiques anonymisée de ces correspondances, ou la détection de contenus non sollicités ou malveillants. « L'éditeur prend les mesures nécessaires pour garantir le secret et l'intégrité des correspondances échangées par l'intermédiaire de ses services. « III. - Les infractions aux dispositions du présent article sont sanctionnées des peines prévues aux articles 226-1, 226-2, 226-3 et 226-15 du code pénal. « Les opérateurs et les éditeurs mentionnés au II sont tenus de porter à la connaissance de leur personnel les peines encourues au titre du présent article. »",
+          "display_gi": 3602
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.028,
+          "argument": "Le 1° de l'article L.311-4 du code monétaire et financier est remplacé par deux alinéas ainsi rédigés : « 1° Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, effectuées pour l'achat de services ou contenus numériques et de services vocaux, quel que soit le dispositif utilisé pour l'achat ou la consommation du contenu numérique et imputées sur la facture correspondante à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois ; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 euros par mois. « 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois »",
+          "display_gi": 452
+        }
+      ]
+    },
+    {
+      "theme_id": "n194",
+      "title": "cnil · cil · contrôle",
+      "n_claims": 60,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 60,
+          "dispersion": 0.202,
+          "argument": "il faudra que la CNIL puisse faire face à la demande",
+          "display_gi": 3072
+        }
+      ]
+    },
+    {
+      "theme_id": "n195",
+      "title": "mots · insérés · conseille",
+      "n_claims": 21,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 21,
+          "dispersion": 0.137,
+          "argument": "A l'article 9 de la même loi, après les mots : « sont communiqués », sont insérés les mots : « ou diffusés »",
+          "display_gi": 160
+        }
+      ]
+    },
+    {
+      "theme_id": "n196",
+      "title": "wikipédia · wikipedia · wiki",
+      "n_claims": 26,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 26,
+          "dispersion": 0.154,
+          "argument": "N'utiliser que Wikipédia n'est pas recommandé, il faut toujours s'appuyer sur différentes ressources pour pouvoir acquérir de nouvelles connaissances",
+          "display_gi": 701
+        }
+      ]
+    }
+  ]
+}
