@@ -26,3 +26,12 @@ lecture des caches marchent sans ; elle ne sert qu'à *construire* de nouvelles 
 - Architecture · dev/prod · conventions → **`.agent/README.md`**
 - Contrat d'API front↔back → `frontend/src/redesign/contract.ts`
 - Coût LLM d'une analyse → `GET /cost` (transparence des coûts)
+
+
+## Licence & CLA
+
+Agora est sous **AGPL-3.0** (voir `LICENSE`). En contribuant, vous acceptez le
+[CLA](CLA.md) : signez vos commits avec `git commit -s` (`Signed-off-by:`) — cela vaut
+acceptation. Le CLA permet de financer l'édition civique **gratuite** d'Agora par une
+édition commerciale ; vous restez propriétaire de votre contribution, votre nom reste
+au générique.

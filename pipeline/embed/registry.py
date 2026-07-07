@@ -66,6 +66,20 @@ REGISTRY: dict[str, ModelSpec] = {
         normalize=True,
         note="MoE multilingue ; requiert einops ; matryoshka (dim native gardée).",
     ),
+    # Contender R&D (bench JINA, 2026-07-07). jina-embeddings-v2-base-de :
+    # Apache-2.0 (déployable) MAIS BILINGUE DE-EN seulement — pas de FR/IT natif.
+    # Le flagship multilingue de Jina (jina-embeddings-v3, FR/DE/IT) est CC-BY-NC-4.0
+    # (NON-COMMERCIAL) → rédhibitoire pour Agora, donc NON benché. Code custom
+    # (JinaBERT/ALiBi) => trust_remote_code + révision épinglée. Aucun préfixe.
+    "jinaai/jina-embeddings-v2-base-de": ModelSpec(
+        model_id="jinaai/jina-embeddings-v2-base-de",
+        doc_prefix="",
+        query_prefix="",
+        trust_remote_code=True,
+        revision="3f9eede875721714945b6a99a3198299243cf2be",
+        normalize=True,
+        note="Apache-2.0 mais bilingue DE-EN (pas FR/IT) ; JinaBERT/ALiBi, trust_remote_code.",
+    ),
     # Multilingue fort. AUCUN préfixe — en ajouter dégraderait la qualité.
     "BAAI/bge-m3": ModelSpec(
         model_id="BAAI/bge-m3",
@@ -85,6 +99,8 @@ ALIASES: dict[str, str] = {
     "nomic-v2": "nomic-ai/nomic-embed-text-v2-moe",
     "bge-m3": "BAAI/bge-m3",
     "bge": "BAAI/bge-m3",
+    "jina": "jinaai/jina-embeddings-v2-base-de",
+    "jina-v2-de": "jinaai/jina-embeddings-v2-base-de",
 }
 
 
