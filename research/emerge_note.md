@@ -61,7 +61,53 @@ l'émergence d'arguments pour/contre demande un corpus **opinion-clivage** : **t
 débat addiction, ~1 h de build) ou **granddebat** (22174 — mais ~15 h d'extraction à ce rythme,
 hors session). Recommandation : rejouer l'émergence sur **tiktok** avant de conclure.
 
+## 6. Test sur corpus opinion-clivage (tiktok) + raffinements — LE verdict
+
+Buildé **tiktok** (1604 avis → 2361 claims, 134 feuilles) en DEV. Ajouté (`emerge_refined.py`) :
+**fusion des sur-découpes** (centroïdes ≥0.85) + **filtre de substance LLM** (is_argument +
+membre le plus net, sans rédiger) + **affichage membre-net** (pas le médoïde).
+
+Résultats qui tranchent :
+
+- **Fusion 0.85 → tiktok s'effondre à 0 clivage (1 argument/feuille).** Le pour et le contre
+  d'un thème partagent le vocabulaire → centroïdes proches → fusionnés. La fusion, censée réparer
+  la sur-découpe, DÉTRUIT le clivage réel.
+- **Sans fusion → 237 « arguments », mais ce sont des NUANCES d'un même point**, pas des
+  arguments distincts (n1 : 4 communautés = « mal-être / tristesse / addiction / vide » = UN
+  argument éclaté). Et **le pour/contre ne se sépare pas** (n16 : « tiktok a de bons côtés » sort
+  comme 1 amas parmi des négatifs, pas un pôle net).
+- **Filtre de substance : keep tiktok 25 % vs repnum 5 %** — il discrimine DIRECTIONNELLEMENT
+  (opinion > législatif), mais les décisions sont **incohérentes à la marge** : il garde
+  « mal-être dû au contenu triste » et jette « mal-être dû au temps passé » et « harcèlement dans
+  les commentaires » — arguments équivalents. Le 25 % n'est pas « 25 % d'arguments », c'est du
+  bruit de filtre.
+
+### Verdict FINAL sur l'émergence
+
+**L'émergence bottom-up des arguments (et *a fortiori* de la cible) ne fonctionne pas, pour une
+raison FONDAMENTALE, pas un défaut de réglage :**
+
+1. **Les embeddings encodent le SUJET, pas la STANCE ni la structure argumentative.** Prouvé :
+   les clusters sont des sous-facettes de sujet ; pour/contre ne se sépare jamais ; fusionner
+   ou non ne donne ni arguments distincts ni pôles.
+2. **« Argument » est mal défini SANS cible.** Sur tiktok (témoignages de vécu) comme sur repnum
+   (édition de loi), il n'y a pas de proposition débattable préalable → « quel témoignage est un
+   argument pour/contre » est arbitraire, et le filtre LLM comme le clustering flanchent pour
+   CETTE raison.
+
+→ **L'ordre du pipeline ACTUEL est le bon** : dériver la cible D'ABORD (une proposition
+débattable), PUIS classer la stance pour/contre, PUIS miner les arguments. L'émergence ne peut pas
+bootstrapper la cible car le signal (débat/stance) n'est pas dans les embeddings. L'idée de Bob
+était une hypothèse légitime ; **la mesure la réfute proprement** — et confirme que le vrai levier
+est le **raffinement VERBATIM À L'INTÉRIEUR de cet ordre** (V-SELECT / V-EXTRACT,
+`argmine_verbatim_note.md` / `argmine_extract_note.md`), pas le remplacement de l'ordre.
+
+Corollaire réutilisable : tester la valeur d'un corpus AVANT d'y miner des arguments — pas de
+cible dérivable / trop peu d'arguments substantiels → « positions pas assez développées » (le
+garde-fou front de Bob, qui reste juste).
+
 ## Artefacts
 
-`emerge_build.py` (build fondation, dumpe `emerge_cache/<ds>/`) · `emerge_proto.py` (émergence) ·
-`emerge_proto_republique-numerique.json`.
+`emerge_build.py` (build fondation) · `emerge_proto.py` (émergence brute) ·
+`emerge_refined.py` (fusion + filtre substance) · `emerge_proto_republique-numerique.json` ·
+`emerge_refined_{republique-numerique,tiktok}*.json`.

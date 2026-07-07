@@ -1,0 +1,1344 @@
+{
+  "summary": {
+    "dataset": "tiktok",
+    "judged": true,
+    "merge_thr": 1.01,
+    "n_leaves": 134,
+    "n_arguments": 60,
+    "communities_filtered_as_meta": 177,
+    "leaves_clivage": 16,
+    "leaves_consensus": 15,
+    "leaves_underdeveloped": 103
+  },
+  "leaves": [
+    {
+      "theme_id": "n1",
+      "title": "algorithme · triste · tristes",
+      "n_claims": 111,
+      "n_arguments": 6,
+      "arguments": [
+        {
+          "n_support": 30,
+          "dispersion": 0.129,
+          "argument": "le fait d'avoir des tiktok triste dans mes pour toi m'enfonce dans mon mal être",
+          "display_gi": 1152
+        },
+        {
+          "n_support": 23,
+          "dispersion": 0.131,
+          "argument": "Je trouve personnellement que TikTok enterre les personnes dans leur mal-être, en leur proposant du contenu auxquels elles portent un intérêt. Par exemple, une personne en dépression va faire que de voir des vidéos sur la dépression ou de personnes dépressives, ce qui ne les aident absolument pas à sortir la tête",
+          "display_gi": 68
+        },
+        {
+          "n_support": 16,
+          "dispersion": 0.132,
+          "argument": "Tiktok utilise un algorithme très poussé sur ce qui intéresse chaque personne … Lorsque les individus ont un mal-être déjà présent ou non, ils vont avoir tendance à regarder du contenu néfaste pour le bien-être moral car ce contenu est « classique » sur TikTok … Par la suite, seul ce type de contenu est proposé ce qui accroît le mal-être ou le créer notamment par des comparaisons physiques, en insistant sur des troubles alimentaires ou des pratiques nocives pour la santé (des tendances sur la plateforme prônent la maigreur extrême, un contenu qui glamourise la dépression etc)",
+          "display_gi": 1671
+        },
+        {
+          "n_support": 15,
+          "dispersion": 0.131,
+          "argument": "tiktok c'est censé être comme un échappatoire de la vie réelle mais il y'a beaucoup de contenu triste donc ça nous enfonce simplement dans notre tristesse",
+          "display_gi": 1322
+        },
+        {
+          "n_support": 14,
+          "dispersion": 0.128,
+          "argument": "Il est courant que l'algorithme de tiktok nous propose des vidéos tristes a répétition ce qui peut avoir un impact aggravant sur notre propre tristesse",
+          "display_gi": 975
+        },
+        {
+          "n_support": 13,
+          "dispersion": 0.119,
+          "argument": "TikTok m'a proposé pendant plusieurs mois du contenu dépressif voir incitant au suicide sans conseil d'en parler a des personnes … J'étais gravement en dépression pendant c'est temps là et l'algorithme de TikTok m'a enfoncé encore plus … J'ai failli faire plusieurs tentatives de suicide … L'algorithme m'a montré plus de 6 000 TikTok déprimant ou incitant au suicide",
+          "display_gi": 2249
+        }
+      ]
+    },
+    {
+      "theme_id": "n2",
+      "title": "instagram · reels · réels",
+      "n_claims": 20,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.123,
+          "argument": "Je me suis contenter d'Instagram et de la fonctionnalité des Reels, qui s'est avérer me provoquer le même sentiment de mal-être avec les influenceurs qui montrent leur vie parfaite et leur corps parfait, sans pour autant avoir du contenu véritablement utile (simplement des vidéos d'eux en train de danser ou en train de voyager) … J'ai donc également fini par désinstaller cette application depuis décembre 2024",
+          "display_gi": 152
+        },
+        {
+          "n_support": 9,
+          "dispersion": 0.124,
+          "argument": "Attention à ne pas trop se focaliser sur tiktok, les reels d'instagram sont la même chose. Tout aussi addictif et tout aussi problématique",
+          "display_gi": 13
+        }
+      ]
+    },
+    {
+      "theme_id": "n3",
+      "title": "mois · désinstaller · dépendance",
+      "n_claims": 51,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.115,
+          "argument": "J'ai senti une dépendance à TikTok. Du brain rot pur. … Ces formats sont chronophage et il est difficile de s'en détacher. … je ne suis pas sûre d'arriver à m'en détacher seule",
+          "display_gi": 893
+        },
+        {
+          "n_support": 18,
+          "dispersion": 0.118,
+          "argument": "Tiktok est addictif et m'a fait perdre beaucoup de temps à rester dessus et enchaîner les vidéos sans pouvoir m'arrêter de façon raisonnable … Je l'ai desinstallé par précaution",
+          "display_gi": 724
+        },
+        {
+          "n_support": 15,
+          "dispersion": 0.123,
+          "argument": "Je n'utilise plus tiktok car c une boucle infernale qui gaspille mon temps et qui n'a aucun genre d'intérêt personnel",
+          "display_gi": 1275
+        }
+      ]
+    },
+    {
+      "theme_id": "n5",
+      "title": "enfants · fils · parental",
+      "n_claims": 30,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.122,
+          "argument": "Mes enfants ont déjà eu tendance à s'identifier aux tiktokeurs … Mon fils par exemple, suite à des vidéos tiktok, pense que l'école est inutile, à des idées pour \"sécher\" les cours. Il est à présent mal à l'école",
+          "display_gi": 824
+        },
+        {
+          "n_support": 12,
+          "dispersion": 0.13,
+          "argument": "Tik Tok est indestructeur familial ça permet de rompre toute communication à la maison les réseaux sociaux et le téléphone portable ont gâcher la communication la vie de couple le monde actuel ne vit que par le virtuel et si seulement tout ça pouvait disparaître ça ferait beaucoup de bien et ça permettrait aux personnes de communiquer entre elles verbalement dans le respect",
+          "display_gi": 962
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.128,
+          "argument": "Mon fils change de comportement ( découverte de la sexualité beaucoup plus prononcé) depuis qu'il regarde des vidéos ou autres sur tik tok ou you tube",
+          "display_gi": 867
+        }
+      ]
+    },
+    {
+      "theme_id": "n6",
+      "title": "dangereuse · application · trouve",
+      "n_claims": 40,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.132,
+          "argument": "Contenu sélectionné par tiktok toujours avec des appels à la haine et la désinformation,réalité déformé, agressivité, poussé à l achat",
+          "display_gi": 492
+        },
+        {
+          "n_support": 16,
+          "dispersion": 0.136,
+          "argument": "tiktok est vraiment une application dangereuse car n'importe qui peut y avoir accès, tout le monde peut poster ce qu'il souhait et c'est vraiment nocif au sein des jeunes",
+          "display_gi": 1446
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.111,
+          "argument": "Certains contenus sont choquants, mon frère a reproduit ce qu'il a vu sur TikTok avec son ami, le résultat a été désastreux et des vies ont été mises en danger",
+          "display_gi": 1360
+        }
+      ]
+    },
+    {
+      "theme_id": "n7",
+      "title": "informations · hyper · adolescente",
+      "n_claims": 20,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.134,
+          "argument": "J ai interdit à mes enfants l accès à Tiktok car je constatais lors de leur pratique une hyper agressivité, un état de stress et un état de manque une addiction croissane qui allait a l hyper consommation dans le sens où le monde ne tournait que par apport à cela même écran éteint il reproduisait les gag en bouche des heures et des heures … cela modifiait leur langage et il n acceptait plus l autorité …puis le sevrage durait environ 15 jours … c était très dure … il a conscience que Tiktok est plus que tout le reste un poison",
+          "display_gi": 1406
+        },
+        {
+          "n_support": 9,
+          "dispersion": 0.128,
+          "argument": "tik tok véhicule un tas considérable d'informations fausses et débiles uniquement destinées à rémunérer leur créateur",
+          "display_gi": 512
+        }
+      ]
+    },
+    {
+      "theme_id": "n8",
+      "title": "incitation · images · pornographique",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.141,
+          "argument": "Je trouve que TikTok n'est pas assez contrôlé. On y voit énormément de contenus inappropriés, notamment des jeunes filles de 13-14 ans qui s'exposent parfois de manière très dénudée. C'est inquiétant de voir autant de mineurs mis en avant dans des situations qui ne sont pas adaptées à leur âge",
+          "display_gi": 2083
+        }
+      ]
+    },
+    {
+      "theme_id": "n9",
+      "title": "interdit · mesure · mineurs",
+      "n_claims": 16,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.114,
+          "argument": "je pense qu'il faut grandement encadrer le contenue tiktok, comme sur YouTube, ou sinon tiktok devait être interdit aux mineurs, voir interdit tout cours",
+          "display_gi": 1520
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.104,
+          "argument": "Nous vous demandons solennellement d'envisager une interdiction de TikTok et des réseaux sociaux pour les mineurs de moins de 16 ans, comme cela est en discussion dans d'autres pays. Une telle mesure, loin d'être autoritaire, serait un acte de protection, de santé publique, et de préservation de notre avenir collectif",
+          "display_gi": 293
+        }
+      ]
+    },
+    {
+      "theme_id": "n11",
+      "title": "anorexie · suicide · adolescente",
+      "n_claims": 15,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.125,
+          "argument": "Tik tok permet d'accentuer un mal être déjà existant chez nos adolescents tik tok livre clé en main des méthodes pour se faire mal à soi même (suicide et automutilations)",
+          "display_gi": 722
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.117,
+          "argument": "Ma fille lutte avec une anorexie. TikTok est en grande partie responsable de son TCA",
+          "display_gi": 2058
+        }
+      ]
+    },
+    {
+      "theme_id": "n12",
+      "title": "scarifier · fille · crise",
+      "n_claims": 12,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.113,
+          "argument": "a cause de Tiktok beaucoup d'adolescents ont commencé a se scarifier ( j'ai aussi commencé a cause de Tiktok) ou qui sont tomber en deprression",
+          "display_gi": 782
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.122,
+          "argument": "Ma fille Noéline 12 ans c'est scarifier l'année dernière première année de 6e son mal-être elle allait écouter des musiques tristes sur Tik Tok il a ramené vers des contenus lui montrant comment se scarifier et que des chansons tristes",
+          "display_gi": 906
+        }
+      ]
+    },
+    {
+      "theme_id": "n13",
+      "title": "skinnytok · manger · phrases",
+      "n_claims": 7,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.152,
+          "argument": "Avec le \"skinnytok\" le but était de faire culpabiliser les jeunes filles et de les faire manger moins pour être fine, certaines phrases sont très choquantes du genre \"ne te récompense pas avec de la nourriture, tu n'es pas une chienne\" et peuvent vraiment rendre mal psychologiquement une jeune fille",
+          "display_gi": 2132
+        }
+      ]
+    },
+    {
+      "theme_id": "n14",
+      "title": "videos · faire vomir · maladie",
+      "n_claims": 16,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.1,
+          "argument": "Il y a énormément de contenus médicaux sur Tiktok, notamment des gens qui racontent leurs expériences sous couvert de sensibilisation mais quand on a sois-même des angoisses sur la maladie, cela peut vite devenir très difficile, avec un enfermement sur des contenus anxiogènes",
+          "display_gi": 269
+        },
+        {
+          "n_support": 8,
+          "dispersion": 0.119,
+          "argument": "il y a un passage de 3 mois où sur tiktok j'avais plein de vidéos pro ana sur ma full et je me sentais mal de ne pas être aussi fine et de ne pas manger comme les filles que je voyais sur les vidéos tt",
+          "display_gi": 931
+        }
+      ]
+    },
+    {
+      "theme_id": "n15",
+      "title": "suicider · suicide · meilleure",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.118,
+          "argument": "Ma fille ainée s'est suicidée l'année dernière. Tik tok ne l'a pas tué mais la conforté elle même dans son mal être",
+          "display_gi": 2060
+        }
+      ]
+    },
+    {
+      "theme_id": "n16",
+      "title": "vie · décrocher · côtés",
+      "n_claims": 55,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n17",
+      "title": "passer · faire · impression",
+      "n_claims": 135,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n20",
+      "title": "commentaires · haineux · critique",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n21",
+      "title": "insulter · bafouée arrive · divorces trouve",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n23",
+      "title": "poste · commentaires · argent méchanceté",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n24",
+      "title": "haine · avis · menacer",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n25",
+      "title": "propos · publiquement insultes · viol personellement",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n26",
+      "title": "commentaires · publications · commentaire",
+      "n_claims": 19,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n29",
+      "title": "lgbt · haine · couleur peau",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n30",
+      "title": "fake · haine · faits",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n31",
+      "title": "propos · homophobie · homophobe",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n32",
+      "title": "harcèlement · gouvernement · sérieux",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n33",
+      "title": "racistes · racisme · anti",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n34",
+      "title": "haine · sentent · humain incompréhension",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n35",
+      "title": "contenus · contenu · caractère",
+      "n_claims": 48,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n37",
+      "title": "rumeurs · republications · reçues jugement",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n38",
+      "title": "news · fausses · idées",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n39",
+      "title": "désinformation · informations impression · informationnelle fausses",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n41",
+      "title": "insulte · insultes · oliv",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n43",
+      "title": "faux · gofficiel · gianni",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n44",
+      "title": "comptes · faux compte · harceler",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n45",
+      "title": "usurpation identité · forme · sentent",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n46",
+      "title": "menaces · envoyait · photos",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n47",
+      "title": "veulent · anonymat homme · gendarmerie simplement",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n50",
+      "title": "principes · histoire profonde · nuits",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n51",
+      "title": "ridicules bêtise · aimée · jeunes détresse",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n52",
+      "title": "cauchemars constate · térifie ded · remettent",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n53",
+      "title": "conversion · victimes · appel",
+      "n_claims": 19,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n54",
+      "title": "malsaines · horrible · incroyable faut",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n55",
+      "title": "choquer · sais · donné",
+      "n_claims": 34,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n57",
+      "title": "dangereux · défis · jeu activités",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n58",
+      "title": "tca · scarifications · dictées promotions",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n59",
+      "title": "moquerie · répétition maquillage · adapté abrutisa",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n60",
+      "title": "choquant contenu · choqué · trompeur choquant",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n62",
+      "title": "addiction · dépendance · addictif",
+      "n_claims": 64,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n64",
+      "title": "sentiment · vient · lié",
+      "n_claims": 26,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n65",
+      "title": "contenu · ordre · sentiment",
+      "n_claims": 26,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n66",
+      "title": "vus illusion · baisse résultats · dévalorisation perte",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n67",
+      "title": "triste · influencer · voir",
+      "n_claims": 21,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n69",
+      "title": "anorexie · trouble · alimentaires",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n70",
+      "title": "troubles · alimentaire · comportement",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n71",
+      "title": "angoisse · anxiété · panique",
+      "n_claims": 20,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n73",
+      "title": "baisse · estime · perte",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n74",
+      "title": "concentration · capacité · capacités",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n75",
+      "title": "dépression · renforcement · stress",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n76",
+      "title": "procrastination · procrastiner · stresse démotivation",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n78",
+      "title": "suicide · découvre · jeunes",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n79",
+      "title": "mutilation · automutilation · auto",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n80",
+      "title": "pratiques · tentatives · suicidaires",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n82",
+      "title": "vidéos · vidéo · triste",
+      "n_claims": 65,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n84",
+      "title": "américain · vidéo · rapeur",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n85",
+      "title": "sexistes · voile · racistes",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n86",
+      "title": "sexuel · culte · sexe",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n88",
+      "title": "images · thème · taper vulgarisation",
+      "n_claims": 8,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n89",
+      "title": "images · choquantes · nudité",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n90",
+      "title": "maltraitance · chiens · animal",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n93",
+      "title": "guest · prison · prisons",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n94",
+      "title": "harceleurs · rue vidéos · élèves vidéo",
+      "n_claims": 5,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n95",
+      "title": "choquantes · vidéos · défis",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n96",
+      "title": "atteris · morts · nouvelles",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n98",
+      "title": "vidéos · inhumain · filles mineures",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n99",
+      "title": "vidéos · défilent · aime",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n100",
+      "title": "regarder · video · enferme",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n103",
+      "title": "téléphone · sommeil · harcelant sens",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n104",
+      "title": "culpabiliser · culpabilise · coupable",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n105",
+      "title": "perd · utiliser · rencontre addition",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n106",
+      "title": "passe · passais · revis délaisse",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n107",
+      "title": "culpabilité · utilisé · sentiment",
+      "n_claims": 19,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n108",
+      "title": "impression · journée · sentiment",
+      "n_claims": 32,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n110",
+      "title": "jour nuit · interruption remettez · facilement notification",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n111",
+      "title": "veux · souhaite · decrochher droit",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n112",
+      "title": "manque envie · ennuie · activités manque",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n113",
+      "title": "arrive · faire angoisse · détacher",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n114",
+      "title": "sentiment · jais · sensation",
+      "n_claims": 26,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n115",
+      "title": "perdre · impression · perd",
+      "n_claims": 36,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n116",
+      "title": "perte · utilisation · révisions",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n119",
+      "title": "fille · convertir · influencé",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n120",
+      "title": "fille · collège · téléphones",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n122",
+      "title": "fille · physique · corps moqueries",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n123",
+      "title": "fille · venons mettre · circulé",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n126",
+      "title": "albou · pontiac · dylan",
+      "n_claims": 5,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n127",
+      "title": "fille · disant · frère",
+      "n_claims": 8,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n128",
+      "title": "harcèlement · ophenya · participait",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n129",
+      "title": "collège · camarades · établissement",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n130",
+      "title": "fils · chantage · photo",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n133",
+      "title": "posent · questions · parents",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n134",
+      "title": "enfants environnement · élèves · comportements",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n136",
+      "title": "famille · fortement situation · réfléchir école",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n137",
+      "title": "actuellement comparez · malheur surexposition · enfants",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n138",
+      "title": "contrôle · parental · téléphone",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n139",
+      "title": "seuls · parents · enfants",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n140",
+      "title": "amie · collège · publié",
+      "n_claims": 43,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 18,
+          "dispersion": 0.141,
+          "argument": "Ma fille a été l'objet de diffamation sur TikTok par une camarade de classe … Ne mentionnant pas son nom, nous n'avons pas pu porter plainte mais l'ensemble des camarades savaient qu'elle était visée",
+          "display_gi": 2253
+        },
+        {
+          "n_support": 13,
+          "dispersion": 0.131,
+          "argument": "Les élèves de l établissements entre eux qui envoient des messages ou insultes , critiquent les physique , contenus et se poursuivent après à l école",
+          "display_gi": 2280
+        },
+        {
+          "n_support": 12,
+          "dispersion": 0.136,
+          "argument": "mon ancienne meilleure amie à commencé à me harceler sur Tiktok. Surtout en utilisant l'espace des commentaires",
+          "display_gi": 438
+        }
+      ]
+    },
+    {
+      "theme_id": "n142",
+      "title": "application · appli · sentiment",
+      "n_claims": 51,
+      "n_arguments": 4,
+      "arguments": [
+        {
+          "n_support": 17,
+          "dispersion": 0.115,
+          "argument": "Sentiment profond de perdre son temps et volonté perpétuelle de vouloir arrêter \"après la prochaine vidéo\". On se sent comme pris dans une boucle dans laquelle il faut être \"fort\" pour désinstaller l'application et quasiment se marginaliser du fait de ne pas connaitre les nouvelles trends, ne pas avoir vu la vidéo d'un tel ou d'une telle et en même temps ne pas la désinstaller reste une perte de temps considérable à la fois pour soi et pour ses études … il est extrêmement rare de voir des contenus réellement utiles/intéressants",
+          "display_gi": 1999
+        },
+        {
+          "n_support": 16,
+          "dispersion": 0.123,
+          "argument": "Sentiments de vide après avoir passé du temps sur cette application qui gâche le temps et nuit au développement social, artistique, culturel, environnemental etc..",
+          "display_gi": 2239
+        },
+        {
+          "n_support": 13,
+          "dispersion": 0.114,
+          "argument": "Mal être lié au temps inutile gaspillé sur l'application et l'incapacité de s'en défaire à cause d'une trop grande addiction",
+          "display_gi": 172
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.113,
+          "argument": "- que c'était un faux plaisir, - que je perdais mon temps à regarder les autres vivre, - que c'était très addictif alors que l'intérêt intellectuel était médiocre - et je me suis très vite rendue compte quand j'arrivais ENFIN à m'en détacher de cette application avec laquelle je scrollais pendant des heures sans m'en apercevoir, je me retrouvais avec une journée perdue et une réalité de tâches quotidiennes considérables à réaliser. Cela me donnait une très mauvaise estime de moi. C'était la déprime assurée à la sortie de cette application: je me sentais lasse, découragée, nulle de m'être fait piégée.",
+          "display_gi": 766
+        }
+      ]
+    },
+    {
+      "theme_id": "n143",
+      "title": "application · malsaine · app",
+      "n_claims": 24,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.126,
+          "argument": "Cette application est malsaine, pleines d'images et vidéos choquantes et inadapté à un public avant 15 ans",
+          "display_gi": 1584
+        },
+        {
+          "n_support": 8,
+          "dispersion": 0.11,
+          "argument": "Un engrenage. Une dépendance … Mon fils de 15ans a décidé de lui même de retirer l'appli car ils s'est rendu compte des effets notamment sur ses notes à l'école … Pas d'autre solution que couper",
+          "display_gi": 951
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.127,
+          "argument": "Mal être liée à la haine, à la misogynie et au racisme banalisé sur cette application",
+          "display_gi": 1182
+        }
+      ]
+    },
+    {
+      "theme_id": "n144",
+      "title": "application · appli · fakes news",
+      "n_claims": 25,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.101,
+          "argument": "cette application est addictive et donc nous fait procrastiner en repoussant nos devoirs et obligations",
+          "display_gi": 527
+        },
+        {
+          "n_support": 9,
+          "dispersion": 0.141,
+          "argument": "Que nous apporte cette application si ce n'est rendre nos jeunes addictifs et incapable de se détacher de ces fakes news en pagaille!",
+          "display_gi": 76
+        },
+        {
+          "n_support": 6,
+          "dispersion": 0.104,
+          "argument": "cette application a une portée extrêmement négative sur différents points",
+          "display_gi": 1658
+        }
+      ]
+    },
+    {
+      "theme_id": "n145",
+      "title": "supprimé · application · appli",
+      "n_claims": 19,
+      "n_arguments": 3,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.119,
+          "argument": "Je pense que cette application est une drogue qui enferme dans un cercle vicieux … On la télécharge pour \"faire comme tout le monde\". Puis petit à petit, on commence à passer plus de temps dessus : quand on attend, quand on s'ennuie, entre deux cours ou même jusque tard avant de dormir. Chaque vidéo est censée être l'unique ou la dernière, mais on finit par s'abrutir avec des dizaines de vidéos par jour qui nous dégoûtent de notre quotidien et de la vraie vie, car ce n'est jamais assez",
+          "display_gi": 1434
+        },
+        {
+          "n_support": 7,
+          "dispersion": 0.121,
+          "argument": "Lorsque j'ai pu visionner des vidéos choquantes, cela a pu provoquer des angoisses le soir … j'ai donc décidé pour mon bien être d'arrêter cette application",
+          "display_gi": 270
+        },
+        {
+          "n_support": 5,
+          "dispersion": 0.104,
+          "argument": "l'application permet aussi de promouvoir le « corps parfait » (même si y'a des comptes de body positivité), donc ça nous pousse à nous préoccuper vachement de notre apparence, à faire des régimes qui n'ont pas lieu d'être chez des personnes qui souffraient déjà",
+          "display_gi": 321
+        }
+      ]
+    },
+    {
+      "theme_id": "n146",
+      "title": "désinstallé · application · supprime",
+      "n_claims": 27,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 14,
+          "dispersion": 0.135,
+          "argument": "Mon fils de 18 ans l'a désinstallé car il se rendait compte qu'il en était devenu très dépendant et qu'il perdait beaucoup de temps sur les écrans",
+          "display_gi": 1098
+        },
+        {
+          "n_support": 13,
+          "dispersion": 0.111,
+          "argument": "Cette application doit être supprimée",
+          "display_gi": 245
+        }
+      ]
+    },
+    {
+      "theme_id": "n149",
+      "title": "réseaux sociaux · sociaux brf · arrêt année",
+      "n_claims": 8,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.142,
+          "argument": "brf remettez la simplicité à la mode les réseaux sociaux sont entrain de tuer notre génération",
+          "display_gi": 1080
+        }
+      ]
+    },
+    {
+      "theme_id": "n150",
+      "title": "réseaux sociaux · chine · sociaux france",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.142,
+          "argument": "Il faut aussi limiter les autres réseaux sociaux, en contrôlant chaque publication par rapport au contenu (aussi par rapport à l'orthographe)",
+          "display_gi": 998
+        }
+      ]
+    },
+    {
+      "theme_id": "n151",
+      "title": "sociaux · réseaux · yeux",
+      "n_claims": 12,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 12,
+          "dispersion": 0.157,
+          "argument": "On devrait pouvoir choisir le genre de contenu que l'on souhaite voir sur les réseaux sociaux et ne pas se voir inonder de contenu générer par des algorithmes",
+          "display_gi": 154
+        }
+      ]
+    },
+    {
+      "theme_id": "n153",
+      "title": "plateformes · plateforme · moindre cadre",
+      "n_claims": 11,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 11,
+          "dispersion": 0.15,
+          "argument": "Il s'agit de reconnaître une réalité alarmante : des millions de jeunes Français sont littéralement happés par ces plateformes, développées à l'étranger, souvent sans le moindre cadre éthique ou pédagogique, et totalement inadaptées à leur développement",
+          "display_gi": 302
+        }
+      ]
+    },
+    {
+      "theme_id": "n154",
+      "title": "réseaux · oui · fou",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.149,
+          "argument": "aller toujours plus loin pour plus de vues, ce monde est fou et ce n'est pas un modèle pour notre jeunesse",
+          "display_gi": 55
+        }
+      ]
+    },
+    {
+      "theme_id": "n155",
+      "title": "réseau · réseaux présence · réseaux harcelement",
+      "n_claims": 10,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.137,
+          "argument": "De harcelement vraiment un réseau dangereux selon moi pour les mineurs",
+          "display_gi": 2085
+        }
+      ]
+    },
+    {
+      "theme_id": "n157",
+      "title": "influenceurs · culture comparaison · vie culture",
+      "n_claims": 7,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 7,
+          "dispersion": 0.131,
+          "argument": "Certains influenceurs ont des discours moralement répréhensibles : masculinisme, propagande religieuse, etc",
+          "display_gi": 51
+        }
+      ]
+    },
+    {
+      "theme_id": "n158",
+      "title": "influenceurs · racontent · parfaite",
+      "n_claims": 13,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 13,
+          "dispersion": 0.148,
+          "argument": "Beaucoup d'influenceurs aiment montrer une vie lisse et parfaite et cela n'aide pas quand on traverse une phase difficile",
+          "display_gi": 186
+        }
+      ]
+    },
+    {
+      "theme_id": "n159",
+      "title": "réalité · vivent · hésitent",
+      "n_claims": 5,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 5,
+          "dispersion": 0.119,
+          "argument": "Certains ne vivent pas dans la réalité : ils \"vivent\" des histoires d'amour fantasmées avec des gens qu'ils ne vont pas essayer de connaître dans la réalité mais qu'ils stalkent sur les réseaux",
+          "display_gi": 1523
+        }
+      ]
+    },
+    {
+      "theme_id": "n161",
+      "title": "police · réseaux sociaux · protéger",
+      "n_claims": 6,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 6,
+          "dispersion": 0.121,
+          "argument": "LA POLICE NATIONALE m'a confirmé que le mal subi sur les réseaux sociaux n'ont pas la main dessus, car les propriétaires des réseaux sociaux ne partagent pas d'information avec la police française … la police ne peux pas protéger mes enfants",
+          "display_gi": 1197
+        }
+      ]
+    },
+    {
+      "theme_id": "n162",
+      "title": "interdire · limiter · réponse",
+      "n_claims": 8,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 8,
+          "dispersion": 0.152,
+          "argument": "interdire les réseaux aux ados et retrouvons leur vrai personalité … interdire les réseaux sociaux aux moins de 18 ans",
+          "display_gi": 2109
+        }
+      ]
+    },
+    {
+      "theme_id": "n163",
+      "title": "usages · sociaux · réseaux",
+      "n_claims": 9,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 9,
+          "dispersion": 0.149,
+          "argument": "Les réseaux sociaux ont accentué de manière extrêmement préjudiciable le mal-être de ma fille et son estime d'elle-même",
+          "display_gi": 794
+        }
+      ]
+    },
+    {
+      "theme_id": "n164",
+      "title": "réseaux sociaux · sociaux général · résonance",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n166",
+      "title": "comparaison · physique · bling",
+      "n_claims": 23,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n168",
+      "title": "vie · ect comparaison · comparer",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n169",
+      "title": "monde · pareil sentir · croire",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n170",
+      "title": "compare · confiance · hauteur",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n171",
+      "title": "parfaite · parfait · image",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n173",
+      "title": "parfait · corps · créent",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n174",
+      "title": "filles · corps · parfaites",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n175",
+      "title": "jolies filles · minces · minceur",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n176",
+      "title": "corps · apparence · correctement mauvaise",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n177",
+      "title": "algorithme · propose · triste",
+      "n_claims": 47,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n178",
+      "title": "scroller · scrolling · scroll",
+      "n_claims": 43,
+      "n_arguments": 0,
+      "arguments": []
+    }
+  ]
+}
