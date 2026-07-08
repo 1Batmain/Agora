@@ -163,78 +163,6 @@ export function About({ onHome }: { onHome: () => void }) {
           </p>
         </section>
 
-        <section className="landing__archi">
-          <header className="sec-head">
-            <h2>Architecture du dépôt</h2>
-            <span className="sec-head__hint">Qui fait quoi</span>
-          </header>
-          <p className="how__lead">
-            Une séparation nette entre le calcul (fait une fois, hors ligne) et le service
-            (rapide, sans clé, sans calcul lourd à la requête) :
-          </p>
-          <ul className="archi">
-            <li className="archi__item">
-              <span className="tag-pill">Python · FastAPI</span>
-              <strong>backend/</strong>
-              <p>
-                API qui <em>sert</em> le cache précalculé (thèmes, synthèses, citations,
-                opinion, avis) — aucun calcul lourd à la requête — et les scripts de
-                construction (<code>build_analysis</code>, <code>build_opinion</code>,{' '}
-                <code>build_cache</code>).
-              </p>
-            </li>
-            <li className="archi__item">
-              <span className="tag-pill">Python</span>
-              <strong>pipeline/</strong>
-              <p>
-                Le cœur algorithmique : extraction des claims (<code>claims/</code>),
-                vectorisation (<code>embed/</code>), constitution du graphe et détection de
-                communautés (<code>cluster/</code>), ingestion des corpus bruts
-                (<code>ingest/</code>).
-              </p>
-            </li>
-            <li className="archi__item">
-              <span className="tag-pill">React · Vite · TypeScript</span>
-              <strong>frontend/</strong>
-              <p>
-                L'application que tu utilises : carte des thèmes, explorateur de
-                témoignages, synthèses par niveau, répartition d'opinion — le contrat de
-                types front↔back vit dans <code>src/redesign/contract.ts</code>.
-              </p>
-            </li>
-            <li className="archi__item">
-              <span className="tag-pill">scripts + Tailscale</span>
-              <strong>deploy/</strong>
-              <p>
-                Scripts de déploiement et de promotion de cache vers la production — un
-                environnement séparé du développement, sans clé LLM, qui ne sert que du
-                cache déjà calculé.
-              </p>
-            </li>
-            <li className="archi__item">
-              <span className="tag-pill">GitHub Actions</span>
-              <strong>.github/</strong>
-              <p>
-                CI (tests + build sur chaque PR) et déploiement automatique : un merge sur{' '}
-                <code>main</code> redéploie seul le serveur de production.
-              </p>
-            </li>
-            <li className="archi__item">
-              <span className="tag-pill">Markdown</span>
-              <strong>.agent/</strong>
-              <p>
-                Notes de R&amp;D (décisions d'algorithmes, arbitrages mesurés) et ledger des
-                tâches en cours — la mémoire du projet, pour que chaque idée « on pourrait…
-                » soit vérifiée avant d'être adoptée.
-              </p>
-            </li>
-          </ul>
-          <p className="how__footer">
-            Stack : Python 3.11 · FastAPI · nomic-embed-v2 · Mistral · Leiden/igraph ·
-            React + Vite + TypeScript — souverain &amp; local, modèles ouverts.
-          </p>
-        </section>
-
         <section className="landing__method">
           <header className="sec-head">
             <h2>Comment on obtient ces résultats</h2>
@@ -270,40 +198,36 @@ export function About({ onHome }: { onHome: () => void }) {
             <h2>Limites &amp; contenu généré par IA</h2>
             <span className="sec-head__hint">À lire avant de faire confiance aux chiffres</span>
           </header>
-          <div className="trust-note trust-note--warn" role="note">
-            <p className="trust-note__title">Avertissement</p>
-            <p className="trust-note__lead">
-              Une partie du contenu affiché est <strong>générée par un modèle de langage</strong>{' '}
-              (Mistral) — il peut se tromper.
+          <div className="section-prose">
+            <p>
+              Dans Agora, la <strong>surface d'hallucination est réduite au maximum</strong> :
+              les extraits (claims) sont des sous-chaînes EXACTES du texte citoyen, jamais
+              reformulées. Mais pour <strong>générer du contexte autour de la donnée brute</strong>{' '}
+              — nommer un thème, le résumer, classer une opinion — on s'appuie sur des{' '}
+              <strong>modèles de langage</strong> (Mistral) qui produisent du texte : ils
+              peuvent le <strong>déformer et s'éloigner de la réalité</strong>. C'est la
+              principale limite à garder en tête.
             </p>
-            <ul className="trust-note__list">
-              <li>
-                <strong>Titres et synthèses de thèmes</strong> sont rédigés par un LLM à
-                partir des verbatims du cluster. Même s'il travaille sur des extraits réels,
-                un résumé peut rester <strong>approximatif ou incomplet</strong> — il ne
-                remplace jamais la lecture des témoignages sources.
-              </li>
-              <li>
-                <strong>La classification d'opinion</strong> (pour / contre / nuancé) et le
-                niveau de confiance qui l'accompagne sont une <strong>estimation
-                automatique</strong>, pas un jugement humain vérifié un par un.
-              </li>
-              <li>
-                <strong>Les pourcentages ne sont pas un sondage</strong> : ils décrivent les
-                contributions reçues (participation volontaire), pas l'opinion de la
-                population générale.
-              </li>
-              <li>
-                En revanche, chaque <strong>extrait verbatim</strong> (claim) reste, lui, une
-                sous-chaîne EXACTE du texte citoyen — c'est l'interprétation qui peut se
-                tromper, jamais la citation elle-même.
-              </li>
-              <li>
-                Une extraction ou une lecture qui semble fausse ? Le bouton{' '}
-                <strong>« Signaler »</strong>, présent sur chaque avis, permet de le
-                remonter à l'équipe.
-              </li>
-            </ul>
+            <p>
+              Les <strong>titres et synthèses de thèmes</strong> sont rédigés par un LLM à
+              partir des verbatims du cluster. Même adossé à des extraits réels, un résumé
+              peut rester approximatif ou incomplet — il ne remplace jamais la lecture des
+              témoignages sources.
+            </p>
+            <p>
+              La <strong>classification d'opinion</strong> (pour / contre / nuancé) et le
+              niveau de confiance qui l'accompagne sont une estimation automatique, pas un
+              jugement humain vérifié un par un. Et les <strong>pourcentages ne sont pas un
+              sondage</strong> : ils décrivent les contributions reçues (participation
+              volontaire), pas l'opinion de la population générale.
+            </p>
+            <p>
+              En revanche, chaque <strong>extrait verbatim</strong> (claim) reste, lui, une
+              sous-chaîne EXACTE du texte citoyen — c'est l'interprétation qui peut se
+              tromper, jamais la citation elle-même. Une extraction ou une lecture qui semble
+              fausse ? Le bouton <strong>« Signaler »</strong>, présent sur chaque avis,
+              permet de le remonter à l'équipe.
+            </p>
           </div>
         </section>
 
