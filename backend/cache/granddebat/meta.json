@@ -39,5 +39,6 @@
     "note": "Périmètre très différent : notre corpus = UNE question ouverte du seul thème Démocratie (22 471 réponses de l'export open data ; 118 356 contributions officielles à cette question) ; les 3,25 M€ couvrent le traitement des ~2 M de contributions des 4 thèmes, questions fermées, cahiers et numérisation BnF inclus. Ordre de grandeur uniquement. Extrapolation naïve au coût Agora mesuré (~1,1 $/1 000 réponses) : traiter les ~2 M de contributions ≈ 2 000-2 500 $ de LLM — hors validation humaine et normes du dispositif officiel.",
     "source_url": "https://www.archimag.com/vie-numerique/2019/05/23/grand-d%C3%A9bat-co%C3%BBt%C3%A9-12-millions-euros"
   },
-  "n_responses": 22471
+  "n_responses": 22471,
+  "official_url": "https://www.data.gouv.fr/datasets/donnees-ouvertes-du-grand-debat-national"
 }
