@@ -25,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 
-from backend.build_opinion import MODEL, run_stance
+from backend.build_opinion import MODEL, run_stance, _chat_retry
 from pipeline.cluster import mistral_client
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,8 +47,7 @@ def judge_clear(cible: str, text: str) -> bool | None:
     messages = [{"role": "system", "content": _JUDGE_SYSTEM},
                 {"role": "user", "content": f"CIBLE : {cible}\n\nCONTRIBUTION : {text}"}]
     try:
-        raw = mistral_client.chat(messages, model=MODEL, temperature=0.0,
-                                  max_tokens=20, json_mode=True)
+        raw = _chat_retry(messages, model=MODEL, max_tokens=20)   # backoff sur 429 (RPM large bas)
         return bool(json.loads(raw).get("claire"))
     except (mistral_client.MistralError, json.JSONDecodeError, TypeError):
         return None

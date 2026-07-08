@@ -1,0 +1,627 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_claims": 268,
+    "baseline_decided": 224,
+    "filtered_decided": 148,
+    "removed_by_filter": 76,
+    "removals_good_notclear": 56,
+    "removals_bad_clear": 18,
+    "removal_precision": 0.757,
+    "kept_sample": 20,
+    "kept_judged_clear": 16,
+    "kept_precision": 0.8,
+    "conf_of_removed": {
+      "medium": 33,
+      "high": 43
+    }
+  },
+  "flipped": [
+    {
+      "theme_id": "n3",
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Légiférer contre la diffusion de fausses informations, est impossible, parce que le temps qu'elle soit identifiée, elle a déjà été diffusée. Et si on la censure, elle ressortira sous des formes variées",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n3",
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Je suis pour la suspension de tout personnage qu'il soit médiatique, politique où privé, (que ce soit dans son emploi de journaliste par exemple où de son compte sur les réseaux sociaux pour tout autre), véhiculant une fausse information, le délais pourrais varier selon la gravité, en cas de récidive une amende dissuasive devrait être appliquée, le but n'étant pas de faire dans la demi mesure",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n3",
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Ce conseil devrait avoir la possibilité de \"forcer\" le pourvoyeur de la \"fausse-nouvelle\" à se \"repentir\", non pas par une ligne perdue mais de manière à effacer le préjudice : Une nouvelle se propage va très vite, il faut donc utiliser deux fois plus d'énergie à la contre-carrer. Ce n'est pas une ligne d'excuse à un instant t dans un article perdu au milieu de milliards d'articles qui va faire la différence",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n3",
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "des publicités, ou des spots sur la désinformation et ses dangers, par exemple au cinéma ou avant le journal de 20h à la tv, pourraient être envisagées",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n3",
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "l'ideal serait dans la loi un article qui protège la position des lanceurs d'alerte et les rende impossibles à poursuivre pour diffusion de fausses informations, étant acquis qu'un lanceur d'alerte travaille pour le bien collectif",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "un cadre légal pourrait obliger les professionnels de l'information à vérifier avant la publication, ainsi qu'à identifier les informations partisanes",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Obliger les gafas à ne publier que les sites labellisés en période électorale.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Faire obligation aux plateformes ayant un nombre de connexions important de signaler aux autorités publiques et à tous les candidats pendant la période électorale l'existence d'un envoi massif à des personnes ciblées pour leurs caractéristiques communes d'une information pouvant influencer leur choix.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n5",
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "le sujet ici n'est pas alimenté par les journalistes : les fake news sont alimentées via les réseaux sociaux … Ce ne sont pas les journalistes qui en sont les auteurs … Ne mélangeons pas tout",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n5",
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "EN realité je ne pense pas que la lutte contre les fake news doivent faire l'objet d'une loi, surtout qu'elles se diffusent essentiellement sur les réseaux sociaux , dans le cas ou un journal en diffuserait une, impossible du coup de légiférer en se basant sur l'argument : \"c'est un journaliste qui relaye l'information donc ce n'est pas une fake news\"",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n5",
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n5",
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Le problème des fake news vient de gens qui ne sont pas journalistes, qui les produisent et les diffusent en utilisant des canaux, notamment les réseaux sociaux (mais pas seulement car les emails sont aussi un puissant vecteur de fake news).",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n5",
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Les seules sources de fake news que l'état doit contrôler sont les élus qui le représentent. De nombreuses affirmations de députés sur différents sujets sont approximatives voire fausses, alors même que des sources documentées et accessibles existent (cf. les communications sur les migrants)",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n6",
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "Il sans doute aussi légiférer sur les techniques d'embrigadement des sectes, des entreprises terroristes voire des partis politiques non républicains (et leurs associations satellites) qui diffusent des fake dans un but purement électoraliste.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n6",
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "la notion d'activité qui \"dépasse un seuil de nombre de connexions sur le territoire français\" n'a aucun sens. Qu'est-ce qu'une connexion : s'agit-il d'un accès au site, d'un accès unique au site ou d'une connexion à un compte sur la plateforme ? Comment vérifier qu'on se situe sur \"le territoire français\" ? L'adresse IP n'est pas suffisamment fiable.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n10",
+      "cible": "renforcer l'application des lois existantes plutôt qu'en créer",
+      "text": "il faut aussi des lois claires et non des lois de blablablabla marque de fabrique du Parlement Français depuis au moins 25 ans",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n10",
+      "cible": "renforcer l'application des lois existantes plutôt qu'en créer",
+      "text": "Charte de Munich qui existe déjà",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n11",
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Ces questions doivent rester à la portée du plus grand nombre et ne doivent pas nous échapper",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n11",
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "NON À LA CENSURE, OUI A LA LIBERTÉ",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n11",
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Aucune limitation à l'information, quelle qu'elle soit",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n11",
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Laisser le droit à l erreur",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n11",
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Une lois pour le bien être de tous un chacun sous l'Autorité d'une Justice à l'écoute du Peuple",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n13",
+      "cible": "légiférer sur le domaine en heure à heure",
+      "text": "Surtout qu'il est indiqué un renforcement du CSA qui n'est lui même pas très indépendant",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n14",
+      "cible": "différencier gestion eau professionnelle et personnelle",
+      "text": "Globalement d'accord avec tout ça.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n14",
+      "cible": "différencier gestion eau professionnelle et personnelle",
+      "text": "Vous inventez l'eau chaude, là.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Revoir la charte de déontologie des journalistes",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Revoir la déontologie des journalistes",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Pour la révocation d'un journaliste, cela existe déjà c'est la charte de Munich etc",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Responsabilité de parution pour les journalistes professionnels : oui … Et c'est d'ailleurs spécifié dans la Charte de Munich, décrivant les droits et les DEVOIRS des journalistes",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Les medias de toute nature doivent respecter la déontologie de leur profession. Vérifier, avant toute annonce, la véracité.",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Charte de Munich qui existe déjà (1ere version 1938, seconde version 1971) - Cette charte détaille les droits et les devoirs des journalistes",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Charte de déontologie : elle existe : Charte de Munich.",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Le problème ce ne sont pas les journalistes professionnels qui font globalement bien leur travail. Quand ils font des erreurs, et c'est humain personne n'est infaillible, cela peut arriver, ils corrigent.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n18",
+      "cible": "soumettre les médias à une autorité de contrôle indépendante",
+      "text": "Les médias devraient donner un exemple d'objectivité, d'impartialité et de sérieux afin d'encourager l'honnêteté de tous",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n18",
+      "cible": "soumettre les médias à une autorité de contrôle indépendante",
+      "text": "Une vraie égalité de représentation des candidats dans les médias lors des élections.",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n18",
+      "cible": "soumettre les médias à une autorité de contrôle indépendante",
+      "text": "Aucune interrogation sur nos chaînes de télévision française qui ne sont pas objectives … Trop complaisante avec certains",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n18",
+      "cible": "soumettre les médias à une autorité de contrôle indépendante",
+      "text": "la chaîne info de Bolloré passe quasiment sous silence la mise en examen du patron … Chaque citoyen devrait pouvoir facilement savoir à quel groupe financier (marchand d'armes, bétonneur, r etc) appartient un média public … Quand ces mêmes groupes passent des marchés publics avec les collectivités, détenir une radio, un journal ou une (des) télé(s) leur donne un avantage conséquent (le poids des médias dans l'opinion publique)",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n18",
+      "cible": "soumettre les médias à une autorité de contrôle indépendante",
+      "text": "le Prime Time est le moteur et donc, tout n'est pas vérifié avant le passage à l'antenne",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n20",
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "Les obligations d'information loyale et transparente existent déjà à la suite de la loi pour une République numérique.",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n20",
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "La liberté d'informer repose sur la confiance que le citoyen accorde à la sincérité de l'information. Cette confiance est du même ordre que celle qui repose sur les élus. Ce d'autant que cette l'exercice de cette liberté n'est pas sans conséquence sur la vie politique.",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n20",
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "La Scam est en accord avec les recommandations formulées au paragraphe 10 de l'avis du Conseil d'Etat du 19 avril 2018 sur les propositions de loi relatives à la lutte contre les fausses informations, qui suggèrent de s'en tenir à la notion de « fausses informations », à la fois plus large que celle de « fausses nouvelles » (déjà présente à l'article 27 de la loi du 29/07/1881 et de l'article L.97 du code électoral) mais aussi plus opératoire dans le contexte visé",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n20",
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "De mémoire, même l'AFP a publié des fausses-nouvelles (le décès de je ne sais plus qui et tout les journaux ont repris en cadence l'info avant un démenti) alors \"labelliser\" c'est donner un blanc-sein qui serait plus terrible que tout.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n21",
+      "cible": "laisser l'État définir une vérité officielle",
+      "text": "sinon les abus et manipulations organisés par les puissants auront force de vérités et serions très vite dans une dictature qui a déjà commencé",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n21",
+      "cible": "laisser l'État définir une vérité officielle",
+      "text": "La divulgation des montants perçus est contraire à la liberté d'entreprendre et au secret des affaires.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n22",
+      "cible": "interdire les contenus illégaux avant les élections",
+      "text": "Ne rien faire au nom de la liberté d'expression risque de tuer la République",
+      "stance": "favorable",
+      "conf": "high"
+    },
+    {
+      "theme_id": "n22",
+      "cible": "interdire les contenus illégaux avant les élections",
+      "text": "Enfin demander sérieusement (avec amende à la clé) aux GAFA d'arrêter de laisser passer des contenus hors la loi (racistes, homophobes, sexistes.)",
+      "stance": "favorable",
+      "conf": "high"
+    },
+    {
+      "theme_id": "n24",
+      "cible": "limiter légalement les fausses informations en ligne",
+      "text": "Aujourd'hui, diffuser des témoignages de femmes traumatisées par leur IVG est considéré comme une fausse information. Mais qu'est-ce qui dit que le traumatisme est impossible? … Plusieurs personnalités en accord avec l'IVG ont condamné la loi constituant un \"délit d'entrave\", comme étant une entrave au débat publique, à la liberté d'expression et une interdiction de débattre. Absolument contre cette idée",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "Le rôle de l'école est essentiel … Les professeurs documentalistes se sont déjà emparés des diverses problématiques liées aux médias, et à la circulation de l'information. Avec une prise en compte très variable par l'Institution … Comment assurer une formation des élèves quand on sait qu'il n'y a, le plus souvent, qu'un seul professeur documentaliste dans les établissements ? … Le saupoudrage d'EMI (éducation aux médias et à l'information), sans que personne ne sache vraiment de quoi il s'agit, ne peut être suffisant",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "Dans le secondaire, les enseignants documentalistes sont des personnes ressource pour travailler dans ce sens-là",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "Dans les collèges et les lycées, il y a ce qu'on appelle l'Education aux Médias et à l'Information. Il y a des spécialistes : les professeurs-documentalistes.",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "Le rôle de l'école est essentiel … L'enseignement info-documentaire permet d'entamer, dès le collège, une sensibilisation aux flux d'informations et aux risques y afférant … Selon la maturité et l'âge des élèves, on parvient à aborder des notions plus complexes (mise en œuvre de l'esprit critique, analyse des sources, évaluation de l'information, etc.) … Autant de compétences essentielles dans le cadre de la scolarité et en tant que citoyen",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "il existe dans les collèges et lycées des personnes dont la qualification semble les désigner pour s'occuper de la question. Ce sont les professeurs documentalistes … il faut cesser de vouloir démanteler leurs missions en voulant en faire des animateurs de super foyer numérique et en niant leur vocation à caractère pédagogique … dans CAPES, le P signifie Professorat et non pas animateur",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n26",
+      "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+      "text": "L'Education Nationale est toujours un peu comme le type sur son wagon à mains essayant désespérément de se raccrocher au dernier wagon du train des évolutions de société … Il est nécessaire que les formations proposées soient enfin en phase avec la société, et non en retard de trois ou quatre ans à chaque fois … C'est le rôle en particulier des professeurs documentalistes",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "aux citoyens de vérifier les sources et la fiabilités des dîtes informations",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Les informations diffusées doivent avoir été vérifiées, recoupées, prouvées",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Réprimer fortement les colporteurs de fausses informations non vérifiées, non vérifiables",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "aux citoyens de vérifier leurs sources",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "il revient aux citoyens de vérifier eux même les informations qu'ils reçoivent",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Il faudrait différencier les sites d'information (médias journalistiques reconnus) et les sites dits \"réseaux sociaux\", dont les \"informations\" ne sont ni vérifiées ni vérifiables",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "le citoyen lambda doit apprendre à trier les informations !",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Faire savoir par ex que Wikipédia N'EST PAS une encyclopédie fiable",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Il apparait difficile concrètement d'établir des critères \"officiels\" qui permettraient de séparer une information vraie d'une information fausse … Toutefois, les informations, dont on connaitrait à l'avance la véracité (preuves historiques avec l'appui de témoignages, preuves scientifiques avec les résultats d'évaluations menées), et qui seraient manipulées, pourraient faire l'objet de restrictions, par la fermeture des sites",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n28",
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "exiger davantage de rigueur dans les transmissions d'informations : trop d'approximations, pas assez de contrôle en amant de la diffusion, recherche de scoops mal vérifiés, tout cela jette un trouble sur la crédibilité de ce qui est proposé au citoyen.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n30",
+      "cible": "sanctionner les fausses informations politiques",
+      "text": "Car par le passé de vrai informations ont été dénoncé comme fausses par nombres de personnes, avant que la justice finisse par se saisir des personnes incriminées par ces informations, en ayant confirmé leurs véracité au préalable … Ce fut notamment le cas pour le financement de la campagne présidentielle de Nicolas Sarkosy par le régime de Mouhamar Qaddafi",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n30",
+      "cible": "sanctionner les fausses informations politiques",
+      "text": "Il est patent que les dernières élections n'ont pas été manipulées par des fake news, elles ont au contraire été le théâtre de la manifestation de la vérité, qui a mené à la défaite de Fillon.",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n30",
+      "cible": "sanctionner les fausses informations politiques",
+      "text": "Le FN, LRM, LR, la FI, le PS etc sont des partis républicains qui participent tous à des fausses nouvelles plus ou moins … Le leader d'un de ces groupes à même bombardé un pays sur base d'une de ces fausses nouvelles … Sans compter Bush en 2003 pour l'Irak, pour prendre un exemple étranger, alors qu'il était à la tête d'un parti nommé \"Republicans\"",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n31",
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "Lorsque les fausses informations sont de natures à porter gravement atteinte à un individu (remise en question de sa probité, de son intégrité.) il paraît essentiel d'etablir des gardes-fous",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n31",
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "insultes, fausses informations destinées à nuire à une personne ou une groupe de personnes",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n32",
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "Les fake news circulent très vite, comment les repérer et les contrer en temps voulu ?",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n32",
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "il existe déjà un arsenal qui parait adapté et suffisant pour lutter contre les fausses informations, que cela soit en ou hors période électorale",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n32",
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "il faut lutter contre les discriminations sexistes dû aux fakes news",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n32",
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "Une grande majorité de fake-news sont démontées en deux clics dans un moteur de recherche ou chez Hoaxbuster.",
+      "stance": "defavorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n34",
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "il faut déjà surtout miser sur l'éducation",
+      "stance": "favorable",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n34",
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "\"Eduquer le peuple\" renvoie à des périodes sinistres de notre histoire",
+      "stance": "defavorable",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n35",
+      "cible": "privilégier l'éducation aux médias plutôt qu'une loi sur les fake news",
+      "text": "Eduquer à l'esprit critique me semble la meilleure parade aux fake news . Ine éducation aux médias pour tous vaut mieux qu'une loi qui désengage le public de son jugement critique.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n35",
+      "cible": "privilégier l'éducation aux médias plutôt qu'une loi sur les fake news",
+      "text": "La solution contre les fausses informations (déjà condamnables par la loi) est certainement plus à chercher dans l'éducation aux médias et à l'esprit critique, la protection des conditions du métier de journaliste et la refondation de ses principes et méthodes (dans les écoles de journalisme comme dans les médias), la lutte contre le monopole des pouvoirs industriels et financiers sur les médias d'information, etc.",
+      "stance": "favorable",
+      "conf": "high",
+      "judge_claire": true
+    }
+  ]
+}
