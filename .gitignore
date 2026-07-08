@@ -67,3 +67,7 @@ eval/
 # R&D émergence — caches de build lourds (reproductibles via emerge_build.py)
 research/emerge_cache/
 research/emerge_build.log
+
+# R&D pré-filtre — base caches (dérivation+stance, reproductibles)
+research/relevance_base_*.json
+research/relevance_suite.log
