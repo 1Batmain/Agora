@@ -4,9 +4,8 @@ import type { ReactNode } from 'react';
  * Header PARTAGÉ d'Agora (issu de la landing). Réutilisé sur TOUTES les vues
  * (landing, analyse, participer) pour une identité cohérente.
  *
- *  - `onHome` : si fourni, un bouton explicite « ← Accueil » apparaît à côté du
- *    brand (logo + titre) — LUI AUSSI cliquable, en repli. Absent (sur la
- *    landing) → ni bouton, ni brand cliquable.
+ *  - `onHome` : si fourni, le brand (logo + titre « Agora ») devient cliquable et
+ *    ramène à l'accueil. Absent (sur la landing) → brand non cliquable.
  *  - `onAbout` : si fourni, un lien « Comment ça marche ? » apparaît à droite,
  *    vers la page de présentation du projet (architecture, pipeline, équipe).
  *  - `right`  : contenu optionnel à droite (nom de la consultation, badge statut…).
@@ -34,16 +33,6 @@ export function Header({
   return (
     <header className="gov-header">
       <div className="gov-header__brandgroup">
-        {onHome && (
-          <button
-            type="button"
-            className="gov-header__back"
-            onClick={onHome}
-            title="Retour à l’accueil"
-          >
-            ← Accueil
-          </button>
-        )}
         {onHome ? (
           <button
             type="button"

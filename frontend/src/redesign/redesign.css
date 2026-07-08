@@ -1032,24 +1032,6 @@ body {
 
 /* ====================== Landing + Participer (MVP shell) ====================== */
 
-/* « ← Consultations » : retour à la landing, dans le header brand. */
-.gov-header__back {
-  flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--agora);
-  background: var(--agora-soft);
-  border: 1px solid var(--agora-soft2);
-  border-radius: 6px;
-  padding: 6px 12px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.gov-header__back:hover {
-  background: var(--agora-soft2);
-  color: var(--agora-active);
-}
-
 /* « Comment ça marche ? » : lien discret vers la page « À propos ». */
 .gov-header__navlink {
   font-family: inherit;
