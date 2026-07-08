@@ -35,6 +35,14 @@ class ModelSpec:
     revision: str | None = None
     normalize: bool = True
     note: str = ""
+    # Backend de chargement/encodage :
+    #  - "sentence_transformers" (défaut) : SentenceTransformer.encode.
+    #  - "hf_mean_pool" : AutoModel transformers + mean-pooling — pour les modèles dont
+    #    le chemin sentence-transformers/trust_remote_code casse sur ce transformers
+    #    (ex. jina-v3 : seul le port natif charge). Encodage géré par `Embedder`.
+    loader: str = "sentence_transformers"
+    # Licence des poids (traçabilité légale). "cc-by-nc-4.0" = NON-COMMERCIAL.
+    license: str = "apache-2.0"
 
     def prefix(self, is_query: bool) -> str:
         return self.query_prefix if is_query else self.doc_prefix
@@ -80,6 +88,84 @@ REGISTRY: dict[str, ModelSpec] = {
         normalize=True,
         note="Apache-2.0 mais bilingue DE-EN (pas FR/IT) ; JinaBERT/ALiBi, trust_remote_code.",
     ),
+    # --- Veille contenders (2026-07-07) — permissifs, multilingues, CPU. ---
+    # Tous Apache-2.0/MIT (vérifiés API HF). Cf. research/bench_veille_*.md.
+    #
+    # IBM Granite R2 : ModernBERT NATIF (aucun code distant → pas de rot type jina).
+    # Aucun préfixe d'instruction (entraînés sans). Commits épinglés (repro).
+    "ibm-granite/granite-embedding-97m-multilingual-r2": ModelSpec(
+        model_id="ibm-granite/granite-embedding-97m-multilingual-r2",
+        trust_remote_code=False,
+        revision="835ad14087e140460703cf0fae09f97d469d65c2",
+        normalize=True,
+        note="Apache-2.0 ; ModernBERT natif ; 97M, dim 384 ; sans préfixe ; CPU rapide.",
+    ),
+    "ibm-granite/granite-embedding-311m-multilingual-r2": ModelSpec(
+        model_id="ibm-granite/granite-embedding-311m-multilingual-r2",
+        trust_remote_code=False,
+        revision="44399559930365213510b1ee2eb15ded83374f0e",
+        normalize=True,
+        note="Apache-2.0 ; ModernBERT natif ; 311M, dim 768 (MRL) ; sans préfixe.",
+    ),
+    # GTE multilingue : code custom (NewModel) => trust_remote_code + commit épinglé.
+    "Alibaba-NLP/gte-multilingual-base": ModelSpec(
+        model_id="Alibaba-NLP/gte-multilingual-base",
+        trust_remote_code=True,
+        revision="9bbca17d9273fd0d03d5725c7a4b0f6b45142062",
+        normalize=True,
+        note="Apache-2.0 ; 305M dim 768 ; trust_remote_code (code custom épinglé) ; sans préfixe.",
+    ),
+    # Arctic-Embed 2.0 large : XLM-R NATIF. Préfixe "query: " côté REQUÊTE seulement
+    # (docs bruts) — le banc encode en mode document → aucun préfixe appliqué.
+    "Snowflake/snowflake-arctic-embed-l-v2.0": ModelSpec(
+        model_id="Snowflake/snowflake-arctic-embed-l-v2.0",
+        doc_prefix="",
+        query_prefix="query: ",
+        trust_remote_code=False,
+        revision="ac6544c8a46e00af67e330e85a9028c66b8cfd9a",
+        normalize=True,
+        note="Apache-2.0 ; XLM-R large natif ; 568M dim 1024 ; préfixe requête uniquement.",
+    ),
+    # Qwen3-Embedding : LLM (Qwen3), pooling LAST-TOKEN géré par la config ST du repo.
+    # Docs encodés bruts (l'instruction ne concerne que les requêtes). Lent CPU.
+    "Qwen/Qwen3-Embedding-0.6B": ModelSpec(
+        model_id="Qwen/Qwen3-Embedding-0.6B",
+        trust_remote_code=False,
+        revision="97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+        normalize=True,
+        note="Apache-2.0 ; 600M LLM ; dim ≤1024 (MRL) ; pooling last-token (config ST) ; lent CPU.",
+    ),
+    # e5-large-instruct : XLM-R natif. Contrairement à e5-small, les DOCUMENTS n'ont
+    # PAS de préfixe "passage:" (seule la requête reçoit "Instruct: …\nQuery: ").
+    "intfloat/multilingual-e5-large-instruct": ModelSpec(
+        model_id="intfloat/multilingual-e5-large-instruct",
+        doc_prefix="",
+        query_prefix="",
+        trust_remote_code=False,
+        revision="274baa43b0e13e37fafa6428dbc7938e62e5c439",
+        normalize=True,
+        note="MIT ; XLM-R 560M dim 1024 ; docs sans préfixe (diffère d'e5-small).",
+    ),
+    # jina-embeddings-v3 (port transformers-NATIF `tomaarsen/…-hf` : le chemin
+    # sentence-transformers/trust_remote_code amont casse sur ce transformers).
+    # ⚠️ LICENCE CC-BY-NC-4.0 (NON-COMMERCIAL). Adopté comme embedder de BUILD en
+    # phase RECHERCHE (génération de golds/datasets de qualité, non-commerciale).
+    # PARE-FEU : ses sorties ne doivent JAMAIS servir à entraîner un modèle EXPÉDIÉ
+    # dans l'édition commerciale (le NC contaminerait l'élève). Re-dérivation propre
+    # (embedder Apache : arctic-l/granite) exigée avant toute commercialisation.
+    # Cf. research/jina_provenance_firewall.md. Meilleure qualité mesurée (NMI thème
+    # 0.482 sur x-stance). Mean-pooling natif, dim 1024, sans préfixe.
+    "tomaarsen/jina-embeddings-v3-hf": ModelSpec(
+        model_id="tomaarsen/jina-embeddings-v3-hf",
+        doc_prefix="",
+        query_prefix="",
+        trust_remote_code=False,
+        revision="489592a9ef4098ea66bdc4a4a76614014e198e96",
+        normalize=True,
+        loader="hf_mean_pool",
+        license="cc-by-nc-4.0",
+        note="jina-v3 (port natif) ; NON-COMMERCIAL ; embedder de build RECHERCHE ; dim 1024.",
+    ),
     # Multilingue fort. AUCUN préfixe — en ajouter dégraderait la qualité.
     "BAAI/bge-m3": ModelSpec(
         model_id="BAAI/bge-m3",
@@ -101,6 +187,19 @@ ALIASES: dict[str, str] = {
     "bge": "BAAI/bge-m3",
     "jina": "jinaai/jina-embeddings-v2-base-de",
     "jina-v2-de": "jinaai/jina-embeddings-v2-base-de",
+    # Veille contenders (2026-07-07)
+    "granite-97m-r2": "ibm-granite/granite-embedding-97m-multilingual-r2",
+    "granite-311m-r2": "ibm-granite/granite-embedding-311m-multilingual-r2",
+    "gte-multi": "Alibaba-NLP/gte-multilingual-base",
+    "gte-multilingual-base": "Alibaba-NLP/gte-multilingual-base",
+    "arctic-l": "Snowflake/snowflake-arctic-embed-l-v2.0",
+    "arctic-l-v2": "Snowflake/snowflake-arctic-embed-l-v2.0",
+    "qwen3-0.6b": "Qwen/Qwen3-Embedding-0.6B",
+    "qwen3-embed": "Qwen/Qwen3-Embedding-0.6B",
+    "e5-large-instruct": "intfloat/multilingual-e5-large-instruct",
+    # jina-v3 (NON-COMMERCIAL) — embedder de build phase recherche (cf. pare-feu).
+    "jina-v3": "tomaarsen/jina-embeddings-v3-hf",
+    "jina-embed": "tomaarsen/jina-embeddings-v3-hf",
 }
 
 
