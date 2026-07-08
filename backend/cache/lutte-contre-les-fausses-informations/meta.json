@@ -24,5 +24,6 @@
     "seed": 42
   },
   "question": "Que pensez-vous des mesures proposées pour lutter contre la manipulation de l'information et les fausses informations en ligne ?",
-  "context": "Consultation citoyenne de l'Assemblée nationale (2018) menée dans le cadre des propositions de loi relatives à la lutte contre les fausses informations. Les citoyens ont déposé des contributions libres dans plusieurs fils de débat thématiques (rôle des plateformes, du juge, éducation aux médias, etc.)."
+  "context": "Consultation citoyenne de l'Assemblée nationale (2018) menée dans le cadre des propositions de loi relatives à la lutte contre les fausses informations. Les citoyens ont déposé des contributions libres dans plusieurs fils de débat thématiques (rôle des plateformes, du juge, éducation aux médias, etc.).",
+  "official_url": "https://www.assemblee-nationale.fr/"
 }

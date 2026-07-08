@@ -37,5 +37,6 @@
     "xstance__society",
     "xstance__welfare"
   ],
-  "context": "x-stance — corpus multilingue (DE/FR/IT) de prises de position sur des questions politiques suisses. Chaque contribution exprime une position argumentée, pour ou contre."
+  "context": "x-stance — corpus multilingue (DE/FR/IT) de prises de position sur des questions politiques suisses. Chaque contribution exprime une position argumentée, pour ou contre.",
+  "official_url": "https://github.com/ZurichNLP/xstance"
 }
