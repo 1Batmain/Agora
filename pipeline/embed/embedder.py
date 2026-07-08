@@ -1,14 +1,18 @@
 """T-N1 · Service d'embeddings in-process, MULTILINGUE et pluggable.
 
-Embeddings sémantiques robustes au paraphrasing via sentence-transformers, CPU.
-Trois modèles multilingues derrière UNE interface, chacun avec SA convention de
-préfixe (cf. `pipeline.embed.registry`) :
+Embeddings sémantiques robustes au paraphrasing, CPU. Modèles multilingues
+pluggables derrière UNE interface, chacun avec SA convention de préfixe et son
+backend de chargement (cf. `pipeline.embed.registry`) :
 
-  - `nomic-ai/nomic-embed-text-v2-moe` (défaut) : "search_document: " / "search_query: "
-  - `intfloat/multilingual-e5-small`            : "passage: " / "query: "
-  - `BAAI/bge-m3`                               : aucun préfixe
+  - `tomaarsen/jina-embeddings-v3-hf` (DÉFAUT de build) : loader natif `hf_mean_pool`
+  - `nomic-ai/nomic-embed-text-v2-moe` (Apache, repli propre) : "search_document: " / …
+  - `Snowflake/snowflake-arctic-embed-l-v2.0` (Apache) : meilleure qualité permissive
+  - `intfloat/multilingual-e5-small`, `BAAI/bge-m3`, granite-r2, gte, qwen3…
 
-Le DÉFAUT est le winner multilingue (nomic-v2) — cohérent batch ↔ backend live.
+Le DÉFAUT est jina-v3 (meilleure qualité mesurée) — ⚠️ **CC-BY-NC-4.0, NON-COMMERCIAL** :
+phase RECHERCHE / génération de golds. Pare-feu de provenance : ses sorties ne doivent
+pas entraîner un modèle expédié commercialement (re-dériver Apache avant vente ;
+cf. `research/jina_provenance_firewall.md`).
 
 API (inchangée, utilisée par cluster/eval) :
   `Embedder(model_id).embed(texts, is_query=False) -> np.ndarray`
@@ -29,11 +33,14 @@ import numpy as np
 
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
-# Défaut = le WINNER multilingue validé (banc qualité, cf. `.agent/queue/cross-lane.md`).
-# nomic-v2 mixe les langues PAR THÈME (NMI cluster↔langue=0.008) ; e5-small
-# clusterise PAR LANGUE (NMI=0.81) → inutilisable en multilingue. Le défaut batch
-# doit être COHÉRENT avec le backend live (qui embedde déjà en nomic-v2 / cache).
-DEFAULT_MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
+# Défaut de BUILD = jina-v3 (port natif), la MEILLEURE qualité mesurée (NMI thème
+# 0.482 vs nomic 0.407 sur x-stance). ⚠️ Licence CC-BY-NC-4.0 (NON-COMMERCIAL) :
+# adopté en phase RECHERCHE pour générer des golds/datasets de qualité. Ses sorties
+# NE DOIVENT PAS entraîner un modèle EXPÉDIÉ commercialement (pare-feu de provenance,
+# cf. research/jina_provenance_firewall.md). nomic-v2 (Apache) reste le repli propre
+# pour toute re-dérivation commercialisable. jina-v3 ne charge PAS via sentence-
+# transformers ici (code amont cassé) → loader "hf_mean_pool" (AutoModel + mean-pool).
+DEFAULT_MODEL_ID = "tomaarsen/jina-embeddings-v3-hf"
 
 
 class Embedder:
@@ -63,17 +70,30 @@ class Embedder:
     @property
     def model(self):
         if self._model is None:
-            # Import paresseux : pas de coût torch tant qu'on n'encode rien.
-            from sentence_transformers import SentenceTransformer
+            if self.spec.loader == "hf_mean_pool":
+                # Chemin NATIF (AutoModel) : pour les modèles dont sentence-transformers
+                # /trust_remote_code casse sur ce transformers (ex. jina-v3). On charge
+                # le tokenizer + le modèle ; l'encodage (mean-pool) est fait par `embed`.
+                import torch
+                from transformers import AutoModel, AutoTokenizer
 
-            kwargs = {"device": self.device}
-            if self.spec.trust_remote_code:
-                kwargs["trust_remote_code"] = True
-            # Épingle le commit chargé (sécurité : code distant figé pour les modèles
-            # à trust_remote_code ; cf. registry). `None` ⇒ comportement par défaut (main).
-            if self.spec.revision:
-                kwargs["revision"] = self.spec.revision
-            self._model = SentenceTransformer(self.model_id, **kwargs)
+                kw = {"revision": self.spec.revision} if self.spec.revision else {}
+                tok = AutoTokenizer.from_pretrained(self.model_id, **kw)
+                mdl = AutoModel.from_pretrained(self.model_id, dtype=torch.float32, **kw)
+                mdl.eval()
+                self._model = (tok, mdl)
+            else:
+                # Import paresseux : pas de coût torch tant qu'on n'encode rien.
+                from sentence_transformers import SentenceTransformer
+
+                kwargs = {"device": self.device}
+                if self.spec.trust_remote_code:
+                    kwargs["trust_remote_code"] = True
+                # Épingle le commit chargé (sécurité : code distant figé pour les modèles
+                # à trust_remote_code ; cf. registry). `None` ⇒ défaut (main).
+                if self.spec.revision:
+                    kwargs["revision"] = self.spec.revision
+                self._model = SentenceTransformer(self.model_id, **kwargs)
         return self._model
 
     def _prep(self, texts: list[str], prefix: str) -> list[str]:
@@ -100,17 +120,43 @@ class Embedder:
 
         do_normalize = self.spec.normalize if normalize is None else normalize
         prepared = self._prep(items, self.spec.prefix(is_query))
-        vecs = self.model.encode(
-            prepared,
-            batch_size=self.batch_size,
-            convert_to_numpy=True,
-            normalize_embeddings=do_normalize,
-            show_progress_bar=False,
-        ).astype(np.float32)
+        if self.spec.loader == "hf_mean_pool":
+            vecs = self._encode_hf_mean_pool(prepared, do_normalize)
+        else:
+            vecs = self.model.encode(
+                prepared,
+                batch_size=self.batch_size,
+                convert_to_numpy=True,
+                normalize_embeddings=do_normalize,
+                show_progress_bar=False,
+            ).astype(np.float32)
         return vecs[0] if single else vecs
+
+    def _encode_hf_mean_pool(
+        self, texts: list[str], do_normalize: bool, max_length: int = 512
+    ) -> np.ndarray:
+        """Encodage NATIF : AutoModel → mean-pooling masqué → (L2). CPU, batché."""
+        import torch
+
+        tok, mdl = self.model
+        out: list[np.ndarray] = []
+        with torch.no_grad():
+            for i in range(0, len(texts), self.batch_size):
+                enc = tok(texts[i : i + self.batch_size], padding=True, truncation=True,
+                          max_length=max_length, return_tensors="pt")
+                h = mdl(**enc).last_hidden_state                 # (b, t, d)
+                mask = enc["attention_mask"].unsqueeze(-1).float()
+                v = (h * mask).sum(1) / mask.sum(1).clamp(min=1e-9)
+                if do_normalize:
+                    v = torch.nn.functional.normalize(v, dim=1)
+                out.append(v.cpu().numpy().astype(np.float32))
+        return np.vstack(out) if out else np.empty((0, self.dim), dtype=np.float32)
 
     @property
     def dim(self) -> int:
+        if self.spec.loader == "hf_mean_pool":
+            _, mdl = self.model
+            return int(mdl.config.hidden_size)
         return int(self.model.get_sentence_embedding_dimension())
 
     def benchmark(self, texts: list[str]) -> dict:

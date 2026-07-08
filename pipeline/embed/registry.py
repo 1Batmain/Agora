@@ -35,6 +35,14 @@ class ModelSpec:
     revision: str | None = None
     normalize: bool = True
     note: str = ""
+    # Backend de chargement/encodage :
+    #  - "sentence_transformers" (défaut) : SentenceTransformer.encode.
+    #  - "hf_mean_pool" : AutoModel transformers + mean-pooling — pour les modèles dont
+    #    le chemin sentence-transformers/trust_remote_code casse sur ce transformers
+    #    (ex. jina-v3 : seul le port natif charge). Encodage géré par `Embedder`.
+    loader: str = "sentence_transformers"
+    # Licence des poids (traçabilité légale). "cc-by-nc-4.0" = NON-COMMERCIAL.
+    license: str = "apache-2.0"
 
     def prefix(self, is_query: bool) -> str:
         return self.query_prefix if is_query else self.doc_prefix
@@ -138,6 +146,26 @@ REGISTRY: dict[str, ModelSpec] = {
         normalize=True,
         note="MIT ; XLM-R 560M dim 1024 ; docs sans préfixe (diffère d'e5-small).",
     ),
+    # jina-embeddings-v3 (port transformers-NATIF `tomaarsen/…-hf` : le chemin
+    # sentence-transformers/trust_remote_code amont casse sur ce transformers).
+    # ⚠️ LICENCE CC-BY-NC-4.0 (NON-COMMERCIAL). Adopté comme embedder de BUILD en
+    # phase RECHERCHE (génération de golds/datasets de qualité, non-commerciale).
+    # PARE-FEU : ses sorties ne doivent JAMAIS servir à entraîner un modèle EXPÉDIÉ
+    # dans l'édition commerciale (le NC contaminerait l'élève). Re-dérivation propre
+    # (embedder Apache : arctic-l/granite) exigée avant toute commercialisation.
+    # Cf. research/jina_provenance_firewall.md. Meilleure qualité mesurée (NMI thème
+    # 0.482 sur x-stance). Mean-pooling natif, dim 1024, sans préfixe.
+    "tomaarsen/jina-embeddings-v3-hf": ModelSpec(
+        model_id="tomaarsen/jina-embeddings-v3-hf",
+        doc_prefix="",
+        query_prefix="",
+        trust_remote_code=False,
+        revision="489592a9ef4098ea66bdc4a4a76614014e198e96",
+        normalize=True,
+        loader="hf_mean_pool",
+        license="cc-by-nc-4.0",
+        note="jina-v3 (port natif) ; NON-COMMERCIAL ; embedder de build RECHERCHE ; dim 1024.",
+    ),
     # Multilingue fort. AUCUN préfixe — en ajouter dégraderait la qualité.
     "BAAI/bge-m3": ModelSpec(
         model_id="BAAI/bge-m3",
@@ -169,6 +197,9 @@ ALIASES: dict[str, str] = {
     "qwen3-0.6b": "Qwen/Qwen3-Embedding-0.6B",
     "qwen3-embed": "Qwen/Qwen3-Embedding-0.6B",
     "e5-large-instruct": "intfloat/multilingual-e5-large-instruct",
+    # jina-v3 (NON-COMMERCIAL) — embedder de build phase recherche (cf. pare-feu).
+    "jina-v3": "tomaarsen/jina-embeddings-v3-hf",
+    "jina-embed": "tomaarsen/jina-embeddings-v3-hf",
 }
 
 
