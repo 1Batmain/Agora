@@ -1,0 +1,862 @@
+{
+  "summary": {
+    "dataset": "tiktok",
+    "model": "mistral-large-latest",
+    "variant": "soft",
+    "baseline_decided": 1764,
+    "filtered_decided": 1623,
+    "removed": 141,
+    "removal_good_notclear": 103,
+    "removal_bad_clear": 31,
+    "removal_precision": 0.769,
+    "kept_sample": 25,
+    "kept_clear": 14,
+    "kept_precision": 0.56,
+    "conf_removed": {
+      "medium": 98,
+      "high": 42,
+      "low": 1
+    }
+  },
+  "flipped": [
+    {
+      "cible": "réguler les algorithmes amplifiant la tristesse",
+      "text": "Ma sœur, passe trop de temps sur Tiktok, comme pour oublier son propre mal-être ( effet hypnotique )",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les algorithmes amplifiant la tristesse",
+      "text": "sentiment de manque de confiance en soi face a de nombreux tiktoks ou encore face a de mauvais commentaires",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les algorithmes amplifiant la tristesse",
+      "text": "En utilisant tiktok, on a un flux important d'informations divers et variés qui sont pour la plupart négative par rapport au monde et beaucoup de point de vues sur différents aspects de la société actuelle qui font comprendre qu'on vit dans un monde horrible. On se sent un peu étouffé et enfermer dans tout ça … il faut s'en éloigner au maximum tout en se rendant compte qu'en effet notre société n'est pas parfaite",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les algorithmes amplifiant la tristesse",
+      "text": "J'allais sûr tiktok pour me détendre mais je ressortait de l'application pleine de rage, de dégoût et, surtout, de haine pour les autres … Ça me donnait aussi mal à la tête … Malgré cela, je retournais sur l'application dans le but de me détendre",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "supprimer les algorithmes de contenus courts addictifs",
+      "text": "je me suis rabattue sur les réels Instagram",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "supprimer TikTok pour lutter contre la dépendance",
+      "text": "Rien n'a était causé par tiktok",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "supprimer TikTok pour lutter contre la dépendance",
+      "text": "j'ai signalé le comtenu mais TikTok m'a dit qu'il n'y avait pas de soucis",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "supprimer TikTok pour lutter contre la dépendance",
+      "text": "Texts via TikTok de personnes qui cachaient leurs identités",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire TikTok aux mineurs sans accord parental",
+      "text": "Des enfants malades utilisés par leur parents sur tiktok aussi me choque",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les images à caractère pornographique aux mineurs",
+      "text": "la veille un homme avait contacté mon chéri et lui avait envoyé une photo de ma fille aux toilettes avec les cuisses couvertes d'entailles … le même qui nous a contacté, lui faisait croire qu'il était amoureux et lui faisait du chantage pour avoir des photos et vidéos de nus et cela tous les jours … les contenus mortifères n'avaient rien arrangé, entre les vidéos pour apprendre à se scarifier, ou se suicider, où celles sur les moyens de maigrir et j'en oublie … Tik-Tok est juste horrible et détruit nos enfants",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les images à caractère pornographique aux mineurs",
+      "text": "Le plus compliqué est que le plus petit de 13 ans croient tout ce qu'il se passe sur TikTok et qu'il pense avoir raison, ce qui créé des tensions à l'école",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire TikTok aux mineurs en France",
+      "text": "Je souhaite l'interdiction de tiktok sur le sol francais",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire TikTok aux mineurs en France",
+      "text": "C'est une honte l'état doit interdite tik Tok",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter l'accès des mineurs à TikTok",
+      "text": "Ma fille de 19 ans a développé une addiction à TikTok qui a contribué à son décrochage scolaire",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les contenus déclencheurs de troubles mentaux en ligne",
+      "text": "À cause de TikTok, j'ai commencé à me masturber plusieurs fois par jour, surtout quand je vois des hommes déguisé en furie nocturnes",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les contenus pro-suicide sur les réseaux sociaux",
+      "text": "j'ai vu un tiktok où mon ami s'est fait renversé par une voiture… il en est décédé et je suis traumatisée, ils n'ont même pas banni la vidéo",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'usage des réseaux sociaux pour les mineurs",
+      "text": "TikTok n'est pas une bonne application",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "sanctionner les insultes et propos haineux en ligne",
+      "text": "Y font des mauvaises blagues pour brisé les couples et sait pas drôle et intelligent et après y a des disputes ou des divorces..?",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les commentaires en ligne par modération systématique",
+      "text": "non juste des remarques sur ce que je publiais une seule fois",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les commentaires en ligne par modération systématique",
+      "text": "J'ai d'ailleurs signalé en direct que ce genre de promotion n'était pas approprié, mais il m'a répondu de façon désinvolte, en disant quelque chose comme : « Chacun fait ce qu'il veut, au moins moi je gagne de l'argent. »",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "modérer strictement les commentaires en ligne",
+      "text": "Publications malintentionnées de camarades de classes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "modérer strictement les commentaires en ligne",
+      "text": "Certaines publications sont très sombres, tristes et mettent le moral à zéro",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "modérer strictement les commentaires en ligne",
+      "text": "Sans parler des innombrables publications bourrés de fautes d'orthographes. La moitié des personnes de ma classe n'a objectivement pas le niveau CE1 en français",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler strictement les contenus haineux et faux en ligne",
+      "text": "Beaucoup trop de haine et d'activité interdite(redonne urbain, bagarre,violence physique,.)",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler strictement les contenus haineux et faux en ligne",
+      "text": "trop de choses mal, mutilations. sujets que des jeunes enfants ne devraient pas avoir accès",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler strictement les contenus haineux et faux en ligne",
+      "text": "peur extrême pour des bébés ou des enfants dont les parents sont indignes et leur font risquer leur vie",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les propos homophobes et transphobes par la loi",
+      "text": "Propos raciste, désinformation, antisémitisme.. propos anti féministe..",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les propos homophobes et transphobes par la loi",
+      "text": "Apologie de l'islam, discours pro Palestine, dénigrement des femmes",
+      "conf": "low",
+      "judge_claire": false
+    },
+    {
+      "cible": "renforcer la lutte gouvernementale contre le harcèlement",
+      "text": "La violence est trop présente et normalisée",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "renforcer la lutte gouvernementale contre le harcèlement",
+      "text": "act de violence en direct",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les propos racistes et antisémites en ligne",
+      "text": "J'ai honte pour la race humaine",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler la diffusion des rumeurs en ligne",
+      "text": "Plusieurs rumeurs ont été faites",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler la diffusion des rumeurs en ligne",
+      "text": "Plus de liberté d'expression sur ses idées politique",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire la création de faux comptes en ligne",
+      "text": "il croit les fausses astuces des fraudeurs et parfois il tente de les appliquer",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la création de faux comptes en ligne",
+      "text": "arnaque sur personne vulnérable pour aider financièrement de faux dépressifs",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire la création de faux comptes en ligne",
+      "text": "les fausses formations pulullent et sont des arnaques monumentales",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la création de faux comptes en ligne",
+      "text": "Pour gianni_gofficiel, il manipule et arnaque totalement sa communauté. Il dit de venir sur son live pour qu'on le voit manger sa chips ou qu'on le voit appuyer sur une alarme à incendie. Dans tous ses shorts, il dit qu'il va le faire mais il ne le fait jamais. Mais le vrai drame c'est que sur ses lives il oblige sa communauté à lui donner de l'argent pour qu'il fasse le défi prévu initialement … gianni_gofficiel a SCAM ce compte à l'enfant ce qui est totalement illégal !",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser l'anonymat total en ligne sans contrôle",
+      "text": "Vente de produits contrefaits",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'envoi anonyme de contenus menaçants ou privés",
+      "text": "Un homme m'envoyait des message bizarre",
+      "conf": "medium"
+    },
+    {
+      "cible": "interdire l'envoi anonyme de contenus menaçants ou privés",
+      "text": "C'était des raids numériques. Une personne envoyait toute sa communauté mharceler",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les influenceurs toxiques sur les réseaux sociaux",
+      "text": "Les gens son pas contens et reste dans leure coin",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les influenceurs toxiques sur les réseaux sociaux",
+      "text": "jai deja vu aussi des hommes qui laissent paraitre des erections a travers leur vetement",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "imposer la conversion des victimes d'attaques",
+      "text": "Une des cause de ma dépense",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "imposer la conversion des victimes d'attaques",
+      "text": "Nous ne voulons pas du droit qualifornien.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les contenus toxiques en ligne",
+      "text": "mes amis deviennent tous accros un par un c'est une épidémie",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser le contenu choquant en ligne sans restriction",
+      "text": "J ai du mal a 'e plus me connecter",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser le contenu choquant en ligne sans restriction",
+      "text": "Aucun problème rencontré,",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser le contenu choquant en ligne sans restriction",
+      "text": "M'ont donné des TCA",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser le contenu choquant en ligne sans restriction",
+      "text": "je ne fais pas confiance au gouvernement chinois",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les contenus choquants en ligne",
+      "text": "Contenu abrutissant",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les contenus choquants en ligne",
+      "text": "Compassion - choqué",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter l'exposition algorithmique à contenu émotionnellement négatif",
+      "text": "2. Un mal-être lié au sentiment de perdre son temps, d'avoir du mal à décrocher et scroller indéfiniment sans ressentir une grande satisfaction",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'exposition algorithmique à contenu émotionnellement négatif",
+      "text": "Le mal être vient de l'utilisation excessive de quelque chose aussi inutile : c'est la sensation d'avoir perdu son temps (un temps considérable) pour quelque chose d'aussi inutile",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'exposition algorithmique à contenu émotionnellement négatif",
+      "text": "Mal-être : Puisque la dopamine est en continu le sentiment de mal-être et le sentiment de démotivation pour le moindre mouvement, la moindre activité et de la procrastination",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "réguler les contenus nuisibles en ligne",
+      "text": "La sensation d'être forcé et poussé à voir de manière intrusive l'intimité de personnes partageant des choses très personnels sur ce réseau",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler les contenus nuisibles en ligne",
+      "text": "Heurtée plus généralement par le lynchage-défouloir qui témoigne d'une grande violence intérieure des individus et n'inspire aucune confiance sur notre capacité à tous à faire société",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "attribuer le mal-être aux réseaux sociaux",
+      "text": "- Mal de tête",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les contenus pro-ana et pro-mia en ligne",
+      "text": "Il mange avec le téléphone en suivant tic toc manque de concentration sur les cours troubles du comportement à la maison Saute les repas , et pas de dialogue en famille",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'exposition aux contenus anxiogènes en ligne",
+      "text": "Angoisse liée à la guerre en Ukraine",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'incitation aux pratiques suicidaires",
+      "text": "Incitations a des pratiques religieuses inappropriées, se référant à des extraits de texte sacrés sortis de leur contexte",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter la diffusion de vidéos à forte charge émotionnelle négative",
+      "text": "Vidéos inutiles, perte de temps au detriment d'autres activités telles que la lecture",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter la diffusion de vidéos à forte charge émotionnelle négative",
+      "text": "les minis vidéos entrainent une impatience permanente pour tout",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la publication de vidéos sans consentement explicite",
+      "text": "Insulte sur certaines vidéos publiés",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la publication de vidéos sans consentement explicite",
+      "text": "j'ai reçu des insultes sous des vidéos aussi",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la publication de vidéos sans consentement explicite",
+      "text": "Video virale, critiques et insultes",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la publication de vidéos sans consentement explicite",
+      "text": "Des milliers de critiques reçu sur la plupart de mes vidéos, sans aucune raison et en rapport avec mon corps",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les contenus haineux sur les plateformes de divertissement",
+      "text": "Bfmtv et Cnews publie des contenus haineux, raciste et fausse et l'état de ne fait rien contre cette désinformation ! Sans parler des usines à troll russe et chinoise qui font l'apogée de l'extrême droites pro russe et chinoise",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire tout contenu sexuel non sollicité en ligne",
+      "text": "Souvent on voit des vidéos avec des filles qui ont un corps de rêve, ça me fait me détester encore plus",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la diffusion d'images choquantes sans restriction",
+      "text": "Lance des défis de photos à prendre à une certaine heure préciser pour gagner des likes par des utilisateurs émotionnellement fragile qui vont jusqu'à mettre tout le monde en danger en prenant sans autorisation des gens en photo, y compris dans des salles de classe, sans que les adultes présent ne s'en rendent compte",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion d'images de maltraitance animale",
+      "text": "Quand je vois des animaux malades",
+      "conf": "medium"
+    },
+    {
+      "cible": "interdire la diffusion d'images de maltraitance animale",
+      "text": "voir des chiens morts ça fait mal",
+      "conf": "medium"
+    },
+    {
+      "cible": "interdire la diffusion d'images de maltraitance animale",
+      "text": "voir plein d'événements triste et violent",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la diffusion de contenus violents depuis les prisons",
+      "text": "je pense que voir des vidéos sur la guerre en Ukraine qui du coup montre explicitement des cadavres et des gens ce faire abattre est pas la meilleur chose que j'ai envie de voir",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "autoriser la diffusion de contenus violents depuis les prisons",
+      "text": "Je parle de la vidéo qui a tourné partout de la mort de Aboubakar Cissé tué par un terroriste au sein d'une mosquée .",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser la diffusion de contenus violents depuis les prisons",
+      "text": "une fin de live qui a duré un peu plus de 14h, dans lequel le créateur de contenu TLJ etait lynché par l'hôte, Sheikah.officiel ainsi que les guest sur son live, accusé d'être un pédophile, avec dans la participation du salon des commentaires plus haineux les uns que les autres, puisque ceux qui tentaient de le defendre etaient mutés … cette personne à pour habitude d'ouvrir des lives, de s'en prendre à d'autres créateurs avec ses guest habituels, de les afficher en place publique, de les menacer et de proferer des accusations",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les vidéos choquantes aux mineurs",
+      "text": "Designer revenge dans un live s est moqué de moi et m a humilié ce qui m a conduite à avoir des pensées suicidaire et m a traumatisé",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser les vidéos choquantes sans avertissement",
+      "text": "situation de harcèlement qu'on assiste entre d'une personne d'une vidéo à une autre",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'accès des mineurs à tout contenu à caractère sexuel",
+      "text": "La banalisation des vidéos vues par notre adolescent durant plusieurs années (qu'il nous montre de temps en temps) nous montre une insensibilité de sa part à la vue de certaines vidéos TRÈS VIOLENTES..!! Pour nous c'est totalement insoutenable et pour lui c'est normal, cela le fait rire..",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter l'accès aux vidéos choquantes pour les mineurs",
+      "text": "Les gens se permettent trop de choses derrière leurs écrans",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'accès aux vidéos choquantes pour les mineurs",
+      "text": "On se sent bloqués à regarder",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'accès aux vidéos choquantes pour les mineurs",
+      "text": "trop de personnes se filment à tout va",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'accès aux vidéos choquantes pour les mineurs",
+      "text": "lorsque que je tombe sur des vidéo de benoit chevalier j'ai envie de casser mon téléphone",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'usage du téléphone avant le coucher",
+      "text": "Si mon fils ne regarde pas ses notifications, son téléphone vibre sans s'arrêter toutes les 3 secondes. Harcelant",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "rendre la culpabilité productive un devoir social",
+      "text": "On voit beaucoup de contenu qui nous fait culpabiliser en fonction de ce qu'on mange ou pas, de ce qu'on fait ou pas Je trouve que c'est une source de stress",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "consacrer son temps libre aux rencontres numériques",
+      "text": "il y a aussi un effet de mode qui peut etre lourd a porter, surtout quil déteint facilement sur la vie de toute les jours",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter le temps passé sur les réseaux sociaux",
+      "text": "Des fois je me sens un peu déprime mais rien de fou",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "reconnaître la culpabilité comme signe d'usage excessif",
+      "text": "culpabilité sur le poids contenus sur le mal être des ados",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "considérer le temps passé comme perdu ou utile",
+      "text": "Sentiment de manque dès qu'on ne se connecte pas dans la journée",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "considérer le temps passé comme perdu ou utile",
+      "text": "Une impression d'être seul. OU une impression de ne pas avoir d'amis",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "considérer le temps passé comme perdu ou utile",
+      "text": "L'impression d'être enfermé d'en une bulle est de ne plus avoir d'amis",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter l'usage des réseaux sociaux au quotidien",
+      "text": "L'envie de toujours ressemblé aux « stars »",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter volontairement son temps sur une activité addictive",
+      "text": "Les pour toi qui reviennent tout le temps",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "reconnaître le sentiment de dévalorisation sociale comme souffrance collective",
+      "text": "Sentiment d'être mise à nue, de ne plus avoir de vie privé",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "reconnaître le sentiment de dévalorisation sociale comme souffrance collective",
+      "text": "Perte total du sens de la vérité",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "reconnaître le sentiment de dévalorisation sociale comme souffrance collective",
+      "text": "- Gêné par l'absence totale d'intérêt de certain contenu qui ne semble être présent que pour alimenter un flot continue d'information ce qui valide les pensées de Aldous Huxley sur l'abrutissement d'une société du fait d'une quantité trop importante d'informations qui nous font perdre l'essentiel et nous ramènent à ne plus rien savoir",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter le temps passé en boucle de défilement",
+      "text": "Pensées n'excédant plus 1 minute",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter le temps passé en boucle de défilement",
+      "text": "mini dépression envie de rien faire fatigué",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'incitation à convertir un mineur sans accord parental",
+      "text": "Ma fille c'est sacrifié pendant 3 ans",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'incitation à convertir un mineur sans accord parental",
+      "text": "Ma fille a fait 2 tentatives de suicide car elle a été harcelé à l'école et elle passait trop de temps sur les réseaux et ça l'a déconnecté du monde réel , elle pensait que sa vie était merdique , qu'elle était moche",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser le contrôle parental sur les réseaux des mineurs",
+      "text": "Sensation d'exclusion pour ma fille qui voyait les contenus de ses amis en soirée où elle n'était pas invité",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "sanctionner systématiquement le harcèlement en ligne et scolaire",
+      "text": "Lorsque je vois nasdas utilisé des personnes vulnérables pour faire du contenu et qu'il fait de plus en plus du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans. Ça me pose question",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "autoriser les comptes anonymes dans les établissements scolaires",
+      "text": "ma sœur qui s'est fait harceler sur Snapchat par des élèves de son établissement, il y a maintenant deux ans, des insultes et des moqueries sans justifications dans ses messages privés et dans des groupes",
+      "conf": "high"
+    },
+    {
+      "cible": "autoriser les comptes anonymes dans les établissements scolaires",
+      "text": "site au contenus postées sur les réseaux sociaux certaines personnes de mon établissement scolaires sont venu me voir en me montrant mon compte ainsi que mon contenu dans le but de se moquer des sons utilisées ou encore de moi",
+      "conf": "high"
+    },
+    {
+      "cible": "autoriser les comptes anonymes dans les établissements scolaires",
+      "text": "Défi avec du feu au bout des doigts réalisé bêtement par ma cadette",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'éducation aux écrans dans les programmes scolaires",
+      "text": "cela avant la série Adolescence (à montrer au Lycée à mon sens aux parents/profs/élèves/personnels encadrant/force de police/politique = utile pour tous et nous avons chacun un rôle constructif, parole de médiateur et parent",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "j'ai été victime de harcèlement sur tiktok",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "mon ancienne meilleure amie à commencé à me harceler sur Tiktok. Surtout en utilisant l'espace des commentaires",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "Mon ex petit ami m'a fait subir du ciber harcèlement sur TikTok il s'y est mi avec tout c'est ami je les bloquais mais il revenait avec des faux comptes … j'ai vu qu'il avait publié mon adresse",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "concernant l'harcèlement, j'avais publier une vidéo , nous pouvons pas vraiment dire que c'est de l'harcèlement mais l'ex petite amie de mon ex petite amie m'a envoyer un message pour me dire que je cite « t'es trop moche » « j'te lave h2948 » en m'envoyant le screen de mon tiktok",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "Notre fille de 12 ans a essayé les scarification suite à des jeunes filles qui expliquent sur tik tik comment faire",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "quand une personne sur tiktok publie une vidéo en critiquant les personnes qu'ont ci ou ça et que toi t'as ça ça me fait du mal et vouloir changer",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "Je portais l'étoile de David dans mon pseudo tiktok et sous plusieurs vidéos j'ai subi des moqueries et insultes lié a cela. Malgré le fait que j'ai signalé, tiktok me disait ne trouver aucune infraction",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "mon fils a été harcelé et frappé suite à un défi tik tok de taper sur tous les jeunes nés en 2010",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "Mon fils a été approché par un escroc sur Tik-Tok se faisant passer pour une jeune fille. Cet escroc lui a demand\" une photo de son visage (ce que mon fils de 16 ans a réalisé) et s'en ai suivit une tentative de chantage au photomontage sexuel grossier, qui m'a conduit à porter plainte auprès du Commissariat de Lorient. Aucune suite n'a pour l'instant été donnée, le ou les auteurs résidant très certainement, d'après les forces de l'ordre, dans un pays hors union européenne",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire la diffusion de contenus scolaires sur les réseaux sociaux",
+      "text": "Les élèves avec qui je travaille en classe entière ont pour au moins 1/3 d'entre eux déjà reçu des dick pik",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'application aux mineurs",
+      "text": "Les jeunes ne communiquent plus, et il y a un risque d'isolement à cause de cette application",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire l'application aux mineurs",
+      "text": "Cette application nous détruit la vie.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "supprimer définitivement cette application des stores",
+      "text": "j'ai desinstaller l'application. J'en avais marre que les gens jugent trop vite ou s'invente des rumeurs",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "supprimer définitivement cette application des stores",
+      "text": "Pour X que j'ai désinstaller en 2023/2024 je trouve que c'est le pire réseau social, les gens sont méchant malsain, tout ce qu'il y a de pire (je pense que c'est le réseau social avec qui j'ai eu la moins bonne expérience), des vidéo CHOQUANTE (des vidéos ou on voit des gens se faire écraser par des voiture, des gens se faire tuer et j'en passe) alors que ce que je rechercher sur l'application avait rien à voir avec ce genre de contenu",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "supprimer définitivement cette application des stores",
+      "text": "J'ai repéré le même fonctionnement sur X (tweeter): la surcharge d'infos aussi plaisantes que déplaisantes qui m'ont fait désinstaller l'appli",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser les algorithmes décider du contenu affiché aux utilisateurs",
+      "text": "On se compare très souvent au corp des gens sur les réseaux sociaux",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser les algorithmes décider du contenu affiché aux utilisateurs",
+      "text": "De plus les ressens sociaux font complexer et nous ne sont pas la réalité",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser les algorithmes décider du contenu affiché aux utilisateurs",
+      "text": "Développons nos réseaux sociaux adapte à nos valeurs euros.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser les algorithmes décider du contenu affiché aux utilisateurs",
+      "text": "le rapeur français a dit tout vi à les réseaux sociaux mais si cela n'existait pas je ne pense pas qu'il aurait était devant un public ou même devant la perssone concernée pour aller dire c'est méchanceté je trouve sa tros facile de parler dériére un écran. Au lieu d'aller dire c'est chose la les yeux dans les yeux",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler la promotion d'une vie parfaite par les influenceurs",
+      "text": "Ce sentiment de mal-être est causé par les influenceurs qui racontent leurs situations tristes, que je trouve très réelles, ce qui m'enfonce encore davantage dans mon mal-être",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "réguler la promotion d'une vie parfaite par les influenceurs",
+      "text": "Les lives match des autre d'influenceurs me choquent, ils manipulent les gens jusqu'à leur parler en privé pour les amadouer et leur offrir des cadeaux qu'ils récupèrent ensuite…",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les réseaux sociaux aux mineurs",
+      "text": "La réponse pour réussir à réduire le temps sur nos ados ne peut pour moi passer que par une réponse collective, telle que l'interdiction d'un smartphone dans les collèges",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "réguler l'usage des réseaux sociaux pour limiter l'addiction",
+      "text": "Des élèves peuvent ressentir un mal-être selon les propos/vidéos qu'ils voient sur les Réseaux Sociaux",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "réguler l'usage des réseaux sociaux pour limiter l'addiction",
+      "text": "Le sentiment de mal-être , c'est que cela m'a vraiment choqué … Ce n'est pas normal que l'on puisse faire cela et en plus le filmer et le mettre sur les réseaux sociaux afin que tout le monde puisse le voir … Je suis contre les réseaux sociaux à cause de cela",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "réguler l'usage des réseaux sociaux pour limiter l'addiction",
+      "text": "Cyber-harcelement, moquerie lié au physique en rapport avec mes postes sur les réseaux. Cela conduit à se retirer des réseaux, la honte de poster et la peur d'ouvrir les réseaux sociaux",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les comparaisons sociales basées sur le physique",
+      "text": "Comparaison beaucoup plus fréquente avec d'autres personnes",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les comparaisons sociales basées sur le physique",
+      "text": "Comparaison constante",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les comparaisons sociales basées sur le physique",
+      "text": "Grosse attache au physique car c'est beaucoup montrer sur ce reseau",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les comparaisons sociales basées sur le physique",
+      "text": "Discrimination physique",
+      "conf": "medium"
+    },
+    {
+      "cible": "interdire les comparaisons sociales basées sur le physique",
+      "text": "Publications sur le physique",
+      "conf": "medium"
+    },
+    {
+      "cible": "accepter que le monde soit uniformisé par les normes sociales",
+      "text": "L'impression que tout le monde deviens stupide , que la stupidité domine sur tout le monde , à croire tout et n'importe quoi",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire la promotion des standards de corps parfaits",
+      "text": "Concernant le mal être, un parfait exemple: le beauté privilège. c'est à dire qu'une personne naturellement belle, ou maquillée, qui s'habille bien et a la mode et aussi riche en passant sera plus célèbre que quelqu'un qui a moins confiance en lui, qui a moins de moyen et qui ne suit pas les modes",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "laisser les algorithmes amplifier les contenus tristes",
+      "text": "l'algorithme propose des vidéos qui finissent pas limiter l'ouverture d'esprit et enferment l'opinion ou le sujet",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "laisser les algorithmes amplifier les contenus tristes",
+      "text": "On reçoit trop de contenu similaire répétitif par l'algorithme",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "laisser les algorithmes amplifier les contenus tristes",
+      "text": "L'algorithme est un cercle vicieux qui nous fais rester le plus longtemps possible sur l'application, ce qui nous fais faire passer à côté de plein de choses",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "laisser les algorithmes amplifier les contenus tristes",
+      "text": "Un sentiment de culpabilité lié à un algorithme basé autour du sport qui peut parfois avoir des conséquences psychologiques, notamment vis à vis du reflet physique",
+      "conf": "high",
+      "judge_claire": false
+    }
+  ]
+}

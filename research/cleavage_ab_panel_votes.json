@@ -1,0 +1,120 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_pairs": 10,
+    "b_wins": 6,
+    "a_wins": 4
+  },
+  "pairs": [
+    {
+      "theme_id": "n1",
+      "votes": [
+        "b",
+        "b",
+        "b"
+      ],
+      "winner": "b",
+      "prop_a": "Instaurer un conseil d'autorégulation déontologique des médias",
+      "prop_b": "Instaurer un conseil de déontologie journalistique à pouvoir de sanction"
+    },
+    {
+      "theme_id": "n2",
+      "votes": [
+        "a",
+        "a",
+        "a"
+      ],
+      "winner": "a",
+      "prop_a": "Imposer une vérification systématique avant publication",
+      "prop_b": "Obliger les journalistes à vérifier avant publication"
+    },
+    {
+      "theme_id": "n3",
+      "votes": [
+        "a",
+        "a",
+        "a"
+      ],
+      "winner": "a",
+      "prop_a": "Obliger les plateformes à modérer les contenus électoraux",
+      "prop_b": "Imposer aux plateformes une obligation de signalement en période électorale"
+    },
+    {
+      "theme_id": "n4",
+      "votes": [
+        "b",
+        "b",
+        "b"
+      ],
+      "winner": "b",
+      "prop_a": "Rendre publics les liens d'intérêts des médias",
+      "prop_b": "Imposer une transparence totale sur les liens d'influence des médias publics"
+    },
+    {
+      "theme_id": "n6",
+      "votes": [
+        "a",
+        "a",
+        "a"
+      ],
+      "winner": "a",
+      "prop_a": "Renforcer l'application des lois existantes plutôt qu'en créer",
+      "prop_b": "Renforcer l'application des lois existantes plutôt que légiférer"
+    },
+    {
+      "theme_id": "n8",
+      "votes": [
+        "a",
+        "b",
+        "b"
+      ],
+      "winner": "b",
+      "prop_a": "Réduire les délais judiciaires par des référés ultra-rapides",
+      "prop_b": "Décider en 48h sans recours administratif immédiat"
+    },
+    {
+      "theme_id": "n9",
+      "votes": [
+        "b",
+        "b",
+        "b"
+      ],
+      "winner": "b",
+      "prop_a": "Instaurer un droit à l'effacement des fausses informations",
+      "prop_b": "Imposer un repentir public effaçant la fausse information"
+    },
+    {
+      "theme_id": "n10",
+      "votes": [
+        "b",
+        "b",
+        "b"
+      ],
+      "winner": "b",
+      "prop_a": "Autoriser l'État à filtrer les contenus en ligne sans juge",
+      "prop_b": "Interdire les contenus en ligne par mots-clés sans contrôle judiciaire"
+    },
+    {
+      "theme_id": "n13",
+      "votes": [
+        "a",
+        "a",
+        "a"
+      ],
+      "winner": "a",
+      "prop_a": "Instaurer une accréditation officielle des vérificateurs d'information",
+      "prop_b": "Confier à des organismes accrédités le décodage officiel des infos"
+    },
+    {
+      "theme_id": "n14",
+      "votes": [
+        "b",
+        "b",
+        "a"
+      ],
+      "winner": "b",
+      "prop_a": "Instaurer un contrôle systématique des discours haineux en ligne",
+      "prop_b": "Instaurer un éveil critique obligatoire contre la haine"
+    }
+  ]
+}

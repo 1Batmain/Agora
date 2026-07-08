@@ -1,0 +1,1210 @@
+{
+  "summary": {
+    "dataset": "republique-numerique",
+    "judged": true,
+    "merge_thr": 0.85,
+    "n_leaves": 162,
+    "n_arguments": 9,
+    "communities_filtered_as_meta": 181,
+    "leaves_clivage": 2,
+    "leaves_consensus": 5,
+    "leaves_underdeveloped": 155
+  },
+  "leaves": [
+    {
+      "theme_id": "n1",
+      "title": "donnée · sensibles · api",
+      "n_claims": 87,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 87,
+          "dispersion": 0.19,
+          "argument": "Je peux tout à fait avoir l'envie et le besoin de confier des données privées à une entreprise sans que celles-ci ne soit distribuée aux quatre vents",
+          "display_gi": 1578
+        }
+      ]
+    },
+    {
+      "theme_id": "n2",
+      "title": "data · ouverture · secret défense",
+      "n_claims": 115,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n3",
+      "title": "formats · format · pdf",
+      "n_claims": 69,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 60,
+          "dispersion": 0.205,
+          "argument": "Les formats libres permettent le libre accès et l'égalité de l'accès a la donnée, ils sont utilisables directement et gratuitement via des logiciels eux même libres, sans nécessiter d'achat ni l'ouverture d'un compte sur un service en ligne",
+          "display_gi": 514
+        },
+        {
+          "n_support": 9,
+          "dispersion": 0.108,
+          "argument": "cela évite le risque de \"back doors\", c'est transparent, modifiable et donc adaptable aux besoins, évite les DRM et les obligations coûyeuses de mises à jour selon la volonté du fournisseur ; assure la liberté des administratins et des citoyens-ennes",
+          "display_gi": 686
+        }
+      ]
+    },
+    {
+      "theme_id": "n5",
+      "title": "personnelles · contrôler · caractère personnel",
+      "n_claims": 27,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 27,
+          "dispersion": 0.171,
+          "argument": "« Toute personne dispose du droit de décider de la collecte, de l'usage et de la communication de ses données à caractère personnel, de les contrôler et de limiter leur transfert, dans les conditions et limites fixées par les lois et règlements en vigueur. Ces droits sont inaliénables »",
+          "display_gi": 3803
+        }
+      ]
+    },
+    {
+      "theme_id": "n6",
+      "title": "dcp · traitements · assuré",
+      "n_claims": 33,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n7",
+      "title": "anonymisation · naissance · préalable",
+      "n_claims": 28,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n8",
+      "title": "privée · secret · correspondances",
+      "n_claims": 41,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n9",
+      "title": "notaire · identifiants · passe",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n10",
+      "title": "nom · privée · vie",
+      "n_claims": 33,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n12",
+      "title": "intégralité · produit · étape transformation",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n13",
+      "title": "usager · intervenant · durée",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n14",
+      "title": "annonces · faille · correction",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n16",
+      "title": "portabilité · patrimoine · consommateur",
+      "n_claims": 26,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n17",
+      "title": "mesure audience · formuler exigences · limiter efficacité",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n18",
+      "title": "cgv · cgu · documentation",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n19",
+      "title": "entreprises · barème · privées",
+      "n_claims": 89,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n20",
+      "title": "rapport · sondage · servi rédaction",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n21",
+      "title": "santé · numéro · sécurité sociale",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n24",
+      "title": "attendre seconde · mandriva · peine",
+      "n_claims": 29,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n25",
+      "title": "langue · orthographe · sourdes",
+      "n_claims": 35,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n26",
+      "title": "veux · incitations terme · interne entendez",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n27",
+      "title": "clair · cinéma différence · courtes",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n29",
+      "title": "france connect · structure · usine gaz",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n30",
+      "title": "afnor · retard · norme",
+      "n_claims": 32,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n31",
+      "title": "organisme · cecill · expert",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n32",
+      "title": "environnement santé · métiers · vague",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n33",
+      "title": "assurer prestation · protocoles disponibles · offerts incluant",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n34",
+      "title": "interprètes · certification · formation",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n35",
+      "title": "supprimer · texte · darlays",
+      "n_claims": 104,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n36",
+      "title": "stipulation · contraire · mitigé",
+      "n_claims": 39,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n37",
+      "title": "proposition · simplification · propositions",
+      "n_claims": 82,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n38",
+      "title": "url · doublon · évoqué",
+      "n_claims": 79,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n39",
+      "title": "risque zéro · sécurité · avis",
+      "n_claims": 60,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n42",
+      "title": "ondes · santé · wifi",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n43",
+      "title": "handicapées · démarches administratives · langue",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n44",
+      "title": "wifi · opérateur · émission",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n45",
+      "title": "citoyens français · fondamental · débit convenable",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n46",
+      "title": "détenus · réinsertion · progressif contrôlé",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n47",
+      "title": "traduction · écrite · simultanée",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n49",
+      "title": "emploi · institution · interdit",
+      "n_claims": 23,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n50",
+      "title": "vital · mourrir · monde",
+      "n_claims": 27,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n51",
+      "title": "publicité · publicités · pub",
+      "n_claims": 30,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n52",
+      "title": "dns · vaut · activation automatique",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n53",
+      "title": "moteur · moteurs · cookies",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n54",
+      "title": "neutralité · trafic · principe",
+      "n_claims": 47,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n56",
+      "title": "sites · conformité · accessibilité",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n57",
+      "title": "lien · sites · universelle acces",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n58",
+      "title": "accessibilité · sites · dépendent",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n59",
+      "title": "progiciels · schéma · feuille route",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n61",
+      "title": "fibre · ruraux · zones",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n62",
+      "title": "débit · minimum · mega",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n63",
+      "title": "fibre · abonnés · renouvellement",
+      "n_claims": 5,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n64",
+      "title": "fibre · optique · réseau",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n65",
+      "title": "avis · plateformes · vérification",
+      "n_claims": 49,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n67",
+      "title": "débit · débits · normalement",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n68",
+      "title": "débits · compensations · continue récurrente",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n69",
+      "title": "amende · art · passible",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n70",
+      "title": "courrier électronique · consommation · vérification",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n71",
+      "title": "fréquences · redevance · radioélectriques",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n73",
+      "title": "opérateurs · numéro vert · nombre clients",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n74",
+      "title": "connexion · entreprises · techniquement",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n75",
+      "title": "saisi · adsl · pouvez",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n76",
+      "title": "client · opérateurs · orange",
+      "n_claims": 10,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n78",
+      "title": "logiciels · libres · utiliser",
+      "n_claims": 55,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n79",
+      "title": "logiciels · logiciel · libres",
+      "n_claims": 44,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n80",
+      "title": "source · logiciel · formats",
+      "n_claims": 62,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n81",
+      "title": "linux · gnu · distributions",
+      "n_claims": 39,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n83",
+      "title": "firmware · vendus · pilotes",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n84",
+      "title": "vente · logiciel · application",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n85",
+      "title": "verrouillage · liseuse · pleinement exercer",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n86",
+      "title": "constructeurs · remboursement · système",
+      "n_claims": 8,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n87",
+      "title": "matériel · durée · maintien",
+      "n_claims": 6,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n88",
+      "title": "logiciels · logiciel · libres",
+      "n_claims": 47,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n89",
+      "title": "système · obligation utiliser · traite",
+      "n_claims": 28,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n90",
+      "title": "matériel · ordinateurs · bios",
+      "n_claims": 46,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n91",
+      "title": "licence · logiciel · licences",
+      "n_claims": 47,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n93",
+      "title": "programmation · comprendre · apprendre",
+      "n_claims": 46,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n95",
+      "title": "formation · mooc · élus",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n96",
+      "title": "jeunes · plateformes digitales · constuire",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n97",
+      "title": "lieux · epn · animation",
+      "n_claims": 7,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n98",
+      "title": "mairie · béneficiaire · conservées",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n100",
+      "title": "cours · enseignants · enseignant",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n101",
+      "title": "outil · enfants · élèves",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n102",
+      "title": "plan · éducation nationale · enseignement",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n103",
+      "title": "enseignants · école · outils",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n104",
+      "title": "éthiques · réflexion · éthique",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n105",
+      "title": "informatique · établissements · cours",
+      "n_claims": 43,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n107",
+      "title": "numériques détriment · esprits · technologies",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n108",
+      "title": "mort · vie · numériques",
+      "n_claims": 27,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n109",
+      "title": "réduite · retransmettre · moyen moderne",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n110",
+      "title": "carnet · phase · référents numériques",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n111",
+      "title": "stratégie · régionaux · développement",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n112",
+      "title": "jeunes · prix livre · enfants",
+      "n_claims": 30,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n113",
+      "title": "jeux · sport · hasard",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n116",
+      "title": "assemblée · commission · citoyens",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n117",
+      "title": "tirés · citoyens · voter",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n118",
+      "title": "démocratie · révision · votes",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n119",
+      "title": "politique · lois · amendement",
+      "n_claims": 8,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n121",
+      "title": "procureur · judiciaire · république",
+      "n_claims": 23,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n122",
+      "title": "renseignement · interception · surveillance",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n123",
+      "title": "alerte · lanceur · lanceurs",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n124",
+      "title": "drones · combat · robot",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n125",
+      "title": "famille · opérer remettre · augmentant",
+      "n_claims": 76,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n127",
+      "title": "participent · absence · sanctionner",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n128",
+      "title": "sanctions · plan vigipirate · extorsion",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n129",
+      "title": "sanction · sanctions · pécuniaire",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n130",
+      "title": "décret · décrets · application",
+      "n_claims": 37,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n131",
+      "title": "lettre recommandée · lois · formulation",
+      "n_claims": 31,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n132",
+      "title": "projet · distinction · législatif",
+      "n_claims": 28,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n134",
+      "title": "propriété · auteur · copie",
+      "n_claims": 62,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n135",
+      "title": "commerciale · vente liée · commercial",
+      "n_claims": 48,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n136",
+      "title": "auteur · commons · licence",
+      "n_claims": 55,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n137",
+      "title": "photo · images · photos",
+      "n_claims": 56,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n138",
+      "title": "auteurs · auteur · artistes",
+      "n_claims": 38,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n141",
+      "title": "bénéficiaire rsa · frais · économie collaborative",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n142",
+      "title": "proposition demande · impliquée · consultation experts",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n143",
+      "title": "euros · plafond · millions",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n144",
+      "title": "cir · financement · investissements",
+      "n_claims": 14,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n145",
+      "title": "aide · associations · aidés",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n146",
+      "title": "organismes · action · etat",
+      "n_claims": 37,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n147",
+      "title": "collectivités · citoyens · petites",
+      "n_claims": 48,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n149",
+      "title": "acteur collaboratif · activité · statut",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n150",
+      "title": "association · permettre création · membre fondateur",
+      "n_claims": 5,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n151",
+      "title": "associations · association · agrément",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n152",
+      "title": "associations · intérêts généraux · travaux intérêts",
+      "n_claims": 5,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n153",
+      "title": "argent · financements · encouragés",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n154",
+      "title": "transparence · citoyens · hidalgo",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n156",
+      "title": "mois · durée · délais",
+      "n_claims": 61,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n158",
+      "title": "publications · recherche · chercheurs",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n159",
+      "title": "recherche · chercheurs · pays",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n160",
+      "title": "résultats · financement · année",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n161",
+      "title": "recherche · revue · résultats",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n162",
+      "title": "archive · dépôt · fichier national",
+      "n_claims": 8,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n164",
+      "title": "éditeurs · chercheurs · publications",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n165",
+      "title": "revues · shs · production",
+      "n_claims": 12,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n166",
+      "title": "éditeurs · stm · access",
+      "n_claims": 11,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n167",
+      "title": "édition · peer reviewing · revues",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n168",
+      "title": "éditeur · sciences · forme",
+      "n_claims": 34,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n170",
+      "title": "traitement · libertés · directives",
+      "n_claims": 36,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n171",
+      "title": "publication présente · documents · administrations mentionnées",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n172",
+      "title": "représentation · ayants · propriété intellectuelle",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n173",
+      "title": "bases · statistique · titre gratuit",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n174",
+      "title": "documents · administrations mentionnées · publication présente",
+      "n_claims": 19,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n175",
+      "title": "informations · présent chapitre · réutilisation",
+      "n_claims": 27,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n176",
+      "title": "référence · diffusion · administrations",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n177",
+      "title": "commun · informationnel · domaine",
+      "n_claims": 22,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n179",
+      "title": "dns · sécurité · cloud",
+      "n_claims": 27,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n180",
+      "title": "mail · adresse · courrier",
+      "n_claims": 28,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n182",
+      "title": "mail · débiteur · adresse",
+      "n_claims": 9,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n183",
+      "title": "https · ovi · ministères",
+      "n_claims": 16,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n184",
+      "title": "carte · identité · clef",
+      "n_claims": 15,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n185",
+      "title": "ipv · compatibles · compter janvier",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n186",
+      "title": "chiffrement · clé · clés",
+      "n_claims": 38,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n187",
+      "title": "vote · carte · monnaie",
+      "n_claims": 87,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n189",
+      "title": "sms · dons · paiement",
+      "n_claims": 18,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n190",
+      "title": "sms · téléphone · temps réel",
+      "n_claims": 17,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n191",
+      "title": "paiement · sms · arnaque",
+      "n_claims": 13,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n192",
+      "title": "cabines · téléphoniques · cabine",
+      "n_claims": 24,
+      "n_arguments": 0,
+      "arguments": []
+    },
+    {
+      "theme_id": "n193",
+      "title": "communications électroniques · abonné · paiement",
+      "n_claims": 50,
+      "n_arguments": 2,
+      "arguments": [
+        {
+          "n_support": 10,
+          "dispersion": 0.073,
+          "argument": "II. - Les éditeurs de services de communication au public en ligne permettant aux utilisateurs de ces services d'échanger des correspondances sont tenus de respecter le secret de celles-ci. Le secret couvre le contenu de la correspondance en ligne, l'en-tête du message ainsi que les documents joints à la correspondance, le cas échéant. Sont assimilés à des correspondances les contenus diffusés à un groupe restreint de desinataires. « Tout traitement automatisé d'analyse du contenu de la correspondance en ligne ou des documents joints à celle-ci constitue une atteinte au secret des correspondances, sauf lorsque ce traitement a pour fonction l'affichage, le tri ou l'acheminement de ces correspondances, ou la détection de contenus non sollicités ou malveillants. « L'éditeur prend les mesures nécessaires pour garantir le secret et l'intégrité des correspondances échangées par l'intermédiaire de ses services. « III. - Les infractions aux dispositions du présent article sont sanctionnées des peines prévues aux articles 226-1, 226-2, 226-3 et 226-15 du code pénal. « Les opérateurs et les éditeurs mentionnés au II sont tenus de porter à la connaissance de leur personnel les peines encourues au titre du présent article.",
+          "display_gi": 4162
+        },
+        {
+          "n_support": 10,
+          "dispersion": 0.028,
+          "argument": "Il faut Inclure les messagerie de type Messenger, WhatsApp, WeChat, Viber, etc . ne pas limiter au SMS sur lesquels les opérateur on le contrôle. le SMS est à la messagerie ce que le Minitel est à Internet :-p … Le 1° de l'article L.311-4 du code monétaire et financier est remplacé par deux alinéas ainsi rédigés : « 1° Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, effectuées pour l'achat de contenu numérique et de services vocaux, quel que soit le dispositif utilisé pour l'achat ou la consommation du contenu numérique et imputées sur la facture correspondante à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois ; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 euros par mois. « 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois »",
+          "display_gi": 1245
+        }
+      ]
+    },
+    {
+      "theme_id": "n194",
+      "title": "cnil · cil · contrôle",
+      "n_claims": 60,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 60,
+          "dispersion": 0.202,
+          "argument": "Il faut donner plus de moyens à a CNIL qui est aujourdh'ui bcp trop spectatrice et pas assez actrice sur le terrain (trop éloignée des réalités rencontrées sur le terrain)",
+          "display_gi": 2695
+        }
+      ]
+    },
+    {
+      "theme_id": "n195",
+      "title": "mots · insérés · conseille",
+      "n_claims": 21,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 21,
+          "dispersion": 0.137,
+          "argument": "Au d) du 2°, après les mots : « et conseille », sont remplacés par les mots « , conseille et accompagne »",
+          "display_gi": 79
+        }
+      ]
+    },
+    {
+      "theme_id": "n196",
+      "title": "wikipédia · wikipedia · wiki",
+      "n_claims": 26,
+      "n_arguments": 1,
+      "arguments": [
+        {
+          "n_support": 26,
+          "dispersion": 0.154,
+          "argument": "N'utiliser que Wikipédia n'est pas recommandé, il faut toujours s'appuyer sur différentes ressources pour pouvoir acquérir de nouvelles connaissances",
+          "display_gi": 701
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,483 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "model": "mistral-large-latest",
+    "variant": "strict",
+    "baseline_decided": 221,
+    "filtered_decided": 144,
+    "removed": 77,
+    "removal_good_notclear": 46,
+    "removal_bad_clear": 30,
+    "removal_precision": 0.605,
+    "kept_sample": 25,
+    "kept_clear": 22,
+    "kept_precision": 0.88,
+    "conf_removed": {
+      "medium": 26,
+      "high": 51
+    }
+  },
+  "flipped": [
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Il ne faut pas laisser cette loi passer à l'exception de la partie sur les fausses informations volontairement diffusées par des médias professionnels",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Légiférer contre la diffusion de fausses informations, est impossible, parce que le temps qu'elle soit identifiée, elle a déjà été diffusée. Et si on la censure, elle ressortira sous des formes variées",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "des publicités, ou des spots sur la désinformation et ses dangers, par exemple au cinéma ou avant le journal de 20h à la tv, pourraient être envisagées",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "l'ideal serait dans la loi un article qui protège la position des lanceurs d'alerte et les rende impossibles à poursuivre pour diffusion de fausses informations, étant acquis qu'un lanceur d'alerte travaille pour le bien collectif",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Contraindre les plateformes à assumer leurs responsabilités de diffuseur est une nécessité. Pas seulement en période électorale !",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "un cadre légal pourrait obliger les professionnels de l'information à vérifier avant la publication, ainsi qu'à identifier les informations partisanes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Obliger les gafas à ne publier que les sites labellisés en période électorale.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Faire obligation aux plateformes ayant un nombre de connexions important de signaler aux autorités publiques et à tous les candidats pendant la période électorale l'existence d'un envoi massif à des personnes ciblées pour leurs caractéristiques communes d'une information pouvant influencer leur choix.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "le sujet ici n'est pas alimenté par les journalistes : les fake news sont alimentées via les réseaux sociaux … Ce ne sont pas les journalistes qui en sont les auteurs … Ne mélangeons pas tout",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "EN realité je ne pense pas que la lutte contre les fake news doivent faire l'objet d'une loi, surtout qu'elles se diffusent essentiellement sur les réseaux sociaux , dans le cas ou un journal en diffuserait une, impossible du coup de légiférer en se basant sur l'argument : \"c'est un journaliste qui relaye l'information donc ce n'est pas une fake news\"",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Le problème des fake news vient de gens qui ne sont pas journalistes, qui les produisent et les diffusent en utilisant des canaux, notamment les réseaux sociaux (mais pas seulement car les emails sont aussi un puissant vecteur de fake news).",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "Il sans doute aussi légiférer sur les techniques d'embrigadement des sectes, des entreprises terroristes voire des partis politiques non républicains (et leurs associations satellites) qui diffusent des fake dans un but purement électoraliste.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "la notion d'activité qui \"dépasse un seuil de nombre de connexions sur le territoire français\" n'a aucun sens. Qu'est-ce qu'une connexion : s'agit-il d'un accès au site, d'un accès unique au site ou d'une connexion à un compte sur la plateforme ? Comment vérifier qu'on se situe sur \"le territoire français\" ? L'adresse IP n'est pas suffisamment fiable.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "appliquer strictement les lois existantes plutôt qu’en créer",
+      "text": "aucune lois ne peut porter sur des sujets précis, une loi est générale",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "appliquer strictement les lois existantes plutôt qu’en créer",
+      "text": "Elle n'ajoute que des propositions liberticides ou infaisables à l'arsenal légal déjà existant",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "appliquer strictement les lois existantes plutôt qu’en créer",
+      "text": "Charte de Munich qui existe déjà",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Ces questions doivent rester à la portée du plus grand nombre et ne doivent pas nous échapper",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "NON À LA CENSURE, OUI A LA LIBERTÉ",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Aucune limitation à l'information, quelle qu'elle soit",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Code déontologique à respecter.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Laisser le droit à l erreur",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Une lois pour le bien être de tous un chacun sous l'Autorité d'une Justice à l'écoute du Peuple",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "légiférer sur le domaine en heure à heure",
+      "text": "Surtout qu'il est indiqué un renforcement du CSA qui n'est lui même pas très indépendant",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "distinguer usage professionnel et personnel de l'eau",
+      "text": "Globalement d'accord avec tout ça.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "distinguer usage professionnel et personnel de l'eau",
+      "text": "Vous inventez l'eau chaude, là.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Pour la révocation d'un journaliste, cela existe déjà c'est la charte de Munich etc",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Responsabilité de parution pour les journalistes professionnels : oui … Et c'est d'ailleurs spécifié dans la Charte de Munich, décrivant les droits et les DEVOIRS des journalistes",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "engager la responsabilité du journaliste ou de la personne qui diffuse des fakes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Les medias de toute nature doivent respecter la déontologie de leur profession. Vérifier, avant toute annonce, la véracité.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Charte de Munich qui existe déjà (1ere version 1938, seconde version 1971) - Cette charte détaille les droits et les devoirs des journalistes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Les journaliste avant de diffuser une info devraient vérifier celle ci et l'etaye … Dans le cas où il publierai sans le but de promouvoir une idée, sans fondement, il serai normal de les tenir responsable de leur ecrit",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Le problème ce ne sont pas les journalistes professionnels qui font globalement bien leur travail. Quand ils font des erreurs, et c'est humain personne n'est infaillible, cela peut arriver, ils corrigent.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer une obligation d'équité médiatique stricte",
+      "text": "La loi actuelle sur la presse suffit",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "instaurer une obligation d'équité médiatique stricte",
+      "text": "la chaîne info de Bolloré passe quasiment sous silence la mise en examen du patron … Chaque citoyen devrait pouvoir facilement savoir à quel groupe financier (marchand d'armes, bétonneur, r etc) appartient un média public … Quand ces mêmes groupes passent des marchés publics avec les collectivités, détenir une radio, un journal ou une (des) télé(s) leur donne un avantage conséquent (le poids des médias dans l'opinion publique)",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "instaurer une obligation d'équité médiatique stricte",
+      "text": "le Prime Time est le moteur et donc, tout n'est pas vérifié avant le passage à l'antenne",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "Les obligations d'information loyale et transparente existent déjà à la suite de la loi pour une République numérique.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "La liberté d'informer repose sur la confiance que le citoyen accorde à la sincérité de l'information. Cette confiance est du même ordre que celle qui repose sur les élus. Ce d'autant que cette l'exercice de cette liberté n'est pas sans conséquence sur la vie politique.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "La Scam est en accord avec les recommandations formulées au paragraphe 10 de l'avis du Conseil d'Etat du 19 avril 2018 sur les propositions de loi relatives à la lutte contre les fausses informations, qui suggèrent de s'en tenir à la notion de « fausses informations », à la fois plus large que celle de « fausses nouvelles » (déjà présente à l'article 27 de la loi du 29/07/1881 et de l'article L.97 du code électoral) mais aussi plus opératoire dans le contexte visé",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier à l'État le rôle d'arbitre de la vérité",
+      "text": "Cibler ses comptes et sa propagande. Si l'Etat doit intervenir, c'est contre la propagande",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier à l'État le rôle d'arbitre de la vérité",
+      "text": "La divulgation des montants perçus est contraire à la liberté d'entreprendre et au secret des affaires.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter légalement les fausses informations en ligne",
+      "text": "La liberté de l'information oblige la presse à veiller à la sincérité des informations diffusées auprès du public. Cette obligation est certes renforcée pendant des périodes où les choix démocratiques s'exercent mais elle s'impose également hors de ces périodes. … Il importe que l'atteinte à la confiance que le public peut avoir dans l'information soit sanctionnée pendant la période électorale mais également hors de ces périodes. … Il n'est pas discutable que la diffusion de fausses nouvelles a des conséquences graves sur la vie publique mais elle constitue de facto une atteinte à la liberté de la presse à raison de la perte de confiance qu'elle engendre dans l'opinion.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "limiter légalement les fausses informations en ligne",
+      "text": "Aujourd'hui, diffuser des témoignages de femmes traumatisées par leur IVG est considéré comme une fausse information. Mais qu'est-ce qui dit que le traumatisme est impossible? … Plusieurs personnalités en accord avec l'IVG ont condamné la loi constituant un \"délit d'entrave\", comme étant une entrave au débat publique, à la liberté d'expression et une interdiction de débattre. Absolument contre cette idée",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Le rôle de l'école est essentiel … Les professeurs documentalistes se sont déjà emparés des diverses problématiques liées aux médias, et à la circulation de l'information. Avec une prise en compte très variable par l'Institution … Comment assurer une formation des élèves quand on sait qu'il n'y a, le plus souvent, qu'un seul professeur documentaliste dans les établissements ? … Le saupoudrage d'EMI (éducation aux médias et à l'information), sans que personne ne sache vraiment de quoi il s'agit, ne peut être suffisant",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Dans le secondaire, les enseignants documentalistes sont des personnes ressource pour travailler dans ce sens-là",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "La loi sera inutile, voire nuisible … Il faut créer massivement des postes de professeur.e.s documentalistes dans les collèges et lycées, afin d'assurer ENFIN une véritable éducation à la culture de l'information à tous les jeunes",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Le rôle de l'Etat est de s'assurer des bonnes conditions d'une éducation à la culture de l'information, partout sur le territoire et pour tous de façon égale … La solution : recruter des professeur.e.s documentalistes, spécialistes de la question !",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Mise en place d'un curriculum EMI de l'école primaire à l'université et inscription de l'EMI dans les programmes scolaires et universitaires. EMI enseignée par les professeurs documentalistes",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Dans les collèges et les lycées, il y a ce qu'on appelle l'Education aux Médias et à l'Information. Il y a des spécialistes : les professeurs-documentalistes.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Il est très difficile de la définir, il faudrait que le paradigme respecte le pluralisme, qu'i,l soit très objectif … Il est donc nécessaire d'éduquer à un véritable esprit critique, à l'esprit d'analyse des images, des articles ce qu'un professeur documentaliste peut faire dans l'enseignement",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Le rôle de l'école est essentiel … L'enseignement info-documentaire permet d'entamer, dès le collège, une sensibilisation aux flux d'informations et aux risques y afférant … Selon la maturité et l'âge des élèves, on parvient à aborder des notions plus complexes (mise en œuvre de l'esprit critique, analyse des sources, évaluation de l'information, etc.) … Autant de compétences essentielles dans le cadre de la scolarité et en tant que citoyen",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "il existe dans les collèges et lycées des personnes dont la qualification semble les désigner pour s'occuper de la question. Ce sont les professeurs documentalistes … il faut cesser de vouloir démanteler leurs missions en voulant en faire des animateurs de super foyer numérique et en niant leur vocation à caractère pédagogique … dans CAPES, le P signifie Professorat et non pas animateur",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "Les fausses informations ont toujours existé, le phénomène est amplifié par le paysage informationnel actuel. La meilleur façon de prévenir et de lutter reste l'éducation et l'acculturation aux problématiques informationnelles actuelles. L'école a un rôle important à jouer et il faut laisser plus de place à l'enseignement de l'information-documentation dispensé par les professeurs documentalistes, en reconnaissant la spécificité de cet enseignement qui va au-delà d'une sensibilisation et apporte des connaissances devenues aujourd'hui indispensables.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'EMI comme enseignement dédié au collège",
+      "text": "L'Education Nationale est toujours un peu comme le type sur son wagon à mains essayant désespérément de se raccrocher au dernier wagon du train des évolutions de société … Il est nécessaire que les formations proposées soient enfin en phase avec la société, et non en retard de trois ou quatre ans à chaque fois … C'est le rôle en particulier des professeurs documentalistes",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "aux citoyens de vérifier les sources et la fiabilités des dîtes informations",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Réprimer fortement les colporteurs de fausses informations non vérifiées, non vérifiables",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "aux citoyens de vérifier leurs sources",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "il revient aux citoyens de vérifier eux même les informations qu'ils reçoivent",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "Il faudrait différencier les sites d'information (médias journalistiques reconnus) et les sites dits \"réseaux sociaux\", dont les \"informations\" ne sont ni vérifiées ni vérifiables",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "le citoyen lambda doit apprendre à trier les informations !",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier la vérification des infos à un organisme indépendant",
+      "text": "exiger davantage de rigueur dans les transmissions d'informations : trop d'approximations, pas assez de contrôle en amant de la diffusion, recherche de scoops mal vérifiés, tout cela jette un trouble sur la crédibilité de ce qui est proposé au citoyen.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "sanctionner les fausses informations politiques",
+      "text": "Il est patent que les dernières élections n'ont pas été manipulées par des fake news, elles ont au contraire été le théâtre de la manifestation de la vérité, qui a mené à la défaite de Fillon.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "sanctionner les fausses informations politiques",
+      "text": "Le FN, LRM, LR, la FI, le PS etc sont des partis républicains qui participent tous à des fausses nouvelles plus ou moins … Le leader d'un de ces groupes à même bombardé un pays sur base d'une de ces fausses nouvelles … Sans compter Bush en 2003 pour l'Irak, pour prendre un exemple étranger, alors qu'il était à la tête d'un parti nommé \"Republicans\"",
+      "conf": "medium"
+    },
+    {
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "Lorsque les fausses informations sont de natures à porter gravement atteinte à un individu (remise en question de sa probité, de son intégrité.) il paraît essentiel d'etablir des gardes-fous",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "insultes, fausses informations destinées à nuire à une personne ou une groupe de personnes",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "Les fake news circulent très vite, comment les repérer et les contrer en temps voulu ?",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "il existe déjà un arsenal qui parait adapté et suffisant pour lutter contre les fausses informations, que cela soit en ou hors période électorale",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "il faut lutter contre les discriminations sexistes dû aux fakes news",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "Donner plus de moyens à l'école pour éduquer les futurs citoyens sur ce sujet",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "il faut déjà surtout miser sur l'éducation",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "il est préférable d'éduquer, que de mettre en place des lois qui seront systématiquement détournées et qui renforceront l'idée des théories complotistes",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+      "text": "\"Eduquer le peuple\" renvoie à des périodes sinistres de notre histoire",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "privilégier l'éducation aux médias plutôt que légiférer sur les fake news",
+      "text": "Eduquer à l'esprit critique me semble la meilleure parade aux fake news . Ine éducation aux médias pour tous vaut mieux qu'une loi qui désengage le public de son jugement critique.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "privilégier l'éducation aux médias plutôt que légiférer sur les fake news",
+      "text": "La solution contre les fausses informations (déjà condamnables par la loi) est certainement plus à chercher dans l'éducation aux médias et à l'esprit critique, la protection des conditions du métier de journaliste et la refondation de ses principes et méthodes (dans les écoles de journalisme comme dans les médias), la lutte contre le monopole des pouvoirs industriels et financiers sur les médias d'information, etc.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "enseigner la vérification critique de l'information",
+      "text": "Dans une société de l'information, il faut apprendre à s'informer, savoir reconnaître le vrai du faux, protéger ses données personnelles, être capable de communiquer sur les réseaux sociaux, connaître le fonctionnement de l'économie du numérique … C'est une question d'éducation avant tout",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "enseigner la vérification critique de l'information",
+      "text": "L'enjeu véritable est une éducation à l'information des citoyens, et notamment à l'information qui est sur Internet … Cela pourrait passer par des formations (scolaires ou professionnelles) sur la formulation, le vocabulaire et l'argumentation choisis par les rédacteurs",
+      "conf": "high",
+      "judge_claire": true
+    }
+  ]
+}

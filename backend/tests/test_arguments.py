@@ -163,28 +163,31 @@ def test_rollup_respects_parent_max():
 
 
 # --------------------------------------------------------------------------- #
-# Parsing durci de la sortie LLM
+# Parsing durci de la SÉLECTION LLM (V-SELECT) — l'invariant verbatim tient PAR le fait
+# que les indices renvoyés sont TOUJOURS bornés à [0, n) : un argument = group[indice] =
+# un claim RÉEL (jamais une phrase inventée).
 # --------------------------------------------------------------------------- #
-def test_parse_arguments_strips_markdown():
-    # Observé au 1er run réel (Ministral) : du **gras** markdown dans les phrases.
-    from backend.build_arguments import _parse_arguments
+def test_parse_selected_bounds_and_dedup():
+    from backend.build_arguments import _parse_selected
 
-    out = _parse_arguments('{"arguments": [{"argument": "Créer un **organe '
-                           'indépendant** avec des *pouvoirs* réels"}]}', max_k=5)
-    assert out == ["Créer un organe indépendant avec des pouvoirs réels"]
+    # bornés à [0, n), dédupliqués, ordre préservé (5 hors bornes écarté, 2 dédup)
+    assert _parse_selected('{"selected": [2, 0, 2, 5]}', n=4, max_k=5) == [2, 0]
+    # dict-form {"i":k} toléré (phrasé de mistral-large)
+    assert _parse_selected('{"selected": [{"i": 1}, {"i": 3}]}', n=4, max_k=5) == [1, 3]
+    # tronqué à max_k
+    assert _parse_selected('{"selected": [0, 1, 2, 3, 4, 5]}', n=10, max_k=3) == [0, 1, 2]
 
 
-def test_parse_arguments_hardened():
-    from backend.build_arguments import _parse_arguments
+def test_parse_selected_hardened():
+    from backend.build_arguments import _parse_selected
 
-    ok = _parse_arguments('{"arguments": [{"argument": " Encadrer les plateformes "},'
-                          '{"argument": ""}, "chaîne nue", 42]}', max_k=5)
-    assert ok == ["Encadrer les plateformes", "chaîne nue"]
-    assert _parse_arguments("pas du json", max_k=5) == []
-    assert _parse_arguments('{"autre": 1}', max_k=5) == []
-    assert _parse_arguments('{"arguments": "pas une liste"}', max_k=5) == []
-    many = '{"arguments": [' + ",".join(f'{{"argument": "a{i}"}}' for i in range(9)) + "]}"
-    assert len(_parse_arguments(many, max_k=5)) == 5
+    assert _parse_selected('{"selected": ["2", null, "x", 3]}', n=4, max_k=5) == [2, 3]
+    assert _parse_selected("pas du json", n=4, max_k=5) == []
+    assert _parse_selected('{"autre": 1}', n=4, max_k=5) == []
+    assert _parse_selected('{"selected": "pas une liste"}', n=4, max_k=5) == []
+    # tous les indices renvoyés sont dans les bornes → argument toujours un claim réel (verbatim)
+    got = _parse_selected('{"selected": [-1, 0, 99, 3]}', n=4, max_k=5)
+    assert all(0 <= i < 4 for i in got) and got == [0, 3]
 
 
 # --------------------------------------------------------------------------- #

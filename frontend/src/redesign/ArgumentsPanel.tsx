@@ -8,9 +8,10 @@ import { stripMd } from './strings';
  * clivage baké). Quand les DEUX polarités existent, un sélecteur pour/contre
  * n'affiche qu'un côté à la fois, la POSITION MAJORITAIRE (au support) par défaut.
  *
- * Honnêteté : chaque argument est une phrase REFORMULÉE par IA, mais il n'existe
- * que s'il est adossé à des contributions réelles (fail-closed côté build) — les
- * sources verbatim sont dépliables et cliquables vers l'avis d'origine.
+ * Honnêteté : chaque argument est une contribution citoyenne VERBATIM (sélectionnée
+ * par IA, jamais reformulée — V-SELECT), et il n'existe que s'il est adossé à
+ * d'autres contributions réelles (fail-closed côté build) — les sources verbatim
+ * sont dépliables et cliquables vers l'avis d'origine.
  */
 
 // Même langage visuel de stance que AvisDetail.STANCE_META (vert positif / rouge négatif).

@@ -116,11 +116,21 @@ STANCE_SYSTEM = (
     "ATTENTION — le piège à éviter : ne confonds JAMAIS un sentiment négatif ENVERS LE SUJET "
     "avec une opposition à l'action. Quelqu'un qui critique ou subit un problème est FAVORABLE "
     "à une action qui vise à le corriger. Juge la position sur l'ACTION, pas la tonalité.\n"
+    # PERTINENCE (pré-filtre SOFT) — VALIDÉ research/relevance_calibration_note.md : le stance
+    # sur-classait des témoignages TANGENTIELS (autre action, même thème) en "favorable" par
+    # ASSOCIATION de sujet, avec confiance (79% de sur-classement sur les cas litigieux, non
+    # capté par la confiance). Variante SOFT (défaut sûr : faux retraits minimes) : on n'écarte
+    # que le CLAIREMENT hors-action, on garde l'indirect légitime → précision 0.61→0.80, rappel
+    # ~0.87. Ce gate PRÉCÈDE la priorité anti-abstention (qui ne joue QUE sur l'on-topic).
+    "PERTINENCE (à vérifier D'ABORD) : ne classe \"favorable\"/\"defavorable\" QUE si la "
+    "contribution PORTE sur CETTE action précise. Si elle vise une action CLAIREMENT DIFFÉRENTE "
+    "(même thème général), ou reste purement descriptive/générale SANS implication pour cette "
+    "action, classe \"nuance\" — ne lui prête pas une position par simple proximité de sujet.\n"
     # large_noabst — VALIDÉ research/stance_large_bench.md : sans cette consigne, mistral-large
     # sur-abstient (25% nuance) ; avec, acc décidés 0.861 (vs small 0.796), rendement 77%,
-    # McNemar 33-7. À revalider sur corpus réel (engagement) — cf. le bench.
-    "PRIORITÉ : ne réserve \"nuance\" qu'aux contributions VRAIMENT sans position sur "
-    "l'action — si une lecture raisonnable permet de trancher, TRANCHE.\n"
+    # McNemar 33-7. Ne joue QUE sur les contributions jugées PERTINENTES ci-dessus.
+    "PRIORITÉ : parmi les contributions QUI PORTENT sur l'action, ne réserve \"nuance\" qu'à "
+    "celles vraiment sans position — si une lecture raisonnable permet de trancher, TRANCHE.\n"
     "Pour CHAQUE contribution, indique aussi ta CONFIANCE : \"high\" (position explicite et "
     "nette), \"medium\" (probable mais indirecte), \"low\" (ambigu/hors-sujet — tu hésites). "
     "Réponds en JSON strict : {\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|"

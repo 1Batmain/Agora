@@ -1,0 +1,127 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_disagreements": 14,
+    "conf_a_on_extra": {
+      "high": 6,
+      "medium": 8
+    },
+    "judge_a_clear": 3,
+    "judge_a_notclear": 11,
+    "a_overclassif_rate": 0.786
+  },
+  "disagreements": [
+    {
+      "theme_id": "n3",
+      "cible_a": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Une loi pour responsabiliser les diffuseurs face aux fausses informations, je suis d'accord … Mais sans éduquer la population et à tout âge, cela restera inopérant … Si les fausses informations se diffusent aussi rapidement c'est que les gens ont envie d'y croire. Que peut-faire une loi seule contre ça ?",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n3",
+      "cible_a": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "des publicités, ou des spots sur la désinformation et ses dangers, par exemple au cinéma ou avant le journal de 20h à la tv, pourraient être envisagées",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible_a": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Si la loi pouvait obliger les annonceurs et ceux qui opèrent les campagnes publicitaires sur Internet à être transparents et à conduire à ce que ces sites ne soient pas financés par la publicité, ce serait un élément permettant de réduire la production et la diffusion de fausses informations",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible_a": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Obliger les gafas à ne publier que les sites labellisés en période électorale.",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n4",
+      "cible_a": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "Faire obligation aux plateformes ayant un nombre de connexions important de signaler aux autorités publiques et à tous les candidats pendant la période électorale l'existence d'un envoi massif à des personnes ciblées pour leurs caractéristiques communes d'une information pouvant influencer leur choix.",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n10",
+      "cible_a": "renforcer l'application des lois existantes plutôt qu'en créer",
+      "text": "Charte de Munich qui existe déjà",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible_a": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Revoir la charte de déontologie des journalistes",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible_a": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Revoir la déontologie des journalistes",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n17",
+      "cible_a": "instaurer des sanctions contraignantes pour les journalistes",
+      "text": "Charte de déontologie : elle existe : Charte de Munich.",
+      "stance_a": "defavorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n20",
+      "cible_a": "laisser l'État définir le vrai et le faux par la loi",
+      "text": "Les obligations d'information loyale et transparente existent déjà à la suite de la loi pour une République numérique.",
+      "stance_a": "defavorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n22",
+      "cible_a": "interdire les contenus illégaux avant les élections",
+      "text": "Enfin demander sérieusement (avec amende à la clé) aux GAFA d'arrêter de laisser passer des contenus hors la loi (racistes, homophobes, sexistes.)",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n24",
+      "cible_a": "limiter légalement les fausses informations en ligne",
+      "text": "La liberté de l'information oblige la presse à veiller à la sincérité des informations diffusées auprès du public. Cette obligation est certes renforcée pendant des périodes où les choix démocratiques s'exercent mais elle s'impose également hors de ces périodes. … Il importe que l'atteinte à la confiance que le public peut avoir dans l'information soit sanctionnée pendant la période électorale mais également hors de ces périodes. … Il n'est pas discutable que la diffusion de fausses nouvelles a des conséquences graves sur la vie publique mais elle constitue de facto une atteinte à la liberté de la presse à raison de la perte de confiance qu'elle engendre dans l'opinion.",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": true
+    },
+    {
+      "theme_id": "n28",
+      "cible_a": "confier la vérification des infos à un organisme indépendant",
+      "text": "Il apparait difficile concrètement d'établir des critères \"officiels\" qui permettraient de séparer une information vraie d'une information fausse … Toutefois, les informations, dont on connaitrait à l'avance la véracité (preuves historiques avec l'appui de témoignages, preuves scientifiques avec les résultats d'évaluations menées), et qui seraient manipulées, pourraient faire l'objet de restrictions, par la fermeture des sites",
+      "stance_a": "favorable",
+      "conf_a": "medium",
+      "judge_claire": false
+    },
+    {
+      "theme_id": "n31",
+      "cible_a": "encadrer légalement les fausses informations en période électorale",
+      "text": "Clarifier ce qu'est une fake news, mettre un cadre plus précis à sa définition.",
+      "stance_a": "favorable",
+      "conf_a": "high",
+      "judge_claire": false
+    }
+  ]
+}

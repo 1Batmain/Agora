@@ -178,15 +178,17 @@ export interface ArgumentSource {
 }
 
 /**
- * Un argument miné : phrase SYNTHÉTISÉE par le LLM mais re-SOURCÉE sur des
- * contributions réelles (fail-closed : il n'existe que si ≥ min_support claims
- * au-dessus du seuil de similarité le soutiennent).
+ * Un argument miné (V-SELECT) : une contribution citoyenne SÉLECTIONNÉE par le LLM,
+ * servie VERBATIM (jamais reformulée), et re-SOURCÉE sur les claims du groupe
+ * (fail-closed : il n'existe que si ≥ min_support claims au-dessus du seuil le soutiennent).
  */
 export interface MinedArgument {
   id: string; // `${theme_id}:${stance}:${k}`
   theme_id: string;
   stance: 'pour' | 'contre' | 'neutre';
-  argument: string; // une phrase courte reformulée
+  argument: string; // span VERBATIM (le claim sélectionné, jamais reformulé)
+  verbatim?: boolean; // true : `argument` est une sous-chaîne exacte d'un avis (V-SELECT)
+  claim_id?: string; // `${avis_id}#${index}` du claim-source de l'argument
   n_support: number; // claims réellement assignés (comptes disjoints)
   weight: number;
   share: number | null; // part du groupe (null sur les agrégats parents)

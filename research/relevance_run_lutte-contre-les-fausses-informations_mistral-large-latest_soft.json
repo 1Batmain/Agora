@@ -1,0 +1,147 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "model": "mistral-large-latest",
+    "variant": "soft",
+    "baseline_decided": 221,
+    "filtered_decided": 200,
+    "removed": 21,
+    "removal_good_notclear": 15,
+    "removal_bad_clear": 5,
+    "removal_precision": 0.75,
+    "kept_sample": 25,
+    "kept_clear": 20,
+    "kept_precision": 0.8,
+    "conf_removed": {
+      "medium": 7,
+      "high": 14
+    }
+  },
+  "flipped": [
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Il ne faut pas laisser cette loi passer à l'exception de la partie sur les fausses informations volontairement diffusées par des médias professionnels",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "rendre obligatoire l'éducation aux médias pour tous",
+      "text": "Légiférer contre la diffusion de fausses informations, est impossible, parce que le temps qu'elle soit identifiée, elle a déjà été diffusée. Et si on la censure, elle ressortira sous des formes variées",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "obliger les plateformes à modérer les contenus diffusés",
+      "text": "un cadre légal pourrait obliger les professionnels de l'information à vérifier avant la publication, ainsi qu'à identifier les informations partisanes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "le sujet ici n'est pas alimenté par les journalistes : les fake news sont alimentées via les réseaux sociaux … Ce ne sont pas les journalistes qui en sont les auteurs … Ne mélangeons pas tout",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "lever l'anonymat sur les réseaux sociaux",
+      "text": "Une loi en la matière n'est pas du tout efficace. Elle n'empêcherait pas les fake news, les sites qui les diffusent.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "Il sans doute aussi légiférer sur les techniques d'embrigadement des sectes, des entreprises terroristes voire des partis politiques non républicains (et leurs associations satellites) qui diffusent des fake dans un but purement électoraliste.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+      "text": "la notion d'activité qui \"dépasse un seuil de nombre de connexions sur le territoire français\" n'a aucun sens. Qu'est-ce qu'une connexion : s'agit-il d'un accès au site, d'un accès unique au site ou d'une connexion à un compte sur la plateforme ? Comment vérifier qu'on se situe sur \"le territoire français\" ? L'adresse IP n'est pas suffisamment fiable.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "appliquer strictement les lois existantes plutôt qu’en créer",
+      "text": "Charte de Munich qui existe déjà",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Ces questions doivent rester à la portée du plus grand nombre et ne doivent pas nous échapper",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Code déontologique à respecter.",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "instaurer des peines pécuniaires pour les discours de haine",
+      "text": "Une lois pour le bien être de tous un chacun sous l'Autorité d'une Justice à l'écoute du Peuple",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "légiférer sur le domaine en heure à heure",
+      "text": "Surtout qu'il est indiqué un renforcement du CSA qui n'est lui même pas très indépendant",
+      "conf": "medium",
+      "judge_claire": false
+    },
+    {
+      "cible": "distinguer usage professionnel et personnel de l'eau",
+      "text": "Globalement d'accord avec tout ça.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "distinguer usage professionnel et personnel de l'eau",
+      "text": "Vous inventez l'eau chaude, là.",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "instaurer des sanctions pour manquement à la charte de déontologie",
+      "text": "Charte de Munich qui existe déjà (1ere version 1938, seconde version 1971) - Cette charte détaille les droits et les devoirs des journalistes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "confier à l'État le rôle d'arbitre de la vérité",
+      "text": "Cibler ses comptes et sa propagande. Si l'Etat doit intervenir, c'est contre la propagande",
+      "conf": "medium",
+      "judge_claire": true
+    },
+    {
+      "cible": "confier à l'État le rôle d'arbitre de la vérité",
+      "text": "La divulgation des montants perçus est contraire à la liberté d'entreprendre et au secret des affaires.",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "limiter légalement les fausses informations en ligne",
+      "text": "Aujourd'hui, diffuser des témoignages de femmes traumatisées par leur IVG est considéré comme une fausse information. Mais qu'est-ce qui dit que le traumatisme est impossible? … Plusieurs personnalités en accord avec l'IVG ont condamné la loi constituant un \"délit d'entrave\", comme étant une entrave au débat publique, à la liberté d'expression et une interdiction de débattre. Absolument contre cette idée",
+      "conf": "high",
+      "judge_claire": true
+    },
+    {
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "Lorsque les fausses informations sont de natures à porter gravement atteinte à un individu (remise en question de sa probité, de son intégrité.) il paraît essentiel d'etablir des gardes-fous",
+      "conf": "high"
+    },
+    {
+      "cible": "encadrer légalement les fausses informations en période électorale",
+      "text": "insultes, fausses informations destinées à nuire à une personne ou une groupe de personnes",
+      "conf": "high",
+      "judge_claire": false
+    },
+    {
+      "cible": "interdire les sites diffusant de la désinformation",
+      "text": "il faut lutter contre les discriminations sexistes dû aux fakes news",
+      "conf": "high",
+      "judge_claire": false
+    }
+  ]
+}

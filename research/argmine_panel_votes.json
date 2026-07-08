@@ -1,0 +1,430 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_themes": 15,
+    "n_ballots": 29,
+    "firsts": {
+      "current": 11,
+      "vselect": 11,
+      "vcluster": 7
+    },
+    "borda": {
+      "current": 28,
+      "vselect": 38,
+      "vcluster": 21
+    },
+    "mean_rank": {
+      "current": 2.034,
+      "vcluster": 2.276,
+      "vselect": 1.69
+    }
+  },
+  "votes": [
+    {
+      "theme_id": "n1",
+      "accent": "neutre",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n1",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vselect",
+        "vcluster",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n1",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n10",
+      "accent": "neutre",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vselect": "X",
+        "vcluster": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n10",
+      "accent": "fidélité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vselect": "X",
+        "vcluster": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n10",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vselect": "X",
+        "vcluster": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n17",
+      "accent": "neutre",
+      "rank_methods": [
+        "current",
+        "vcluster",
+        "vselect"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n17",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vselect",
+        "vcluster",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n17",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "current",
+        "vcluster",
+        "vselect"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n18",
+      "accent": "neutre",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n18",
+      "accent": "fidélité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n18",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n21",
+      "accent": "neutre",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n21",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vselect",
+        "vcluster",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n21",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "vselect",
+        "vcluster",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n23",
+      "accent": "neutre",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "current": "X",
+        "vcluster": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n23",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "current": "X",
+        "vcluster": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n23",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "current": "X",
+        "vcluster": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n25",
+      "accent": "neutre",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n25",
+      "accent": "fidélité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n25",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n27",
+      "accent": "neutre",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n27",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n27",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n28",
+      "accent": "neutre",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n28",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vcluster",
+        "vselect",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "vselect": "Y",
+        "current": "Z"
+      }
+    },
+    {
+      "theme_id": "n29",
+      "accent": "neutre",
+      "rank_methods": [
+        "vselect",
+        "current",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n29",
+      "accent": "fidélité",
+      "rank_methods": [
+        "vselect",
+        "vcluster",
+        "current"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    },
+    {
+      "theme_id": "n29",
+      "accent": "distinctivité",
+      "rank_methods": [
+        "current",
+        "vselect",
+        "vcluster"
+      ],
+      "letter_of": {
+        "vcluster": "X",
+        "current": "Y",
+        "vselect": "Z"
+      }
+    }
+  ]
+}

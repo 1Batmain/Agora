@@ -1,14 +1,17 @@
 """BUILD ARGUMENTS — mine les ARGUMENTS principaux par thème (pour / contre / neutre),
 chacun SOURCÉ sur des contributions réelles, et persiste `analysis/arguments.json`.
 
-Approche « synthèse puis re-sourçage » (fail-closed) :
-  1. par (feuille × stance), le LLM lit les claims du groupe et propose ≤ k arguments
-     canoniques (reformulés, une phrase courte) — appel `json_mode` caché par contenu ;
-  2. chaque argument est embeddé dans le MÊME espace que les claims (nomic-v2) puis
-     RE-SOURCÉ par cosinus sur les claims du groupe (assignation argmax EXCLUSIVE →
-     comptes disjoints honnêtes) ;
-  3. un argument qui ne rassemble pas `MIN_SUPPORT` claims au-dessus du seuil est
-     SUPPRIMÉ : il n'existe AUCUN argument servi sans exemples verbatim réels derrière.
+Approche « V-SELECT » (sélection verbatim, fail-closed) — VALIDÉE research/argmine_verbatim_note.md
+(bat la paraphrase servie au panel aveugle, 71% tête-à-tête) :
+  1. par (feuille × stance), le LLM SÉLECTIONNE ≤ k contributions représentatives d'idées
+     DISTINCTES — il ne RÉDIGE rien, il renvoie des NUMÉROS (`json_mode` caché par contenu).
+     Le texte d'argument servi EST le claim choisi → VERBATIM par construction (join de
+     sous-chaînes exactes de l'avis), invariant Agora respecté (fini la paraphrase inventée) ;
+  2. le claim sélectionné (son vecteur RAW, MÊME espace nomic-v2) re-source par cosinus les
+     claims du groupe (argmax EXCLUSIF → comptes disjoints) — l'ablation a écarté tout
+     enrichissement cible-référencé (research/argmine_extract_note.md) ;
+  3. un argument qui ne rassemble pas `MIN_SUPPORT` claims au-dessus du seuil est SUPPRIMÉ :
+     aucun argument servi sans exemples verbatim réels derrière.
 
 La partition pour/contre vient de `claim_stance.json` (baké par `build_opinion`) ; les
 feuilles sans clivage tombent en mode « neutre » (tous les claims). Les parents sont
@@ -83,61 +86,57 @@ def _log(msg: str) -> None:
 # --------------------------------------------------------------------------- #
 # Prompts (json_mode) — fidélité stricte, rien d'inventé, langue des contributions.
 # --------------------------------------------------------------------------- #
-def _system_prompt(stance: str, max_k: int) -> str:
-    if stance == "pour":
-        angle = ("des contributions citoyennes FAVORABLES à une proposition. Dégage les "
-                 "arguments PRINCIPAUX que ces contributions avancent POUR la proposition")
-    elif stance == "contre":
-        angle = ("des contributions citoyennes DÉFAVORABLES à une proposition. Dégage les "
-                 "arguments PRINCIPAUX que ces contributions avancent CONTRE la proposition")
-    else:
-        angle = ("des contributions citoyennes sur un thème. Dégage les arguments "
-                 "PRINCIPAUX que ces contributions avancent")
+def _select_system(stance: str, max_k: int) -> str:
+    """Prompt de SÉLECTION (V-SELECT) — le LLM CHOISIT des contributions, ne RÉDIGE rien.
+
+    VALIDÉ research/argmine_verbatim_note.md : servir un span VERBATIM (une contribution
+    réelle) bat la paraphrase servie au panel aveugle (71% tête-à-tête). L'invariant verbatim
+    est garanti par CONSTRUCTION — le texte servi EST un claim (join de sous-chaînes d'avis).
+    """
+    camp = {"pour": " (toutes FAVORABLES à la proposition)",
+            "contre": " (toutes DÉFAVORABLES à la proposition)"}.get(stance, "")
     return (
-        f"Tu es analyste de consultations citoyennes. On te donne {angle} — au plus "
-        f"{max_k}, moins s'il y a moins d'idées distinctes. Chaque argument : UNE phrase "
-        "courte (≤ 20 mots), reformulée mais STRICTEMENT FIDÈLE aux contributions — tu "
-        "n'inventes RIEN qui n'y figure pas, tu ne complètes pas avec tes connaissances. "
-        "Un argument = une idée distincte (pas de reformulations redondantes). Rédige "
-        "dans la langue dominante des contributions. Réponds en JSON strict : "
-        '{"arguments":[{"argument":"<phrase>"}]} — rien d\'autre.'
+        "Tu es analyste de consultations citoyennes. On te donne des CONTRIBUTIONS citoyennes "
+        f"NUMÉROTÉES{camp}. SÉLECTIONNE les contributions qui expriment le MIEUX les arguments "
+        "PRINCIPAUX et DISTINCTS du groupe — une par idée distincte, la plus claire et "
+        f"représentative. Au plus {max_k}, MOINS s'il y a moins d'idées distinctes. Tu ne "
+        "RÉDIGES rien, tu ne reformules rien : tu renvoies UNIQUEMENT les NUMÉROS choisis, de "
+        "la plus représentative à la moins. Ignore les redites. "
+        'Réponds en JSON strict : {"selected":[<int>, ...]} — rien d\'autre.'
     )
 
 
-def _user_prompt(stance: str, proposition: str | None, title: str,
+def _select_user(stance: str, proposition: str | None, title: str,
                  texts: list[str]) -> str:
     head = (f"PROPOSITION : {proposition}" if proposition
             else f"THÈME : {title}")
     label = {"pour": "favorables", "contre": "défavorables"}.get(stance, "")
     return (f"{head}\n\nCONTRIBUTIONS{f' ({label})' if label else ''} :\n"
-            + "\n".join(f"- {t[:200]}" for t in texts))
+            + "\n".join(f"[{i}] {t[:200]}" for i, t in enumerate(texts)))
 
 
-import re
+def _parse_selected(content: str, n: int, max_k: int) -> list[int]:
+    """Sortie LLM → indices de contributions choisis. Durci : bornés, dédupliqués, ≤ max_k.
 
-_MD_EMPHASIS = re.compile(r"\*{1,3}([^*]+)\*{1,3}")
-
-
-def _strip_markdown(text: str) -> str:
-    """Retire l'emphase markdown (**gras**, *italique*) que certains modèles glissent
-    dans les phrases — l'argument est affiché en texte brut par le front."""
-    return _MD_EMPHASIS.sub(r"\1", text)
-
-
-def _parse_arguments(content: str, max_k: int) -> list[str]:
-    """Sortie LLM → liste de phrases. Durci : jamais d'exception, [] au moindre doute."""
+    Robuste au phrasé de `large` qui renvoie parfois des objets {\"i\":3} au lieu d'entiers nus.
+    """
     try:
         data = json.loads(content)
     except (json.JSONDecodeError, TypeError):
         return []
-    items = data.get("arguments") if isinstance(data, dict) else None
+    items = data.get("selected") if isinstance(data, dict) else None
     if not isinstance(items, list):
         return []
-    out: list[str] = []
+    out: list[int] = []
     for item in items:
-        text = item.get("argument") if isinstance(item, dict) else item
-        if isinstance(text, str) and text.strip():
-            out.append(_strip_markdown(text.strip()))
+        if isinstance(item, dict):
+            item = item.get("i", item.get("index", item.get("numero")))
+        try:
+            idx = int(item)
+        except (TypeError, ValueError):
+            continue
+        if 0 <= idx < n and idx not in out:
+            out.append(idx)
         if len(out) >= max_k:
             break
     return out
@@ -235,32 +234,40 @@ def _content_key(dataset: str, theme_id: str, stance: str, model: str,
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
 
 
-def synthesize_group(dataset: str, theme_id: str, stance: str,
-                     proposition: str | None, title: str, texts: list[str],
-                     *, model: str) -> list[str]:
-    """≤ MAX_K arguments candidats pour un groupe (caché ; repli = [] non caché)."""
+def select_group(dataset: str, theme_id: str, stance: str,
+                 proposition: str | None, title: str, texts: list[str],
+                 *, model: str) -> list[int]:
+    """Indices des contributions SÉLECTIONNÉES pour un groupe (caché ; repli = [] non caché).
+
+    Le LLM CHOISIT (V-SELECT), il ne rédige pas — la sortie est une liste d'entiers (indices
+    dans `texts`). Un cache d'ancien format (`{"arguments":[...]}` de l'ex-synthèse) décode en
+    None → on régénère proprement (pas de collision).
+    """
+    n = len(texts)
     key = _content_key(dataset, theme_id, stance, model, proposition, texts)
     value, _source = cached_llm(
         mem_cache=_ARG_MEM,
         key=key,
         disk_path=store.analysis_dir(dataset) / "arguments_llm" / f"{key}.json",
         build_messages=lambda: [
-            {"role": "system", "content": _system_prompt(stance, MAX_K)},
-            {"role": "user", "content": _user_prompt(stance, proposition, title, texts)},
+            {"role": "system", "content": _select_system(stance, MAX_K)},
+            {"role": "user", "content": _select_user(stance, proposition, title, texts)},
         ],
         fallback_fn=lambda _reason, _exc=None: [],
         model=model,
-        max_tokens=600,
-        temperature=0.2,
+        max_tokens=120,
+        temperature=0.0,
         json_mode=True,
-        decode=lambda data: ([_strip_markdown(str(s)) for s in data["arguments"]]
+        decode=lambda data: ([int(i) for i in data["selected"]
+                              if isinstance(i, int) and 0 <= i < n]
                              if isinstance(data, dict)
-                             and isinstance(data.get("arguments"), list) else None),
+                             and isinstance(data.get("selected"), list)
+                             and all(isinstance(i, int) for i in data["selected"]) else None),
         encode=lambda v: {"theme_id": theme_id, "stance": stance,
-                          "model": model, "arguments": v},
-        postprocess=lambda raw: _parse_arguments(raw, MAX_K),
+                          "model": model, "selected": v},
+        postprocess=lambda raw: _parse_selected(raw, n, MAX_K),
         accept=lambda v: isinstance(v, list) and len(v) > 0,
-        cache_fallback=False,  # groupe vide → on réessaie quand l'API/LLM revient
+        cache_fallback=False,  # sélection vide → on réessaie quand l'API/LLM revient
     )
     return value if isinstance(value, list) else []
 
@@ -292,18 +299,18 @@ def _leaf_groups(node: ThemeNode, prepared, stance_map: dict,
     return "neutre", []
 
 
-def _cap_inputs(group: list, vecs: np.ndarray) -> list:
-    """Si le groupe dépasse INPUT_CAP : garde les plus proches du centroïde du groupe
-    (déterministe, représentatif — même logique que l'échantillonnage des citations)."""
-    if len(group) <= INPUT_CAP:
-        return group
+def _cap_positions(n: int, vecs: np.ndarray) -> list[int]:
+    """POSITIONS (indices dans le groupe) montrées au LLM. Si le groupe dépasse INPUT_CAP :
+    garde les plus proches du centroïde (déterministe, représentatif). On renvoie les POSITIONS
+    (pas les items) pour pouvoir re-mapper les indices SÉLECTIONNÉS par le LLM vers le groupe."""
+    if n <= INPUT_CAP:
+        return list(range(n))
     centroid = vecs.mean(axis=0)
     norm = np.linalg.norm(centroid)
     if norm > 0:
         centroid = centroid / norm
     sims = vecs @ centroid
-    top = np.argsort(-sims)[:INPUT_CAP]
-    return [group[i] for i in sorted(int(i) for i in top)]
+    return sorted(int(i) for i in np.argsort(-sims)[:INPUT_CAP])
 
 
 # --------------------------------------------------------------------------- #
@@ -342,7 +349,7 @@ def build_arguments(
                     and t.get("proposition")}
     stance_map = store.read_claim_stance(dataset) or {}
 
-    # ── 1. Groupes (feuille × stance), puis synthèse LLM parallèle par groupe.
+    # ── 1. Groupes (feuille × stance), puis SÉLECTION LLM parallèle par groupe (V-SELECT).
     leaves = [tree.nodes[nid] for nid in tree.order if not tree.nodes[nid].children]
     jobs: list[dict] = []
     leaf_mode: dict[str, str] = {}
@@ -354,18 +361,19 @@ def build_arguments(
         title = node.title or node.label
         for stance, proposition, sub in groups:
             gvecs = prepared.claim_vecs[[gi for gi, _aid, _t in sub]].astype(np.float32)
-            capped = _cap_inputs(sub, gvecs)
+            shown_pos = _cap_positions(len(sub), gvecs)   # positions montrées au LLM
             jobs.append({"node": node, "stance": stance, "proposition": proposition,
                          "title": title, "group": sub, "gvecs": gvecs,
-                         "texts": [t for _gi, _aid, t in capped]})
+                         "shown_pos": shown_pos,
+                         "texts": [sub[p][2] for p in shown_pos]})
 
     total = len(jobs)
-    _log(f"{dataset} · {total} groupe(s) feuille×stance à synthétiser (modèle {model})")
+    _log(f"{dataset} · {total} groupe(s) feuille×stance à sélectionner (V-SELECT, modèle {model})")
     done = 0
     lock = threading.Lock()
 
-    def _synth(job: dict) -> dict:
-        job["candidates"] = synthesize_group(
+    def _select(job: dict) -> dict:
+        job["selected_shown"] = select_group(
             dataset, job["node"].id, job["stance"], job["proposition"],
             job["title"], job["texts"], model=model)
         return job
@@ -374,17 +382,17 @@ def build_arguments(
         if on_progress:
             on_progress("arguments", k, total)
         if k == total or k % 5 == 0:
-            _log(f"{dataset} · synthèse {k}/{total}")
+            _log(f"{dataset} · sélection {k}/{total}")
 
     if LLM_MAX_WORKERS <= 1 or total <= 1:
         for job in jobs:
-            _synth(job)
+            _select(job)
             done += 1
             _record(done)
     else:
         with ThreadPoolExecutor(max_workers=LLM_MAX_WORKERS,
                                 thread_name_prefix="agora-arguments") as ex:
-            futures = [ex.submit(_synth, job) for job in jobs]
+            futures = [ex.submit(_select, job) for job in jobs]
             for fut in as_completed(futures):
                 fut.result()
                 with lock:
@@ -392,26 +400,21 @@ def build_arguments(
                     k = done
                 _record(k)
 
-    # ── 2. Embedding de TOUS les candidats en un seul batch (torch, hors threads).
-    all_texts = [c for job in jobs for c in job["candidates"]]
-    n_candidates = len(all_texts)
-    arg_vecs = None
-    if all_texts:
-        from pipeline.claims.pipeline import embed_claim_texts
-        arg_vecs = embed_claim_texts(all_texts, embedder=embedder).astype(np.float32)
-
-    # ── 3. Par groupe : dédup candidats → back-match fail-closed → entrées gardées.
+    # ── 2. Par groupe : les claims SÉLECTIONNÉS sont les candidats (leurs vecteurs RAW servent
+    #    de vecteurs d'argument — pas de ré-embedding : l'ablation a validé le span BRUT, cf.
+    #    research/argmine_extract_note.md). Dédup → back-match fail-closed → entrées gardées.
+    #    Le texte d'argument servi EST le claim sélectionné → VERBATIM par construction.
     theme_entries: dict[str, dict] = {}
     leaf_args_kept: dict[str, list[dict]] = {}   # avec _vec, pour le rollup
-    n_kept = n_dropped = 0
-    cursor = 0
+    n_kept = n_dropped = n_candidates = 0
     for job in jobs:
-        cands = job["candidates"]
-        vecs = arg_vecs[cursor:cursor + len(cands)] if cands else np.zeros((0, 1), np.float32)
-        cursor += len(cands)
         node, stance = job["node"], job["stance"]
-        kept_idx = dedup_candidates(vecs, DEDUP_THRESHOLD) if len(cands) else []
-        matches = back_match(vecs[kept_idx], job["gvecs"],
+        group, gvecs = job["group"], job["gvecs"]
+        sel_pos = [job["shown_pos"][j] for j in job["selected_shown"]]  # positions dans le groupe
+        n_candidates += len(sel_pos)
+        sel_vecs = gvecs[sel_pos] if sel_pos else np.zeros((0, gvecs.shape[1]), np.float32)
+        kept_idx = dedup_candidates(sel_vecs, DEDUP_THRESHOLD) if sel_pos else []
+        matches = back_match(sel_vecs[kept_idx], gvecs,
                              sim_threshold=SIM_THRESHOLD, min_support=MIN_SUPPORT) \
             if kept_idx else []
 
@@ -420,18 +423,10 @@ def build_arguments(
             "proposition": job["proposition"], "n_claims": leaf_group_sizes[node.id],
             "arguments": [],
         })
-        if DEBUG:
-            sims_all = (job["gvecs"] @ vecs.T) if len(cands) else np.zeros((0, 0))
-            entry.setdefault("debug", []).extend({
-                "stance": stance, "argument": cands[i],
-                "sim_max": round(float(sims_all[:, i].max()), 4) if sims_all.size else 0.0,
-                "sim_p90": round(float(np.percentile(sims_all[:, i], 90)), 4) if sims_all.size else 0.0,
-                "n_above_thr": int((sims_all[:, i] >= SIM_THRESHOLD).sum()) if sims_all.size else 0,
-                "kept": any(kept_idx[m.arg_index] == i for m in matches),
-            } for i in range(len(cands)))
 
-        group = job["group"]
         for k, m in enumerate(matches):
+            seed_pos = sel_pos[kept_idx[m.arg_index]]   # position (dans le groupe) du claim-seed
+            seed_gi, seed_aid, seed_text = group[seed_pos]
             gi_rows = [group[r] for r in m.assigned]
             sources = [{"avis_id": aid, "claim_id": f"{aid}#{gi}",
                         "text": prepared.claim_texts[gi], "similarity": round(sim, 4)}
@@ -440,7 +435,9 @@ def build_arguments(
                 "id": f"{node.id}:{stance}:{k}",
                 "theme_id": node.id,
                 "stance": stance,
-                "argument": cands[kept_idx[m.arg_index]],
+                "argument": seed_text,          # VERBATIM (claim sélectionné, jamais reformulé)
+                "verbatim": True,
+                "claim_id": f"{seed_aid}#{seed_gi}",
                 "n_support": len(m.assigned),
                 "weight": round(float(sum(prepared.claim_weight[gi]
                                           for gi, _aid, _t in gi_rows)), 3),
@@ -449,7 +446,7 @@ def build_arguments(
             }
             entry["arguments"].append(arg_entry)
             leaf_args_kept.setdefault(node.id, []).append(
-                {**arg_entry, "_vec": vecs[kept_idx[m.arg_index]]})
+                {**arg_entry, "_vec": sel_vecs[kept_idx[m.arg_index]]})
             n_kept += 1
         n_dropped += len(kept_idx) - len(matches)
 
@@ -501,7 +498,7 @@ def build_arguments(
                    "max_k": MAX_K, "dedup_threshold": DEDUP_THRESHOLD,
                    "input_cap": INPUT_CAP, "parent_max": PARENT_MAX,
                    "top_sources": TOP_SOURCES},
-        "prompt_system": _system_prompt("<stance>", MAX_K),
+        "prompt_system": _select_system("<stance>", MAX_K),
         "counts": {"themes": len(themes), "arguments": n_kept,
                    "candidates": n_candidates, "dropped": n_dropped},
         "n_leaves": len(leaves),

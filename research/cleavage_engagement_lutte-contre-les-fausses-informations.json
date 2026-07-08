@@ -1,0 +1,445 @@
+{
+  "summary": {
+    "dataset": "lutte-contre-les-fausses-informations",
+    "n_leaves": 22,
+    "min_engagement_threshold": 0.35,
+    "a": {
+      "engagement_mean": 0.806,
+      "engagement_median": 0.815,
+      "pct_nuance_mean": 0.194,
+      "n_impur": 0,
+      "n_clivant": 16,
+      "n_consensuel": 6
+    },
+    "c": {
+      "engagement_mean": 0.767,
+      "engagement_median": 0.769,
+      "pct_nuance_mean": 0.233,
+      "n_impur": 0,
+      "n_clivant": 15,
+      "n_consensuel": 7
+    },
+    "leaves_c_more_engaged": 2,
+    "leaves_a_more_engaged": 9
+  },
+  "rows": [
+    {
+      "theme_id": "n3",
+      "title": "impossible · possibilité · éduquer",
+      "n": 11,
+      "a": {
+        "cible": "rendre obligatoire l'éducation aux médias pour tous",
+        "nuance": 2,
+        "engagement": 0.818,
+        "profil": "clivant",
+        "pct_nuance": 0.182
+      },
+      "c": {
+        "cible": "interdire tout partage de fausse information non corrigée sous 24h",
+        "nuance": 5,
+        "engagement": 0.545,
+        "profil": "clivant",
+        "pct_nuance": 0.455
+      }
+    },
+    {
+      "theme_id": "n4",
+      "title": "plateformes · intermédiaires · sites",
+      "n": 15,
+      "a": {
+        "cible": "obliger les plateformes à modérer les contenus diffusés",
+        "nuance": 5,
+        "engagement": 0.667,
+        "profil": "clivant",
+        "pct_nuance": 0.333
+      },
+      "c": {
+        "cible": "obliger plateformes à supprimer contenus illicites sous 24h",
+        "nuance": 6,
+        "engagement": 0.6,
+        "profil": "clivant",
+        "pct_nuance": 0.4
+      }
+    },
+    {
+      "theme_id": "n5",
+      "title": "réseaux sociaux · sources · anonymat",
+      "n": 12,
+      "a": {
+        "cible": "lever l'anonymat sur les réseaux sociaux",
+        "nuance": 3,
+        "engagement": 0.75,
+        "profil": "clivant",
+        "pct_nuance": 0.25
+      },
+      "c": {
+        "cible": "obliger les réseaux sociaux à supprimer l'anonymat",
+        "nuance": 4,
+        "engagement": 0.667,
+        "profil": "clivant",
+        "pct_nuance": 0.333
+      }
+    },
+    {
+      "theme_id": "n6",
+      "title": "dépendance · institutions · chaîne",
+      "n": 8,
+      "a": {
+        "cible": "conditionner l'accès des chaînes étrangères aux conventions publiques",
+        "nuance": 2,
+        "engagement": 0.75,
+        "profil": "clivant",
+        "pct_nuance": 0.25
+      },
+      "c": {
+        "cible": "interdire toute chaîne sous dépendance étrangère",
+        "nuance": 2,
+        "engagement": 0.75,
+        "profil": "clivant",
+        "pct_nuance": 0.25
+      }
+    },
+    {
+      "theme_id": "n10",
+      "title": "lois · déjà · législatif",
+      "n": 10,
+      "a": {
+        "cible": "renforcer l'application des lois existantes plutôt qu'en créer",
+        "nuance": 2,
+        "engagement": 0.8,
+        "profil": "clivant",
+        "pct_nuance": 0.2
+      },
+      "c": {
+        "cible": "renforcer l'application des lois existantes",
+        "nuance": 3,
+        "engagement": 0.7,
+        "profil": "consensuel",
+        "pct_nuance": 0.3
+      }
+    },
+    {
+      "theme_id": "n11",
+      "title": "inclure · éveiller · peines pecunieres",
+      "n": 11,
+      "a": {
+        "cible": "instaurer des peines pécuniaires pour les discours de haine",
+        "nuance": 4,
+        "engagement": 0.636,
+        "profil": "clivant",
+        "pct_nuance": 0.364
+      },
+      "c": {
+        "cible": "instaurer des amendes pour incitation à la haine",
+        "nuance": 3,
+        "engagement": 0.727,
+        "profil": "clivant",
+        "pct_nuance": 0.273
+      }
+    },
+    {
+      "theme_id": "n13",
+      "title": "simplement · heure · domaine",
+      "n": 9,
+      "a": {
+        "cible": "légiférer sur le domaine en heure à heure",
+        "nuance": 3,
+        "engagement": 0.667,
+        "profil": "clivant",
+        "pct_nuance": 0.333
+      },
+      "c": {
+        "cible": "supprimer tout délai légal de référé en ligne",
+        "nuance": 2,
+        "engagement": 0.778,
+        "profil": "clivant",
+        "pct_nuance": 0.222
+      }
+    },
+    {
+      "theme_id": "n14",
+      "title": "intérêt · propositions · eau",
+      "n": 9,
+      "a": {
+        "cible": "différencier gestion eau professionnelle et personnelle",
+        "nuance": 5,
+        "engagement": 0.444,
+        "profil": "clivant",
+        "pct_nuance": 0.556
+      },
+      "c": {
+        "cible": "réserver l'eau chaude aux professionnels",
+        "nuance": 5,
+        "engagement": 0.444,
+        "profil": "clivant",
+        "pct_nuance": 0.556
+      }
+    },
+    {
+      "theme_id": "n17",
+      "title": "charte · journaliste · déontologie",
+      "n": 13,
+      "a": {
+        "cible": "instaurer des sanctions contraignantes pour les journalistes",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "clivant",
+        "pct_nuance": 0.231
+      },
+      "c": {
+        "cible": "instaurer une révocation automatique pour fake news prouvée",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "clivant",
+        "pct_nuance": 0.231
+      }
+    },
+    {
+      "theme_id": "n18",
+      "title": "passage · sérieux · mise examen",
+      "n": 8,
+      "a": {
+        "cible": "soumettre les médias à une autorité de contrôle indépendante",
+        "nuance": 1,
+        "engagement": 0.875,
+        "profil": "consensuel",
+        "pct_nuance": 0.125
+      },
+      "c": {
+        "cible": "imposer un quota égal temps antenne candidats",
+        "nuance": 2,
+        "engagement": 0.75,
+        "profil": "clivant",
+        "pct_nuance": 0.25
+      }
+    },
+    {
+      "theme_id": "n20",
+      "title": "vrai · faux · etat",
+      "n": 13,
+      "a": {
+        "cible": "laisser l'État définir le vrai et le faux par la loi",
+        "nuance": 1,
+        "engagement": 0.923,
+        "profil": "clivant",
+        "pct_nuance": 0.077
+      },
+      "c": {
+        "cible": "interdire à l'État de qualifier le vrai ou faux",
+        "nuance": 2,
+        "engagement": 0.846,
+        "profil": "consensuel",
+        "pct_nuance": 0.154
+      }
+    },
+    {
+      "theme_id": "n21",
+      "title": "vérité · etat · dictature",
+      "n": 13,
+      "a": {
+        "cible": "laisser l'État définir une vérité officielle",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "consensuel",
+        "pct_nuance": 0.231
+      },
+      "c": {
+        "cible": "interdire à l'État de certifier la vérité",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "consensuel",
+        "pct_nuance": 0.231
+      }
+    },
+    {
+      "theme_id": "n22",
+      "title": "interdire · passer · censure",
+      "n": 10,
+      "a": {
+        "cible": "interdire les contenus illégaux avant les élections",
+        "nuance": 1,
+        "engagement": 0.9,
+        "profil": "clivant",
+        "pct_nuance": 0.1
+      },
+      "c": {
+        "cible": "interdire tout envoi politique deux semaines avant élection",
+        "nuance": 2,
+        "engagement": 0.8,
+        "profil": "clivant",
+        "pct_nuance": 0.2
+      }
+    },
+    {
+      "theme_id": "n24",
+      "title": "liberté · atteinte · expression",
+      "n": 8,
+      "a": {
+        "cible": "limiter légalement les fausses informations en ligne",
+        "nuance": 1,
+        "engagement": 0.875,
+        "profil": "clivant",
+        "pct_nuance": 0.125
+      },
+      "c": {
+        "cible": "interdire par loi toute fake news en période électorale",
+        "nuance": 2,
+        "engagement": 0.75,
+        "profil": "clivant",
+        "pct_nuance": 0.25
+      }
+    },
+    {
+      "theme_id": "n26",
+      "title": "enseignement · élèves · emi",
+      "n": 40,
+      "a": {
+        "cible": "intégrer l'EMI au curriculum via les professeurs documentalistes",
+        "nuance": 0,
+        "engagement": 1.0,
+        "profil": "consensuel",
+        "pct_nuance": 0.0
+      },
+      "c": {
+        "cible": "instaurer un cours obligatoire EMI par des professeurs documentalistes",
+        "nuance": 0,
+        "engagement": 1.0,
+        "profil": "consensuel",
+        "pct_nuance": 0.0
+      }
+    },
+    {
+      "theme_id": "n28",
+      "title": "décodeurs · vérifiées · citoyens vérifier",
+      "n": 16,
+      "a": {
+        "cible": "confier la vérification des infos à un organisme indépendant",
+        "nuance": 3,
+        "engagement": 0.812,
+        "profil": "clivant",
+        "pct_nuance": 0.188
+      },
+      "c": {
+        "cible": "obliger les plateformes à afficher un label « vérifié »",
+        "nuance": 3,
+        "engagement": 0.812,
+        "profil": "clivant",
+        "pct_nuance": 0.188
+      }
+    },
+    {
+      "theme_id": "n30",
+      "title": "politique · fausse · exemple",
+      "n": 8,
+      "a": {
+        "cible": "sanctionner les fausses informations politiques",
+        "nuance": 1,
+        "engagement": 0.875,
+        "profil": "clivant",
+        "pct_nuance": 0.125
+      },
+      "c": {
+        "cible": "interdire aux élus de diffuser des fausses informations",
+        "nuance": 1,
+        "engagement": 0.875,
+        "profil": "clivant",
+        "pct_nuance": 0.125
+      }
+    },
+    {
+      "theme_id": "n31",
+      "title": "élections · démocratie · nuire",
+      "n": 8,
+      "a": {
+        "cible": "encadrer légalement les fausses informations en période électorale",
+        "nuance": 0,
+        "engagement": 1.0,
+        "profil": "clivant",
+        "pct_nuance": 0.0
+      },
+      "c": {
+        "cible": "interdire les fausses infos prouvées à but électoral",
+        "nuance": 1,
+        "engagement": 0.875,
+        "profil": "clivant",
+        "pct_nuance": 0.125
+      }
+    },
+    {
+      "theme_id": "n32",
+      "title": "sites · lutter · désinformation",
+      "n": 13,
+      "a": {
+        "cible": "interdire les sites diffusant de la désinformation",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "clivant",
+        "pct_nuance": 0.231
+      },
+      "c": {
+        "cible": "supprimer tout site diffusant des fausses informations vérifiées",
+        "nuance": 3,
+        "engagement": 0.769,
+        "profil": "clivant",
+        "pct_nuance": 0.231
+      }
+    },
+    {
+      "theme_id": "n34",
+      "title": "éduquer · esprit critique · développer esprit",
+      "n": 13,
+      "a": {
+        "cible": "intégrer l'enseignement systématique de l'esprit critique à l'école",
+        "nuance": 2,
+        "engagement": 0.846,
+        "profil": "consensuel",
+        "pct_nuance": 0.154
+      },
+      "c": {
+        "cible": "instaurer un cours obligatoire d'esprit critique dès le collège",
+        "nuance": 2,
+        "engagement": 0.846,
+        "profil": "consensuel",
+        "pct_nuance": 0.154
+      }
+    },
+    {
+      "theme_id": "n35",
+      "title": "critique · meilleure · mieux",
+      "n": 9,
+      "a": {
+        "cible": "privilégier l'éducation aux médias plutôt qu'une loi sur les fake news",
+        "nuance": 1,
+        "engagement": 0.889,
+        "profil": "consensuel",
+        "pct_nuance": 0.111
+      },
+      "c": {
+        "cible": "supprimer toute loi contre les fake news",
+        "nuance": 1,
+        "engagement": 0.889,
+        "profil": "consensuel",
+        "pct_nuance": 0.111
+      }
+    },
+    {
+      "theme_id": "n36",
+      "title": "apprendre · savoir · fonctionnement",
+      "n": 11,
+      "a": {
+        "cible": "instaurer une éducation systématique à l'information",
+        "nuance": 1,
+        "engagement": 0.909,
+        "profil": "consensuel",
+        "pct_nuance": 0.091
+      },
+      "c": {
+        "cible": "instaurer un cours obligatoire d'éducation aux médias dès l'école primaire",
+        "nuance": 1,
+        "engagement": 0.909,
+        "profil": "consensuel",
+        "pct_nuance": 0.091
+      }
+    }
+  ]
+}
