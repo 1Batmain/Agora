@@ -22,38 +22,6 @@ export function Landing({
   const closedCount = datasets.length - openCount;
   const formatResponseCount = (n: number | null | undefined) =>
     n != null ? `${n.toLocaleString(LOCALE)} réponses citoyennes` : 'Nombre de réponses indisponible';
-  const features = [
-    {
-      title: 'Les thèmes identifiés',
-      body: 'Les grands sujets qui reviennent dans les contributions citoyennes.',
-    },
-    {
-      title: 'Les chiffres clés',
-      body: 'Le nombre de contributions analysées, le nombre de thèmes identifiés et l’état de la consultation.',
-    },
-    {
-      title: 'Des exemples d’avis',
-      body: 'Des extraits de contributions pour garder un lien avec ce que les citoyens ont réellement exprimé.',
-    },
-  ];
-  const steps = [
-    {
-      title: '1. Une question est posée',
-      body: 'Une consultation publique invite les citoyens à donner leur avis sur un sujet précis.',
-    },
-    {
-      title: '2. Les citoyens contribuent',
-      body: 'Ils expriment leurs avis, leurs préoccupations ou leurs propositions dans des textes libres.',
-    },
-    {
-      title: '3. Agora regroupe les sujets récurrents',
-      body: 'Les contributions qui parlent de sujets proches sont rapprochées.',
-    },
-    {
-      title: '4. Les résultats sont présentés clairement',
-      body: 'Agora affiche les thèmes identifiés, les chiffres clés et des exemples d’avis exprimés.',
-    },
-  ];
 
   return (
     <div className="agora landing">
@@ -61,8 +29,7 @@ export function Landing({
 
       <main className="landing__body">
         <section className="hero">
-          <p className="hero__kicker">Outil d’analyse de consultations publiques</p>
-          <h1 className="hero__title">Comprendre ce que disent les citoyens dans une consultation</h1>
+          <h1 className="hero__title">Écouter et retranscrire fidèlement la parole citoyenne</h1>
           <p className="hero__tagline">
             Agora analyse les contributions citoyennes publiées dans une
             consultation et fait ressortir les sujets qui reviennent le plus
@@ -81,38 +48,6 @@ export function Landing({
             <li>
               <strong>{closedCount}</strong> analyses disponibles
             </li>
-          </ul>
-        </section>
-
-        <section className="landing__how">
-          <header className="sec-head">
-            <h2>Comment ça fonctionne</h2>
-            <span className="sec-head__hint">De la question posée à une lecture plus claire des contributions.</span>
-          </header>
-          <ol className="how__steps">
-            {steps.map((step) => (
-              <li key={step.title} className="how__step">
-                <div>
-                  <strong>{step.title}</strong>
-                  <p>{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="landing__features">
-          <header className="sec-head">
-            <h2>Ce que vous pouvez voir</h2>
-            <span className="sec-head__hint">Trois repères pour comprendre rapidement le contenu d’une consultation.</span>
-          </header>
-          <ul className="feature-grid">
-            {features.map((feature) => (
-              <li key={feature.title} className="feature-card">
-                <strong>{feature.title}</strong>
-                <p>{feature.body}</p>
-              </li>
-            ))}
           </ul>
         </section>
 
