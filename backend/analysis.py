@@ -32,6 +32,7 @@ import numpy as np
 
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from backend.develop import corpus_idf, rerank_order
+from backend.recut import recut_tree
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
     DEFAULT_RESOLUTION,
@@ -673,11 +674,19 @@ def build_theme_tree(
                 node, vecs, prepared.claim_texts, idf=claim_idf)
             node.hero_avis_id = _hero_avis(node, prepared, avis_total)
 
-    return ThemeTree(
+    tree = ThemeTree(
         nodes=nodes, order=order, macros=macros, dataset=ds.id, prepared=prepared,
         tau=tau, base_resolution=resolution, seed=seed, derived_global=derived_global,
         root_coarsen=root_coarsen, claim_idf=claim_idf,
     )
+    # RE-COUPE sauce_magique : la façade macro devient la COUPE optimale de l'arbre.
+    # Appliquée ICI, et non chez l'appelant : `build_opinion` et `build_arguments`
+    # doivent voir EXACTEMENT l'arbre que `build_analysis` sérialise, sinon leurs
+    # `theme_id` désignent des nœuds que la re-coupe a dissous (thèmes fantômes servis).
+    # Ids de nœuds inchangés ; no-op si la façade est déjà la coupe optimale.
+    if nodes:
+        recut_tree(tree)
+    return tree
 
 
 # --------------------------------------------------------------------------- #

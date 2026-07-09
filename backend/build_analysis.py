@@ -39,7 +39,6 @@ from backend.analysis import (
     build_theme_tree,
 )
 from backend.avis import build_avis_provenance
-from backend.recut import recut_tree
 from backend.translate import build_translations
 from backend.keywords_fr import translate_tree_keywords
 from backend.citations import citations_for_theme
@@ -59,6 +58,9 @@ ProgressFn = Callable[[str, str, int, int], None]
 #     modèle CHEAP. C'est le gros du coût d'un rebuild (extraction cachée) → cheap = vite.
 # Surchargeables par env (aucune valeur de corpus codée en dur).
 EXTRACT_MODEL = os.environ.get("AGORA_EXTRACT_MODEL", "mistral-large-latest")
+# Laisse passer un arbre entièrement plat (aucun macro subdivisé). Fail-closed par défaut :
+# la hiérarchie est le produit, pas un bonus (cf. `_assert_tree_is_structured`).
+ALLOW_FLAT_TREE = os.environ.get("AGORA_ALLOW_FLAT_TREE", "").strip() == "1"
 ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
 
 # Concurrence BORNÉE des appels LLM d'enrichissement (titres/accroches/descriptions/
@@ -106,6 +108,41 @@ def _parallel_for(
                     done += 1
                     k = done
                 on_done(k)
+
+
+class FlatTreeError(RuntimeError):
+    """L'arbre servi n'a AUCUN sous-thème alors que le corpus est multi-macro."""
+
+
+def _assert_tree_is_structured(tree) -> None:
+    """Refuse un arbre entièrement plat — la hiérarchie EST le produit.
+
+    Signature pathologique observée : `tau` (seuil de subdivision, dérivé du plus grand
+    écart des dispersions) se cale au-dessus de toutes les dispersions, plus AUCUN macro
+    n'est éligible, et l'arbre sort à profondeur 0 avec un `status: ready` parfaitement
+    serein. Le produit promet « thèmes → sous-thèmes → verbatim » : un arbre plat est un
+    échec de build, pas un résultat. On lève AVANT l'enrichissement LLM (donc avant la
+    dépense). Un corpus réellement mono-facette a <3 macros et passe.
+    """
+    macros = list(tree.macros)
+    if len(macros) < 3:
+        return                                   # trop peu de macros : platitude légitime
+    structured = sum(1 for m in macros if tree.nodes[m].children)
+    if structured:
+        return
+    disp = sorted(round(tree.nodes[m].dispersion, 4) for m in macros)
+    if ALLOW_FLAT_TREE:
+        print(f"⚠️  arbre PLAT toléré (AGORA_ALLOW_FLAT_TREE=1) : {len(macros)} macros, "
+              f"0 subdivisé, tau={tree.tau:.4f}")
+        return
+    raise FlatTreeError(
+        f"{len(macros)} macros, AUCUN subdivisé → arbre plat (profondeur 0).\n"
+        f"  tau (seuil de subdivision) = {tree.tau:.4f}\n"
+        f"  dispersions des macros     = {disp}\n"
+        f"  → aucun macro n'atteint tau : le seuil dérivé exclut tout le monde.\n"
+        f"Diagnostiquer `_derive_tau` (backend/analysis.py) avant de servir ce build.\n"
+        f"AGORA_ALLOW_FLAT_TREE=1 pour passer outre en connaissance de cause."
+    )
 
 
 def load_dataset(dataset_id: str):
@@ -167,17 +204,17 @@ def build_analysis(
             ds, backend=backend, model=extract_model, embedder=embedder,
             resolution=resolution, seed=seed, extract_progress=_extract_progress,
         )
-        # 1a) RE-COUPE sauce_magique (backend.recut) : la façade macro devient la COUPE
-        #     optimale de l'arbre (anti macro-géant à l'échelle). Ids de nœuds inchangés,
-        #     ancêtres dissous retirés, couleurs/convergence réassignées. No-op si la
-        #     coupe optimale est déjà la façade actuelle.
-        rc = recut_tree(tree)
+        # 1a) RE-COUPE sauce_magique : appliquée DANS `build_theme_tree` (tous les
+        #     builders doivent voir le même arbre) ; ici on ne fait qu'en rapporter le
+        #     diagnostic, posé sur `tree.recut` et relayé dans `params.recut`.
+        rc = tree.recut
         if rc:
             report("recut", "re-coupe sauce_magique : "
                             f"{rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros "
                             f"(top1 {rc['avant']['top1']:.0%}→{rc['apres']['top1']:.0%})")
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
+        _assert_tree_is_structured(tree)
 
         # 1a-bis) Mots-clés en FRANÇAIS (datasets multilingues) : on traduit les TERMES
         #     c-TF-IDF non-FR AU BUILD (caché, batché), AVANT que les titres/accroches/
