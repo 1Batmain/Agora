@@ -87,7 +87,6 @@ def build_live_tree(
     nodes: dict = {}
     order: list[str] = []
     macros: list[str] = []
-    tau = float("inf")
     derived = None
     merge_thr = float("nan")
     root_modularity = None        # Q Leiden de la partition RACINE (None si n==0)
@@ -115,16 +114,16 @@ def build_live_tree(
         fine_groups = list(by_cluster.values())
 
         # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) — MÊME orchestration
-        # (coarsening racine, tau, sous-arbres variance-adaptatifs, nommage/couleurs/
+        # (coarsening racine, sous-arbres freinés par min_sub_size, nommage/couleurs/
         # convergence). Ici les membres sont des IDÉES et le graphe racine part du seuil
         # DONNÉ (levier Console), pas du seuil dérivé — c'est la seule divergence, en amont.
-        nodes, order, macros, tau, merge_thr = _build_macro_forest(
+        nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs64, weights_arr, owner, texts,
             min_sub_size=derived.min_sub_size, resolution=resolution, seed=seed)
 
     return SimpleNamespace(
         nodes=nodes, order=order, macros=macros, dataset=None,
-        tau=tau, base_resolution=resolution, seed=seed,
+        base_resolution=resolution, seed=seed,
         derived_global=derived, knn_threshold=thr, root_modularity=root_modularity,
         root_coarsen={
             "n_fine": len(by_cluster) if n else 0,

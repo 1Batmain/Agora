@@ -114,17 +114,18 @@ def test_prepare_claims_leve_sur_modele_divergent(tmp_path, monkeypatch):
 # --------------------------------------------------------------------------- #
 # 3. Arbre plat ⇒ FlatTreeError (avant toute dépense LLM)
 # --------------------------------------------------------------------------- #
-def _fake_tree(n_macros: int, *, structured: bool, tau: float = 0.2145):
+def _fake_tree(n_macros: int, *, structured: bool, mss: int = 27):
     nodes = {}
     macros = []
     for i in range(n_macros):
         mid = f"n{i}"
         kids = [f"n{i}c"] if structured and i == 0 else []
-        nodes[mid] = SimpleNamespace(id=mid, children=kids, dispersion=0.18 + 0.001 * i)
+        nodes[mid] = SimpleNamespace(id=mid, children=kids, n_claims=100 + i)
         macros.append(mid)
         for c in kids:
-            nodes[c] = SimpleNamespace(id=c, children=[], dispersion=0.1)
-    return SimpleNamespace(nodes=nodes, macros=macros, tau=tau)
+            nodes[c] = SimpleNamespace(id=c, children=[], n_claims=50)
+    return SimpleNamespace(nodes=nodes, macros=macros,
+                           derived_global=SimpleNamespace(min_sub_size=mss))
 
 
 def test_arbre_plat_leve():
@@ -132,7 +133,7 @@ def test_arbre_plat_leve():
         _assert_tree_is_structured(_fake_tree(15, structured=False))
     msg = str(exc.value)
     assert "AUCUN subdivisé" in msg
-    assert "tau" in msg and "0.2145" in msg      # le diagnostic doit être actionnable
+    assert "min_sub_size" in msg and "27" in msg   # le diagnostic doit être actionnable
 
 
 def test_arbre_structure_passe():
@@ -148,3 +149,53 @@ def test_arbre_plat_tolere_si_flag(monkeypatch):
     import backend.build_analysis as B
     monkeypatch.setattr(B, "ALLOW_FLAT_TREE", True)
     B._assert_tree_is_structured(_fake_tree(15, structured=False))   # ne lève pas
+
+
+# --------------------------------------------------------------------------- #
+# 4. Le frein de la récursion : min_sub_size à l'échelle du CORPUS, `tau` supprimé
+# --------------------------------------------------------------------------- #
+def test_tau_et_res_ladder_ont_disparu():
+    """`tau` basculait sur 2 claims d'écart ; RES_LADDER ne montait jamais.
+
+    Verdict `.agent/notes/HIERARCHY_TAU.md`. Ce test est le cliquet : si quelqu'un
+    réintroduit un pré-filtre, il doit d'abord ré-ouvrir le verdict.
+    """
+    assert not hasattr(A, "_derive_tau")
+    assert not hasattr(A, "RES_LADDER")
+    assert "tau" not in A.ThemeTree.__dataclass_fields__
+
+
+def test_subdivide_refuse_sous_min_sub_size():
+    """Un nœud qui ne dégage pas ≥2 groupes de `min_sub_size` reste une FEUILLE."""
+    import numpy as np
+    # Deux paquets nettement séparés de 6 claims chacun.
+    a = np.tile(np.array([1.0, 0.0, 0.0, 0.0]), (6, 1))
+    b = np.tile(np.array([0.0, 1.0, 0.0, 0.0]), (6, 1))
+    vecs = np.vstack([a, b]).astype(np.float32)
+    vecs += np.linspace(0, 0.02, vecs.size).reshape(vecs.shape)   # bruit déterministe
+    vecs /= np.linalg.norm(vecs, axis=1, keepdims=True)
+    members = list(range(12))
+
+    # min_sub_size=5 : les deux paquets sont viables → coupe.
+    coupe = A._subdivide(members, vecs, 1.0, 42, 5)
+    assert coupe is not None and len(coupe) >= 2
+
+    # min_sub_size=50 : aucun sous-groupe n'atteint l'échelle du corpus → feuille.
+    assert A._subdivide(members, vecs, 1.0, 42, 50) is None
+
+
+def test_min_sub_size_ne_retrecit_pas_avec_le_noeud(monkeypatch):
+    """`_build_subtree` propage l'échelle CORPUS — pas une échelle recalculée par nœud."""
+    vus: list[int] = []
+
+    def spy(members, vecs, res, seed, min_sub_size):
+        vus.append(min_sub_size)
+        return None                                   # feuille → arrête la récursion
+
+    monkeypatch.setattr(A, "_subdivide", spy)
+    import numpy as np
+    vecs = np.eye(4, dtype=np.float32)[[0, 1, 2, 3]]
+    nodes, order = {}, []
+    A._build_subtree([0, 1, 2, 3], None, 0, [0], nodes, order, vecs,
+                     np.ones(4), [0, 1, 2, 3], 27, 1.0, 42)
+    assert vus == [27], "min_sub_size doit descendre inchangé (échelle du corpus)"

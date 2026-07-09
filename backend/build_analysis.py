@@ -117,12 +117,15 @@ class FlatTreeError(RuntimeError):
 def _assert_tree_is_structured(tree) -> None:
     """Refuse un arbre entièrement plat — la hiérarchie EST le produit.
 
-    Signature pathologique observée : `tau` (seuil de subdivision, dérivé du plus grand
-    écart des dispersions) se cale au-dessus de toutes les dispersions, plus AUCUN macro
-    n'est éligible, et l'arbre sort à profondeur 0 avec un `status: ready` parfaitement
-    serein. Le produit promet « thèmes → sous-thèmes → verbatim » : un arbre plat est un
-    échec de build, pas un résultat. On lève AVANT l'enrichissement LLM (donc avant la
-    dépense). Un corpus réellement mono-facette a <3 macros et passe.
+    Le produit promet « thèmes → sous-thèmes → verbatim » : un arbre à profondeur 0 sur
+    un corpus multi-macro est un échec de build, pas un résultat. On lève AVANT
+    l'enrichissement LLM (donc avant la dépense). Un corpus réellement mono-facette a
+    <3 macros et passe.
+
+    Historique : le rebuild tiktok du 2026-07-08 a servi un arbre plat avec un
+    `status: ready` serein, parce que le seuil de dispersion `tau` s'était calé au-dessus
+    de toutes les dispersions. `tau` a depuis été supprimé (`.agent/notes/HIERARCHY_TAU.md`)
+    — ce garde-fou reste : il protège contre la PROCHAINE cause d'aplatissement.
     """
     macros = list(tree.macros)
     if len(macros) < 3:
@@ -130,17 +133,18 @@ def _assert_tree_is_structured(tree) -> None:
     structured = sum(1 for m in macros if tree.nodes[m].children)
     if structured:
         return
-    disp = sorted(round(tree.nodes[m].dispersion, 4) for m in macros)
+    mss = getattr(tree.derived_global, "min_sub_size", None)
+    tailles = sorted(tree.nodes[m].n_claims for m in macros)
     if ALLOW_FLAT_TREE:
         print(f"⚠️  arbre PLAT toléré (AGORA_ALLOW_FLAT_TREE=1) : {len(macros)} macros, "
-              f"0 subdivisé, tau={tree.tau:.4f}")
+              f"0 subdivisé, min_sub_size={mss}")
         return
     raise FlatTreeError(
         f"{len(macros)} macros, AUCUN subdivisé → arbre plat (profondeur 0).\n"
-        f"  tau (seuil de subdivision) = {tree.tau:.4f}\n"
-        f"  dispersions des macros     = {disp}\n"
-        f"  → aucun macro n'atteint tau : le seuil dérivé exclut tout le monde.\n"
-        f"Diagnostiquer `_derive_tau` (backend/analysis.py) avant de servir ce build.\n"
+        f"  min_sub_size (échelle corpus) = {mss}\n"
+        f"  tailles des macros, en claims = {tailles}\n"
+        f"  → aucun macro ne dégage ≥2 sous-thèmes de {mss} claims.\n"
+        f"Vérifier `resolution` et `_subdivide` (backend/analysis.py) avant de servir.\n"
         f"AGORA_ALLOW_FLAT_TREE=1 pour passer outre en connaissance de cause."
     )
 
