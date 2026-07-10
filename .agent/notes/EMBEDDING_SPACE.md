@@ -120,3 +120,57 @@ coarsening hors de cause.
 ## Reproduire
 Diagnostics + gold : cf. queue `T-N10`. Le cosinus est invariant par ÉCHELLE mais PAS par
 TRANSLATION — multiplier les vecteurs ne change rien, déplacer l'origine change tout.
+
+---
+
+## 8. Courbe N sur x-stance élargi (2026-07-10) — et une hypothèse RETIRÉE
+
+`xstance-large` : 20 000 contributions (sur 67 271 disponibles), embeddings LOCAUX, coût nul.
+Gold à DEUX niveaux : `topic` (12) et `question_id` (192). Clustering au niveau AVIS.
+
+**Le proxy avis↔claims est valide** (même corpus `xstance`, 3000 avis) — le SENS du gain est
+le même sur les deux unités, seule l'amplitude diffère :
+```
+unite / espace     comm.  ARI_topic   NMI    ARI_question  NMI
+avis   . brut        18     0.211    0.398      0.077     0.474
+avis   . centre      18     0.245    0.422      0.097     0.512
+claims . brut        17     0.161    0.317      0.056     0.386
+claims . centre      19     0.216    0.374      0.086     0.456
+```
+→ le banc au niveau avis (gratuit) donne la DIRECTION, pas la MAGNITUDE. Toute conclusion
+quantitative doit être re-vérifiée au niveau claims.
+
+⚠️ L'ARI contre 192 questions avec ~18 communautés est **plafonné par construction**. Le NMI
+est l'indicateur lisible à ce niveau. Pour exploiter vraiment le gold à deux niveaux, il faut
+confronter les FEUILLES de l'arbre aux questions, pas la partition racine.
+
+### Résultats (3 sous-échantillons × 3 graines par point)
+```
+    N   espace   ARI_topic         comm.   hubness
+ 1000     brut   0.189 +- 0.016    11.4     3.40
+ 1000   centre   0.223 +- 0.021    13.2     0.80
+ 4000     brut   0.253 +- 0.012    17.2     3.85
+ 4000   centre   0.281 +- 0.011    17.9     0.92
+20000     brut   0.257 +- 0.012    31.3     3.48
+20000   centre   0.301 +- 0.002    24.0     0.99
+```
+
+### ❌ HYPOTHÈSE RETIRÉE (le jour même)
+Sur UNE seule graine, l'ARI du brut semblait DÉCROÎTRE avec N (0.253 → 0.240) et j'en avais
+tiré un mécanisme : « la hubness s'aggrave avec N, donc les données deviennent un poison ».
+**Les deux affirmations sont fausses.** Avec 9 tirages par point : le brut s'AMÉLIORE avec N
+(0.189 → 0.257), et la hubness est PLATE (3.40 / 3.85 / 3.48). Une jolie histoire bâtie sur
+un artefact d'échantillonnage. *Répéter avant d'expliquer.*
+
+### ✅ Ce qui tient
+- Le recentrage gagne à **chaque** taille, sur les **trois** métriques (ARI_topic,
+  ARI_question, NMI). Gain à peu près **constant** (+0.03 à +0.04), NON croissant avec N.
+- Il divise la **hubness par 3,5 à 4** (≈3.5 → ≈0.9), indépendamment de N.
+- **Le brut SUR-FRAGMENTE quand N grandit** : 11 communautés à N=1000, **31 à N=20 000**,
+  pour 12 topics réels. Le centré plafonne à 24, et sa variance s'effondre
+  (σ = 0.002 à N=20 000). Plus juste ET plus stable.
+
+### Ce que ça donne à T-N9
+Des points sur l'axe N, à sémantique constante, gratuits, avec vérité terrain — de quoi
+dériver `k(N)` et `min_sub_size(N)` au lieu de les poser. Extensible à 67 271.
+Harnais : `research/xstance_bench.py` (`transfert` | `courbe`).
