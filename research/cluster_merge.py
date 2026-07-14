@@ -259,18 +259,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", default="tiktok")
     ap.add_argument("--pair", nargs=2, default=None, help="ids A B de la paire suspecte forcée")
-    ap.add_argument("--recut", action="store_true", help="mesure la façade SERVIE (post-recut)")
     args = ap.parse_args()
 
     ds = load_dataset(args.dataset)
     tree = build_theme_tree(ds, model=_cache_model(args.dataset))
     assert tree.prepared.extracted == 0, "extraction aurait dû être 100% cachée"
-    if args.recut:
-        from backend.recut import recut_tree
-        rc = recut_tree(tree)
-        print(f"# recut appliqué : {rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros"
-              if rc else "# recut no-op (façade = racines)")
-    rng = np.random.default_rng(42)
 
     macros = macro_nodes(tree)
     leaves = leaf_nodes(tree)

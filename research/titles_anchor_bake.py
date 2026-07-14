@@ -5,7 +5,7 @@ AVANT  = titre SERVI (cache analysis.json) + repro « ancienne méthode » AU MO
 APRÈS  = titrage ANCRÉ (`backend.titles`), deux régimes :
            • repli  : prompt ancré (mots-clés = ancres) sur les représentatives ;
            • plein  : + sélection DISTINCTIVE sur TOUTES les claims du nœud (member_texts).
-Zéro modif du pipeline : recharge le cache (extraction 100% cachée), recut = façade servie.
+Zéro modif du pipeline : recharge le cache (extraction 100% cachée) et lit la façade servie.
 
     MISTRAL_API_KEY=$(cat var/mistral.key) uv run --extra faiss \
         python research/titles_anchor_bake.py
@@ -24,7 +24,6 @@ from backend import titles
 from backend.analysis import build_theme_tree
 from backend.build_analysis import load_dataset
 from backend.recluster import dataset_dir
-from backend.recut import recut_tree
 from pipeline.cluster import mistral_client
 
 DATASET = "tiktok"
@@ -74,9 +73,6 @@ def main():
     ds = load_dataset(DATASET)
     tree = build_theme_tree(ds, model=cache_model(DATASET))
     assert tree.prepared.extracted == 0, "extraction aurait dû être 100% cachée"
-    rc = recut_tree(tree)
-    print(f"# recut : {rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros" if rc
-          else "# recut no-op")
     print(f"# {len(tree.macros)} macros ; n_claims={len(tree.prepared.claim_texts)} ; modèle={MODEL}\n")
 
     served = served_titles(DATASET)

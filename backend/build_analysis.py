@@ -39,7 +39,6 @@ from backend.analysis import (
     build_theme_tree,
 )
 from backend.avis import build_avis_provenance
-from backend.recut import recut_tree
 from backend.translate import build_translations
 from backend.keywords_fr import translate_tree_keywords
 from backend.citations import citations_for_theme
@@ -59,6 +58,12 @@ ProgressFn = Callable[[str, str, int, int], None]
 #     modèle CHEAP. C'est le gros du coût d'un rebuild (extraction cachée) → cheap = vite.
 # Surchargeables par env (aucune valeur de corpus codée en dur).
 EXTRACT_MODEL = os.environ.get("AGORA_EXTRACT_MODEL", "mistral-large-latest")
+# Laisse passer un arbre entièrement plat (aucun macro subdivisé). Fail-closed par défaut :
+# la hiérarchie est le produit, pas un bonus (cf. `_assert_tree_is_structured`).
+ALLOW_FLAT_TREE = os.environ.get("AGORA_ALLOW_FLAT_TREE", "").strip() == "1"
+# Part MAXIMALE de titres/synthèses en repli avant de refuser de servir le build.
+MAX_FALLBACK_SHARE = float(os.environ.get("AGORA_MAX_FALLBACK_SHARE", "0.05"))
+ALLOW_DEGRADED = os.environ.get("AGORA_ALLOW_DEGRADED", "").strip() == "1"
 ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
 
 # Concurrence BORNÉE des appels LLM d'enrichissement (titres/accroches/descriptions/
@@ -106,6 +111,91 @@ def _parallel_for(
                     done += 1
                     k = done
                 on_done(k)
+
+
+class FlatTreeError(RuntimeError):
+    """L'arbre servi n'a AUCUN sous-thème alors que le corpus est multi-macro."""
+
+
+def _assert_tree_is_structured(tree) -> None:
+    """Refuse un arbre entièrement plat — la hiérarchie EST le produit.
+
+    Le produit promet « thèmes → sous-thèmes → verbatim » : un arbre à profondeur 0 sur
+    un corpus multi-macro est un échec de build, pas un résultat. On lève AVANT
+    l'enrichissement LLM (donc avant la dépense). Un corpus réellement mono-facette a
+    <3 macros et passe.
+
+    Historique : le rebuild tiktok du 2026-07-08 a servi un arbre plat avec un
+    `status: ready` serein, parce que le seuil de dispersion `tau` s'était calé au-dessus
+    de toutes les dispersions. `tau` a depuis été supprimé (`.agent/notes/HIERARCHY_TAU.md`)
+    — ce garde-fou reste : il protège contre la PROCHAINE cause d'aplatissement.
+    """
+    macros = list(tree.macros)
+    if len(macros) < 3:
+        return                                   # trop peu de macros : platitude légitime
+    structured = sum(1 for m in macros if tree.nodes[m].children)
+    if structured:
+        return
+    mss = getattr(tree.derived_global, "min_sub_size", None)
+    tailles = sorted(tree.nodes[m].n_claims for m in macros)
+    if ALLOW_FLAT_TREE:
+        print(f"⚠️  arbre PLAT toléré (AGORA_ALLOW_FLAT_TREE=1) : {len(macros)} macros, "
+              f"0 subdivisé, min_sub_size={mss}")
+        return
+    raise FlatTreeError(
+        f"{len(macros)} macros, AUCUN subdivisé → arbre plat (profondeur 0).\n"
+        f"  min_sub_size (échelle corpus) = {mss}\n"
+        f"  tailles des macros, en claims = {tailles}\n"
+        f"  → aucun macro ne dégage ≥2 sous-thèmes de {mss} claims.\n"
+        f"Vérifier `resolution` et `_subdivide` (backend/analysis.py) avant de servir.\n"
+        f"AGORA_ALLOW_FLAT_TREE=1 pour passer outre en connaissance de cause."
+    )
+
+
+class DegradedEnrichmentError(RuntimeError):
+    """Trop de titres/synthèses sont des REPLIS : le build est dégradé, pas prêt."""
+
+
+def _assert_enrichment_is_complete(dataset: str, tree, node_ids: list[str]) -> None:
+    """Refuse de servir un build dont l'enrichissement LLM s'est effondré en silence.
+
+    Un 429 (quota Mistral atteint) ne lève pas : chaque appelant retombe sur son repli —
+    titre en mots-clés, synthèse jamais écrite — et le build se déclarait `ready`. Vécu
+    deux fois : le « bug des 257 titres-labels », puis un rebuild tiktok à 27 % de titres
+    en mots-clés et 37 % de synthèses absentes. `mistral_client` réessaie désormais ; ce
+    garde-fou constate ce qui a malgré tout été perdu.
+
+    Le repli reste LÉGITIME à petite dose (un thème minuscule, un texte pauvre) : on ne
+    lève qu'au-delà du seuil, et `AGORA_ALLOW_DEGRADED=1` passe outre en connaissance de
+    cause (utile pour un build hors-ligne, sans clé).
+    """
+    exhausted = mistral_client.get_exhausted()
+    n = len(node_ids) or 1
+    kw_titles = [i for i in node_ids if " · " in (tree.nodes[i].title or "")]
+    missing_insights = [i for i in node_ids if not store.read_insights(dataset, "theme", i)]
+
+    part_titles = len(kw_titles) / n
+    part_insights = len(missing_insights) / n
+    if exhausted["count"]:
+        _log(f"{dataset} · ⚠️  {exhausted['count']} appels LLM perdus après réessais "
+             f"{exhausted['by_status']} (429 = quota Mistral)")
+
+    if part_titles <= MAX_FALLBACK_SHARE and part_insights <= MAX_FALLBACK_SHARE:
+        return
+    msg = (
+        f"enrichissement DÉGRADÉ sur {dataset} :\n"
+        f"  titres en repli mots-clés : {len(kw_titles)}/{n} ({part_titles:.0%})\n"
+        f"  synthèses absentes        : {len(missing_insights)}/{n} ({part_insights:.0%})\n"
+        f"  appels LLM perdus         : {exhausted['count']} {exhausted['by_status'] or ''}\n"
+        f"  seuil toléré              : {MAX_FALLBACK_SHARE:.0%}\n"
+        f"Cause la plus fréquente : quota Mistral atteint (429) en cours de build.\n"
+        f"Recharger le crédit puis RELANCER — les replis ne sont pas cachés, ils se\n"
+        f"régénèrent. AGORA_ALLOW_DEGRADED=1 pour servir quand même."
+    )
+    if ALLOW_DEGRADED:
+        _log(f"{dataset} · ⚠️  {msg}")
+        return
+    raise DegradedEnrichmentError(msg)
 
 
 def load_dataset(dataset_id: str):
@@ -167,17 +257,9 @@ def build_analysis(
             ds, backend=backend, model=extract_model, embedder=embedder,
             resolution=resolution, seed=seed, extract_progress=_extract_progress,
         )
-        # 1a) RE-COUPE sauce_magique (backend.recut) : la façade macro devient la COUPE
-        #     optimale de l'arbre (anti macro-géant à l'échelle). Ids de nœuds inchangés,
-        #     ancêtres dissous retirés, couleurs/convergence réassignées. No-op si la
-        #     coupe optimale est déjà la façade actuelle.
-        rc = recut_tree(tree)
-        if rc:
-            report("recut", "re-coupe sauce_magique : "
-                            f"{rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros "
-                            f"(top1 {rc['avant']['top1']:.0%}→{rc['apres']['top1']:.0%})")
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
+        _assert_tree_is_structured(tree)
 
         # 1a-bis) Mots-clés en FRANÇAIS (datasets multilingues) : on traduit les TERMES
         #     c-TF-IDF non-FR AU BUILD (caché, batché), AVANT que les titres/accroches/
@@ -311,6 +393,8 @@ def build_analysis(
                               duration_seconds=perf_counter() - t0)
         except Exception as _e:  # le coût est un bonus, jamais bloquant
             _log(f"{dataset} · (coût non enregistré: {_e})")
+
+        _assert_enrichment_is_complete(dataset, tree, node_ids)
 
         took_s = round(perf_counter() - t0, 1)
         final = store.write_status(

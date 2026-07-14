@@ -38,11 +38,32 @@ _USAGE_LOCK = _threading.Lock()
 _USAGE: dict = {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "by_model": {}}
 
 
+# Appels perdus APRÈS épuisement des réessais : l'appelant va retomber sur son repli.
+# Compté ici pour qu'un build puisse CONSTATER sa propre dégradation au lieu de la subir.
+_EXHAUSTED: dict = {"count": 0, "by_status": {}}
+
+
 def reset_usage() -> None:
     """Remet à zéro l'accumulateur de tokens (à appeler au début d'un build)."""
     with _USAGE_LOCK:
         _USAGE.update(calls=0, prompt_tokens=0, completion_tokens=0)
         _USAGE["by_model"] = {}
+        _EXHAUSTED.update(count=0)
+        _EXHAUSTED["by_status"] = {}
+
+
+def get_exhausted() -> dict:
+    """Appels définitivement perdus : `{count, by_status}` (429 = quota, 0 = réseau)."""
+    import copy
+    with _USAGE_LOCK:
+        return copy.deepcopy(_EXHAUSTED)
+
+
+def _note_exhausted(err: "MistralError") -> None:
+    with _USAGE_LOCK:
+        _EXHAUSTED["count"] += 1
+        k = str(err.status)
+        _EXHAUSTED["by_status"][k] = _EXHAUSTED["by_status"].get(k, 0) + 1
 
 
 def get_usage() -> dict:
@@ -146,6 +167,27 @@ def _safe_reason(resp) -> str:
         return (resp.text or "")[:200] if hasattr(resp, "text") else "erreur inconnue"
 
 
+# Un 429 (quota/rate-limit) ou un 5xx sont TRANSITOIRES : sans réessai, chaque appelant
+# retombe sur son repli — titre en mots-clés, synthèse absente — et le build se déclare
+# `ready` en ayant silencieusement perdu son enrichissement. C'est arrivé deux fois
+# (« bug des 257 titres-labels », puis 27 % de titres + 37 % de synthèses perdus quand le
+# quota Mistral a été atteint en cours de build). Le réessai vit ICI, une seule fois, pour
+# tous les appelants — pas dans chaque module.
+RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
+MAX_RETRIES = int(os.environ.get("AGORA_MISTRAL_RETRIES", "4"))
+BACKOFF_BASE = float(os.environ.get("AGORA_MISTRAL_BACKOFF", "2.0"))  # 2s, 4s, 8s, 16s
+BACKOFF_CAP = 30.0
+
+
+def _retry_after(resp) -> float | None:
+    """Délai demandé par le serveur (`Retry-After`, en secondes), s'il est exploitable."""
+    raw = resp.headers.get("Retry-After") if resp is not None else None
+    try:
+        return max(0.0, min(BACKOFF_CAP, float(raw))) if raw else None
+    except (TypeError, ValueError):
+        return None
+
+
 def chat(
     messages: list[dict],
     *,
@@ -157,13 +199,19 @@ def chat(
 ) -> str:
     """Un appel chat-completions Mistral. Renvoie le `content` du message assistant.
 
-    Lève `MistralError` si pas de clé (status 0), timeout/réseau (status 0) ou
-    réponse non-200 (status = code HTTP, p.ex. 401 sur clé invalide). L'appelant
-    décide du repli. La clé n'est jamais loggée.
+    RÉESSAIE les erreurs transitoires (429 quota/débit, 5xx, timeout, réseau) avec un
+    backoff exponentiel plein-jitter, en respectant `Retry-After`. Ne réessaie JAMAIS
+    ce qui ne peut pas guérir : absence de clé, 401/403 (clé invalide), 4xx de requête.
+
+    Lève `MistralError` une fois les réessais épuisés (status = code HTTP, 0 =
+    local/réseau). L'appelant décide du repli. La clé n'est jamais loggée.
     """
     key = load_api_key()
     if not key:
         raise MistralError(0, "no_api_key")
+
+    import random
+    import time
 
     import httpx
 
@@ -181,16 +229,34 @@ def chat(
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
-    try:
-        resp = httpx.post(API_URL, json=payload, headers=headers, timeout=timeout or TIMEOUT)
-    except httpx.TimeoutException:
-        raise MistralError(0, "timeout")
-    except httpx.HTTPError as exc:
-        # Ne pas inclure d'éventuels headers/URL avec secret : type d'erreur seul.
-        raise MistralError(0, f"network_error:{type(exc).__name__}")
 
-    if resp.status_code != 200:
-        raise MistralError(resp.status_code, _safe_reason(resp))
+    resp = None
+    for attempt in range(MAX_RETRIES + 1):
+        transient: MistralError | None = None
+        try:
+            resp = httpx.post(API_URL, json=payload, headers=headers,
+                              timeout=timeout or TIMEOUT)
+        except httpx.TimeoutException:
+            transient = MistralError(0, "timeout")
+        except httpx.HTTPError as exc:
+            # Ne pas inclure d'éventuels headers/URL avec secret : type d'erreur seul.
+            transient = MistralError(0, f"network_error:{type(exc).__name__}")
+        else:
+            if resp.status_code == 200:
+                break
+            err = MistralError(resp.status_code, _safe_reason(resp))
+            if resp.status_code not in RETRY_STATUSES:
+                raise err            # 401/403/400… : réessayer ne guérira rien
+            transient = err
+
+        if attempt == MAX_RETRIES:
+            _note_exhausted(transient)
+            raise transient
+        delay = _retry_after(resp if transient.status in RETRY_STATUSES else None)
+        if delay is None:            # plein-jitter : évite que N workers repartent ensemble
+            delay = random.uniform(0.0, min(BACKOFF_CAP, BACKOFF_BASE * (2 ** attempt)))
+        time.sleep(delay)
+        resp = None
 
     try:
         data = resp.json()

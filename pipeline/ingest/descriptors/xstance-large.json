@@ -1,0 +1,30 @@
+{
+  "name": "xstance-large",
+  "status": "closed",
+  "format": "jsonl",
+  "path": "data/raw/xstance-data-v1.0.zip",
+  "url": "https://github.com/ZurichNLP/xstance/raw/master/data/xstance-data-v1.0.zip",
+  "encoding": "utf-8",
+  "archive": "zip",
+  "members": [
+    "train.jsonl",
+    "valid.jsonl",
+    "test.jsonl"
+  ],
+  "columns": {
+    "id": "id",
+    "text": "comment",
+    "author": "author",
+    "lang": "language"
+  },
+  "props": {
+    "question": "question",
+    "question_id": "question_id",
+    "topic": "topic",
+    "label": "label"
+  },
+  "_note": "BANC T-N9/T-N10 : x-stance ENTIER (67 271 contributions), non plafonné. Gold à DEUX niveaux : `topic` (12) pour les macros, `question_id` (191) pour les sous-thèmes, + `label` (FAVOR/AGAINST) pour la stance. Sert à tracer les courbes N des lois dérivées. Le dataset SERVI reste `xstance` (cap 3000).",
+  "context": "x-stance — corpus multilingue (DE/FR/IT) de prises de position sur des questions politiques suisses. Chaque contribution exprime une position argumentée, pour ou contre.",
+  "official_url": "https://github.com/ZurichNLP/xstance",
+  "label": "x-stance (banc, non plafonné)"
+}

@@ -43,6 +43,9 @@ CLAIMS_NAME = "claims.json"
 CLAIMS_EMB_NAME = "claims_emb.npz"
 TARGET_EMB_NAME = "target_emb.npz"
 DEFAULT_MIN_CHARS = 12
+# Autorise une ré-extraction qui ÉCRASE un cache de claims produit par un autre modèle.
+# Fail-closed par défaut : sans ce drapeau, la divergence de modèle lève.
+ALLOW_REEXTRACT = os.environ.get("AGORA_ALLOW_REEXTRACT", "").strip() == "1"
 
 
 class OllamaUnavailable(RuntimeError):
@@ -63,10 +66,35 @@ def _avis_from_ideas(ideas: list, min_chars: int) -> list[Avis]:
     return out
 
 
+class ClaimsCacheModelMismatch(RuntimeError):
+    """Le cache de claims existe mais a été extrait par un AUTRE modèle.
+
+    Le modèle est la clé du cache : un `model` différent invaliderait tout et
+    déclencherait une ré-extraction complète (coûteuse) qui ÉCRASE `claims.json`
+    et `claims_emb.npz`. Un appelant qui oublie `model=` récupère le défaut du
+    backend (`ministral-3b-latest`) et détruit ainsi un cache mistral-large sans
+    un mot — d'où l'échec explicite plutôt que la ré-extraction implicite.
+    """
+
+
+def _cached_claims_model(path: Path) -> str | None:
+    """Modèle qui a produit le cache de claims (None si absent/illisible)."""
+    if not path.exists():
+        return None
+    try:
+        rec = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    model = rec.get("model")
+    return str(model) if isinstance(model, str) else None
+
+
 def _load_claims_cache(path: Path, model: str) -> dict[str, list[Claim]]:
     """Charge l'extraction cachée (claims ancrés) si elle matche le modèle, sinon {}.
 
     Le cache sérialise des `Claim` en dicts `{text,start,end}` ; on les renormalise.
+    Le CONTRÔLE de cohérence du modèle est fait en amont par `prepare_claims`
+    (`ClaimsCacheModelMismatch`) ; ici un modèle divergent rend simplement {}.
     """
     if not path.exists():
         return {}
@@ -273,6 +301,16 @@ def prepare_claims(
     be = resolve_backend(backend, ollama_url=ollama_url, model=model)
     model = be.model
     claims_path = ddir / CLAIMS_NAME
+    # GARDE-FOU : un cache existant extrait par un AUTRE modèle serait écrasé en silence
+    # par la ré-extraction ci-dessous. On échoue plutôt, sauf autorisation explicite.
+    cached_model = _cached_claims_model(claims_path)
+    if cached_model is not None and cached_model != model and not ALLOW_REEXTRACT:
+        raise ClaimsCacheModelMismatch(
+            f"{claims_path} a été extrait par {cached_model!r}, or ce build demande "
+            f"{model!r}. Poursuivre ré-extrairait TOUS les avis et écraserait le cache.\n"
+            f"→ passe `model={cached_model!r}` (ou --model) pour réutiliser le cache,\n"
+            f"→ ou pose AGORA_ALLOW_REEXTRACT=1 pour ré-extraire volontairement."
+        )
     claims_by_id = _load_claims_cache(claims_path, model)
     missing = [a for a in avis if a.id not in claims_by_id]
     extracted = len(missing)
