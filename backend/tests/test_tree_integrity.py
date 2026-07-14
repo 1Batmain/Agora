@@ -1,13 +1,11 @@
-"""Intégrité de l'arbre servi — trois régressions constatées sur le rebuild tiktok.
+"""Intégrité de l'arbre servi — régressions constatées sur le rebuild tiktok.
 
-1. `build_theme_tree` applique la re-coupe sauce_magique LUI-MÊME. Sinon
-   `build_opinion`/`build_arguments`, qui rappellent `build_theme_tree` de leur côté,
-   travaillent sur la façade PRÉ-coupe et émettent des `theme_id` que `analysis.json`
-   ne contient pas (thème fantôme servi).
-2. Le cache de claims est clé par MODÈLE : un appelant qui oublie `model=` récupère le
+1. Le cache de claims est clé par MODÈLE : un appelant qui oublie `model=` récupère le
    défaut du backend et ré-extrait tout, écrasant le cache. Doit lever, pas détruire.
-3. Un arbre entièrement plat (aucun macro subdivisé) est un ÉCHEC de build, pas un
+2. Un arbre entièrement plat (aucun macro subdivisé) est un ÉCHEC de build, pas un
    résultat : la hiérarchie est le produit.
+3. Les CLIQUETS des verdicts : `tau`/`RES_LADDER` (pré-filtre) et `sauce_magique`
+   (re-coupe) ont été RETIRÉS. Les réintroduire exige de ré-ouvrir le verdict.
 """
 from __future__ import annotations
 
@@ -25,52 +23,7 @@ from backend.claims_endpoint import (
 
 
 # --------------------------------------------------------------------------- #
-# 1. La re-coupe est appliquée DANS build_theme_tree (tous les builders, même arbre)
-# --------------------------------------------------------------------------- #
-def test_build_theme_tree_applique_la_recoupe(monkeypatch):
-    """Le contrat : construire l'arbre ⇒ la façade est déjà la coupe optimale."""
-    appels: list[object] = []
-
-    def spy(tree, **kw):
-        appels.append(tree)
-        return None                       # no-op : façade déjà optimale
-
-    monkeypatch.setattr(A, "recut_tree", spy)
-
-    # Un `prepared` minimal suffit : 6 claims, 2 avis, vecteurs 4-D normalisés.
-    import numpy as np
-    vecs = np.array([[1.0, 0, 0, 0], [0.99, 0.14, 0, 0], [0.98, 0.2, 0, 0],
-                     [0, 1.0, 0, 0], [0.14, 0.99, 0, 0], [0.2, 0.98, 0, 0]],
-                    dtype=np.float32)
-    vecs /= np.linalg.norm(vecs, axis=1, keepdims=True)
-    textes = ["algorithme addictif scroll", "algorithme recommandation vidéo",
-              "addiction scroll infini", "harcèlement commentaires haineux",
-              "harcèlement scolaire réseau", "propos haineux modération"]
-    prepared = SimpleNamespace(
-        avis=[SimpleNamespace(id="a0", text="x", weight=1.0),
-              SimpleNamespace(id="a1", text="y", weight=1.0)],
-        claims_by_id={}, claim_texts=textes, claim_owner=[0, 0, 0, 1, 1, 1],
-        claim_weight=np.ones(6), claim_vecs=vecs,
-        claim_spans=[[(0, 1)]] * 6, claim_target=[None] * 6,
-        target_vecs=np.zeros((6, 4), dtype=np.float32),
-        target_mask=np.zeros(6, dtype=bool),
-        backend=None, model="m", embedder="e", min_chars=1, extracted=0,
-    )
-    A.build_theme_tree(SimpleNamespace(id="t", ideas=[]), prepared=prepared, seed=42)
-    assert len(appels) == 1, "build_theme_tree doit appliquer recut_tree exactement une fois"
-
-
-def test_build_analysis_nappelle_plus_recut_lui_meme():
-    """La re-coupe ne doit plus être câblée chez UN seul appelant (cause du thème fantôme)."""
-    import backend.build_analysis as B
-    assert not hasattr(B, "recut_tree"), (
-        "build_analysis ne doit plus importer recut_tree : la re-coupe appartient "
-        "à build_theme_tree, sinon opinion/arguments voient un autre arbre."
-    )
-
-
-# --------------------------------------------------------------------------- #
-# 2. Cache de claims : divergence de modèle ⇒ échec explicite, jamais d'écrasement
+# 1. Cache de claims : divergence de modèle ⇒ échec explicite, jamais d'écrasement
 # --------------------------------------------------------------------------- #
 def test_cached_claims_model_lit_la_cle(tmp_path):
     p = tmp_path / "claims.json"
@@ -163,6 +116,23 @@ def test_tau_et_res_ladder_ont_disparu():
     assert not hasattr(A, "_derive_tau")
     assert not hasattr(A, "RES_LADDER")
     assert "tau" not in A.ThemeTree.__dataclass_fields__
+
+
+def test_sauce_magique_a_disparu():
+    """La re-coupe FRAGMENTAIT des thèmes cohérents ; sa raison d'être (le macro géant de
+    granddebat) était un artefact d'ANISOTROPIE, qui s'évapore une fois l'espace recentré
+    (top1 : 0.999 → 0.185). La hiérarchie a une seule autorité : la chaîne d'emboîtement.
+
+    Verdict `.agent/notes/HIERARCHY_LAYERS.md`. Cliquet : ne pas la ressusciter en silence.
+    """
+    import importlib
+
+    import backend.build_analysis as B
+    assert not hasattr(A, "recut_tree"), "analysis ne doit plus appliquer de re-coupe"
+    assert not hasattr(B, "recut_tree")
+    assert "recut" not in A.ThemeTree.__dataclass_fields__
+    with pytest.raises(ModuleNotFoundError):
+        importlib.import_module("backend.recut")
 
 
 def test_subdivide_refuse_sous_min_sub_size():

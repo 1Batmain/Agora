@@ -31,13 +31,13 @@ import numpy as np
 
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from backend.develop import corpus_idf, rerank_order
-from backend.recut import recut_tree
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
     DEFAULT_RESOLUTION,
     DEFAULT_SEED,
     N_REPRESENTATIVE,
 )
+from pipeline.cluster import layers
 from pipeline.cluster.adaptive import derive_defaults, derive_k
 from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import run_leiden
@@ -96,7 +96,6 @@ class ThemeTree:
     derived_global: object          # DerivedDefaults sur tout le corpus de claims
     root_coarsen: dict | None = None  # diagnostic du coarsening racine (fusion macros)
     claim_idf: dict | None = None     # idf corpus des claims (D1, calculé une fois au build)
-    recut: dict | None = None         # diagnostic de la re-coupe sauce_magique (backend.recut)
 
     def get(self, node_id: str) -> ThemeNode | None:
         return self.nodes.get(node_id)
@@ -518,6 +517,29 @@ def _cooccurrence(tree: ThemeTree) -> list[dict]:
 
 
 # --------------------------------------------------------------------------- #
+# Chaîne d'emboîtement → clusters fins + étiquette macro de chacun
+# --------------------------------------------------------------------------- #
+def _groups_from_chain(chain: list) -> tuple[list[list[int]], list[int] | None]:
+    """Traduit la chaîne (`pipeline.cluster.layers`) en (clusters fins, label macro par fin).
+
+    Le 1er étage donne les clusters FINS ; le 2e (s'il existe) donne la couche MACRO. Un
+    cluster fin hérite du macro où tombe la MAJORITÉ de ses claims — l'emboîtement n'étant
+    jamais parfait (propreté < 1), c'est le vote majoritaire qui tranche, jamais un
+    appariement d'identifiants.
+    """
+    fine = chain[0].membership
+    by_cluster: dict[int, list[int]] = {}
+    for i, c in enumerate(fine):
+        by_cluster.setdefault(int(c), []).append(i)
+    fine_groups = list(by_cluster.values())
+    if len(chain) < 2:
+        return fine_groups, None
+    coarse = chain[1].membership
+    macro_labels = [int(np.bincount(coarse[g]).argmax()) for g in fine_groups]
+    return fine_groups, macro_labels
+
+
+# --------------------------------------------------------------------------- #
 # Cœur PARTAGÉ de construction de la forêt de macros (claims /analysis ↔ idées Console)
 # --------------------------------------------------------------------------- #
 def _build_macro_forest(
@@ -530,6 +552,7 @@ def _build_macro_forest(
     min_sub_size: int,
     resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
+    macro_labels: list[int] | None = None,
 ) -> tuple[dict, list, list, float]:
     """À partir des clusters FINS Leiden, construit la forêt de macros et la remplit.
 
@@ -549,10 +572,19 @@ def _build_macro_forest(
     order: list = []
     macros: list = []
 
-    # COARSENING de l'ENTRÉE : fusionne les racines aux centroïdes trop proches (μ+σ,
-    # dérivé) → moins de macros, plus distincts. Les clusters fins fusionnés deviennent
-    # les enfants (drill-down). Aucun effet si rien ne se recoupe.
-    super_groups, merge_thr = _coarsen_roots(fine_groups, vecs)
+    if macro_labels is not None:
+        # Macros DONNÉS par la chaîne d'emboîtement (`pipeline.cluster.layers`) : un label
+        # grossier par cluster fin. Le regroupement est alors MESURÉ (Leiden à un k plus
+        # large), pas déduit de la proximité des centroïdes.
+        groups: dict[int, list[int]] = {}
+        for i, lab in enumerate(macro_labels):
+            groups.setdefault(lab, []).append(i)
+        super_groups, merge_thr = list(groups.values()), float("nan")
+    else:
+        # COARSENING de l'ENTRÉE : fusionne les racines aux centroïdes trop proches (μ+σ,
+        # dérivé) → moins de macros, plus distincts. Les clusters fins fusionnés deviennent
+        # les enfants (drill-down). Aucun effet si rien ne se recoupe.
+        super_groups, merge_thr = _coarsen_roots(fine_groups, vecs)
 
     counter = [0]
     # Macros (super-groupes) triés par poids social décroissant ; à l'intérieur, les
@@ -602,6 +634,10 @@ def build_theme_tree(
                                   progress=extract_progress, **kw)
 
     vecs = prepared.claim_vecs
+    if len(vecs):
+        # RECENTRAGE de l'espace : corrige l'anisotropie du modèle d'embedding (les vecteurs
+        # vivent dans un cône étroit). Zéro paramètre, +19 % d'ARI sur le gold.
+        vecs = layers.centre(vecs).astype(np.float32)
     weights = prepared.claim_weight
     owner = prepared.claim_owner
     n_claims = len(prepared.claim_texts)
@@ -615,24 +651,35 @@ def build_theme_tree(
     root_coarsen: dict | None = None
 
     if n_claims:
-        # Niveau 0 brut : clusters FINS (Leiden base sur le graphe global dérivé).
-        graph = build_knn_graph(vecs, k=derived_global.k, threshold=derived_global.threshold)
-        membership = run_leiden(graph, resolution=resolution, seed=seed).membership
-        by_cluster: dict[int, list[int]] = {}
-        for i, c in enumerate(membership):
-            by_cluster.setdefault(c, []).append(i)
-        fine_groups = list(by_cluster.values())
+        # k comme ROBINET DE ZOOM : on BALAIE k et on lit la hiérarchie dans l'emboîtement
+        # des partitions, au lieu de DÉRIVER k du nombre de claims (`derive_k(N)`, qui ne
+        # regardait jamais le contenu). Le 1er étage donne les thèmes fins, le 2e les macros.
+        layer_chain = layers.chain(vecs, resolution=resolution, seed=seed)
+        fine_groups, macro_labels = _groups_from_chain(layer_chain)
 
         # Cœur PARTAGÉ avec la Console live (`live_cluster.build_live_tree`) : coarsening
         # racine, sous-arbres (freinés par min_sub_size seul), nommage/couleurs/convergence.
         nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs, weights, owner, prepared.claim_texts,
-            min_sub_size=derived_global.min_sub_size, resolution=resolution, seed=seed)
+            min_sub_size=derived_global.min_sub_size, resolution=resolution, seed=seed,
+            macro_labels=macro_labels)
         root_coarsen = {
             "n_fine": len(fine_groups), "n_macros": len(macros),
             "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
             "criterion": "fusion racines si cos(centroïdes) > μ+σ des sims inter-centroïdes ET > min(cohésion) (garde-fou généricité)",
         }
+        if layer_chain:
+            # PROPRETÉ de la couche macro : jauge continue (0 = hasard, 1 = emboîtement
+            # parfait). Sert au front à afficher la confiance et à choisir le nommage
+            # (facettes énumérées plutôt que titre soudé quand elle est basse).
+            root_coarsen = {
+                "n_fine": len(fine_groups), "n_macros": len(macros),
+                "merge_threshold": None,
+                "criterion": "macros = chaîne d'emboîtement (k balayé, propreté normalisée vs modèle nul)",
+                "chain": [{"k": lv.k, "n_clusters": lv.n_clusters,
+                           "cleanliness": round(lv.cleanliness, 4)} for lv in layer_chain],
+                "macro_cleanliness": round(layer_chain[1].cleanliness, 4) if len(layer_chain) > 1 else None,
+            }
 
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.
         avis_total = (np.bincount(np.asarray(prepared.claim_owner, dtype=int),
@@ -648,13 +695,6 @@ def build_theme_tree(
         base_resolution=resolution, seed=seed, derived_global=derived_global,
         root_coarsen=root_coarsen, claim_idf=claim_idf,
     )
-    # RE-COUPE sauce_magique : la façade macro devient la COUPE optimale de l'arbre.
-    # Appliquée ICI, et non chez l'appelant : `build_opinion` et `build_arguments`
-    # doivent voir EXACTEMENT l'arbre que `build_analysis` sérialise, sinon leurs
-    # `theme_id` désignent des nœuds que la re-coupe a dissous (thèmes fantômes servis).
-    # Ids de nœuds inchangés ; no-op si la façade est déjà la coupe optimale.
-    if nodes:
-        recut_tree(tree)
     return tree
 
 
@@ -882,9 +922,6 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None,
                     "dispersion : cf. .agent/notes/HIERARCHY_TAU.md",
         },
         "root_coarsen": tree.root_coarsen,   # fusion des racines trop proches (entrée grossière)
-        # re-coupe sauce_magique (backend.recut) : façade macro = coupe optimale de l'arbre.
-        # `getattr` : robuste aux arbres construits hors build (mocks, anciens pickles).
-        "recut": getattr(tree, "recut", None),
         "derived": None if dg is None else {
             "k": dg.k,
             "threshold": round(dg.threshold, 4),

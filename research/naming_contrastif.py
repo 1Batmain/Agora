@@ -67,24 +67,12 @@ def closest_pairs(tree, neighbors, k=8):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", default="tiktok")
-    ap.add_argument(
-        "--recut",
-        default=True,
-        action=argparse.BooleanOptionalAction,
-        help="mesure la façade SERVIE (post-recut) — défaut",
-    )
     ap.add_argument("--pairs", type=int, default=8)
     args = ap.parse_args()
 
     model = _cache_model(args.dataset)
     ds = load_dataset(args.dataset)
     tree = build_theme_tree(ds, model=model)
-    if args.recut:
-        from backend.recut import recut_tree
-        rc = recut_tree(tree)
-        if rc:
-            print(f"# recut : {rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros")
-
     neighbors = titles.nearest_neighbor_map(tree)
     print(f"# dataset={args.dataset}  modèle={model}")
     print(f"# {len(tree.nodes)} nœuds, {len(tree.macros)} macros, "

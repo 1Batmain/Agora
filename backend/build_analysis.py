@@ -257,14 +257,6 @@ def build_analysis(
             ds, backend=backend, model=extract_model, embedder=embedder,
             resolution=resolution, seed=seed, extract_progress=_extract_progress,
         )
-        # 1a) RE-COUPE sauce_magique : appliquée DANS `build_theme_tree` (tous les
-        #     builders doivent voir le même arbre) ; ici on ne fait qu'en rapporter le
-        #     diagnostic, posé sur `tree.recut` et relayé dans `params.recut`.
-        rc = tree.recut
-        if rc:
-            report("recut", "re-coupe sauce_magique : "
-                            f"{rc['avant']['n_clusters']}→{rc['apres']['n_clusters']} macros "
-                            f"(top1 {rc['avant']['top1']:.0%}→{rc['apres']['top1']:.0%})")
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
         _assert_tree_is_structured(tree)
