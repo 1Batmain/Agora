@@ -42,8 +42,18 @@ témoin artificiel monte à 0.94 — la méthode détecte donc la hiérarchie *q
 la platitude de nos corpus est réelle, pas un défaut de mesure. La couche grossière est une
 **commodité de navigation**, pas une structure que le corpus imposerait.
 
-**Décision produit (Bob, 2026-07-14) : l'affichage reste UNE coupe.** La chaîne sert à
-*choisir* la coupe, pas à la faire naviguer. Le front n'expose ni curseur de k ni jauge.
+**Décision produit (Bob, 2026-07-15) : l'arbre servi suit TOUTE la chaîne.** On ne fixe pas le
+nombre de niveaux — la chaîne ne garde déjà que les étages qui s'emboîtent proprement, c'est
+donc « autant de niveaux que la structure justifie ». tiktok : 4 → 9 → 16 (3 niveaux). Le front
+navigue toute profondeur (drill-down), sans curseur de k. (Remplace la décision « une seule
+coupe » du 2026-07-14 : jeter le reste de la chaîne revenait à fixer arbitrairement 2 niveaux.)
+
+Réserve ouverte (2026-07-15) : la **redondance sémantique entre thèmes frères** (ex. tiktok :
+~5 clusters d'« addiction » exprimés dans des vocabulaires différents) traverse tous les
+niveaux. Elle n'est PAS géométrique (centroïdes recentrés aussi éloignés qu'entre sujets
+distincts, 0.38–0.53) → aucune fusion par proximité ne la corrige. La chaîne optimise
+l'emboîtement, jamais la distinctivité entre frères — c'est un AXE non mesuré. Piste : mesurer
+la redondance frère-à-frère (panel LLM « même sujet ? » ou recouvrement kNN inter-clusters).
 
 Le **niveau fin**, lui, est validé de l'extérieur : sur x-stance — seul corpus annoté par des
 humains — la chaîne s'arrête à 14 thèmes là où les annotateurs en avaient défini 12.
