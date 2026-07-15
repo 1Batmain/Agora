@@ -115,10 +115,10 @@ def build_live_tree(
         fine_groups = list(by_cluster.values())
 
         # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) : macros (ici par
-        # coarsening racine, `macro_labels=None` — la Console est un explorateur k MANUEL,
-        # elle ne balaie pas la chaîne), attachement des feuilles, nommage/couleurs/
-        # convergence. Divergences amont assumées : membres = IDÉES ; graphe racine au seuil
-        # DONNÉ (levier Console) ; regroupement macro par coarsening et non par la chaîne.
+        # coarsening racine, `hierarchy=None` — la Console est un explorateur k MANUEL, elle
+        # ne balaie pas la chaîne), attachement des feuilles, nommage/couleurs/convergence.
+        # Divergences amont assumées : membres = IDÉES ; graphe racine au seuil DONNÉ (levier
+        # Console) ; regroupement macro par coarsening (2 niveaux) et non par la chaîne.
         nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs64, weights_arr, owner, texts,
             resolution=resolution, seed=seed)

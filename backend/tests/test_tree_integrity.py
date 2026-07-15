@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 from types import SimpleNamespace
 
+import numpy as np
 import pytest
 
 from backend import analysis as A
@@ -136,7 +137,7 @@ def test_sauce_magique_a_disparu():
 def test_subdivide_a_disparu():
     """La re-clusterisation Leiden des feuilles (`_subdivide`, pilotée par `derive_k`)
     contredisait la chaîne d'emboîtement et re-découpait des thèmes cohérents. Retirée :
-    la hiérarchie a une seule autorité, la chaîne (2 niveaux mesurés).
+    la hiérarchie a une seule autorité, la chaîne.
 
     Verdict `.agent/notes/HIERARCHY_LAYERS.md`. Cliquet : ne pas la réintroduire en silence.
     """
@@ -144,15 +145,38 @@ def test_subdivide_a_disparu():
     assert not hasattr(A, "MAX_DEPTH")          # le garde-fou de profondeur n'a plus d'objet
 
 
-def test_arbre_de_la_chaine_a_deux_niveaux(monkeypatch):
-    """`_build_subtree` n'attache QUE les `forced_children` (les thèmes fins de la chaîne) :
-    un nœud sans enfants forcés est une feuille — plus de descente au-delà de 2 niveaux."""
-    import numpy as np
-    vecs = np.eye(4, dtype=np.float32)[[0, 1, 2, 3]]
-    nodes, order = {}, []
-    # macro avec 2 clusters fins forcés → profondeur 1 ; les fins n'ont pas d'enfants forcés.
-    A._build_subtree([0, 1, 2, 3], None, 0, [0], nodes, order, vecs,
-                     np.ones(4), [0, 1, 2, 3], forced_children=[[0, 1], [2, 3]])
-    depths = sorted(n.depth for n in nodes.values())
-    assert depths == [0, 1, 1]                  # 1 macro + 2 feuilles, jamais de niveau 2
-    assert all(not nodes[c].children for c in nodes if nodes[c].depth == 1)
+class _Lv:
+    def __init__(self, membership, k=0, n=0, cleanliness=1.0):
+        self.membership = np.asarray(membership)
+        self.k, self.n_clusters, self.cleanliness = k, n, cleanliness
+
+
+def test_chaine_multi_niveaux_emboitee():
+    """L'arbre suit TOUTE la chaîne : on ne fixe pas le nombre de niveaux. Une chaîne à 3
+    étages (fin → moyen → grossier) qui s'emboîtent produit un arbre à 3 profondeurs, membres
+    ancrés dans les feuilles."""
+    # 8 claims. Fin : 4 paires. Moyen : 2 groupes de 2 paires. Grossier : 1... on garde 2 macros.
+    fine   = [0, 0, 1, 1, 2, 2, 3, 3]          # 4 clusters fins
+    medium = [0, 0, 0, 0, 1, 1, 1, 1]          # 2 groupes (paires 0-1 / 2-3)
+    chain = [_Lv(fine, n=4), _Lv(medium, n=2, cleanliness=0.8)]
+    forest = A._chain_hierarchy(chain)
+    # 2 racines, chacune avec 2 feuilles fines → profondeurs {0,1}
+    assert len(forest) == 2
+    for members, kids in forest:
+        assert len(kids) == 2
+        assert sorted(members) == sorted(m for km, _ in kids for m in km)   # membres = ∪ feuilles
+
+    # 3 étages : fin(4) → moyen(2) → grossier(1 seul → déplié, pas de racine redondante)
+    coarse = [0, 0, 0, 0, 0, 0, 0, 0]
+    forest3 = A._chain_hierarchy([_Lv(fine, n=4), _Lv(medium, n=2), _Lv(coarse, n=1)])
+    # la racine unique qui embrasse tout est dépliée → on garde les 2 nœuds du niveau moyen
+    assert len(forest3) == 2
+
+    # Construction complète via _build_macro_forest : la profondeur suit la chaîne.
+    vecs = np.eye(8, dtype=np.float32)
+    texts = ["alpha", "alpha", "beta", "beta", "gamma", "gamma", "delta", "delta"]
+    built, _order, macros, _thr = A._build_macro_forest(
+        [], vecs, np.ones(8), list(range(8)), texts, hierarchy=forest)
+    assert len(macros) == 2                              # 2 racines
+    assert max(n.depth for n in built.values()) == 1     # 2 niveaux (feuilles à la profondeur 1)
+    assert sum(1 for n in built.values() if not n.children) == 4   # 4 feuilles fines
