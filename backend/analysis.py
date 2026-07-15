@@ -6,11 +6,10 @@ et construit l'objet que le canvas du front affiche :
   - **B1 — relations** : arêtes de **co-occurrence** (deux thèmes liés quand un même
     avis porte des claims tombant dans les deux). Aucune position 2D n'est calculée —
     UMAP a été retiré, le front fait sa propre mise en page (d3-pack).
-  - **B2 — hiérarchie ÉMERGENTE** : chaque thème tente sa subdivision, et c'est Leiden
-    qui répond. Un thème n'a des sous-thèmes que si la re-clusterisation de ses propres
-    claims dégage ≥2 groupes atteignant `min_sub_size` — la taille minimale d'un thème
-    À L'ÉCHELLE DU CORPUS. Profondeur variable : thèmes homogènes = feuilles, thèmes
-    composites = subdivisés. Un seul robinet : `resolution` (défaut Leiden, 1.0).
+  - **B2 — hiérarchie MESURÉE** : deux niveaux tirés de la CHAÎNE D'EMBOÎTEMENT
+    (`pipeline.cluster.layers`) — on balaie k (le zoom) et on lit macros → thèmes fins dans
+    l'emboîtement des partitions, au lieu de dériver k du nombre de claims. Les thèmes fins
+    sont les feuilles : plus aucune re-clusterisation Leiden par nœud (cf. `HIERARCHY_LAYERS.md`).
 
 Tout dérive des données (généricité) : aucune liste de thèmes, aucun seuil de corpus
 codé en dur. La sortie suit le contrat figé `.agent/queue/front-redesign.md` :
@@ -23,6 +22,7 @@ codé en dur. La sortie suit le contrat figé `.agent/queue/front-redesign.md` :
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from itertools import combinations
 from time import perf_counter
@@ -38,15 +38,9 @@ from pipeline.claims.pipeline import (
     N_REPRESENTATIVE,
 )
 from pipeline.cluster import layers
-from pipeline.cluster.adaptive import derive_defaults, derive_k
-from pipeline.cluster.knn import build_knn_graph, knn_search
-from pipeline.cluster.leiden_cluster import run_leiden
+from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.palette import color_for
-
-# --- Hyper-paramètres de FORME (sans unité corpus-spécifique) -------------- #
-MAX_DEPTH = 4          # garde-fou de profondeur (l'arbre s'arrête bien avant en pratique)
-
 
 @dataclass
 class ThemeNode:
@@ -126,60 +120,6 @@ def _node_stats(members: list[int], vecs: np.ndarray, weights: np.ndarray
         consensus = 1.0
     weight = float(weights[members].sum())
     return centroid, dispersion, float(consensus), weight
-
-
-# --------------------------------------------------------------------------- #
-# Subdivision d'un nœud — re-graphe ses propres claims, UNE passe Leiden
-# --------------------------------------------------------------------------- #
-def _subdivide(members: list[int], vecs: np.ndarray, base_resolution: float,
-               seed: int, min_sub_size: int) -> list[list[int]] | None:
-    """Partitionne `members` en ≥2 sous-thèmes viables, ou None si homogène.
-
-    Re-dérive la GÉOMÉTRIE du graphe sur le sous-ensemble (k, seuil d'arête) mais PAS
-    l'échelle : `min_sub_size` vient du corpus entier. Un sous-thème est un thème à
-    l'échelle de la consultation, pas à l'échelle de son parent — sinon le critère de
-    viabilité rétrécit avec le nœud et n'arrête jamais la descente (verdict
-    `.agent/notes/HIERARCHY_TAU.md`).
-
-    Leiden tourne UNE fois, à `base_resolution`. « Ce nœud ne se divise pas » est une
-    réponse valide : c'est le SEUL frein de la récursion. Les miettes (communautés sous
-    le seuil) rejoignent le sous-thème viable le plus proche → la partition couvre tout
-    le parent. Renvoie des indices GLOBAUX.
-    """
-    if len(members) < 2:
-        return None
-    subvecs = np.ascontiguousarray(vecs[members], dtype=np.float64)
-    subvecs32 = subvecs.astype(np.float32)
-    k_eff = derive_k(subvecs.shape[0])
-    neighbors = knn_search(subvecs32, k_eff)            # 1 passe k-NN → seuil + graphe
-    dd = derive_defaults(subvecs32, k=k_eff, neighbors=neighbors)
-    graph = build_knn_graph(subvecs, k=dd.k, threshold=dd.threshold, neighbors=neighbors)
-
-    membership = run_leiden(graph, resolution=base_resolution, seed=seed).membership
-    by_cluster: dict[int, list[int]] = {}
-    for i, c in enumerate(membership):
-        by_cluster.setdefault(c, []).append(i)
-    chosen = list(by_cluster.values())
-    if sum(1 for g in chosen if len(g) >= min_sub_size) < 2:
-        return None                          # nœud homogène à l'échelle du corpus
-
-    big = [g for g in chosen if len(g) >= min_sub_size]
-    small = [g for g in chosen if len(g) < min_sub_size]
-    # Centroïdes des sous-thèmes viables (pour absorber les miettes).
-    big_centroids = []
-    for g in big:
-        s = subvecs[g].sum(axis=0)
-        nrm = np.linalg.norm(s)
-        big_centroids.append(s / nrm if nrm > 0 else s)
-    big_centroids = np.asarray(big_centroids)
-    for g in small:
-        s = subvecs[g].sum(axis=0)
-        nrm = np.linalg.norm(s)
-        gc = s / nrm if nrm > 0 else s
-        nearest = int(np.argmax(big_centroids @ gc))
-        big[nearest] = big[nearest] + g
-    # Indices LOCAUX → GLOBAUX.
-    return [[members[i] for i in g] for g in big]
 
 
 # --------------------------------------------------------------------------- #
@@ -274,19 +214,14 @@ def _coarsen_roots(groups: list[list[int]], vecs: np.ndarray
 def _build_subtree(members: list[int], parent_id: str | None, depth: int,
                    counter: list[int], nodes: dict[str, ThemeNode], order: list[str],
                    vecs: np.ndarray, weights: np.ndarray, owner: list[int],
-                   min_sub_size: int, base_resolution: float, seed: int,
                    forced_children: list[list[int]] | None = None) -> str:
-    """Crée le nœud de `members`, tente de le subdiviser, récursif.
+    """Crée le nœud de `members` et, si `forced_children` est fourni, ses enfants.
 
-    Aucun pré-filtre : tout nœud tente sa subdivision, et c'est Leiden qui répond. Le
-    frein est `min_sub_size` (échelle du corpus) — un nœud qui ne dégage pas ≥2
-    sous-thèmes de cette taille reste une feuille. L'ancien seuil de dispersion `tau`
-    est supprimé : dérivé du plus grand écart des dispersions, il basculait sur deux
-    claims d'écart (verdict `.agent/notes/HIERARCHY_TAU.md`).
-
-    `forced_children` (optionnel) impose la partition des enfants — sert au COARSENING
-    racine : un macro fusionné prend pour enfants les clusters fins qu'il regroupe
-    (détail préservé en drill-down). Les enfants, eux, re-subdivisent normalement.
+    La hiérarchie a une SEULE source : la chaîne d'emboîtement (`pipeline.cluster.layers`).
+    Elle donne deux niveaux mesurés — macros → thèmes fins — passés ici via `forced_children`
+    (les clusters fins d'un macro). Un nœud sans `forced_children` est une FEUILLE : plus de
+    re-clusterisation Leiden des feuilles (l'ancien `_subdivide`, piloté par `derive_k`,
+    contredisait la chaîne et re-découpait des thèmes cohérents — cf. `HIERARCHY_LAYERS.md`).
     """
     node_id = f"n{counter[0]}"
     counter[0] += 1
@@ -300,13 +235,10 @@ def _build_subtree(members: list[int], parent_id: str | None, depth: int,
     nodes[node_id] = node
     order.append(node_id)
 
-    child_groups = forced_children
-    if child_groups is None and depth < MAX_DEPTH:
-        child_groups = _subdivide(members, vecs, base_resolution, seed, min_sub_size)
-    if child_groups:
-        for grp in child_groups:
+    if forced_children:
+        for grp in forced_children:
             cid = _build_subtree(grp, node_id, depth + 1, counter, nodes, order,
-                                 vecs, weights, owner, min_sub_size, base_resolution, seed)
+                                 vecs, weights, owner)
             node.children.append(cid)
     return node_id
 
@@ -526,7 +458,12 @@ def _groups_from_chain(chain: list) -> tuple[list[list[int]], list[int] | None]:
     cluster fin hérite du macro où tombe la MAJORITÉ de ses claims — l'emboîtement n'étant
     jamais parfait (propreté < 1), c'est le vote majoritaire qui tranche, jamais un
     appariement d'identifiants.
+
+    Chaîne vide (corpus plus petit que le plus petit palier du balayage) → `([], None)` :
+    l'appelant gère le cas dégénéré, jamais d'`IndexError`.
     """
+    if not chain:
+        return [], None
     fine = chain[0].membership
     by_cluster: dict[int, list[int]] = {}
     for i, c in enumerate(fine):
@@ -549,22 +486,18 @@ def _build_macro_forest(
     owner: list[int],
     texts: list[str],
     *,
-    min_sub_size: int,
     resolution: float = DEFAULT_RESOLUTION,
     seed: int = DEFAULT_SEED,
     macro_labels: list[int] | None = None,
 ) -> tuple[dict, list, list, float]:
-    """À partir des clusters FINS Leiden, construit la forêt de macros et la remplit.
+    """À partir des clusters FINS, construit la forêt de macros → thèmes fins et la remplit.
 
-    Étapes (IDENTIQUES pour `/analysis` et la Console live — c'est la SEULE source de
-    cette orchestration, plus de recopie à synchroniser à la main) : coarsening racine
-    (`_coarsen_roots`), sous-arbres (`_build_subtree`, freinés par `min_sub_size` seul),
-    puis nommage c-TF-IDF, couleurs par macro et convergence intra. Agnostique au TYPE de
-    membre : l'appelant passe ses propres vecteurs/poids/owner/textes (claims pour
-    `/analysis`, idées pour la Console) et la source du graphe RACINE amont (seuil dérivé
-    vs seuil donné) reste son choix.
-
-    `min_sub_size` est l'échelle du CORPUS : il descend inchangé dans toute la récursion.
+    Étapes (IDENTIQUES pour `/analysis` et la Console live — c'est la SEULE source de cette
+    orchestration, plus de recopie à synchroniser à la main) : regroupement macro (chaîne
+    d'emboîtement si `macro_labels`, sinon coarsening racine `_coarsen_roots`), attachement
+    des clusters fins comme feuilles (`_build_subtree`), puis nommage c-TF-IDF, couleurs par
+    macro et convergence intra. Agnostique au TYPE de membre : l'appelant passe ses propres
+    vecteurs/poids/owner/textes (claims pour `/analysis`, idées pour la Console).
 
     Renvoie `(nodes, order, macros, merge_thr)`.
     """
@@ -598,7 +531,7 @@ def _build_macro_forest(
         union = [m for g in fine for m in g]
         forced = fine if len(fine) >= 2 else None    # ≥2 fins fusionnés ⇒ drill-down
         mid = _build_subtree(union, None, 0, counter, nodes, order, vecs, weights,
-                             owner, min_sub_size, resolution, seed, forced_children=forced)
+                             owner, forced_children=forced)
         macros.append(mid)
 
     _name_nodes(nodes, texts)
@@ -654,20 +587,22 @@ def build_theme_tree(
         # k comme ROBINET DE ZOOM : on BALAIE k et on lit la hiérarchie dans l'emboîtement
         # des partitions, au lieu de DÉRIVER k du nombre de claims (`derive_k(N)`, qui ne
         # regardait jamais le contenu). Le 1er étage donne les thèmes fins, le 2e les macros.
-        layer_chain = layers.chain(vecs, resolution=resolution, seed=seed)
-        fine_groups, macro_labels = _groups_from_chain(layer_chain)
+        # `on_skip` remonte les paliers sautés faute de mémoire — JAMAIS de troncature muette.
+        skipped_k: list[int] = []
+        layer_chain = layers.chain(vecs, resolution=resolution, seed=seed,
+                                   on_skip=lambda k, _n: skipped_k.append(k))
+        if layer_chain:
+            fine_groups, macro_labels = _groups_from_chain(layer_chain)
+        else:
+            # Corpus plus petit que le plus petit palier du balayage (≤ K_GRID[0]) : le
+            # balayage n'a aucun palier → un seul thème via le coarsening trivial.
+            fine_groups, macro_labels = [list(range(n_claims))], None
 
-        # Cœur PARTAGÉ avec la Console live (`live_cluster.build_live_tree`) : coarsening
-        # racine, sous-arbres (freinés par min_sub_size seul), nommage/couleurs/convergence.
+        # Cœur PARTAGÉ avec la Console live (`live_cluster.build_live_tree`) : regroupement
+        # macro, attachement des feuilles, nommage/couleurs/convergence.
         nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs, weights, owner, prepared.claim_texts,
-            min_sub_size=derived_global.min_sub_size, resolution=resolution, seed=seed,
-            macro_labels=macro_labels)
-        root_coarsen = {
-            "n_fine": len(fine_groups), "n_macros": len(macros),
-            "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
-            "criterion": "fusion racines si cos(centroïdes) > μ+σ des sims inter-centroïdes ET > min(cohésion) (garde-fou généricité)",
-        }
+            resolution=resolution, seed=seed, macro_labels=macro_labels)
         if layer_chain:
             # PROPRETÉ de la couche macro : jauge continue (0 = hasard, 1 = emboîtement
             # parfait). Sert au front à afficher la confiance et à choisir le nommage
@@ -679,6 +614,13 @@ def build_theme_tree(
                 "chain": [{"k": lv.k, "n_clusters": lv.n_clusters,
                            "cleanliness": round(lv.cleanliness, 4)} for lv in layer_chain],
                 "macro_cleanliness": round(layer_chain[1].cleanliness, 4) if len(layer_chain) > 1 else None,
+                "skipped_k": skipped_k,
+            }
+        else:
+            root_coarsen = {
+                "n_fine": len(fine_groups), "n_macros": len(macros),
+                "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
+                "criterion": "corpus minuscule : un seul thème (balayage k sans palier)",
             }
 
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.
@@ -916,16 +858,14 @@ def analysis_payload(tree: ThemeTree, *, took_ms: int | None = None,
         "n_leaves": n_leaves,
         "max_depth": max_depth,
         "adaptive": {
-            "min_sub_size": (dg.min_sub_size if dg else None),
-            "note": "subdivision si Leiden dégage ≥2 sous-thèmes ≥ min_sub_size "
-                    "(taille d'un thème à l'échelle du CORPUS). Aucun seuil de "
-                    "dispersion : cf. .agent/notes/HIERARCHY_TAU.md",
+            "note": "hiérarchie = chaîne d'emboîtement (2 niveaux mesurés : macros → thèmes "
+                    "fins). Aucune re-subdivision des feuilles, aucun seuil de dispersion : "
+                    "cf. .agent/notes/HIERARCHY_LAYERS.md, HIERARCHY_TAU.md",
         },
-        "root_coarsen": tree.root_coarsen,   # fusion des racines trop proches (entrée grossière)
-        "derived": None if dg is None else {
+        "root_coarsen": tree.root_coarsen,   # chaîne d'emboîtement (k balayé) + propreté macro
+        "derived": None if dg is None else {   # DIAGNOSTIC du graphe global (non clusterisé : la chaîne l'est)
             "k": dg.k,
             "threshold": round(dg.threshold, 4),
-            "min_sub_size": dg.min_sub_size,
             "knn_sim_mean": dg.pool_mean,
             "knn_sim_std": dg.pool_std,
         },

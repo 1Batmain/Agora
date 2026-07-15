@@ -37,6 +37,7 @@ from backend.analysis import (
 )
 from backend import density
 from backend.recluster import load_cache
+from pipeline.cluster import layers
 from pipeline.cluster.adaptive import derive_defaults, derive_k
 from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION, DEFAULT_SEED, run_leiden
@@ -74,12 +75,12 @@ def build_live_tree(
     helpers d'indices/couleurs et la sérialisation, sans porter de `PreparedClaims`.
     """
     n = len(ideas)
-    # L2-normalisation défensive (les embeddings cachés le sont déjà ; idempotent) →
-    # garantit l'exactitude des stats de nœud (dispersion = 1 − ‖Σv‖/n).
-    v32 = np.ascontiguousarray(vecs, dtype=np.float32)
-    norms = np.linalg.norm(v32, axis=1, keepdims=True)
-    v32 = v32 / np.where(norms > 0, norms, 1.0)
-    vecs64 = v32.astype(np.float64)
+    # RECENTRAGE de l'espace, comme `/analysis` (`analysis.build_theme_tree`) : corrige
+    # l'anisotropie du modèle d'embedding. Sans lui, la Console reproduirait la pathologie
+    # du macro fourre-tout que le recentrage supprime (cf. `.agent/notes/EMBEDDING_SPACE.md`).
+    # `layers.centre` recentre PUIS L2-normalise → stats de nœud exactes (dispersion=1−‖Σv‖/n).
+    vecs64 = layers.centre(np.asarray(vecs)) if n else np.asarray(vecs, dtype=np.float64)
+    v32 = vecs64.astype(np.float32)
     weights_arr = np.asarray(weights, dtype=np.float64)
     texts = [(getattr(idea, "text_clean", None) or idea.text) for idea in ideas]
     owner = list(range(n))                       # une idée = un avis
@@ -113,13 +114,14 @@ def build_live_tree(
             by_cluster.setdefault(c, []).append(i)
         fine_groups = list(by_cluster.values())
 
-        # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) — MÊME orchestration
-        # (coarsening racine, sous-arbres freinés par min_sub_size, nommage/couleurs/
-        # convergence). Ici les membres sont des IDÉES et le graphe racine part du seuil
-        # DONNÉ (levier Console), pas du seuil dérivé — c'est la seule divergence, en amont.
+        # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) : macros (ici par
+        # coarsening racine, `macro_labels=None` — la Console est un explorateur k MANUEL,
+        # elle ne balaie pas la chaîne), attachement des feuilles, nommage/couleurs/
+        # convergence. Divergences amont assumées : membres = IDÉES ; graphe racine au seuil
+        # DONNÉ (levier Console) ; regroupement macro par coarsening et non par la chaîne.
         nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs64, weights_arr, owner, texts,
-            min_sub_size=derived.min_sub_size, resolution=resolution, seed=seed)
+            resolution=resolution, seed=seed)
 
     return SimpleNamespace(
         nodes=nodes, order=order, macros=macros, dataset=None,

@@ -123,7 +123,7 @@ def subset(
 
 
 def build_cache(
-    dataset: str = "tiktok",
+    dataset: str,
     *,
     descriptor: str | None = None,
     model: str = "nomic-v2",
@@ -247,7 +247,7 @@ def build_cache(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Cache d'embeddings nomic-v2 par dataset.")
-    ap.add_argument("--dataset", default="tiktok", help="id du dataset = nom du descripteur")
+    ap.add_argument("--dataset", required=True, help="id du dataset = nom du descripteur")
     ap.add_argument("--descriptor", default=None, help="chemin descripteur explicite (override)")
     ap.add_argument("--model", default="nomic-v2", help="alias/model_id (défaut nomic-v2)")
     ap.add_argument("--min-chars", type=int, default=1, help="filtre avis trop courts")

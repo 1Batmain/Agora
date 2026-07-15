@@ -27,7 +27,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from pipeline.cluster.adaptive import derive_defaults
-from pipeline.cluster.knn import build_knn_graph, knn_search
+from pipeline.cluster.knn import build_knn_graph, knn_search, slice_neighbors
 from pipeline.cluster.leiden_cluster import run_leiden
 
 # Balayage log-espacé du rayon de voisinage. C'est LE levier : on ne calcule pas k, on le
@@ -87,25 +87,28 @@ def chain(vecs: np.ndarray, *, resolution: float = 1.0, seed: int = 42,
     n = len(v64)
     rng = np.random.default_rng(0)
 
-    parts: dict[int, np.ndarray] = {}
+    # Le graphe kNN pèse n·k arêtes : sur un gros corpus les k les plus grossiers font
+    # exploser la mémoire (36 k claims × k=1800 ≈ 65 M d'arêtes → OOM). On saute ces paliers
+    # plutôt que de mourir — mais JAMAIS en silence : `on_skip` le remonte, car une troncature
+    # muette se lirait comme « on a balayé jusqu'au bout ».
+    usable = [k for k in K_GRID if k < n and n * k <= MAX_EDGES]
     for k in K_GRID:
-        if k >= n:
-            continue
-        # Le graphe kNN pèse n·k arêtes : sur un gros corpus les k les plus grossiers font
-        # exploser la mémoire (36 k claims × k=1800 ≈ 65 M d'arêtes → OOM). On saute ces
-        # paliers plutôt que de mourir — mais JAMAIS en silence : `on_skip` le remonte, car
-        # une troncature muette se lirait comme « on a balayé jusqu'au bout ».
-        if n * k > MAX_EDGES:
-            if on_skip:
-                on_skip(k, n)
-            continue
-        neighbors = knn_search(v32, k)
-        dd = derive_defaults(v32, k=k, neighbors=neighbors)
-        graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=neighbors)
-        parts[k] = np.asarray(run_leiden(graph, resolution=resolution, seed=seed).membership)
-        del neighbors, graph
-    if not parts:
+        if k < n and n * k > MAX_EDGES and on_skip:
+            on_skip(k, n)
+    if not usable:
         return []
+
+    # UN SEUL knn_search, au k le plus grand : le top-(k+1) d'un k plus fin est le PRÉFIXE
+    # du top-(k_max+1), donc chaque palier se dérive par slice — identique au bit près à un
+    # knn_search par k, mais O(n²d) payé une fois au lieu de ~15 (cf. `knn.slice_neighbors`).
+    nb_max = knn_search(v32, max(usable))
+    parts: dict[int, np.ndarray] = {}
+    for k in usable:
+        nb = slice_neighbors(nb_max, k)
+        dd = derive_defaults(v32, k=k, neighbors=nb)
+        graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=nb)
+        parts[k] = np.asarray(run_leiden(graph, resolution=resolution, seed=seed).membership)
+        del nb, graph
 
     # Un k représentatif par taille de partition : le plus fin qui l'atteint.
     by_size: dict[int, int] = {}

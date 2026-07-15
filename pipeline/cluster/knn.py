@@ -82,6 +82,18 @@ def knn_search(vecs: np.ndarray, k: int, prefer_faiss: bool = True) -> KnnNeighb
     return KnnNeighbors(sims=sims, idx=idx, backend=backend)
 
 
+def slice_neighbors(neighbors: "KnnNeighbors", k: int) -> "KnnNeighbors":
+    """Restreint un voisinage à son top-(k+1) — un PRÉFIXE exact (sims/idx triés décroissants).
+
+    `knn_search` calcule tous les cosinus (O(n²d)) et n'en garde que les k+1 meilleurs, triés.
+    Le top-(k'+1) d'un k' plus petit est donc le PRÉFIXE du top-(k+1). Slicer revient exactement
+    à `knn_search(vecs, k')` — au bit près — sans recalculer les distances. Permet UN seul
+    `knn_search` au k max puis tous les paliers plus fins par slice (cf. `cluster.layers`)."""
+    c = k + 1
+    return KnnNeighbors(sims=neighbors.sims[:, :c], idx=neighbors.idx[:, :c],
+                        backend=neighbors.backend)
+
+
 def build_knn_graph(
     vecs: np.ndarray,
     k: int = 10,

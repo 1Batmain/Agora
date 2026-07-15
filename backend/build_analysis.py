@@ -136,18 +136,16 @@ def _assert_tree_is_structured(tree) -> None:
     structured = sum(1 for m in macros if tree.nodes[m].children)
     if structured:
         return
-    mss = getattr(tree.derived_global, "min_sub_size", None)
     tailles = sorted(tree.nodes[m].n_claims for m in macros)
     if ALLOW_FLAT_TREE:
         print(f"⚠️  arbre PLAT toléré (AGORA_ALLOW_FLAT_TREE=1) : {len(macros)} macros, "
-              f"0 subdivisé, min_sub_size={mss}")
+              f"aucun sous-thème")
         return
     raise FlatTreeError(
-        f"{len(macros)} macros, AUCUN subdivisé → arbre plat (profondeur 0).\n"
-        f"  min_sub_size (échelle corpus) = {mss}\n"
+        f"{len(macros)} macros, AUCUN avec sous-thèmes → arbre plat (macros ≡ thèmes fins).\n"
         f"  tailles des macros, en claims = {tailles}\n"
-        f"  → aucun macro ne dégage ≥2 sous-thèmes de {mss} claims.\n"
-        f"Vérifier `resolution` et `_subdivide` (backend/analysis.py) avant de servir.\n"
+        f"  → la chaîne d'emboîtement n'a pas dégagé de couche macro au-dessus des thèmes fins.\n"
+        f"Vérifier la chaîne (pipeline/cluster/layers.py) et `resolution` avant de servir.\n"
         f"AGORA_ALLOW_FLAT_TREE=1 pour passer outre en connaissance de cause."
     )
 

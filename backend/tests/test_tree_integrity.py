@@ -67,7 +67,7 @@ def test_prepare_claims_leve_sur_modele_divergent(tmp_path, monkeypatch):
 # --------------------------------------------------------------------------- #
 # 3. Arbre plat ⇒ FlatTreeError (avant toute dépense LLM)
 # --------------------------------------------------------------------------- #
-def _fake_tree(n_macros: int, *, structured: bool, mss: int = 27):
+def _fake_tree(n_macros: int, *, structured: bool):
     nodes = {}
     macros = []
     for i in range(n_macros):
@@ -77,16 +77,14 @@ def _fake_tree(n_macros: int, *, structured: bool, mss: int = 27):
         macros.append(mid)
         for c in kids:
             nodes[c] = SimpleNamespace(id=c, children=[], n_claims=50)
-    return SimpleNamespace(nodes=nodes, macros=macros,
-                           derived_global=SimpleNamespace(min_sub_size=mss))
+    return SimpleNamespace(nodes=nodes, macros=macros)
 
 
 def test_arbre_plat_leve():
     with pytest.raises(FlatTreeError) as exc:
         _assert_tree_is_structured(_fake_tree(15, structured=False))
     msg = str(exc.value)
-    assert "AUCUN subdivisé" in msg
-    assert "min_sub_size" in msg and "27" in msg   # le diagnostic doit être actionnable
+    assert "arbre plat" in msg and "AUCUN avec sous-thèmes" in msg   # diagnostic actionnable
 
 
 def test_arbre_structure_passe():
@@ -105,7 +103,7 @@ def test_arbre_plat_tolere_si_flag(monkeypatch):
 
 
 # --------------------------------------------------------------------------- #
-# 4. Le frein de la récursion : min_sub_size à l'échelle du CORPUS, `tau` supprimé
+# 4. Cliquets des verdicts : `tau`/`RES_LADDER`, `sauce_magique`, `_subdivide` retirés
 # --------------------------------------------------------------------------- #
 def test_tau_et_res_ladder_ont_disparu():
     """`tau` basculait sur 2 claims d'écart ; RES_LADDER ne montait jamais.
@@ -135,37 +133,26 @@ def test_sauce_magique_a_disparu():
         importlib.import_module("backend.recut")
 
 
-def test_subdivide_refuse_sous_min_sub_size():
-    """Un nœud qui ne dégage pas ≥2 groupes de `min_sub_size` reste une FEUILLE."""
-    import numpy as np
-    # Deux paquets nettement séparés de 6 claims chacun.
-    a = np.tile(np.array([1.0, 0.0, 0.0, 0.0]), (6, 1))
-    b = np.tile(np.array([0.0, 1.0, 0.0, 0.0]), (6, 1))
-    vecs = np.vstack([a, b]).astype(np.float32)
-    vecs += np.linspace(0, 0.02, vecs.size).reshape(vecs.shape)   # bruit déterministe
-    vecs /= np.linalg.norm(vecs, axis=1, keepdims=True)
-    members = list(range(12))
+def test_subdivide_a_disparu():
+    """La re-clusterisation Leiden des feuilles (`_subdivide`, pilotée par `derive_k`)
+    contredisait la chaîne d'emboîtement et re-découpait des thèmes cohérents. Retirée :
+    la hiérarchie a une seule autorité, la chaîne (2 niveaux mesurés).
 
-    # min_sub_size=5 : les deux paquets sont viables → coupe.
-    coupe = A._subdivide(members, vecs, 1.0, 42, 5)
-    assert coupe is not None and len(coupe) >= 2
-
-    # min_sub_size=50 : aucun sous-groupe n'atteint l'échelle du corpus → feuille.
-    assert A._subdivide(members, vecs, 1.0, 42, 50) is None
+    Verdict `.agent/notes/HIERARCHY_LAYERS.md`. Cliquet : ne pas la réintroduire en silence.
+    """
+    assert not hasattr(A, "_subdivide")
+    assert not hasattr(A, "MAX_DEPTH")          # le garde-fou de profondeur n'a plus d'objet
 
 
-def test_min_sub_size_ne_retrecit_pas_avec_le_noeud(monkeypatch):
-    """`_build_subtree` propage l'échelle CORPUS — pas une échelle recalculée par nœud."""
-    vus: list[int] = []
-
-    def spy(members, vecs, res, seed, min_sub_size):
-        vus.append(min_sub_size)
-        return None                                   # feuille → arrête la récursion
-
-    monkeypatch.setattr(A, "_subdivide", spy)
+def test_arbre_de_la_chaine_a_deux_niveaux(monkeypatch):
+    """`_build_subtree` n'attache QUE les `forced_children` (les thèmes fins de la chaîne) :
+    un nœud sans enfants forcés est une feuille — plus de descente au-delà de 2 niveaux."""
     import numpy as np
     vecs = np.eye(4, dtype=np.float32)[[0, 1, 2, 3]]
     nodes, order = {}, []
+    # macro avec 2 clusters fins forcés → profondeur 1 ; les fins n'ont pas d'enfants forcés.
     A._build_subtree([0, 1, 2, 3], None, 0, [0], nodes, order, vecs,
-                     np.ones(4), [0, 1, 2, 3], 27, 1.0, 42)
-    assert vus == [27], "min_sub_size doit descendre inchangé (échelle du corpus)"
+                     np.ones(4), [0, 1, 2, 3], forced_children=[[0, 1], [2, 3]])
+    depths = sorted(n.depth for n in nodes.values())
+    assert depths == [0, 1, 1]                  # 1 macro + 2 feuilles, jamais de niveau 2
+    assert all(not nodes[c].children for c in nodes if nodes[c].depth == 1)
