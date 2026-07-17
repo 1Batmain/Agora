@@ -11,9 +11,10 @@ points de convergence et les idées les plus représentées.
 
 ### Description longue
 **Contexte.** Lorsque des commissions réalisent des consultations citoyennes,
-elles posent parfois des questions ouvertes pouvant recueillir jusqu'à
-**10 000 réponses**. Leur analyse manuelle est coûteuse et lente, et nécessite
-une méthodologie pour faire ressortir les points communs de ces retours.
+elles posent parfois des questions ouvertes pouvant recueillir **plusieurs
+dizaines de milliers de réponses** (33 609 pour la seule consultation TikTok).
+Leur analyse manuelle est coûteuse et lente, et nécessite une méthodologie pour
+faire ressortir les points communs de ces retours.
 
 **Enjeu.** Comment extraire les tendances, les points de convergence et les
 idées les plus pertinentes d'un grand volume de réponses en langage naturel,
@@ -27,17 +28,40 @@ de manière **transparente** et **reproductible** ?
 - Faciliter l'ingestion des données agrégées lors des consultations citoyennes —
   réduction des coûts et du temps.
 
+**Trois engagements, tenus de bout en bout.**
+- 🔍 **Fidèle** — zéro reformulation : chaque extrait affiché est une sous-chaîne
+  exacte du texte citoyen.
+- 🧭 **Traçable** — chaque thème émane des idées extraites des témoignages, et se
+  remonte jusqu'au verbatim exact qui le compose.
+- 🔒 **Souverain** — embeddings calculés en local, modèles ouverts.
+
+À cela s'ajoute un principe d'**honnêteté** : les limites de l'analyse sont affichées,
+jamais masquées.
+
 **Déroulé / approche.**
 1. **Prétraitement** : nettoyage (fautes, doublons), détection de langue,
    anonymisation.
-2. **Analyse** : clustering sémantique (embeddings + K-means / HDBSCAN) pour
-   regrouper les réponses par idées communes ; extraction de mots-clés
-   (TF-IDF, LDA) pour les sujets dominants ; analyse de sentiment pour l'opinion
-   globale.
-3. **Visualisation** : cartes de chaleur, nuages de mots interactifs, graphes de
-   co-occurrence.
-4. **Validation humaine** : interface pour explorer les réponses individuelles
-   et auditer chaque cluster.
+2. **Extraction des positions** : chaque réponse est décomposée en *affirmations
+   élémentaires* par un modèle de langage — on analyse les idées qu'elle porte,
+   pas seulement le texte entier. **Aucune reformulation** : chaque affirmation est
+   un extrait *exact* du texte citoyen, relié à sa réponse d'origine (auditable).
+3. **Regroupement émergent** : les affirmations sont représentées par des
+   *embeddings* sémantiques calculés **en local** (modèle ouvert, multilingue —
+   aucune donnée n'est envoyée à un tiers pour cette étape), puis regroupées par
+   détection de communautés sur un graphe de plus-proches-voisins. Aucune liste de
+   thèmes n'est fixée à l'avance : ils **émergent** des réponses.
+4. **Hiérarchie mesurée, pas décidée** : plutôt que d'imposer un nombre de
+   thèmes, on fait varier l'échelle de regroupement (le « zoom ») et on lit la
+   structure — grands thèmes puis sous-thèmes — là où les niveaux s'emboîtent le
+   plus proprement. C'est le corpus qui dicte sa granularité et son nombre de
+   niveaux, pas un paramètre arbitraire.
+5. **Nommage transparent** : titres et mots-clés sont dérivés des réponses
+   elles-mêmes, jamais d'une catégorie plaquée ; chaque thème se remonte jusqu'aux
+   verbatims qui le composent.
+6. **Opinion & consensus** : pour chaque thème, les points de convergence, les
+   axes de désaccord et la part de voix qu'ils représentent.
+7. **Visualisation & validation humaine** : une carte navigable des thèmes, avec
+   exploration des réponses individuelles et audit de chaque regroupement.
 
 **Données.** L'Assemblée ne publie pas les réponses brutes des consultations
 (données personnelles). Le système est donc entraîné et évalué sur des jeux
@@ -88,4 +112,5 @@ Cochez les ressources utilisées en remplaçant `[ ]` par `[x]`.
 - À compléter
 
 ### Documents
-- À compléter
+- **Démonstration publique en ligne** : <https://forge.tail0b8aa8.ts.net> — la
+  méthode Agora sur des témoignages publics de consultations citoyennes.
