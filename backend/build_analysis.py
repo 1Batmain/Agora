@@ -114,38 +114,35 @@ def _parallel_for(
 
 
 class FlatTreeError(RuntimeError):
-    """L'arbre servi n'a AUCUN sous-thème alors que le corpus est multi-macro."""
+    """Un seul thème avale le corpus — partition dégénérée, pas une synthèse."""
 
 
 def _assert_tree_is_structured(tree) -> None:
-    """Refuse un arbre entièrement plat — la hiérarchie EST le produit.
+    """Refuse une partition DÉGÉNÉRÉE — un thème qui avale tout le corpus.
 
-    Le produit promet « thèmes → sous-thèmes → verbatim » : un arbre à profondeur 0 sur
-    un corpus multi-macro est un échec de build, pas un résultat. On lève AVANT
-    l'enrichissement LLM (donc avant la dépense). Un corpus réellement mono-facette a
-    <3 macros et passe.
-
-    Historique : le rebuild tiktok du 2026-07-08 a servi un arbre plat avec un
-    `status: ready` serein, parce que le seuil de dispersion `tau` s'était calé au-dessus
-    de toutes les dispersions. `tau` a depuis été supprimé (`.agent/notes/HIERARCHY_TAU.md`)
-    — ce garde-fou reste : il protège contre la PROCHAINE cause d'aplatissement.
+    La couche servie est désormais PLATE (partition au pic de modularité ; la hiérarchie
+    d'abstraction viendra d'un autre mécanisme). Une partition plate saine est un résultat
+    légitime — ce n'est plus un échec. Le vrai échec à intercepter AVANT l'enrichissement LLM
+    (donc avant la dépense) est la DÉGÉNÉRESCENCE : un unique thème géant qui absorbe la quasi-
+    totalité des claims (ex. l'artefact du macro à 99,9 % sur granddebat, symptôme d'anisotropie
+    ou d'un γ inadapté). Un corpus réellement mono-thème (<2 thèmes) passe.
     """
     macros = list(tree.macros)
-    if len(macros) < 3:
-        return                                   # trop peu de macros : platitude légitime
-    structured = sum(1 for m in macros if tree.nodes[m].children)
-    if structured:
-        return
-    tailles = sorted(tree.nodes[m].n_claims for m in macros)
+    if len(macros) < 2:
+        return                                   # mono-thème : légitime
+    tailles = sorted((tree.nodes[m].n_claims for m in macros), reverse=True)
+    total = sum(tailles)
+    part_max = tailles[0] / total if total else 0.0
+    if part_max <= 0.85:
+        return                                   # partition saine
     if ALLOW_FLAT_TREE:
-        print(f"⚠️  arbre PLAT toléré (AGORA_ALLOW_FLAT_TREE=1) : {len(macros)} macros, "
-              f"aucun sous-thème")
+        print(f"⚠️  partition dégénérée tolérée (AGORA_ALLOW_FLAT_TREE=1) : "
+              f"un thème avale {part_max:.0%} des claims")
         return
     raise FlatTreeError(
-        f"{len(macros)} macros, AUCUN avec sous-thèmes → arbre plat (macros ≡ thèmes fins).\n"
-        f"  tailles des macros, en claims = {tailles}\n"
-        f"  → la chaîne d'emboîtement n'a pas dégagé de couche macro au-dessus des thèmes fins.\n"
-        f"Vérifier la chaîne (pipeline/cluster/layers.py) et `resolution` avant de servir.\n"
+        f"un thème avale {part_max:.0%} des claims ({len(macros)} thèmes, tailles {tailles[:5]}…)\n"
+        f"  → partition dégénérée : anisotropie résiduelle ou γ inadapté.\n"
+        f"Vérifier le recentrage et `flat_partition` (pipeline/cluster/layers.py) avant de servir.\n"
         f"AGORA_ALLOW_FLAT_TREE=1 pour passer outre en connaissance de cause."
     )
 

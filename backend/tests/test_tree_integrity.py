@@ -66,41 +66,38 @@ def test_prepare_claims_leve_sur_modele_divergent(tmp_path, monkeypatch):
 
 
 # --------------------------------------------------------------------------- #
-# 3. Arbre plat ⇒ FlatTreeError (avant toute dépense LLM)
+# 3. Partition DÉGÉNÉRÉE (un thème avale tout) ⇒ FlatTreeError (avant dépense LLM)
 # --------------------------------------------------------------------------- #
-def _fake_tree(n_macros: int, *, structured: bool):
-    nodes = {}
-    macros = []
-    for i in range(n_macros):
+def _fake_tree(tailles: list[int]):
+    """Arbre PLAT (chaque thème = un macro sans enfants) aux tailles données."""
+    nodes, macros = {}, []
+    for i, t in enumerate(tailles):
         mid = f"n{i}"
-        kids = [f"n{i}c"] if structured and i == 0 else []
-        nodes[mid] = SimpleNamespace(id=mid, children=kids, n_claims=100 + i)
+        nodes[mid] = SimpleNamespace(id=mid, children=[], n_claims=t)
         macros.append(mid)
-        for c in kids:
-            nodes[c] = SimpleNamespace(id=c, children=[], n_claims=50)
     return SimpleNamespace(nodes=nodes, macros=macros)
 
 
-def test_arbre_plat_leve():
+def test_partition_saine_plate_passe():
+    """Une partition plate ÉQUILIBRÉE est un résultat légitime (la hiérarchie vient après)."""
+    _assert_tree_is_structured(_fake_tree([300, 250, 200, 180, 120, 90]))
+
+
+def test_theme_geant_leve():
     with pytest.raises(FlatTreeError) as exc:
-        _assert_tree_is_structured(_fake_tree(15, structured=False))
-    msg = str(exc.value)
-    assert "arbre plat" in msg and "AUCUN avec sous-thèmes" in msg   # diagnostic actionnable
+        _assert_tree_is_structured(_fake_tree([950, 20, 15, 10, 5]))   # un thème = 94 %
+    assert "avale" in str(exc.value)
 
 
-def test_arbre_structure_passe():
-    _assert_tree_is_structured(_fake_tree(15, structured=True))
+def test_mono_theme_passe():
+    """<2 thèmes : mono-thème légitime."""
+    _assert_tree_is_structured(_fake_tree([1000]))
 
 
-def test_corpus_mono_facette_passe():
-    """<3 macros : la platitude est un résultat légitime, pas une pathologie."""
-    _assert_tree_is_structured(_fake_tree(2, structured=False))
-
-
-def test_arbre_plat_tolere_si_flag(monkeypatch):
+def test_theme_geant_tolere_si_flag(monkeypatch):
     import backend.build_analysis as B
     monkeypatch.setattr(B, "ALLOW_FLAT_TREE", True)
-    B._assert_tree_is_structured(_fake_tree(15, structured=False))   # ne lève pas
+    B._assert_tree_is_structured(_fake_tree([950, 20, 15, 10, 5]))     # ne lève pas
 
 
 # --------------------------------------------------------------------------- #
@@ -145,38 +142,32 @@ def test_subdivide_a_disparu():
     assert not hasattr(A, "MAX_DEPTH")          # le garde-fou de profondeur n'a plus d'objet
 
 
-class _Lv:
-    def __init__(self, membership, k=0, n=0, cleanliness=1.0):
-        self.membership = np.asarray(membership)
-        self.k, self.n_clusters, self.cleanliness = k, n, cleanliness
+def test_flat_partition_pic_de_modularite():
+    """`flat_partition` balaie γ sur UN graphe fixe et renvoie la partition au pic de
+    modularité. Sur 2 blobs nets, elle doit dégager ≥2 thèmes propres."""
+    from pipeline.cluster import layers
+    rng = np.random.default_rng(0)
+    a = rng.normal(0, 1, (120, 32)) + 8 * np.eye(32)[0]
+    b = rng.normal(0, 1, (120, 32)) - 8 * np.eye(32)[0]
+    V = np.vstack([a, b])
+    V /= np.linalg.norm(V, axis=1, keepdims=True)
+    membership, meta = layers.flat_partition(layers.centre(V), seed=42)
+    assert meta["n_clusters"] >= 2
+    assert 0.0 <= meta["modularity"] <= 1.0
+    assert meta["gamma"] in layers.GAMMA_GRID
+    assert len(membership) == len(V)
 
 
-def test_chaine_multi_niveaux_emboitee():
-    """L'arbre suit TOUTE la chaîne : on ne fixe pas le nombre de niveaux. Une chaîne à 3
-    étages (fin → moyen → grossier) qui s'emboîtent produit un arbre à 3 profondeurs, membres
-    ancrés dans les feuilles."""
-    # 8 claims. Fin : 4 paires. Moyen : 2 groupes de 2 paires. Grossier : 1... on garde 2 macros.
-    fine   = [0, 0, 1, 1, 2, 2, 3, 3]          # 4 clusters fins
-    medium = [0, 0, 0, 0, 1, 1, 1, 1]          # 2 groupes (paires 0-1 / 2-3)
-    chain = [_Lv(fine, n=4), _Lv(medium, n=2, cleanliness=0.8)]
-    forest = A._chain_hierarchy(chain)
-    # 2 racines, chacune avec 2 feuilles fines → profondeurs {0,1}
-    assert len(forest) == 2
-    for members, kids in forest:
-        assert len(kids) == 2
-        assert sorted(members) == sorted(m for km, _ in kids for m in km)   # membres = ∪ feuilles
-
-    # 3 étages : fin(4) → moyen(2) → grossier(1 seul → déplié, pas de racine redondante)
-    coarse = [0, 0, 0, 0, 0, 0, 0, 0]
-    forest3 = A._chain_hierarchy([_Lv(fine, n=4), _Lv(medium, n=2), _Lv(coarse, n=1)])
-    # la racine unique qui embrasse tout est dépliée → on garde les 2 nœuds du niveau moyen
-    assert len(forest3) == 2
-
-    # Construction complète via _build_macro_forest : la profondeur suit la chaîne.
-    vecs = np.eye(8, dtype=np.float32)
-    texts = ["alpha", "alpha", "beta", "beta", "gamma", "gamma", "delta", "delta"]
+def test_arbre_plat_via_macro_forest():
+    """Partition plate → `_build_macro_forest` construit un arbre à profondeur 0 (chaque
+    cluster = un thème, aucun enfant)."""
+    vecs = np.eye(6, dtype=np.float32)
+    texts = ["addiction scroll compulsif", "addiction écran dépendance",
+             "harcèlement commentaires haineux", "harcèlement scolaire propos",
+             "comparaison corps physique", "corps féminin normes beauté"]
+    hierarchy = [([0, 1], []), ([2, 3], []), ([4, 5], [])]     # 3 thèmes plats
     built, _order, macros, _thr = A._build_macro_forest(
-        [], vecs, np.ones(8), list(range(8)), texts, hierarchy=forest)
-    assert len(macros) == 2                              # 2 racines
-    assert max(n.depth for n in built.values()) == 1     # 2 niveaux (feuilles à la profondeur 1)
-    assert sum(1 for n in built.values() if not n.children) == 4   # 4 feuilles fines
+        [], vecs, np.ones(6), list(range(6)), texts, hierarchy=hierarchy)
+    assert len(macros) == 3
+    assert max(n.depth for n in built.values()) == 0          # tout à plat
+    assert all(not n.children for n in built.values())

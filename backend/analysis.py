@@ -452,45 +452,6 @@ def _cooccurrence(tree: ThemeTree) -> list[dict]:
 
 
 # --------------------------------------------------------------------------- #
-# Chaîne d'emboîtement → clusters fins + étiquette macro de chacun
-# --------------------------------------------------------------------------- #
-def _chain_hierarchy(chain: list) -> list:
-    """Traduit la chaîne en une FORÊT emboîtée — chaque étage propre de la chaîne = une profondeur.
-
-    La chaîne va du plus fin (`chain[0]`) au plus grossier (`chain[-1]`). On bâtit l'arbre du
-    BAS vers le HAUT : les feuilles sont les clusters fins ; à chaque étage plus grossier, on
-    regroupe les nœuds courants par le cluster où tombe la MAJORITÉ de leurs claims (vote
-    majoritaire — l'emboîtement n'est jamais parfait, propreté < 1, jamais d'appariement
-    d'identifiants). Un regroupement qui n'attrape qu'UN nœud ne crée pas de niveau redondant :
-    le nœud remonte tel quel (d'où des branches de profondeurs variables). Les membres restent
-    toujours ancrés dans les feuilles → arbre STRICTEMENT emboîté.
-
-    On ne fixe pas le nombre de niveaux : c'est la longueur de la chaîne (autant d'étages
-    qu'elle en dégage de propres) qui décide. Renvoie les nœuds RACINE (les plus grossiers),
-    chacun `(membres, sous-enfants)`. Chaîne vide → `[]` (l'appelant gère le cas dégénéré).
-    """
-    if not chain:
-        return []
-    parts = [np.asarray(lv.membership) for lv in chain]
-    p0 = parts[0]
-    nodes: list = [(np.where(p0 == c)[0].tolist(), []) for c in sorted(set(p0.tolist()))]
-    for pj in parts[1:]:
-        groups: dict[int, list] = {}
-        for nd in nodes:
-            lab = int(np.bincount(pj[nd[0]]).argmax())
-            groups.setdefault(lab, []).append(nd)
-        nodes = [kids[0] if len(kids) == 1
-                 else ([m for k in kids for m in k[0]], kids)
-                 for kids in groups.values()]
-    # Une racine UNIQUE qui embrasse tout le corpus n'est pas un macro : c'est la partition
-    # triviale (un étage grossier à 1 cluster). On la déplie — on ne sert pas un « thème » qui
-    # est le corpus entier.
-    while len(nodes) == 1 and nodes[0][1]:
-        nodes = nodes[0][1]
-    return nodes
-
-
-# --------------------------------------------------------------------------- #
 # Cœur PARTAGÉ de construction de la forêt de macros (claims /analysis ↔ idées Console)
 # --------------------------------------------------------------------------- #
 def _build_macro_forest(
@@ -507,8 +468,7 @@ def _build_macro_forest(
     """Construit et remplit la forêt de thèmes à partir d'une hiérarchie emboîtée.
 
     Deux sources de hiérarchie (`hierarchy` = liste de nœuds `(membres, sous-enfants)`) :
-      - `/analysis` la passe TELLE QUELLE, dérivée de la chaîne d'emboîtement complète
-        (`_chain_hierarchy`) — profondeur quelconque, autant d'étages que la chaîne en justifie.
+      - `/analysis` la passe TELLE QUELLE, la partition PLATE au pic de modularité (chaque cluster = un thème, profondeur 0).
       - la Console live la laisse à `None` → coarsening racine (`_coarsen_roots`) à 2 niveaux :
         c'est un explorateur k MANUEL, il ne balaie pas la chaîne.
     Puis `_build_subtree` matérialise l'arbre, et nommage c-TF-IDF / couleurs par macro /
@@ -592,43 +552,26 @@ def build_theme_tree(
     root_coarsen: dict | None = None
 
     if n_claims:
-        # k comme ROBINET DE ZOOM : on BALAIE k et on lit la hiérarchie dans l'emboîtement
-        # des partitions, au lieu de DÉRIVER k du nombre de claims (`derive_k(N)`, qui ne
-        # regardait jamais le contenu). L'arbre servi suit TOUTE la chaîne : autant de niveaux
-        # qu'elle en dégage de propres (tiktok 4→9→16, rép-num 5→9→17→31…), on ne fixe rien.
-        # `on_skip` remonte les paliers sautés faute de mémoire — JAMAIS de troncature muette.
-        skipped_k: list[int] = []
-        layer_chain = layers.chain(vecs, resolution=resolution, seed=seed,
-                                   on_skip=lambda k, _n: skipped_k.append(k))
-        if layer_chain:
-            hierarchy = _chain_hierarchy(layer_chain)
-            nodes, order, macros, merge_thr = _build_macro_forest(
-                [], vecs, weights, owner, prepared.claim_texts,
-                resolution=resolution, seed=seed, hierarchy=hierarchy)
-            # PROPRETÉ par étage : jauge continue (0 = hasard, 1 = emboîtement parfait). Sert
-            # au front à afficher la confiance et à choisir le nommage (facettes énumérées
-            # plutôt que titre soudé quand elle est basse). `macro_cleanliness` = saut le plus
-            # grossier (dans la couche macro servie).
-            root_coarsen = {
-                "n_fine": layer_chain[0].n_clusters, "n_macros": len(macros),
-                "n_levels": len(layer_chain), "merge_threshold": None,
-                "criterion": "arbre = chaîne d'emboîtement complète (k balayé, propreté normalisée vs modèle nul)",
-                "chain": [{"k": lv.k, "n_clusters": lv.n_clusters,
-                           "cleanliness": round(lv.cleanliness, 4)} for lv in layer_chain],
-                "macro_cleanliness": round(layer_chain[-1].cleanliness, 4) if len(layer_chain) > 1 else None,
-                "skipped_k": skipped_k,
-            }
-        else:
-            # Corpus plus petit que le plus petit palier du balayage (≤ K_GRID[0]) : aucun
-            # palier → un seul thème via le coarsening trivial (hierarchy=None).
-            nodes, order, macros, merge_thr = _build_macro_forest(
-                [list(range(n_claims))], vecs, weights, owner, prepared.claim_texts,
-                resolution=resolution, seed=seed)
-            root_coarsen = {
-                "n_fine": len(macros), "n_macros": len(macros),
-                "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
-                "criterion": "corpus minuscule : un seul thème (balayage k sans palier)",
-            }
+        # COUCHE PLATE au PIC DE MODULARITÉ : on ne balaie plus k (qui changeait le graphe et
+        # dégénérait en pure densification), on fixe UN graphe et on balaie la résolution γ —
+        # le bouton direct de granularité. Le pic de modularité donne le grain naturel du
+        # corpus. Les couches ABSTRAITES au-dessus viendront d'un autre mécanisme (ré-embedding
+        # des synthèses de thèmes, cf. `research/synthesis_embed_note.md`) — pas d'un γ plus
+        # grossier. Ici l'arbre est donc PLAT : chaque cluster = un thème.
+        membership, gmeta = layers.flat_partition(vecs, seed=seed)
+        by_cluster: dict[int, list[int]] = {}
+        for i, c in enumerate(membership.tolist()):
+            by_cluster.setdefault(c, []).append(i)
+        hierarchy = [(members, []) for members in by_cluster.values()]
+        nodes, order, macros, merge_thr = _build_macro_forest(
+            [], vecs, weights, owner, prepared.claim_texts,
+            resolution=resolution, seed=seed, hierarchy=hierarchy)
+        root_coarsen = {
+            "n_macros": len(macros), "flat": True,
+            "criterion": "partition plate au pic de modularité (γ balayé, graphe fixe)",
+            "gamma": gmeta["gamma"], "modularity": gmeta["modularity"],
+            "n_clusters": gmeta["n_clusters"], "gamma_curve": gmeta["curve"],
+        }
 
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.
         avis_total = (np.bincount(np.asarray(prepared.claim_owner, dtype=int),

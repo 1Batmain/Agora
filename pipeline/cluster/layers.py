@@ -47,6 +47,45 @@ MAX_EDGES = 12_000_000
 # refuse. Il n'existe que pour annoter les sorties de mesure.
 CLEAN_FLOOR = 0.5
 
+# --- Partition PLATE au pic de modularité (remplace le k-sweep) --------------------------- #
+# k était un PROXY indirect de la résolution : faire varier k changeait le GRAPHE (densité
+# 120× entre k=6 et k=2000, seuil adaptatif tombant à 0 → pure densification). Le bouton
+# direct de granularité de la modularité est γ. On construit UN graphe fixe (un seul
+# knn_search) et on balaie γ ; le pic de modularité donne le grain « naturel » du corpus
+# (mesuré : xstance pic à 14 thèmes ≈ 12 topics gold). Cf. `research/gamma_sweep.py`.
+K_GRAPH = 30                                            # voisinage du graphe FIXE
+GAMMA_GRID = (0.2, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0)  # résolutions balayées
+
+
+def flat_partition(vecs: np.ndarray, *, seed: int = 42) -> tuple[np.ndarray, dict]:
+    """Partition PLATE au pic de modularité. `vecs` DOIT être déjà recentré.
+
+    Un seul graphe kNN (seuil dérivé), γ balayé, on garde la partition qui MAXIMISE la
+    modularité — le grain où la structure de communautés est la plus forte. Renvoie
+    `(membership, meta)` avec la courbe γ→(n_clusters, modularité) pour diagnostic.
+    """
+    v64 = np.ascontiguousarray(vecs.astype(np.float64))
+    v32 = v64.astype(np.float32)
+    n = len(v64)
+    k = min(K_GRAPH, n - 1)
+    nb = knn_search(v32, k)
+    dd = derive_defaults(v32, k=k, neighbors=nb)
+    graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=nb)
+
+    best = None
+    curve = []
+    for gamma in GAMMA_GRID:
+        r = run_leiden(graph, resolution=gamma, seed=seed)
+        mod, nc = float(r.modularity), len(set(r.membership))
+        curve.append({"gamma": gamma, "n_clusters": nc, "modularity": round(mod, 4)})
+        if best is None or mod > best[0]:
+            best = (mod, gamma, np.asarray(r.membership))
+    mod, gamma, membership = best
+    meta = {"gamma": gamma, "modularity": round(mod, 4),
+            "n_clusters": len(set(membership.tolist())),
+            "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve}
+    return membership, meta
+
 
 def centre(vecs: np.ndarray) -> np.ndarray:
     """Recentre puis re-normalise : `v ← (v−μ)/‖v−μ‖`, μ = centroïde du corpus.
