@@ -625,11 +625,10 @@ def build_theme_tree(
             resolution=resolution, seed=seed, hierarchy=hierarchy)
         root_coarsen = {
             "n_macros": len(macros), "flat": absres is None,
-            "criterion": ("macros = abstraction (étiquette canonique LLM + affectation embedding)"
+            "criterion": ("macros = abstraction (profil de thème ré-embeddé, puis clustering — moteur B)"
                           if absres else "partition plate au pic de modularité (γ balayé, graphe fixe)"),
             "gamma": gmeta["gamma"], "modularity": gmeta["modularity"],
             "n_fine": gmeta["n_clusters"], "gamma_curve": gmeta["curve"],
-            "macro_titles": (absres["macros"] if absres else None),
         }
 
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.

@@ -1,64 +1,52 @@
-"""Moteur d'abstraction — fonctions pures (chat_fn injecté, zéro dépendance LLM réelle)."""
+"""Moteur d'abstraction B — profil ré-embeddé (chat_fn / embed_fn injectés, zéro LLM réel)."""
 from __future__ import annotations
 
 import json
-from pathlib import Path
+
+import numpy as np
 
 from pipeline.cluster import abstraction as ab
 
 
-def _fake_chat(labels_by_text):
-    """chat_fn simulé : étiquette selon un mot-clé, groupe addiction+scroll ensemble."""
+def test_compute_fusionne_par_reembedding():
+    """Profil par thème → ré-embedding → clustering : deux thèmes au profil proche fusionnent."""
+    # 4 thèmes : 0 et 1 « addiction » (profils quasi identiques), 2 et 3 distincts.
+    prof = {0: "addiction aux réseaux", 1: "addiction aux réseaux et écrans",
+            2: "harcèlement en ligne", 3: "image du corps et comparaison"}
+
     def chat(messages, **_kw):
-        sys = messages[0]["content"]
-        user = messages[-1]["content"]
-        if "groupes" in sys or "Regroupe" in sys:      # étape regroupement
-            # 0,1 = addiction (même groupe) ; 2 = harcèlement ; 3 = corps
-            return json.dumps({"groupes": [
-                {"titre": "Addiction", "indices": [0, 1]},
-                {"titre": "Harcèlement", "indices": [2]},
-                {"titre": "Image du corps", "indices": [3]},
-            ]})
-        for kw, lab in labels_by_text.items():         # étape étiquette
-            if kw in user:
-                return lab
-        return "autre"
-    return chat
+        u = messages[-1]["content"]
+        if "addiction" in u or "scroll" in u or "appli" in u:
+            return "Sujet : addiction aux réseaux sociaux. Les témoignages décrivent la dépendance."
+        if "haine" in u:
+            return "Sujet : harcèlement en ligne. Insultes et menaces."
+        return "Sujet : image du corps. Comparaison et normes de beauté."
 
+    def emb(texts):
+        # embeddings jouets : par mot-clé du profil → addiction proche, autres orthogonaux
+        def v(t):
+            if "addiction" in t: return [1.0, 0.0, 0.0]
+            if "harcèlement" in t: return [0.0, 1.0, 0.0]
+            return [0.0, 0.0, 1.0]
+        return np.array([v(t) for t in texts], dtype=float)
 
-def test_compute_fusionne_les_redondants():
-    chat = _fake_chat({"scroll": "addiction aux réseaux", "appli": "addiction aux réseaux",
-                       "haine": "harcèlement en ligne", "corps": "image du corps"})
     clusters = [["scroll heures"], ["appli désinstaller"], ["haine insultes"], ["corps comparaison"]]
-    r = ab.compute(clusters, chat_fn=chat, model="x")
+    r = ab.compute(clusters, chat_fn=chat, embed_fn=emb, model="x")
     assert r is not None
-    assert r["assign"][0] == r["assign"][1]              # les 2 addictions fusionnent
-    assert len({r["assign"][0], r["assign"][2], r["assign"][3]}) == 3   # 3 macros distincts
-    assert len(r["macros"]) == 3
-
-
-def test_dedup_partition_stricte():
-    """Un thème double-assigné par le LLM ne va que dans UN macro (premier qui le réclame)."""
-    def chat(messages, **_kw):
-        if "groupes" in messages[0]["content"]:
-            return json.dumps({"groupes": [
-                {"titre": "A", "indices": [0, 1]},
-                {"titre": "B", "indices": [1, 2, 3]},      # 1 réclamé deux fois
-            ]})
-        return "label"
-    r = ab.compute([["a"], ["b"], ["c"], ["d"]], chat_fn=chat, model="x")
-    assert r["assign"][1] == 0                            # thème 1 → premier groupe (A)
-    assert sum(1 for a in r["assign"] if a == r["assign"][1]) == 2   # A = {0,1}
+    assert r["assign"][0] == r["assign"][1]                 # les 2 addictions fusionnent
+    assert len(set(r["assign"])) >= 2                       # ≥2 macros
+    assert "profiles" in r and len(r["profiles"]) == 4
 
 
 def test_corpus_trop_petit_pas_dabstraction():
-    assert ab.compute([["a"], ["b"]], chat_fn=lambda *a, **k: "x", model="m") is None
+    assert ab.compute([["a"], ["b"]], chat_fn=lambda *a, **k: "x",
+                      embed_fn=lambda t: np.zeros((len(t), 3)), model="m") is None
 
 
 def test_cache_par_signature(tmp_path):
     clusters = [[0, 1], [2, 3], [4, 5]]
-    result = {"labels": ["x"], "macros": ["M"], "assign": [0, 0, 1]}
+    result = {"profiles": ["x"], "assign": [0, 0, 1]}
     p = tmp_path / "abstraction.json"
     ab.save(p, clusters, result)
-    assert ab.load(p, clusters) == result                # même partition → hit
-    assert ab.load(p, [[0], [1, 2, 3, 4, 5]]) is None     # partition changée → miss
+    assert ab.load(p, clusters) == result                   # même partition → hit
+    assert ab.load(p, [[0], [1, 2, 3, 4, 5]]) is None        # partition changée → miss

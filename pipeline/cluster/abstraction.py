@@ -20,83 +20,57 @@ import hashlib
 import json
 from pathlib import Path
 
-MIN_THEMES = 4        # en dessous, la couche plate suffit (pas d'abstraction)
-LABEL_MAX_TOKENS = 25
+import numpy as np
+
+from pipeline.cluster.layers import centre, flat_partition
+
+MIN_THEMES = 4          # en dessous, la couche plate suffit (pas d'abstraction)
+PROFILE_MAX_TOKENS = 450  # profil capé (< 512 = fenêtre d'input de nomic-v2)
 
 
-def _canonical_label(claims: list[str], *, chat_fn, model: str) -> str:
-    ex = "\n".join(f"- {c[:180]}" for c in claims[:15])
+def _profile(claims: list[str], *, chat_fn, model: str) -> str:
+    """PROFIL du thème destiné à être EMBEDDÉ : fidèle et précis, mais canonique dans son
+    ouverture pour que deux thèmes du même sujet se rejoignent dans l'espace. C'est le levier
+    central (moteur B) : ce qu'on embedde décide si les redondants fusionnent SANS perdre la
+    précision. Une étiquette courte sur-collapse (perd la précision) ; une phrase riche varie
+    trop (ne merge pas) ; le profil est l'équilibre — commence par nommer le SUJET DE FOND."""
+    ex = "\n".join(f"- {c[:200]}" for c in claims[:20])
     msg = [
         {"role": "system", "content":
-         "Donne le SUJET de ce groupe de témoignages en 3 à 6 mots, sous forme de CATÉGORIE "
-         "canonique et générique (ex: « dépendance aux réseaux sociaux », « protection des "
-         "mineurs »). Juste la catégorie, rien d'autre."},
-        {"role": "user", "content": f"Témoignages :\n{ex}\n\nCatégorie :"},
+         "Rédige un PROFIL de ce thème en 3 à 5 phrases (≤ 300 mots). Commence par UNE phrase qui "
+         "nomme le SUJET DE FOND en termes généraux et canoniques, puis précise fidèlement les "
+         "angles et positions portés par les témoignages. Ce profil servira à regrouper ce thème "
+         "avec ceux qui traitent du même sujet — reste fidèle ET canonique. Juste le profil."},
+        {"role": "user", "content": f"Témoignages :\n{ex}\n\nProfil :"},
     ]
-    return chat_fn(msg, model=model, temperature=0.0, max_tokens=LABEL_MAX_TOKENS).strip()
+    return chat_fn(msg, model=model, temperature=0.0, max_tokens=PROFILE_MAX_TOKENS).strip()
 
 
-def _group_labels(labels: list[str], *, chat_fn, model: str) -> list[dict]:
-    """Le LLM regroupe les étiquettes par SUJET DE FOND (fusionne les redondances). Renvoie une
-    liste `[{"titre":..., "indices":[...]}]`. Raisonne sur le SENS (pas la surface) → route bien
-    les cas ambigus (« utilisation excessive » = addiction, pas « risque social »)."""
-    lst = "\n".join(f"{i}. {l}" for i, l in enumerate(labels))
-    msg = [
-        {"role": "system", "content":
-         "On te donne une liste de SUJETS de thèmes. Regroupe ceux qui traitent du MÊME sujet de "
-         "FOND (fusionne les redondances : plusieurs formulations d'une même idée = un groupe), et "
-         "garde DISTINCTS les sujets réellement différents (même s'ils partagent un contexte). Vise "
-         "plusieurs groupes équilibrés, pas un ou deux fourre-tout. Réponds en JSON : "
-         '{"groupes": [{"titre": "catégorie courte et neutre", "indices": [numéros]}]}.'},
-        {"role": "user", "content": lst},
-    ]
-    raw = chat_fn(msg, model=model, temperature=0.0, max_tokens=500, json_mode=True)
-    try:
-        return json.loads(raw).get("groupes", [])
-    except (json.JSONDecodeError, AttributeError):
-        return []
+def compute(cluster_texts: list[list[str]], *, chat_fn, embed_fn, model: str) -> dict | None:
+    """Couche macro par RÉ-EMBEDDING (moteur B). `cluster_texts[i]` = claims représentatifs du
+    thème i.
 
+    Pipeline : profil fidèle par thème (LLM) → ré-embedding local du profil → clustering des
+    profils (même moteur `flat_partition`, γ au pic de modularité) = couche macro. Le profil
+    normalise la surface vers le sens SANS perdre la précision (cf. `research/profile_embed_note`).
 
-def compute(cluster_texts: list[list[str]], *, chat_fn, embed_fn=None, model: str) -> dict | None:
-    """Calcule la couche macro. `cluster_texts[i]` = claims représentatifs du thème i.
-
-    Étiquette canonique par thème (surface→sens), PUIS regroupement LLM par sujet de fond. Le
-    regroupement libre peut double-assigner un thème AMBIGU : on DÉDUPLIQUE (premier groupe qui
-    le réclame gagne) → partition stricte. `embed_fn` n'est plus requis (gardé pour compat).
-
-    Renvoie `{"labels":[...], "macros":[...], "assign":[macro par thème]}` ou `None` si trop peu
-    de thèmes, ou si tout retombe dans un seul macro (pas d'abstraction utile).
+    Renvoie `{"profiles":[...], "assign":[macro par thème]}` ou `None` si trop peu de thèmes ou si
+    tout retombe dans un seul macro (pas d'abstraction utile). Les macros sont nommés en aval
+    (c-TF-IDF + titre LLM), comme tout nœud à enfants.
     """
     n = len(cluster_texts)
     if n < MIN_THEMES:
         return None
-    labels = [_canonical_label(c, chat_fn=chat_fn, model=model) for c in cluster_texts]
-    groupes = _group_labels(labels, chat_fn=chat_fn, model=model)
-
-    assign = [-1] * n
-    titles: list[str] = []
-    for g in groupes:
-        gi = len(titles)
-        placed = False
-        for idx in g.get("indices", []):
-            if isinstance(idx, int) and 0 <= idx < n and assign[idx] == -1:
-                assign[idx] = gi
-                placed = True
-        if placed:
-            titles.append(str(g.get("titre") or "").strip() or labels[
-                next(i for i in range(n) if assign[i] == gi)])
-    # Thèmes oubliés par le LLM → chacun son propre macro (jamais perdus).
-    for i in range(n):
-        if assign[i] == -1:
-            assign[i] = len(titles)
-            titles.append(labels[i])
+    profiles = [_profile(c, chat_fn=chat_fn, model=model) for c in cluster_texts]
+    vecs = centre(np.asarray(embed_fn(profiles), dtype=np.float64))
+    part, _meta = flat_partition(vecs, seed=42)
+    assign = part.tolist()
 
     used = sorted(set(assign))
     if len(used) < 2:
         return None                                  # tout dans un macro = pas d'abstraction
     remap = {m: i for i, m in enumerate(used)}
-    return {"labels": labels, "macros": [titles[m] for m in used],
-            "assign": [remap[a] for a in assign]}
+    return {"profiles": profiles, "assign": [remap[a] for a in assign]}
 
 
 # --- Cache disque : DÉTERMINISE l'abstraction entre les étapes du build ------------------- #
