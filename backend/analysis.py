@@ -511,6 +511,47 @@ def _build_macro_forest(
 # --------------------------------------------------------------------------- #
 # Point d'entrée : construit l'arbre (sans x,y) — réutilisé par insights/citations
 # --------------------------------------------------------------------------- #
+def _central_texts(members: list[int], vecs: np.ndarray, texts: list[str], top: int = 15) -> list[str]:
+    """Claims les plus proches du centroïde d'un cluster (pour l'étiquette canonique)."""
+    sub = vecs[members]
+    c = sub.mean(axis=0)
+    nrm = np.linalg.norm(c)
+    c = c / nrm if nrm else c
+    order = np.argsort(-(sub @ c))[:top]
+    return [texts[members[i]] for i in order]
+
+
+def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[str],
+                 *, model: str | None, compute: bool) -> dict | None:
+    """Couche macro : relit le cache, ou la CALCULE (LLM) si `compute` et clé dispo.
+
+    Cachée par signature de la partition → cohérente entre build_analysis/opinion/arguments.
+    Repli PLAT (None) si : pas de cache, pas de calcul demandé, pas de clé, ou trop peu de thèmes.
+    """
+    from pathlib import Path
+
+    from pipeline.cluster import abstraction as ab
+
+    path = Path(f"backend/cache/{ds.id}/analysis/abstraction.json")
+    cached = ab.load(path, clusters)
+    if cached is not None:
+        return cached
+    if not compute:
+        return None
+    from pipeline.cluster import mistral_client
+    from pipeline.embed.embedder import embed as _embed
+    if not mistral_client.available():
+        return None
+    cluster_texts = [_central_texts(m, vecs, texts) for m in clusters]
+    # Abstraction = tâche de nommage/regroupement légère → modèle SMALL (moins cher que
+    # l'extraction). `model` (extraction) ignoré ici volontairement.
+    result = ab.compute(cluster_texts, chat_fn=mistral_client.chat, embed_fn=_embed,
+                        model="mistral-small-latest")
+    if result is not None:
+        ab.save(path, clusters, result)
+    return result
+
+
 def build_theme_tree(
     ds,
     *,
@@ -522,6 +563,7 @@ def build_theme_tree(
     seed: int = DEFAULT_SEED,
     prepared: PreparedClaims | None = None,
     extract_progress=None,
+    abstract: bool = False,
 ) -> ThemeTree:
     """Extrait/charge les claims puis construit l'arbre variance-adaptatif.
 
@@ -562,15 +604,32 @@ def build_theme_tree(
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership.tolist()):
             by_cluster.setdefault(c, []).append(i)
-        hierarchy = [(members, []) for members in by_cluster.values()]
+        clusters = list(by_cluster.values())
+
+        # COUCHE MACRO (abstraction) : regroupe les thèmes redondants sans souder les distincts.
+        # Calculée UNE fois au build (LLM, `abstract=True`) et CACHÉE ; relue par les autres
+        # étapes → arbre identique partout (cohérence build_analysis/opinion/arguments).
+        absres = _abstraction(ds, clusters, vecs, prepared.claim_texts,
+                              model=model, compute=abstract)
+        if absres:
+            groups: dict[int, list[int]] = {}
+            for ti, mi in enumerate(absres["assign"]):
+                groups.setdefault(mi, []).append(ti)
+            hierarchy = [([m for t in tis for m in clusters[t]],
+                          [(clusters[t], []) for t in tis]) for tis in groups.values()]
+        else:
+            hierarchy = [(members, []) for members in clusters]     # plat (repli)
+
         nodes, order, macros, merge_thr = _build_macro_forest(
             [], vecs, weights, owner, prepared.claim_texts,
             resolution=resolution, seed=seed, hierarchy=hierarchy)
         root_coarsen = {
-            "n_macros": len(macros), "flat": True,
-            "criterion": "partition plate au pic de modularité (γ balayé, graphe fixe)",
+            "n_macros": len(macros), "flat": absres is None,
+            "criterion": ("macros = abstraction (étiquette canonique LLM + affectation embedding)"
+                          if absres else "partition plate au pic de modularité (γ balayé, graphe fixe)"),
             "gamma": gmeta["gamma"], "modularity": gmeta["modularity"],
-            "n_clusters": gmeta["n_clusters"], "gamma_curve": gmeta["curve"],
+            "n_fine": gmeta["n_clusters"], "gamma_curve": gmeta["curve"],
+            "macro_titles": (absres["macros"] if absres else None),
         }
 
         # nb TOTAL de claims par avis (dénominateur de la pureté du hero) — calculé une fois.

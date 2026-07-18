@@ -251,6 +251,7 @@ def build_analysis(
         tree = build_theme_tree(
             ds, backend=backend, model=extract_model, embedder=embedder,
             resolution=resolution, seed=seed, extract_progress=_extract_progress,
+            abstract=True,        # calcule + cache la couche macro (relue par opinion/arguments)
         )
         node_ids = list(tree.order)
         report("tree", f"{len(node_ids)} thèmes (macros: {len(tree.macros)})")
