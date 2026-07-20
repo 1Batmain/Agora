@@ -54,15 +54,23 @@ CLEAN_FLOOR = 0.5
 # knn_search) et on balaie γ ; le pic de modularité donne le grain « naturel » du corpus
 # (mesuré : xstance pic à 14 thèmes ≈ 12 topics gold). Cf. `research/gamma_sweep.py`.
 K_GRAPH = 30                                            # voisinage du graphe FIXE
-GAMMA_GRID = (0.2, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0)  # résolutions balayées
+GAMMA_GRID = (0.2, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0)  # résolutions balayées (recherche du pic)
+# Résolution de la couche FEUILLE servie. On sert plus FIN que le pic de modularité : la couche
+# fine porte le DÉTAIL (thèmes précis mais redondants), et le moteur d'abstraction remonte la
+# STRUCTURE au-dessus (macros). Mesuré (Grand Débat 160k avis) : servir fin+abstraction retrouve
+# les 4 domaines (ARI 0.60) mieux que servir le pic de modularité (14 thèmes, ARI 0.42).
+# `FINE_GAMMA` est un paramètre de FORME (résolution = le bon bouton, cf. verdict k→γ), pas un
+# seuil calé sur un corpus. Cf. `research/gd_nightly_results.json`.
+FINE_GAMMA = 3.0
 
 
-def flat_partition(vecs: np.ndarray, *, seed: int = 42) -> tuple[np.ndarray, dict]:
-    """Partition PLATE au pic de modularité. `vecs` DOIT être déjà recentré.
+def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
+                   seed: int = 42) -> tuple[np.ndarray, dict]:
+    """Partition à résolution γ (Leiden) sur UN graphe kNN fixe. `vecs` DOIT être recentré.
 
-    Un seul graphe kNN (seuil dérivé), γ balayé, on garde la partition qui MAXIMISE la
-    modularité — le grain où la structure de communautés est la plus forte. Renvoie
-    `(membership, meta)` avec la courbe γ→(n_clusters, modularité) pour diagnostic.
+    `gamma` donné → partition à cette résolution (un seul Leiden). `gamma=None` → on balaie
+    `GAMMA_GRID` et on garde le PIC de modularité (le grain naturel). Renvoie `(membership,
+    meta)`, `meta.curve` peuplée seulement en mode balayage.
     """
     v64 = np.ascontiguousarray(vecs.astype(np.float64))
     v32 = v64.astype(np.float32)
@@ -72,16 +80,24 @@ def flat_partition(vecs: np.ndarray, *, seed: int = 42) -> tuple[np.ndarray, dic
     dd = derive_defaults(v32, k=k, neighbors=nb)
     graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=nb)
 
+    if gamma is not None:
+        r = run_leiden(graph, resolution=gamma, seed=seed)
+        membership = np.asarray(r.membership)
+        meta = {"gamma": gamma, "modularity": round(float(r.modularity), 4),
+                "n_clusters": len(set(membership.tolist())),
+                "k_graph": k, "threshold": round(dd.threshold, 4), "curve": []}
+        return membership, meta
+
     best = None
     curve = []
-    for gamma in GAMMA_GRID:
-        r = run_leiden(graph, resolution=gamma, seed=seed)
+    for gm in GAMMA_GRID:
+        r = run_leiden(graph, resolution=gm, seed=seed)
         mod, nc = float(r.modularity), len(set(r.membership))
-        curve.append({"gamma": gamma, "n_clusters": nc, "modularity": round(mod, 4)})
+        curve.append({"gamma": gm, "n_clusters": nc, "modularity": round(mod, 4)})
         if best is None or mod > best[0]:
-            best = (mod, gamma, np.asarray(r.membership))
-    mod, gamma, membership = best
-    meta = {"gamma": gamma, "modularity": round(mod, 4),
+            best = (mod, gm, np.asarray(r.membership))
+    mod, gm, membership = best
+    meta = {"gamma": gm, "modularity": round(mod, 4),
             "n_clusters": len(set(membership.tolist())),
             "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve}
     return membership, meta

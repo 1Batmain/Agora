@@ -600,7 +600,10 @@ def build_theme_tree(
         # corpus. Les couches ABSTRAITES au-dessus viendront d'un autre mécanisme (ré-embedding
         # des synthèses de thèmes, cf. `research/synthesis_embed_note.md`) — pas d'un γ plus
         # grossier. Ici l'arbre est donc PLAT : chaque cluster = un thème.
-        membership, gmeta = layers.flat_partition(vecs, seed=seed)
+        # Couche FEUILLE : plus fine que le pic de modularité (elle porte le DÉTAIL) ; le moteur
+        # d'abstraction remonte la STRUCTURE au-dessus. Mesuré (Grand Débat) : fin+abstraction
+        # retrouve les domaines mieux que le pic seul.
+        membership, gmeta = layers.flat_partition(vecs, gamma=layers.FINE_GAMMA, seed=seed)
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership.tolist()):
             by_cluster.setdefault(c, []).append(i)
