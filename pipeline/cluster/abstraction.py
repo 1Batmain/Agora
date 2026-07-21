@@ -74,26 +74,33 @@ def compute(cluster_texts: list[list[str]], *, chat_fn, embed_fn, model: str) ->
 
 
 # --- Cache disque : DÉTERMINISE l'abstraction entre les étapes du build ------------------- #
-def signature(clusters: list[list[int]]) -> str:
-    """Empreinte STABLE de la partition plate (indépendante de l'ordre des clusters)."""
-    key = repr(sorted(tuple(sorted(c)) for c in clusters))
+def signature(clusters: list[list[int]], *, embedder: str = "", chat_model: str = "") -> str:
+    """Empreinte STABLE de l'abstraction : partition (ordre-insensible) + EMBEDDER + modèle
+    de chat. L'embedder EN FAIT PARTIE car les profils sont ré-embeddés : un cache construit
+    avec un modèle (ex. jina) ne doit JAMAIS être re-servi pour un build sur un autre modèle
+    (ex. nomic-v2, permissif) — question de licence ET de cohérence d'espace."""
+    key = repr((sorted(tuple(sorted(c)) for c in clusters), embedder, chat_model))
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 
-def load(path: Path, clusters: list[list[int]]) -> dict | None:
-    """Relit l'abstraction cachée si elle correspond à CETTE partition (sinon None)."""
+def load(path: Path, clusters: list[list[int]], *, embedder: str = "",
+         chat_model: str = "") -> dict | None:
+    """Relit l'abstraction cachée si elle correspond à CETTE partition ET au MÊME embedder/
+    modèle (sinon None → recalcul)."""
     if not path.exists():
         return None
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
-    if data.get("signature") != signature(clusters):
-        return None                                  # partition changée → cache périmé
+    if data.get("signature") != signature(clusters, embedder=embedder, chat_model=chat_model):
+        return None                                  # partition/embedder changé → cache périmé
     return data.get("result")
 
 
-def save(path: Path, clusters: list[list[int]], result: dict) -> None:
+def save(path: Path, clusters: list[list[int]], result: dict, *, embedder: str = "",
+         chat_model: str = "") -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"signature": signature(clusters), "result": result},
+    sig = signature(clusters, embedder=embedder, chat_model=chat_model)
+    path.write_text(json.dumps({"signature": sig, "result": result},
                                ensure_ascii=False, indent=2), encoding="utf-8")

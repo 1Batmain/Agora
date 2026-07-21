@@ -45,7 +45,7 @@ DEFAULT_MODEL = "ministral-3:latest"
 # re-dériver en embedder Apache (nomic-v2 / arctic-l) avant commercialisation.
 # Pare-feu : research/jina_provenance_firewall.md. Changer cette constante ré-embed
 # les datasets REBUILDÉS (la prod sert le cache, ne rebuild pas → pas d'impact serve).
-DEFAULT_EMBEDDER = "nomic-v2"
+DEFAULT_EMBEDDER = "arctic-l"
 # DEFAULT_SEED ré-exporté depuis sa source unique `pipeline.cluster.leiden_cluster`
 # (backend/analysis.py et les builds l'importent d'ici par commodité historique).
 N_REPRESENTATIVE = 4

@@ -521,11 +521,17 @@ def _central_texts(members: list[int], vecs: np.ndarray, texts: list[str], top: 
     return [texts[members[i]] for i in order]
 
 
+ABSTRACTION_CHAT_MODEL = "mistral-small-latest"  # nommage/regroupement léger (≠ extraction)
+
+
 def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[str],
-                 *, model: str | None, compute: bool) -> dict | None:
+                 *, model: str | None, embedder: str, compute: bool) -> dict | None:
     """Couche macro : relit le cache, ou la CALCULE (LLM) si `compute` et clé dispo.
 
-    Cachée par signature de la partition → cohérente entre build_analysis/opinion/arguments.
+    Cachée par signature (partition + EMBEDDER + modèle) → cohérente entre build_analysis/
+    opinion/arguments, et un cache d'un autre embedder n'est jamais re-servi. Les profils sont
+    ré-embeddés avec l'`embedder` DU BUILD (permissif, ex. nomic-v2) — jamais le défaut jina
+    (NON-COMMERCIAL) : la couche macro servie doit rester commercialement re-dérivable.
     Repli PLAT (None) si : pas de cache, pas de calcul demandé, pas de clé, ou trop peu de thèmes.
     """
     from pathlib import Path
@@ -533,7 +539,7 @@ def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[st
     from pipeline.cluster import abstraction as ab
 
     path = Path(f"backend/cache/{ds.id}/analysis/abstraction.json")
-    cached = ab.load(path, clusters)
+    cached = ab.load(path, clusters, embedder=embedder, chat_model=ABSTRACTION_CHAT_MODEL)
     if cached is not None:
         return cached
     if not compute:
@@ -543,12 +549,13 @@ def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[st
     if not mistral_client.available():
         return None
     cluster_texts = [_central_texts(m, vecs, texts) for m in clusters]
-    # Abstraction = tâche de nommage/regroupement légère → modèle SMALL (moins cher que
-    # l'extraction). `model` (extraction) ignoré ici volontairement.
-    result = ab.compute(cluster_texts, chat_fn=mistral_client.chat, embed_fn=_embed,
-                        model="mistral-small-latest")
+    # Ré-embed des profils avec l'embedder DU BUILD (permissif) — PAS le défaut module (jina,
+    # CC-BY-NC). Sans ça la couche macro servie serait non-commercialisable (règle firewall).
+    result = ab.compute(cluster_texts, chat_fn=mistral_client.chat,
+                        embed_fn=lambda t: _embed(t, model_id=embedder),
+                        model=ABSTRACTION_CHAT_MODEL)
     if result is not None:
-        ab.save(path, clusters, result)
+        ab.save(path, clusters, result, embedder=embedder, chat_model=ABSTRACTION_CHAT_MODEL)
     return result
 
 
@@ -613,7 +620,7 @@ def build_theme_tree(
         # Calculée UNE fois au build (LLM, `abstract=True`) et CACHÉE ; relue par les autres
         # étapes → arbre identique partout (cohérence build_analysis/opinion/arguments).
         absres = _abstraction(ds, clusters, vecs, prepared.claim_texts,
-                              model=model, compute=abstract)
+                              model=model, embedder=embedder, compute=abstract)
         if absres:
             groups: dict[int, list[int]] = {}
             for ti, mi in enumerate(absres["assign"]):
