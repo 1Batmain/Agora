@@ -153,6 +153,74 @@ def _title_messages(node, anchors: list[str]) -> list[dict]:
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
+# Titrage des MACROS (familles) — versionné dans la clé de cache, comme `ANCHOR_METHOD`.
+MACRO_METHOD = "umbrella-children-v1"
+
+
+def _macro_title_messages(child_titles: list[str]) -> list[dict]:
+    reps = "\n".join(f"- {t}" for t in child_titles)
+    system = (
+        "Tu nommes une FAMILLE de thèmes — un regroupement de sous-thèmes proches, issu "
+        "d'une analyse de contributions citoyennes. Tu produis un TITRE COURT d'OMBRELLE "
+        "(3 à 7 mots) : une phrase NOMINALE lisible qui nomme le SUJET COMMUN des "
+        "sous-thèmes, neutre, sans ponctuation finale, sans guillemets, sans préfixe "
+        "(« Famille : »…). Tu n'inventes rien hors des sous-thèmes fournis."
+    )
+    user = (
+        "Voici les SOUS-THÈMES de cette famille, déjà titrés. Rédige UN SEUL titre court "
+        "qui nomme ce qu'ils ont EN COMMUN — le thème général qui les chapeaute, PAS la "
+        "liste et surtout PAS un empilement de mots-clés. Préfère une formulation lisible "
+        "et grammaticale. Langue dominante des sous-thèmes. Réponds UNIQUEMENT par le "
+        "titre, rien d'autre.\n\n"
+        f"Sous-thèmes :\n{reps or '(aucun)'}\n"
+    )
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+def _macro_key(dataset: str, node, model: str, child_titles: list[str]) -> str:
+    """Clé de cache d'un titre de macro : hash de (dataset, id, modèle, méthode, ENSEMBLE
+    trié des titres d'enfants). Triée → insensible à une permutation des enfants (cf. la
+    même précaution que `_content_key` contre l'avalanche de re-génération)."""
+    parts = [dataset, node.id, model, MACRO_METHOD, "|".join(sorted(child_titles))]
+    raw = "\x00".join(parts)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def title_for_macro(dataset: str, node, child_titles: list[str], *,
+                    model: str | None = None, refresh: bool = False) -> str:
+    """Titre d'OMBRELLE d'un macro (famille) : synthétise les titres de ses sous-thèmes.
+
+    Un macro chapeaute plusieurs thèmes fins ; ses mots-clés c-TF-IDF sont l'UNION diffuse
+    de ses enfants → le titrage ancré-keywords (`title_for_node`) y dégénère en salade de
+    mots-clés (« Réseaux sociaux contenus inappropriés jeunes filles »). On titre donc le
+    macro à partir des TITRES déjà propres de ses enfants — une ombrelle lisible.
+
+    Caché par contenu (titres des enfants) → rebuild idempotent. Sans enfant titré, on
+    retombe sur le titrage ancré-keywords. Repli sur le label si pas de clé/erreur API.
+    """
+    synth_model = model or mistral_client.NAMING_MODEL
+    kids = [t.strip() for t in child_titles if t and t.strip()]
+    if not kids:
+        return title_for_node(dataset, node, model=model, refresh=refresh)
+    key_hash = _macro_key(dataset, node, synth_model, kids)
+    title, _ = cached_llm(
+        mem_cache=_MEM_CACHE,
+        key=key_hash,
+        disk_path=_disk_path(dataset, key_hash),
+        build_messages=lambda: _macro_title_messages(kids),
+        fallback_fn=lambda *_: _fallback(node),
+        model=synth_model,
+        max_tokens=TITLE_MAX_TOKENS,
+        temperature=TITLE_TEMPERATURE,
+        decode=lambda data: (data.get("title") or "").strip(),
+        encode=lambda t: {"id": node.id, "title": t, "model": synth_model},
+        postprocess=_clean_title,
+        refresh=refresh,
+        cache_fallback=False,  # repli JAMAIS caché (429 transitoire ≠ vérité)
+    )
+    return title
+
+
 def _clean_title(raw: str) -> str:
     """Nettoie la sortie LLM en un titre court propre (1 ligne, sans guillemets/puces)."""
     t = (raw or "").strip()

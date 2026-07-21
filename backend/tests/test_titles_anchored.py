@@ -87,3 +87,32 @@ def test_content_key_invariant_to_anchor_order():
     assert titles._content_key("ds", node, "m", list(reversed(anchors))) == base
     assert titles._content_key("ds", node, "m", ["claim alpha", "claim beta",
                                                  "claim gamma"]) == base
+
+
+# --- Titrage des MACROS (ombrelle sur les titres d'enfants) ------------------------------- #
+
+def test_macro_messages_carry_child_titles():
+    """Le prompt de macro montre les titres d'ENFANTS (pas les keywords diffus)."""
+    kids = ["Contrôle parental des ados", "Interdiction des réseaux aux mineurs"]
+    msgs = titles._macro_title_messages(kids)
+    user = msgs[-1]["content"]
+    assert all(k in user for k in kids)
+    assert "OMBRELLE" in msgs[0]["content"] or "ombrelle" in msgs[0]["content"].lower()
+
+
+def test_macro_key_invariant_to_child_order():
+    """Régression : c'est l'ENSEMBLE des titres d'enfants qui définit l'ombrelle, pas
+    leur ordre — une permutation ne doit pas flipper la clé (avalanche de re-génération)."""
+    node = _Node()
+    kids = ["Titre gamma", "Titre alpha", "Titre beta"]
+    base = titles._macro_key("ds", node, "m", kids)
+    assert titles._macro_key("ds", node, "m", list(reversed(kids))) == base
+
+
+def test_macro_key_versioned_by_method():
+    """`MACRO_METHOD` fait partie du hash → un changement de méthode invalide le cache."""
+    node = _Node()
+    kids = ["Titre a", "Titre b"]
+    k1 = titles._macro_key("ds", node, "m", kids)
+    # méthode différente ⇒ hash différent (distinct du titrage ancré `_content_key`)
+    assert k1 != titles._content_key("ds", node, "m", kids)

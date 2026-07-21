@@ -45,7 +45,7 @@ from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.cluster_enrich import description_for_node, hook_for_node
 from backend.recluster import CACHE_DIR, load_cache
-from backend.titles import title_for_node
+from backend.titles import title_for_macro, title_for_node
 from backend import cost
 from pipeline.cluster import mistral_client
 
@@ -275,6 +275,12 @@ def build_analysis(
         total = len(node_ids)
         report("titles", f"titres courts ({enrich}, caché)", 0, total)
 
+        # Fins d'abord (titrage ancré-keywords), MACROS ensuite : le titre d'un macro est une
+        # OMBRELLE des titres de ses enfants (ses keywords c-TF-IDF sont l'union diffuse de
+        # ses fils → le titrage ancré y dégénère en salade de mots-clés). D'où deux passes.
+        fine_ids = [nid for nid in node_ids if not tree.nodes[nid].children]
+        macro_ids = [nid for nid in node_ids if tree.nodes[nid].children]
+
         def _title_work(nid: str) -> None:
             node = tree.nodes[nid]
             node.title = title_for_node(dataset, node, model=enrich)  # CHEAP (≠ extraction)
@@ -283,7 +289,15 @@ def build_analysis(
             if k == total or k % 25 == 0:
                 report("titles", f"titres courts ({enrich}, caché)", k, total)
 
-        _parallel_for(node_ids, _title_work, on_done=_title_done)
+        _parallel_for(fine_ids, _title_work, on_done=_title_done)
+
+        def _title_macro(nid: str) -> None:
+            node = tree.nodes[nid]
+            child_titles = [tree.nodes[c].title for c in node.children if c in tree.nodes]
+            node.title = title_for_macro(dataset, node, child_titles, model=enrich)
+
+        _parallel_for(macro_ids, _title_macro)
+        report("titles", f"titres courts ({enrich}, caché)", total, total)
 
         # 1c) Accroche + description LLM par thème (CACHÉES par contenu) → analysis.json.
         #     Même infra que les titres : rebuild idempotent, zéro appel si inchangé.
