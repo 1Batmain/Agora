@@ -4,15 +4,16 @@ Embeddings sémantiques robustes au paraphrasing, CPU. Modèles multilingues
 pluggables derrière UNE interface, chacun avec SA convention de préfixe et son
 backend de chargement (cf. `pipeline.embed.registry`) :
 
-  - `tomaarsen/jina-embeddings-v3-hf` (DÉFAUT de build) : loader natif `hf_mean_pool`
+  - `Snowflake/snowflake-arctic-embed-l-v2.0` (Apache, DÉFAUT) : meilleure qualité permissive
   - `nomic-ai/nomic-embed-text-v2-moe` (Apache, repli propre) : "search_document: " / …
-  - `Snowflake/snowflake-arctic-embed-l-v2.0` (Apache) : meilleure qualité permissive
+  - `tomaarsen/jina-embeddings-v3-hf` : meilleure qualité mesurée mais ⚠️ CC-BY-NC (voir plus bas)
   - `intfloat/multilingual-e5-small`, `BAAI/bge-m3`, granite-r2, gte, qwen3…
 
-Le DÉFAUT est jina-v3 (meilleure qualité mesurée) — ⚠️ **CC-BY-NC-4.0, NON-COMMERCIAL** :
-phase RECHERCHE / génération de golds. Pare-feu de provenance : ses sorties ne doivent
-pas entraîner un modèle expédié commercialement (re-dériver Apache avant vente ;
-cf. `research/jina_provenance_firewall.md`).
+Le DÉFAUT est arctic-l (Apache 2.0), le MEILLEUR embedder PERMISSIF au bench (arctic-l vs
+nomic sur données FR servies). Choix COMMERCIALEMENT PROPRE : ses sorties peuvent entraîner/
+alimenter un produit expédié. jina-v3 (CC-BY-NC-4.0, NON-COMMERCIAL) reste disponible pour la
+seule RECHERCHE, jamais en défaut — pare-feu de provenance : ses sorties ne doivent pas
+entraîner un modèle expédié commercialement (cf. `research/jina_provenance_firewall.md`).
 
 API (inchangée, utilisée par cluster/eval) :
   `Embedder(model_id).embed(texts, is_query=False) -> np.ndarray`
@@ -33,14 +34,11 @@ import numpy as np
 
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
-# Défaut de BUILD = jina-v3 (port natif), la MEILLEURE qualité mesurée (NMI thème
-# 0.482 vs nomic 0.407 sur x-stance). ⚠️ Licence CC-BY-NC-4.0 (NON-COMMERCIAL) :
-# adopté en phase RECHERCHE pour générer des golds/datasets de qualité. Ses sorties
-# NE DOIVENT PAS entraîner un modèle EXPÉDIÉ commercialement (pare-feu de provenance,
-# cf. research/jina_provenance_firewall.md). nomic-v2 (Apache) reste le repli propre
-# pour toute re-dérivation commercialisable. jina-v3 ne charge PAS via sentence-
-# transformers ici (code amont cassé) → loader "hf_mean_pool" (AutoModel + mean-pool).
-DEFAULT_MODEL_ID = "tomaarsen/jina-embeddings-v3-hf"
+# Défaut = arctic-l (Snowflake, Apache 2.0), le MEILLEUR embedder PERMISSIF au bench (arctic-l
+# vs nomic sur données FR servies). COMMERCIALEMENT PROPRE : aucune contrainte de re-dérivation
+# avant vente. jina-v3 (CC-BY-NC-4.0, NON-COMMERCIAL) — meilleure qualité brute mais réservé à
+# la RECHERCHE, JAMAIS en défaut (pare-feu de provenance, cf. research/jina_provenance_firewall.md).
+DEFAULT_MODEL_ID = "Snowflake/snowflake-arctic-embed-l-v2.0"
 
 
 class Embedder:

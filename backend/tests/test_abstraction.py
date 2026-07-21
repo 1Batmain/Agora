@@ -47,6 +47,18 @@ def test_cache_par_signature(tmp_path):
     clusters = [[0, 1], [2, 3], [4, 5]]
     result = {"profiles": ["x"], "assign": [0, 0, 1]}
     p = tmp_path / "abstraction.json"
-    ab.save(p, clusters, result)
-    assert ab.load(p, clusters) == result                   # même partition → hit
-    assert ab.load(p, [[0], [1, 2, 3, 4, 5]]) is None        # partition changée → miss
+    ab.save(p, clusters, result, embedder="nomic-v2", chat_model="m")
+    assert ab.load(p, clusters, embedder="nomic-v2", chat_model="m") == result   # même clé → hit
+    assert ab.load(p, [[0], [1, 2, 3, 4, 5]], embedder="nomic-v2", chat_model="m") is None  # partition ≠ → miss
+
+
+def test_cache_invalide_si_embedder_differe(tmp_path):
+    """Un cache construit avec un embedder n'est JAMAIS re-servi pour un autre (licence +
+    cohérence d'espace) : jina ≠ nomic-v2 même à partition identique."""
+    clusters = [[0, 1], [2, 3], [4, 5]]
+    result = {"profiles": ["x"], "assign": [0, 0, 1]}
+    p = tmp_path / "abstraction.json"
+    ab.save(p, clusters, result, embedder="tomaarsen/jina-embeddings-v3-hf", chat_model="m")
+    assert ab.load(p, clusters, embedder="nomic-v2", chat_model="m") is None     # embedder ≠ → miss
+    assert ab.load(p, clusters, embedder="tomaarsen/jina-embeddings-v3-hf",
+                   chat_model="m") == result                                     # même embedder → hit
