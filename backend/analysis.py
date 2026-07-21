@@ -125,6 +125,15 @@ def _node_stats(members: list[int], vecs: np.ndarray, weights: np.ndarray
 # --------------------------------------------------------------------------- #
 # COARSENING racine — fusionne les macro-thèmes dont les centroïdes se recoupent
 # --------------------------------------------------------------------------- #
+# Borne de COMPUTE (comme `MAX_EDGES`), pas un paramètre de méthode : le coarsening agglomératif
+# re-scanne les paires à chaque itération → O(n³) en n = nb de clusters racine. En régime SAIN
+# n vaut quelques dizaines à ~200 (sub-seconde). Une partition DÉGÉNÉRÉE (près de singletons, ex.
+# graphe vidé au seuil Console) donne n ≈ nb d'idées → O(n³) = GEL (incident vécu). Au-delà de la
+# borne, il n'y a de toute façon rien de cohérent à regrouper → repli plat, pas de coarsening.
+# n³ sous ~10⁸ (sub-seconde) ⇒ ~465 ; on prend 512 (marge, puissance ronde).
+COARSEN_MAX_ROOTS = 512
+
+
 def _coarsen_roots(groups: list[list[int]], vecs: np.ndarray
                    ) -> tuple[list[list[int]], float]:
     """Regroupe les clusters RACINES qui se recoupent → entrée plus grossière, distincte.
@@ -152,6 +161,8 @@ def _coarsen_roots(groups: list[list[int]], vecs: np.ndarray
     """
     n = len(groups)
     if n < 2:
+        return [[i] for i in range(n)], float("nan")
+    if n > COARSEN_MAX_ROOTS:                          # partition dégénérée → repli plat (anti-gel O(n³))
         return [[i] for i in range(n)], float("nan")
     cents, cohesion = [], []
     for g in groups:

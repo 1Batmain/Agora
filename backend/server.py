@@ -47,10 +47,10 @@ from pydantic import BaseModel, Field
 from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION
 
 from backend.recluster import (
-    DEFAULT_DATASET,
     DEFAULT_NAMING_METHOD,
     MODEL_ID,
     NAMINGS,
+    default_dataset,
     dataset_descriptor,
     list_datasets,
     list_open_consultations,
@@ -89,8 +89,8 @@ if not _ids:
     )
 _IDSET = set(_ids)                       # whitelist O(1) (sécurité path-traversal)
 _LOADED: dict[str, _Dataset] = {}        # cache des datasets effectivement chargés
-# Défaut rétro-compat : "tiktok" s'il existe, sinon le premier découvert.
-DEFAULT = DEFAULT_DATASET if DEFAULT_DATASET in _IDSET else _ids[0]
+# Défaut = celui DÉCLARÉ (descripteur `"default": true`) s'il est servi, sinon le 1er découvert.
+DEFAULT = _d if (_d := default_dataset()) in _IDSET else _ids[0]
 
 
 def _resolve(dataset: str | None) -> _Dataset:

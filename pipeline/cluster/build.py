@@ -1,5 +1,11 @@
 """Pipeline batch NLP → GraphPayload coloré par thème.
 
+⚠️ LEGACY (CLI batch) — HORS chemin servi. Le service (`backend/`) et le build courant
+(`backend/build_analysis.py` → moteur B) n'importent PAS ce module. Seul `to_idea` reste
+consommé (par `pipeline/ingest/make_fixture.py`) ; le reste (GraphPayload, `hierarchy`)
+est l'ancien moteur, conservé comme référence. Ne pas y ajouter de logique servie.
+
+
   ideas.jsonl → embed (e5-small) → graphe k-NN cosine → Leiden →
   scoring + naming TF-IDF → graph.json {meta, nodes, links, themes}
 

@@ -1,6 +1,7 @@
 {
   "name": "tiktok",
   "label": "Consultation TikTok (FR)",
+  "default": true,
   "status": "closed",
   "format": "csv",
   "path": "data/raw/tiktok_appel_a_temoignages.csv",
