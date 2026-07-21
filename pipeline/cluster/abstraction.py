@@ -23,6 +23,7 @@ from pathlib import Path
 import numpy as np
 
 from pipeline.cluster.layers import centre, flat_partition
+from pipeline.embed.registry import resolve_model_id
 
 MIN_THEMES = 4          # en dessous, la couche plate suffit (pas d'abstraction)
 PROFILE_MAX_TOKENS = 450  # cap conservateur, sûr pour toutes les fenêtres d'embedder supportées
@@ -80,7 +81,11 @@ def signature(clusters: list[list[int]], *, embedder: str = "", chat_model: str 
     de chat. L'embedder EN FAIT PARTIE car les profils sont ré-embeddés : un cache construit
     avec un modèle (ex. jina) ne doit JAMAIS être re-servi pour un build sur un autre modèle
     (ex. nomic-v2, permissif) — question de licence ET de cohérence d'espace."""
-    key = repr((sorted(tuple(sorted(c)) for c in clusters), embedder, chat_model))
+    # Embedder NORMALISÉ (alias → id canonique) : « arctic-l » et l'id résolu
+    # « Snowflake/… » désignent le MÊME modèle → même signature (sinon cache miss → repli plat
+    # → désync des theme_id entre analysis/opinion/arguments).
+    emb = resolve_model_id(embedder) if embedder else ""
+    key = repr((sorted(tuple(sorted(c)) for c in clusters), emb, chat_model))
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 

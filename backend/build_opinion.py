@@ -430,8 +430,11 @@ def build_opinion(
     mistral_client.reset_usage()  # suivi tokens/coût de la phase opinion (cleavage + stance)
 
     _log(f"{dataset} · construction de l'arbre (caché si déjà extrait)…")
+    # `abstract=True` : construit le MÊME arbre (couche macro comprise) que `build_analysis` —
+    # charge le cache d'abstraction qu'il a écrit → theme_id IDENTIQUES par construction, quel
+    # que soit l'ordre des builds (sinon repli plat → numérotation DFS décalée → jointures ratées).
     tree = build_theme_tree(ds, backend=backend, model=extract_model, embedder=embedder,
-                            resolution=resolution, seed=seed)
+                            resolution=resolution, seed=seed, abstract=True)
 
     leaves = [tree.nodes[nid] for nid in tree.order if not tree.nodes[nid].children]
     total = len(leaves)

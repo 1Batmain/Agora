@@ -71,6 +71,9 @@ def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
     v64 = np.ascontiguousarray(vecs.astype(np.float64))
     v32 = v64.astype(np.float32)
     n = len(v64)
+    if n <= 1:                                        # dégénéré : 0 ou 1 claim → 1 cluster trivial
+        return np.zeros(n, dtype=int), {"gamma": gamma, "modularity": 0.0,
+                                        "n_clusters": n, "k_graph": 0, "threshold": 0.0, "curve": []}
     k = min(K_GRAPH, n - 1)
     nb = knn_search(v32, k)
     dd = derive_defaults(v32, k=k, neighbors=nb)
@@ -109,7 +112,10 @@ def centre(vecs: np.ndarray) -> np.ndarray:
     """
     v = vecs.astype(np.float64)
     v -= v.mean(axis=0)
-    v /= np.linalg.norm(v, axis=1, keepdims=True)
+    norms = np.linalg.norm(v, axis=1, keepdims=True)
+    # Garde div-par-zéro : à n==1 la soustraction du centroïde annule l'unique vecteur (norme 0)
+    # → sans garde, division → NaN silencieux propagé en aval. On laisse alors le vecteur nul.
+    v /= np.where(norms > 0, norms, 1.0)
     return np.ascontiguousarray(v)
 
 

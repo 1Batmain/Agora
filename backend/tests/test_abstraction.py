@@ -62,3 +62,12 @@ def test_cache_invalide_si_embedder_differe(tmp_path):
     assert ab.load(p, clusters, embedder="nomic-v2", chat_model="m") is None     # embedder ≠ → miss
     assert ab.load(p, clusters, embedder="tomaarsen/jina-embeddings-v3-hf",
                    chat_model="m") == result                                     # même embedder → hit
+
+
+def test_signature_alias_normalise(tmp_path):
+    """L'alias et l'id résolu du MÊME modèle donnent la MÊME signature (sinon un build en
+    « arctic-l » et un autre en « Snowflake/… » désync le cache → repli plat → F1)."""
+    clusters = [[0, 1], [2, 3], [4, 5]]
+    resolved = "Snowflake/snowflake-arctic-embed-l-v2.0"
+    assert ab.signature(clusters, embedder="arctic-l", chat_model="m") == \
+           ab.signature(clusters, embedder=resolved, chat_model="m")
