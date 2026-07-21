@@ -75,12 +75,17 @@ def build_live_tree(
     helpers d'indices/couleurs et la sérialisation, sans porter de `PreparedClaims`.
     """
     n = len(ideas)
-    # RECENTRAGE de l'espace, comme `/analysis` (`analysis.build_theme_tree`) : corrige
-    # l'anisotropie du modèle d'embedding. Sans lui, la Console reproduirait la pathologie
-    # du macro fourre-tout que le recentrage supprime (cf. `.agent/notes/EMBEDDING_SPACE.md`).
-    # `layers.centre` recentre PUIS L2-normalise → stats de nœud exactes (dispersion=1−‖Σv‖/n).
-    vecs64 = layers.centre(np.asarray(vecs)) if n else np.asarray(vecs, dtype=np.float64)
-    v32 = vecs64.astype(np.float32)
+    # L2-normalisation défensive (les embeddings cachés le sont déjà ; idempotent) →
+    # garantit l'exactitude des stats de nœud (dispersion = 1 − ‖Σv‖/n).
+    #
+    # PAS de recentrage ici (contrairement à `/analysis`) : le SEUIL est le levier MANUEL de
+    # la Console, calibré sur l'espace brut (cosinus ~0.6-0.9). Recentrer décale les cosinus
+    # autour de 0 → un seuil de 0.75 vide le graphe → partition dégénérée (tous singletons) →
+    # coarsening O(n²). Recentrer la Console exigerait de recalibrer son seuil (MEDIUM-2 différé).
+    v32 = np.ascontiguousarray(vecs, dtype=np.float32)
+    norms = np.linalg.norm(v32, axis=1, keepdims=True)
+    v32 = v32 / np.where(norms > 0, norms, 1.0)
+    vecs64 = v32.astype(np.float64)
     weights_arr = np.asarray(weights, dtype=np.float64)
     texts = [(getattr(idea, "text_clean", None) or idea.text) for idea in ideas]
     owner = list(range(n))                       # une idée = un avis
