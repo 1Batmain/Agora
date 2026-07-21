@@ -1,0 +1,178 @@
+{
+  "n_avis": 160000,
+  "par_theme": {
+    "démocratie": 40000,
+    "fiscalité": 40000,
+    "écologie": 40000,
+    "organisation": 40000
+  },
+  "gamma_curve": [
+    {
+      "gamma": 0.5,
+      "n": 6,
+      "modularity": 0.7127
+    },
+    {
+      "gamma": 0.7,
+      "n": 8,
+      "modularity": 0.7304
+    },
+    {
+      "gamma": 1.0,
+      "n": 14,
+      "modularity": 0.7575
+    },
+    {
+      "gamma": 1.5,
+      "n": 20,
+      "modularity": 0.7511
+    },
+    {
+      "gamma": 2.0,
+      "n": 31,
+      "modularity": 0.7397
+    },
+    {
+      "gamma": 3.0,
+      "n": 47,
+      "modularity": 0.7088
+    },
+    {
+      "gamma": 4.0,
+      "n": 59,
+      "modularity": 0.6963
+    }
+  ],
+  "approche_A": {
+    "description": "couche plate au pic de modularité",
+    "gamma": 1.0,
+    "n_themes": 14,
+    "ARI_vs_4domaines": 0.424,
+    "composition": [
+      {
+        "macro": 0,
+        "n": 24906,
+        "dominante": "écologie",
+        "purete": 0.976
+      },
+      {
+        "macro": 1,
+        "n": 20992,
+        "dominante": "organisation",
+        "purete": 0.947
+      },
+      {
+        "macro": 2,
+        "n": 19042,
+        "dominante": "fiscalité",
+        "purete": 0.966
+      },
+      {
+        "macro": 3,
+        "n": 16736,
+        "dominante": "démocratie",
+        "purete": 0.935
+      },
+      {
+        "macro": 4,
+        "n": 16328,
+        "dominante": "démocratie",
+        "purete": 0.866
+      },
+      {
+        "macro": 5,
+        "n": 15855,
+        "dominante": "fiscalité",
+        "purete": 0.952
+      },
+      {
+        "macro": 6,
+        "n": 12709,
+        "dominante": "organisation",
+        "purete": 0.916
+      },
+      {
+        "macro": 7,
+        "n": 10196,
+        "dominante": "démocratie",
+        "purete": 0.589
+      },
+      {
+        "macro": 8,
+        "n": 8618,
+        "dominante": "écologie",
+        "purete": 0.773
+      },
+      {
+        "macro": 9,
+        "n": 7485,
+        "dominante": "écologie",
+        "purete": 0.972
+      },
+      {
+        "macro": 10,
+        "n": 2940,
+        "dominante": "fiscalité",
+        "purete": 0.891
+      },
+      {
+        "macro": 11,
+        "n": 1607,
+        "dominante": "fiscalité",
+        "purete": 0.615
+      },
+      {
+        "macro": 12,
+        "n": 1570,
+        "dominante": "démocratie",
+        "purete": 0.95
+      },
+      {
+        "macro": 13,
+        "n": 1016,
+        "dominante": "organisation",
+        "purete": 0.745
+      }
+    ]
+  },
+  "approche_B": {
+    "description": "couche fine + moteur d'abstraction B (profil ré-embeddé)",
+    "fine_gamma": 4.0,
+    "n_fine": 59,
+    "n_macros": 4,
+    "ARI_macros_vs_4domaines": 0.6,
+    "ARI_fine_vs_4domaines": 0.109,
+    "composition": [
+      {
+        "macro": 0,
+        "n": 49724,
+        "dominante": "démocratie",
+        "purete": 0.761
+      },
+      {
+        "macro": 1,
+        "n": 39882,
+        "dominante": "fiscalité",
+        "purete": 0.873
+      },
+      {
+        "macro": 2,
+        "n": 40536,
+        "dominante": "organisation",
+        "purete": 0.774
+      },
+      {
+        "macro": 3,
+        "n": 29858,
+        "dominante": "écologie",
+        "purete": 0.948
+      }
+    ],
+    "profils_exemples": [
+      "**La transparence et la responsabilité des institutions publiques** constituent un impératif démocratique central, selon les témoignages recueillis. Ceux-ci soulignent la nécessité d’une **ouverture totale des finances et des décisions** (budgets participatifs, rapports détaillés, publication des frais et soutiens), d’une **accessibilité accrue des élus** (rencontres citoyennes, comptes-rendus clairs) et d’une **réduction des privilèges** (salaires modérés, exemplarité). Les répondants insistent aussi sur l’**indépendance des élus** (dépassement des clivages partisans) et la **simplification des processus décisionnels**, afin de restaurer la confiance et l’efficacité du gouvernement. Enfin, une **participation citoyenne renforcée** (budgets participatifs, restitutions) est présentée comme un levier essentiel pour une démocratie plus transparente et responsable.",
+      "**La démocratie participative et l’instauration du Référendum d’Initiative Citoyenne (RIC) constituent un axe central de la demande citoyenne pour une refonte des mécanismes de décision politique.**\n\nLes témoignages convergent vers l’exigence d’un **RIC intégral** (législatif, abrogatoire, révocatoire et constitutionnel), permettant aux citoyens de proposer, abroger ou révoquer des lois, ainsi que de contrôler l’action des élus, notamment via des **contrats électoraux contraignants** et des **consultations régulières**. Certains insistent sur la nécessité de **simplifier l’accès à la parole citoyenne** (seuils de signatures vérifiables, associations déclarées) et de **renforcer la démocratie locale** (réunions participatives, conseils de citoyens). D’autres soulignent l’urgence de **respecter les promesses électorales** et de **prendre en compte le vote blanc**, tandis qu’une minorité critique le RIC, évoquant un risque de démobilisation ou de blocage institutionnel. L’ensemble reflète une **volonté de restaurer la souveraineté populaire** et de **rééquilibrer les rapports de force** entre citoyens et représentants, parfois au prix d’une remise en cause des cadres traditionnels (UE, institutions).",
+      "**Profil : Renforcement de la démocratie participative et de la transparence institutionnelle**\n\nCe thème aborde les mécanismes visant à **rééquilibrer le rapport entre citoyens et institutions** par l’instauration de dispositifs concrets de participation, de consultation et de contrôle démocratique. Les témoignages prônent une **démocratie plus directe et décentralisée**, combinant outils numériques (plateformes en ligne, votes électroniques, consultations) et méthodes traditionnelles (réunions publiques, permanences locales, cahiers de doléances). Ils soulignent l’urgence de **limiter l’influence des lobbies** et d’assurer une **transparence accrue** (budgets, réformes, comptes-rendus) pour restaurer la confiance. L’accent est mis sur la **responsabilisation des élus** (mandats non renouvelables, temps dédié au terrain) et la **création de commissions indépendantes** pour évaluer les revendications citoyennes. L’objectif ultime est de **rapprocher les représentants des administrés**, en faisant de la démocratie un processus **continu, inclusif et pédagogique**.",
+      "**La démocratie représentative face à la défiance citoyenne : vers une refonte des rapports entre gouvernants et gouvernés**\n\nCe thème interroge les dysfonctionnements structurels de la représentation politique, marquée par un décalage croissant entre les élites dirigeantes et les aspirations populaires. Les témoignages dénoncent un mépris institutionnalisé, une opacité des décisions et une confiscation du pouvoir par des technocrates déconnectés, exigeant une écoute concrète, une transparence radicale et une exemplarité des élus. Ils prônent une démocratie plus directe, où les citoyens – via des mécanismes de contrôle, de participation ou de tirage au sort – deviennent acteurs des réformes, tout en rejetant les privilèges des représentants et les réformes imposées sans consultation. L’enjeu central réside dans la restauration d’une légitimité par l’action et le dialogue, au-delà des postures et des intérêts particuliers."
+    ]
+  }
+}

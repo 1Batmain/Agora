@@ -1,0 +1,13 @@
+{
+  "name": "granddebat-mix",
+  "label": "Grand Débat — 4 thèmes (échantillon)",
+  "status": "closed",
+  "format": "csv",
+  "path": "data/raw/gd_mix.csv",
+  "encoding": "utf-8",
+  "delimiter": ",",
+  "has_header": true,
+  "columns": { "id": 0, "text": 1 },
+  "_note": "Échantillon combiné des 4 thèmes officiels du Grand Débat National (800 avis/thème, question ouverte majeure de chaque thème), pour tester la couche macro (abstraction) sur un corpus MULTI-thèmes. Source : open data data.gouv.fr, snapshots 21/03/2019. Colonne 2 = theme (démocratie/fiscalité/écologie/organisation) = gold. PAS de question de cadrage : le corpus mélange 4 questions distinctes.",
+  "context": "Grand Débat National 2019 — échantillon des 4 thèmes officiels (démocratie et citoyenneté, fiscalité et dépenses publiques, transition écologique, organisation de l'État), une question ouverte majeure par thème. Open data data.gouv.fr, Licence Ouverte 2.0."
+}
