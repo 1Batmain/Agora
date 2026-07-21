@@ -1,0 +1,44 @@
+{
+  "targets": [
+    [
+      "ADDICTION",
+      "passer · faire"
+    ],
+    [
+      "FILLES",
+      "enfants · fille"
+    ],
+    [
+      "FILLES",
+      "fille · enfants"
+    ],
+    [
+      "ADDICTION",
+      "application · appli"
+    ],
+    [
+      "FILLES",
+      "corps · comparaison"
+    ],
+    [
+      "ADDICTION",
+      "scroller · heures"
+    ],
+    [
+      "ADDICTION",
+      "addiction · dépendance"
+    ]
+  ],
+  "synths": [
+    "La dépendance aux plateformes numériques comme mécanisme d'évitement des responsabilités ou de régulation émotionnelle.",
+    "L'impact délétère des algorithmes de réseaux sociaux sur la santé mentale et le développement des jeunes.",
+    "La violence systémique et l'impunité en ligne, où les normes sociales, les biais algorithmiques et les dérives psychologiques se conjuguent pour normaliser l'humiliation, l'exploitation et la destruction de l'intégrité humaine.",
+    "L'emprise des réseaux sociaux sur le temps et les comportements, générant une dépendance aliénante et une altération de la conscience de soi.",
+    "La pression sociale et médiatique des standards de beauté uniformes engendre un sentiment d'exclusion et de mal-être chez les individus qui s'en écartent.",
+    "La difficulté à contrôler son attention et son temps face à des stimuli numériques compulsifs.",
+    "La dépendance aux technologies numériques altère le bien-être psychologique et les habitudes quotidiennes."
+  ],
+  "intra_addiction": -0.0869,
+  "intra_filles": -0.1344,
+  "cross": -0.2092
+}

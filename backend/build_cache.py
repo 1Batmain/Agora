@@ -123,7 +123,7 @@ def subset(
 
 
 def build_cache(
-    dataset: str = "tiktok",
+    dataset: str,
     *,
     descriptor: str | None = None,
     model: str = "nomic-v2",
@@ -180,9 +180,25 @@ def build_cache(
 
     lang_counts = Counter(_idea_lang(i) for i in ideas if _idea_lang(i))
     src_counts = Counter(i["props"].get("source", dataset) for i in ideas)
+
+    # LIBELLÉ : ne JAMAIS rétrograder celui d'un dataset déjà servi. Le repli sur l'id est
+    # légitime pour un dataset neuf, mais un re-ingest sans `--label` avait ainsi écrasé
+    # « Consultation TikTok (FR) » par « tiktok » — une régression muette, invisible tant
+    # qu'on ne regarde pas l'UI. On relit donc le meta existant avant de replier.
+    meta_path = out_dir / META_NAME
+    previous = {}
+    if meta_path.exists():
+        try:
+            previous = json.loads(meta_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            previous = {}
+    inherited = previous.get("label")
+    if inherited == dataset:      # un repli d'un run précédent n'est pas un libellé à garder
+        inherited = None
+
     meta = {
         "id": dataset,
-        "label": label or desc.extra.get("label") or dataset,
+        "label": label or desc.extra.get("label") or inherited or dataset,
         "status": desc.status,
         "n_nodes": len(ideas),
         # Voix réelles à la question dans le CORPUS (pré-échantillonnage) — l'affichage
@@ -208,9 +224,7 @@ def build_cache(
     for _k in ("question", "context", "official_baseline", "official_url"):
         if desc.extra.get(_k):
             meta[_k] = desc.extra[_k]
-    (out_dir / META_NAME).write_text(
-        json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # Durée réelle de l'ingestion+embedding (0 token LLM — c'est du calcul local, mais elle
     # compte dans la durée de traitement affichée honnêtement par l'overview).
@@ -233,7 +247,7 @@ def build_cache(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Cache d'embeddings nomic-v2 par dataset.")
-    ap.add_argument("--dataset", default="tiktok", help="id du dataset = nom du descripteur")
+    ap.add_argument("--dataset", required=True, help="id du dataset = nom du descripteur")
     ap.add_argument("--descriptor", default=None, help="chemin descripteur explicite (override)")
     ap.add_argument("--model", default="nomic-v2", help="alias/model_id (défaut nomic-v2)")
     ap.add_argument("--min-chars", type=int, default=1, help="filtre avis trop courts")

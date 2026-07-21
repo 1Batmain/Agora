@@ -1,5 +1,6 @@
 {
   "name": "granddebat",
+  "label": "Grand Débat National (FR)",
   "status": "closed",
   "format": "csv",
   "path": "data/raw/granddebat_democratie_citoyennete.csv",

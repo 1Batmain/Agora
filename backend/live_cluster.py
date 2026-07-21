@@ -76,6 +76,11 @@ def build_live_tree(
     n = len(ideas)
     # L2-normalisation défensive (les embeddings cachés le sont déjà ; idempotent) →
     # garantit l'exactitude des stats de nœud (dispersion = 1 − ‖Σv‖/n).
+    #
+    # PAS de recentrage ici (contrairement à `/analysis`) : le SEUIL est le levier MANUEL de
+    # la Console, calibré sur l'espace brut (cosinus ~0.6-0.9). Recentrer décale les cosinus
+    # autour de 0 → un seuil de 0.75 vide le graphe → partition dégénérée (tous singletons) →
+    # coarsening O(n²). Recentrer la Console exigerait de recalibrer son seuil (MEDIUM-2 différé).
     v32 = np.ascontiguousarray(vecs, dtype=np.float32)
     norms = np.linalg.norm(v32, axis=1, keepdims=True)
     v32 = v32 / np.where(norms > 0, norms, 1.0)
@@ -113,13 +118,14 @@ def build_live_tree(
             by_cluster.setdefault(c, []).append(i)
         fine_groups = list(by_cluster.values())
 
-        # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) — MÊME orchestration
-        # (coarsening racine, sous-arbres freinés par min_sub_size, nommage/couleurs/
-        # convergence). Ici les membres sont des IDÉES et le graphe racine part du seuil
-        # DONNÉ (levier Console), pas du seuil dérivé — c'est la seule divergence, en amont.
+        # Cœur PARTAGÉ avec `/analysis` (`analysis._build_macro_forest`) : macros (ici par
+        # coarsening racine, `hierarchy=None` — la Console est un explorateur k MANUEL, elle
+        # ne balaie pas la chaîne), attachement des feuilles, nommage/couleurs/convergence.
+        # Divergences amont assumées : membres = IDÉES ; graphe racine au seuil DONNÉ (levier
+        # Console) ; regroupement macro par coarsening (2 niveaux) et non par la chaîne.
         nodes, order, macros, merge_thr = _build_macro_forest(
             fine_groups, vecs64, weights_arr, owner, texts,
-            min_sub_size=derived.min_sub_size, resolution=resolution, seed=seed)
+            resolution=resolution, seed=seed)
 
     return SimpleNamespace(
         nodes=nodes, order=order, macros=macros, dataset=None,

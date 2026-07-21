@@ -1,5 +1,6 @@
 {
   "name": "xstance",
+  "label": "x-stance (DE/FR/IT)",
   "status": "closed",
   "format": "jsonl",
   "path": "data/raw/xstance-data-v1.0.zip",
