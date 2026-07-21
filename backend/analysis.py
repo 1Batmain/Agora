@@ -39,7 +39,6 @@ from pipeline.claims.pipeline import (
     N_REPRESENTATIVE,
 )
 from pipeline.cluster import layers
-from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.palette import color_for
 
@@ -599,7 +598,9 @@ def build_theme_tree(
     macros: list[str] = []
     # idf corpus des claims — calculé UNE fois, partagé par tous les nœuds (D1) et /citations.
     claim_idf = corpus_idf(prepared.claim_texts) if n_claims else None
-    derived_global = derive_defaults(vecs.astype(np.float32)) if n_claims else None
+    # `derived_global` (diagnostic `meta.derived`) est REMONTÉ par `flat_partition` (le graphe qu'il
+    # construit déjà) — pas recalculé par une passe dense O(n²·d) séparée (audit efficience #1).
+    derived_global = None
     root_coarsen: dict | None = None
 
     if n_claims:
@@ -612,6 +613,7 @@ def build_theme_tree(
         # macro). Mesuré (Grand Débat) : fin+abstraction retrouve les domaines mieux que le
         # pic de modularité seul.
         membership, gmeta = layers.flat_partition(vecs, gamma=layers.FINE_GAMMA, seed=seed)
+        derived_global = gmeta.get("derived")        # DerivedDefaults du graphe servi (k=K_GRAPH)
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership.tolist()):
             by_cluster.setdefault(c, []).append(i)

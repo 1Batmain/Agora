@@ -101,14 +101,21 @@ def test_429_persistant_compte_lappel_perdu(monkeypatch):
 # --------------------------------------------------------------------------- #
 # Garde-fou de build : un enrichissement effondré n'est pas `ready`
 # --------------------------------------------------------------------------- #
-def _tree(titles: dict[str, str]):
-    return SimpleNamespace(nodes={i: SimpleNamespace(id=i, title=t) for i, t in titles.items()})
+# Un nœud est en REPLI ⟺ son `title` == son `_fallback` (= son `label` mots-clés). On modélise
+# donc chaque nœud avec un `label` ; repli si title==label, bon titre sinon. Le label sert de
+# label c-TF-IDF (peut être multi-mots « a · b · c » OU un seul mot sans séparateur).
+def _tree(specs: dict[str, tuple[str, str]]):
+    """`specs` : id -> (title, label)."""
+    return SimpleNamespace(nodes={i: SimpleNamespace(id=i, title=t, label=lab)
+                                  for i, (t, lab) in specs.items()})
 
 
 def test_build_refuse_un_enrichissement_degrade(monkeypatch):
     import backend.build_analysis as B
     monkeypatch.setattr(B.store, "read_insights", lambda *_a: None)      # 100 % manquants
-    tree = _tree({f"n{i}": ("a · b · c" if i < 3 else "Un vrai titre") for i in range(10)})
+    # i<3 en repli (title==label) ; sinon vrai titre (≠ label).
+    tree = _tree({f"n{i}": (("a · b · c", "a · b · c") if i < 3 else ("Un vrai titre", "a · b · c"))
+                  for i in range(10)})
     with pytest.raises(DegradedEnrichmentError) as exc:
         _assert_enrichment_is_complete("ds", tree, list(tree.nodes))
     msg = str(exc.value)
@@ -116,17 +123,30 @@ def test_build_refuse_un_enrichissement_degrade(monkeypatch):
     assert "AGORA_ALLOW_DEGRADED" in msg
 
 
+def test_repli_a_un_seul_motcle_est_compte(monkeypatch):
+    """Régression F3 : un repli sur un label à 1 SEUL mot-clé (pas de « · ») doit être compté —
+    l'ancienne détection par présence de « · » le ratait → build dégradé servi `ready`."""
+    import backend.build_analysis as B
+    monkeypatch.setattr(B.store, "read_insights", lambda *_a: {"markdown": "ok"})   # synthèses OK
+    # 100 % des titres retombés sur un label mono-mot (sans séparateur) → doit lever sur les titres.
+    tree = _tree({f"n{i}": ("motcle", "motcle") for i in range(10)})
+    with pytest.raises(DegradedEnrichmentError) as exc:
+        _assert_enrichment_is_complete("ds", tree, list(tree.nodes))
+    assert "titres en repli" in str(exc.value)
+
+
 def test_build_accepte_un_repli_marginal(monkeypatch):
     import backend.build_analysis as B
     monkeypatch.setattr(B.store, "read_insights", lambda *_a: {"markdown": "ok"})
     # 1 titre de repli sur 100 = 1 % < seuil 5 % : légitime, on ne lève pas.
-    titles = {f"n{i}": ("a · b · c" if i == 0 else "Un vrai titre") for i in range(100)}
-    _assert_enrichment_is_complete("ds", _tree(titles), list(titles))
+    specs = {f"n{i}": (("a · b · c", "a · b · c") if i == 0 else ("Un vrai titre", "a · b · c"))
+             for i in range(100)}
+    _assert_enrichment_is_complete("ds", _tree(specs), list(specs))
 
 
 def test_flag_allow_degraded_laisse_passer(monkeypatch):
     import backend.build_analysis as B
     monkeypatch.setattr(B.store, "read_insights", lambda *_a: None)
     monkeypatch.setattr(B, "ALLOW_DEGRADED", True)
-    tree = _tree({f"n{i}": "a · b · c" for i in range(10)})
+    tree = _tree({f"n{i}": ("a · b · c", "a · b · c") for i in range(10)})
     B._assert_enrichment_is_complete("ds", tree, list(tree.nodes))        # ne lève pas

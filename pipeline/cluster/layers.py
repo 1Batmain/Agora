@@ -72,19 +72,22 @@ def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
     v32 = v64.astype(np.float32)
     n = len(v64)
     if n <= 1:                                        # dégénéré : 0 ou 1 claim → 1 cluster trivial
-        return np.zeros(n, dtype=int), {"gamma": gamma, "modularity": 0.0,
-                                        "n_clusters": n, "k_graph": 0, "threshold": 0.0, "curve": []}
+        return np.zeros(n, dtype=int), {"gamma": gamma, "modularity": 0.0, "n_clusters": n,
+                                        "k_graph": 0, "threshold": 0.0, "curve": [], "derived": None}
     k = min(K_GRAPH, n - 1)
     nb = knn_search(v32, k)
     dd = derive_defaults(v32, k=k, neighbors=nb)
     graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=nb)
 
+    # `dd` (DerivedDefaults du graphe RÉELLEMENT construit, k=K_GRAPH) est remonté dans `meta` pour
+    # que l'appelant serve un diagnostic COHÉRENT avec le graphe utilisé — sans repayer une passe
+    # dense O(n²·d) séparée (cf. audit efficience #1). `dd.k` = le vrai k, pas `derive_k(n)`.
     if gamma is not None:
         r = run_leiden(graph, resolution=gamma, seed=seed)
         membership = np.asarray(r.membership)
         meta = {"gamma": gamma, "modularity": round(float(r.modularity), 4),
                 "n_clusters": len(set(membership.tolist())),
-                "k_graph": k, "threshold": round(dd.threshold, 4), "curve": []}
+                "k_graph": k, "threshold": round(dd.threshold, 4), "curve": [], "derived": dd}
         return membership, meta
 
     best = None
@@ -98,7 +101,7 @@ def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
     mod, gm, membership = best
     meta = {"gamma": gm, "modularity": round(mod, 4),
             "n_clusters": len(set(membership.tolist())),
-            "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve}
+            "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve, "derived": dd}
     return membership, meta
 
 

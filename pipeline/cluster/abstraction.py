@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -26,6 +27,7 @@ from pipeline.cluster.layers import centre, flat_partition
 from pipeline.embed.registry import resolve_model_id
 
 MIN_THEMES = 4          # en dessous, la couche plate suffit (pas d'abstraction)
+PROFILE_WORKERS = 4     # concurrence des profils LLM, alignée sur AGORA_LLM_MAX_WORKERS (défaut)
 PROFILE_MAX_TOKENS = 450  # cap conservateur, sûr pour toutes les fenêtres d'embedder supportées
                           # (arctic-l 8192, nomic-v2 512) — jamais tronqué à l'embed
 
@@ -63,7 +65,10 @@ def compute(cluster_texts: list[list[str]], *, chat_fn, embed_fn, model: str) ->
     n = len(cluster_texts)
     if n < MIN_THEMES:
         return None
-    profiles = [_profile(c, chat_fn=chat_fn, model=model) for c in cluster_texts]
+    # Profils LLM en PARALLÈLE (comme le reste de l'enrichissement) — phase isolée, donc pas de
+    # pic de concurrence supplémentaire ; le chat_fn gère ses réessais 429. `map` préserve l'ordre.
+    with ThreadPoolExecutor(max_workers=min(PROFILE_WORKERS, n)) as ex:
+        profiles = list(ex.map(lambda c: _profile(c, chat_fn=chat_fn, model=model), cluster_texts))
     vecs = centre(np.asarray(embed_fn(profiles), dtype=np.float64))
     part, _meta = flat_partition(vecs, seed=42)
     assign = part.tolist()
