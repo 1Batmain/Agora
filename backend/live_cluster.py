@@ -37,7 +37,6 @@ from backend.analysis import (
 )
 from backend import density
 from backend.recluster import load_cache
-from pipeline.cluster import layers
 from pipeline.cluster.adaptive import derive_defaults, derive_k
 from pipeline.cluster.knn import build_knn_graph, knn_search
 from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION, DEFAULT_SEED, run_leiden
