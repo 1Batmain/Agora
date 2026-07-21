@@ -1,22 +1,18 @@
-"""Chaîne d'emboîtement : k comme robinet de zoom, en remplacement de `derive_k(N)`.
+"""Partitionnement de clusters : `flat_partition` (SERVI) + `chain` (harnais R&D).
 
-`derive_k(N) = 3.8·log₁₀N` devine le nombre de thèmes à partir de la TAILLE du corpus —
-une formule qui ne regarde jamais le contenu. Ici on MESURE : on balaie le rayon de
-voisinage k (le zoom), on clusterise à chaque palier, et on lit la hiérarchie via
-l'emboîtement des partitions les unes dans les autres.
+Ce module porte DEUX choses, à ne pas confondre :
 
-  1. Balayage k (fin → très grossier) → une partition Leiden par k.
-  2. Chaîne : depuis le niveau fin, on descend en gardant à chaque étage
-     (~granularité/`STEP_RATIO`) le k dont la partition s'emboîte le MIEUX dans le niveau
-     courant.
-  3. PROPRETÉ d'un saut = emboîtement normalisé : 0 = hasard (étiquettes grossières
-     mélangées), 1 = emboîtement parfait. Elle ne dépend d'AUCUN seuil arbitraire.
+- **`flat_partition` (chemin SERVI)** — partition à résolution γ sur UN graphe kNN fixe.
+  C'est la couche FEUILLE du pipeline de prod (`backend/analysis.py`, `abstraction.py`) :
+  on fixe le graphe et on clusterise à γ (le bouton direct de granularité), au lieu de
+  balayer k (qui changeait le graphe et dégénérait en pure densification). Voir aussi
+  `centre` (recentrage anti-anisotropie), également servi.
 
-La propreté est une JAUGE CONTINUE, jamais un verdict binaire : mesurée sur nos corpus,
-elle vaut 0.65–0.82 partout (cascade) alors qu'un mélange artificiel de deux domaines
-étrangers monte à 0.94. Aucun corpus réel n'a de frontière macro nette — la couche
-grossière est une commodité de navigation, et la propreté sert à l'afficher honnêtement
-(nommage par facettes + confiance quand elle est basse), pas à la supprimer.
+- **`chain` + K_GRID/STEP_RATIO/N_NULL/CLEAN_FLOOR/`_nestedness`/`Level` (HARNAIS R&D)** —
+  la « chaîne d'emboîtement » : balayage de k, hiérarchie lue via l'emboîtement des
+  partitions, propreté = emboîtement normalisé (0 hasard → 1 parfait). N'est PLUS dans le
+  chemin servi (importé seulement par `research/`) — c'était l'exploration qui a MENÉ au
+  verdict « γ, pas k ». Conservé comme instrument de mesure, pas comme moteur de prod.
 
 Verdict : `.agent/notes/HIERARCHY_LAYERS.md`. Harnais de mesure : `research/k_layers.py`.
 """

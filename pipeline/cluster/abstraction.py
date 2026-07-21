@@ -25,7 +25,8 @@ import numpy as np
 from pipeline.cluster.layers import centre, flat_partition
 
 MIN_THEMES = 4          # en dessous, la couche plate suffit (pas d'abstraction)
-PROFILE_MAX_TOKENS = 450  # profil capé (< 512 = fenêtre d'input de nomic-v2)
+PROFILE_MAX_TOKENS = 450  # cap conservateur, sûr pour toutes les fenêtres d'embedder supportées
+                          # (arctic-l 8192, nomic-v2 512) — jamais tronqué à l'embed
 
 
 def _profile(claims: list[str], *, chat_fn, model: str) -> str:

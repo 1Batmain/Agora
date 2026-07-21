@@ -218,11 +218,11 @@ def _build_subtree(members: list[int], parent_id: str | None, depth: int,
                    forced_children: list | None = None) -> str:
     """Crée le nœud de `members` et, récursivement, ses enfants forcés.
 
-    `forced_children` : liste de nœuds `(membres, sous-enfants)` — la hiérarchie MESURÉE par
-    la chaîne d'emboîtement, de profondeur QUELCONQUE. On ne fixe PAS le nombre de niveaux :
-    tant que la chaîne dégage un étage qui s'emboîte proprement, il devient une profondeur de
-    l'arbre. Un nœud sans enfants forcés est une FEUILLE — plus de re-clusterisation Leiden
-    (l'ancien `_subdivide`, piloté par `derive_k`, cf. `HIERARCHY_LAYERS.md`).
+    `forced_children` : liste de nœuds `(membres, sous-enfants)` — la hiérarchie fournie par le
+    MOTEUR D'ABSTRACTION (profil de thème ré-embeddé → clustering des profils, moteur B). Le
+    chemin servi produit 2 niveaux (feuille γ + macro) ; la structure est générique et
+    accepterait davantage de niveaux. Un nœud sans enfants forcés est une FEUILLE — plus de
+    re-clusterisation Leiden (l'ancien `_subdivide`, retiré, cf. `HIERARCHY_LAYERS.md`).
     """
     node_id = f"n{counter[0]}"
     counter[0] += 1
@@ -530,8 +530,9 @@ def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[st
 
     Cachée par signature (partition + EMBEDDER + modèle) → cohérente entre build_analysis/
     opinion/arguments, et un cache d'un autre embedder n'est jamais re-servi. Les profils sont
-    ré-embeddés avec l'`embedder` DU BUILD (permissif, ex. nomic-v2) — jamais le défaut jina
-    (NON-COMMERCIAL) : la couche macro servie doit rester commercialement re-dérivable.
+    ré-embeddés avec l'`embedder` DU BUILD (permissif, ex. arctic-l/nomic-v2) passé EXPLICITEMENT
+    — jamais le défaut module implicite : la couche macro servie doit rester commercialement
+    re-dérivable (le pare-feu réserve jina à la recherche, jamais en défaut).
     Repli PLAT (None) si : pas de cache, pas de calcul demandé, pas de clé, ou trop peu de thèmes.
     """
     from pathlib import Path
@@ -549,8 +550,9 @@ def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[st
     if not mistral_client.available():
         return None
     cluster_texts = [_central_texts(m, vecs, texts) for m in clusters]
-    # Ré-embed des profils avec l'embedder DU BUILD (permissif) — PAS le défaut module (jina,
-    # CC-BY-NC). Sans ça la couche macro servie serait non-commercialisable (règle firewall).
+    # Ré-embed des profils avec l'embedder DU BUILD (permissif), passé EXPLICITEMENT — jamais en
+    # s'appuyant sur le défaut module implicite. Garantit une couche macro commercialement
+    # re-dérivable et cohérente avec l'espace des claims de base (règle firewall de provenance).
     result = ab.compute(cluster_texts, chat_fn=mistral_client.chat,
                         embed_fn=lambda t: _embed(t, model_id=embedder),
                         model=ABSTRACTION_CHAT_MODEL)
@@ -601,15 +603,14 @@ def build_theme_tree(
     root_coarsen: dict | None = None
 
     if n_claims:
-        # COUCHE PLATE au PIC DE MODULARITÉ : on ne balaie plus k (qui changeait le graphe et
-        # dégénérait en pure densification), on fixe UN graphe et on balaie la résolution γ —
-        # le bouton direct de granularité. Le pic de modularité donne le grain naturel du
-        # corpus. Les couches ABSTRAITES au-dessus viendront d'un autre mécanisme (ré-embedding
-        # des synthèses de thèmes, cf. `research/synthesis_embed_note.md`) — pas d'un γ plus
-        # grossier. Ici l'arbre est donc PLAT : chaque cluster = un thème.
-        # Couche FEUILLE : plus fine que le pic de modularité (elle porte le DÉTAIL) ; le moteur
-        # d'abstraction remonte la STRUCTURE au-dessus. Mesuré (Grand Débat) : fin+abstraction
-        # retrouve les domaines mieux que le pic seul.
+        # COUCHE FEUILLE à résolution γ : on ne balaie plus k (qui changeait le graphe et
+        # dégénérait en pure densification), on fixe UN graphe et on clusterise à γ FIN — le
+        # bouton direct de granularité. Cette couche porte le DÉTAIL (thèmes précis, redondants).
+        # La STRUCTURE au-dessus (macros) vient du moteur d'ABSTRACTION juste en dessous
+        # (ré-embedding des profils de thèmes, moteur B) — PAS d'un γ plus grossier. L'arbre
+        # n'est PLAT qu'en REPLI (quand `absres is None`) ; sinon il a 2 niveaux (feuille +
+        # macro). Mesuré (Grand Débat) : fin+abstraction retrouve les domaines mieux que le
+        # pic de modularité seul.
         membership, gmeta = layers.flat_partition(vecs, gamma=layers.FINE_GAMMA, seed=seed)
         by_cluster: dict[int, list[int]] = {}
         for i, c in enumerate(membership.tolist()):
