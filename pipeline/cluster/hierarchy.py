@@ -1,5 +1,11 @@
 """T-N4b · Thèmes HIÉRARCHIQUES (macro → sous-thèmes) via Leiden 2 niveaux.
 
+⚠️ LEGACY — HORS chemin servi. Le pipeline de prod construit sa hiérarchie via le moteur
+d'ABSTRACTION (profil de thème ré-embeddé, `backend/analysis.py` + `pipeline/cluster/
+abstraction.py`), PAS par ce Leiden 2-niveaux. Ce module n'est plus importé que par
+`cluster/build.py` (CLI batch legacy) et `research/`. Conservé comme référence historique.
+
+
 Idée : un député lit d'abord quelques **grandes communautés** (macro, `level=0`),
 puis ouvre chacune pour voir ses **sous-thèmes** (`level=1`). Ex.
 `harcèlement` → `cyberharcèlement` / `comparaison physique` / `haine LGBT-racisme`.

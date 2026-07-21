@@ -18,14 +18,18 @@ from __future__ import annotations
 
 import hashlib
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
 
 from pipeline.cluster.layers import centre, flat_partition
+from pipeline.embed.registry import resolve_model_id
 
 MIN_THEMES = 4          # en dessous, la couche plate suffit (pas d'abstraction)
-PROFILE_MAX_TOKENS = 450  # profil capé (< 512 = fenêtre d'input de nomic-v2)
+PROFILE_WORKERS = 4     # concurrence des profils LLM, alignée sur AGORA_LLM_MAX_WORKERS (défaut)
+PROFILE_MAX_TOKENS = 450  # cap conservateur, sûr pour toutes les fenêtres d'embedder supportées
+                          # (arctic-l 8192, nomic-v2 512) — jamais tronqué à l'embed
 
 
 def _profile(claims: list[str], *, chat_fn, model: str) -> str:
@@ -61,7 +65,10 @@ def compute(cluster_texts: list[list[str]], *, chat_fn, embed_fn, model: str) ->
     n = len(cluster_texts)
     if n < MIN_THEMES:
         return None
-    profiles = [_profile(c, chat_fn=chat_fn, model=model) for c in cluster_texts]
+    # Profils LLM en PARALLÈLE (comme le reste de l'enrichissement) — phase isolée, donc pas de
+    # pic de concurrence supplémentaire ; le chat_fn gère ses réessais 429. `map` préserve l'ordre.
+    with ThreadPoolExecutor(max_workers=min(PROFILE_WORKERS, n)) as ex:
+        profiles = list(ex.map(lambda c: _profile(c, chat_fn=chat_fn, model=model), cluster_texts))
     vecs = centre(np.asarray(embed_fn(profiles), dtype=np.float64))
     part, _meta = flat_partition(vecs, seed=42)
     assign = part.tolist()
@@ -79,7 +86,11 @@ def signature(clusters: list[list[int]], *, embedder: str = "", chat_model: str 
     de chat. L'embedder EN FAIT PARTIE car les profils sont ré-embeddés : un cache construit
     avec un modèle (ex. jina) ne doit JAMAIS être re-servi pour un build sur un autre modèle
     (ex. nomic-v2, permissif) — question de licence ET de cohérence d'espace."""
-    key = repr((sorted(tuple(sorted(c)) for c in clusters), embedder, chat_model))
+    # Embedder NORMALISÉ (alias → id canonique) : « arctic-l » et l'id résolu
+    # « Snowflake/… » désignent le MÊME modèle → même signature (sinon cache miss → repli plat
+    # → désync des theme_id entre analysis/opinion/arguments).
+    emb = resolve_model_id(embedder) if embedder else ""
+    key = repr((sorted(tuple(sorted(c)) for c in clusters), emb, chat_model))
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 

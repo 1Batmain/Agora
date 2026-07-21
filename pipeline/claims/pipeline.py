@@ -39,12 +39,11 @@ from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.scoring import score_cluster
 
 DEFAULT_MODEL = "ministral-3:latest"
-# Embedder de BUILD par défaut. jina-v3 = meilleure qualité mesurée (NMI thème 0.482
-# vs nomic 0.407). ⚠️ CC-BY-NC-4.0 (NON-COMMERCIAL) : phase RECHERCHE / génération de
-# golds. Ses sorties ne doivent PAS entraîner un modèle expédié commercialement —
-# re-dériver en embedder Apache (nomic-v2 / arctic-l) avant commercialisation.
-# Pare-feu : research/jina_provenance_firewall.md. Changer cette constante ré-embed
-# les datasets REBUILDÉS (la prod sert le cache, ne rebuild pas → pas d'impact serve).
+# Embedder de BUILD par défaut = arctic-l (Snowflake, Apache 2.0), le MEILLEUR embedder
+# PERMISSIF au bench FR servi. COMMERCIALEMENT PROPRE : aucune contrainte de re-dérivation.
+# jina-v3 (meilleure qualité brute mais CC-BY-NC-4.0, NON-COMMERCIAL) reste réservé à la
+# RECHERCHE, jamais en défaut (pare-feu : research/jina_provenance_firewall.md). Changer cette
+# constante ré-embed les datasets REBUILDÉS (la prod sert le cache → pas d'impact serve immédiat).
 DEFAULT_EMBEDDER = "arctic-l"
 # DEFAULT_SEED ré-exporté depuis sa source unique `pipeline.cluster.leiden_cluster`
 # (backend/analysis.py et les builds l'importent d'ici par commodité historique).
@@ -114,7 +113,7 @@ def _normalize_rows(M: np.ndarray) -> np.ndarray:
 
 
 def embed_claim_texts(texts: list[str], *, embedder: str = DEFAULT_EMBEDDER) -> np.ndarray:
-    """Vecteurs L2-normalisés des claims, dans l'espace de `embedder` (défaut jina-v3)."""
+    """Vecteurs L2-normalisés des claims, dans l'espace de `embedder` (défaut arctic-l, Apache)."""
     if not texts:
         return np.zeros((0, 1), dtype=np.float64)
     from pipeline.embed.embedder import Embedder

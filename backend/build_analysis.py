@@ -45,7 +45,7 @@ from backend.citations import citations_for_theme
 from backend.insights import render_insight
 from backend.cluster_enrich import description_for_node, hook_for_node
 from backend.recluster import CACHE_DIR, load_cache
-from backend.titles import title_for_macro, title_for_node
+from backend.titles import _fallback, title_for_macro, title_for_node
 from backend import cost
 from pipeline.cluster import mistral_client
 
@@ -166,7 +166,11 @@ def _assert_enrichment_is_complete(dataset: str, tree, node_ids: list[str]) -> N
     """
     exhausted = mistral_client.get_exhausted()
     n = len(node_ids) or 1
-    kw_titles = [i for i in node_ids if " · " in (tree.nodes[i].title or "")]
+    # Repli DÉTECTÉ par égalité au `_fallback` (label mots-clés / « thème id ») — PAS par la
+    # présence de « · » : un thème homogène à 1 seul mot-clé a un label sans séparateur et
+    # échappait au comptage → un build dégradé pouvait passer sous le seuil.
+    kw_titles = [i for i in node_ids
+                 if (tree.nodes[i].title or "") == _fallback(tree.nodes[i])]
     missing_insights = [i for i in node_ids if not store.read_insights(dataset, "theme", i)]
 
     part_titles = len(kw_titles) / n
@@ -296,7 +300,15 @@ def build_analysis(
             child_titles = [tree.nodes[c].title for c in node.children if c in tree.nodes]
             node.title = title_for_macro(dataset, node, child_titles, model=enrich)
 
-        _parallel_for(macro_ids, _title_macro)
+        # Par bande de profondeur DÉCROISSANTE : un macro lit les titres de ses enfants, qui
+        # doivent déjà être calculés. Arbre servi (2 niveaux) = une seule bande ; robuste si un
+        # jour l'abstraction produit >2 niveaux (titrer tous les macros d'un coup laisserait un
+        # parent lire le titre encore vide d'un enfant intermédiaire → repli salade de mots-clés).
+        by_depth: dict[int, list[str]] = {}
+        for nid in macro_ids:
+            by_depth.setdefault(tree.nodes[nid].depth, []).append(nid)
+        for depth in sorted(by_depth, reverse=True):
+            _parallel_for(by_depth[depth], _title_macro)
         report("titles", f"titres courts ({enrich}, caché)", total, total)
 
         # 1c) Accroche + description LLM par thème (CACHÉES par contenu) → analysis.json.

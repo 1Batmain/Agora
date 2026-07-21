@@ -28,14 +28,27 @@ DEFAULT_NAMING_METHOD = DEFAULT_NAMING
 
 # Cache MULTI-DATASET : `backend/cache/<dataset>/{embeddings.npy, ideas.jsonl,
 # meta.json}`. Un dataset = un sous-dossier (aucun nom de corpus codé en dur ;
-# les datasets sont DÉCOUVERTS en scannant le dossier). Défaut rétro-compat =
-# "tiktok".
+# les datasets sont DÉCOUVERTS en scannant le dossier).
 CACHE_DIR = Path(__file__).resolve().parent / "cache"
-DEFAULT_DATASET = "tiktok"
 
 # Descripteurs d'ingestion (un par consultation). Les consultations OUVERTES
 # (status:"open") n'ont pas encore de cache d'analyse : on les découvre ici.
 DESCRIPTORS_DIR = Path(__file__).resolve().parent.parent / "pipeline" / "ingest" / "descriptors"
+
+
+def default_dataset() -> str | None:
+    """Dataset par défaut de l'UI = celui marqué `"default": true` dans SON descripteur —
+    un choix produit DÉCLARATIF, PAS un id de corpus codé en dur ici (règle de généricité).
+    None si aucun n'est marqué → l'appelant retombe sur l'ordre alphabétique / le 1er découvert."""
+    if not DESCRIPTORS_DIR.exists():
+        return None
+    for p in sorted(DESCRIPTORS_DIR.glob("*.json")):
+        try:
+            if json.loads(p.read_text(encoding="utf-8")).get("default") is True:
+                return p.stem
+        except (OSError, json.JSONDecodeError):
+            continue
+    return None
 
 MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
 
@@ -58,7 +71,7 @@ def list_datasets() -> list[str]:
 
     Découverte pure (zéro littéral de corpus) : on liste les dossiers qui
     contiennent à la fois `embeddings.npy` et `ideas.jsonl`. Triés avec le défaut
-    (`tiktok`) en tête pour la rétro-compat de l'UI.
+    DÉCLARÉ (descripteur `"default": true`) en tête, sinon alphabétique.
     """
     if not CACHE_DIR.exists():
         return []
@@ -66,8 +79,15 @@ def list_datasets() -> list[str]:
         p.name for p in CACHE_DIR.iterdir()
         if p.is_dir() and (p / EMB_NAME).exists() and (p / IDEAS_NAME).exists()
     ]
-    found.sort(key=lambda n: (n != DEFAULT_DATASET, n))
+    dflt = default_dataset()
+    found.sort(key=lambda n: (n != dflt, n))       # dflt None → tri purement alphabétique
     return found
+
+
+# Défaut RÉSOLU (déclaré via descripteur, sinon 1er dataset découvert) — VALEUR DÉRIVÉE, PAS un
+# littéral de corpus. La logique servie utilise `default_dataset()` (dynamique) ; cette constante
+# n'est qu'une commodité pour les appelants/tests qui ont besoin d'un id concret figé.
+DEFAULT_DATASET = default_dataset() or (list_datasets() or [None])[0]
 
 
 def _read_descriptor_file(name: str) -> dict | None:
@@ -128,8 +148,12 @@ def open_consultation_descriptor(name: str) -> Consultation:
     }
 
 
-def load_cache(dataset: str = DEFAULT_DATASET) -> tuple[list[Idea], np.ndarray, np.ndarray]:
-    """Charge le cache d'UN dataset (vecteurs + ideas alignés). Aucun torch."""
+def load_cache(dataset: str | None = None) -> tuple[list[Idea], np.ndarray, np.ndarray]:
+    """Charge le cache d'UN dataset (vecteurs + ideas alignés). Aucun torch.
+
+    `dataset=None` → défaut déclaré (`default_dataset()`), sinon 1er dataset découvert."""
+    if dataset is None:
+        dataset = default_dataset() or (list_datasets() or [""])[0]
     emb_path, ideas_path, _ = cache_paths(dataset)
     if not emb_path.exists() or not ideas_path.exists():
         raise RuntimeError(

@@ -1,22 +1,18 @@
-"""Chaîne d'emboîtement : k comme robinet de zoom, en remplacement de `derive_k(N)`.
+"""Partitionnement de clusters : `flat_partition` (SERVI) + `chain` (harnais R&D).
 
-`derive_k(N) = 3.8·log₁₀N` devine le nombre de thèmes à partir de la TAILLE du corpus —
-une formule qui ne regarde jamais le contenu. Ici on MESURE : on balaie le rayon de
-voisinage k (le zoom), on clusterise à chaque palier, et on lit la hiérarchie via
-l'emboîtement des partitions les unes dans les autres.
+Ce module porte DEUX choses, à ne pas confondre :
 
-  1. Balayage k (fin → très grossier) → une partition Leiden par k.
-  2. Chaîne : depuis le niveau fin, on descend en gardant à chaque étage
-     (~granularité/`STEP_RATIO`) le k dont la partition s'emboîte le MIEUX dans le niveau
-     courant.
-  3. PROPRETÉ d'un saut = emboîtement normalisé : 0 = hasard (étiquettes grossières
-     mélangées), 1 = emboîtement parfait. Elle ne dépend d'AUCUN seuil arbitraire.
+- **`flat_partition` (chemin SERVI)** — partition à résolution γ sur UN graphe kNN fixe.
+  C'est la couche FEUILLE du pipeline de prod (`backend/analysis.py`, `abstraction.py`) :
+  on fixe le graphe et on clusterise à γ (le bouton direct de granularité), au lieu de
+  balayer k (qui changeait le graphe et dégénérait en pure densification). Voir aussi
+  `centre` (recentrage anti-anisotropie), également servi.
 
-La propreté est une JAUGE CONTINUE, jamais un verdict binaire : mesurée sur nos corpus,
-elle vaut 0.65–0.82 partout (cascade) alors qu'un mélange artificiel de deux domaines
-étrangers monte à 0.94. Aucun corpus réel n'a de frontière macro nette — la couche
-grossière est une commodité de navigation, et la propreté sert à l'afficher honnêtement
-(nommage par facettes + confiance quand elle est basse), pas à la supprimer.
+- **`chain` + K_GRID/STEP_RATIO/N_NULL/CLEAN_FLOOR/`_nestedness`/`Level` (HARNAIS R&D)** —
+  la « chaîne d'emboîtement » : balayage de k, hiérarchie lue via l'emboîtement des
+  partitions, propreté = emboîtement normalisé (0 hasard → 1 parfait). N'est PLUS dans le
+  chemin servi (importé seulement par `research/`) — c'était l'exploration qui a MENÉ au
+  verdict « γ, pas k ». Conservé comme instrument de mesure, pas comme moteur de prod.
 
 Verdict : `.agent/notes/HIERARCHY_LAYERS.md`. Harnais de mesure : `research/k_layers.py`.
 """
@@ -75,17 +71,23 @@ def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
     v64 = np.ascontiguousarray(vecs.astype(np.float64))
     v32 = v64.astype(np.float32)
     n = len(v64)
+    if n <= 1:                                        # dégénéré : 0 ou 1 claim → 1 cluster trivial
+        return np.zeros(n, dtype=int), {"gamma": gamma, "modularity": 0.0, "n_clusters": n,
+                                        "k_graph": 0, "threshold": 0.0, "curve": [], "derived": None}
     k = min(K_GRAPH, n - 1)
     nb = knn_search(v32, k)
     dd = derive_defaults(v32, k=k, neighbors=nb)
     graph = build_knn_graph(v64, k=dd.k, threshold=dd.threshold, neighbors=nb)
 
+    # `dd` (DerivedDefaults du graphe RÉELLEMENT construit, k=K_GRAPH) est remonté dans `meta` pour
+    # que l'appelant serve un diagnostic COHÉRENT avec le graphe utilisé — sans repayer une passe
+    # dense O(n²·d) séparée (cf. audit efficience #1). `dd.k` = le vrai k, pas `derive_k(n)`.
     if gamma is not None:
         r = run_leiden(graph, resolution=gamma, seed=seed)
         membership = np.asarray(r.membership)
         meta = {"gamma": gamma, "modularity": round(float(r.modularity), 4),
                 "n_clusters": len(set(membership.tolist())),
-                "k_graph": k, "threshold": round(dd.threshold, 4), "curve": []}
+                "k_graph": k, "threshold": round(dd.threshold, 4), "curve": [], "derived": dd}
         return membership, meta
 
     best = None
@@ -99,7 +101,7 @@ def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,
     mod, gm, membership = best
     meta = {"gamma": gm, "modularity": round(mod, 4),
             "n_clusters": len(set(membership.tolist())),
-            "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve}
+            "k_graph": k, "threshold": round(dd.threshold, 4), "curve": curve, "derived": dd}
     return membership, meta
 
 
@@ -113,7 +115,10 @@ def centre(vecs: np.ndarray) -> np.ndarray:
     """
     v = vecs.astype(np.float64)
     v -= v.mean(axis=0)
-    v /= np.linalg.norm(v, axis=1, keepdims=True)
+    norms = np.linalg.norm(v, axis=1, keepdims=True)
+    # Garde div-par-zéro : à n==1 la soustraction du centroïde annule l'unique vecteur (norme 0)
+    # → sans garde, division → NaN silencieux propagé en aval. On laisse alors le vecteur nul.
+    v /= np.where(norms > 0, norms, 1.0)
     return np.ascontiguousarray(v)
 
 

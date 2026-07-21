@@ -338,8 +338,10 @@ def build_arguments(
     mistral_client.reset_usage()
 
     _log(f"{dataset} · construction de l'arbre (caché si déjà extrait)…")
+    # `abstract=True` : même arbre (macros comprises) que `build_analysis` → theme_id identiques
+    # (charge le cache d'abstraction), quel que soit l'ordre des builds. Cf. build_opinion.
     tree = build_theme_tree(ds, backend=backend, model=extract_model, embedder=embedder,
-                            resolution=resolution, seed=seed)
+                            resolution=resolution, seed=seed, abstract=True)
     prepared = tree.prepared
 
     opinion = store.read_opinion(dataset) or {}
