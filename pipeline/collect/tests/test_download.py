@@ -2,7 +2,6 @@
 import io
 import urllib.error
 
-import pytest
 
 from pipeline.collect import download
 

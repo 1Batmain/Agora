@@ -1,0 +1,4821 @@
+{
+  "n_avis": 201,
+  "candidats": [
+    "ministral-3b-latest",
+    "ministral-8b-latest",
+    "mistral-large-latest"
+  ],
+  "per_avis": [
+    {
+      "id": "tiktok:20",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:29",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "tiktok:48",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:54",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:58",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:65",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:73",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:76",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:78",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:91",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:92",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:93",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:97",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:98",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:106",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:122",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:129",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:130",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:137",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 6,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:140",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 6,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:149",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:150",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:153",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:155",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:172",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 6,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:173",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "tiktok:182",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:185",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:194",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:210",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:226",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:236",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "tiktok:243",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:256",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:276",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:291",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "tiktok:293",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:304",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:316",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 1
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:317",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:350",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:363",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:369",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:380",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:391",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:396",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:398",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:408",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:414",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:415",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:419",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:425",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:430",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 15,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:445",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 9,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:446",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:471",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "tiktok:480",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:481",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 7,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 5,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 7,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:482",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "tiktok:487",
+      "dataset": "tiktok",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "tiktok:499",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "tiktok:503",
+      "dataset": "tiktok",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2404",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1149",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:577",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5703",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5964",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:846",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1554",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1229",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2084",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:183",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3218",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 1
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1400",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 6,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2819",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4340",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:518",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:535",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1336",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:6208",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3575",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:563",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3078",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:234",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1727",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2316",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1866",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3220",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4364",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:6192",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4095",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2829",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:910",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:377",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:736",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 6,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1352",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 5,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:941",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:650",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 6,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1899",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4329",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5102",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 6,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5679",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 8,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 11,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:688",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 11,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 8,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 5,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:40",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 5,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 7,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1312",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5134",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1253",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1347",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 5,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4739",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1306",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4928",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:571",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5070",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2705",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5797",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:930",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 1
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:423",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1613",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4001",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3296",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:994",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 1
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:3157",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5548",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:727",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2495",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2581",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:241",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4906",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 1
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2934",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1839",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:193",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 1
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:400",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 0
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:1224",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5580",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:101",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:500",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5757",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:403",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4736",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:5678",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4033",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:2435",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:686",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4878",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:625",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4832",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "republique-numerique:4964",
+      "dataset": "republique-numerique",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-6",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-7",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-8",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-9",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-13",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 8,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 8,
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "n_claims": 9,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-14",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-16",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-19",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 0
+        },
+        "ministral-3b-latest": {
+          "n_claims": 14,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-22",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-28",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-31",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-37",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-39",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-40",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-42",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-49",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 7,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 5,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 7,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-51",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-53",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-54",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-58",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-59",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-60",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-64",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-66",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-68",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-73",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-77",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-78",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "n_claims": 7,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 6,
+          "score": 4
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-82",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-86",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-94",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-95",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-98",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-100",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-101",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 4,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-105",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-109",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": null
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": null
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-110",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-111",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-112",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-117",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 4,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-122",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-126",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-128",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 30,
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "n_claims": 30,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 22,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-130",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-132",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-136",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-138",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "n_claims": 3,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-141",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-147",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 4,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-156",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "n_claims": 2,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 2
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-160",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-3b-latest": {
+          "n_claims": 3,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 3
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-161",
+      "dataset": "granddebat",
+      "by_model": {
+        "ministral-8b-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "n_claims": 1,
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "n_claims": 1,
+          "score": 5
+        }
+      }
+    },
+    {
+      "id": "granddebat:1-162",
+      "dataset": "granddebat",
+      "by_model": {
+        "mistral-large-latest": {
+          "n_claims": 2,
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "n_claims": 5,
+          "score": 5
+        },
+        "ministral-8b-latest": {
+          "n_claims": 2,
+          "score": 3
+        }
+      }
+    }
+  ],
+  "scores": {
+    "ministral-3b-latest": [
+      3,
+      5,
+      3,
+      3,
+      4,
+      3,
+      3,
+      3,
+      5,
+      3,
+      3,
+      5,
+      5,
+      5,
+      5,
+      3,
+      2,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      3,
+      5,
+      3,
+      2,
+      5,
+      3,
+      5,
+      4,
+      5,
+      3,
+      4,
+      1,
+      3,
+      2,
+      4,
+      3,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4,
+      3,
+      5,
+      4,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      2,
+      4,
+      5,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      3,
+      4,
+      2,
+      3,
+      5,
+      2,
+      3,
+      5,
+      3,
+      3,
+      5,
+      5,
+      3,
+      5,
+      5,
+      4,
+      4,
+      5,
+      5,
+      4,
+      5,
+      5,
+      4,
+      5,
+      4,
+      5,
+      5,
+      4,
+      4,
+      5,
+      4,
+      3,
+      5,
+      2,
+      4,
+      1,
+      4,
+      3,
+      5,
+      3,
+      5,
+      5,
+      2,
+      3,
+      5,
+      3,
+      2,
+      1,
+      5,
+      5,
+      1,
+      0,
+      3,
+      2,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      4,
+      5,
+      3,
+      5,
+      5,
+      4,
+      5,
+      3,
+      4,
+      5,
+      3,
+      3,
+      5,
+      2,
+      3,
+      2,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      5,
+      2,
+      5,
+      4,
+      5,
+      5,
+      5,
+      2,
+      3,
+      3,
+      3,
+      5,
+      5,
+      3,
+      3,
+      3,
+      5,
+      5,
+      2,
+      5,
+      5,
+      5,
+      2,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "ministral-8b-latest": [
+      5,
+      5,
+      3,
+      3,
+      2,
+      5,
+      5,
+      4,
+      5,
+      3,
+      3,
+      5,
+      3,
+      2,
+      5,
+      3,
+      2,
+      2,
+      4,
+      3,
+      3,
+      3,
+      2,
+      5,
+      4,
+      3,
+      5,
+      5,
+      5,
+      5,
+      2,
+      5,
+      4,
+      3,
+      2,
+      3,
+      5,
+      5,
+      5,
+      5,
+      3,
+      2,
+      3,
+      5,
+      2,
+      5,
+      2,
+      2,
+      3,
+      4,
+      3,
+      3,
+      2,
+      4,
+      3,
+      2,
+      2,
+      5,
+      2,
+      3,
+      3,
+      3,
+      4,
+      3,
+      3,
+      5,
+      5,
+      3,
+      1,
+      2,
+      3,
+      3,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      4,
+      3,
+      5,
+      5,
+      2,
+      3,
+      2,
+      4,
+      2,
+      5,
+      3,
+      2,
+      4,
+      3,
+      4,
+      5,
+      3,
+      5,
+      5,
+      5,
+      2,
+      3,
+      4,
+      3,
+      4,
+      3,
+      2,
+      5,
+      5,
+      2,
+      3,
+      5,
+      5,
+      2,
+      3,
+      2,
+      5,
+      5,
+      5,
+      5,
+      2,
+      3,
+      5,
+      5,
+      4,
+      4,
+      4,
+      2,
+      5,
+      3,
+      3,
+      3,
+      3,
+      4,
+      5,
+      5,
+      5,
+      2,
+      3,
+      4,
+      5,
+      3,
+      5,
+      5,
+      3,
+      5,
+      2,
+      3,
+      2,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      2,
+      5,
+      3,
+      3,
+      5,
+      5,
+      5,
+      5,
+      3,
+      3,
+      3,
+      5,
+      5,
+      3,
+      3,
+      2,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      4,
+      5,
+      5,
+      4,
+      2,
+      4,
+      5,
+      3
+    ],
+    "mistral-large-latest": [
+      5,
+      5,
+      3,
+      3,
+      3,
+      5,
+      5,
+      3,
+      5,
+      5,
+      3,
+      5,
+      2,
+      5,
+      5,
+      3,
+      5,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      2,
+      5,
+      3,
+      3,
+      5,
+      2,
+      5,
+      5,
+      5,
+      4,
+      2,
+      5,
+      5,
+      4,
+      3,
+      5,
+      4,
+      3,
+      2,
+      3,
+      5,
+      2,
+      5,
+      5,
+      2,
+      5,
+      5,
+      4,
+      5,
+      5,
+      5,
+      4,
+      5,
+      3,
+      5,
+      5,
+      2,
+      4,
+      3,
+      2,
+      5,
+      5,
+      3,
+      4,
+      4,
+      5,
+      3,
+      3,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      3,
+      4,
+      5,
+      5,
+      5,
+      3,
+      4,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4,
+      5,
+      5,
+      4,
+      3,
+      3,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      3,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      1,
+      5,
+      3,
+      5,
+      3,
+      5,
+      5,
+      3,
+      5,
+      5,
+      2,
+      4,
+      4,
+      5,
+      5,
+      5,
+      2,
+      3,
+      5,
+      3,
+      4,
+      3,
+      4,
+      5,
+      3,
+      5,
+      2,
+      5,
+      2,
+      2,
+      3,
+      2,
+      0,
+      5,
+      5,
+      3,
+      5,
+      2,
+      5,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      3,
+      5,
+      5,
+      3,
+      5,
+      4,
+      3,
+      4,
+      4,
+      5,
+      5,
+      3,
+      3,
+      5,
+      4,
+      5,
+      3,
+      3,
+      5,
+      4,
+      5,
+      5,
+      4,
+      5,
+      5,
+      5,
+      3,
+      5,
+      3,
+      3,
+      3,
+      5,
+      4
+    ]
+  },
+  "n_claims": {
+    "ministral-3b-latest": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      3,
+      1,
+      1,
+      1,
+      5,
+      6,
+      2,
+      1,
+      2,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      5,
+      2,
+      3,
+      4,
+      15,
+      9,
+      4,
+      4,
+      1,
+      7,
+      4,
+      3,
+      2,
+      2,
+      1,
+      4,
+      4,
+      2,
+      3,
+      2,
+      1,
+      3,
+      2,
+      2,
+      3,
+      6,
+      3,
+      2,
+      3,
+      2,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      6,
+      5,
+      2,
+      6,
+      3,
+      1,
+      6,
+      11,
+      11,
+      7,
+      3,
+      2,
+      2,
+      4,
+      3,
+      1,
+      2,
+      1,
+      1,
+      1,
+      4,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      2,
+      2,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2,
+      3,
+      2,
+      1,
+      2,
+      3,
+      2,
+      4,
+      1,
+      2,
+      4,
+      1,
+      3,
+      1,
+      1,
+      3,
+      9,
+      1,
+      1,
+      14,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      7,
+      2,
+      1,
+      1,
+      2,
+      2,
+      1,
+      3,
+      5,
+      1,
+      1,
+      1,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      2,
+      1,
+      3,
+      2,
+      1,
+      2,
+      22,
+      2,
+      1,
+      2,
+      1,
+      2,
+      4,
+      2,
+      3,
+      1,
+      5
+    ],
+    "ministral-8b-latest": [
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      6,
+      1,
+      1,
+      1,
+      2,
+      1,
+      3,
+      2,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      3,
+      2,
+      2,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      5,
+      1,
+      1,
+      1,
+      2,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      2,
+      3,
+      2,
+      2,
+      3,
+      1,
+      2,
+      2,
+      3,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      3,
+      1,
+      3,
+      1,
+      1,
+      1,
+      4,
+      8,
+      5,
+      3,
+      2,
+      1,
+      5,
+      3,
+      2,
+      2,
+      1,
+      1,
+      2,
+      4,
+      4,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      2,
+      2,
+      2,
+      1,
+      2,
+      2,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      8,
+      2,
+      3,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      5,
+      2,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      1,
+      1,
+      1,
+      1,
+      7,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      1,
+      2,
+      30,
+      3,
+      1,
+      2,
+      3,
+      2,
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "mistral-large-latest": [
+      3,
+      3,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      2,
+      6,
+      5,
+      2,
+      1,
+      2,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      3,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      3,
+      1,
+      4,
+      4,
+      2,
+      2,
+      1,
+      7,
+      1,
+      3,
+      1,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      1,
+      1,
+      1,
+      2,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      2,
+      4,
+      3,
+      1,
+      3,
+      8,
+      5,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      4,
+      5,
+      4,
+      2,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      2,
+      3,
+      1,
+      3,
+      1,
+      1,
+      1,
+      8,
+      1,
+      1,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      4,
+      7,
+      2,
+      1,
+      1,
+      2,
+      1,
+      2,
+      3,
+      1,
+      1,
+      1,
+      1,
+      6,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      4,
+      1,
+      2,
+      1,
+      1,
+      2,
+      2,
+      1,
+      2,
+      30,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      2
+    ]
+  },
+  "summary_note": "rétention = score / large ; couverture = nb moyen de claims/avis"
+}

@@ -134,7 +134,8 @@ def build_live_tree(
         root_coarsen={
             "n_fine": len(by_cluster) if n else 0,
             "n_macros": len(macros),
-            "merge_threshold": (None if merge_thr != merge_thr else round(merge_thr, 4)),
+            # NaN = aucune fusion mesurée (coarsening abstenu) → on sert `null`, pas un nombre.
+            "merge_threshold": (None if np.isnan(merge_thr) else round(merge_thr, 4)),
         },
     )
 

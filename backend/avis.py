@@ -33,7 +33,7 @@ from __future__ import annotations
 import json
 import unicodedata
 
-from backend.analysis import ThemeTree, macro_of
+from backend.analysis import ThemeTree
 
 
 def _claim_macro(tree: ThemeTree) -> dict[int, str]:

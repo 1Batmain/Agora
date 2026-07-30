@@ -31,7 +31,6 @@ from ._helpers import (
     EXPECTED_DATASETS,
     analysis_ready,
     available_datasets,
-    require_ready,
 )
 
 

@@ -49,7 +49,6 @@ from backend.analysis import (
     DEFAULT_RESOLUTION,
     DEFAULT_SEED,
     ThemeNode,
-    ThemeTree,
     build_theme_tree,
 )
 from backend.build_analysis import EXTRACT_MODEL, load_dataset

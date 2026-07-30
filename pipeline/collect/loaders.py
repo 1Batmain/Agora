@@ -8,7 +8,6 @@ transforme en statut de fichier, sans faire tomber le run).
 from __future__ import annotations
 
 import csv
-import io
 import json
 import zipfile
 from dataclasses import dataclass

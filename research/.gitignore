@@ -2,3 +2,5 @@
 .cache/
 # Checkpoint ctx du décodage adaptatif (lourd, reproductible) — non versionné.
 .adaptive_ctx.pkl
+# Logs de run R&D — reproductibles, non versionnés.
+*.log

@@ -28,7 +28,7 @@ from typing import Callable
 
 from backend.recluster import dataset_dir
 from pipeline.ingest.lang import detect_lang
-from pipeline.translate import DEFAULT_TRANSLATE_MODEL, FR, is_french, translate_batch
+from pipeline.translate import DEFAULT_TRANSLATE_MODEL, is_french, translate_batch
 
 TRANSLATIONS_NAME = "translations.json"
 # Modèle de traduction (CHEAP), surchargeable par env — aucune valeur de corpus en dur.

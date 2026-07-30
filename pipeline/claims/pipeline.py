@@ -22,7 +22,7 @@ dans les deux : `count` = nombre d'avis qui « pontent » les deux thèmes.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import combinations
 
 import numpy as np
@@ -30,7 +30,7 @@ import numpy as np
 from pipeline.claims.backend import resolve_backend
 from pipeline.claims.extract import extract_claims
 from pipeline.claims.ollama import OllamaStats
-from pipeline.claims.span import Claim, as_claim
+from pipeline.claims.span import as_claim
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.palette import color_for
 from pipeline.cluster.knn import build_knn_graph

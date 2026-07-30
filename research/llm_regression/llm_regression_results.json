@@ -1,0 +1,485 @@
+{
+  "dataset": "tiktok",
+  "role": "title",
+  "n_themes": 10,
+  "models": [
+    "mistral-large-latest",
+    "mistral-medium-latest",
+    "mistral-small-latest",
+    "ministral-8b-latest",
+    "ministral-3b-latest"
+  ],
+  "per_theme": [
+    {
+      "theme": "n1",
+      "keywords": [
+        "haine",
+        "commentaires",
+        "harcèlement",
+        "insultes",
+        "propos"
+      ],
+      "titles": {
+        "mistral-large-latest": {
+          "title": "Harcèlement et propos haineux en ligne",
+          "score": 4
+        },
+        "mistral-medium-latest": {
+          "title": "Discours haineux en ligne",
+          "score": 3
+        },
+        "mistral-small-latest": {
+          "title": "Haine et harcèlement en ligne",
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "title": "Violence verbale en ligne et discriminations**",
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "title": "Commentaires haineux et propos racistes en ligne",
+          "score": 5
+        }
+      }
+    },
+    {
+      "theme": "n2",
+      "keywords": [
+        "réseaux",
+        "enfants",
+        "sociaux",
+        "jeunes",
+        "contrôle"
+      ],
+      "titles": {
+        "mistral-medium-latest": {
+          "title": "Contrôle des réseaux sociaux pour les jeunes",
+          "score": 3
+        },
+        "mistral-small-latest": {
+          "title": "Contrôle des réseaux sociaux pour les jeunes",
+          "score": 3
+        },
+        "ministral-8b-latest": {
+          "title": "Réseaux sociaux et contrôle parental pour filles mineures**",
+          "score": 4
+        },
+        "ministral-3b-latest": {
+          "title": "Réseaux sociaux et mineurs filles contrôle âge",
+          "score": 1
+        },
+        "mistral-large-latest": {
+          "title": "Contrôle des réseaux sociaux pour jeunes filles",
+          "score": 4
+        }
+      }
+    },
+    {
+      "theme": "n3",
+      "keywords": [
+        "photo",
+        "fille",
+        "collège",
+        "harcèlement",
+        "compte"
+      ],
+      "titles": {
+        "mistral-small-latest": {
+          "title": "Harcèlement scolaire et en ligne",
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "title": "Harcèlement scolaire et réseaux sociaux**",
+          "score": 2
+        },
+        "ministral-3b-latest": {
+          "title": "Harcèlement en ligne contre filles collégiennes",
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "title": "Harcèlement en ligne filles collège comptes photo",
+          "score": 1
+        },
+        "mistral-medium-latest": {
+          "title": "Harcèlement en ligne et scolaire",
+          "score": 2
+        }
+      }
+    },
+    {
+      "theme": "n4",
+      "keywords": [
+        "contenus",
+        "contenu",
+        "désinformation",
+        "informations",
+        "fausses"
+      ],
+      "titles": {
+        "ministral-8b-latest": {
+          "title": "Dangers des publications fausses et alarmistes**",
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "title": "Fausses actualités et contenus dangereux",
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "title": "Désinformation et contenus dangereux en ligne",
+          "score": 5
+        },
+        "mistral-medium-latest": {
+          "title": "Contenus dangereux et désinformation",
+          "score": 4
+        },
+        "mistral-small-latest": {
+          "title": "Contenus dangereux désinformation",
+          "score": 2
+        }
+      }
+    },
+    {
+      "theme": "n5",
+      "keywords": [
+        "vidéos",
+        "vidéo",
+        "choquantes",
+        "images",
+        "choquante"
+      ],
+      "titles": {
+        "ministral-3b-latest": {
+          "title": "Guerre des images choquantes",
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "title": "Vidéos choquantes et propagation en ligne",
+          "score": 5
+        },
+        "mistral-medium-latest": {
+          "title": "Vidéos choquantes guerre images",
+          "score": 1
+        },
+        "mistral-small-latest": {
+          "title": "Vidéos choquantes et guerre sociale",
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "title": "Montages vidéo violents et diffusion**",
+          "score": 4
+        }
+      }
+    },
+    {
+      "theme": "n6",
+      "keywords": [
+        "enfants",
+        "fille",
+        "fils",
+        "parents",
+        "interdit"
+      ],
+      "titles": {
+        "mistral-large-latest": {
+          "title": "Risques TikTok contrôle parental adolescents",
+          "score": 3
+        },
+        "mistral-medium-latest": {
+          "title": "Contrôle parental et interdiction des réseaux sociaux pour adolescents",
+          "score": 4
+        },
+        "mistral-small-latest": {
+          "title": "Interdiction réseaux sociaux mineurs",
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "title": "Parents et adolescents face aux dangers de TikTok**",
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "title": "Réseaux sociaux et mineurs",
+          "score": 1
+        }
+      }
+    },
+    {
+      "theme": "n8",
+      "keywords": [
+        "application",
+        "appli",
+        "sentiment",
+        "addiction",
+        "arrêter"
+      ],
+      "titles": {
+        "mistral-medium-latest": {
+          "title": "Addiction aux applications",
+          "score": 3
+        },
+        "mistral-small-latest": {
+          "title": "Boucle addiction appli heures",
+          "score": 1
+        },
+        "ministral-8b-latest": {
+          "title": "Dépendance aux applis sociales : heures perdues et sentiment d’isolement**",
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "title": "Addiction aux applications sociales et perte de temps réel",
+          "score": 4
+        },
+        "mistral-large-latest": {
+          "title": "Arrêt addiction application heures perdues",
+          "score": 4
+        }
+      }
+    },
+    {
+      "theme": "n9",
+      "keywords": [
+        "passer",
+        "faire",
+        "impression",
+        "passe",
+        "heures"
+      ],
+      "titles": {
+        "mistral-small-latest": {
+          "title": "Temps perdu sur TikTok",
+          "score": 4
+        },
+        "ministral-8b-latest": {
+          "title": "TikTok et la spirale addictive du temps perdu**",
+          "score": 5
+        },
+        "ministral-3b-latest": {
+          "title": "Procrastination addictive TikTok",
+          "score": 3
+        },
+        "mistral-large-latest": {
+          "title": "TikTok procrastination addictive perte de temps",
+          "score": 2
+        },
+        "mistral-medium-latest": {
+          "title": "Perte de temps TikTok addictif",
+          "score": 3
+        }
+      }
+    },
+    {
+      "theme": "n10",
+      "keywords": [
+        "réseaux",
+        "contenus",
+        "vie",
+        "sociaux",
+        "jeunes"
+      ],
+      "titles": {
+        "ministral-8b-latest": {
+          "title": "Impact des réseaux sociaux sur la perception et la santé",
+          "score": 3
+        },
+        "ministral-3b-latest": {
+          "title": "Réseaux sociaux jeunes contenus toxiques plateformes",
+          "score": 1
+        },
+        "mistral-large-latest": {
+          "title": "Influence des réseaux sociaux sur les jeunes et la société",
+          "score": 4
+        },
+        "mistral-medium-latest": {
+          "title": "Impact des réseaux sociaux sur les jeunes",
+          "score": 4
+        },
+        "mistral-small-latest": {
+          "title": "TikTok réseaux jeunes contenus vie",
+          "score": 2
+        }
+      }
+    },
+    {
+      "theme": "n11",
+      "keywords": [
+        "Instagram",
+        "dépendance",
+        "addiction",
+        "désinstaller",
+        "YouTube"
+      ],
+      "titles": {
+        "ministral-3b-latest": {
+          "title": "Dépendance aux Reels et aux formats courts",
+          "score": 5
+        },
+        "mistral-large-latest": {
+          "title": "Dépendance aux Reels et réseaux sociaux",
+          "score": 4
+        },
+        "mistral-medium-latest": {
+          "title": "Addiction aux Reels et réseaux sociaux",
+          "score": 4
+        },
+        "mistral-small-latest": {
+          "title": "Dépendance réseaux sociaux Reels",
+          "score": 2
+        },
+        "ministral-8b-latest": {
+          "title": "Désintoxication numérique Reels TikTok Instagram YouTube**",
+          "score": 3
+        }
+      }
+    }
+  ],
+  "scores": {
+    "mistral-large-latest": [
+      4,
+      4,
+      1,
+      5,
+      5,
+      3,
+      4,
+      2,
+      4,
+      4
+    ],
+    "mistral-medium-latest": [
+      3,
+      3,
+      2,
+      4,
+      1,
+      4,
+      3,
+      3,
+      4,
+      4
+    ],
+    "mistral-small-latest": [
+      3,
+      3,
+      2,
+      2,
+      2,
+      2,
+      1,
+      4,
+      2,
+      2
+    ],
+    "ministral-8b-latest": [
+      2,
+      4,
+      2,
+      5,
+      4,
+      5,
+      5,
+      5,
+      3,
+      3
+    ],
+    "ministral-3b-latest": [
+      5,
+      1,
+      4,
+      5,
+      3,
+      1,
+      4,
+      3,
+      1,
+      5
+    ]
+  },
+  "latency_ms": {
+    "mistral-large-latest": [
+      767,
+      569,
+      577,
+      581,
+      564,
+      683,
+      612,
+      641,
+      565,
+      685
+    ],
+    "mistral-medium-latest": [
+      442,
+      1069,
+      420,
+      371,
+      390,
+      705,
+      413,
+      1033,
+      851,
+      632
+    ],
+    "mistral-small-latest": [
+      381,
+      442,
+      492,
+      332,
+      368,
+      489,
+      421,
+      342,
+      411,
+      367
+    ],
+    "ministral-8b-latest": [
+      450,
+      391,
+      395,
+      375,
+      343,
+      350,
+      321,
+      398,
+      332,
+      319
+    ],
+    "ministral-3b-latest": [
+      608,
+      246,
+      215,
+      209,
+      212,
+      292,
+      234,
+      259,
+      275,
+      331
+    ]
+  },
+  "summary": {
+    "mistral-large-latest": {
+      "score_moyen": 3.6,
+      "latence_ms": 624,
+      "prix_relatif": 150.0
+    },
+    "mistral-medium-latest": {
+      "score_moyen": 3.1,
+      "latence_ms": 633,
+      "prix_relatif": 50.0
+    },
+    "mistral-small-latest": {
+      "score_moyen": 2.3,
+      "latence_ms": 404,
+      "prix_relatif": 7.5
+    },
+    "ministral-8b-latest": {
+      "score_moyen": 3.8,
+      "latence_ms": 367,
+      "prix_relatif": 2.5
+    },
+    "ministral-3b-latest": {
+      "score_moyen": 3.2,
+      "latence_ms": 288,
+      "prix_relatif": 1.0
+    }
+  }
+}

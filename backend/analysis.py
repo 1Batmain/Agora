@@ -23,7 +23,6 @@ codé en dur. La sortie suit le contrat figé `.agent/queue/front-redesign.md` :
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, field
 from itertools import combinations
 from time import perf_counter
@@ -535,10 +534,15 @@ ABSTRACTION_CHAT_MODEL = "mistral-small-latest"  # nommage/regroupement léger (
 
 
 def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[str],
-                 *, model: str | None, embedder: str, compute: bool) -> dict | None:
+                 *, embedder: str, compute: bool) -> dict | None:
     """Couche macro : relit le cache, ou la CALCULE (LLM) si `compute` et clé dispo.
 
-    Cachée par signature (partition + EMBEDDER + modèle) → cohérente entre build_analysis/
+    N'accepte PAS de modèle de chat : l'abstraction est une tâche de nommage légère dont le
+    modèle est fixé par `ABSTRACTION_CHAT_MODEL` (source unique, entrant dans la signature du
+    cache). Le modèle d'EXTRACTION n'a rien à voir ici — avant, il était accepté puis ignoré
+    en silence, ce qui laissait croire à un levier inexistant.
+
+    Cachée par signature (partition + EMBEDDER + modèle de chat) → cohérente entre build_analysis/
     opinion/arguments, et un cache d'un autre embedder n'est jamais re-servi. Les profils sont
     ré-embeddés avec l'`embedder` DU BUILD (permissif, ex. arctic-l/nomic-v2) passé EXPLICITEMENT
     — jamais le défaut module implicite : la couche macro servie doit rester commercialement
@@ -634,7 +638,7 @@ def build_theme_tree(
         # Calculée UNE fois au build (LLM, `abstract=True`) et CACHÉE ; relue par les autres
         # étapes → arbre identique partout (cohérence build_analysis/opinion/arguments).
         absres = _abstraction(ds, clusters, vecs, prepared.claim_texts,
-                              model=model, embedder=embedder, compute=abstract)
+                              embedder=embedder, compute=abstract)
         if absres:
             groups: dict[int, list[int]] = {}
             for ti, mi in enumerate(absres["assign"]):
