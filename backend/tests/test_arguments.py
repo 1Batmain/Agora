@@ -9,7 +9,6 @@ pas recalculés : rien ne doit casser sans `arguments.json`).
 
 from __future__ import annotations
 
-from pathlib import Path
 
 from backend import analysis_store
 from backend.recluster import DEFAULT_DATASET

@@ -34,7 +34,6 @@ import os
 import sys
 from time import perf_counter
 
-from . import mistral_client
 from .mistral_client import MistralError, _record_usage, _safe_reason
 
 # Endpoint OpenAI-compatible local (vLLM `vllm serve` expose /v1/chat/completions).

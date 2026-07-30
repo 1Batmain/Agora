@@ -53,7 +53,6 @@ from backend.claims_endpoint import (
 from backend.recluster import (
     EMB_NAME,
     IDEAS_NAME,
-    META_NAME,
     cache_paths,
     dataset_dir,
     load_cache,

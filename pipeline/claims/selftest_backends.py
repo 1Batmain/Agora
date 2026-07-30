@@ -15,7 +15,6 @@ un chemin requis échoue ; le chemin `mac` est OPTIONNEL (dépend de la dispo du
 from __future__ import annotations
 
 import os
-import sys
 
 from pipeline.claims.backend import MacBackend, resolve_backend
 from pipeline.claims.extract import extract_claims

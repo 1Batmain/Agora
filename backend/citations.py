@@ -15,7 +15,6 @@ du sous-arbre porté par le nœud (ses `members`). Champs hors-contrat (`avis_id
 
 from __future__ import annotations
 
-import numpy as np
 
 from backend.analysis import DEFAULT_RESOLUTION, DEFAULT_SEED, ThemeTree, get_or_build_tree
 from backend.develop import corpus_idf, development_scores, guard_gate

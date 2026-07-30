@@ -1,7 +1,6 @@
 """Moteur d'abstraction B — profil ré-embeddé (chat_fn / embed_fn injectés, zéro LLM réel)."""
 from __future__ import annotations
 
-import json
 
 import numpy as np
 
@@ -11,9 +10,7 @@ from pipeline.cluster import abstraction as ab
 def test_compute_fusionne_par_reembedding():
     """Profil par thème → ré-embedding → clustering : deux thèmes au profil proche fusionnent."""
     # 4 thèmes : 0 et 1 « addiction » (profils quasi identiques), 2 et 3 distincts.
-    prof = {0: "addiction aux réseaux", 1: "addiction aux réseaux et écrans",
-            2: "harcèlement en ligne", 3: "image du corps et comparaison"}
-
+    # `chat` ci-dessous simule le LLM en reconnaissant le vocabulaire de chaque thème.
     def chat(messages, **_kw):
         u = messages[-1]["content"]
         if "addiction" in u or "scroll" in u or "appli" in u:

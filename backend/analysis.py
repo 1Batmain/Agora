@@ -23,7 +23,6 @@ codé en dur. La sortie suit le contrat figé `.agent/queue/front-redesign.md` :
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, field
 from itertools import combinations
 from time import perf_counter
