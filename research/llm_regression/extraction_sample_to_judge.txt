@@ -1,0 +1,501 @@
+===== avis tiktok:430 (tiktok) =====
+AVIS: Je suis profondément préoccupé par la piètre qualité et la nature nocive des contenus sur TikTok. La plateforme est envahie de distractions superficielles, de désinformation, ainsi que de contenus faisant la promotion de discours pro-CCP, pro-MAGA, pro-russes, tout en attaquant ouvertement les valeurs occidentales, Taïwan et nos institutions démocratiques. Je vous exhorte vivement à envisager de restreindre l'accès à ce type de réseaux sociaux. Sous couvert de « liberté d'expression », ces plateformes sont instrumentalisées pour saper nos démocraties. Elles exploitent nos peurs, minent la conf
+  [ministral-3b-latest] 15 claims:
+     • piètre qualité et la nature nocive des contenus sur TikTok
+     • envahie de distractions superficielles
+     • désinformation
+     • promotion de discours pro-CCP, pro-MAGA, pro-russes
+     • attaquant ouvertement les valeurs occidentales, Taïwan et nos institutions démocratiques
+     • instrumentalisées pour saper nos démocraties
+     • exploitent nos peurs
+     • minent la confiance envers nos institutions
+     • divisent nos sociétés
+     • amplifient les idéologies autoritaires
+     • diffusion de produits bon marché, souvent nuisibles pour l'environnement
+     • au profit d'intérêts économiques douteux
+     • manipuler l'opinion publique
+     • déstabiliser nos sociétés démocratiques
+     • restreindre l'accès à ce type de réseaux sociaux
+  [mistral-large-latest] 4 claims:
+     • Je suis profondément préoccupé par la piètre qualité et la nature nocive des contenus sur TikTok … La plateforme est envahie de distractions superficielles, de désinformation, ainsi que de contenus faisant la promotion de discours pro-CCP, pro-MAGA, pro-russes, tout en attaquant ouvertement les valeurs occidentales, Taïwan et nos institutions démocratiques … Je vous exhorte vivement à envisager de restreindre l'accès à ce type de réseaux sociaux
+     • Sous couvert de « liberté d'expression », ces plateformes sont instrumentalisées pour saper nos démocraties … Elles exploitent nos peurs, minent la confiance envers nos institutions, divisent nos sociétés et amplifient les idéologies autoritaires
+     • Parallèlement, elles favorisent la diffusion de produits bon marché, souvent nuisibles pour l'environnement, au profit d'intérêts économiques douteux
+     • Nous ne pouvons pas continuer à fermer les yeux sur l'utilisation de ces outils pour manipuler l'opinion publique et déstabiliser nos sociétés démocratiques
+
+===== avis granddebat:1-105 (granddebat) =====
+AVIS: réduire le nombre de députés, pas de cumul de mandats, pas deux fois le meme mandat, création d'un congés politique, maintien de la rémunération existante avant le mandat, réduire les frais avec un seul collaborateur par député, présence obligatoire en séance, participation à une commission obligatoire, temps en région déterminé dans l'agenda de l'assemblée type une semaine sur quatre, interdiction de recevoir cadeaux, lobbyistes, mettre à la retraite les élus à 67 ans
+  [ministral-3b-latest] 10 claims:
+     • réduire le nombre de députés
+     • pas de cumul de mandats
+     • pas deux fois le meme mandat
+     • maintien de la rémunération existante avant le mandat
+     • réduire les frais avec un seul collaborateur par député
+     • présence obligatoire en séance
+     • participation à une commission obligatoire
+     • temps en région déterminé dans l'agenda de l'assemblée type une semaine sur quatre
+     • interdiction de recevoir cadeaux, lobbyistes
+     • mettre à la retraite les élus à 67 ans
+  [mistral-large-latest] 1 claims:
+     • réduire le nombre de députés, pas de cumul de mandats, pas deux fois le meme mandat, création d'un congés politique, maintien de la rémunération existante avant le mandat, réduire les frais avec un seul collaborateur par député, présence obligatoire en séance, participation à une commission obligatoire, temps en région déterminé dans l'agenda de l'assemblée type une semaine sur quatre, interdiction de recevoir cadeaux, lobbyistes, mettre à la retraite les élus à 67 ans
+
+===== avis republique-numerique:5679 (republique-numerique) =====
+AVIS: Ne pas confondre open access "payant" et dépôt dans des archives ouvertes. Une durée d'embargo plus courte (6 mois en STM et 12 en SHS) dans des archives ouvertes garantit une meilleure libre circulation, ainsi que le libre accès à la production scientifique qu'elle soit en STM ou dans d'autres disciplines. Cela dynamise également les échanges scientifiques. Si l'éditeur commercial amène une plus-value non négligeable, il reste que tout le système d'édition s'effondrerait sans les chercheurs qui cherchent, trouvent et proposent des articles, et sans les rapporteurs qui les expertisent, gratuit
+  [ministral-3b-latest] 11 claims:
+     • Ne pas confondre open access "payant" et dépôt dans des archives ouvertes.
+     • Une durée d'embargo plus courte (6 mois en STM et 12 en SHS) dans des archives ouvertes garantit une meilleure libre circulation, ainsi que le libre accès à la production scientifique qu'elle soit en STM ou dans d'autres disciplines.
+     • Cela dynamise également les échanges scientifiques.
+     • Si l'éditeur commercial amène une plus-value non négligeable, il reste que tout le système d'édition s'effondrerait sans les chercheurs qui cherchent, trouvent et proposent des articles, et sans les rapporteurs qui les expertisent, gratuitement, lors de leur soumission.
+     • Or nous assistons depuis plusieurs années à une explosion des coûts des abonnements aux revues, les grands éditeurs commerciaux faisant exploser le coût de leurs tarifs bien au delà du raisonnable, nous assistons tout autant à une explosion du nombres de revues prédatrices.
+     • Ces coûts exorbitants qui ne cessent de croître font que l'accès et la libre circulation des idées est rendu difficile, l'open access "payant" à la source ne faisant que déplacer le problème et offrant une "fausse" liberté d'accès.
+     • Tous ces processus entravent la libre circulation des idées.
+     • Conserver une durée d'embargo garantit que les grands et petits éditeurs commerciaux puissent recevoir un retour sur investissement.
+     • La limiter à 6 mois pour les STM et 12 mois pour les SHS, en s'alignant sur ce qui existe déjà au niveau européen, garantit au contraire qu'on n'asphyxie pas les dynamiques de recherche.
+     • Les deux peuvent coexister sans se nuire et leur double existence au contraire garantir un meilleur équilibre en terme de diffusion scientifique et d'accès à la production scientifique.
+     • Pour ma part, je pense que le dépôt dans une archive ouverte doit rester un choix de l'auteur et ne peut être imposé, cela irait sinon contre le principe de la propriété intellectuelle.
+  [mistral-large-latest] 4 claims:
+     • Ne pas confondre open access "payant" et dépôt dans des archives ouvertes … Une durée d'embargo plus courte (6 mois en STM et 12 en SHS) dans des archives ouvertes garantit une meilleure libre circulation, ainsi que le libre accès à la production scientifique qu'elle soit en STM ou dans d'autres disciplines. Cela dynamise également les échanges scientifiques
+     • Si l'éditeur commercial amène une plus-value non négligeable, il reste que tout le système d'édition s'effondrerait sans les chercheurs qui cherchent, trouvent et proposent des articles, et sans les rapporteurs qui les expertisent, gratuitement, lors de leur soumission … Or nous assistons depuis plusieurs années à une explosion des coûts des abonnements aux revues, les grands éditeurs commerciaux faisant exploser le coût de leurs tarifs bien au delà du raisonnable, nous assistons tout autant à une explosion du nombres de revues prédatrices. Ces coûts exorbitants qui ne cessent de croître font que l'accès et la libre circulation des idées est rendu difficile, l'open access "payant" à la source ne faisant que déplacer le problème et offrant une "fausse" liberté d'accès. Tous ces processus entravent la libre circulation des idées
+     • Conserver une durée d'embargo garantit que les grands et petits éditeurs commerciaux puissent recevoir un retour sur investissement. La limiter à 6 mois pour les STM et 12 mois pour les SHS, en s'alignant sur ce qui existe déjà au niveau européen, garantit au contraire qu'on n'asphyxie pas les dynamiques de recherche. Les deux peuvent coexister sans se nuire et leur double existence au contraire garantir un meilleur équilibre en terme de diffusion scientifique et d'accès à la production scientifique
+     • Pour ma part, je pense que le dépôt dans une archive ouverte doit rester un choix de l'auteur et ne peut être imposé, cela irait sinon contre le principe de la propriété intellectuelle
+
+===== avis granddebat:1-19 (granddebat) =====
+AVIS: Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel. Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum do
+  [ministral-3b-latest] 11 claims:
+     • Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel.
+     • Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum.
+     • Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort.
+     • Une chambre des référendums par département serait raisonnable.
+     • Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat.
+     • Une chaîne de télévision publique dédiée aux référendums doit être également créée.
+     • L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire.
+     • Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet.
+     • Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%.
+     • Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste.
+     • Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non.
+  [mistral-large-latest] 4 claims:
+     • Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel … Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat. Une chaîne de télévision publique dédiée aux référendums doit être également créée. L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche. Le nombre de signataires nécessaires reste encore à déterminer
+     • Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%
+     • Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter
+     • Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non
+
+===== avis republique-numerique:736 (republique-numerique) =====
+AVIS: I. L'article L. 33-1 du code des postes et des communications électroniques est modifié comme suit : 1° Après le o), il est ajouté l'alinéa suivant : « p) la neutralité de l'Internet, garantie par le traitement égal et non discriminatoire du trafic par les opérateurs dans la fourniture des services d'accès à Internet ainsi que par le droit des utilisateurs finals, y compris les personnes fournissant des services de communication au public en ligne d'accéder et de contribuer à Internet, conformément au règlement du Parlement européen et du Conseil n° …. du … établissant des mesures relatives au
+  [ministral-3b-latest] 7 claims:
+     • la neutralité de l'Internet, garantie par le traitement égal et non discriminatoire du trafic par les opérateurs dans la fourniture des services d'accès à Internet ainsi que par le droit des utilisateurs finals, y compris les personnes fournissant des services de communication au public en ligne d'accéder et de contribuer à Internet, conformément au règlement du Parlement européen et du Conseil n° …. du …
+     • Après le o), il est ajouté l'alinéa suivant : « p) la neutralité de l'Internet, garantie par le traitement égal et non discriminatoire du trafic par les opérateurs dans la fourniture des services d'accès à Internet ainsi que par le droit des utilisateurs finals, y compris les personnes fournissant des services de communication au public en ligne d'accéder et de contribuer à Internet, conformément au règlement du Parlement européen et du Conseil n° …. du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté.
+     • Le mot « réciproques » est supprimé
+     • Après le troisième alinéa du I est inséré un alinéa ainsi rédigé : « aux dispositions du règlement n° …. du Parlement européen et du Conseil, du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté ; »
+     • Après le sixième alinéa du I, il est ajouté un alinéa ainsi rédigé : « Lorsque l'Autorité estime qu'il existe un risque caractérisé qu'un exploitant de réseau ou une personne fournissant des services de communications électroniques ne respecte pas ses obligations, résultant des dispositions et prescriptions mentionnées au I, à l'échéance prévue initialement, elle peut mettre en demeure l'exploitant ou le fournisseur de s'y conformer à cette échéance.
+     • Au premier alinéa, après les mots : « des personnes fournissant de services de communications électroniques », sont insérés les mots : « ou des personnes fournissant des services de communication au public en ligne »
+     • Au premier alinéa du I, le mot : « ou » est remplacé par le mot : «, par » et après les mots : « personnes fournissant des services de communications électroniques » sont insérés les mots «, ou par une personne fournissant de services de communication au public en ligne »
+  [mistral-large-latest] 1 claims:
+     • I. L'article L. 33-1 du code des postes et des communications électroniques est modifié comme suit : 1° Après le o), il est ajouté l'alinéa suivant : « p) la neutralité de l'Internet, garantie par le traitement égal et non discriminatoire du trafic par les opérateurs dans la fourniture des services d'accès à Internet ainsi que par le droit des utilisateurs finals, y compris les personnes fournissant des services de communication au public en ligne d'accéder et de contribuer à Internet, conformément au règlement du Parlement européen et du Conseil n° …. du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté. » ; 2° Au dernier alinéa, les mots : « a à o » sont remplacés par les mots : « a à p ». … II. - Au 2° du I de l'article L. 32-4 du code des postes et des communications électroniques, après les mots : « les conditions techniques et tarifaires d'acheminement » sont ajoutés les mots : « et de gestion ». … III. - Le 5° du II de l'article L. 36-8 du code des postes et des communications électroniques est ainsi modifié : 1° Après les mots : « d'acheminement » sont insérés les mots : « , notamment de gestion, » 2° Le mot « réciproques » est supprimé. … IV. - Au 3° de l'article L. 36-7 du code des postes et des communications électroniques, après les mots : « à l'intérieur de l'Union » sont insérés les mots : « et du règlement n° …. du Parlement européen et du Conseil, du …, établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté ». … V. - L'article L. 36-11 du code des postes et des communications électroniques est ainsi modifié : 1° Au premier alinéa, après les mots : « des personnes fournissant de services de communications électroniques », sont insérés les mots : « ou des personnes fournissant des services de communication au public en ligne » ; 2° Au premier alinéa du I, le mot : « ou » est remplacé par le mot : «, par » et après les mots : « personnes fournissant des services de communications électroniques » sont insérés les mots «, ou par une personne fournissant de services de communication au public en ligne » ; 3° Après le troisième alinéa du I est inséré un alinéa ainsi rédigé : « aux dispositions du règlement n° …. du Parlement européen et du Conseil, du … établissant des mesures relatives au marché unique européen des communications électroniques et visant à faire de l'Europe un continent connecté ; » 4° Après le sixième alinéa du I, il est ajouté un alinéa ainsi rédigé : « Lorsque l'Autorité estime qu'il existe un risque caractérisé qu'un exploitant de réseau ou une personne fournissant des services de communications électroniques ne respecte pas ses obligations, résultant des dispositions et prescriptions mentionnées au I, à l'échéance prévue initialement, elle peut mettre en demeure l'exploitant ou le fournisseur de s'y conformer à cette échéance. »
+
+===== avis republique-numerique:688 (republique-numerique) =====
+AVIS: Article 0 : Accès aux données numériques Les données détaillées dans les articles suivants doivent être accesibles aux personnes concernées, dûment identifiées et connues des bénéficiaires, et à elles seulement. Les modifications doivent être enregistrées et consultables, ainsi que la date et l'auteur de la modification. Article 1 : Justificatif détaillé des factures Chaque facture d'aide à domicile doit : détailler le calcul du nombre d'heures, préciser par intervention : quel intervenant, début, durée L'identification de l'intervenant doit être certaine et pérenne. L'intervenant doit être id
+  [ministral-3b-latest] 11 claims:
+     • Les données détaillées dans les articles suivants doivent être accesibles aux personnes concernées, dûment identifiées et connues des bénéficiaires, et à elles seulement.
+     • Les modifications doivent être enregistrées et consultables, ainsi que la date et l'auteur de la modification.
+     • Chaque facture d'aide à domicile doit : détailler le calcul du nombre d'heures, préciser par intervention : quel intervenant, début, durée
+     • L'identification de l'intervenant doit être certaine et pérenne. L'intervenant doit être identifié par son propre numéro de téléphone mobile pour être contacté directement, même s'il a changé plusieurs fois de services d'aide.
+     • Il faut multiplier les contrôles contre les prestations fictives, en confrontant aléatoirement certaines interventions passées : la durée facturée à l'usager, la durée payée à l'intervenant.
+     • Chaque nouvel intervenant doit se présenter préalablement à l'usager, en l'informant par écrit, courriel ou sms, de son nom et de son téléphone mobile. Un mini-cv joint est recommandé.
+     • L'usager doit être informé par planning, courriel, ou sms : qui va venir, quand, la durée prévue.
+     • En cas de changements de dernière minute, l'intervenant qui va réellement venir doit tenir l'usager informé, par sms ou courriel.
+     • A chaque fin d'intervention, la durée qui sera facturée doit être communiquée à l'usager. La validation à chaud de l'usager doit être recueillie.
+     • L'usager doit pouvoir donner son avis après chaque intervention.
+     • Les données dématérialisées d'intervention ne peuvent pas être gérées par les prestataires. Elles doivent être gérées, certifiées sincères et inaltérables, par un organisme indépendant, tiers de confiance.
+  [mistral-large-latest] 5 claims:
+     • Les données détaillées dans les articles suivants doivent être accesibles aux personnes concernées, dûment identifiées et connues des bénéficiaires, et à elles seulement. Les modifications doivent être enregistrées et consultables, ainsi que la date et l'auteur de la modification.
+     • Chaque facture d'aide à domicile doit : détailler le calcul du nombre d'heures, préciser par intervention : quel intervenant, début, durée L'identification de l'intervenant doit être certaine et pérenne. L'intervenant doit être identifié par son propre numéro de téléphone mobile pour être contacté directement, même s'il a changé plusieurs fois de services d'aide. Il faut multiplier les contrôles contre les prestations fictives, en confrontant aléatoirement certaines interventions passées : la durée facturée à l'usager, la durée payée à l'intervenant.
+     • Chaque nouvel intervenant doit se présenter préalablement à l'usager, en l'informant par écrit, courriel ou sms, de son nom et de son téléphone mobile. Un mini-cv joint est recommandé. L'usager doit être informé par planning, courriel, ou sms : qui va venir, quand, la durée prévue. En cas de changements de dernière minute, l'intervenant qui va réellement venir doit tenir l'usager informé, par sms ou courriel.
+     • A chaque fin d'intervention, la durée qui sera facturée doit être communiquée à l'usager. La validation à chaud de l'usager doit être recueillie. L'usager doit pouvoir donner son avis après chaque intervention.
+     • Les données dématérialisées d'intervention ne peuvent pas être gérées par les prestataires. Elles doivent être gérées, certifiées sincères et inaltérables, par un organisme indépendant, tiers de confiance.
+
+===== avis granddebat:1-112 (granddebat) =====
+AVIS: Que les élus remplissent vraiment le mandat pour lequel ils ont été élus. Notamment en ce qui concerne les parlementaires (députés et aussi sénateurs) que la présence lors des sessions soit OBLIGATOIRE (sauf cas de force majeure tel que maladie). En effet, quand on est salarié, le patron ne nous paye pas si on ne vient pas au travail, alors pourquoi un élu qui ne siège que rarement continue à toucher sa "paye" d'élu. Le "patron" de l'élu, ce sont les citoyens à qui il doit rendre des comptes notamment en justifiant son travail d'élu. D'autre part, il faudrait supprimer tous les privilèges des 
+  [ministral-3b-latest] 9 claims:
+     • Que les élus remplissent vraiment le mandat pour lequel ils ont été élus
+     • Notamment en ce qui concerne les parlementaires (députés et aussi sénateurs) que la présence lors des sessions soit OBLIGATOIRE
+     • sauf cas de force majeure tel que maladie
+     • En effet, quand on est salarié, le patron ne nous paye pas si on ne vient pas au travail, alors pourquoi un élu qui ne siège que rarement continue à toucher sa
+     • paye
+     • patron
+     • de l'élu, ce sont les citoyens à qui il doit rendre des comptes notamment en justifiant son travail d'élu
+     • D'autre part, il faudrait supprimer tous les privilèges des élus
+     • pourquoi donc continuent-ils à bénéficier d'avantages une fois leur mandat terminé ?
+  [mistral-large-latest] 3 claims:
+     • Que les élus remplissent vraiment le mandat pour lequel ils ont été élus. Notamment en ce qui concerne les parlementaires (députés et aussi sénateurs) que la présence lors des sessions soit OBLIGATOIRE (sauf cas de force majeure tel que maladie) … Le "patron" de l'élu, ce sont les citoyens à qui il doit rendre des comptes notamment en justifiant son travail d'élu
+     • En effet, quand on est salarié, le patron ne nous paye pas si on ne vient pas au travail, alors pourquoi un élu qui ne siège que rarement continue à toucher sa "paye" d'élu
+     • D'autre part, il faudrait supprimer tous les privilèges des élus : pourquoi donc continuent-ils à bénéficier d'avantages une fois leur mandat terminé ?
+
+===== avis tiktok:481 (tiktok) =====
+AVIS: Le fait de ne pas pouvoir s'empêcher de s'arreter. Tikitok fait perdre en productivité et notamment sur la concentration. La vidéo de Léo Duff sur le sujet est vraiment percutante et devrait être montré dans toutes les écoles.il est nécessaire d'éduquer les jeunes et de les prévenir des dangers de tiktok. Je suis prêt à vous aider pour parler sur ce sujet. Pour information j'ai supprimé tiktok depuis près de 3 ans. Ce fut difficile au début, mais je n'ai plus envie de l'avoir. Les gens pensent que supprimer va leur faire perdre du divertissement, il faut donc les convaincre de se stopper. Les 
+  [ministral-3b-latest] 2 claims:
+     • Les gens pensent que supprimer va leur faire perdre du divertissement, il faut donc les convaincre de se stopper
+     • Les jeunes ne communiquent plus, et il y a un risque d'isolement à cause de cette application
+  [mistral-large-latest] 7 claims:
+     • Le fait de ne pas pouvoir s'empêcher de s'arreter
+     • Tikitok fait perdre en productivité et notamment sur la concentration
+     • il est nécessaire d'éduquer les jeunes et de les prévenir des dangers de tiktok
+     • j'ai supprimé tiktok depuis près de 3 ans. Ce fut difficile au début, mais je n'ai plus envie de l'avoir
+     • Les gens pensent que supprimer va leur faire perdre du divertissement, il faut donc les convaincre de se stopper
+     • Les jeunes ne communiquent plus, et il y a un risque d'isolement à cause de cette application
+     • aucun réseau social n'a de pouvoir d'addiction comme Tiktok (bien que les contenus peuvent s'y rapprocher notamment les réels Instagram ou YouTube). Leur algorithme est moins puissant
+
+===== avis republique-numerique:5102 (republique-numerique) =====
+AVIS: comme très bien imagé par Pierre Ygrié les fondations solide du numérique ne peuvent être faite que par la fibre. En irrigant tout le territoire zones rurales et urbaines on assure l'utilisation d'un internet équitable pour tout le monde. Un corps qui n'est pas irrigué partout est voué à mourir. peut on imaginer de ne pas diffuser le savoir, la culture, et les services d'internet en ignorant les ruraux? Avec un réseau fibre pour internet fixe, et un réseau hertzien pour internet mobile et Tel, on assurera un maillage parfait du pays. Le moindre hameau doit être alimenté par la fibre comme le f
+  [ministral-3b-latest] 6 claims:
+     • comme très bien imagé par Pierre Ygrié les fondations solide du numérique ne peuvent être faite que par la fibre
+     • En irrigant tout le territoire zones rurales et urbaines on assure l'utilisation d'un internet équitable pour tout le monde
+     • Un corps qui n'est pas irrigué partout est voué à mourir
+     • peut on imaginer de ne pas diffuser le savoir, la culture, et les services d'internet en ignorant les ruraux?
+     • Le moindre hameau doit être alimenté par la fibre comme le fait l'électricité
+     • De toute façon le réseau cuivre est à refaire d'urgence, alors saisissons cette opportunité
+  [mistral-large-latest] 1 claims:
+     • les fondations solide du numérique ne peuvent être faite que par la fibre … En irrigant tout le territoire zones rurales et urbaines on assure l'utilisation d'un internet équitable pour tout le monde … peut on imaginer de ne pas diffuser le savoir, la culture, et les services d'internet en ignorant les ruraux? … Avec un réseau fibre pour internet fixe, et un réseau hertzien pour internet mobile et Tel, on assurera un maillage parfait du pays … Le moindre hameau doit être alimenté par la fibre comme le fait l'électricité … De toute façon le réseau cuivre est à refaire d'urgence, alors saisissons cette opportunité
+
+===== avis granddebat:1-101 (granddebat) =====
+AVIS: Passer d'un régime présidentiel à un régime beaucoup moins vertical. Les citoyens doivent pouvoir peser en permanence sur leur destin sans délégation arbitraire de pouvoir. 3 solutions d'amélioration en plus : - Instauration du RIC en toutes matières : législatif (adoption d'un texte : loi, décret, règlement…), abrogatoire (annulation d'un texte de loi), constituant (modification de la Constitution), révocatoire (destitution d'un membre d'une institution, et notamment des élus), ratificatoire (ratification ou dénonciation d'un traité, pacte, accord international), suspensif (annulation d'une l
+  [ministral-3b-latest] 9 claims:
+     • Passer d'un régime présidentiel à un régime beaucoup moins vertical
+     • Les citoyens doivent pouvoir peser en permanence sur leur destin sans délégation arbitraire de pouvoir
+     • - Instauration du RIC en toutes matières : législatif (adoption d'un texte : loi, décret, règlement…), abrogatoire (annulation d'un texte de loi), constituant (modification de la Constitution), révocatoire (destitution d'un membre d'une institution, et notamment des élus), ratificatoire (ratification ou dénonciation d'un traité, pacte, accord international), suspensif (annulation d'une loi avant son entrée en vigueur), convocatoire (convocation d'une assemblée tirée au sort, d'un collège d'experts…)
+     • - Reconnaissance et prise en compte du vote blanc
+     • Définition du vote blanc : bulletin blanc ou feuille de papier blanche, vierge de toute inscription, placée dans l'enveloppe qui elle-même est placée dans l'urne. Les enveloppes vides sont assimilées à un vote blanc.
+     • Les enveloppes vides sont assimilées à un vote blanc. Décompte : les bulletins blancs sont décomptés spécifiquement et considérés comme suffrages exprimés.
+     • Condition préalable : le vote est rendu obligatoire (il reste à définir les sanctions pour les abstentionnistes non excusés).
+     • Périmètre d'application : pour toutes les élections, à tous les tours.
+     • - Création d'une Assemblée citoyenne tirée au sort (avec rotation régulière) pour contrebalancer le pouvoir de l'exécutif et des 2 assemblées existantes (nationale et Sénat)
+  [mistral-large-latest] 4 claims:
+     • Passer d'un régime présidentiel à un régime beaucoup moins vertical. Les citoyens doivent pouvoir peser en permanence sur leur destin sans délégation arbitraire de pouvoir
+     • - Instauration du RIC en toutes matières : législatif (adoption d'un texte : loi, décret, règlement…), abrogatoire (annulation d'un texte de loi), constituant (modification de la Constitution), révocatoire (destitution d'un membre d'une institution, et notamment des élus), ratificatoire (ratification ou dénonciation d'un traité, pacte, accord international), suspensif (annulation d'une loi avant son entrée en vigueur), convocatoire (convocation d'une assemblée tirée au sort, d'un collège d'experts…)
+     • - Reconnaissance et prise en compte du vote blanc. Définition du vote blanc : bulletin blanc ou feuille de papier blanche, vierge de toute inscription, placée dans l'enveloppe qui elle-même est placée dans l'urne. Les enveloppes vides sont assimilées à un vote blanc. Décompte : les bulletins blancs sont décomptés spécifiquement et considérés comme suffrages exprimés. Condition préalable : le vote est rendu obligatoire (il reste à définir les sanctions pour les abstentionnistes non excusés). Seuil : si le pourcentage de votes blancs atteint la majorité absolue des suffrages exprimés (50% + 1 voix), l'élection est invalidée. Elle recommence avec d'autres candidats (interdiction aux premiers candidats de se représenter). Périmètre d'application : pour toutes les élections, à tous les tours
+     • - Création d'une Assemblée citoyenne tirée au sort (avec rotation régulière) pour contrebalancer le pouvoir de l'exécutif et des 2 assemblées existantes (nationale et Sénat)
+
+===== avis tiktok:414 (tiktok) =====
+AVIS: Sensation de ne pas pouvoir décrocher, et arriver jusqu'à la fameuse vidéo « les pouces crevés » de Tiktok au bout d'une heure de consultation pour inviter à décrocher, sensation humiliante
+  [ministral-3b-latest] 5 claims:
+     • Sensation de ne pas pouvoir décrocher
+     • et arriver jusqu'à la fameuse vidéo « les pouces crevés » de Tiktok
+     • au bout d'une heure de consultation
+     • pour inviter à décrocher
+     • sensation humiliante
+  [mistral-large-latest] 1 claims:
+     • Sensation de ne pas pouvoir décrocher, et arriver jusqu'à la fameuse vidéo « les pouces crevés » de Tiktok au bout d'une heure de consultation pour inviter à décrocher, sensation humiliante
+
+===== avis tiktok:445 (tiktok) =====
+AVIS: Le temps passé sur tik tok, a scroller me fait culpabiliser de ne pas avoir par exemple pris le temps de lire, réviser ect… Cette impression de rater quelque chose est fatigante, je passe mon temps à comparer ma vie à celle des autres. Je sais que mon frère âgé de 15 ans est très impacté par ce réseaux social, il y passe tout son temps et finit par adopter un comportement similaire à celui que l'on peut voir sur les vidéos. Ce réseau social est nocif, le temps qu'on y passe ne se contrôle pas. Cependant, je suis abonnée pour ma part a beaucoup de contenu sur l'actualité mais cela ne fait pas t
+  [ministral-3b-latest] 9 claims:
+     • Le temps passé sur tik tok, a scroller
+     • me fait culpabiliser de ne pas avoir par exemple pris le temps de lire, réviser ect…
+     • Cette impression de rater quelque chose
+     • fatigante
+     • je passe mon temps à comparer ma vie à celle des autres
+     • il y passe tout son temps
+     • finit par adopter un comportement similaire
+     • le temps qu'on y passe ne se contrôle pas
+     • Ce réseau social est nocif
+  [mistral-large-latest] 5 claims:
+     • Le temps passé sur tik tok, a scroller me fait culpabiliser de ne pas avoir par exemple pris le temps de lire, réviser ect… … Cette impression de rater quelque chose est fatigante
+     • je passe mon temps à comparer ma vie à celle des autres
+     • Je sais que mon frère âgé de 15 ans est très impacté par ce réseaux social, il y passe tout son temps et finit par adopter un comportement similaire à celui que l'on peut voir sur les vidéos
+     • Ce réseau social est nocif, le temps qu'on y passe ne se contrôle pas
+     • Cependant, je suis abonnée pour ma part a beaucoup de contenu sur l'actualité mais cela ne fait pas tout
+
+===== avis republique-numerique:650 (republique-numerique) =====
+AVIS: Pas de formulation spécifique. Le président de la CADA propose la création d'un "un référé communication, diffusion et réutilisation" qui serait dispensé des conditions d'urgence et d'utilité du référé administratif. Le rapporteur de la CADA préfère s'en tenir à l'application de la procédure, cad du respect du délai de 6 mois prévu par le Code de justice administrative, qui est trop souvent largement dépassé. Ms FNE indique (p.326 du rapport) que "l'obligation précédente de traiter cette catégorie de contentieux en 6 mois maximum a été supprimée" et que "désormais le délai serait voisin des 24
+  [ministral-3b-latest] 6 claims:
+     • Le président de la CADA propose la création d'un "un référé communication, diffusion et réutilisation" qui serait dispensé des conditions d'urgence et d'utilité du référé administratif.
+     • Ms FNE indique (p.326 du rapport) que "l'obligation précédente de traiter cette catégorie de contentieux en 6 mois maximum a été supprimée" et que "désormais le délai serait voisin des 24 mois"
+     • On pourrait a minima imposer une sanction financière en cas de dépassement de délai.
+     • De nombreux observateurs (FNE - France Nature Environnement, par ex) ou acteurs (Serge Daël, président de la CADA - excusez-du peu - ou Nicolas Polge, rapporteur général de la Cada) déplorent la lenteur du recours juridique lorsque l'avis de la CADA n'est pas suivi
+     • Quel intérêt d'obtenir un document 3 à 5 ans après ?
+     • Imagine-t-on ce qu'aurait modifié un accès plus étendu aux documents admi & un recours plus efficace en 1986, lorsque les autorités affirmaient que le nuage de Tchernobyl n'avait pas passé la France
+  [mistral-large-latest] 2 claims:
+     • Le président de la CADA propose la création d'un "un référé communication, diffusion et réutilisation" qui serait dispensé des conditions d'urgence et d'utilité du référé administratif … On pourrait a minima imposer une sanction financière en cas de dépassement de délai
+     • l'obligation précédente de traiter cette catégorie de contentieux en 6 mois maximum a été supprimée" et que "désormais le délai serait voisin des 24 mois" … Quel intérêt d'obtenir un document 3 à 5 ans après ?
+
+===== avis granddebat:1-66 (granddebat) =====
+AVIS: o La consultation citoyenne : possibilité pour une corporation ou une fédération de citoyens déclarées (association…) avec un minimum de 500.000 signatures (vérifiables) de déposer une demande de référendum populaire, dont l'organisation et la facture est pris en charge par la corporation. Les questions soumises au référendum doivent être validées par le Conseil Constitutionnel. Une ou plusieurs consultations peut avoir lieu une fois par trimestre seulement. Les résultats, avec un quorum de 50 % des Français électeurs, sont dès lors transmis à l'Assemblée Nationale avec obligation pour cette d
+  [ministral-3b-latest] 5 claims:
+     • o La consultation citoyenne : possibilité pour une corporation ou une fédération de citoyens déclarées (association…) avec un minimum de 500.000 signatures (vérifiables) de déposer une demande de référendum populaire
+     • dont l'organisation et la facture est pris en charge par la corporation
+     • Les questions soumises au référendum doivent être validées par le Conseil Constitutionnel
+     • Une ou plusieurs consultations peut avoir lieu une fois par trimestre seulement
+     • Les résultats, avec un quorum de 50 % des Français électeurs, sont dès lors transmis à l'Assemblée Nationale avec obligation pour cette dernière d'étudier et de voter les décisions issus de ces consultations
+  [mistral-large-latest] 1 claims:
+     • La consultation citoyenne : possibilité pour une corporation ou une fédération de citoyens déclarées (association…) avec un minimum de 500.000 signatures (vérifiables) de déposer une demande de référendum populaire, dont l'organisation et la facture est pris en charge par la corporation … Les questions soumises au référendum doivent être validées par le Conseil Constitutionnel … Une ou plusieurs consultations peut avoir lieu une fois par trimestre seulement … Les résultats, avec un quorum de 50 % des Français électeurs, sont dès lors transmis à l'Assemblée Nationale avec obligation pour cette dernière d'étudier et de voter les décisions issus de ces consultations
+
+===== avis tiktok:172 (tiktok) =====
+AVIS: Les problèmes de mal être de notre adolescente ont démarrés avec l'utilisation de tik tok. Manque d'envie pour tout le reste, irritabilité, gestion de la frustration difficile, automutilation. Le réseau social ne lui proposait que des vidéos de jeunes déprimés, suicidaires ou qui sautomutilaient. Difficultés à ne pas consulter l'application. Malgré temps d'écran et contrôle, elle a trouvé des moyens de contourner les restrictions. Nous avons alertés son médecin, sans succès le corps médical n'est pas du tout formé et au fait de ce problème lié à tik tok. Le peu de fois où elle ne l'a pas utili
+  [ministral-3b-latest] 4 claims:
+     • Les problèmes de mal être de notre adolescente ont démarrés avec l'utilisation de tik tok. Manque d'envie pour tout le reste, irritabilité, gestion de la frustration difficile, automutilation. Le réseau social ne lui proposait que des vidéos de jeunes déprimés, suicidaires ou qui sautomutilaient.
+     • Difficultés à ne pas consulter l'application. Malgré temps d'écran et contrôle, elle a trouvé des moyens de contourner les restrictions.
+     • Nous avons alertés son médecin, sans succès le corps médical n'est pas du tout formé et au fait de ce problème lié à tik tok.
+     • Le peu de fois où elle ne l'a pas utilisé plusieurs jours : motivation retrouvée, sommeil lecture.
+  [mistral-large-latest] 1 claims:
+     • Les problèmes de mal être de notre adolescente ont démarrés avec l'utilisation de tik tok. Manque d'envie pour tout le reste, irritabilité, gestion de la frustration difficile, automutilation. Le réseau social ne lui proposait que des vidéos de jeunes déprimés, suicidaires ou qui sautomutilaient. Difficultés à ne pas consulter l'application. Malgré temps d'écran et contrôle, elle a trouvé des moyens de contourner les restrictions … Le peu de fois où elle ne l'a pas utilisé plusieurs jours : motivation retrouvée, sommeil lecture
+
+===== avis tiktok:425 (tiktok) =====
+AVIS: Tiktok véhicule une image totalement faussée de la jeunesse et impose une vision superficielle, captivante dans le mauvais sens du terme, jusqu'à décrocher de la réalité des choses.
+  [ministral-3b-latest] 4 claims:
+     • Tiktok véhicule une image totalement faussée de la jeunesse
+     • et impose une vision superficielle
+     • captivante dans le mauvais sens du terme
+     • jusqu'à décrocher de la réalité des choses
+  [mistral-large-latest] 1 claims:
+     • Tiktok véhicule une image totalement faussée de la jeunesse et impose une vision superficielle, captivante dans le mauvais sens du terme, jusqu'à décrocher de la réalité des choses
+
+===== avis tiktok:471 (tiktok) =====
+AVIS: Une sorte de malaise vis à vis des images : gêne, anxiété. Dans ces cas, les vidéos étaient sur des sujets très forts, y compris justes traités par des chaînes d'information.
+  [ministral-3b-latest] 4 claims:
+     • Une sorte de malaise vis à vis des images
+     • gêne, anxiété
+     • Dans ces cas, les vidéos étaient sur des sujets très forts
+     • y compris justes traités par des chaînes d'information
+  [mistral-large-latest] 1 claims:
+     • Une sorte de malaise vis à vis des images : gêne, anxiété … Dans ces cas, les vidéos étaient sur des sujets très forts, y compris justes traités par des chaînes d'information
+
+===== avis republique-numerique:1400 (republique-numerique) =====
+AVIS: JeanneP: Tout le monde n'a pas accès aux nouvelles technologies (notamment des personnes âgées isolées), et ces personnes peuvent se sentir mises à l'écart. Il est cependant vrai que cela encouragerait certainement les nouvelles générations pour qui se déplacer au bureau de vote peut constituer un obstacle. C'est pourquoi il faudrait maintenir les deux possibilités ; bureaux de vote et nouvelles technologies. BD: Il y en a pour tout le monde ! d'ailleurs les personnes âgées ne se déplacent pas forcément très facilement non plus.. De toute façon le passé/présent nous a montré qu'il est toujours
+  [ministral-3b-latest] 5 claims:
+     • Tout le monde n'a pas accès aux nouvelles technologies (notamment des personnes âgées isolées), et ces personnes peuvent se sentir mises à l'écart.
+     • Il est cependant vrai que cela encouragerait certainement les nouvelles générations pour qui se déplacer au bureau de vote peut constituer un obstacle.
+     • C'est pourquoi il faudrait maintenir les deux possibilités ; bureaux de vote et nouvelles technologies.
+     • De toute façon le passé/présent nous a montré qu'il est toujours possible de trouver des solutions : on voit parfois sur des papiers d'abonnement téléphonique par exemple (désolé) :
+     • vous pouvez résilier en ligne sur ww. ou par courrier postale, ou en guichet physique. Pourquoi l'état a-t-il toujours tant de retard ?
+  [mistral-large-latest] 2 claims:
+     • Tout le monde n'a pas accès aux nouvelles technologies (notamment des personnes âgées isolées), et ces personnes peuvent se sentir mises à l'écart. … il faudrait maintenir les deux possibilités ; bureaux de vote et nouvelles technologies.
+     • Pourquoi l'état a-t-il toujours tant de retard ?
+
+===== avis republique-numerique:518 (republique-numerique) =====
+AVIS: I. Après le 1er alinéa de l'article 78 de la loi n° 2005-102 du 11 février 2005 pour l'égalité des droits, il est ajouté l'alinéa suivant : « Les services d'accueil téléphonique destinés à recevoir les appels des usagers sont accessibles aux personnes déficientes auditives par la mise à disposition d'un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne, en respectant les mêmes conditions de traduction.» « Les associations reconnues d'utilité publiques dotées d'un service d'accueil téléphon
+  [ministral-3b-latest] 4 claims:
+     • « Les associations reconnues d'utilité publiques dotées d'un service d'accueil téléphonique, doivent mettre à la disposition des personnes déficientes auditives un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne »
+     • L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. »
+     • Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle »
+     • IV. Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi.
+  [mistral-large-latest] 1 claims:
+     • II. L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. » … III. Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle ». … IV. Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi.
+
+===== avis republique-numerique:40 (republique-numerique) =====
+AVIS: Le code de la consommation est ainsi modifié : I. - Le chapitre 1er du Titre II du Livre 1er du code de la consommation est complété par une section 18 ainsi rédigée : « Section 18 : Récupération et portabilité de données « Sous-section 1 : Services de courrier électronique « Art. L. 121-120. « Tout fournisseur d'un service de courrier électronique doit proposer une fonctionnalité gratuite permettant à tout consommateur de transférer directement les messages qu'il a émis ou reçus au moyen de ce service, et qui sont conservés par un système de traitement automatisé mis en œuvre par le fournisse
+  [ministral-3b-latest] 7 claims:
+     • Tout fournisseur d'un service de courrier électronique doit proposer une fonctionnalité gratuite permettant à tout consommateur de transférer directement les messages qu'il a émis ou reçus au moyen de ce service, et qui sont conservés par un système de traitement automatisé mis en œuvre par le fournisseur du service, ainsi que sa liste de contacts, vers un autre fournisseur de service de courrier électronique, dans la limite de la capacité de stockage de ce nouveau service.
+     • Les fournisseurs de service de courrier électronique informent les consommateurs de manière claire et loyale du droit mentionné au premier alinéa.
+     • Les fournisseurs de service de courrier électronique sont tenus de proposer gratuitement aux consommateurs, lorsque ceux-ci changent de fournisseur, une offre leur permettant de continuer, pour une durée de six mois à compter de la résiliation ou de la désactivation du service, à avoir accès gratuitement au courrier électronique reçu sur l'adresse électronique attribuée.
+     • La fonctionnalité prévue au premier alinéa doit offrir au consommateur une faculté de requête unique étendue au moins à un type ou un format de fichiers ou données.
+     • Les fournisseurs de services de communication au public en ligne informent clairement le consommateur, avant la conclusion d'un contrat et dans le contrat, de l'impossibilité ou de la possibilité de récupérer les données ayant fait l'objet d'un traitement et, le cas échéant, des modalités de cette récupération et de la forme, notamment le format de fichier, sous laquelle les données sont récupérables.
+     • Les fournisseurs de services de communication au public en ligne précisent le cas échéant le caractère ouvert et interopérable du format de fichier utilisé.
+     • Tout manquement aux articles L. 121-120 et L. 121-121 est passible d'une amende administrative dont le montant ne peut excéder 3 000 € pour une personne physique et 15 000 € pour une personne morale.
+  [mistral-large-latest] 4 claims:
+     • Tout fournisseur d'un service de courrier électronique doit proposer une fonctionnalité gratuite permettant à tout consommateur de transférer directement les messages qu'il a émis ou reçus au moyen de ce service, et qui sont conservés par un système de traitement automatisé mis en œuvre par le fournisseur du service, ainsi que sa liste de contacts, vers un autre fournisseur de service de courrier électronique, dans la limite de la capacité de stockage de ce nouveau service. … Pour cela, tout fournisseur d'un service de courrier électronique ne peut refuser de fournir à un autre fournisseur d'un service de courrier électronique les informations nécessaires à la mise en place des fonctionnalités mentionnées au premier alinéa, notamment celles relatives à leurs règles techniques et aux standards applicables. … Les fournisseurs de service de courrier électronique informent les consommateurs de manière claire et loyale du droit mentionné au premier alinéa. … Les fournisseurs de service de courrier électronique sont tenus de proposer gratuitement aux consommateurs, lorsque ceux-ci changent de fournisseur, une offre leur permettant de continuer, pour une durée de six mois à compter de la résiliation ou de la désactivation du service, à avoir accès gratuitement au courrier électronique reçu sur l'adresse électronique attribuée.
+     • Tout fournisseur d'un service de communication au public en ligne propose, en prenant toutes les mesures nécessaires à cette fin, notamment en termes d'interface de programmation, au consommateur une fonctionnalité gratuite permettant la récupération licite : 1° de tous les fichiers mis en ligne par le consommateur; 2° de toutes les données associées au compte utilisateur du consommateur et résultant de l'utilisation de ce compte, notamment les données relatives au classement de contenus. … La fonctionnalité prévue au premier alinéa doit offrir au consommateur une faculté de requête unique étendue au moins à un type ou un format de fichiers ou données. … Les fournisseurs de services de communication au public en ligne informent clairement le consommateur, avant la conclusion d'un contrat et dans le contrat, de l'impossibilité ou de la possibilité de récupérer les données ayant fait l'objet d'un traitement et, le cas échéant, des modalités de cette récupération et de la forme, notamment le format de fichier, sous laquelle les données sont récupérables. Les fournisseurs de services de communication au public en ligne précisent le cas échéant le caractère ouvert et interopérable du format de fichier utilisé.
+     • La présente section est également applicable aux services fournis aux professionnels.
+     • Tout manquement aux articles L. 121-120 et L. 121-121 est passible d'une amende administrative dont le montant ne peut excéder 3 000 € pour une personne physique et 15 000 € pour une personne morale.
+
+===== avis republique-numerique:5797 (republique-numerique) =====
+AVIS: Le Gouvernement, dans l'explication qu'il donne de cet article, indique qu'il faudra prendre en compte le futur règlement européen sur la protection des données personnelles au moment de l'adoption du texte définitif. L'utilité de ce projet d'article doit donc être questionnée dès lors que le texte européen établira un corpus unique de règles, valable dans toute l'Union (« un continent, un droit », selon l'orientation générale du Conseil de l'Union européenne adoptée le 15 juin 2015 par les ministres de la justice de l'UE). Par ailleurs, la rédaction de l'article soulève des questions complexe
+  [ministral-3b-latest] 5 claims:
+     • L'utilité de ce projet d'article doit donc être questionnée dès lors que le texte européen établira un corpus unique de règles, valable dans toute l'Union (« un continent, un droit », selon l'orientation générale du Conseil de l'Union européenne adoptée le 15 juin 2015 par les ministres de la justice de l'UE).
+     • la rédaction de l'article soulève des questions complexes au regard de la protection des droits de propriété intellectuelle.
+     • le transfert des données utilisateur d'un service à un autre ne doit pas imposer que le nouveau service propose des contenus identiques à l'ancien, pour garantir que les données transférées puissent être effectivement utilisées.
+     • D'une part, certaines applications n'ont pas attendu le projet de texte du Gouvernement pour proposer la conversion des listes de lecture créées par un utilisateur sur un premier service de musique en ligne, en un format réutilisable sur un second service similaire.
+     • En conséquence, le projet d'article, s'il devait être maintenu, devrait préciser clairement que l'effectivité du droit à la portabilité des données ne porte pas préjudice aux droits des tiers, et notamment à la nécessité de négocier les autorisations nécessaires à la mise à disposition des contenus.
+  [mistral-large-latest] 2 claims:
+     • L'utilité de ce projet d'article doit donc être questionnée dès lors que le texte européen établira un corpus unique de règles, valable dans toute l'Union (« un continent, un droit », selon l'orientation générale du Conseil de l'Union européenne adoptée le 15 juin 2015 par les ministres de la justice de l'UE)
+     • la rédaction de l'article soulève des questions complexes au regard de la protection des droits de propriété intellectuelle. En effet, le transfert des données utilisateur d'un service à un autre ne doit pas imposer que le nouveau service propose des contenus identiques à l'ancien, pour garantir que les données transférées puissent être effectivement utilisées … Il convient en outre de rappeler que les questions de transfert et d'interopérabilité des données utilisateur entre services reçoivent d'ores et déjà des réponses en pratique … le projet d'article, s'il devait être maintenu, devrait préciser clairement que l'effectivité du droit à la portabilité des données ne porte pas préjudice aux droits des tiers, et notamment à la nécessité de négocier les autorisations nécessaires à la mise à disposition des contenus
+
+===== avis granddebat:1-42 (granddebat) =====
+AVIS: Suppression du Senat + limiter les mandats dans le temps + diminution de tous les salaires de la haute administration + suppresion de toutes les niches fiscales pour les fonctionnaires.
+  [ministral-3b-latest] 1 claims:
+     • Suppression du Senat + limiter les mandats dans le temps + diminution de tous les salaires de la haute administration + suppresion de toutes les niches fiscales pour les fonctionnaires.
+  [mistral-large-latest] 4 claims:
+     • Suppression du Senat
+     • limiter les mandats dans le temps
+     • diminution de tous les salaires de la haute administration
+     • suppresion de toutes les niches fiscales pour les fonctionnaires
+
+===== avis granddebat:1-109 (granddebat) =====
+AVIS: Il faut que ces élus représentent la sociologie de la population et non pas comme actuellement des élites qui sortent tous des grandes écoles et qui sont complètement déconnecté de se que vivent les français . Je suis pour une proportionnel intégrale de l'assemblée national et la suppression du sénat
+  [ministral-3b-latest] 5 claims:
+     • Il faut que ces élus représentent la sociologie de la population
+     • et non pas comme actuellement des élites qui sortent tous des grandes écoles
+     • et qui sont complètement déconnecté de se que vivent les français
+     • Je suis pour une proportionnel intégrale de l'assemblée national
+     • et la suppression du sénat
+  [mistral-large-latest] 2 claims:
+     • Il faut que ces élus représentent la sociologie de la population et non pas comme actuellement des élites qui sortent tous des grandes écoles et qui sont complètement déconnecté de se que vivent les français
+     • Je suis pour une proportionnel intégrale de l'assemblée national et la suppression du sénat
+
+===== avis granddebat:1-147 (granddebat) =====
+AVIS: Le lobbying par des entreprises privées (ou par les organismes ou les cabinets de conseil qui les représentent) a des conséquences majeures sur l'économie, l'environnement, la santé. Au lieu de garantir aux citoyens que les décideurs agissent pour l'intérêt général, le processus législatif est corrompu par des activités de lobbying pour des intérêts particuliers, avec des conséquences néfastes et problématiques pour la population (nutrition, taxis, hydrocarbures, glyphosate, loi egalim.). Ces conflits d'intérêts permanents et organisés sont en train de jeter le discrédit sur nos décideurs, et 
+  [ministral-3b-latest] 4 claims:
+     • Le lobbying par des entreprises privées (ou par les organismes ou les cabinets de conseil qui les représentent) a des conséquences majeures sur l'économie, l'environnement, la santé.
+     • Au lieu de garantir aux citoyens que les décideurs agissent pour l'intérêt général, le processus législatif est corrompu par des activités de lobbying pour des intérêts particuliers, avec des conséquences néfastes et problématiques pour la population (nutrition, taxis, hydrocarbures, glyphosate, loi egalim.)
+     • Ces conflits d'intérêts permanents et organisés sont en train de jeter le discrédit sur nos décideurs, et contribuent à l'écroulement actuel de notre système démocratique en France et en Europe
+     • Il faut avoir le courage politique de limiter l'influence des lobbies, d'écarter les clients privés qu'ils représentent du processus de conception des lois, et de contrôler nos décideurs publics et nos élus afin qu'enfin ils agissent dans l'intérêt général des citoyens.
+  [mistral-large-latest] 1 claims:
+     • le processus législatif est corrompu par des activités de lobbying pour des intérêts particuliers, avec des conséquences néfastes et problématiques pour la population (nutrition, taxis, hydrocarbures, glyphosate, loi egalim.) … Il faut avoir le courage politique de limiter l'influence des lobbies, d'écarter les clients privés qu'ils représentent du processus de conception des lois, et de contrôler nos décideurs publics et nos élus afin qu'enfin ils agissent dans l'intérêt général des citoyens
+
+===== avis granddebat:1-162 (granddebat) =====
+AVIS: Rapprocher Elus et Citoyens. Comment rapprocher la représentation Parlementaire des citoyens ? Les Elus, en quête de notoriété et de proximité, plaident pour un élargissement de leurs mandats à d'autres mandats électifs (par exemple Député -Maire). Ceci va incontestablement à l'encontre d'un travail parlementaire approfondi. D'autre part, cette formule n'a pas prouvé son efficacité dans le passé. Enfin cela irait à l'encontre d'une réduction du nombre d'élus. Mais la proximité des Elus parlementaires et des citoyens n'est pas jugée suffisante à l'heure actuelle, renforçant de facto la méfiance
+  [ministral-3b-latest] 5 claims:
+     • Rapprocher Elus et Citoyens. Comment rapprocher la représentation Parlementaire des citoyens ? Les Elus, en quête de notoriété et de proximité, plaident pour un élargissement de leurs mandats à d'autres mandats électifs (par exemple Député -Maire). Ceci va incontestablement à l'encontre d'un travail parlementaire approfondi.
+     • D'autre part, cette formule n'a pas prouvé son efficacité dans le passé. Enfin cela irait à l'encontre d'une réduction du nombre d'élus.
+     • Mais la proximité des Elus parlementaires et des citoyens n'est pas jugée suffisante à l'heure actuelle, renforçant de facto la méfiance des citoyens vis-à-vis du système représentatif.
+     • Cette proximité devrait-être améliorée. Une solution pourrait être la suivante : au niveau départemental (proximité ; tradition) mettre en place une Assemblée citoyenne comprenant les élus parlementaires du département, des Maires, une représentation des corps intermédiaires et des citoyens tirés au sort chaque année.
+     • La représentation citoyenne devrait refléter au mieux la société (Egalité H/F, socioprofessionnels, actifs/retraités/ non actifs, ..). Cette « assemblée » se réunirait de manière régulière (par exemple 2 fois par mois sur 1 journée) et débattrait des projets de loi en cours d'examen à l'Assemblée.
+  [mistral-large-latest] 2 claims:
+     • Les Elus, en quête de notoriété et de proximité, plaident pour un élargissement de leurs mandats à d'autres mandats électifs (par exemple Député -Maire). Ceci va incontestablement à l'encontre d'un travail parlementaire approfondi. D'autre part, cette formule n'a pas prouvé son efficacité dans le passé. Enfin cela irait à l'encontre d'une réduction du nombre d'élus … la proximité des Elus parlementaires et des citoyens n'est pas jugée suffisante à l'heure actuelle, renforçant de facto la méfiance des citoyens vis-à-vis du système représentatif. Cette proximité devrait-être améliorée
+     • Une solution pourrait être la suivante : au niveau départemental (proximité ; tradition) mettre en place une Assemblée citoyenne comprenant les élus parlementaires du département, des Maires, une représentation des corps intermédiaires et des citoyens tirés au sort chaque année. La représentation citoyenne devrait refléter au mieux la société (Egalité H/F, socioprofessionnels, actifs/retraités/ non actifs, ..). Cette « assemblée » se réunirait de manière régulière (par exemple 2 fois par mois sur 1 journée) et débattrait des projets de loi en cours d'examen à l'Assemblée. Cette assemblée aurait vocation à élaborer des contributions et des propositions, et à nourrir le débat parlementaire porté par les Elus. Cette Assemblée disposerait d'un secrétariat permanent pour recueillir les contributions / propositions de tous citoyen au fil de l'eau
+
+===== avis tiktok:20 (tiktok) =====
+AVIS: Sentiment de mal-être expliqué par le fait que regarder des vidéos courtes pendant 1h fait perdre notre productivité, notre temps (précieux), ne nous apprend absolument rien. Cela peut entrainer une dépendance, ce qui fut mon cas lorsque j'étais au lycée. Sans prendre de recul sur notre rapport aux réseaux sociaux, il semble peu probable de sortir de cette addiction.
+  [ministral-3b-latest] 1 claims:
+     • Sentiment de mal-être expliqué par le fait que regarder des vidéos courtes pendant 1h fait perdre notre productivité, notre temps (précieux), ne nous apprend absolument rien. Cela peut entrainer une dépendance, ce qui fut mon cas lorsque j'étais au lycée. Sans prendre de recul sur notre rapport aux réseaux sociaux, il semble peu probable de sortir de cette addiction.
+  [mistral-large-latest] 3 claims:
+     • Sentiment de mal-être expliqué par le fait que regarder des vidéos courtes pendant 1h fait perdre notre productivité, notre temps (précieux), ne nous apprend absolument rien
+     • Cela peut entrainer une dépendance, ce qui fut mon cas lorsque j'étais au lycée
+     • Sans prendre de recul sur notre rapport aux réseaux sociaux, il semble peu probable de sortir de cette addiction
+
+===== avis tiktok:29 (tiktok) =====
+AVIS: Tiktok est une plateforme qui montre principalement du contenue qui pousse à la culture du vide , même si des comptes peuvent être intéressant pour avoir des astuces ou informations utiles , la plupart du contenu peut même parfois être très choquant , les propos sont violents et haineux ou enferme l'utilisateur dans un mal être particulier: la plateforme crée une boucle d'addiction et après c'est dur de s'en sortir , à part supprimer il n' y a pas grand chose à faire.
+  [ministral-3b-latest] 1 claims:
+     • Tiktok est une plateforme qui montre principalement du contenue qui pousse à la culture du vide , même si des comptes peuvent être intéressant pour avoir des astuces ou informations utiles , la plupart du contenu peut même parfois être très choquant , les propos sont violents et haineux ou enferme l'utilisateur dans un mal être particulier: la plateforme crée une boucle d'addiction et après c'est dur de s'en sortir , à part supprimer il n' y a pas grand chose à faire.
+  [mistral-large-latest] 3 claims:
+     • Tiktok est une plateforme qui montre principalement du contenue qui pousse à la culture du vide
+     • la plupart du contenu peut même parfois être très choquant , les propos sont violents et haineux ou enferme l'utilisateur dans un mal être particulier
+     • la plateforme crée une boucle d'addiction et après c'est dur de s'en sortir , à part supprimer il n' y a pas grand chose à faire
+
+===== avis tiktok:140 (tiktok) =====
+AVIS: J'ai 27 ans, je suis consciente de la perte de temps qu'induisent les applications comme tiktok et Instagram, POURTANT, je me retrouve à avoir à les supprimer et à me déconnecter pour m'empêcher d'y aller perdre mon temps. Et ce alors même que je peux être irritée par ce que je vois (consumérisme, idioties en tout genre, plagiat infini). Ces applications sont incroyablement addictives même pour ceux qui ne les apprécient pas (comme moi). J'y vois un vrai danger pour les plus jeunes, sans compter les problèmes de désinformation. Il s'agit d'un vrai problème de société : peut-on laisser de grand
+  [ministral-3b-latest] 4 claims:
+     • J'ai 27 ans, je suis consciente de la perte de temps qu'induisent les applications comme tiktok et Instagram, POURTANT, je me retrouve à avoir à les supprimer et à me déconnecter pour m'empêcher d'y aller perdre mon temps.
+     • Ces applications sont incroyablement addictives même pour ceux qui ne les apprécient pas (comme moi). J'y vois un vrai danger pour les plus jeunes, sans compter les problèmes de désinformation.
+     • Il s'agit d'un vrai problème de société : peut-on laisser de grandes entreprises étrangères, voler du temps de vie à nos enfants, à nos proches, et ce pour faire du profit ? La réponse devrait être un grand NON.
+     • Et pourtant, je le répète, j'ai été une utilisatrice de ces applications et j'y ai aussi pris du plaisir.
+  [mistral-large-latest] 6 claims:
+     • je suis consciente de la perte de temps qu'induisent les applications comme tiktok et Instagram, POURTANT, je me retrouve à avoir à les supprimer et à me déconnecter pour m'empêcher d'y aller perdre mon temps
+     • Et ce alors même que je peux être irritée par ce que je vois (consumérisme, idioties en tout genre, plagiat infini)
+     • Ces applications sont incroyablement addictives même pour ceux qui ne les apprécient pas (comme moi)
+     • J'y vois un vrai danger pour les plus jeunes, sans compter les problèmes de désinformation
+     • Il s'agit d'un vrai problème de société : peut-on laisser de grandes entreprises étrangères, voler du temps de vie à nos enfants, à nos proches, et ce pour faire du profit ? La réponse devrait être un grand NON
+     • Et pourtant, je le répète, j'ai été une utilisatrice de ces applications et j'y ai aussi pris du plaisir
+
+===== avis tiktok:236 (tiktok) =====
+AVIS: Alors toute plateforme confondue, je trouve un mal-être de voir des créateurs de contenu devoir faire eux-même la modération sur les plateformes. Voir même embaucher, etc. des "modérateurs", c'est à mon sens irresponsable de la part des plateformes de se détourner et laisser la responsabilité sur les créateurs qui font tout afin de respecter au maximum les règles. Il est à mon sens urgent, important de les responsabilités et que TOUTES les plateformes sachant qu'elles disposent des moyens financier colossaux afin de fournir le nécessaire en modérateur et porter cette charge. Cela serait un min
+  [ministral-3b-latest] 1 claims:
+     • On pourrait aussi imaginer que les plateformes envoient eux-même lors de doute un signalement via une interconnexion auprès des autorités et les autorités (sur la justice) prendra l'action associée (demande de suspension, de ban ou autres) afin de laisser à chacun sa place dans le respect des droits fondamentaux.
+  [mistral-large-latest] 3 claims:
+     • je trouve un mal-être de voir des créateurs de contenu devoir faire eux-même la modération sur les plateformes. Voir même embaucher, etc. des "modérateurs", c'est à mon sens irresponsable de la part des plateformes de se détourner et laisser la responsabilité sur les créateurs qui font tout afin de respecter au maximum les règles
+     • Il est à mon sens urgent, important de les responsabilités et que TOUTES les plateformes sachant qu'elles disposent des moyens financier colossaux afin de fournir le nécessaire en modérateur et porter cette charge … Cela serait un minimum d'équilibre, bien sûr en respectant la liberté d'expression
+     • On pourrait aussi imaginer que les plateformes envoient eux-même lors de doute un signalement via une interconnexion auprès des autorités et les autorités (sur la justice) prendra l'action associée (demande de suspension, de ban ou autres) afin de laisser à chacun sa place dans le respect des droits fondamentaux
+
+===== avis tiktok:350 (tiktok) =====
+AVIS: Lorsque je vois nasdas utilisé des personnes vulnérables pour faire du contenu et qu'il fait de plus en plus du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans. Ça me pose question. Les lives match des autre d'influenceurs me choquent, ils manipulent les gens jusqu'à leur parler en privé pour les amadouer et leur offrir des cadeaux qu'ils récupèrent ensuite… La dernière dinguerie qui m'a choqué c'est l'ancien président du collectif Avi qui se reconvertit dans l'équipe d'Hmi.
+  [ministral-3b-latest] 1 claims:
+     • Lorsque je vois nasdas utilisé des personnes vulnérables pour faire du contenu et qu'il fait de plus en plus du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans. Ça me pose question. Les lives match des autre d'influenceurs me choquent, ils manipulent les gens jusqu'à leur parler en privé pour les amadouer et leur offrir des cadeaux qu'ils récupèrent ensuite… La dernière dinguerie qui m'a choqué c'est l'ancien président du collectif Avi qui se reconvertit dans l'équipe d'Hmi.
+  [mistral-large-latest] 3 claims:
+     • Lorsque je vois nasdas utilisé des personnes vulnérables pour faire du contenu et qu'il fait de plus en plus du trash jusqu'à dire qu'une de ses protégées étaient escort a 13 ans
+     • Les lives match des autre d'influenceurs me choquent, ils manipulent les gens jusqu'à leur parler en privé pour les amadouer et leur offrir des cadeaux qu'ils récupèrent ensuite
+     • La dernière dinguerie qui m'a choqué c'est l'ancien président du collectif Avi qui se reconvertit dans l'équipe d'Hmi
+
+===== avis tiktok:380 (tiktok) =====
+AVIS: Certains contenus prônent la maigreur et l'anorexie tandis que d'autres mettent en avant des défis dangereux sous prétexte de jeu. Cependant, certains contenus sont aidants et peuvent être source d'inspiration positive.
+  [ministral-3b-latest] 1 claims:
+     • Certains contenus prônent la maigreur et l'anorexie tandis que d'autres mettent en avant des défis dangereux sous prétexte de jeu. Cependant, certains contenus sont aidants et peuvent être source d'inspiration positive.
+  [mistral-large-latest] 3 claims:
+     • Certains contenus prônent la maigreur et l'anorexie
+     • d'autres mettent en avant des défis dangereux sous prétexte de jeu
+     • certains contenus sont aidants et peuvent être source d'inspiration positive
+
+===== avis tiktok:408 (tiktok) =====
+AVIS: Renforcement de la dépression Mauvaise estime de soi Scarifications
+  [ministral-3b-latest] 1 claims:
+     • Renforcement de la dépression Mauvaise estime de soi Scarifications
+  [mistral-large-latest] 3 claims:
+     • Renforcement de la dépression
+     • Mauvaise estime de soi
+     • Scarifications
+
+===== avis tiktok:419 (tiktok) =====
+AVIS: Sentiment addictif, perte de la notion du temps, abrutissement
+  [ministral-3b-latest] 3 claims:
+     • Sentiment addictif
+     • perte de la notion du temps
+     • abrutissement
+  [mistral-large-latest] 1 claims:
+     • Sentiment addictif, perte de la notion du temps, abrutissement
+
+===== avis tiktok:446 (tiktok) =====
+AVIS: Vidéo de Palestiniens qui publient des vidéos pour se faire aider dans des environnement complètement détruit. Avec des appels aux dons. Qui fait naitre un sentiment de mal-être sans pour autant que cela sois une mauvaise chose. Aussi des vidéos de personnes d'extreme droite qui véhicule des idées fausses et dangereuses.
+  [ministral-3b-latest] 4 claims:
+     • Vidéo de Palestiniens qui publient des vidéos pour se faire aider dans des environnement complètement détruit
+     • Avec des appels aux dons
+     • Qui fait naitre un sentiment de mal-être
+     • Aussi des vidéos de personnes d'extreme droite
+  [mistral-large-latest] 2 claims:
+     • Vidéo de Palestiniens qui publient des vidéos pour se faire aider dans des environnement complètement détruit. Avec des appels aux dons. Qui fait naitre un sentiment de mal-être sans pour autant que cela sois une mauvaise chose
+     • Aussi des vidéos de personnes d'extreme droite qui véhicule des idées fausses et dangereuses
+
+===== avis republique-numerique:1149 (republique-numerique) =====
+AVIS: c'est une très bonne idée et c'est nécessaire. En effet, lorsqu'on regarde un reportage sur une catastrophe au népal au 20H pourquoi ne pas faire un petit don. Les arguments des détracteurs ne sont pas valable car : 1- le sms payant est largment utilisé et sécurisé 2- les marges des opérateurs ne sont pas les taux délirants qui sont déclamés par ces gens qui croient savoir sans savoir 3- il peut y avoir des gardes fous qui sont installé par les opérateurs comme pour les paiement par sms ou carte bancaire.
+  [ministral-3b-latest] 4 claims:
+     • c'est une très bonne idée et c'est nécessaire
+     • En effet, lorsqu'on regarde un reportage sur une catastrophe au népal au 20H pourquoi ne pas faire un petit don
+     • 2- les marges des opérateurs ne sont pas les taux délirants qui sont déclamés par ces gens qui croient savoir sans savoir
+     • 3- il peut y avoir des gardes fous qui sont installé par les opérateurs comme pour les paiement par sms ou carte bancaire
+  [mistral-large-latest] 2 claims:
+     • c'est une très bonne idée et c'est nécessaire
+     • 1- le sms payant est largment utilisé et sécurisé … 2- les marges des opérateurs ne sont pas les taux délirants qui sont déclamés par ces gens qui croient savoir sans savoir … 3- il peut y avoir des gardes fous qui sont installé par les opérateurs comme pour les paiement par sms ou carte bancaire
+
+===== avis republique-numerique:577 (republique-numerique) =====
+AVIS: Un volet n'est pas développé: celui de l'accessibilité par toute personne. Par définition, toute personne, tout citoyen a la liberté d'accepter ou de refuser d'utiliser des moyens électroniques commem oyen de communication. Il peut s'agir essentiellement des personnes âgées, des personnes en situation de dépendance sans nécessairement être handicapée. L'accès doit aussi tenir compte des personnes n'ayant pas la faculté d'accès au monde numérique, comme: les personnes placées sous tutelleso ou curatelles, les personnes mineures, etc.. Il faut que la loi oblige l'Administration, les collectivité
+  [ministral-3b-latest] 4 claims:
+     • Un volet n'est pas développé: celui de l'accessibilité par toute personne
+     • Il peut s'agir essentiellement des personnes âgées, des personnes en situation de dépendance sans nécessairement être handicapée. L'accès doit aussi tenir compte des personnes n'ayant pas la faculté d'accès au monde numérique, comme: les personnes placées sous tutelleso ou curatelles, les personnes mineures, etc.
+     • Il faut que la loi oblige l'Administration, les collectivités, les associaitons, les sociétés, mais également les opérateurs à: - assurer l'accès gratuit au réseau numérique - assurer que la présentation est accessible par tous et facilement compéhensible quel que soit la langue aprlée et comprise par l'uilisatuer, en tenant compte des personnes n'ayant pas une facilité de lecture ou de visualisation des informations présentées sur un écran. - assurer sur le matriel mis à disposition soit conforme à l'usage de n'importe quel citoyen lambda.
+     • - Enfin, que l'accès aux informations stockées et exploitées par les réseaux électorniques continuent à recevoir des informations papier; et ce afin de garantir à chaque citoyen la liberté de choix, la garantie d'être traité de façon égale quel que soit le choix de la personne.
+  [mistral-large-latest] 2 claims:
+     • Un volet n'est pas développé: celui de l'accessibilité par toute personne
+     • toute personne, tout citoyen a la liberté d'accepter ou de refuser d'utiliser des moyens électroniques commem oyen de communication … Il faut que la loi oblige l'Administration, les collectivités, les associaitons, les sociétés, mais également les opérateurs à: - assurer l'accès gratuit au réseau numérique - assurer que la présentation est accessible par tous et facilement compéhensible quel que soit la langue aprlée et comprise par l'uilisatuer, en tenant compte des personnes n'ayant pas une facilité de lecture ou de visualisation des informations présentées sur un écran. - assurer sur le matriel mis à disposition soit conforme à l'usage de n'importe quel citoyen lambda. - Enfin, que l'accès aux informations stockées et exploitées par les réseaux électorniques continuent à recevoir des informations papier; et ce afin de garantir à chaque citoyen la liberté de choix, la garantie d'être traité de façon égale quel que soit le choix de la personne
+
+===== avis republique-numerique:5964 (republique-numerique) =====
+AVIS: Je suis actuellement bénéficiaire de tickets restaurants papier et mes collègues bénéficiaires d'une carte à puce remplissant une fonction équivalente. Pour entendre régulièrement parler de l'ingérence cavalière que se permet l'organisme distributeurs de tickets restau sur le solde de leur carte (plusieurs régulations "surprise" ces derniers mois leurs ont déjà empêché de payer par ce biais, alors que notre employeur fournit normalement les sommes nécessaires au fonctionnement normal de la carte), je préfère utiliser des tickets papier. Il s'agit de la même raison pour laquelle j'ai toujours d
+  [ministral-3b-latest] 3 claims:
+     • Je suis actuellement bénéficiaire de tickets restaurants papier et mes collègues bénéficiaires d'une carte à puce remplissant une fonction équivalente. Pour entendre régulièrement parler de l'ingérence cavalière que se permet l'organisme distributeurs de tickets restau sur le solde de leur carte
+     • plusieurs régulations "surprise" ces derniers mois leurs ont déjà empêché de payer par ce biais, alors que notre employeur fournit normalement les sommes nécessaires au fonctionnement normal de la carte
+     • Il s'agit de la même raison pour laquelle j'ai toujours du liquide sur moi, malgré ma carte de crédit: lui, je sais quand il est (ou pas) dans mon portefeuille.
+  [mistral-large-latest] 1 claims:
+     • je préfère utiliser des tickets papier … Il s'agit de la même raison pour laquelle j'ai toujours du liquide sur moi, malgré ma carte de crédit: lui, je sais quand il est (ou pas) dans mon portefeuille
+
+===== avis republique-numerique:1229 (republique-numerique) =====
+AVIS: Après le deuxième alinéa de l'article 40 de la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, sont insérés les alinéas suivants : « Le responsable du traitement est tenu d'effacer dans les meilleurs délais les données à caractère personnel qui ont été collectées dans le cadre de l'offre de services de la société de l'information lorsque la personne concernée était mineure au moment de la collecte. « En cas de refus ou d'absence de réponse de la part du responsable de traitement à l'égard de la personne concernée, cette dernière peut saisir la Commission 
+  [ministral-3b-latest] 3 claims:
+     • Après le deuxième alinéa de l'article 40 de la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, sont insérés les alinéas suivants : « Le responsable du traitement est tenu d'effacer dans les meilleurs délais les données à caractère personnel qui ont été collectées dans le cadre de l'offre de services de la société de l'information lorsque la personne concernée était mineure au moment de la collecte. « En cas de refus ou d'absence de réponse de la part du responsable de traitement à l'égard de la personne concernée, cette dernière peut saisir la Commission nationale de l'informatique et des libertés, qui se prononce sur la demande dans un délai de 15 jours.
+     • « Les dispositions des deux alinéas précédents ne s'appliquent pas lorsque le traitement de données à caractère personnel est nécessaire : - pour exercer le droit à la liberté d'expression et d'information - pour respecter une obligation légale qui requiert le traitement des données ou pour exercer une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement - pour des motifs d'intérêt public dans le domaine de la santé publique - à des fins d'archivage dans l'intérêt public ou à des fins scientifiques statistiques et historiques - à la constatation, à l'exercice ou à la défense de droits en justice
+     • « Les modalités d'application des huit alinéas précédents sont fixées par décret en Conseil d'Etat. »
+  [mistral-large-latest] 1 claims:
+     • Le responsable du traitement est tenu d'effacer dans les meilleurs délais les données à caractère personnel qui ont été collectées dans le cadre de l'offre de services de la société de l'information lorsque la personne concernée était mineure au moment de la collecte … En cas de refus ou d'absence de réponse de la part du responsable de traitement à l'égard de la personne concernée, cette dernière peut saisir la Commission nationale de l'informatique et des libertés, qui se prononce sur la demande dans un délai de 15 jours … Les dispositions des deux alinéas précédents ne s'appliquent pas lorsque le traitement de données à caractère personnel est nécessaire : - pour exercer le droit à la liberté d'expression et d'information - pour respecter une obligation légale qui requiert le traitement des données ou pour exercer une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement - pour des motifs d'intérêt public dans le domaine de la santé publique - à des fins d'archivage dans l'intérêt public ou à des fins scientifiques statistiques et historiques - à la constatation, à l'exercice ou à la défense de droits en justice
+
+===== avis republique-numerique:2316 (republique-numerique) =====
+AVIS: L'implémentation exacte de l'algorithme pose la question du détail d'implantation à décrire et peut donc fournir des clés à qui voudrait "piper" les dés. Par contre, la description formelle du protocole de vote, y compris dans ses aspects d'objets permanents manipulés, des redondances, des types de sécurité mis en place, etc. semblent nécessaires et sans danger de faciliter la fraude. A titre d'exemple, j'ai mis une source que l'analyse formelle de protocole de vote.
+  [ministral-3b-latest] 4 claims:
+     • L'implémentation exacte de l'algorithme pose la question du détail d'implantation à décrire et peut donc fournir des clés à qui voudrait
+     • piper
+     • Par contre, la description formelle du protocole de vote, y compris dans ses aspects d'objets permanents manipulés, des redondances, des types de sécurité mis en place, etc. semblent nécessaires et sans danger de faciliter la fraude.
+     • A titre d'exemple, j'ai mis une source que l'analyse formelle de protocole de vote.
+  [mistral-large-latest] 2 claims:
+     • L'implémentation exacte de l'algorithme pose la question du détail d'implantation à décrire et peut donc fournir des clés à qui voudrait "piper" les dés
+     • la description formelle du protocole de vote, y compris dans ses aspects d'objets permanents manipulés, des redondances, des types de sécurité mis en place, etc. semblent nécessaires et sans danger de faciliter la fraude
+
+===== avis republique-numerique:1352 (republique-numerique) =====
+AVIS: Les étudiants doivent connaitre les différents logiciels, ce ne serait pas bon pour leur formation. Accessoirement c'est une déclaration de guerre à des sociétés privées: on leur dit en gros "on va vous faire disparaitre" au moins en France. C'est incompatible avec les règles du commerce actuelles et ne parlons pas du risque de procès en cas de passage d'un traité comme TAFTA avec ses lois pour multinationales. Sur le fond je suis pourtant d'accord.
+  [ministral-3b-latest] 1 claims:
+     • on leur dit en gros
+  [mistral-large-latest] 3 claims:
+     • Les étudiants doivent connaitre les différents logiciels, ce ne serait pas bon pour leur formation
+     • Accessoirement c'est une déclaration de guerre à des sociétés privées: on leur dit en gros "on va vous faire disparaitre" au moins en France. C'est incompatible avec les règles du commerce actuelles et ne parlons pas du risque de procès en cas de passage d'un traité comme TAFTA avec ses lois pour multinationales
+     • Sur le fond je suis pourtant d'accord

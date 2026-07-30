@@ -1,0 +1,839 @@
+{
+  "n_avis": 30,
+  "avis": [
+    {
+      "id": "tiktok:5677",
+      "dataset": "tiktok",
+      "len": 80,
+      "text": "tik tok est trop addictif et fait perdre en productivité, en énergie et fatigue.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "tik tok est trop addictif",
+          "fait perdre en productivité",
+          "en énergie",
+          "et fatigue"
+        ],
+        "ministral-3b-latest/tune": [
+          "tik tok est trop addictif et fait perdre en productivité, en énergie et fatigue"
+        ],
+        "mistral-large-latest/base": [
+          "tik tok est trop addictif et fait perdre en productivité, en énergie et fatigue"
+        ],
+        "mistral-large-latest/tune": [
+          "tik tok est trop addictif et fait perdre en productivité, en énergie et fatigue"
+        ]
+      }
+    },
+    {
+      "id": "tiktok:6445",
+      "dataset": "tiktok",
+      "len": 80,
+      "text": "ce sont des images violente sur un lynchage sur un animal et aussi sur un homme,",
+      "out": {
+        "ministral-3b-latest/base": [
+          "ce sont des images violente sur un lynchage sur un animal et aussi sur un homme"
+        ],
+        "ministral-3b-latest/tune": [
+          "ce sont des images violente sur un lynchage sur un animal et aussi sur un homme"
+        ],
+        "mistral-large-latest/base": [
+          "ce sont des images violente sur un lynchage sur un animal et aussi sur un homme"
+        ],
+        "mistral-large-latest/tune": [
+          "ce sont des images violente sur un lynchage sur un animal"
+        ]
+      }
+    },
+    {
+      "id": "tiktok:11600",
+      "dataset": "tiktok",
+      "len": 80,
+      "text": "Le mal être de ne pas réussir à éteindre l'application parcequ'elle est adictive",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Le mal être de ne pas réussir à éteindre l'application parcequ'elle est adictive"
+        ],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "Le mal être de ne pas réussir à éteindre l'application parcequ'elle est adictive"
+        ],
+        "mistral-large-latest/tune": [
+          "Le mal être de ne pas réussir à éteindre l'application parcequ'elle est adictive"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:2769",
+      "dataset": "republique-numerique",
+      "len": 80,
+      "text": "Et le droit à l'oubli dans tout ça ? Tout cela ressemble à un fichage définitif.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Et le droit à l'oubli dans tout ça ?",
+          "Tout cela ressemble à un fichage définitif."
+        ],
+        "ministral-3b-latest/tune": [
+          "Et le droit à l'oubli dans tout ça ? Tout cela ressemble à un fichage définitif."
+        ],
+        "mistral-large-latest/base": [
+          "Et le droit à l'oubli dans tout ça ? Tout cela ressemble à un fichage définitif."
+        ],
+        "mistral-large-latest/tune": [
+          "Et le droit à l'oubli dans tout ça ? Tout cela ressemble à un fichage définitif."
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:718",
+      "dataset": "republique-numerique",
+      "len": 80,
+      "text": "Plutôt sous la forme d'un internet disponible dans des relais de service public.",
+      "out": {
+        "ministral-3b-latest/base": [],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "un internet disponible dans des relais de service public"
+        ],
+        "mistral-large-latest/tune": [
+          "Plutôt sous la forme d'un internet disponible dans des relais de service public"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:1508",
+      "dataset": "republique-numerique",
+      "len": 80,
+      "text": "C'est une très bonne idée mais ce n'est effectivement pas l'esprit de l'article.",
+      "out": {
+        "ministral-3b-latest/base": [],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "C'est une très bonne idée",
+          "ce n'est effectivement pas l'esprit de l'article"
+        ],
+        "mistral-large-latest/tune": [
+          "C'est une très bonne idée",
+          "ce n'est effectivement pas l'esprit de l'article"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-890",
+      "dataset": "granddebat",
+      "len": 80,
+      "text": "Les rendre plus représentatifs et incontestables en rendant le vote obligatoire.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Les rendre plus représentatifs et incontestables",
+          "en rendant le vote obligatoire"
+        ],
+        "ministral-3b-latest/tune": [
+          "Les rendre plus représentatifs et incontestables en rendant le vote obligatoire"
+        ],
+        "mistral-large-latest/base": [
+          "Les rendre plus représentatifs et incontestables en rendant le vote obligatoire"
+        ],
+        "mistral-large-latest/tune": [
+          "Les rendre plus représentatifs et incontestables en rendant le vote obligatoire"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-53",
+      "dataset": "granddebat",
+      "len": 81,
+      "text": "CV complet + lettre de motivation pour tous les candidats à toutes les élections.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "CV complet + lettre de motivation pour tous les candidats à toutes les élections"
+        ],
+        "ministral-3b-latest/tune": [
+          "CV complet + lettre de motivation pour tous les candidats à toutes les élections"
+        ],
+        "mistral-large-latest/base": [
+          "CV complet + lettre de motivation pour tous les candidats à toutes les élections"
+        ],
+        "mistral-large-latest/tune": [
+          "CV complet + lettre de motivation pour tous les candidats à toutes les élections"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-68",
+      "dataset": "granddebat",
+      "len": 81,
+      "text": "Que les élus soient plus à l'écoute des citoyens et non déconnectés de la réalité",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Que les élus soient plus à l'écoute des citoyens",
+          "et non déconnectés de la réalité"
+        ],
+        "ministral-3b-latest/tune": [
+          "Que les élus soient plus à l'écoute des citoyens et non déconnectés de la réalité"
+        ],
+        "mistral-large-latest/base": [
+          "Que les élus soient plus à l'écoute des citoyens et non déconnectés de la réalité"
+        ],
+        "mistral-large-latest/tune": [
+          "Que les élus soient plus à l'écoute des citoyens et non déconnectés de la réalité"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:4518",
+      "dataset": "republique-numerique",
+      "len": 82,
+      "text": "Pas d'utilisation sans droit á des fins commerciales, politiques, promotionnelles.",
+      "out": {
+        "ministral-3b-latest/base": [],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "Pas d'utilisation sans droit á des fins commerciales, politiques, promotionnelles"
+        ],
+        "mistral-large-latest/tune": [
+          "Pas d'utilisation sans droit á des fins commerciales, politiques, promotionnelles"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:5406",
+      "dataset": "republique-numerique",
+      "len": 82,
+      "text": "Aussi bien dans la loi que dans la pratique, le chiffrement est déjà opérationnel.",
+      "out": {
+        "ministral-3b-latest/base": [],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "Aussi bien dans la loi que dans la pratique, le chiffrement est déjà opérationnel"
+        ],
+        "mistral-large-latest/tune": [
+          "Aussi bien dans la loi que dans la pratique, le chiffrement est déjà opérationnel"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-528",
+      "dataset": "granddebat",
+      "len": 82,
+      "text": "Associé les citoyens aux décisions, accorder un quota pour les décisions au peuple",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Associé les citoyens aux décisions",
+          "accorder un quota pour les décisions au peuple"
+        ],
+        "ministral-3b-latest/tune": [
+          "Associé les citoyens aux décisions",
+          "accorder un quota pour les décisions au peuple"
+        ],
+        "mistral-large-latest/base": [
+          "Associé les citoyens aux décisions, accorder un quota pour les décisions au peuple"
+        ],
+        "mistral-large-latest/tune": [
+          "Associé les citoyens aux décisions",
+          "accorder un quota pour les décisions au peuple"
+        ]
+      }
+    },
+    {
+      "id": "tiktok:767",
+      "dataset": "tiktok",
+      "len": 83,
+      "text": "mal être car trop de temps passé sur l'application. difficultés pour se concentrer.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "mal être car trop de temps passé sur l'application. difficultés pour se concentrer."
+        ],
+        "ministral-3b-latest/tune": [
+          "mal être car trop de temps passé sur l'application. difficultés pour se concentrer."
+        ],
+        "mistral-large-latest/base": [
+          "mal être car trop de temps passé sur l'application",
+          "difficultés pour se concentrer"
+        ],
+        "mistral-large-latest/tune": [
+          "mal être car trop de temps passé sur l'application",
+          "difficultés pour se concentrer"
+        ]
+      }
+    },
+    {
+      "id": "tiktok:1908",
+      "dataset": "tiktok",
+      "len": 83,
+      "text": "À l'école, impact direct sur les enfants dans la cour de récréation Très négatives…",
+      "out": {
+        "ministral-3b-latest/base": [
+          "À l'école, impact direct sur les enfants dans la cour de récréation Très négatives"
+        ],
+        "ministral-3b-latest/tune": [],
+        "mistral-large-latest/base": [
+          "impact direct sur les enfants dans la cour de récréation Très négatives…"
+        ],
+        "mistral-large-latest/tune": [
+          "À l'école, impact direct sur les enfants dans la cour de récréation Très négatives…"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-6",
+      "dataset": "granddebat",
+      "len": 83,
+      "text": "Budget participatif, possibilité d'interpeller ses élus, transparence des décisions",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Budget participatif",
+          "possibilité d'interpeller ses élus",
+          "transparence des décisions"
+        ],
+        "ministral-3b-latest/tune": [
+          "Budget participatif",
+          "possibilité d'interpeller ses élus",
+          "transparence des décisions"
+        ],
+        "mistral-large-latest/base": [
+          "Budget participatif",
+          "possibilité d'interpeller ses élus",
+          "transparence des décisions"
+        ],
+        "mistral-large-latest/tune": [
+          "Budget participatif",
+          "possibilité d'interpeller ses élus",
+          "transparence des décisions"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:387",
+      "dataset": "republique-numerique",
+      "len": 2475,
+      "text": "I. Le chapitre Ier du titre Ier du livre Ier du code de la consommation est modifié comme suit : 1° Après l'article L. 111-5-1 est inséré l'article L. 111-5-2, ainsi rédigé : « Art. L. 111-5-2 - Sans préjudice des obligations d'information prévues à l'article 19 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, toute personne dont l'activité consiste, à titre principal ou accessoire, à collecter, modérer ou diffuser des avis en ligne de consommateurs, est tenue de délivrer une information loyale, claire et transparente sur les modalités de vérification des avis mis en ligne. « Elle précise si les avis qu'elle a mis en ligne font l'objet ou non d'une vérification et, si tel est le cas, elle indique les caractéristiques principales de la vérification mise en œuvre. « Les modalités et le contenu de ces informations sont fixés par décret. » 2° A l'article L. 111-6-1, la référence « et L. 111-5-1 » est remplacé par la référence « à L. 111-5-2 » II. L'article L. 121-83 du code de la consommation est ainsi modifié : 1° Le b) est ainsi rédigé : « Les services offerts, incluant le détail des protocoles disponibles, leur niveau de qualité et le délai nécessaire pour en assurer la prestation ; » 2° Après le b), il est inséré un b bis) ainsi rédigé : « b bis) les débits minimums, normalement disponible, maximums montants et descendants fournis lorsqu'il s'agit de services d'accès à internet fixe et une estimation des débits maximums montants et descendants fournis dans le cas de services d'accès à internet mobile, ainsi que l'incidence sur la disponibilité des services offerts d'un écart significatif par rapport au débit prévu au contrat ; » 3° le d) est ainsi rédigé : « Les compensations et formules de remboursement applicables lorsque le niveau de qualité de services ou les débits prévus dans le contrat, ne sont généralement pas atteints, de façon continue ou récurrente ; » 4° le g) est complété par les mots : «, de protection de la vie privée et des données à caractère personnel, ainsi que l'impact des limitations de volume, de débits ou d'autres paramètres sur la qualité de l'accès à internet, en particulier l'utilisation de contenus, d'applications et de services, y compris ceux bénéficiant d'une qualité optimisée. » L'article L.121-83 du code de la consommation dans sa rédaction issue de la présente loi est applicable aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Les modalités et le contenu de ces informations sont fixés par décret.",
+          "Les services offerts, incluant le détail des protocoles disponibles, leur niveau de qualité et le délai nécessaire pour en assurer la prestation ; … Les compensations et formules de remboursement applicables lorsque le niveau de qualité de services ou les débits prévus dans le contrat, ne sont généralement pas atteints, de façon continue ou récurrente ;"
+        ],
+        "ministral-3b-latest/tune": [
+          "Les modalités et le contenu de ces informations sont fixés par décret.",
+          "L'article L.121-83 du code de la consommation dans sa rédaction issue de la présente loi est applicable aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi."
+        ],
+        "mistral-large-latest/base": [
+          "I. Le chapitre Ier du titre Ier du livre Ier du code de la consommation est modifié comme suit : 1° Après l'article L. 111-5-1 est inséré l'article L. 111-5-2, ainsi rédigé : « Art. L. 111-5-2 - Sans préjudice des obligations d'information prévues à l'article 19 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, toute personne dont l'activité consiste, à titre principal ou accessoire, à collecter, modérer ou diffuser des avis en ligne de consommateurs, est tenue de délivrer une information loyale, claire et transparente sur les modalités de vérification des avis mis en ligne. « Elle précise si les avis qu'elle a mis en ligne font l'objet ou non d'une vérification et, si tel est le cas, elle indique les caractéristiques principales de la vérification mise en œuvre. « Les modalités et le contenu de ces informations sont fixés par décret. » 2° A l'article L. 111-6-1, la référence « et L. 111-5-1 » est remplacé par la référence « à L. 111-5-2 »",
+          "II. L'article L. 121-83 du code de la consommation est ainsi modifié : 1° Le b) est ainsi rédigé : « Les services offerts, incluant le détail des protocoles disponibles, leur niveau de qualité et le délai nécessaire pour en assurer la prestation ; » 2° Après le b), il est inséré un b bis) ainsi rédigé : « b bis) les débits minimums, normalement disponible, maximums montants et descendants fournis lorsqu'il s'agit de services d'accès à internet fixe et une estimation des débits maximums montants et descendants fournis dans le cas de services d'accès à internet mobile, ainsi que l'incidence sur la disponibilité des services offerts d'un écart significatif par rapport au débit prévu au contrat ; » 3° le d) est ainsi rédigé : « Les compensations et formules de remboursement applicables lorsque le niveau de qualité de services ou les débits prévus dans le contrat, ne sont généralement pas atteints, de façon continue ou récurrente ; » 4° le g) est complété par les mots : «, de protection de la vie privée et des données à caractère personnel, ainsi que l'impact des limitations de volume, de débits ou d'autres paramètres sur la qualité de l'accès à internet, en particulier l'utilisation de contenus, d'applications et de services, y compris ceux bénéficiant d'une qualité optimisée. » L'article L.121-83 du code de la consommation dans sa rédaction issue de la présente loi est applicable aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi."
+        ],
+        "mistral-large-latest/tune": [
+          "Les services offerts, incluant le détail des protocoles disponibles, leur niveau de qualité et le délai nécessaire pour en assurer la prestation",
+          "les débits minimums, normalement disponible, maximums montants et descendants fournis lorsqu'il s'agit de services d'accès à internet fixe et une estimation des débits maximums montants et descendants fournis dans le cas de services d'accès à internet mobile, ainsi que l'incidence sur la disponibilité des services offerts d'un écart significatif par rapport au débit prévu au contrat",
+          "Les compensations et formules de remboursement applicables lorsque le niveau de qualité de services ou les débits prévus dans le contrat, ne sont généralement pas atteints, de façon continue ou récurrente",
+          "le g) est complété par les mots : «, de protection de la vie privée et des données à caractère personnel, ainsi que l'impact des limitations de volume, de débits ou d'autres paramètres sur la qualité de l'accès à internet, en particulier l'utilisation de contenus, d'applications et de services, y compris ceux bénéficiant d'une qualité optimisée. »",
+          "L'article L.121-83 du code de la consommation dans sa rédaction issue de la présente loi est applicable aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi."
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-13",
+      "dataset": "granddebat",
+      "len": 2431,
+      "text": "Que constatons-nous ? Que malgré leurs excès, malgré leur tempérament patient mais explosif une fois cette patience mise à mal, les Français sont des gens raisonnables. Que demandent-ils au fond, au-delà des questions pourtant essentielles de pouvoir d'achat et de bien être personnel ? Ils demandent un cadre, clair, et une fois pour toute garant des fondements de la démocratie « à la française » : liberté, égalité, fraternité mais aussi laïcité, équité et éthique. Aussi, en ce qui concerne le débat national sur la démocratie et sa pratique , plusieurs choses simples seraient à mettre en œuvre : - IMPOSER comme vous l'aviez prévu dans votre programme l'impossibilité pour tout citoyen de se présenter ou de se maintenir à une élection avec un casier judiciaire non vierge de certains crimes ou délits (argent public, harcèlement moral ou sexuel, incitation à la haine ou à la violence…). Cette mesure est à mes yeux la plus importante de toutes. - Pourquoi pas un référendum d'initiative citoyenne, cadré, pour éviter les débordements et la désorganisation : 3 millions de signatures minimum de citoyens majeurs, sur des familles de sujet cadrées par la constitution et validés par le conseil constitutionnel, et pas plus de 3 par an (en faisant passer en priorité ceux qui ont reçu le plus de signatures). - Mettre en place une ou des commissions de contrôle mixtes (élus, personnalités, citoyens) sur l'existence, l'utilité, la composition et le budget d'instances représentatives directes ou indirectes (commissions diverses, organismes d'état)… - Revoir le statut de l'élu, quitte à les rémunérer davantage, de manière à ce que « faire de la politique » ne soit plus un métier ou une profession mais bien une fonction (limiter le nombre de mandats successifs, garantir un retour à l'emploi même dans le privé…) - Supprimer certains avantages opaques ou mal contrôlés comme les indemnités de représentation (ou mieux les contrôler), certains voyages gratuits, etc… - Revenir, mais vous l'avez prévu, à une forme de service militaire de 6 mois minimum - Comptabiliser le vote blanc/et ou rendre le vote obligatoire. - Instiller une dose de proportionnelle dans les élections nationales Je ne suis pas politologue, mais je reste persuadé que la mise en place de telles mesures, d'un seul coup, aurait plusieurs avantages : donner satisfaction aux citoyens mécontents ET améliorer les conditions d'exercice de la démocratie.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "un cadre, clair, et une fois pour toute garant des fondements de la démocratie « à la française » : liberté, égalité, fraternité mais aussi laïcité, équité et éthique",
+          "IMPOSER comme vous l'aviez prévu dans votre programme l'impossibilité pour tout citoyen de se présenter ou de se maintenir à une élection avec un casier judiciaire non vierge de certains crimes ou délits (argent public, harcèlement moral ou sexuel, incitation à la haine ou à la violence…)",
+          "un référendum d'initiative citoyenne, cadré, pour éviter les débordements et la désorganisation : 3 millions de signatures minimum de citoyens majeurs, sur des familles de sujet cadrées par la constitution et validés par le conseil constitutionnel, et pas plus de 3 par an (en faisant passer en priorité ceux qui ont reçu le plus de signatures)",
+          "Mettre en place une ou des commissions de contrôle mixtes (élus, personnalités, citoyens) sur l'existence, l'utilité, la composition et le budget d'instances représentatives directes ou indirectes (commissions diverses, organismes d'état)",
+          "Revoir le statut de l'élu, quitte à les rémunérer davantage, de manière à ce que « faire de la politique » ne soit plus un métier ou une profession mais bien une fonction (limiter le nombre de mandats successifs, garantir un retour à l'emploi même dans le privé…)",
+          "Supprimer certains avantages opaques ou mal contrôlés comme les indemnités de représentation (ou mieux les contrôler), certains voyages gratuits, etc…",
+          "Revenir, mais vous l'avez prévu, à une forme de service militaire de 6 mois minimum",
+          "Comptabiliser le vote blanc/et ou rendre le vote obligatoire",
+          "Instiller une dose de proportionnelle dans les élections nationales"
+        ],
+        "ministral-3b-latest/tune": [
+          "un cadre, clair, et une fois pour toute garant des fondements de la démocratie « à la française » : liberté, égalité, fraternité mais aussi laïcité, équité et éthique",
+          "IMPOSER comme vous l'aviez prévu dans votre programme l'impossibilité pour tout citoyen de se présenter ou de se maintenir à une élection avec un casier judiciaire non vierge de certains crimes ou délits (argent public, harcèlement moral ou sexuel, incitation à la haine ou à la violence…)",
+          "Pourquoi pas un référendum d'initiative citoyenne, cadré, pour éviter les débordements et la désorganisation : 3 millions de signatures minimum de citoyens majeurs, sur des familles de sujet cadrées par la constitution et validés par le conseil constitutionnel, et pas plus de 3 par an (en faisant passer en priorité ceux qui ont reçu le plus de signatures)",
+          "Mettre en place une ou des commissions de contrôle mixtes (élus, personnalités, citoyens) sur l'existence, l'utilité, la composition et le budget d'instances représentatives directes ou indirectes (commissions diverses, organismes d'état)",
+          "Revoir le statut de l'élu, quitte à les rémunérer davantage, de manière à ce que « faire de la politique » ne soit plus un métier ou une profession mais bien une fonction (limiter le nombre de mandats successifs, garantir un retour à l'emploi même dans le privé…)",
+          "Supprimer certains avantages opaques ou mal contrôlés comme les indemnités de représentation (ou mieux les contrôler), certains voyages gratuits, etc…",
+          "Revenir, mais vous l'avez prévu, à une forme de service militaire de 6 mois minimum",
+          "Comptabiliser le vote blanc/et ou rendre le vote obligatoire",
+          "Instiller une dose de proportionnelle dans les élections nationales"
+        ],
+        "mistral-large-latest/base": [
+          "Que demandent-ils au fond, au-delà des questions pourtant essentielles de pouvoir d'achat et de bien être personnel ? Ils demandent un cadre, clair, et une fois pour toute garant des fondements de la démocratie « à la française » : liberté, égalité, fraternité mais aussi laïcité, équité et éthique.",
+          "- IMPOSER comme vous l'aviez prévu dans votre programme l'impossibilité pour tout citoyen de se présenter ou de se maintenir à une élection avec un casier judiciaire non vierge de certains crimes ou délits (argent public, harcèlement moral ou sexuel, incitation à la haine ou à la violence…). Cette mesure est à mes yeux la plus importante de toutes.",
+          "- Pourquoi pas un référendum d'initiative citoyenne, cadré, pour éviter les débordements et la désorganisation : 3 millions de signatures minimum de citoyens majeurs, sur des familles de sujet cadrées par la constitution et validés par le conseil constitutionnel, et pas plus de 3 par an (en faisant passer en priorité ceux qui ont reçu le plus de signatures).",
+          "- Mettre en place une ou des commissions de contrôle mixtes (élus, personnalités, citoyens) sur l'existence, l'utilité, la composition et le budget d'instances représentatives directes ou indirectes (commissions diverses, organismes d'état)…",
+          "- Revoir le statut de l'élu, quitte à les rémunérer davantage, de manière à ce que « faire de la politique » ne soit plus un métier ou une profession mais bien une fonction (limiter le nombre de mandats successifs, garantir un retour à l'emploi même dans le privé…)",
+          "- Supprimer certains avantages opaques ou mal contrôlés comme les indemnités de représentation (ou mieux les contrôler), certains voyages gratuits, etc…",
+          "- Revenir, mais vous l'avez prévu, à une forme de service militaire de 6 mois minimum",
+          "- Comptabiliser le vote blanc/et ou rendre le vote obligatoire.",
+          "- Instiller une dose de proportionnelle dans les élections nationales"
+        ],
+        "mistral-large-latest/tune": [
+          "Que demandent-ils au fond, au-delà des questions pourtant essentielles de pouvoir d'achat et de bien être personnel ? Ils demandent un cadre, clair, et une fois pour toute garant des fondements de la démocratie « à la française » : liberté, égalité, fraternité mais aussi laïcité, équité et éthique.",
+          "- IMPOSER comme vous l'aviez prévu dans votre programme l'impossibilité pour tout citoyen de se présenter ou de se maintenir à une élection avec un casier judiciaire non vierge de certains crimes ou délits (argent public, harcèlement moral ou sexuel, incitation à la haine ou à la violence…). Cette mesure est à mes yeux la plus importante de toutes.",
+          "- Pourquoi pas un référendum d'initiative citoyenne, cadré, pour éviter les débordements et la désorganisation : 3 millions de signatures minimum de citoyens majeurs, sur des familles de sujet cadrées par la constitution et validés par le conseil constitutionnel, et pas plus de 3 par an (en faisant passer en priorité ceux qui ont reçu le plus de signatures).",
+          "- Mettre en place une ou des commissions de contrôle mixtes (élus, personnalités, citoyens) sur l'existence, l'utilité, la composition et le budget d'instances représentatives directes ou indirectes (commissions diverses, organismes d'état)…",
+          "- Revoir le statut de l'élu, quitte à les rémunérer davantage, de manière à ce que « faire de la politique » ne soit plus un métier ou une profession mais bien une fonction (limiter le nombre de mandats successifs, garantir un retour à l'emploi même dans le privé…)",
+          "- Supprimer certains avantages opaques ou mal contrôlés comme les indemnités de représentation (ou mieux les contrôler), certains voyages gratuits, etc…",
+          "- Revenir, mais vous l'avez prévu, à une forme de service militaire de 6 mois minimum",
+          "- Comptabiliser le vote blanc/et ou rendre le vote obligatoire.",
+          "- Instiller une dose de proportionnelle dans les élections nationales"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:196",
+      "dataset": "republique-numerique",
+      "len": 2356,
+      "text": "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par de la cryptographie forte et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles utilisés et les publics visés. Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP). Ce doi nottament être le cas des membres des parlements et des mairies. Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité. Les courriers électroniques en provenance des services de l'état doivent être signés électroniquement. De même, les échanges de données électroniques entre les différents services et institutions publiques doivent obligatoirement et uniquement utiliser des canaux sécurisés par de la cryptographie forte et de la confidentialité persistante. Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques. Le chiffrement doit obligatoirement être effectué de bout en bout. L'ANSSI pourra aider au déploiement et à la mise en œuvre. Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants. Les OVI et les services \"sensibles\" devront réaliser un audit tous les 3 ans. Des ammendes administratives devront être prévue pour les fautes et les manquements graves. Éléments de contexte Explication de l'article : Les communications sur Internet peuvent - de par la nature et l'architecture du réseau - être modifiées, détournées, altérées. La seule technique actuellement fiable pour éviter ce type de problème est l'utilisation du chiffrement de haut niveau et de PFS. L'État traitant des informations personnelles et/ou sensibles il est important de garantir la confidentialité et l'intégrité des données échangées entre les services de l'État et les citoyens.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP). Ce doi nottament être le cas des membres des parlements et des mairies.",
+          "Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité. Les courriers électroniques en provenance des services de l'état doivent être signés électroniquement.",
+          "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques.",
+          "Le chiffrement doit obligatoirement être effectué de bout en bout.",
+          "L'ANSSI pourra aider au déploiement et à la mise en œuvre.",
+          "Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants.",
+          "Des ammendes administratives devront être prévue pour les fautes et les manquements graves."
+        ],
+        "ministral-3b-latest/tune": [
+          "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par de la cryptographie forte et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles utilisés et les publics visés",
+          "Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP)",
+          "Ce doi nottament être le cas des membres des parlements et des mairies",
+          "Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité",
+          "De même, les échanges de données électroniques entre les différents services et institutions publiques doivent obligatoirement et uniquement utiliser des canaux sécurisés par de la cryptographie forte et de la confidentialité persistante",
+          "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques",
+          "Le chiffrement doit obligatoirement être effectué de bout en bout",
+          "L'ANSSI pourra aider au déploiement et à la mise en œuvre",
+          "Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants",
+          "Des ammendes administratives devront être prévue pour les fautes et les manquements graves"
+        ],
+        "mistral-large-latest/base": [
+          "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par de la cryptographie forte et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles utilisés et les publics visés",
+          "Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP) … Ce doi nottament être le cas des membres des parlements et des mairies",
+          "Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité … Les courriers électroniques en provenance des services de l'état doivent être signés électroniquement",
+          "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques … Le chiffrement doit obligatoirement être effectué de bout en bout",
+          "L'ANSSI pourra aider au déploiement et à la mise en œuvre",
+          "Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants … Les OVI et les services \"sensibles\" devront réaliser un audit tous les 3 ans",
+          "Des ammendes administratives devront être prévue pour les fautes et les manquements graves"
+        ],
+        "mistral-large-latest/tune": [
+          "Les services publics et collectivités publiques (mairie, ministères, etc.) mettant en œuvre des services sur Internet (sites institutionnels, site de télédéclaration, extranet, intranet, etc.) doivent obligatoirement et uniquement mettre en œuvre des communications sécurisées par de la cryptographie forte et les bonnes pratiques aquéquates (HSTS, confidentialité persistante) quelque soit les protocoles utilisés et les publics visés",
+          "Les courriers électroniques échangés avec les institutions et services publics et les citoyens doivent pouvoir être chiffrés par la mise à disposition de clefs publiques (S/MIME ou PGP) … Ce doi nottament être le cas des membres des parlements et des mairies",
+          "Les courriers électroniques en provenance des services de l'État doivent être signés électroniquement afin d'en garantir l'authenticité … Les courriers électroniques en provenance des services de l'état doivent être signés électroniquement",
+          "Les OVI et les services « sensibles » (Département informatique, ambassades, ministères, Préfectures, Police et Gendarmerie), doivent utiliser 2 couches de chiffrement (VPN + HTTPS ; HTTPS + PGP par exemple) lors de la consultation ou de l'échange de données informatiques",
+          "Le chiffrement doit obligatoirement être effectué de bout en bout",
+          "L'ANSSI pourra aider au déploiement et à la mise en œuvre",
+          "Un audit de sécurité devra être réalisé tous les 5 ans par l'ANSSI pour les communes de plus de 10 000 habitants",
+          "Les OVI et les services \"sensibles\" devront réaliser un audit tous les 3 ans",
+          "Des ammendes administratives devront être prévue pour les fautes et les manquements graves"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:481",
+      "dataset": "republique-numerique",
+      "len": 2294,
+      "text": "Article 1 bis (nouveau) Liste complétée des documents administratifs communicables Au deuxième alinéa de l'article 1er de la loi n° 78-753 du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public, après le mot : « statistiques » sont insérés les mots :« , codes source de logiciels ». Éléments de contexte Explication de l'article : Le fonctionnement de l'État et des services publics est régi par des lois de plus en plus complexes que les organismes sociaux, les administrations, interprètent désormais au travers de logiciels. Nous basculons dans une situation où ce sont des algorithmes, écrits par quelques initiés, qui définissent l'application du droit, la rendant univoque et figée. Cela concerne notamment les modes de calculs de prestations sociales ou d'impôts. La formule \"code is law\" - le code informatique fait le droit - devient une norme et seuls de très rares experts savent, chacun dans son domaine, certes pointu mais restreint, quelles sont les règles effectivement appliquées. Sans l'accès au code source de ces logiciels, il devient impossible de contrôler réellement de quelle façon est interprétée la loi et sa bonne application. La publication du code source, sous licence libre, est indispensable au bon fonctionnement d'une démocratie moderne qui respecte ses citoyens. A minima, l'accès au code source est une base de la transparence, une des conditions qui permet à chacun de connaître, en particulier, la manière dont il est traité fiscalement, de pouvoir la contester, d'y adhérer puis d'accepter les règles de notre République. La loi du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public fournit une liste non exhaustive de types de documents administratifs communicables. Cette liste est interprétée et étendue par les avis de la Commission d'Accès aux Documents Administratifs (CADA). La jurisprudence constante de la CADA (code source du logiciel de calcul de l'impôt sur le revenu des personnes physiques notamment) a considéré que le code source des logiciels devait être considéré comme un document administratif. Le nouvel article proposé consacre la jurisprudence de la CADA sans entraîner donc de nouvelles obligations pour les administrations.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Au deuxième alinéa de l'article 1er de la loi n° 78-753 du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public, après le mot : « statistiques » sont insérés les mots :« , codes source de logiciels »",
+          "Le fonctionnement de l'État et des services publics est régi par des lois de plus en plus complexes que les organismes sociaux, les administrations, interprètent désormais au travers de logiciels. Nous basculons dans une situation où ce sont des algorithmes, écrits par quelques initiés, qui définissent l'application du droit, la rendant univoque et figée. Cela concerne notamment les modes de calculs de prestations sociales ou d'impôts. La formule \"code is law\" - le code informatique fait le droit - devient une norme et seuls de très rares experts savent, chacun dans son domaine, certes pointu mais restreint, quelles sont les règles effectivement appliquées.",
+          "Sans l'accès au code source de ces logiciels, il devient impossible de contrôler réellement de quelle façon est interprétée la loi et sa bonne application.",
+          "La publication du code source, sous licence libre, est indispensable au bon fonctionnement d'une démocratie moderne qui respecte ses citoyens.",
+          "La loi du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public fournit une liste non exhaustive de types de documents administratifs communicables.",
+          "Le nouvel article proposé consacre la jurisprudence de la CADA sans entraîner donc de nouvelles obligations pour les administrations."
+        ],
+        "ministral-3b-latest/tune": [
+          "Le fonctionnement de l'État et des services publics est régi par des lois de plus en plus complexes que les organismes sociaux, les administrations, interprètent désormais au travers de logiciels. … Nous basculons dans une situation où ce sont des algorithmes, écrits par quelques initiés, qui définissent l'application du droit, la rendant univoque et figée.",
+          "Cela concerne notamment les modes de calculs de prestations sociales ou d'impôts.",
+          "Sans l'accès au code source de ces logiciels, il devient impossible de contrôler réellement de quelle façon est interprétée la loi et sa bonne application.",
+          "La publication du code source, sous licence libre, est indispensable au bon fonctionnement d'une démocratie moderne qui respecte ses citoyens.",
+          "Le nouvel article proposé consacre la jurisprudence de la CADA sans entraîner donc de nouvelles obligations pour les administrations."
+        ],
+        "mistral-large-latest/base": [
+          "Article 1 bis (nouveau) Liste complétée des documents administratifs communicables Au deuxième alinéa de l'article 1er de la loi n° 78-753 du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public, après le mot : « statistiques » sont insérés les mots :« , codes source de logiciels »",
+          "Le fonctionnement de l'État et des services publics est régi par des lois de plus en plus complexes que les organismes sociaux, les administrations, interprètent désormais au travers de logiciels. Nous basculons dans une situation où ce sont des algorithmes, écrits par quelques initiés, qui définissent l'application du droit, la rendant univoque et figée. Cela concerne notamment les modes de calculs de prestations sociales ou d'impôts … Sans l'accès au code source de ces logiciels, il devient impossible de contrôler réellement de quelle façon est interprétée la loi et sa bonne application",
+          "La publication du code source, sous licence libre, est indispensable au bon fonctionnement d'une démocratie moderne qui respecte ses citoyens",
+          "A minima, l'accès au code source est une base de la transparence, une des conditions qui permet à chacun de connaître, en particulier, la manière dont il est traité fiscalement, de pouvoir la contester, d'y adhérer puis d'accepter les règles de notre République",
+          "La loi du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public fournit une liste non exhaustive de types de documents administratifs communicables. Cette liste est interprétée et étendue par les avis de la Commission d'Accès aux Documents Administratifs (CADA). La jurisprudence constante de la CADA (code source du logiciel de calcul de l'impôt sur le revenu des personnes physiques notamment) a considéré que le code source des logiciels devait être considéré comme un document administratif. Le nouvel article proposé consacre la jurisprudence de la CADA sans entraîner donc de nouvelles obligations pour les administrations"
+        ],
+        "mistral-large-latest/tune": [
+          "Article 1 bis (nouveau) Liste complétée des documents administratifs communicables Au deuxième alinéa de l'article 1er de la loi n° 78-753 du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public, après le mot : « statistiques » sont insérés les mots :« , codes source de logiciels »",
+          "Le fonctionnement de l'État et des services publics est régi par des lois de plus en plus complexes que les organismes sociaux, les administrations, interprètent désormais au travers de logiciels. Nous basculons dans une situation où ce sont des algorithmes, écrits par quelques initiés, qui définissent l'application du droit, la rendant univoque et figée. Cela concerne notamment les modes de calculs de prestations sociales ou d'impôts. La formule \"code is law\" - le code informatique fait le droit - devient une norme et seuls de très rares experts savent, chacun dans son domaine, certes pointu mais restreint, quelles sont les règles effectivement appliquées",
+          "Sans l'accès au code source de ces logiciels, il devient impossible de contrôler réellement de quelle façon est interprétée la loi et sa bonne application",
+          "La publication du code source, sous licence libre, est indispensable au bon fonctionnement d'une démocratie moderne qui respecte ses citoyens",
+          "A minima, l'accès au code source est une base de la transparence, une des conditions qui permet à chacun de connaître, en particulier, la manière dont il est traité fiscalement, de pouvoir la contester, d'y adhérer puis d'accepter les règles de notre République",
+          "La loi du 17 juillet 1978 portant diverses mesures d'amélioration des relations entre l'administration et le public fournit une liste non exhaustive de types de documents administratifs communicables. Cette liste est interprétée et étendue par les avis de la Commission d'Accès aux Documents Administratifs (CADA). La jurisprudence constante de la CADA (code source du logiciel de calcul de l'impôt sur le revenu des personnes physiques notamment) a considéré que le code source des logiciels devait être considéré comme un document administratif. Le nouvel article proposé consacre la jurisprudence de la CADA sans entraîner donc de nouvelles obligations pour les administrations"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:1350",
+      "dataset": "republique-numerique",
+      "len": 2219,
+      "text": "I. Relèvent du domaine commun informationnel : 1° Tous les éléments appartenant au fonds communs, tels qu'idées, découvertes, principes, méthodes intellectuelles ; 2° Les faits, dès lors qu'ils ont fait l'objet d'une divulgation publique licite, notamment dans le respect du droit à la protection de la vie privée ; 3° Les oeuvres de l'esprit entrées dans le domaine public, soit à l'échéance des droits patrimoniaux, soit dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif ; 4° Les brevets d'invention dont la durée de protection légale est échue ; 5° Les informations issues des documents administratifs diffusés publiquement par les personnes mentionnées à l'article 1 de la loi n°78-753 du 17 juillet 1978 et dans les conditions précisées à l'article 7 de la même loi, sans préjudice des dispositions des articles 9, 10, 14 et 15 de ladite loi. 6° Et, plus généralement, tout bien immatériel dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif. II. Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que telles, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral. Des communautés de personnes physiques ou morales, de droit privé ou de droit public, peuvent s'instituer pour en régler la manière d'en jouir et en administrer la ressource. Elles ne peuvent toutefois en disposer. Toute personne morale ou physique a qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel. III. Le fait de capter des communs informationnels de manière exclusive sera pénalement sanctionné par une amende de 300.000 euros pour les personnes physiques ou dix pour cent du chiffre d'affaires mondial pour les personnes morales, et 3 ans d'emprisonnement. VI. Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel ».",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Relèvent du domaine commun informationnel : 1° Tous les éléments appartenant au fonds communs, tels qu'idées, découvertes, principes, méthodes intellectuelles ; 2° Les faits, dès lors qu'ils ont fait l'objet d'une divulgation publique licite, notamment dans le respect du droit à la protection de la vie privée ; 3° Les oeuvres de l'esprit entrées dans le domaine public, soit à l'échéance des droits patrimoniaux, soit dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif ; 4° Les brevets d'invention dont la durée de protection légale est échue ; 5° Les informations issues des documents administratifs diffusés publiquement par les personnes mentionnées à l'article 1 de la loi n°78-753 du 17 juillet 1978 et dans les conditions précisées à l'article 7 de la même loi, sans préjudice des dispositions des articles 9, 10, 14 et 15 de ladite loi. 6° Et, plus généralement, tout bien immatériel dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif.",
+          "Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que telles, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral.",
+          "Des communautés de personnes physiques ou morales, de droit privé ou de droit public, peuvent s'instituer pour en régler la manière d'en jouir et en administrer la ressource. Elles ne peuvent toutefois en disposer.",
+          "Toute personne morale ou physique a qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel.",
+          "Le fait de capter des communs informationnels de manière exclusive sera pénalement sanctionné par une amende de 300.000 euros pour les personnes physiques ou dix pour cent du chiffre d'affaires mondial pour les personnes morales, et 3 ans d'emprisonnement.",
+          "Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel »."
+        ],
+        "ministral-3b-latest/tune": [
+          "Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que telles, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral.",
+          "Des communautés de personnes physiques ou morales, de droit privé ou de droit public, peuvent s'instituer pour en régler la manière d'en jouir et en administrer la ressource.",
+          "Toute personne morale ou physique a qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel.",
+          "Le fait de capter des communs informationnels de manière exclusive sera pénalement sanctionné par une amende de 300.000 euros pour les personnes physiques ou dix pour cent du chiffre d'affaires mondial pour les personnes morales, et 3 ans d'emprisonnement.",
+          "Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel »."
+        ],
+        "mistral-large-latest/base": [
+          "I. Relèvent du domaine commun informationnel : 1° Tous les éléments appartenant au fonds communs, tels qu'idées, découvertes, principes, méthodes intellectuelles ; 2° Les faits, dès lors qu'ils ont fait l'objet d'une divulgation publique licite, notamment dans le respect du droit à la protection de la vie privée ; 3° Les oeuvres de l'esprit entrées dans le domaine public, soit à l'échéance des droits patrimoniaux, soit dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif ; 4° Les brevets d'invention dont la durée de protection légale est échue ; 5° Les informations issues des documents administratifs diffusés publiquement par les personnes mentionnées à l'article 1 de la loi n°78-753 du 17 juillet 1978 et dans les conditions précisées à l'article 7 de la même loi, sans préjudice des dispositions des articles 9, 10, 14 et 15 de ladite loi. 6° Et, plus généralement, tout bien immatériel dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif.",
+          "II. Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que telles, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral. Des communautés de personnes physiques ou morales, de droit privé ou de droit public, peuvent s'instituer pour en régler la manière d'en jouir et en administrer la ressource. Elles ne peuvent toutefois en disposer. Toute personne morale ou physique a qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel.",
+          "III. Le fait de capter des communs informationnels de manière exclusive sera pénalement sanctionné par une amende de 300.000 euros pour les personnes physiques ou dix pour cent du chiffre d'affaires mondial pour les personnes morales, et 3 ans d'emprisonnement.",
+          "VI. Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel »."
+        ],
+        "mistral-large-latest/tune": [
+          "I. Relèvent du domaine commun informationnel : 1° Tous les éléments appartenant au fonds communs, tels qu'idées, découvertes, principes, méthodes intellectuelles ; 2° Les faits, dès lors qu'ils ont fait l'objet d'une divulgation publique licite, notamment dans le respect du droit à la protection de la vie privée ; 3° Les oeuvres de l'esprit entrées dans le domaine public, soit à l'échéance des droits patrimoniaux, soit dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif ; 4° Les brevets d'invention dont la durée de protection légale est échue ; 5° Les informations issues des documents administratifs diffusés publiquement par les personnes mentionnées à l'article 1 de la loi n°78-753 du 17 juillet 1978 et dans les conditions précisées à l'article 7 de la même loi, sans préjudice des dispositions des articles 9, 10, 14 et 15 de ladite loi. 6° Et, plus généralement, tout bien immatériel dont les ayants droit ont consenti de manière définitive et gratuite à ce que leur usage soit collectif et non exclusif.",
+          "II. Les choses qui composent le domaine commun informationnel sont des choses communes au sens de l'article 714 du Code civil. Elles ne peuvent, en tant que telles, faire l'objet d'une exclusivité, ni d'une restriction de l'usage commun à tous, autre que l'exercice du droit moral. Des communautés de personnes physiques ou morales, de droit privé ou de droit public, peuvent s'instituer pour en régler la manière d'en jouir et en administrer la ressource. Elles ne peuvent toutefois en disposer. Toute personne morale ou physique a qualité pour agir aux fins de faire cesser toute atteinte au domaine commun informationnel.",
+          "III. Le fait de capter des communs informationnels de manière exclusive sera pénalement sanctionné par une amende de 300.000 euros pour les personnes physiques ou dix pour cent du chiffre d'affaires mondial pour les personnes morales, et 3 ans d'emprisonnement.",
+          "VI. Au troisième alinéa de l'article L.411-1 du code de la propriété intellectuelle, après les mots « protection des innovations, », il est inséré les mots : « pour la promotion de l'innovation collaborative et du domaine commun informationnel »."
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:69",
+      "dataset": "republique-numerique",
+      "len": 2184,
+      "text": "Au chapitre 3 du titre 3 du livre V du code de la recherche, il est inséré un article L. 533-4 ainsi rédigé : «Art. L. 533-4 - I. Lorsque un écrit scientifique, issu d'une activité de recherche financée au moins pour moitié par des fonds publics, est publié dans un périodique, un ouvrage paraissant au moins une fois par an, des actes de congrès ou de colloques ou des recueils de mélanges, son auteur, même en cas de cession exclusive à un éditeur, dispose du droit de mettre à disposition gratuitement sous une forme numérique, sous réserve des droits des éventuels coauteurs, la dernière version acceptée de son manuscrit par son éditeur et à l'exclusion du travail de mise en forme qui incombe à ce dernier, au terme d'un délai de douze mois pour les sciences, la technique et la médecine et de vingt-quatre mois pour les sciences humaines et sociales, à compter de date de la première publication. Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale. « II. - Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours. » Éléments de contexte Explication de l'article : Objectif : favoriser le libre accès aux travaux de recherche publique. Explication : Le monde académique dispose d'un ensemble considérable d'informations scientifiques dont l'accès reste compliqué par les droits d'exclusivité détenus par certaines revues et éditeurs. Le projet de loi propose de favoriser la diffusion en libre accès des résultats de la recherche pour favoriser la circulation du savoir et donc l'innovation. Il est proposé d'inscrire dans la loi, un droit de valorisation secondaire pour les publications scientifiques. L'auteur pourra ainsi rendre sa création publiquement accessible après un délai de 12 mois pour les œuvres scientifiques, techniques et médicales et de 24 mois pour les œuvres des sciences humaines et sociales. Exemple : les scientifiques de la recherche publique auront désormais le droit de publier leurs articles sur des sites ouverts accessibles à tous, notamment les archives publiques spécialisées, après un court délai d'embargo.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "favoriser le libre accès aux travaux de recherche publique … droit de valorisation secondaire pour les publications scientifiques",
+          "favoriser la diffusion en libre accès des résultats de la recherche pour favoriser la circulation du savoir et donc l'innovation",
+          "Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale",
+          "Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours."
+        ],
+        "ministral-3b-latest/tune": [
+          "Au chapitre 3 du titre 3 du livre V du code de la recherche, il est inséré un article L. 533-4 ainsi rédigé : «Art. L. 533-4 - I. Lorsque un écrit scientifique, issu d'une activité de recherche financée au moins pour moitié par des fonds publics, est publié dans un périodique, un ouvrage paraissant au moins une fois par an, des actes de congrès ou de colloques ou des recueils de mélanges, son auteur, même en cas de cession exclusive à un éditeur, dispose du droit de mettre à disposition gratuitement sous une forme numérique, sous réserve des droits des éventuels coauteurs, la dernière version acceptée de son manuscrit par son éditeur et à l'exclusion du travail de mise en forme qui incombe à ce dernier, au terme d'un délai de douze mois pour les sciences, la technique et la médecine et de vingt-quatre mois pour les sciences humaines et sociales, à compter de date de la première publication. Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale. « II. - Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours. » … Objectif : favoriser le libre accès aux travaux de recherche publique.",
+          "Le monde académique dispose d'un ensemble considérable d'informations scientifiques dont l'accès reste compliqué par les droits d'exclusivité détenus par certaines revues et éditeurs.",
+          "Le projet de loi propose de favoriser la diffusion en libre accès des résultats de la recherche pour favoriser la circulation du savoir et donc l'innovation.",
+          "Il est proposé d'inscrire dans la loi, un droit de valorisation secondaire pour les publications scientifiques.",
+          "les scientifiques de la recherche publique auront désormais le droit de publier leurs articles sur des sites ouverts accessibles à tous, notamment les archives publiques spécialisées, après un court délai d'embargo."
+        ],
+        "mistral-large-latest/base": [
+          "Au chapitre 3 du titre 3 du livre V du code de la recherche, il est inséré un article L. 533-4 ainsi rédigé : «Art. L. 533-4 - I. Lorsque un écrit scientifique, issu d'une activité de recherche financée au moins pour moitié par des fonds publics, est publié dans un périodique, un ouvrage paraissant au moins une fois par an, des actes de congrès ou de colloques ou des recueils de mélanges, son auteur, même en cas de cession exclusive à un éditeur, dispose du droit de mettre à disposition gratuitement sous une forme numérique, sous réserve des droits des éventuels coauteurs, la dernière version acceptée de son manuscrit par son éditeur et à l'exclusion du travail de mise en forme qui incombe à ce dernier, au terme d'un délai de douze mois pour les sciences, la technique et la médecine et de vingt-quatre mois pour les sciences humaines et sociales, à compter de date de la première publication. Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale. « II. - Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours. »",
+          "Objectif : favoriser le libre accès aux travaux de recherche publique.",
+          "Le monde académique dispose d'un ensemble considérable d'informations scientifiques dont l'accès reste compliqué par les droits d'exclusivité détenus par certaines revues et éditeurs. Le projet de loi propose de favoriser la diffusion en libre accès des résultats de la recherche pour favoriser la circulation du savoir et donc l'innovation.",
+          "Il est proposé d'inscrire dans la loi, un droit de valorisation secondaire pour les publications scientifiques. L'auteur pourra ainsi rendre sa création publiquement accessible après un délai de 12 mois pour les œuvres scientifiques, techniques et médicales et de 24 mois pour les œuvres des sciences humaines et sociales.",
+          "les scientifiques de la recherche publique auront désormais le droit de publier leurs articles sur des sites ouverts accessibles à tous, notamment les archives publiques spécialisées, après un court délai d'embargo."
+        ],
+        "mistral-large-latest/tune": [
+          "Au chapitre 3 du titre 3 du livre V du code de la recherche, il est inséré un article L. 533-4 ainsi rédigé : «Art. L. 533-4 - I. Lorsque un écrit scientifique, issu d'une activité de recherche financée au moins pour moitié par des fonds publics, est publié dans un périodique, un ouvrage paraissant au moins une fois par an, des actes de congrès ou de colloques ou des recueils de mélanges, son auteur, même en cas de cession exclusive à un éditeur, dispose du droit de mettre à disposition gratuitement sous une forme numérique, sous réserve des droits des éventuels coauteurs, la dernière version acceptée de son manuscrit par son éditeur et à l'exclusion du travail de mise en forme qui incombe à ce dernier, au terme d'un délai de douze mois pour les sciences, la technique et la médecine et de vingt-quatre mois pour les sciences humaines et sociales, à compter de date de la première publication. Cette mise à disposition ne peut donner lieu à aucune exploitation commerciale. « II. - Les dispositions du présent article sont d'ordre public et toute clause contraire à celles-ci est réputée non écrite. Elles ne s'appliquent pas aux contrats en cours. »",
+          "favoriser le libre accès aux travaux de recherche publique",
+          "Le monde académique dispose d'un ensemble considérable d'informations scientifiques dont l'accès reste compliqué par les droits d'exclusivité détenus par certaines revues et éditeurs",
+          "Le projet de loi propose de favoriser la diffusion en libre accès des résultats de la recherche pour favoriser la circulation du savoir et donc l'innovation",
+          "Il est proposé d'inscrire dans la loi, un droit de valorisation secondaire pour les publications scientifiques. L'auteur pourra ainsi rendre sa création publiquement accessible après un délai de 12 mois pour les œuvres scientifiques, techniques et médicales et de 24 mois pour les œuvres des sciences humaines et sociales",
+          "les scientifiques de la recherche publique auront désormais le droit de publier leurs articles sur des sites ouverts accessibles à tous, notamment les archives publiques spécialisées, après un court délai d'embargo"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-19",
+      "dataset": "granddebat",
+      "len": 2163,
+      "text": "Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel. Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat. Une chaîne de télévision publique dédiée aux référendums doit être également créée. L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche. Le nombre de signataires nécessaires reste encore à déterminer. - Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%. - Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter. - Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel",
+          "Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat.",
+          "L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche. Le nombre de signataires nécessaires reste encore à déterminer",
+          "Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%",
+          "Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter.",
+          "Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non"
+        ],
+        "ministral-3b-latest/tune": [
+          "Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel",
+          "Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat.",
+          "L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche.",
+          "Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%.",
+          "Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter.",
+          "Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non."
+        ],
+        "mistral-large-latest/base": [
+          "Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel. Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat. Une chaîne de télévision publique dédiée aux référendums doit être également créée. L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche. Le nombre de signataires nécessaires reste encore à déterminer.",
+          "Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%.",
+          "Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter.",
+          "Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non."
+        ],
+        "mistral-large-latest/tune": [
+          "Organiser un référendum visant à instaurer le Référendum d'Initiative Citoyenne en toute matière : législatif, abrogatoire, révocatoire et constitutionnel. Concernant les modalités du RIC une fois le référendum l'instituant validé, je reprends le projet d'Étienne Chouard : une pétition de plus de 100 000 signatures sera automatiquement soumise à référendum. Les pétitions de moins de 100 000 signataires seront soumises au libre arbitre de la chambre référendaire la plus proche, composée de citoyens tirés au sort. Une chambre des référendums par département serait raisonnable. Tout référendum doit être précédé d'un débat d'une durée de 6 mois sur le sujet. Arguments et contre-arguments doivent être garantis dans le cadre de ce débat. Une chaîne de télévision publique dédiée aux référendums doit être également créée. L'initiative citée plus haut doit aussi inclure les référendums d'initiative citoyenne au niveau local dans ses matières législative, abrogatoire et révocatoire. Ils passeront eux aussi par la Chambre des Référendums la plus proche. Le nombre de signataires nécessaires reste encore à déterminer.",
+          "Un référendum sur l'Euro précédé d'un débat national doit aussi être organisé. Cette monnaie a un bilan très mauvais, et a été créée pour des raisons idéologiques et non économique. La perte de nombreuses entreprises et de pouvoir d'achat rend nécessaire un référendum sur le sujet. Si ce dernier débouche sur une sortie française de l'Euro, le SMIC devra être revalorisé de 20%.",
+          "Un référendum sur l'Union Européenne précédé d'un débat national doit être également organisé : cette organisation dépouille de leur souveraineté les citoyens et est par essence ultralibérale. Les articles 63, 106, 121 et 123 du Traité sur le Fonctionnement de l'Union Européenne notamment l'en atteste. Les citoyens doivent pouvoir choisir de la quitter.",
+          "Un référendum sur l'OTAN précédé d'un débat national doit être organisé. Cette organisation contrôlée par les États-Unis répands le sang au Moyen-Orient et l'a répandu en Serbie. Les citoyens doivent pouvoir choisir si la France en la quittant puisse redevenir le Pays des Droits de l'Homme ou non."
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:518",
+      "dataset": "republique-numerique",
+      "len": 2150,
+      "text": "I. Après le 1er alinéa de l'article 78 de la loi n° 2005-102 du 11 février 2005 pour l'égalité des droits, il est ajouté l'alinéa suivant : « Les services d'accueil téléphonique destinés à recevoir les appels des usagers sont accessibles aux personnes déficientes auditives par la mise à disposition d'un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne, en respectant les mêmes conditions de traduction.» « Les associations reconnues d'utilité publiques dotées d'un service d'accueil téléphonique, doivent mettre à la disposition des personnes déficientes auditives un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne » II. L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. » III. Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle ». IV. Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Les services d'accueil téléphonique destinés à recevoir les appels des usagers sont accessibles aux personnes déficientes auditives par la mise à disposition d'un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne, en respectant les mêmes conditions de traduction.",
+          "Les associations reconnues d'utilité publiques dotées d'un service d'accueil téléphonique, doivent mettre à la disposition des personnes déficientes auditives un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne",
+          "Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne.",
+          "l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle",
+          "Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi."
+        ],
+        "ministral-3b-latest/tune": [
+          "« Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. »",
+          "« o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle »",
+          "Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi."
+        ],
+        "mistral-large-latest/base": [
+          "I. Après le 1er alinéa de l'article 78 de la loi n° 2005-102 du 11 février 2005 pour l'égalité des droits, il est ajouté l'alinéa suivant : « Les services d'accueil téléphonique destinés à recevoir les appels des usagers sont accessibles aux personnes déficientes auditives par la mise à disposition d'un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne, en respectant les mêmes conditions de traduction.» « Les associations reconnues d'utilité publiques dotées d'un service d'accueil téléphonique, doivent mettre à la disposition des personnes déficientes auditives un service de traduction écrite simultanée et visuelle. A défaut, ces appels peuvent être recueillis à partir d'un service de communication au public en ligne »",
+          "II. L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. »",
+          "III. Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle ».",
+          "IV. Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi."
+        ],
+        "mistral-large-latest/tune": [
+          "L'article L. 113-5 du code de la consommation est complété par un alinéa ainsi rédigé : « Les entreprises dont le chiffre d'affaires est supérieur à un seuil défini par décret rendent ce numéro accessible dans les mêmes conditions aux personnes déficientes auditives, par la mise à disposition d'un service de traduction écrite simultanée et visuelle. Ce service comprend une transcription écrite ou l'intervention d'un interprète en langue des signes française ou d'un codeur en langage parlé complété. Ces appels peuvent également être recueillis à partir d'un service de communication au public en ligne. »",
+          "Après le o) du I de l'article L. 33-1 du code des postes et des communications électroniques, il est inséré un alinéa o bis) ainsi rédigé : « o bis) l'accès des utilisateurs finals déficients auditifs à une offre de services de communications électroniques, incluant la fourniture, à un tarif abordable, d'un service de traduction écrite simultanée et visuelle »",
+          "Les dispositions du présent article entrent en vigueur selon des modalités et des dates prévues par décret et au plus tard dans un délai de cinq ans à compter de la promulgation de la présente loi. Par dérogation, les dispositions du II entre en vigueur dans un délai de deux ans à compter de la promulgation de la présente loi."
+        ]
+      }
+    },
+    {
+      "id": "tiktok:564",
+      "dataset": "tiktok",
+      "len": 2148,
+      "text": "Il devient chaque jour plus difficile de ne pas céder à une forme de désespoir lucide face à l'avilissement cognitif qui s'étale sans honte dans nos espaces publics, à la faveur d'un silence complice. Ce n'est plus une dérive marginale, c'est une mécanique bien huilée, une logique de dévastation mentale à l'échelle industrielle, car en effet, les contenus TikTok les plus crétinisants - dont l'abrutissement semble être la seule finalité - sont désormais diffusés en pleine rue, dans les transports, dans les halls, comme une pestilence sonore dont nul ne peut plus se soustraire. On ne parle plus ici d'un simple divertissement innocent. On parle d'une ingénierie du vide. D'un projet systémique de neutralisation des capacités critiques. L'algorithme ne propose pas, il dicte ; il façonne une humanité qui ne contemple plus, qui ne doute plus, qui ne pense plus. Les jeunes générations - et, faut-il le dire, les moins jeunes aussi - sont absorbées dans un continuum d'images sans contexte, de slogans sans pensée, parfois dans la pauvreté intellectuelle la plus crasse, parfois dans une logique mercantile. Ce n'est pas une révolution culturelle, c'est un désarmement massif de l'esprit. Et ce qui me heurte au plus profond, c'est que cette pollution cognitive n'est même plus confinée aux écrans personnels. En effet, elle déborde. Elle se propage, sans écouteurs, dans une indécence absolue, comme si l'intime n'existait plus, comme si la médiocrité devait être partagée de force, au nom d'une culture de la transparence devenue tyrannie de l'exposition. Mais derrière cette absurdité apparente, il y a un ordre. Un ordre économique et idéologique. On ne laisse pas s'installer une telle indigence culturelle par hasard. C'est l'effet d'un modèle fondé sur la passivité, sur la consommation automatique, sur l'éradication du silence intérieur, ce lieu où naissent encore les pensées profondes et les révoltes légitimes. Ce n'est pas un échec du système, c'est sa réussite la plus cynique, à savoir celle de fabriquer des êtres humains désensibilisés, incapables de saisir la complexité, et donc inaptes à remettre en question l'ordre établi.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Il devient chaque jour plus difficile de ne pas céder à une forme de désespoir lucide face à l'avilissement cognitif qui s'étale sans honte dans nos espaces publics, à la faveur d'un silence complice.",
+          "Ce n'est plus une dérive marginale, c'est une mécanique bien huilée, une logique de dévastation mentale à l'échelle industrielle, car en effet, les contenus TikTok les plus crétinisants - dont l'abrutissement semble être la seule finalité - sont désormais diffusés en pleine rue, dans les transports, dans les halls, comme une pestilence sonore dont nul ne peut plus se soustraire.",
+          "On ne parle plus ici d'un simple divertissement innocent. On parle d'une ingénierie du vide. D'un projet systémique de neutralisation des capacités critiques.",
+          "L'algorithme ne propose pas, il dicte ; il façonne une humanité qui ne contemple plus, qui ne doute plus, qui ne pense plus.",
+          "Les jeunes générations - et, faut-il le dire, les moins jeunes aussi - sont absorbées dans un continuum d'images sans contexte, de slogans sans pensée, parfois dans la pauvreté intellectuelle la plus crasse, parfois dans une logique mercantile.",
+          "Ce n'est pas une révolution culturelle, c'est un désarmement massif de l'esprit.",
+          "En effet, elle déborde. Elle se propage, sans écouteurs, dans une indécence absolue, comme si l'intime n'existait plus, comme si la médiocrité devait être partagée de force, au nom d'une culture de la transparence devenue tyrannie de l'exposition.",
+          "Mais derrière cette absurdité apparente, il y a un ordre. Un ordre économique et idéologique. On ne laisse pas s'installer une telle indigence culturelle par hasard.",
+          "C'est l'effet d'un modèle fondé sur la passivité, sur la consommation automatique, sur l'éradication du silence intérieur, ce lieu où naissent encore les pensées profondes et les révoltes légitimes.",
+          "Ce n'est pas un échec du système, c'est sa réussite la plus cynique, à savoir celle de fabriquer des êtres humains désensibilisés, incapables de saisir la complexité, et donc inaptes à remettre en question l'ordre établi."
+        ],
+        "ministral-3b-latest/tune": [
+          "Il devient chaque jour plus difficile de ne pas céder à une forme de désespoir lucide face à l'avilissement cognitif qui s'étale sans honte dans nos espaces publics, à la faveur d'un silence complice. … Ce n'est plus une dérive marginale, c'est une mécanique bien huilée, une logique de dévastation mentale à l'échelle industrielle, car en effet, les contenus TikTok les plus crétinisants - dont l'abrutissement semble être la seule finalité - sont désormais diffusés en pleine rue, dans les transports, dans les halls, comme une pestilence sonore dont nul ne peut plus se soustraire.",
+          "On ne parle plus ici d'un simple divertissement innocent. On parle d'une ingénierie du vide. … D'un projet systémique de neutralisation des capacités critiques. L'algorithme ne propose pas, il dicte ; il façonne une humanité qui ne contemple plus, qui ne doute plus, qui ne pense plus.",
+          "Les jeunes générations - et, faut-il le dire, les moins jeunes aussi - sont absorbées dans un continuum d'images sans contexte, de slogans sans pensée, parfois dans la pauvreté intellectuelle la plus crasse, parfois dans une logique mercantile.",
+          "Ce n'est pas une révolution culturelle, c'est un désarmement massif de l'esprit. … En effet, elle déborde. Elle se propage, sans écouteurs, dans une indécence absolue, comme si l'intime n'existait plus, comme si la médiocrité devait être partagée de force, au nom d'une culture de la transparence devenue tyrannie de l'exposition.",
+          "Mais derrière cette absurdité apparente, il y a un ordre. Un ordre économique et idéologique. … On ne laisse pas s'installer une telle indigence culturelle par hasard. C'est l'effet d'un modèle fondé sur la passivité, sur la consommation automatique, sur l'éradication du silence intérieur, ce lieu où naissent encore les pensées profondes et les révoltes légitimes.",
+          "Ce n'est pas un échec du système, c'est sa réussite la plus cynique, à savoir celle de fabriquer des êtres humains désensibilisés, incapables de saisir la complexité, et donc inaptes à remettre en question l'ordre établi."
+        ],
+        "mistral-large-latest/base": [
+          "Il devient chaque jour plus difficile de ne pas céder à une forme de désespoir lucide face à l'avilissement cognitif qui s'étale sans honte dans nos espaces publics, à la faveur d'un silence complice … Ce n'est plus une dérive marginale, c'est une mécanique bien huilée, une logique de dévastation mentale à l'échelle industrielle … les contenus TikTok les plus crétinisants - dont l'abrutissement semble être la seule finalité - sont désormais diffusés en pleine rue, dans les transports, dans les halls, comme une pestilence sonore dont nul ne peut plus se soustraire … On ne parle plus ici d'un simple divertissement innocent. On parle d'une ingénierie du vide. D'un projet systémique de neutralisation des capacités critiques … L'algorithme ne propose pas, il dicte ; il façonne une humanité qui ne contemple plus, qui ne doute plus, qui ne pense plus … Les jeunes générations - et, faut-il le dire, les moins jeunes aussi - sont absorbées dans un continuum d'images sans contexte, de slogans sans pensée, parfois dans la pauvreté intellectuelle la plus crasse, parfois dans une logique mercantile … Ce n'est pas une révolution culturelle, c'est un désarmement massif de l'esprit … cette pollution cognitive n'est même plus confinée aux écrans personnels. En effet, elle déborde. Elle se propage, sans écouteurs, dans une indécence absolue, comme si l'intime n'existait plus, comme si la médiocrité devait être partagée de force, au nom d'une culture de la transparence devenue tyrannie de l'exposition … derrière cette absurdité apparente, il y a un ordre. Un ordre économique et idéologique. On ne laisse pas s'installer une telle indigence culturelle par hasard. C'est l'effet d'un modèle fondé sur la passivité, sur la consommation automatique, sur l'éradication du silence intérieur, ce lieu où naissent encore les pensées profondes et les révoltes légitimes … Ce n'est pas un échec du système, c'est sa réussite la plus cynique, à savoir celle de fabriquer des êtres humains désensibilisés, incapables de saisir la complexité, et donc inaptes à remettre en question l'ordre établi"
+        ],
+        "mistral-large-latest/tune": [
+          "Il devient chaque jour plus difficile de ne pas céder à une forme de désespoir lucide face à l'avilissement cognitif qui s'étale sans honte dans nos espaces publics, à la faveur d'un silence complice … Ce n'est plus une dérive marginale, c'est une mécanique bien huilée, une logique de dévastation mentale à l'échelle industrielle … les contenus TikTok les plus crétinisants - dont l'abrutissement semble être la seule finalité - sont désormais diffusés en pleine rue, dans les transports, dans les halls, comme une pestilence sonore dont nul ne peut plus se soustraire … On ne parle plus ici d'un simple divertissement innocent. On parle d'une ingénierie du vide. D'un projet systémique de neutralisation des capacités critiques … L'algorithme ne propose pas, il dicte ; il façonne une humanité qui ne contemple plus, qui ne doute plus, qui ne pense plus … Les jeunes générations - et, faut-il le dire, les moins jeunes aussi - sont absorbées dans un continuum d'images sans contexte, de slogans sans pensée, parfois dans la pauvreté intellectuelle la plus crasse, parfois dans une logique mercantile … Ce n'est pas une révolution culturelle, c'est un désarmement massif de l'esprit … cette pollution cognitive n'est même plus confinée aux écrans personnels. En effet, elle déborde. Elle se propage, sans écouteurs, dans une indécence absolue, comme si l'intime n'existait plus, comme si la médiocrité devait être partagée de force, au nom d'une culture de la transparence devenue tyrannie de l'exposition … derrière cette absurdité apparente, il y a un ordre. Un ordre économique et idéologique. On ne laisse pas s'installer une telle indigence culturelle par hasard. C'est l'effet d'un modèle fondé sur la passivité, sur la consommation automatique, sur l'éradication du silence intérieur, ce lieu où naissent encore les pensées profondes et les révoltes légitimes … Ce n'est pas un échec du système, c'est sa réussite la plus cynique, à savoir celle de fabriquer des êtres humains désensibilisés, incapables de saisir la complexité, et donc inaptes à remettre en question l'ordre établi"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-882",
+      "dataset": "granddebat",
+      "len": 2108,
+      "text": "Il faut un langage sans langue de bois et dire la vérité aux citoyens. j'enfonce une porte ouverte mais c'est ainsi. Il faut aussi arrêter les cadeaux fiscaux comme le CICE et aussi rétablir un rapport d'égal à égal et ne pas toujours demander plus aux français alors que les entreprises du CAC 40 ont de plus de plus les coudées franches, leurs actionnaires de plus en plus de dividendes et je ne parle même pas des GAFA. Ce capitalisme devient une abjection qui a poussé nombre de mes concitoyens de bonne foi dans les rues et sur les ronds points, d'ailleurs ils sont nombreux a ne plus manifester dégoûtés par la récupération des extrêmes. Les autres se sont fait manipulés par d'autres partis politiques. Autre aspect : J'ai travaillé comme personnel administratif dans des collectivités territoriales et force est de constater que le \"pouvoir\" fait tourner la tête et dénature les relations humaines et il faut remettre l'Humain au centre de la politique. En quoi une homme ou une femme politique serait supérieur au citoyen qui gagne péniblement son salaire ? Rétablissez le respects dans les relations. Nous ne sommes pas que des électeurs et des feuilles d'impôts, nous sommes aussi des citoyens à respecter. Les Ministres et leurs conseillers devraient partager la vie des travailleurs au cours de stages (une semaine au moins, voire plus) et comprendre ce qu'est de bosser 40 heures par semaine ou plus pour certains en gagnant 1400 euros net ou à peine le Smic. Et je ne suis pas à plaindre sur ce dernier point. Moralisons également la vie politique, un peu à la façon des pays scandinaves que certains de nos politique aiment donner en exemple lors de discours à l'étranger (sic). Par contre qu'ils aillent jusqu'au bout. Au Danemark ou en Norvège quant un ministre ou un politique s'est fait prendre les doigts dans le pot de confiture, doux euphémisme, il démissionne et ne s'arc boute pas sur sa fonction et son POUVOIR, au risque de porter le discrédit sur son parti ou la classe politique entière. En faisant cela NOS politiques donneront un message positif aux françaises et aux français.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Il faut un langage sans langue de bois et dire la vérité aux citoyens.",
+          "j'enfonce une porte ouverte mais c'est ainsi.",
+          "Il faut aussi arrêter les cadeaux fiscaux comme le CICE",
+          "je ne parle même pas des GAFA",
+          "Les autres se sont fait manipulés par d'autres partis politiques.",
+          "Autre aspect : J'ai travaillé comme personnel administratif dans des collectivités territoriales et force est de constater que le \"pouvoir\" fait tourner la tête et dénature les relations humaines",
+          "il faut remettre l'Humain au centre de la politique",
+          "En quoi une homme ou une femme politique serait supérieur au citoyen qui gagne péniblement son salaire ?",
+          "Nous ne sommes pas que des électeurs et des feuilles d'impôts, nous sommes aussi des citoyens à respecter.",
+          "Les Ministres et leurs conseillers devraient partager la vie des travailleurs au cours de stages (une semaine au moins, voire plus) et comprendre ce qu'est de bosser 40 heures par semaine ou plus pour certains en gagnant 1400 euros net ou à peine le Smic.",
+          "Et je ne suis pas à plaindre sur ce dernier point.",
+          "Par contre qu'ils aillent jusqu'au bout.",
+          "Au Danemark ou en Norvège quant un ministre ou un politique s'est fait prendre les doigts dans le pot de confiture, doux euphémisme, il démissionne et ne s'arc boute pas sur sa fonction et son POUVOIR, au risque de porter le discrédit sur son parti ou la classe politique entière.",
+          "En faisant cela NOS politiques donneront un message positif aux françaises et aux français."
+        ],
+        "ministral-3b-latest/tune": [
+          "un langage sans langue de bois et dire la vérité aux citoyens",
+          "arrêter les cadeaux fiscaux comme le CICE",
+          "remettre l'Humain au centre de la politique … En quoi une homme ou une femme politique serait supérieur au citoyen qui gagne péniblement son salaire ?",
+          "Les Ministres et leurs conseillers devraient partager la vie des travailleurs au cours de stages (une semaine au moins, voire plus) et comprendre ce qu'est de bosser 40 heures par semaine ou plus pour certains en gagnant 1400 euros net ou à peine le Smic"
+        ],
+        "mistral-large-latest/base": [
+          "Il faut un langage sans langue de bois et dire la vérité aux citoyens.",
+          "Il faut aussi arrêter les cadeaux fiscaux comme le CICE et aussi rétablir un rapport d'égal à égal et ne pas toujours demander plus aux français alors que les entreprises du CAC 40 ont de plus de plus les coudées franches, leurs actionnaires de plus en plus de dividendes et je ne parle même pas des GAFA.",
+          "Ce capitalisme devient une abjection qui a poussé nombre de mes concitoyens de bonne foi dans les rues et sur les ronds points, d'ailleurs ils sont nombreux a ne plus manifester dégoûtés par la récupération des extrêmes. Les autres se sont fait manipulés par d'autres partis politiques.",
+          "En quoi une homme ou une femme politique serait supérieur au citoyen qui gagne péniblement son salaire ? Rétablissez le respects dans les relations. Nous ne sommes pas que des électeurs et des feuilles d'impôts, nous sommes aussi des citoyens à respecter.",
+          "Les Ministres et leurs conseillers devraient partager la vie des travailleurs au cours de stages (une semaine au moins, voire plus) et comprendre ce qu'est de bosser 40 heures par semaine ou plus pour certains en gagnant 1400 euros net ou à peine le Smic.",
+          "Moralisons également la vie politique, un peu à la façon des pays scandinaves que certains de nos politique aiment donner en exemple lors de discours à l'étranger (sic). Par contre qu'ils aillent jusqu'au bout. Au Danemark ou en Norvège quant un ministre ou un politique s'est fait prendre les doigts dans le pot de confiture, doux euphémisme, il démissionne et ne s'arc boute pas sur sa fonction et son POUVOIR, au risque de porter le discrédit sur son parti ou la classe politique entière. En faisant cela NOS politiques donneront un message positif aux françaises et aux français."
+        ],
+        "mistral-large-latest/tune": [
+          "Il faut un langage sans langue de bois et dire la vérité aux citoyens.",
+          "Il faut aussi arrêter les cadeaux fiscaux comme le CICE et aussi rétablir un rapport d'égal à égal et ne pas toujours demander plus aux français alors que les entreprises du CAC 40 ont de plus de plus les coudées franches, leurs actionnaires de plus en plus de dividendes et je ne parle même pas des GAFA.",
+          "Ce capitalisme devient une abjection qui a poussé nombre de mes concitoyens de bonne foi dans les rues et sur les ronds points, d'ailleurs ils sont nombreux a ne plus manifester dégoûtés par la récupération des extrêmes. Les autres se sont fait manipulés par d'autres partis politiques.",
+          "J'ai travaillé comme personnel administratif dans des collectivités territoriales et force est de constater que le \"pouvoir\" fait tourner la tête et dénature les relations humaines et il faut remettre l'Humain au centre de la politique.",
+          "En quoi une homme ou une femme politique serait supérieur au citoyen qui gagne péniblement son salaire ? Rétablissez le respects dans les relations. Nous ne sommes pas que des électeurs et des feuilles d'impôts, nous sommes aussi des citoyens à respecter.",
+          "Les Ministres et leurs conseillers devraient partager la vie des travailleurs au cours de stages (une semaine au moins, voire plus) et comprendre ce qu'est de bosser 40 heures par semaine ou plus pour certains en gagnant 1400 euros net ou à peine le Smic.",
+          "Moralisons également la vie politique, un peu à la façon des pays scandinaves que certains de nos politique aiment donner en exemple lors de discours à l'étranger (sic). Par contre qu'ils aillent jusqu'au bout. Au Danemark ou en Norvège quant un ministre ou un politique s'est fait prendre les doigts dans le pot de confiture, doux euphémisme, il démissionne et ne s'arc boute pas sur sa fonction et son POUVOIR, au risque de porter le discrédit sur son parti ou la classe politique entière. En faisant cela NOS politiques donneront un message positif aux françaises et aux français."
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:297",
+      "dataset": "republique-numerique",
+      "len": 2011,
+      "text": "1- Le résultat d'une activité de recherche n'est pas seulement la publication ou l'article scientifique. Les données qui sont générées dans la cadre de la recherche représentent un grand nombre d'opportunité, notamment pour les startups er les groupes de recherche qui appliquent des technologies de big data pour ré analyser les jeux de données existants afin d'en extraire de nouvelles connsaissanes. Il y a une urgence pour définir une politique pour la protection et le partage des données omiques. Certaines revues scientifiques exigent lors de la soumission d'un article scientifique de déposer dans une base de données publique les données et les métadonnées qui ont été utlisées dans cet article scientifique selon un protocole bien défini (par exemple le protocole MIAME dans le cas des données transcriptomiques). En l'absence d'une politique française pour la gestion des données de la recherche, les chercheurs des institutions françaises soumettent souvent leurs données à NCBI (National Center for Biotechnology Information) ou à EBI (European Bioinformatics Institute). Ces données sont protégées durant toute la durée de l'évaluation de l'article (review process) sauf pour les experts qui ont été sélectionnés par la revue pour évaluer la publication. Après acceptation de l'article, les données deviennent publiquement accessible et peuvent être exploitées librement (sauf en France si ces données contiennt une partie démographique, dans ce cas il faut demander une autorisation de la CNIL !). Je pense que cet article devrait être modifié pour inclure la partie données. 2- La situation actuelle de la recherche scientifique est plus complexe que la configuration présentée dans cet article \"une activité de recherche financée au moins pour moitié par des fonds publics\". Que faire dans le cas des projets financés par la commission européenne ou des projets financés par deux pays, par exemple par l'ANR en France et par la DFG en Allemagne ? Éléments de contexte Explication de l'article :",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Il y a une urgence pour définir une politique pour la protection et le partage des données omiques.",
+          "En l'absence d'une politique française pour la gestion des données de la recherche, les chercheurs des institutions françaises soumettent souvent leurs données à NCBI (National Center for Biotechnology Information) ou à EBI (European Bioinformatics Institute).",
+          "Ces données sont protégées durant toute la durée de l'évaluation de l'article (review process) sauf pour les experts qui ont été sélectionnés par la revue pour évaluer la publication.",
+          "Je pense que cet article devrait être modifié pour inclure la partie données."
+        ],
+        "ministral-3b-latest/tune": [
+          "Il y a une urgence pour définir une politique pour la protection et le partage des données omiques",
+          "En l'absence d'une politique française pour la gestion des données de la recherche, les chercheurs des institutions françaises soumettent souvent leurs données à NCBI (National Center for Biotechnology Information) ou à EBI (European Bioinformatics Institute)",
+          "Je pense que cet article devrait être modifié pour inclure la partie données",
+          "Que faire dans le cas des projets financés par la commission européenne ou des projets financés par deux pays, par exemple par l'ANR en France et par la DFG en Allemagne"
+        ],
+        "mistral-large-latest/base": [
+          "Le résultat d'une activité de recherche n'est pas seulement la publication ou l'article scientifique. Les données qui sont générées dans la cadre de la recherche représentent un grand nombre d'opportunité, notamment pour les startups er les groupes de recherche qui appliquent des technologies de big data pour ré analyser les jeux de données existants afin d'en extraire de nouvelles connsaissanes … Il y a une urgence pour définir une politique pour la protection et le partage des données omiques … Certaines revues scientifiques exigent lors de la soumission d'un article scientifique de déposer dans une base de données publique les données et les métadonnées qui ont été utlisées dans cet article scientifique selon un protocole bien défini (par exemple le protocole MIAME dans le cas des données transcriptomiques) … En l'absence d'une politique française pour la gestion des données de la recherche, les chercheurs des institutions françaises soumettent souvent leurs données à NCBI (National Center for Biotechnology Information) ou à EBI (European Bioinformatics Institute). Ces données sont protégées durant toute la durée de l'évaluation de l'article (review process) sauf pour les experts qui ont été sélectionnés par la revue pour évaluer la publication. Après acceptation de l'article, les données deviennent publiquement accessible et peuvent être exploitées librement (sauf en France si ces données contiennt une partie démographique, dans ce cas il faut demander une autorisation de la CNIL !) … Je pense que cet article devrait être modifié pour inclure la partie données",
+          "La situation actuelle de la recherche scientifique est plus complexe que la configuration présentée dans cet article \"une activité de recherche financée au moins pour moitié par des fonds publics\". Que faire dans le cas des projets financés par la commission européenne ou des projets financés par deux pays, par exemple par l'ANR en France et par la DFG en Allemagne ?"
+        ],
+        "mistral-large-latest/tune": [
+          "Le résultat d'une activité de recherche n'est pas seulement la publication ou l'article scientifique. Les données qui sont générées dans la cadre de la recherche représentent un grand nombre d'opportunité, notamment pour les startups er les groupes de recherche qui appliquent des technologies de big data pour ré analyser les jeux de données existants afin d'en extraire de nouvelles connsaissanes … Il y a une urgence pour définir une politique pour la protection et le partage des données omiques … Je pense que cet article devrait être modifié pour inclure la partie données",
+          "Certaines revues scientifiques exigent lors de la soumission d'un article scientifique de déposer dans une base de données publique les données et les métadonnées qui ont été utlisées dans cet article scientifique selon un protocole bien défini (par exemple le protocole MIAME dans le cas des données transcriptomiques)",
+          "En l'absence d'une politique française pour la gestion des données de la recherche, les chercheurs des institutions françaises soumettent souvent leurs données à NCBI (National Center for Biotechnology Information) ou à EBI (European Bioinformatics Institute)",
+          "Ces données sont protégées durant toute la durée de l'évaluation de l'article (review process) sauf pour les experts qui ont été sélectionnés par la revue pour évaluer la publication. Après acceptation de l'article, les données deviennent publiquement accessible et peuvent être exploitées librement (sauf en France si ces données contiennt une partie démographique, dans ce cas il faut demander une autorisation de la CNIL !)",
+          "La situation actuelle de la recherche scientifique est plus complexe que la configuration présentée dans cet article \"une activité de recherche financée au moins pour moitié par des fonds publics\". Que faire dans le cas des projets financés par la commission européenne ou des projets financés par deux pays, par exemple par l'ANR en France et par la DFG en Allemagne ?"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:5757",
+      "dataset": "republique-numerique",
+      "len": 1998,
+      "text": "La 1ère remarque de S. Pouyllau a le mérite de soulever une question importante : quelles pourraient être les conséquences sur la diffusion (papier et électronique) des publications SHS et sur leurs revenus, d'un régime obligatoire (tel que celui proposé, par exemple, par BSN) par lequel les auteurs (payés sur fonds publics) seraient obligés de diffuser gratuitement, très rapidement après leur parution, leurs articles (voire demain leurs ouvrages) via le serveur de leur établissement ? S. Pouyllau, à la suite de M. Dacos et de Cl. Lemercier, nous dit aucune. Pour notre part, nous pensons au contraire qu'une telle diffusion gratuite risquerait d'affecter les ressources qui permettent aux revues et aux ouvrages collectifs de recherche d'exister. Le problème est que personne ne peut, à cet égard, avoir de certitude. Comme le dit honnêtement Cl. Lemercier en clôture de son billet publié sur la liste Histoire/Eco, c'est une affaire d'opinion, de conviction (.) sur laquelle elle ne prétend pas (pas plus que nous) détenir la vérité. La question est donc de savoir ce qu'il adviendrait si elle, M. Dacos et S. Pouyllau se trompaient. On aurait cassé le système actuel - certes perfectible - de diffusion de la science sans en avoir conçu au préalable un nouveau. Comme nous le disons par ailleurs, on ne construit pas sur des ruines ; mais ceci ne doit pas justifier l'immobilisme. C'est pourquoi nous plaidons pour (i) un travail commun pour imaginer ensemble de nouveaux modèles, les plus ouverts possible, de diffusion des publications scientifiques, adaptés aux SHS, modèles qui devraient offrir toutes garanties d'indépendance et de pluralisme, de façon notamment à permettre l'expression dans chaque discipline aussi bien des écoles \"mainstream\" que des écoles hétérodoxes (ii) et, parallèlement, une ouverture raisonnée du système actuel, fondée sur des études sérieuses de l'impact potentiel, discipline par discipline, des mesures préconisées par la C.E. en matière de libre accès.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "quelles pourraient être les conséquences sur la diffusion (papier et électronique) des publications SHS et sur leurs revenus, d'un régime obligatoire (tel que celui proposé, par exemple, par BSN) par lequel les auteurs (payés sur fonds publics) seraient obligés de diffuser gratuitement, très rapidement après leur parution, leurs articles (voire demain leurs ouvrages) via le serveur de leur établissement ?",
+          "une telle diffusion gratuite risquerait d'affecter les ressources qui permettent aux revues et aux ouvrages collectifs de recherche d'exister.",
+          "La question est donc de savoir ce qu'il adviendrait si elle, M. Dacos et S. Pouyllau se trompaient. On aurait cassé le système actuel - certes perfectible - de diffusion de la science sans en avoir conçu au préalable un nouveau.",
+          "C'est pourquoi nous plaidons pour (i) un travail commun pour imaginer ensemble de nouveaux modèles, les plus ouverts possible, de diffusion des publications scientifiques, adaptés aux SHS, modèles qui devraient offrir toutes garanties d'indépendance et de pluralisme, de façon notamment à permettre l'expression dans chaque discipline aussi bien des écoles",
+          "et, parallèlement, une ouverture raisonnée du système actuel, fondée sur des études sérieuses de l'impact potentiel, discipline par discipline, des mesures préconisées par la C.E. en matière de libre accès."
+        ],
+        "ministral-3b-latest/tune": [
+          "quelles pourraient être les conséquences sur la diffusion (papier et électronique) des publications SHS et sur leurs revenus, d'un régime obligatoire (tel que celui proposé, par exemple, par BSN) par lequel les auteurs (payés sur fonds publics) seraient obligés de diffuser gratuitement, très rapidement après leur parution, leurs articles (voire demain leurs ouvrages) via le serveur de leur établissement ?",
+          "une telle diffusion gratuite risquerait d'affecter les ressources qui permettent aux revues et aux ouvrages collectifs de recherche d'exister.",
+          "On aurait cassé le système actuel - certes perfectible - de diffusion de la science sans en avoir conçu au préalable un nouveau.",
+          "C'est pourquoi nous plaidons pour (i) un travail commun pour imaginer ensemble de nouveaux modèles, les plus ouverts possible, de diffusion des publications scientifiques, adaptés aux SHS, modèles qui devraient offrir toutes garanties d'indépendance et de pluralisme, de façon notamment à permettre l'expression dans chaque discipline aussi bien des écoles \"mainstream\" que des écoles hétérodoxes",
+          "et, parallèlement, une ouverture raisonnée du système actuel, fondée sur des études sérieuses de l'impact potentiel, discipline par discipline, des mesures préconisées par la C.E. en matière de libre accès."
+        ],
+        "mistral-large-latest/base": [
+          "une telle diffusion gratuite risquerait d'affecter les ressources qui permettent aux revues et aux ouvrages collectifs de recherche d'exister",
+          "On aurait cassé le système actuel - certes perfectible - de diffusion de la science sans en avoir conçu au préalable un nouveau",
+          "on ne construit pas sur des ruines ; mais ceci ne doit pas justifier l'immobilisme",
+          "nous plaidons pour (i) un travail commun pour imaginer ensemble de nouveaux modèles, les plus ouverts possible, de diffusion des publications scientifiques, adaptés aux SHS, modèles qui devraient offrir toutes garanties d'indépendance et de pluralisme, de façon notamment à permettre l'expression dans chaque discipline aussi bien des écoles \"mainstream\" que des écoles hétérodoxes (ii) et, parallèlement, une ouverture raisonnée du système actuel, fondée sur des études sérieuses de l'impact potentiel, discipline par discipline, des mesures préconisées par la C.E. en matière de libre accès"
+        ],
+        "mistral-large-latest/tune": [
+          "une telle diffusion gratuite risquerait d'affecter les ressources qui permettent aux revues et aux ouvrages collectifs de recherche d'exister",
+          "Le problème est que personne ne peut, à cet égard, avoir de certitude",
+          "On aurait cassé le système actuel - certes perfectible - de diffusion de la science sans en avoir conçu au préalable un nouveau",
+          "on ne construit pas sur des ruines ; mais ceci ne doit pas justifier l'immobilisme",
+          "nous plaidons pour (i) un travail commun pour imaginer ensemble de nouveaux modèles, les plus ouverts possible, de diffusion des publications scientifiques, adaptés aux SHS, modèles qui devraient offrir toutes garanties d'indépendance et de pluralisme, de façon notamment à permettre l'expression dans chaque discipline aussi bien des écoles \"mainstream\" que des écoles hétérodoxes",
+          "(ii) et, parallèlement, une ouverture raisonnée du système actuel, fondée sur des études sérieuses de l'impact potentiel, discipline par discipline, des mesures préconisées par la C.E. en matière de libre accès"
+        ]
+      }
+    },
+    {
+      "id": "granddebat:1-599",
+      "dataset": "granddebat",
+      "len": 1990,
+      "text": "Crédibilité, Exemplarité et pragmatisme . Crédibilité : comment voulez vous rendre un ministre, un député, un fonctionnaire crédible dans ses décisions quand il a passé sa vie comme Fonctionnaire, qu'il n'est pas comptable des décisions qu'il prend, qu'il vit hors du temps : - Le code du travail, un fonctionnaire n'y a jamais eu à faire comme « employeur », comment peut il derrière expliquer comment l'appliquer, de même pour la fiscalité des entreprises … - Le temps, 6 mois - 9 mois entre un texte de loi et sa mise en application … c'est absurde, la mère de famille qui gère son budget, le chef d'entreprise qui veut embaucher, son unité de temps c'est « le jour, la semaine ou le mois » … comment peut-il considérer son gouvernant ou son représentant publique quand celui-ci semble vivre au rythme des semestres … il finit par le détester, « il n'est pas crédible » Exemplarité : - Chaque salarié, du bas de l'échelle au DG rend des comptes sur ses « notes de frais », sur le budget qu'on lui confie … les députés et les sénateurs s'offusquent qu'on puisse envisager de leurs demander de compléter des notes de frais, de rendre des comptes sur leurs enveloppes … mais c'est le B A ba de la vie d'un citoyen que de rendre des comptes à son employeur, à son client, à son fournisseur, - Vous êtes boulanger, médecin, entrepreneur, vous devez « tenir votre budget, facturer vos clients, payer vos fournisseurs, rédiger des rapports d'activité » … en gros votre temps est alloué à la création de la valeur pour gagner de l'argent et « vivre » … et vous voyez des députés à l'assemblée nationale qui s'invectivent, font de l'obstruction, délaissent l'essentiel pour se consacrer à l'accessoire, des ministres qui « créent des commissions », repoussent des décisions, confondent « projet de loi » et « mise en place dans la vie citoyenne » … mais cela n'est pas possible dans la vie d'un citoyen lambda, au risque de perdre son emploi, ne pas gagner sa vie ou mettre la clef sous la porte.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Crédibilité, Exemplarité et pragmatisme . Crédibilité : comment voulez vous rendre un ministre, un député, un fonctionnaire crédible dans ses décisions quand il a passé sa vie comme Fonctionnaire, qu'il n'est pas comptable des décisions qu'il prend, qu'il vit hors du temps :",
+          "- Le temps, 6 mois - 9 mois entre un texte de loi et sa mise en application … c'est absurde, la mère de famille qui gère son budget, le chef d'entreprise qui veut embaucher, son unité de temps c'est « le jour, la semaine ou le mois » … comment peut-il considérer son gouvernant ou son représentant publique quand celui-ci semble vivre au rythme des semestres … il finit par le détester, « il n'est pas crédible »",
+          "Exemplarité : - Chaque salarié, du bas de l'échelle au DG rend des comptes sur ses « notes de frais », sur le budget qu'on lui confie … les députés et les sénateurs s'offusquent qu'on puisse envisager de leurs demander de compléter des notes de frais, de rendre des comptes sur leurs enveloppes …",
+          "- Vous êtes boulanger, médecin, entrepreneur, vous devez « tenir votre budget, facturer vos clients, payer vos fournisseurs, rédiger des rapports d'activité » … en gros votre temps est alloué à la création de la valeur pour gagner de l'argent et « vivre » …",
+          "et vous voyez des députés à l'assemblée nationale qui s'invectivent, font de l'obstruction, délaissent l'essentiel pour se consacrer à l'accessoire, des ministres qui « créent des commissions », repoussent des décisions, confondent « projet de loi » et « mise en place dans la vie citoyenne »"
+        ],
+        "ministral-3b-latest/tune": [
+          "Crédibilité : comment voulez vous rendre un ministre, un député, un fonctionnaire crédible dans ses décisions quand il a passé sa vie comme Fonctionnaire, qu'il n'est pas comptable des décisions qu'il prend, qu'il vit hors du temps : … - Le temps, 6 mois - 9 mois entre un texte de loi et sa mise en application … c'est absurde, la mère de famille qui gère son budget, le chef d'entreprise qui veut embaucher, son unité de temps c'est « le jour, la semaine ou le mois » … comment peut-il considérer son gouvernant ou son représentant publique quand celui-ci semble vivre au rythme des semestres … il finit par le détester, « il n'est pas crédible »",
+          "Exemplarité : - Chaque salarié, du bas de l'échelle au DG rend des comptes sur ses « notes de frais », sur le budget qu'on lui confie … les députés et les sénateurs s'offusquent qu'on puisse envisager de leurs demander de compléter des notes de frais, de rendre des comptes sur leurs enveloppes …",
+          "mais c'est le B A ba de la vie d'un citoyen que de rendre des comptes à son employeur, à son client, à son fournisseur, - Vous êtes boulanger, médecin, entrepreneur, vous devez « tenir votre budget, facturer vos clients, payer vos fournisseurs, rédiger des rapports d'activité » … en gros votre temps est alloué à la création de la valeur pour gagner de l'argent et « vivre » … et vous voyez des députés à l'assemblée nationale qui s'invectivent, font de l'obstruction, délaissent l'essentiel pour se consacrer à l'accessoire, des ministres qui « créent des commissions », repoussent des décisions, confondent « projet de loi » et « mise en place dans la vie citoyenne »"
+        ],
+        "mistral-large-latest/base": [
+          "comment voulez vous rendre un ministre, un député, un fonctionnaire crédible dans ses décisions quand il a passé sa vie comme Fonctionnaire, qu'il n'est pas comptable des décisions qu'il prend, qu'il vit hors du temps : - Le code du travail, un fonctionnaire n'y a jamais eu à faire comme « employeur », comment peut il derrière expliquer comment l'appliquer, de même pour la fiscalité des entreprises … - Le temps, 6 mois - 9 mois entre un texte de loi et sa mise en application … c'est absurde, la mère de famille qui gère son budget, le chef d'entreprise qui veut embaucher, son unité de temps c'est « le jour, la semaine ou le mois » … comment peut-il considérer son gouvernant ou son représentant publique quand celui-ci semble vivre au rythme des semestres … il finit par le détester, « il n'est pas crédible »",
+          "- Chaque salarié, du bas de l'échelle au DG rend des comptes sur ses « notes de frais », sur le budget qu'on lui confie … les députés et les sénateurs s'offusquent qu'on puisse envisager de leurs demander de compléter des notes de frais, de rendre des comptes sur leurs enveloppes … mais c'est le B A ba de la vie d'un citoyen que de rendre des comptes à son employeur, à son client, à son fournisseur",
+          "- Vous êtes boulanger, médecin, entrepreneur, vous devez « tenir votre budget, facturer vos clients, payer vos fournisseurs, rédiger des rapports d'activité » … en gros votre temps est alloué à la création de la valeur pour gagner de l'argent et « vivre » … et vous voyez des députés à l'assemblée nationale qui s'invectivent, font de l'obstruction, délaissent l'essentiel pour se consacrer à l'accessoire, des ministres qui « créent des commissions », repoussent des décisions, confondent « projet de loi » et « mise en place dans la vie citoyenne » … mais cela n'est pas possible dans la vie d'un citoyen lambda, au risque de perdre son emploi, ne pas gagner sa vie ou mettre la clef sous la porte"
+        ],
+        "mistral-large-latest/tune": [
+          "comment voulez vous rendre un ministre, un député, un fonctionnaire crédible dans ses décisions quand il a passé sa vie comme Fonctionnaire, qu'il n'est pas comptable des décisions qu'il prend, qu'il vit hors du temps : - Le code du travail, un fonctionnaire n'y a jamais eu à faire comme « employeur », comment peut il derrière expliquer comment l'appliquer, de même pour la fiscalité des entreprises … - Le temps, 6 mois - 9 mois entre un texte de loi et sa mise en application … c'est absurde, la mère de famille qui gère son budget, le chef d'entreprise qui veut embaucher, son unité de temps c'est « le jour, la semaine ou le mois » … comment peut-il considérer son gouvernant ou son représentant publique quand celui-ci semble vivre au rythme des semestres … il finit par le détester, « il n'est pas crédible »",
+          "Chaque salarié, du bas de l'échelle au DG rend des comptes sur ses « notes de frais », sur le budget qu'on lui confie … les députés et les sénateurs s'offusquent qu'on puisse envisager de leurs demander de compléter des notes de frais, de rendre des comptes sur leurs enveloppes",
+          "Vous êtes boulanger, médecin, entrepreneur, vous devez « tenir votre budget, facturer vos clients, payer vos fournisseurs, rédiger des rapports d'activité » … en gros votre temps est alloué à la création de la valeur pour gagner de l'argent et « vivre » … et vous voyez des députés à l'assemblée nationale qui s'invectivent, font de l'obstruction, délaissent l'essentiel pour se consacrer à l'accessoire, des ministres qui « créent des commissions », repoussent des décisions, confondent « projet de loi » et « mise en place dans la vie citoyenne » … mais cela n'est pas possible dans la vie d'un citoyen lambda, au risque de perdre son emploi, ne pas gagner sa vie ou mettre la clef sous la porte"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:326",
+      "dataset": "republique-numerique",
+      "len": 1988,
+      "text": "Le 1° de l'article L.311-4 du code monétaire et financier est remplacé par deux alinéas ainsi rédigés : « 1° Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, effectuées pour l'achat de contenu numérique et de services vocaux, quel que soit le dispositif utilisé pour l'achat ou la consommation du contenu numérique et imputées sur la facture correspondante à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois ; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 euros par mois. « 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois » « 1° ter L'opération de paiemant par communiquation téléphonique, lorsqu'elle est effectuée par SMS, doit être validé par la transmission d'une suite de lettre spécifique par le payeur. Une simple réponse sans modification du message original ne peut en aucune manière être considéré comme un paiemant.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Le 1° de l'article L.311-4 du code monétaire et financier est remplacé par deux alinéas ainsi rédigés : « 1° Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, effectuées pour l'achat de contenu numérique et de services vocaux, quel que soit le dispositif utilisé pour l'achat ou la consommation du contenu numérique et imputées sur la facture correspondante à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois ; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 euros par mois.",
+          "« 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois",
+          "L'opération de paiemant par communiquation téléphonique, lorsqu'elle est effectuée par SMS, doit être validé par la transmission d'une suite de lettre spécifique par le payeur. Une simple réponse sans modification du message original ne peut en aucune manière être considéré comme un paiemant."
+        ],
+        "ministral-3b-latest/tune": [
+          "Le 1° de l'article L.311-4 du code monétaire et financier est remplacé par deux alinéas ainsi rédigés : « 1° Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, effectuées pour l'achat de contenu numérique et de services vocaux, quel que soit le dispositif utilisé pour l'achat ou la consommation du contenu numérique et imputées sur la facture correspondante à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois ; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 euros par mois. … « 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois",
+          "L'opération de paiemant par communiquation téléphonique, lorsqu'elle est effectuée par SMS, doit être validé par la transmission d'une suite de lettre spécifique par le payeur. Une simple réponse sans modification du message original ne peut en aucune manière être considéré comme un paiemant."
+        ],
+        "mistral-large-latest/base": [],
+        "mistral-large-latest/tune": [
+          "« 1° bis Les opérations de paiement proposées par un fournisseur de réseaux ou de services de communications électroniques, en plus de services de communications électroniques pour un abonné au réseau ou au service, exécutées depuis ou au moyen d'un dispositif électronique et imputées sur la facture correspondante dans le cadre d'activités caritatives ou pour l'achat de tickets à condition que la valeur de chaque opération de paiement isolée ne dépasse pas 50 euros et que la valeur cumulée des opérations de paiement pour un même abonné ne dépasse pas 300 euros par mois; lorsqu'un abonné préfinance son compte auprès du fournisseur de réseau ou de services de communications électroniques, la valeur cumulée des opérations de paiement ne dépasse pas 300 EUR par mois »"
+        ]
+      }
+    },
+    {
+      "id": "republique-numerique:992",
+      "dataset": "republique-numerique",
+      "len": 1960,
+      "text": "I. Dans la loi n° 93-122 du 29 janvier 1993 relative à la prévention de la corruption et à la transparence de la vie économique et des procédures publiques, il est inséré un article 40-2 ainsi rédigé : « Art. 40-2.- Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. » II. Après l'article L. 1411-3 du code général des collectivités territoriales, il est inséré un article ainsi rédigé : « Art. 1411-3-1 - Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. » III. La Commission nationale de l'informatique et des libertés veille au respect de l'obligation préalable d'anonymisation par le délégataire, et prononce le cas échéant une sanction. IV. Le I et le II du présent sont applicables aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi.",
+      "out": {
+        "ministral-3b-latest/base": [
+          "Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux.",
+          "Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux.",
+          "La Commission nationale de l'informatique et des libertés veille au respect de l'obligation préalable d'anonymisation par le délégataire, et prononce le cas échéant une sanction."
+        ],
+        "ministral-3b-latest/tune": [
+          "Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux.",
+          "Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux.",
+          "La Commission nationale de l'informatique et des libertés veille au respect de l'obligation préalable d'anonymisation par le délégataire, et prononce le cas échéant une sanction."
+        ],
+        "mistral-large-latest/base": [
+          "I. Dans la loi n° 93-122 du 29 janvier 1993 relative à la prévention de la corruption et à la transparence de la vie économique et des procédures publiques, il est inséré un article 40-2 ainsi rédigé : « Art. 40-2.- Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. »",
+          "II. Après l'article L. 1411-3 du code général des collectivités territoriales, il est inséré un article ainsi rédigé : « Art. 1411-3-1 - Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. »",
+          "III. La Commission nationale de l'informatique et des libertés veille au respect de l'obligation préalable d'anonymisation par le délégataire, et prononce le cas échéant une sanction.",
+          "IV. Le I et le II du présent sont applicables aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi."
+        ],
+        "mistral-large-latest/tune": [
+          "I. Dans la loi n° 93-122 du 29 janvier 1993 relative à la prévention de la corruption et à la transparence de la vie économique et des procédures publiques, il est inséré un article 40-2 ainsi rédigé : « Art. 40-2.- Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exploitation du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. »",
+          "II. Après l'article L. 1411-3 du code général des collectivités territoriales, il est inséré un article ainsi rédigé : « Art. 1411-3-1 - Le délégataire fournit à la personne morale de droit public, dans un standard ouvert aisément réutilisable, les données et bases de données collectées ou produites à l'occasion de l'exécution du service public ; en présence de données à caractère personnel, le délégataire est dans l'obligation d'anonymiser celles-ci avant toute communication. Il autorise par ailleurs la personne morale de droit public, ou un tiers désigné par celle-ci, à extraire et exploiter librement tout ou partie de ces données et bases de données, notamment en vue de leur mise à disposition à titre gratuit à des fins de réutilisation à titre gratuit ou onéreux. »",
+          "III. La Commission nationale de l'informatique et des libertés veille au respect de l'obligation préalable d'anonymisation par le délégataire, et prononce le cas échéant une sanction.",
+          "IV. Le I et le II du présent sont applicables aux contrats conclus ou reconduits postérieurement à la promulgation de la présente loi."
+        ]
+      }
+    }
+  ]
+}
