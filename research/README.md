@@ -1,13 +1,24 @@
 # Lane EVAL — l'arbitre par la mesure (`eval-as-truth`)
 
+> ⚠️ **Verdict embedder SUPERSEDED.** Ce document date de la première campagne (le
+> répertoire s'appelait alors `eval/`). Son gagnant — **nomic-v2** — n'est plus le défaut :
+> le pipeline sert **`arctic-l`** (Snowflake, Apache 2.0) depuis 2026-07-23 (PR #29), qui l'a
+> battu au bench sur données FR servies. Les chiffres ci-dessous restent valides *pour les
+> modèles qu'ils comparent* — ils ne couvrent simplement pas arctic. Verdicts à jour :
+> [`bench_veille.md`](bench_veille.md), [`ab_embedder_note.md`](ab_embedder_note.md).
+> Le choix d'ALGORITHME (banc Stance) n'est pas concerné par cette bascule.
+>
+> Note de chemins : la lane `eval/` a été renommée `research/` ; les commandes ci-dessous
+> ont été mises à jour en conséquence.
+
 Cette lane tranche les choix de clustering **par les chiffres**, pas l'intuition
 (Playbook §5). Elle réutilise le pipeline mergé (aucune réimplémentation
 d'embeddings/clustering) et héberge **deux bancs complémentaires** :
 
 | Banc | Question tranchée | Entrée | Sortie |
 |------|-------------------|--------|--------|
-| **Qualité** (`quality_bench.py`) | **Quel modèle d'embedding ?** e5-small vs nomic-v2 vs bge-m3 — regrouper par **thème**, pas par **langue** | x-stance DE/FR/IT (thème = `topic`) | `eval/quality_report.md` |
-| **Stance** (`bench.py`) | **Quel algo de clustering ?** Leiden vs UMAP+HDBSCAN | x-stance FR (labels FAVOR/AGAINST) | `eval/report.md` |
+| **Qualité** (`quality_bench.py`) | **Quel modèle d'embedding ?** e5-small vs nomic-v2 vs bge-m3 — regrouper par **thème**, pas par **langue** | x-stance DE/FR/IT (thème = `topic`) | `research/quality_report.md` |
+| **Stance** (`bench.py`) | **Quel algo de clustering ?** Leiden vs UMAP+HDBSCAN | x-stance FR (labels FAVOR/AGAINST) | `research/report.md` |
 
 Les deux sont **indépendants** et régénérables ; ils mesurent des axes différents
 (le modèle d'embedding vs l'algorithme de partition).
@@ -21,14 +32,14 @@ Les deux sont **indépendants** et régénérables ; ils mesurent des axes diff�
 > transforme « améliorer le clustering » en **nombre** et **désigne un gagnant**.
 
 ```
-x-stance (DE/FR/IT, topic)   ── eval/multilingual_data.py (corpus équilibré thème×langue)
+x-stance (DE/FR/IT, topic)   ── research/multilingual_data.py (corpus équilibré thème×langue)
    │  POUR CHAQUE modèle (un seul chargé à la fois) :
    │    embed (e5-small | nomic-v2 | bge-m3)              ── pipeline/embed/ (registre)
    │    rang-kNN cosine → Leiden                          ── pipeline/cluster/{knn,leiden}
    ▼
-clustering prédit  ── métriques multilingues → eval/{coherence,metrics}.py
+clustering prédit  ── métriques multilingues → research/{coherence,metrics}.py
    ▼
-eval/quality_report.md  (scorecard + recommandation du gagnant + composite)
+research/quality_report.md  (scorecard + recommandation du gagnant + composite)
 ```
 
 ### Ce que ça mesure (par modèle)
@@ -58,12 +69,12 @@ est invariant à l'échelle → comparaison juste.
 uv run python -m pipeline.ingest.download --only xstance
 uv sync --extra embed-contender          # einops (nomic-embed-text-v2-moe)
 
-# critère d'acceptation — écrit eval/quality_report.md avec des nombres réels
-uv run python -m eval.quality_bench
+# critère d'acceptation — écrit research/quality_report.md avec des nombres réels
+uv run python -m research.quality_bench
 
 # variantes
-uv run python -m eval.quality_bench --models e5-small,bge-m3 --no-bootstrap
-uv run python -m eval.quality_bench --n-topics 8 --max-per-cell 150
+uv run python -m research.quality_bench --models e5-small,bge-m3 --no-bootstrap
+uv run python -m research.quality_bench --n-topics 8 --max-per-cell 150
 ```
 
 Options : `--models` (alias du registre), `--n-topics`, `--per-cell` /
@@ -72,8 +83,9 @@ Options : `--models` (alias du registre), `--n-topics`, `--per-cell` /
 
 ### Résultat (échantillon par défaut : 2 214 commentaires, DE/FR/IT, 6 thèmes)
 
-**🏆 Gagnant : `nomic-v2`** (composite 0.85), bge-m3 second très proche (0.57),
-**e5-small dernier** (0.25).
+**🏆 Gagnant de CE banc : `nomic-v2`** (composite 0.85), bge-m3 second très proche (0.57),
+**e5-small dernier** (0.25). ⚠️ Gagnant *parmi les trois modèles testés ici* — le défaut
+servi aujourd'hui est `arctic-l`, qui n'était pas au comparatif (cf. bandeau en tête).
 
 | Métrique | nomic-v2 | bge-m3 | e5-small |
 |---|:--:|:--:|:--:|
@@ -89,7 +101,7 @@ linguistique 0.997 → « 1 langue = 1 cluster ») et ne retrouve pas les thème
 thème (NMI thème ≈ 0.40). **Piège à éviter** : e5 a la meilleure
 silhouette/modularité/stabilité — parce que des clusters mono-langues sont
 internes-ment nets… mais **faux**. Seules NMI(langue) et NMI(thème) le révèlent.
-Chiffres exacts, seedés : `eval/quality_report.md`.
+Chiffres exacts, seedés : `research/quality_report.md`.
 
 ### Limites (honnêteté, Playbook §5)
 
@@ -112,16 +124,16 @@ Chiffres exacts, seedés : `eval/quality_report.md`.
 Sur la même source mais via les labels **FAVOR / AGAINST** par question politique.
 
 ```
-x-stance brut (avec labels)        ── eval/data.py (lit data/raw/…zip, PAS ideas.jsonl)
+x-stance brut (avec labels)        ── research/data.py (lit data/raw/…zip, PAS ideas.jsonl)
    │  par question : embed les commentaires (e5-small, CPU)   ── pipeline/embed/
    ▼
 vecteurs L2-normalisés
    │  Leiden : kNN cosine → leidenalg        ── pipeline/cluster/{knn,leiden_cluster}
    │  HDBSCAN : UMAP → HDBSCAN                ── pipeline/cluster/hdbscan_contender
    ▼
-clustering prédit  ── comparé aux labels FAVOR/AGAINST → eval/metrics.py
+clustering prédit  ── comparé aux labels FAVOR/AGAINST → research/metrics.py
    ▼
-eval/report.md  (scorecard agrégé : NMI/ARI/pureté/silhouette + stabilité + coût)
+research/report.md  (scorecard agrégé : NMI/ARI/pureté/silhouette + stabilité + coût)
 ```
 
 | Axe | Métriques |
@@ -133,15 +145,15 @@ eval/report.md  (scorecard agrégé : NMI/ARI/pureté/silhouette + stabilité + 
 
 ```bash
 uv sync --extra contender          # umap-learn + hdbscan (le contender)
-uv run python -m eval.bench --sample-questions 8
-uv run python -m eval.bench --sample-questions 20 --bootstrap 10
-uv run python -m eval.bench --lang all            # de/fr/it
+uv run python -m research.bench --sample-questions 8
+uv run python -m research.bench --sample-questions 20 --bootstrap 10
+uv run python -m research.bench --lang all            # de/fr/it
 ```
 
 Lecture : sur 8 questions FR, **les deux approches recouvrent mal le clivage
 FAVOR/AGAINST** (NMI ≈ 0.04–0.06) — l'embedding capte le **thème**, pas la
 **position**. Détecter la polarité demande un signal dédié. Détails :
-`eval/report.md`. Limites : 2 classes seulement, votations suisses, params figés,
+`research/report.md`. Limites : 2 classes seulement, votations suisses, params figés,
 le bruit HDBSCAN (`-1`) compte comme un cluster (sauf silhouette).
 
 ---

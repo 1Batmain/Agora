@@ -1,12 +1,9 @@
 """Re-clustering LIVE sur les embeddings CACHÉS (jamais ré-embeddés).
 
-Cœur du serveur :8010. À partir des vecteurs nomic-v2 en cache, applique la
-chaîne du contrat — `min_chars` → `dedup` → k-NN(`k`,`threshold`) → Leiden
-**hiérarchique** (macro/sub) → scoring → naming TF-IDF → **GraphPayload
-hiérarchique** — en RÉUTILISANT `pipeline.cluster.*`. Aucun appel au modèle torch.
-
-Le payload a la même shape que `data/graph.json` (`meta, nodes, links, themes`),
-augmenté de `meta.stats { n_macros, n_subs, n_nodes, modularity, took_ms }`.
+Cœur du serveur :8010. Fournit l'accès au CACHE (vecteurs + ideas + meta) dont se
+sert le re-clustering live (`backend.live_cluster`) : découverte des datasets,
+chemins, chargement. Aucun appel au modèle torch — les vecteurs sont lus, jamais
+recalculés (leur embedder est tracé dans `meta.json`).
 """
 
 from __future__ import annotations
