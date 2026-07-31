@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pipeline.cluster.knn import KnnGraph
 
 # SOURCE UNIQUE du seed de CLUSTERING (reproductibilité Leiden/hiérarchie/hdbscan).
-# Importé par claims.pipeline, cluster.hierarchy, cluster.build, cluster.hdbscan_contender.
+# Importé par claims.pipeline et cluster.hdbscan_contender.
 # (Les seeds d'ÉCHANTILLONNAGE — build_cache, ingest.synthetic — sont un concept distinct
 #  et gardent leur propre défaut.)
 DEFAULT_SEED = 42

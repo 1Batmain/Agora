@@ -3,7 +3,7 @@
 Enchaîne, dans UN SEUL process :
   1. `prepare_from_file`  : CSV/JSON arbitraire → JSONL canonique + descripteur généré
      (fonte des colonnes texte libre, heuristiques génériques de `pipeline.collect`) ;
-  2. `backend.build_cache`: ideas + embeddings nomic (torch — AVANT de charger vLLM,
+  2. `backend.build_cache`: ideas + embeddings (torch — AVANT de charger vLLM,
      pour que l'embedder profite du GPU sans se battre avec le KV cache) ;
   3. builds LLM           : `build_analysis` → `build_opinion` → `build_arguments`,
      routés vers un vLLM offline in-process (`local_llm_offline`) ou l'API Mistral.
@@ -59,7 +59,7 @@ def _step_prepare(args) -> dict:
 
 
 def _step_cache(args, descriptor_path: Path) -> dict:
-    _log("2/3 · build_cache : ideas + embeddings nomic (torch)")
+    _log("2/3 · build_cache : ideas + embeddings (torch)")
     from backend.build_cache import build_cache  # import tardif (torch)
     return build_cache(dataset=args.dataset, descriptor=str(descriptor_path),
                        min_chars=args.min_chars, label=args.label)

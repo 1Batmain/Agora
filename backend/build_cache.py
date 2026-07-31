@@ -1,4 +1,4 @@
-"""Construit le cache d'embeddings nomic-v2 d'UN dataset (un SEUL appel torch).
+"""Construit le cache d'embeddings d'UN dataset (un SEUL appel torch).
 
 Cache **par dataset** : `backend/cache/<dataset>/{embeddings.npy, ideas.jsonl,
 meta.json}`. Le serveur live (`backend/server.py`) re-clusterise à partir de ce
@@ -11,7 +11,7 @@ champ, min_chars, dédup exacte). Aucun nom de corpus n'est codé en dur.
 
 Pipeline : `read_generic(desc)` → `to_idea` (nettoyage + langue + anonymisation,
 réutilise la lane ingest) → subset (min_chars → dédup exacte → échantillon
-ÉQUILIBRÉ par champ, cap) → embed nomic-v2 → cache aligné.
+ÉQUILIBRÉ par champ, cap) → embed (`DEFAULT_EMBEDDER`) → cache aligné.
 
 Usage :
     # superset complet (défaut tiktok, rétro-compat)
@@ -32,6 +32,7 @@ from time import perf_counter
 import numpy as np
 
 from backend.recluster import CACHE_DIR, EMB_NAME, IDEAS_NAME, META_NAME
+from pipeline.claims.pipeline import DEFAULT_EMBEDDER
 from pipeline.embed.embedder import Embedder
 from pipeline.ingest import download
 from pipeline.ingest.build import to_idea
@@ -126,7 +127,7 @@ def build_cache(
     dataset: str,
     *,
     descriptor: str | None = None,
-    model: str = "nomic-v2",
+    model: str = DEFAULT_EMBEDDER,
     min_chars: int = 1,
     dedup_exact: bool = True,
     balance: str | None = None,
@@ -246,10 +247,11 @@ def build_cache(
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Cache d'embeddings nomic-v2 par dataset.")
+    ap = argparse.ArgumentParser(description="Cache d'embeddings par dataset.")
     ap.add_argument("--dataset", required=True, help="id du dataset = nom du descripteur")
     ap.add_argument("--descriptor", default=None, help="chemin descripteur explicite (override)")
-    ap.add_argument("--model", default="nomic-v2", help="alias/model_id (défaut nomic-v2)")
+    ap.add_argument("--model", default=DEFAULT_EMBEDDER,
+                    help=f"alias/model_id (défaut : {DEFAULT_EMBEDDER}, la source unique)")
     ap.add_argument("--min-chars", type=int, default=1, help="filtre avis trop courts")
     ap.add_argument("--no-dedup-exact", action="store_true", help="garder les textes identiques")
     ap.add_argument("--balance", default=None,
