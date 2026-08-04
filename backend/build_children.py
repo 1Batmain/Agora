@@ -9,7 +9,7 @@ un dataset ENFANT `id = <parent>__<slug>` avec un cache PROPRE
   - `embeddings.npy`  : les vecteurs d'avis TRANCHÉS (mêmes positions que ces lignes) ;
   - `claims.json`     : les claims du parent pour ces avis (RÉUTILISE l'extraction —
                         ne RÉ-EXTRAIT JAMAIS) ;
-  - `claims_emb.npz`  : les embeddings de claims TRANCHÉS (empreinte recalculée) ;
+  - `claims_emb.npz`  : les embeddings de claims TRANCHÉS (magasin adressé par contenu) ;
   - `target_emb.npz`  : les embeddings de cibles TRANCHÉS (knob α) ;
   - `meta.json`       : `label`=nom du groupe, `parent_id`=<parent>, `status`=closed.
 
@@ -40,13 +40,13 @@ import numpy as np
 
 from backend import build_analysis as ba
 from backend import build_opinion as bo
+from pipeline.embed import vector_store
 from backend.claims_endpoint import (
     CLAIMS_EMB_NAME,
     CLAIMS_NAME,
     TARGET_EMB_NAME,
     _emb_fingerprint,
     _save_claims_cache,
-    _save_emb_cache,
     _save_target_cache,
     prepare_claims,
 )
@@ -204,14 +204,19 @@ def build_children(parent: str, by: str, *, backend: str | None = None,
         _save_claims_cache(child_dir / CLAIMS_NAME, prep.model, child_claims)
 
         # 2c) claims_emb.npz + target_emb.npz TRANCHÉS : on slice les vecteurs du parent
-        #     aux lignes de claims du groupe, et on RECALCULE l'empreinte sur les textes
-        #     de l'enfant (ordre identique à `_flatten` de l'enfant) → cache HIT au build.
+        #     aux lignes de claims du groupe → cache HIT au build de l'enfant.
+        #     Le cache de CLAIMS est adressé par contenu (`pipeline.embed.vector_store`) :
+        #     on écrit directement les paires (clé, vecteur), sans empreinte d'ordre. Plus
+        #     robuste que l'ancien découpage : l'enfant n'a plus besoin de reproduire à
+        #     l'identique l'ordre d'aplatissement du parent pour retrouver ses vecteurs.
         idx = np.asarray(child_claim_rows, dtype=np.intp)
         child_claim_texts = [prep.claim_texts[r] for r in child_claim_rows]
-        claim_fp = _emb_fingerprint(prep.embedder, child_claim_texts)
         child_claim_vecs = (prep.claim_vecs[idx] if idx.size
                             else np.zeros((0, prep.claim_vecs.shape[1]), dtype=prep.claim_vecs.dtype))
-        _save_emb_cache(child_dir / CLAIMS_EMB_NAME, claim_fp, child_claim_vecs)
+        child_store = vector_store.VectorStore()
+        child_store.put_many(
+            vector_store.keys_for(child_claim_texts, prep.embedder), child_claim_vecs)
+        child_store.save(child_dir / CLAIMS_EMB_NAME)
 
         child_target_strings = []
         for r in child_claim_rows:

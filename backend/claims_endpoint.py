@@ -24,6 +24,7 @@ from time import perf_counter
 
 import numpy as np
 
+from pipeline.embed import vector_store
 from pipeline.claims.backend import BackendUnavailable, ClaimBackend, resolve_backend
 from pipeline.claims.extract import extract_claims
 from pipeline.claims.ollama import OllamaStats
@@ -118,25 +119,35 @@ def _save_claims_cache(path: Path, model: str, claims: dict[str, list[Claim]]) -
 
 
 def _emb_fingerprint(embedder: str, claim_texts: list[str]) -> str:
+    """Empreinte GLOBALE de l'ancien cache d'embeddings (format hérité).
+
+    Conservée UNIQUEMENT pour reconnaître un `claims_emb.npz` d'avant la bascule vers le
+    cache adressé par contenu, et l'adopter sans re-calculer (cf. `_migrate_legacy_emb_cache`).
+    Ne plus l'utiliser pour cacher : elle invalide tout dès qu'un seul texte change ou bouge.
+    """
     blob = embedder + "\x00" + "\x00".join(claim_texts)
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
-def _load_emb_cache(path: Path, fingerprint: str) -> np.ndarray | None:
+def _migrate_legacy_emb_cache(path: Path, claim_texts: list[str], embedder: str) -> int:
+    """Adopte un cache HÉRITÉ (vecteurs ordonnés + empreinte globale) s'il correspond.
+
+    Sans cette migration, la bascule imposerait de ré-embedder tous les corpus déjà bâtis
+    (36 275 claims sur le seul granddebat) pour un simple changement de format de cache.
+    Renvoie le nombre de vecteurs adoptés (0 si rien à migrer).
+    """
     if not path.exists():
-        return None
+        return 0
     try:
         d = np.load(path, allow_pickle=False)
-        if str(d["fingerprint"]) == fingerprint:
-            return d["vecs"].astype(np.float64)
+        if "fingerprint" not in d or "keys" in d:
+            return 0                       # déjà au nouveau format (ou illisible)
+        if str(d["fingerprint"]) != _emb_fingerprint(embedder, claim_texts):
+            return 0                       # cache hérité PÉRIMÉ : rien à sauver
+        vecs = d["vecs"]
     except (OSError, KeyError, ValueError):
-        return None
-    return None
-
-
-def _save_emb_cache(path: Path, fingerprint: str, vecs: np.ndarray) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez(path, vecs=vecs.astype(np.float32), fingerprint=np.str_(fingerprint))
+        return 0
+    return vector_store.migrate_from_ordered(path, claim_texts, vecs, embedder)
 
 
 # --------------------------------------------------------------------------- #
@@ -325,14 +336,18 @@ def prepare_claims(
         cold_seconds = round(stats.cold_seconds, 2)
         _save_claims_cache(claims_path, model, claims_by_id)
 
-    # 2) Embeddings des claims (cachés, alignés à l'ordre d'aplatissement).
+    # 2) Embeddings des claims — cache ADRESSÉ PAR CONTENU (un vecteur, une clé).
+    #    Avant : empreinte de la CONCATÉNATION de tous les textes → un claim nouveau
+    #    invalidait le corpus entier (36 275 vecteurs sur granddebat). Désormais un texte
+    #    nouveau coûte UN embedding, et une simple permutation ne coûte plus rien.
+    #    Cf. pipeline/embed/vector_store.py.
     claim_texts, claim_owner, claim_weight, claim_spans, claim_target = _flatten(avis, claims_by_id)
-    fingerprint = _emb_fingerprint(embedder, claim_texts)
-    claim_vecs = _load_emb_cache(emb_path, fingerprint)
-    embedded = claim_vecs is None
-    if claim_vecs is None:
-        claim_vecs = embed_claim_texts(claim_texts, embedder=embedder)
-        _save_emb_cache(emb_path, fingerprint, claim_vecs)
+    _migrate_legacy_emb_cache(emb_path, claim_texts, embedder)
+    claim_vecs, n_embedded = vector_store.embed_cached(
+        claim_texts, embedder=embedder, path=emb_path,
+        embed_fn=lambda missing: embed_claim_texts(missing, embedder=embedder),
+    )
+    embedded = n_embedded > 0
     # float32 suffit pour le cosinus → ÷2 la RAM des vecteurs (le blend/clustering
     # qui a besoin de float64 upcaste localement, cf. sandbox._graph_ctx).
     claim_vecs = np.asarray(claim_vecs, dtype=np.float32)
