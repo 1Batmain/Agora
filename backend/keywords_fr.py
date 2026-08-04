@@ -36,7 +36,9 @@ from pipeline.translate import DEFAULT_TRANSLATE_MODEL, is_french, translate_bat
 
 KEYWORDS_FR_NAME = "keywords_fr.json"
 # Modèle de traduction (CHEAP), surchargeable par env — aucune valeur de corpus en dur.
-TRANSLATE_MODEL = os.environ.get("AGORA_TRANSLATE_MODEL", DEFAULT_TRANSLATE_MODEL)
+# Alias DÉRIVÉ du rôle `translate` du profil (`pipeline.translate` le lit de la même
+# source) — l'ancienne duplication de la lecture d'env dans DEUX modules est supprimée.
+TRANSLATE_MODEL = DEFAULT_TRANSLATE_MODEL
 # Nombre de mots-clés tête formant le label (cf. `name_clusters(label_k=3)`).
 LABEL_K = 3
 

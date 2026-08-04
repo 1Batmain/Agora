@@ -19,11 +19,12 @@ import json
 import re
 from typing import Callable
 
+from pipeline import profile as _profile
 from pipeline.cluster import mistral_client
 
 FR = "fr"
-# Modèle CHEAP par défaut (traduction = tâche simple, batchée). Surchargeable par env.
-DEFAULT_TRANSLATE_MODEL = "mistral-small-latest"
+# Modèle du rôle `translate` du PROFIL actif (traduction = tâche simple, batchée).
+DEFAULT_TRANSLATE_MODEL = _profile.active().model_for("translate")
 BATCH_SIZE = 20            # textes par appel LLM (compromis coût/latence/robustesse)
 TRANSLATE_TEMPERATURE = 0.1  # fidèle, déterministe, pas créatif
 # Bornage de génération : ~3× le texte source (marge pour langues verbeuses) + plancher.

@@ -22,6 +22,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from pipeline import profile as _profile
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.knn import build_knn_graph, knn_search, slice_neighbors
 from pipeline.cluster.leiden_cluster import run_leiden
@@ -57,7 +58,7 @@ GAMMA_GRID = (0.2, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0)  # résolutions balayées
 # les 4 domaines (ARI 0.60) mieux que servir le pic de modularité (14 thèmes, ARI 0.42).
 # `FINE_GAMMA` est un paramètre de FORME (résolution = le bon bouton, cf. verdict k→γ), pas un
 # seuil calé sur un corpus. Cf. `research/gd_nightly_results.json`.
-FINE_GAMMA = 3.0
+FINE_GAMMA = _profile.active().fine_gamma
 
 
 def flat_partition(vecs: np.ndarray, *, gamma: float | None = None,

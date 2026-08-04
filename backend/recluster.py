@@ -15,6 +15,8 @@ from pathlib import Path
 import numpy as np
 
 from backend.consultation_schema import Consultation
+from pipeline import profile as _profile
+from pipeline.embed.registry import resolve_model_id
 from pipeline.cluster.io import Idea
 from pipeline.cluster.naming_methods import DEFAULT_NAMING, NAMING_METHODS
 
@@ -47,7 +49,28 @@ def default_dataset() -> str | None:
             continue
     return None
 
-MODEL_ID = "nomic-ai/nomic-embed-text-v2-moe"
+# Embedder ANNONCÉ par /health. C'était un littéral `nomic-...` codé en dur, devenu
+# faux dès la bascule arctic (vrai par coïncidence tant qu'aucun cache n'était rebâti).
+# La VÉRITÉ d'un dataset est dans SON `meta.json["model_id"]` — deux datasets peuvent avoir
+# été bâtis avec des embedders différents, donc il n'existe pas de "le" model_id global.
+# On garde ce nom pour la rétro-compat des appelants : il vaut l'embedder du PROFIL actif,
+# c'est-à-dire celui avec lequel un build LANCÉ MAINTENANT produirait ses vecteurs.
+MODEL_ID = resolve_model_id(_profile.active().embedder)
+
+
+def dataset_model_id(dataset: str) -> str | None:
+    """Embedder RÉELLEMENT utilisé pour bâtir le cache de `dataset` (lu dans meta.json).
+
+    None si inconnu (vieux cache sans le champ). C'est la seule réponse honnête à
+    « avec quoi ce dataset a-t-il été embeddé ? » — la constante globale, elle, ne décrit
+    que ce qu'un build FUTUR utiliserait."""
+    _, _, meta_path = cache_paths(dataset)
+    if not meta_path.exists():
+        return None
+    try:
+        return json.loads(meta_path.read_text(encoding="utf-8")).get("model_id")
+    except (OSError, json.JSONDecodeError):
+        return None
 
 EMB_NAME = "embeddings.npy"
 IDEAS_NAME = "ideas.jsonl"

@@ -31,6 +31,7 @@ import numpy as np
 
 from backend.claims_endpoint import PreparedClaims, prepare_claims
 from backend.develop import corpus_idf, rerank_order
+from pipeline import profile as _profile
 from pipeline.claims.pipeline import (
     DEFAULT_EMBEDDER,
     DEFAULT_RESOLUTION,
@@ -530,7 +531,9 @@ def _central_texts(members: list[int], vecs: np.ndarray, texts: list[str], top: 
     return [texts[members[i]] for i in order]
 
 
-ABSTRACTION_CHAT_MODEL = "mistral-small-latest"  # nommage/regroupement léger (≠ extraction)
+# Rôle `abstraction` du PROFIL : nommage/regroupement léger, délibérément plus petit que
+# l'extraction. Entre dans la signature du cache d'abstraction.
+ABSTRACTION_CHAT_MODEL = _profile.active().model_for("abstraction")
 
 
 def _abstraction(ds, clusters: list[list[int]], vecs: np.ndarray, texts: list[str],

@@ -33,18 +33,23 @@ from pipeline.claims.ollama import OllamaStats
 from pipeline.claims.span import as_claim
 from pipeline.cluster.adaptive import derive_defaults
 from pipeline.cluster.palette import color_for
+from pipeline import profile as _profile
 from pipeline.cluster.knn import build_knn_graph
 from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION, DEFAULT_SEED, run_leiden
 from pipeline.cluster.naming import derive_corpus_stopwords, name_clusters
 from pipeline.cluster.scoring import score_cluster
 
+# Modèle du backend LOCAL (Ollama sur Mac) — c'est un nom de modèle OLLAMA, pas un modèle
+# d'API : il ne relève donc pas du profil (qui déclare les rôles côté API Mistral).
 DEFAULT_MODEL = "ministral-3:latest"
-# Embedder de BUILD par défaut = arctic-l (Snowflake, Apache 2.0), le MEILLEUR embedder
-# PERMISSIF au bench FR servi. COMMERCIALEMENT PROPRE : aucune contrainte de re-dérivation.
-# jina-v3 (meilleure qualité brute mais CC-BY-NC-4.0, NON-COMMERCIAL) reste réservé à la
-# RECHERCHE, jamais en défaut (pare-feu : research/jina_provenance_firewall.md). Changer cette
-# constante ré-embed les datasets REBUILDÉS (la prod sert le cache → pas d'impact serve immédiat).
-DEFAULT_EMBEDDER = "arctic-l"
+# Embedder de BUILD = celui du PROFIL actif (source de vérité). Aujourd'hui arctic-l
+# (Snowflake, Apache 2.0), le meilleur embedder PERMISSIF au bench FR servi, et
+# COMMERCIALEMENT PROPRE : aucune contrainte de re-dérivation. jina-v3 (meilleure qualité
+# brute mais CC-BY-NC-4.0, NON-COMMERCIAL) reste réservé à la RECHERCHE, jamais en défaut
+# (pare-feu : research/jina_provenance_firewall.md). Changer l'embedder du profil ré-embed
+# les datasets REBUILDÉS (la prod sert le cache → pas d'impact serve immédiat) et impose de
+# REMESURER les seuils de cosinus calibrés (cf. backend/submissions.py).
+DEFAULT_EMBEDDER = _profile.active().embedder
 # DEFAULT_SEED ré-exporté depuis sa source unique `pipeline.cluster.leiden_cluster`
 # (backend/analysis.py et les builds l'importent d'ici par commodité historique).
 N_REPRESENTATIVE = 4

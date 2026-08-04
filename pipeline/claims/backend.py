@@ -20,11 +20,16 @@ from __future__ import annotations
 import os
 import time
 
+from pipeline import profile as _profile
+
 from pipeline.claims.ollama import OllamaClient, OllamaStats, _redact
 from pipeline.cluster import mistral_client
 
 # Modèles par défaut, surchargeables par env (aucune valeur de corpus codée en dur).
-API_MODEL = os.environ.get("AGORA_CLAIMS_API_MODEL", "ministral-3b-latest")
+# Défaut du backend API = rôle `extract` du PROFIL actif. Avant, ce module portait son
+# PROPRE défaut (`ministral-3b-latest`), différent de celui du pipeline : le modèle
+# obtenu dépendait du point d'entrée. C'est la divergence que le profil supprime.
+API_MODEL = _profile.active().model_for("extract")
 MAC_MODEL = os.environ.get("AGORA_CLAIMS_MAC_MODEL", "ministral-3:latest")
 
 # Backend par défaut : API (le Mac est opt-in). Surchargeable par env.

@@ -32,13 +32,14 @@ from typing import Iterable
 
 import numpy as np
 
+from pipeline import profile as _profile
 from pipeline.embed.registry import ModelSpec, get_spec, resolve_model_id
 
 # Défaut = arctic-l (Snowflake, Apache 2.0), le MEILLEUR embedder PERMISSIF au bench (arctic-l
 # vs nomic sur données FR servies). COMMERCIALEMENT PROPRE : aucune contrainte de re-dérivation
 # avant vente. jina-v3 (CC-BY-NC-4.0, NON-COMMERCIAL) — meilleure qualité brute mais réservé à
 # la RECHERCHE, JAMAIS en défaut (pare-feu de provenance, cf. research/jina_provenance_firewall.md).
-DEFAULT_MODEL_ID = "Snowflake/snowflake-arctic-embed-l-v2.0"
+DEFAULT_MODEL_ID = resolve_model_id(_profile.active().embedder)
 
 
 class Embedder:

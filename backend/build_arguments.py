@@ -54,13 +54,15 @@ from backend.analysis import (
 from backend.build_analysis import EXTRACT_MODEL, load_dataset
 from backend.build_opinion import _leaf_claims
 from backend.llm_cache import cached_llm
+from pipeline import profile as _profile
 from pipeline.cluster import mistral_client
 
 # Modèle CHEAP (1 appel par feuille×stance) — surchargeable, même chaîne de repli
 # que l'enrichissement.
-MODEL = os.environ.get(
-    "AGORA_ARGMINE_MODEL", os.environ.get("AGORA_ENRICH_MODEL", "mistral-small-latest")
-)
+# Rôle `argmine` du PROFIL (V-SELECT = sélection de verbatim, pas rédaction → petit
+# modèle, VALIDÉ au banc). Avant : même cascade que `opinion` mais avec un littéral de
+# repli DIFFÉRENT — deux rôles au repli commun et à la valeur finale divergente.
+MODEL = _profile.active().model_for("argmine")
 MAX_K = int(os.environ.get("AGORA_ARG_MAX_K", "5"))                # arguments max / groupe
 INPUT_CAP = int(os.environ.get("AGORA_ARG_INPUT_CAP", "60"))       # claims montrés au LLM
 SIM_THRESHOLD = float(os.environ.get("AGORA_ARG_SIM_THRESHOLD", "0.60"))

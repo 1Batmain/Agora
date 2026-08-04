@@ -32,7 +32,9 @@ from pipeline.translate import DEFAULT_TRANSLATE_MODEL, is_french, translate_bat
 
 TRANSLATIONS_NAME = "translations.json"
 # Modèle de traduction (CHEAP), surchargeable par env — aucune valeur de corpus en dur.
-TRANSLATE_MODEL = os.environ.get("AGORA_TRANSLATE_MODEL", DEFAULT_TRANSLATE_MODEL)
+# Alias DÉRIVÉ du rôle `translate` du profil (`pipeline.translate` le lit de la même
+# source) — l'ancienne duplication de la lecture d'env dans DEUX modules est supprimée.
+TRANSLATE_MODEL = DEFAULT_TRANSLATE_MODEL
 
 ProgressFn = Callable[[int, int], None]
 

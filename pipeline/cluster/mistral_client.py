@@ -18,13 +18,14 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from pipeline import profile as _profile
+
 # Endpoint chat-completions Mistral (EU). Surcharge possible (proxy/tests).
 API_URL = os.environ.get("AGORA_MISTRAL_URL", "https://api.mistral.ai/v1/chat/completions").rstrip("/")
-# Modèle par défaut pour le nommage (titres courts batchés).
-NAMING_MODEL = os.environ.get("AGORA_MISTRAL_MODEL", "mistral-large-latest")
-# Modèle pour la synthèse (rapport) — par défaut le même, surchargeable (p.ex.
-# `mistral-large-latest` pour un rapport plus fin).
-SYNTHESIS_MODEL = os.environ.get("AGORA_MISTRAL_SYNTH_MODEL", NAMING_MODEL)
+# Modèle de nommage/synthèse = rôle `enrich` du PROFIL actif. Ce module est un
+# TRANSPORT HTTP : il ne décide plus quel modèle utiliser, il lit le profil.
+NAMING_MODEL = _profile.active().model_for("enrich")
+SYNTHESIS_MODEL = NAMING_MODEL
 # Timeout réseau par appel (s). La synthèse peut être plus lente qu'un naming.
 TIMEOUT = float(os.environ.get("AGORA_MISTRAL_TIMEOUT", "60"))
 

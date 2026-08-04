@@ -47,12 +47,13 @@ from backend.analysis import (
 )
 from backend.build_analysis import EXTRACT_MODEL, load_dataset
 from backend.titles import title_for_node
+from pipeline import profile as _profile
 from pipeline.cluster import mistral_client
 
 # Modèle CHEAP (cleavage + stance, ~1 + claims/BATCH appels par feuille) — surchargeable.
-MODEL = os.environ.get(
-    "AGORA_OPINION_MODEL", os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
-)
+# Rôle `opinion` du PROFIL. Avant : cascade AGORA_OPINION_MODEL → AGORA_ENRICH_MODEL →
+# littéral, qui couplait trois rôles sans le déclarer (poser ENRICH en déplaçait trois).
+MODEL = _profile.active().model_for("opinion")
 BATCH = 10                       # claims par appel de stance
 # Plafond de claims classés par feuille. Par défaut quasi-illimité : on classe la stance
 # de TOUS les claims des thèmes émis (le garde-fou de pureté écarte déjà les feuilles

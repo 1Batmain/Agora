@@ -47,24 +47,26 @@ from backend.cluster_enrich import description_for_node, hook_for_node
 from backend.recluster import CACHE_DIR, load_cache
 from backend.titles import _fallback, title_for_macro, title_for_node
 from backend import cost
+from pipeline import profile as _profile
 from pipeline.cluster import mistral_client
 
 ProgressFn = Callable[[str, str, int, int], None]
 
-# DEUX modèles SÉPARÉS pour un rebuild rapide (PRIORITÉ 1) :
-#   - EXTRACTION (lente, ~1 appel/avis) → gros modèle de QUALITÉ (claims fidèles,
-#     multi-spans + target). Cachée sur disque : un rebuild ne la rejoue pas.
+# DEUX rôles SÉPARÉS pour un rebuild rapide (PRIORITÉ 1) :
+#   - EXTRACTION (lente, ~1 appel/avis) → modèle de QUALITÉ (claims fidèles, multi-spans
+#     + target). Cachée sur disque : un rebuild ne la rejoue pas.
 #   - ENRICHISSEMENT (titres/accroches/descriptions/insights, ~3-4 appels/thème) →
-#     modèle CHEAP. C'est le gros du coût d'un rebuild (extraction cachée) → cheap = vite.
-# Surchargeables par env (aucune valeur de corpus codée en dur).
-EXTRACT_MODEL = os.environ.get("AGORA_EXTRACT_MODEL", "mistral-large-latest")
+#     l'essentiel du coût d'un rebuild (extraction cachée).
+# Les VALEURS viennent du profil actif (`pipeline.profile`) — source de vérité unique ;
+# ces noms n'en sont que des alias DÉRIVÉS, conservés pour les appelants historiques.
+EXTRACT_MODEL = _profile.active().model_for("extract")
 # Laisse passer un arbre entièrement plat (aucun macro subdivisé). Fail-closed par défaut :
 # la hiérarchie est le produit, pas un bonus (cf. `_assert_tree_is_structured`).
 ALLOW_FLAT_TREE = os.environ.get("AGORA_ALLOW_FLAT_TREE", "").strip() == "1"
 # Part MAXIMALE de titres/synthèses en repli avant de refuser de servir le build.
 MAX_FALLBACK_SHARE = float(os.environ.get("AGORA_MAX_FALLBACK_SHARE", "0.05"))
 ALLOW_DEGRADED = os.environ.get("AGORA_ALLOW_DEGRADED", "").strip() == "1"
-ENRICH_MODEL = os.environ.get("AGORA_ENRICH_MODEL", "mistral-large-latest")
+ENRICH_MODEL = _profile.active().model_for("enrich")
 
 # Concurrence BORNÉE des appels LLM d'enrichissement (titres/accroches/descriptions/
 # insights). Chaque thème est indépendant (effet de bord sur SON nœud, cache idempotent)

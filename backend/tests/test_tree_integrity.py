@@ -40,7 +40,17 @@ def test_cached_claims_model_absent_ou_illisible(tmp_path):
 
 
 def test_prepare_claims_leve_sur_modele_divergent(tmp_path, monkeypatch):
-    """Le scénario exact qui a détruit le cache mistral-large du rebuild tiktok."""
+    """Le scénario exact qui a détruit le cache mistral-large du rebuild tiktok.
+
+    Historiquement, la divergence naissait d'un OUBLI : `model=None` retombait sur le défaut
+    propre au backend api (`ministral-3b-latest`), différent du modèle du pipeline. Ce mode
+    de panne n'existe plus — `pipeline.profile` a supprimé les défauts contradictoires, et
+    `test_pipeline_profile.test_le_defaut_dextraction_ne_diverge_plus` le verrouille.
+
+    Le GARDE, lui, reste indispensable : n'importe quel modèle explicite différent de celui
+    du cache doit lever plutôt que d'écraser une extraction coûteuse. On provoque donc la
+    divergence EXPLICITEMENT, au lieu de compter sur un défaut incohérent.
+    """
     import backend.claims_endpoint as CE
 
     ddir = tmp_path / "tiktok"
@@ -56,9 +66,9 @@ def test_prepare_claims_leve_sur_modele_divergent(tmp_path, monkeypatch):
         SimpleNamespace(id="a0", text="un texte assez long pour passer min_chars",
                         text_clean="un texte assez long pour passer min_chars", weight=1.0)])
 
-    # `model=None` → défaut du backend api (ministral-3b-latest) ≠ clé du cache.
+    # Modèle EXPLICITE ≠ modèle du cache → doit lever sans rien écraser.
     with pytest.raises(ClaimsCacheModelMismatch) as exc:
-        CE.prepare_claims(ds, backend="api", model=None)
+        CE.prepare_claims(ds, backend="api", model="ministral-3b-latest")
     msg = str(exc.value)
     assert "mistral-large-latest" in msg and "AGORA_ALLOW_REEXTRACT" in msg
     # Le cache n'a PAS été touché.

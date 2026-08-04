@@ -46,10 +46,13 @@ from pydantic import BaseModel, Field
 # Léger (numpy only, aucun torch) : la résolution Leiden par défaut, source unique.
 from pipeline.cluster.leiden_cluster import DEFAULT_RESOLUTION
 
+from pipeline.profile import describe as profile_describe
+
 from backend.recluster import (
     DEFAULT_NAMING_METHOD,
     MODEL_ID,
     NAMINGS,
+    dataset_model_id,
     default_dataset,
     dataset_descriptor,
     list_datasets,
@@ -192,13 +195,19 @@ def health() -> dict:
     # Lazy-load : NE force PAS le chargement des vecteurs. `n_cached` vient du
     # descripteur léger (meta.json / ideas, sans vecteurs) ; `loaded` indique si
     # l'objet `_Dataset` (vecteurs en RAM) est effectivement chargé.
+    # `model_id` = embedder qu'un build lancé MAINTENANT utiliserait (profil actif).
+    # L'embedder RÉEL d'un dataset servi est différent s'il a été bâti avant une bascule :
+    # on l'expose PAR DATASET, lu dans son meta.json. Un seul champ global mentait dès que
+    # deux datasets n'avaient pas été bâtis avec le même embedder.
     return {
         "ok": True,
+        "profile": profile_describe(),
         "model_id": MODEL_ID,
         "default_dataset": DEFAULT,
         "datasets": {
             ds_id: {"n_cached": dataset_descriptor(ds_id).get("n_nodes", 0),
-                    "loaded": ds_id in _LOADED}
+                    "loaded": ds_id in _LOADED,
+                    "model_id": dataset_model_id(ds_id)}
             for ds_id in _ids
         },
     }
