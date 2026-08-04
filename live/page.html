@@ -1,0 +1,188 @@
+<!-- Page LIVE — flux entrant à gauche, sortie du pipeline à droite.
+     Autonome : aucun script externe, aucune police distante. Interroge /api/*. -->
+<meta charset="utf-8" />
+<title>Agora · synthèse live d'un débat</title>
+<style>
+  :root {
+    --ink: #16181d; --ink-soft: #5b6270; --line: #dfe3ea; --bg: #f6f7f9;
+    --panel: #ffffff; --accent: #1f5f8b; --fav: #2e7d5b; --def: #a63d40;
+    --nua: #8a8f99; --warn: #b06a1f;
+    font-synthesis-weight: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #e8eaee; --ink-soft: #9aa2b1; --line: #2a2f38; --bg: #14161a;
+            --panel: #1b1e24; --accent: #6ba9d0; --fav: #5cbf92; --def: #e0777a;
+            --nua: #8a8f99; --warn: #d9a15c; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--panel);
+           display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; position: sticky;
+           top: 0; z-index: 5; }
+  h1 { font-size: 17px; margin: 0; font-weight: 650; letter-spacing: -0.01em; }
+  .topic { color: var(--ink-soft); font-size: 14px; }
+  .stats { margin-left: auto; display: flex; gap: 18px; font-variant-numeric: tabular-nums;
+           font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+  .stats b { color: var(--ink); font-weight: 650; }
+  main { display: grid; grid-template-columns: minmax(320px, 2fr) 3fr; gap: 16px; padding: 16px;
+         align-items: start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+            padding: 14px 16px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft);
+       margin: 0 0 10px; font-weight: 650; }
+  .scroll { max-height: 78vh; overflow-y: auto; }
+  .turn { border-top: 1px solid var(--line); padding: 9px 0; }
+  .turn:first-child { border-top: 0; }
+  .who { font-weight: 620; font-size: 13.5px; }
+  .when { color: var(--ink-soft); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .said { color: var(--ink-soft); font-size: 13px; margin-top: 3px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; font-weight: 600; color: var(--ink-soft); font-size: 12px;
+       padding: 4px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; min-width: 90px;
+         background: var(--line); }
+  .bar i { display: block; }
+  .fav { background: var(--fav); } .def { background: var(--def); } .nua { background: var(--nua); }
+  .pill { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11.5px;
+          font-weight: 600; border: 1px solid currentColor; }
+  .p-favorable { color: var(--fav); } .p-défavorable { color: var(--def); }
+  .p-partagé, .p-sans { color: var(--nua); }
+  .cleavage { color: var(--ink-soft); font-size: 12.5px; font-style: italic; }
+  .warn { color: var(--warn); }
+  .note { font-size: 12px; color: var(--ink-soft); margin-top: 10px; line-height: 1.45;
+          border-top: 1px dashed var(--line); padding-top: 9px; }
+  .empty { color: var(--ink-soft); font-size: 13px; padding: 10px 0; }
+  .wrap { overflow-x: auto; }
+</style>
+
+<header>
+  <h1>Agora · synthèse live</h1>
+  <span class="topic" id="topic">…</span>
+  <div class="stats">
+    <span>tours <b id="s-turns">0</b></span>
+    <span>claims <b id="s-claims">0</b></span>
+    <span>thèmes <b id="s-themes">0</b></span>
+    <span>hors thèmes <b id="s-drift">0 %</b></span>
+    <span id="s-live">○ en attente</span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Ce qui est dit — flux entrant</h2>
+    <div class="scroll" id="transcript"><div class="empty">En attente du rejeu…</div></div>
+  </section>
+
+  <div style="display:grid; gap:16px;">
+    <section>
+      <h2>Positions par thème</h2>
+      <div class="wrap"><table id="themes"><tbody></tbody></table></div>
+      <div class="note" id="drift-note"></div>
+    </section>
+
+    <section>
+      <h2>Positions par orateur</h2>
+      <div class="wrap"><table id="speakers"><tbody></tbody></table></div>
+      <div class="note">
+        Une position n'est <b>jamais</b> déduite d'une proximité de texte : elle vient d'un
+        jugement modèle sur une proposition débattable. Mesuré sur x-stance, le clustering ne
+        recouvre le clivage qu'à NMI ≈ 0,05 — l'embedding capte le sujet, pas la position.
+        <span class="warn">Le discours rapporté (citer l'adversaire pour le réfuter) peut
+        inverser une position ; le garde-fou n'est pas encore validé par un banc.</span>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const pct = (x) => (x == null ? "—" : Math.round(x * 100) + " %");
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function bar(f, d, n) {
+  const tot = f + d + n;
+  if (!tot) return '<span class="when">—</span>';
+  const w = (x) => (100 * x / tot).toFixed(1) + "%";
+  return `<span class="bar" title="${f} pour / ${d} contre / ${n} nuance">
+    <i class="fav" style="width:${w(f)}"></i><i class="def" style="width:${w(d)}"></i>
+    <i class="nua" style="width:${w(n)}"></i></span>`;
+}
+
+function renderThemes(s) {
+  const rows = (s.theme_opinion || []).filter(t => t.n_claims > 0);
+  const body = $("themes").querySelector("tbody");
+  if (!rows.length) { body.innerHTML =
+    `<tr><td class="empty">Aucun claim rattaché pour l'instant.</td></tr>`; return; }
+  body.innerHTML = `<tr><th>Thème</th><th class="num">claims</th><th>pour / contre</th></tr>` +
+    rows.map(t => `<tr>
+      <td><b>${esc(t.label)}</b><div class="cleavage">${esc(t.cleavage)}</div></td>
+      <td class="num">${t.n_claims}</td>
+      <td>${bar(t.favorable, t.defavorable, t.nuance)}</td>
+    </tr>`).join("");
+}
+
+function renderSpeakers(s) {
+  const rows = s.speakers || [];
+  const body = $("speakers").querySelector("tbody");
+  if (!rows.length) { body.innerHTML =
+    `<tr><td class="empty">Pas encore assez de prises de parole jugées.</td></tr>`; return; }
+  const labels = Object.fromEntries((s.themes || []).map(t => [t.id, t.label]));
+  body.innerHTML = `<tr><th>Orateur</th><th>Thème</th><th>Position</th>
+      <th class="num">claims</th><th>pour / contre</th></tr>` +
+    rows.map(r => `<tr>
+      <td>${esc(r.speaker)}</td>
+      <td class="when">${esc(labels[r.theme_id] || r.theme_id)}</td>
+      <td><span class="pill p-${esc(r.position).split(" ")[0]}">${esc(r.position)}</span></td>
+      <td class="num">${r.n_claims}</td>
+      <td>${bar(r.favorable, r.defavorable, r.nuance)}</td>
+    </tr>`).join("");
+}
+
+function renderDrift(s) {
+  const d = s.drift || {};
+  $("s-drift").textContent = pct(d.recent);
+  const excess = d.excess || 0;
+  $("drift-note").innerHTML = excess > 0.25
+    ? `<span class="warn"><b>Dérive thématique : ${pct(excess)} au-delà du bruit de fond.</b></span>
+       Des sujets échappent aux thèmes gelés — une restructuration se justifierait.`
+    : `Hors thèmes : ${pct(d.recent)} des claims récents, pour un bruit de fond attendu de
+       ${pct(d.baseline)}. <b>Un taux brut ne s'interprète pas</b> : sur un débat parlementaire,
+       l'essentiel des claims hors thème n'est pas un sujet nouveau mais de la joute
+       (« le sous-amendement n° 42160 »). Seul l'excès porte un signal.`;
+}
+
+async function tick() {
+  try {
+    const [snap, tr] = await Promise.all([
+      fetch("/api/snapshot").then(r => r.ok ? r.json() : null),
+      fetch("/api/transcript?limit=25").then(r => r.ok ? r.json() : { turns: [] }),
+    ]);
+    if (!snap) { $("s-live").textContent = "○ aucun instantané"; return; }
+    $("topic").textContent = snap.topic || snap.session || "";
+    $("s-turns").textContent = snap.turns_seen;
+    $("s-claims").textContent = snap.claims_seen;
+    $("s-themes").textContent = (snap.themes || []).length;
+    $("s-live").textContent = "● en direct";
+    renderThemes(snap); renderSpeakers(snap); renderDrift(snap);
+
+    const turns = (tr.turns || []).slice().reverse();
+    $("transcript").innerHTML = turns.length ? turns.map(t => `
+      <div class="turn">
+        <span class="who">${esc(t.speaker)}</span>
+        <span class="when"> · ${t.stime != null ? new Date(t.stime * 1000)
+          .toISOString().substr(11, 8) : "—"}</span>
+        <div class="said">${esc((t.text || "").slice(0, 260))}${
+          (t.text || "").length > 260 ? "…" : ""}</div>
+      </div>`).join("") : `<div class="empty">En attente du rejeu…</div>`;
+  } catch (e) {
+    $("s-live").textContent = "○ hors ligne";
+  }
+}
+tick();
+setInterval(tick, 2000);
+</script>

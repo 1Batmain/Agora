@@ -48,13 +48,23 @@ from backend.analysis import (
 from backend.build_analysis import EXTRACT_MODEL, load_dataset
 from backend.titles import title_for_node
 from pipeline import profile as _profile
+from pipeline.stance import (
+    BATCH,
+    CONFIDENCE_LEVELS,
+    STANCE_SYSTEM,
+    chat_retry as _chat_retry,
+    cleavage_system,
+    derive_cleavage_from,
+    norm_confidence as _norm_confidence,
+    run_stance,
+    stance_batch,
+)
 from pipeline.cluster import mistral_client
 
 # Modèle CHEAP (cleavage + stance, ~1 + claims/BATCH appels par feuille) — surchargeable.
 # Rôle `opinion` du PROFIL. Avant : cascade AGORA_OPINION_MODEL → AGORA_ENRICH_MODEL →
 # littéral, qui couplait trois rôles sans le déclarer (poser ENRICH en déplaçait trois).
 MODEL = _profile.active().model_for("opinion")
-BATCH = 10                       # claims par appel de stance
 # Plafond de claims classés par feuille. Par défaut quasi-illimité : on classe la stance
 # de TOUS les claims des thèmes émis (le garde-fou de pureté écarte déjà les feuilles
 # diffuses). Reste surchargeable (AGORA_OPINION_CAP) pour borner le coût si besoin.
@@ -79,115 +89,11 @@ def _log(msg: str) -> None:
 # --------------------------------------------------------------------------- #
 # Prompts — REPRIS TELS QUELS du proto validé (research/opinion_proto.py).
 # --------------------------------------------------------------------------- #
-def cleavage_system(title: str) -> str:
-    """Prompt cleavage CONDITIONNÉ sur le TITRE du thème (v2, [[agora-opinion-target-verdict]]).
-
-    v1 (sans titre, « la PLUS SAILLANTE ») faisait dériver la cible vers une FACETTE
-    bruyante au lieu du centre du thème (ex. « Restaurer la confiance par l'écoute » →
-    « cesser de mentir »). v2 = deux leviers validés (research/cleavage_v2_note.md) :
-      1. CONDITIONNER sur le titre — la proposition doit capturer le sujet de CE thème ;
-      2. « CENTRAL » > « saillant » — résumer le débat du thème, pas le détail le plus bruyant.
-    Le titre est injecté tel quel (déjà court, neutre, dérivé des claims représentatives).
-    """
-    return (
-        "Tu es analyste de consultations citoyennes. On te donne le TITRE d'un THÈME, ses "
-        "MOTS-CLÉS et des CONTRIBUTIONS verbatim. Identifie l'OBJET DE CLIVAGE qui RÉSUME "
-        f"le débat CENTRAL de CE thème, intitulé « {title} » : la proposition ou mesure "
-        "PRÉCISE, au cœur du thème, sur laquelle des citoyens peuvent être POUR ou CONTRE. "
-        "Elle doit capturer le SUJET CENTRAL du thème (ce dont parle le titre), PAS une "
-        "facette secondaire ni le détail le plus bruyant. Formule-la comme une proposition "
-        "polaire COURTE (≤12 mots), neutre et débattable, à l'infinitif ou nominale — ex. "
-        "« instaurer le référendum d'initiative citoyenne », « rendre le vote obligatoire », "
-        "« réduire le nombre d'élus », « tirer au sort des citoyens pour légiférer ». "
-        "Réponds en JSON strict : {\"objet\":\"<proposition>\",\"justif\":\"<≤14 mots>\"}."
-    )
-
-STANCE_SYSTEM = (
-    "Tu es analyste de consultations citoyennes. On te donne UNE CIBLE — une PROPOSITION "
-    "D'ACTION débattable (p. ex. « réguler l'usage d'un service », « instaurer une mesure ») "
-    "— et des CONTRIBUTIONS citoyennes verbatim. Pour chaque contribution, classe si son "
-    "auteur SOUTIENT ou S'OPPOSE À CETTE ACTION (et NON son sentiment envers le sujet) :\n"
-    "  - \"favorable\"   : la contribution VA DANS LE SENS de l'action — elle la réclame, OU "
-    "elle décrit un PROBLÈME/méfait que cette action viserait à corriger (décrire les dangers "
-    "d'un sujet = soutenir une action pour le réguler/limiter) ;\n"
-    "  - \"defavorable\" : la contribution S'OPPOSE à l'action — elle défend le sujet tel quel, "
-    "juge l'action inutile/excessive/nuisible, ou refuse toute intervention ;\n"
-    "  - \"nuance\"      : position ambivalente/conditionnelle, ou aucune position claire sur "
-    "l'ACTION elle-même.\n"
-    "ATTENTION — le piège à éviter : ne confonds JAMAIS un sentiment négatif ENVERS LE SUJET "
-    "avec une opposition à l'action. Quelqu'un qui critique ou subit un problème est FAVORABLE "
-    "à une action qui vise à le corriger. Juge la position sur l'ACTION, pas la tonalité.\n"
-    # PERTINENCE (pré-filtre SOFT) — VALIDÉ research/relevance_calibration_note.md : le stance
-    # sur-classait des témoignages TANGENTIELS (autre action, même thème) en "favorable" par
-    # ASSOCIATION de sujet, avec confiance (79% de sur-classement sur les cas litigieux, non
-    # capté par la confiance). Variante SOFT (défaut sûr : faux retraits minimes) : on n'écarte
-    # que le CLAIREMENT hors-action, on garde l'indirect légitime → précision 0.61→0.80, rappel
-    # ~0.87. Ce gate PRÉCÈDE la priorité anti-abstention (qui ne joue QUE sur l'on-topic).
-    "PERTINENCE (à vérifier D'ABORD) : ne classe \"favorable\"/\"defavorable\" QUE si la "
-    "contribution PORTE sur CETTE action précise. Si elle vise une action CLAIREMENT DIFFÉRENTE "
-    "(même thème général), ou reste purement descriptive/générale SANS implication pour cette "
-    "action, classe \"nuance\" — ne lui prête pas une position par simple proximité de sujet.\n"
-    # large_noabst — VALIDÉ research/stance_large_bench.md : sans cette consigne, mistral-large
-    # sur-abstient (25% nuance) ; avec, acc décidés 0.861 (vs small 0.796), rendement 77%,
-    # McNemar 33-7. Ne joue QUE sur les contributions jugées PERTINENTES ci-dessus.
-    "PRIORITÉ : parmi les contributions QUI PORTENT sur l'action, ne réserve \"nuance\" qu'à "
-    "celles vraiment sans position — si une lecture raisonnable permet de trancher, TRANCHE.\n"
-    "Pour CHAQUE contribution, indique aussi ta CONFIANCE : \"high\" (position explicite et "
-    "nette), \"medium\" (probable mais indirecte), \"low\" (ambigu/hors-sujet — tu hésites). "
-    "Réponds en JSON strict : {\"results\":[{\"i\":<int>,\"stance\":\"favorable|defavorable|"
-    "nuance\",\"confidence\":\"high|medium|low\",\"justif\":\"<≤14 mots>\"}]}. Une entrée par "
-    "contribution, dans l'ordre, rien d'autre."
-)
-
-# Niveaux de confiance valides (auto-évaluation du modèle). Toute valeur absente/inconnue
-# est normalisée en repli prudent `low` (on n'invente pas de certitude).
-CONFIDENCE_LEVELS = {"high", "medium", "low"}
-
-
-def _norm_confidence(value) -> str:
-    c = str(value or "").strip().lower()
-    return c if c in CONFIDENCE_LEVELS else "low"
-
-
-
-
-def _chat_retry(messages: list[dict], *, model: str, max_tokens: int) -> str:
-    """`mistral_client.chat` avec BACKOFF exponentiel sur 429/5xx/réseau.
-
-    Leçon du bench stance-large (research/stance_large_bench.md) : sans retry, les 429
-    (RPM bas de large) retombent en repli « nuance/(échec LLM) » → fausse abstention
-    massive et SILENCIEUSE. 4 tentatives, 2→16 s."""
-    delay = 2.0
-    for attempt in range(4):
-        try:
-            return mistral_client.chat(messages, model=model, temperature=0.0,
-                                       max_tokens=max_tokens, json_mode=True)
-        except mistral_client.MistralError as exc:
-            if exc.status in (429, 500, 502, 503, 504, 0) and attempt < 3:
-                time.sleep(delay); delay *= 2
-                continue
-            raise
-    raise mistral_client.MistralError(0, "retries_exhausted")
-
-# --------------------------------------------------------------------------- #
-# Cleavage T2 — objet de clivage dérivé (1 appel LLM par feuille).
-# --------------------------------------------------------------------------- #
 def derive_cleavage(node: ThemeNode, sample_texts: list[str], title: str,
                     *, model: str) -> dict:
-    kw = ", ".join((node.keywords or [])[:10])
-    contribs = "\n".join(f"- {t[:160]}" for t in sample_texts[:14])
-    user = f"MOTS-CLÉS : {kw}\n\nCONTRIBUTIONS :\n{contribs}"
-    messages = [{"role": "system", "content": cleavage_system(title)},
-                {"role": "user", "content": user}]
-    fallback = title or node.title or node.label
-    try:
-        raw = _chat_retry(messages, model=model, max_tokens=200)
-        data = json.loads(raw)
-        objet = str(data.get("objet", "")).strip()
-        return {"objet": objet or fallback,
-                "justif": str(data.get("justif", "")).strip()}
-    except (mistral_client.MistralError, json.JSONDecodeError):
-        return {"objet": fallback, "justif": "(repli label)"}
+    """Objet de clivage d'un thème (adaptateur `ThemeNode` → `pipeline.stance`)."""
+    return derive_cleavage_from(title or node.title or node.label,
+                                list(node.keywords or []), sample_texts, model=model)
 
 
 # Synthèse PARENT — condense les objets de clivage des sous-thèmes en UNE phrase.
@@ -225,49 +131,6 @@ def synthesize_cleavage(propositions: list[str], title: str, *, model: str) -> s
 # --------------------------------------------------------------------------- #
 # Stance — classe chaque claim envers la cible (batché, repli unitaire).
 # --------------------------------------------------------------------------- #
-def stance_batch(cible: str, items: list[tuple[int, str]], *, model: str) -> dict[int, dict]:
-    lines = [f"[{i}] {text}" for i, text in items]
-    user = (f"CIBLE : {cible}\n\n"
-            f"CONTRIBUTIONS (réponds pour chaque [indice]) :\n" + "\n".join(lines))
-    messages = [{"role": "system", "content": STANCE_SYSTEM},
-                {"role": "user", "content": user}]
-    raw = _chat_retry(messages, model=model, max_tokens=1500)
-    data = json.loads(raw)
-    out: dict[int, dict] = {}
-    for rec in data.get("results", []):
-        try:
-            idx = int(rec["i"])
-        except (KeyError, ValueError, TypeError):
-            continue
-        stance = str(rec.get("stance", "")).strip().lower()
-        if stance not in {"favorable", "defavorable", "nuance"}:
-            stance = "nuance"
-        out[idx] = {"stance": stance,
-                    "confidence": _norm_confidence(rec.get("confidence")),
-                    "justif": str(rec.get("justif", "")).strip()}
-    return out
-
-
-def run_stance(cible: str, items: list[tuple[int, str]], *, model: str) -> dict[int, dict]:
-    results: dict[int, dict] = {}
-    for start in range(0, len(items), BATCH):
-        batch = items[start:start + BATCH]
-        try:
-            got = stance_batch(cible, batch, model=model)
-        except (mistral_client.MistralError, json.JSONDecodeError):
-            got = {}
-        for i, text in batch:
-            if i not in got:
-                try:
-                    got.update(stance_batch(cible, [(i, text)], model=model))
-                except (mistral_client.MistralError, json.JSONDecodeError):
-                    got[i] = {"stance": "nuance", "confidence": "low",
-                              "justif": "(échec LLM)"}
-        results.update(got)
-        time.sleep(0.02)
-    return results
-
-
 # --------------------------------------------------------------------------- #
 # Agrégation — répartition + profil clivant/consensuel/impur.
 # --------------------------------------------------------------------------- #
