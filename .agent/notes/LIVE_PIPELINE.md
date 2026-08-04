@@ -74,6 +74,54 @@ claims hors-fond identifiés à la sonde (`LIVE_PROBE_CLAIMS.md`). La dérive ex
 maintenant un `baseline` (le bruit de fond attendu par construction du seuil) et un `excess`.
 **Seul l'excès porte un signal de dérive thématique.**
 
+## 3 bis. Rejeu complet — les chiffres
+
+Séance 055 (« Abrogation de la retraite à 64 ans »), amorçage 30 tours, 41 tours rejoués,
+profil `live`, stance activée.
+
+```
+71 tours · 196 claims · 481 s   →  ~12 s/tour contre ~50 s de cadence réelle : ~4× de marge
+dérive récente 15 % · bruit de fond 10 % · EXCÈS 5 %   (l'indicateur ne crie pas à tort)
+```
+
+**Ce qui marche.** Sur les thèmes qui portent vraiment sur le sujet, les positions sont
+justes et vérifiables au verbatim :
+
+| Orateur | Cible | Position | Verbatim |
+|---|---|---|---|
+| Mme Panosyan-Bouvet (ministre) | abroger la réforme de 2023 | **défavorable** | ✅ correct |
+| Mme Aurore Bergé | abroger la réforme de 2023 | **défavorable** | « …le courage de voter et d'assumer la réforme » ✅ |
+| M. Ugo Bernalicis (LFI) | financer par les cotisations | **favorable** | « il faut augmenter les cotisations vieillesse » ✅ |
+
+**Ce qui ne marche pas, et c'est majoritaire.** Sur 20 thèmes actifs, **14 portent sur le
+fond et 6 sur la procédure** — mais les procéduraux captent **73 des 155 claims classés
+(47 %)**, et ce sont **les DEUX thèmes les plus actifs** :
+
+```
+[PROCÉDURE] 26 claims · « assumer les choix budgétaires avec sérieux »
+[PROCÉDURE] 23 claims · « déposer massivement des amendements sur un texte de loi »
+[FOND]      18 claims · « réformer le système de retraites par répartition »
+```
+
+Ces 47 % recoupent l'estimation indépendante de la sonde (« environ la moitié des claims ne
+portent pas sur le fond ») — deux mesures, même ordre de grandeur.
+
+### ⚠️ Le mode de panne à retenir : un clivage bidon produit une position CONFIANTE et fausse
+
+Le pré-filtre de pertinence **fonctionne** : il classe correctement en `nuance/low` les claims
+sans rapport avec la cible. Mais quand la CIBLE elle-même est procédurale, le modèle trouve un
+lien spécieux et répond avec `high` :
+
+> **CONTRE / high** — cible « assumer les choix budgétaires avec sérieux »
+> claim : *« Le diable a deux visages : les voilà ! »* — justif : « critique l'action par rejet violent »
+
+C'est une insulte entre députés, pas une position budgétaire. De même, « Le rapporteur ne
+daigne même pas se lever » devient **POUR** « limiter la durée des débats ».
+
+**La correction n'est pas dans le prompt de stance** — il fait son travail. Elle est en amont :
+il ne faut pas fabriquer de thème procédural. Le pré-filtre de pertinence doit s'appliquer
+**avant l'amorçage**, pas seulement au moment de juger la position.
+
 ## 4. Ce qui reste FAUX ou non validé — à ne pas oublier
 
 | Point | État |
