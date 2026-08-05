@@ -14,11 +14,21 @@ const API_TARGET = process.env.VITE_API_TARGET || 'http://localhost:8010';
 
 // Proxy `/api/*` → backend (:8010), préfixe `/api` retiré. MÊME config en dev (`server`)
 // ET en preview (build servi en prod) : sans ça, l'app publique ne joindrait pas l'API.
+// Backend LIVE (chantier expérimental, `live.server`) — process et port SÉPARÉS de :8010.
+// La séparation est le point : le pipeline live ne doit ni toucher aux caches servis ni
+// pouvoir dégrader la Console. Absent ? La vue live l'affiche, le reste de l'app l'ignore.
+const LIVE_TARGET = process.env.VITE_LIVE_TARGET || 'http://localhost:8020';
+
 const apiProxy = {
   '/api': {
     target: API_TARGET,
     changeOrigin: true,
     rewrite: (p: string) => p.replace(/^\/api/, ''),
+  },
+  '/live-api': {
+    target: LIVE_TARGET,
+    changeOrigin: true,
+    rewrite: (p: string) => p.replace(/^\/live-api/, '/api'),
   },
 };
 

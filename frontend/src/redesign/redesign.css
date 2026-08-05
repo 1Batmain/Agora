@@ -2718,3 +2718,98 @@ a.team__card--link:hover {
 .argmine__tab--on.argmine__tab--neutre { border-color: #c5c5d2; background: #f7f7fb; color: #3a3a45; }
 
 .argmine__empty { margin: 0; font-size: .82rem; color: #8a8a97; font-style: italic; }
+
+/* ═══ Vue LIVE — débat rejoué + synthèse au fil de l'eau (chantier expérimental) ═══
+   Palette et rythme repris du reste de l'app (mêmes verts/rouges que `.opinion__seg`).
+   Tout est préfixé `.live__` : cette vue ne peut pas déborder sur la Console. */
+.live__body { padding: 20px 24px 40px; max-width: 1500px; margin: 0 auto; }
+.live__topbar {
+  display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.live__title { font-size: 1.25rem; margin: 0; color: var(--grey-1000); }
+.live__topic { margin: .25rem 0 0; color: var(--grey-500); font-size: .95rem; }
+.live__exp {
+  margin-left: .6rem; padding: .1rem .5rem; border-radius: 999px;
+  background: #fff4e5; color: #a4600a; border: 1px solid #f0d3a8;
+  font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+}
+.live__stats {
+  margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap;
+  font-size: .82rem; color: var(--grey-500); font-variant-numeric: tabular-nums;
+}
+.live__stats strong { color: var(--grey-1000); font-size: .95rem; }
+.live__dot::before {
+  content: "●"; margin-right: .35rem; color: var(--grey-300);
+}
+.live__dot--on::before { color: #18753c; }
+
+.live__offline {
+  margin-top: 16px; padding: 14px 16px; border-radius: var(--radius);
+  border: 1px solid #f0d3a8; background: #fff8ef; color: #6b4a12; font-size: .9rem;
+}
+.live__offline code {
+  display: block; margin-top: .5rem; font-size: .8rem; color: #3a3a3a;
+  background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: .35rem .5rem;
+  overflow-x: auto;
+}
+
+.live__grid {
+  margin-top: 18px; display: grid; gap: 18px;
+  grid-template-columns: minmax(300px, 2fr) 3fr; align-items: start;
+}
+@media (max-width: 1000px) { .live__grid { grid-template-columns: 1fr; } }
+.live__col { display: grid; gap: 18px; }
+
+.live__panel {
+  background: var(--bg-raised); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow);
+}
+.live__h2 {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--grey-500); margin: 0 0 12px; font-weight: 700;
+}
+.live__scroll { max-height: 70vh; overflow-y: auto; }
+.live__turn { border-top: 1px solid var(--border); padding: 10px 0; }
+.live__turn:first-child { border-top: 0; padding-top: 0; }
+.live__turn-head { display: flex; gap: .6rem; align-items: baseline; }
+.live__who { font-weight: 700; font-size: .88rem; color: var(--grey-1000); }
+.live__when { font-size: .75rem; color: var(--grey-300); font-variant-numeric: tabular-nums; }
+.live__said { margin: .25rem 0 0; font-size: .85rem; color: var(--grey-700); line-height: 1.5; }
+
+.live__tablewrap { overflow-x: auto; }
+.live__table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.live__table th {
+  text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--grey-500); font-weight: 700; padding: 4px 8px 8px; border-bottom: 1px solid var(--border);
+}
+.live__table td { padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.live__num { text-align: right; font-variant-numeric: tabular-nums; }
+.live__cleavage {
+  display: block; margin-top: .15rem; font-size: .78rem; color: var(--grey-500); font-style: italic;
+}
+.live__muted { color: var(--grey-500); font-size: .82rem; }
+
+.live__bar {
+  display: flex; height: 10px; min-width: 90px; border-radius: 5px;
+  overflow: hidden; background: #ececf4;
+}
+.live__seg { display: block; height: 100%; }
+.live__seg--fav { background: #18753c; }
+.live__seg--def { background: #ce0500; }
+.live__seg--nu { background: #c9c9d6; }
+
+.live__pill {
+  display: inline-block; padding: .1rem .5rem; border-radius: 999px;
+  font-size: .74rem; font-weight: 700; border: 1px solid currentColor; white-space: nowrap;
+}
+.live__pill--fav { color: #18753c; }
+.live__pill--def { color: #ce0500; }
+.live__pill--nu { color: #8a8a97; }
+
+.live__note {
+  margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed var(--border);
+  font-size: .78rem; color: var(--grey-500); line-height: 1.55;
+}
+.live__note--warn { color: #8a5a12; border-top-color: #f0d3a8; }
+.live__warn { color: #b3410a; }

@@ -7,9 +7,10 @@ import { ConsultationOverview } from './ConsultationOverview';
 import { AvisExplorer } from './AvisExplorer';
 import { About } from './About';
 import RedesignApp from './RedesignApp';
+import { LiveDebate } from './LiveDebate';
 
 /** App-level route (no react-router needed): a flat state machine + active id. */
-type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'about';
+type Route = 'landing' | 'overview' | 'analysis' | 'participate' | 'avis' | 'about' | 'live';
 type HistState = { route: Route; activeId: string | null; focus?: string | null; focusTheme?: string | null; focusStance?: 'favorable' | 'defavorable' | null };
 
 /**
@@ -68,6 +69,13 @@ export default function App() {
     if (params.get('about')) {
       setRoute('about');
       window.history.replaceState({ route: 'about', activeId: null } as HistState, '', '?about=1');
+      return;
+    }
+    // `?view=live` → vue LIVE. Volontairement SANS entrée dans la navigation : c'est un
+    // chantier de recherche, atteignable par URL en dev, invisible du public.
+    if (params.get('view') === 'live') {
+      setRoute('live');
+      window.history.replaceState({ route: 'live', activeId: null } as HistState, '', '?view=live');
       return;
     }
     const cid = params.get('c');
@@ -160,6 +168,11 @@ export default function App() {
 
   if (route === 'about') {
     return <About onHome={backToLanding} />;
+  }
+  // Vue LIVE (chantier expérimental) : ne dépend d'AUCUNE consultation — elle lit un
+  // backend séparé (`live.server`). D'où sa place avant les routes gardées par `active`.
+  if (route === 'live') {
+    return <LiveDebate onHome={backToLanding} onAbout={goAbout} />;
   }
   if (route === 'overview' && active) {
     return (
