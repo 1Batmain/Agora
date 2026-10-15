@@ -11,7 +11,7 @@ dependencies = [
     "numpy>=1.26",
     "scikit-learn>=1.4",
     "sentence-transformers>=3.0",
-    "torch>=2.2",
+    "torch>=2.13.0",
     "igraph>=0.11",
     "leidenalg>=0.10",
     # Stopwords multilingues standard (50+ langues) — linguistique, chargé
