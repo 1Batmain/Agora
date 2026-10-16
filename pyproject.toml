@@ -71,6 +71,27 @@ anonymize = [
 # Le code est importé depuis la racine repo (namespace package `pipeline`).
 package = false
 
+# PLANCHERS DE SÉCURITÉ sur des dépendances TRANSITIVES (audit VPS-ADMIN 2026-10-16).
+# `constraint-dependencies` et non une entrée dans un extra : nous ne dépendons pas
+# directement d'anyio, on refuse seulement les versions vulnérables. L'ajouter comme
+# dépendance mentirait sur l'architecture. Un plancher explicite empêche aussi un `uv lock`
+# ultérieur de redescendre sous le correctif : le lock protège de la dérive, pas d'un
+# retour en arrière.
+#
+# anyio : PYSEC-2026-4025 / PYSEC-2026-4023, corrigés en 4.14.2. Tiré par starlette/httpx,
+# donc DANS le chemin de traitement des requêtes servies — d'où la priorité.
+#
+# ⚠️ setuptools (PYSEC-2026-3447, corrigé en 83.0.0) est DÉLIBÉRÉMENT ABSENT d'ici.
+# Mesuré : `torch 2.12.1+cpu` déclare `setuptools<82`, donc un plancher à 83 FORCE
+# torch 2.12.1 → 2.14.1. Torch est le moteur d'embedding : une bascule de version peut
+# changer les vecteurs, donc invalider tous les caches servis et l'analyse publiée.
+# Ce n'est pas un arbitrage à prendre en passant sur un correctif de sécurité.
+# setuptools n'est pas dans le chemin serve (tiré par torch/spacy, outillage de build).
+# Décision et protocole de validation : cf. .agent/inbox/REPONSE-audit-2026-10-16.md.
+constraint-dependencies = [
+    "anyio>=4.14.2",
+]
+
 # Torch CPU-only (box partagée, pas de GPU) — évite le wheel CUDA volumineux.
 [[tool.uv.index]]
 name = "pytorch-cpu"
