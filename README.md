@@ -2,8 +2,13 @@
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE) [![Édition commerciale disponible](https://img.shields.io/badge/édition-commerciale%20dispo-green.svg)](NOTICE)
 
-> ### 🚀 Démo publique en ligne : **<https://forge.tail0b8aa8.ts.net>**
-> Testez la méthode Agora sur des témoignages publics recueillis lors de différentes consultations citoyennes.
+> ### 💤 Démo publique en sommeil (depuis le 16 octobre 2026)
+> L'instance de démonstration qui tournait à `forge.tail0b8aa8.ts.net` est **hors ligne** : le
+> serveur qui l'héberge a été mis en hivernage. Le lien ne répond plus — ce n'est pas une panne.
+>
+> **Le projet n'est pas abandonné et le code reste complet.** Tout est ici : pipeline d'analyse,
+> backend et frontend. Pour l'essayer, voir la section d'installation ci-dessous ; la remise en
+> ligne de la démo est possible à tout moment.
 
 ---
 
